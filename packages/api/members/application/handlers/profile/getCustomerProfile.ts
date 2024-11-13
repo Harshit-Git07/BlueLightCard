@@ -1,6 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
-import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { APIGatewayEvent } from 'aws-lambda';
 import { MemberProfileCustomerGetRepository } from '../../repositories/memberProfileCustomerGetRepository';
 import { MemberProfileCustomerGetService } from '../../services/memberProfileCustomerGetService';
@@ -10,7 +10,7 @@ import { APIError } from '../../models/APIError';
 import { APIErrorCode } from '../../enums/APIErrorCode';
 
 const service: string = process.env.SERVICE as string;
-const logger = new LambdaLogger({ serviceName: `${service}-getOrganisations` });
+const logger = new Logger({ serviceName: `${service}-getOrganisations` });
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
 
 const tableName = process.env.IDENTITY_TABLE_NAME as string;

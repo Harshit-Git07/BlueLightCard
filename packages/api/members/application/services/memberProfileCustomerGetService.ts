@@ -1,6 +1,6 @@
 import { MemberProfileCustomerGetRepository } from '../repositories/memberProfileCustomerGetRepository';
 import { GetCustomerProfileQueryPayload } from '../types/customerProfileTypes';
-import { LambdaLogger } from '../../../core/src/utils/logger/lambdaLogger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { APIError } from '../models/APIError';
 import { APIErrorCode } from '../enums/APIErrorCode';
 import { CustomerProfileModel } from '../models/customer/customerProfileModel';
@@ -8,7 +8,7 @@ import { CustomerProfileModel } from '../models/customer/customerProfileModel';
 export class MemberProfileCustomerGetService {
   constructor(
     private readonly repository: MemberProfileCustomerGetRepository,
-    private readonly logger: LambdaLogger,
+    private readonly logger: Logger,
   ) {}
 
   async getCustomerProfile({
@@ -32,7 +32,7 @@ export class MemberProfileCustomerGetService {
         if (error.message === 'Member profile not found') {
           this.logger.error({
             message: `Error getting customer profile for ${memberUuid}: Customer not found`,
-            body: { error },
+            error: error.message,
           });
           errorSet.push(
             new APIError(
@@ -44,7 +44,8 @@ export class MemberProfileCustomerGetService {
         } else {
           this.logger.error({
             message: `Error getting customer profile for ${memberUuid}`,
-            body: { error },
+            error:
+              error instanceof Error ? error.message : 'Unknown error getting customer profile',
           });
           errorSet.push(
             new APIError(APIErrorCode.GENERIC_ERROR, 'getCustomerProfile', error.message),
@@ -53,7 +54,7 @@ export class MemberProfileCustomerGetService {
       } else {
         this.logger.error({
           message: `Unknown error occured getting customer profile for ${memberUuid}`,
-          body: { error },
+          error: error instanceof Error ? error.message : 'Unknown error getting customer profile',
         });
         errorSet.push(
           new APIError(APIErrorCode.GENERIC_ERROR, 'getCustomerProfile', 'unknown error'),

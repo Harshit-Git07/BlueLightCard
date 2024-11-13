@@ -51,7 +51,7 @@ export class EmployersService {
     } catch (error) {
       this.logger.error({
         message: `Error fetching Employers for organisation: ${organisationId}`,
-        body: { error },
+        error: error instanceof Error ? error.message : 'Unknown error fetching employers',
       });
       errorSet.push(
         new APIError(

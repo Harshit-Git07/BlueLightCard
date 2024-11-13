@@ -1,14 +1,17 @@
 import { APIGatewayEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { MemberCardRepository } from 'application/repositories/memberCardRepository';
 import { MemberCardService } from 'application/services/memberCardService';
 import { MemberCardQueryPayload } from 'application/types/memberCardTypes';
+import { datadog } from 'datadog-lambda-js';
+import 'dd-trace/init';
 
 const service: string = process.env.SERVICE as string;
 const logger = new Logger({ serviceName: `${service}-getMemberCard` });
+const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const tableName = process.env.IDENTITY_TABLE_NAME as string;
 const dynamoDB = DynamoDBDocument.from(new DynamoDB({ region: process.env.REGION ?? 'eu-west-2' }));
@@ -16,7 +19,7 @@ const dynamoDB = DynamoDBDocument.from(new DynamoDB({ region: process.env.REGION
 const repository = new MemberCardRepository(dynamoDB, tableName);
 const cardService = new MemberCardService(repository, logger);
 
-export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+const handlerUnwrapped = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   const { brand, uuid, cardNumber } = event.pathParameters || {};
 
   if (!uuid || !brand) {
@@ -42,7 +45,10 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
       return Response.NotFound({ message: 'No matching member cards found' });
     }
   } catch (error) {
-    logger.error({ message: 'Error fetching member card', error });
+    logger.error({
+      message: 'Error fetching member card',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
     if (error instanceof Error) {
       return Response.Error(error);
     } else {
@@ -50,3 +56,4 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
     }
   }
 };
+export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;

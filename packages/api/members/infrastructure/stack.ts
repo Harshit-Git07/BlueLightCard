@@ -37,30 +37,48 @@ import { MemberProfileCustomerModel } from '../application/models/memberProfileC
 import { UpdateMemberProfileRoute } from './routes/UpdateMemberProfileRoute';
 import { UpdateMemberProfileCustomerRoute } from './routes/UpdateMemberProfileCustomerRoute';
 import { CreateMemberProfileCustomerRoute } from './routes/CreateMemberProfileCustomerRoute';
+import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { createMemberCardsTable } from './dynamodb/createMemberCardsTable';
 
 import { GetCustomerProfileRoute } from './routes/GetCustomerProfileRoute';
 import { CustomerProfileModel } from '../application/models/customer/customerProfileModel';
 
 async function MembersStack({ stack, app }: StackContext) {
+  const SERVICE_NAME = 'members';
   const memberProfilesTableName = `${stack.stage}-${app.name}-memberProfiles`;
   const promoCodeTableName = `${stack.stage}-${app.name}-memberPromos`;
 
   const { certificateArn } = use(Shared);
 
-  stack.tags.setTag('service', 'members');
+  stack.tags.setTag('service', SERVICE_NAME);
 
   const config = MemberStackConfigResolver.for(stack, app.region as MemberStackRegion);
   const globalConfig = GlobalConfigResolver.for(stack.stage);
+  const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
+
+  // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
+  const layers =
+    USE_DATADOG_AGENT.toLowerCase() === 'true' && stack.region
+      ? [`arn:aws:lambda:${stack.region}:464622532012:layer:Datadog-Extension:65`]
+      : undefined;
 
   stack.setDefaultFunctionProps({
     timeout: 20,
     environment: {
-      service: 'members',
+      service: SERVICE_NAME,
+      USE_DATADOG_AGENT: getEnvOrDefault(MemberStackEnvironmentKeys.USE_DATADOG_AGENT, 'false'),
+      DD_API_KEY: getEnvOrDefault(MemberStackEnvironmentKeys.DD_API_KEY, ''),
+      DD_ENV: process.env?.SST_STAGE || 'undefined',
+      DD_GIT_COMMIT_SHA: getEnvOrDefault(MemberStackEnvironmentKeys.DD_GIT_COMMIT_SHA, ''),
+      DD_GIT_REPOSITORY_URL: getEnvOrDefault(MemberStackEnvironmentKeys.DD_GIT_REPOSITORY_URL, ''),
+      DD_SERVICE: SERVICE_NAME,
+      DD_SITE: 'datadoghq.eu',
+      DD_VERSION: getEnvOrDefault(MemberStackEnvironmentKeys.DD_VERSION, ''),
     },
+    layers,
   });
 
-  const membersApi = new ApiGatewayV1Api(stack, 'members', {
+  const membersApi = new ApiGatewayV1Api(stack, SERVICE_NAME, {
     authorizers: {
       // memberAuthorizer: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', authorizer),
     },

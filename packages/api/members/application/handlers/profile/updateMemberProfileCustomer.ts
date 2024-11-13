@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { validateRequest } from '../../utils/requestValidator';
 import {
   MemberProfileCustomerQueryPayload,
@@ -14,6 +14,8 @@ import { OrganisationsRepository } from '../../repositories/organisationsReposit
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { EmployersRepository } from '../../repositories/employersRepository';
+import { datadog } from 'datadog-lambda-js';
+import 'dd-trace/init';
 
 const service: string = process.env.SERVICE as string;
 const logger = new Logger({ serviceName: `${service}-updateMemberProfileCustomer` });
@@ -32,8 +34,9 @@ const profileService = new MemberProfileCustomerService(
   employersRepository,
   logger,
 );
+const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
-export const handler: APIGatewayProxyHandler = async (event) => {
+const handlerUnwrapped: APIGatewayProxyHandler = async (event) => {
   try {
     const { memberUUID, profileId } = event.pathParameters || {};
 
@@ -124,7 +127,10 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       return Response.OK({ message: 'Member profile updated successfully' });
     }
   } catch (error) {
-    logger.error({ message: 'Error updating member profile', error });
+    logger.error({
+      message: 'Error updating member profile',
+      error: error instanceof Error ? error.message : 'unknown error',
+    });
 
     if (error instanceof Error) {
       if ('code' in error && (error as any).code === 'ConditionalCheckFailedException') {
@@ -146,3 +152,4 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     return Response.Error(new Error('Unknown error occurred while updating member profile'));
   }
 };
+export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;

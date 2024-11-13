@@ -1,4 +1,4 @@
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '../../../../core/src/utils/logger/lambdaLogger';
 import { APIError } from '../../models/APIError';
 import { ReusableCrudRepository } from '../../repositories/reusableCrudRepository';
 import { NamedZodType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
@@ -8,7 +8,7 @@ import { ReusableCrudService } from '../reusableCrudService';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 
 jest.mock('../../repositories/reusableCrudRepository');
-jest.mock('@aws-lambda-powertools/logger');
+jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 
 describe('ReusableCrudService', () => {
   let service: ReusableCrudService<any, any>;
@@ -26,7 +26,7 @@ describe('ReusableCrudService', () => {
       'PK',
       'SK',
     ) as jest.Mocked<ReusableCrudRepository<any, any>>;
-    mockLogger = new Logger() as jest.Mocked<Logger>;
+    mockLogger = new Logger({ serviceName: 'mockCrudService' }) as jest.Mocked<Logger>;
     mockZodType = {
       parse: jest.fn() as jest.Mock,
     } as unknown as NamedZodType<z.ZodEffects<z.ZodObject<any>>>;
@@ -66,7 +66,10 @@ describe('ReusableCrudService', () => {
         ...payload,
       });
 
-      expect(mockLogger.info).toHaveBeenCalledWith('Successfully created TestEntity', { query });
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        message: 'Successfully created TestEntity',
+        body: query,
+      });
     });
 
     it('should successfully update an existing entity', async () => {
@@ -88,7 +91,10 @@ describe('ReusableCrudService', () => {
         ...payload,
       });
 
-      expect(mockLogger.info).toHaveBeenCalledWith('Successfully updated TestEntity', { query });
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        message: 'Successfully updated TestEntity',
+        body: query,
+      });
     });
 
     it('should throw an error if validation fails', async () => {
@@ -112,8 +118,9 @@ describe('ReusableCrudService', () => {
         sk: 'SK#456',
         ...payload,
       });
-      expect(mockLogger.error).toHaveBeenCalledWith('Unknown error creating TestEntity:', {
-        error: new Error('Validation error'),
+      expect(mockLogger.error).toHaveBeenCalledWith({
+        message: 'Unknown error creating TestEntity:',
+        error: JSON.stringify(new Error('Validation error')),
       });
     });
 
@@ -140,8 +147,9 @@ describe('ReusableCrudService', () => {
         sk: 'SK#456',
         ...payload,
       });
-      expect(mockLogger.error).toHaveBeenCalledWith('Unknown error creating TestEntity:', {
-        error: new Error('Repository error'),
+      expect(mockLogger.error).toHaveBeenCalledWith({
+        message: 'Unknown error creating TestEntity:',
+        error: JSON.stringify(new Error('Repository error')),
       });
     });
   });

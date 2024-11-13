@@ -1,5 +1,7 @@
 import { APIGatewayEvent, APIGatewayProxyHandler } from 'aws-lambda';
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { Response } from '../utils/restResponse/response';
 import { APIErrorCode } from '../enums/APIErrorCode';
 import { APIError } from '../models/APIError';
@@ -8,6 +10,8 @@ import { NamedZodType } from '@blc-mono/core/extensions/apiGatewayExtension/agMo
 import { z } from 'zod';
 import { ReusableCrudQueryPayload } from '../types/reusableCrudQueryPayload';
 import { ReusableCrudQueryMapper } from '../utils/mappers/reusableCrudQueryMapper';
+import { datadog } from 'datadog-lambda-js';
+import 'dd-trace/init';
 
 import * as reusableCrudPayloadTypes from '../types/reusableCrudPayloadTypes';
 import * as reusableCrudPayloadModels from '../models/reusableCrudPayloadModels';
@@ -35,11 +39,12 @@ const pkQueryKey = process.env.PK_QUERY_KEY as string;
 const skQueryKey = process.env.SK_QUERY_KEY as string;
 
 const tableName = process.env.ENTITY_TABLE_NAME as string;
-const memberProfilesTableName = process.env.MEMBER_PROFILES_TABLE_NAME as string;
-const promoCodeTableName = process.env.PROMO_CODE_TABLE_NAME as string;
 const dynamoDB = DynamoDBDocumentClient.from(
   new DynamoDBClient({ region: process.env.REGION ?? 'eu-west-2' }),
 );
+const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
+const memberProfilesTableName = process.env.MEMBER_PROFILES_TABLE_NAME as string;
+const promoCodeTableName = process.env.PROMO_CODE_TABLE_NAME as string;
 const memberProfilesRepository = new MemberProfileRepository(dynamoDB, memberProfilesTableName);
 const organisationsRepository = new OrganisationsRepository(dynamoDB, memberProfilesTableName);
 const employersRepository = new EmployersRepository(dynamoDB, memberProfilesTableName);
@@ -56,7 +61,7 @@ const promoCodesService = new PromoCodesService(
   memberProfilesService,
 );
 
-export const handler: APIGatewayProxyHandler = async (event: APIGatewayEvent) => {
+const handlerUnwrapped: APIGatewayProxyHandler = async (event: APIGatewayEvent) => {
   try {
     type PayloadTypeName = keyof typeof reusableCrudPayloadTypes;
     const payloadTypeName = process.env.PAYLOAD_TYPE_NAME as PayloadTypeName;
@@ -148,7 +153,10 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayEvent) =>
       }
     }
   } catch (error) {
-    logger.error({ message: `Error updating ${entityName}`, error });
+    logger.error({
+      message: `Error updating ${entityName}`,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
 
     if (error instanceof Error) {
       if ('code' in error && (error as any).code === 'ConditionalCheckFailedException') {
@@ -170,3 +178,4 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayEvent) =>
     return Response.Error(new Error(`Unknown error occurred while updating ${entityName}`));
   }
 };
+export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;

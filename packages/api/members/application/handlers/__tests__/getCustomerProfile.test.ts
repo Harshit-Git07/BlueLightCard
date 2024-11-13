@@ -7,7 +7,7 @@ import { profile } from 'console';
 
 jest.mock('../../repositories/memberProfileCustomerGetRepository');
 jest.mock('../../services/memberProfileCustomerGetService');
-jest.mock('@blc-mono/core/utils/logger/lambdaLogger');
+jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 
 const mockGetCustomerProfile = jest.fn();
 MemberProfileCustomerGetService.prototype.getCustomerProfile = mockGetCustomerProfile;

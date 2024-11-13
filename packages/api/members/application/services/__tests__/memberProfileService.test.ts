@@ -1,4 +1,4 @@
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '../../../../core/src/utils/logger/lambdaLogger';
 import { MemberProfileRepository } from '../../repositories/memberProfileRepository';
 import { OrganisationsRepository } from '../../repositories/organisationsRepository';
 import { EmployersRepository } from '../../repositories/employersRepository';
@@ -17,7 +17,7 @@ import { Gender } from '../../enums/Gender';
 jest.mock('../../repositories/memberProfileRepository');
 jest.mock('../../repositories/organisationsRepository');
 jest.mock('../../repositories/employersRepository');
-jest.mock('@aws-lambda-powertools/logger');
+jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 jest.mock('../../models/memberProfileModel');
 
 const mockDynamoDBDocClient = {} as DynamoDBDocumentClient;
@@ -34,7 +34,7 @@ const mockEmployersRepository = new EmployersRepository(
   mockDynamoDBDocClient,
   mockTableName,
 ) as jest.Mocked<EmployersRepository>;
-const mockLogger = new Logger() as jest.Mocked<Logger>;
+const mockLogger = new Logger({ serviceName: 'mockEmployers' }) as jest.Mocked<Logger>;
 
 describe('MemberProfileService', () => {
   let service: MemberProfileService;
@@ -111,7 +111,10 @@ describe('MemberProfileService', () => {
       await service.upsertMemberProfile(query, payload, true, errorSet);
 
       expect(mockProfileRepository.upsertMemberProfile).toHaveBeenCalledWith(query, payload, true);
-      expect(mockLogger.info).toHaveBeenCalledWith('Profile created successfully', { query });
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        message: 'Profile created successfully',
+        body: query,
+      });
       expect(errorSet).toHaveLength(0);
     });
 
@@ -123,7 +126,10 @@ describe('MemberProfileService', () => {
       await service.upsertMemberProfile(query, payload, false, errorSet);
 
       expect(mockProfileRepository.upsertMemberProfile).toHaveBeenCalledWith(query, payload, false);
-      expect(mockLogger.info).toHaveBeenCalledWith('Profile updated successfully', { query });
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        message: 'Profile updated successfully',
+        body: query,
+      });
       expect(errorSet).toHaveLength(0);
     });
 

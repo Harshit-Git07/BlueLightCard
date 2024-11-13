@@ -1,4 +1,4 @@
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '../../../../core/src/utils/logger/lambdaLogger';
 import { MemberApplicationRepository } from '../../repositories/memberApplicationRepository';
 import { MemberApplicationService } from '../memberApplicationService';
 import { z } from 'zod';
@@ -13,7 +13,7 @@ import { RejectionReason } from '../../enums/RejectionReason';
 
 // Mock the dependencies
 jest.mock('../../repositories/memberApplicationRepository');
-jest.mock('@aws-lambda-powertools/logger');
+jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 
 describe('MemberApplicationService', () => {
   let service: MemberApplicationService;
@@ -77,8 +77,9 @@ describe('MemberApplicationService', () => {
       updatePayload,
       false,
     );
-    expect(mockLogger.info).toHaveBeenCalledWith('Application updated successfully', {
-      query: queryPayload,
+    expect(mockLogger.info).toHaveBeenCalledWith({
+      message: 'Application updated successfully',
+      body: queryPayload,
     });
   });
 
@@ -319,8 +320,9 @@ describe('MemberApplicationService', () => {
       createPayload,
       true,
     );
-    expect(mockLogger.info).toHaveBeenCalledWith('Application created successfully', {
-      query: queryPayload,
+    expect(mockLogger.info).toHaveBeenCalledWith({
+      message: 'Application created successfully',
+      body: queryPayload,
     });
   });
 });

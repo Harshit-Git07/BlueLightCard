@@ -1,4 +1,4 @@
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { MemberApplicationRepository } from '../repositories/memberApplicationRepository';
 import {
   MemberApplicationQueryPayload,
@@ -97,7 +97,7 @@ export class MemberApplicationService {
 
       if (isInsert) {
         if (parsedModel.eligibilityStatus == undefined) {
-          this.logger.info(`eligibilityStatus is required on create`);
+          this.logger.info({ message: 'eligibilityStatus is required on create' });
           errorSet.push(
             new APIError(
               APIErrorCode.VALIDATION_ERROR,
@@ -107,7 +107,7 @@ export class MemberApplicationService {
           );
         }
         if (parsedModel.verificationMethod == undefined) {
-          this.logger.info(`verificationMethod is required on create`);
+          this.logger.info({ message: 'verificationMethod is required on create' });
           errorSet.push(
             new APIError(
               APIErrorCode.VALIDATION_ERROR,
@@ -120,20 +120,25 @@ export class MemberApplicationService {
 
       if (errorSet.length > 0) return;
 
-      this.logger.info(`Attempting to ${action}ate application to ${this.repository.tableName}`, {
-        query,
+      this.logger.info({
+        message: `Attempting to ${action}ate application to ${this.repository.tableName}`,
+        body: query,
       });
       await this.repository.upsertMemberApplication(query, updatedApplication, isInsert);
-      this.logger.info(`Application ${action}ated successfully`, { query });
+      this.logger.info({ message: `Application ${action}ated successfully`, body: query });
     } catch (error) {
       if (error instanceof ZodError) {
-        (error as ZodError).errors.forEach((issue) => {
+        error.errors.forEach((issue) => {
           errorSet.push(
             new APIError(APIErrorCode.VALIDATION_ERROR, issue.path.join('.'), issue.message),
           );
         });
       } else {
-        this.logger.error(`Unknown error ${action}ating application:`, { error });
+        this.logger.error({
+          message: `Unknown error ${action}ating application:`,
+          error:
+            error instanceof Error ? error.message : `Unknown error ${action}ating application`,
+        });
         throw error;
       }
     }

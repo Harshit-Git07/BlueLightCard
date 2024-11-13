@@ -3,7 +3,7 @@ import { APIError } from '../../models/APIError';
 import { EmployersRepository } from '../../repositories/employersRepository';
 import { OrganisationsRepository } from '../../repositories/organisationsRepository';
 import { EmployersService } from '../employersService';
-import { LambdaLogger } from '@blc-mono/core/src/utils/logger/lambdaLogger';
+import { LambdaLogger as Logger } from '../../../../core/src/utils/logger/lambdaLogger';
 
 jest.mock('../../repositories/organisationsRepository.ts');
 jest.mock('../../repositories/employersRepository');
@@ -12,7 +12,7 @@ jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 describe('employersService', () => {
   let mockOrganisationsRepository: jest.MockedObject<OrganisationsRepository>;
   let mockEmployerRepository: jest.MockedObject<EmployersRepository>;
-  let mockLogger: jest.MockedObject<LambdaLogger>;
+  let mockLogger: jest.MockedObject<Logger>;
   let employersService: EmployersService;
 
   beforeEach(() => {
@@ -27,7 +27,7 @@ describe('employersService', () => {
     mockLogger = {
       info: jest.fn(),
       error: jest.fn(),
-    } as unknown as jest.MockedObject<LambdaLogger>;
+    } as unknown as jest.MockedObject<Logger>;
 
     employersService = new EmployersService(
       mockEmployerRepository,

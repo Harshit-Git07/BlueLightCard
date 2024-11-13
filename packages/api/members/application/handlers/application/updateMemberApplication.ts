@@ -1,5 +1,5 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { validateRequest } from '../../utils/requestValidator';
@@ -12,9 +12,12 @@ import { MemberApplicationService } from '../../services/memberApplicationServic
 import { Response } from '../../utils/restResponse/response';
 import { APIErrorCode } from '../../enums/APIErrorCode';
 import { APIError } from '../../models/APIError';
+import { datadog } from 'datadog-lambda-js';
+import 'dd-trace/init';
 
 const service: string = process.env.SERVICE as string;
 const logger = new Logger({ serviceName: `${service}-updateMemberApplication` });
+const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const tableName = process.env.IDENTITY_TABLE_NAME as string;
 const dynamoDB = DynamoDBDocument.from(new DynamoDB({ region: process.env.REGION ?? 'eu-west-2' }));
@@ -22,7 +25,7 @@ const dynamoDB = DynamoDBDocument.from(new DynamoDB({ region: process.env.REGION
 const repository = new MemberApplicationRepository(dynamoDB, tableName);
 const applicationService = new MemberApplicationService(repository, logger);
 
-export const handler: APIGatewayProxyHandler = async (event) => {
+const handlerUnwrapped: APIGatewayProxyHandler = async (event) => {
   try {
     const { brand, memberUUID, applicationId } = event.pathParameters || {};
 
@@ -114,7 +117,10 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       return Response.OK({ message: 'Member application updated successfully' });
     }
   } catch (error) {
-    logger.error({ message: 'Error updating member application', error });
+    logger.error({
+      message: 'Error updating member application',
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
 
     if (error instanceof Error) {
       if ('name' in error && (error as any).name === 'ConditionalCheckFailedException') {
@@ -136,3 +142,4 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     return Response.Error(new Error('Unknown error occurred while updating member application'));
   }
 };
+export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;

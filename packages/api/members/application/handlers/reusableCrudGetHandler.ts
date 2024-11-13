@@ -1,5 +1,5 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { DynamoDBDocument, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { DynamoDB, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Response } from '../utils/restResponse/response';
@@ -10,6 +10,8 @@ import { NamedZodType } from '@blc-mono/core/extensions/apiGatewayExtension/agMo
 import { z } from 'zod';
 import { ReusableCrudQueryPayload } from '../types/reusableCrudQueryPayload';
 import { ReusableCrudQueryMapper } from '../utils/mappers/reusableCrudQueryMapper';
+import { datadog } from 'datadog-lambda-js';
+import 'dd-trace/init';
 
 import * as reusableCrudPayloadTypes from '../types/reusableCrudPayloadTypes';
 import * as reusableCrudPayloadModels from '../models/reusableCrudPayloadModels';
@@ -25,12 +27,15 @@ const pkPrefix = process.env.PK_PREFIX as string;
 const skPrefix = process.env.SK_PREFIX as string;
 const pkQueryKey = process.env.PK_QUERY_KEY as string;
 const skQueryKey = process.env.SK_QUERY_KEY as string;
+const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const tableName = process.env.ENTITY_TABLE_NAME as string;
+
 const dynamoDB = DynamoDBDocumentClient.from(
   new DynamoDBClient({ region: process.env.REGION ?? 'eu-west-2' }),
 );
-export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
+
+const handlerUnwrapped = async (event: APIGatewayEvent): Promise<APIGatewayProxyResult> => {
   type PayloadTypeName = keyof typeof reusableCrudPayloadTypes;
   const payloadTypeName = process.env.PAYLOAD_TYPE_NAME as PayloadTypeName;
   const payloadType = reusableCrudPayloadTypes[payloadTypeName];
@@ -100,7 +105,10 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
       }
     }
   } catch (error) {
-    logger.error({ message: `Error fetching ${entityName}`, error });
+    logger.error({
+      message: `Error fetching ${entityName}`,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    });
     if (error instanceof Error) {
       return Response.Error(error);
     } else {
@@ -108,3 +116,4 @@ export const handler = async (event: APIGatewayEvent): Promise<APIGatewayProxyRe
     }
   }
 };
+export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;

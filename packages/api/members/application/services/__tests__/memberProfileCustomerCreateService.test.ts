@@ -1,4 +1,4 @@
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '../../../../core/src/utils/logger/lambdaLogger';
 import { memberProfileCustomerCreateRepository } from '../../repositories/memberProfileCustomerCreateRepository';
 import { memberProfileCustomerCreateService } from '../memberProfileCustomerCreateService';
 import { AddressInsertPayload, CreateProfilePayload } from '../../types/memberProfilesTypes';
@@ -7,7 +7,7 @@ import { transformDBToApp } from '../../models/memberProfilesModel';
 
 // Mock the dependencies
 jest.mock('../../repositories/memberProfileCustomerCreateRepository');
-jest.mock('@aws-lambda-powertools/logger');
+jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 jest.mock('../../models/memberProfilesModel', () => ({
   ...jest.requireActual('../../models/memberProfilesModel'),
   transformDBToApp: jest.fn(),
@@ -54,9 +54,8 @@ describe('MemberProfileService', () => {
       const result = await service.createCustomerProfiles(payload, brand);
 
       expect(mockRepository.createCustomerProfiles).toHaveBeenCalledWith(payload, brand);
-      expect(mockLogger.info).toHaveBeenCalledWith('Profile created successfully', {
-        memberUuid,
-        profileUuid,
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        message: `Profile created successfully: memberUuid: ${memberUuid} | profileUuid: ${profileUuid}`,
       });
       expect(result).toStrictEqual([memberUuid, profileUuid]); // Check that the correct memberUuid is returned
     });
@@ -70,7 +69,8 @@ describe('MemberProfileService', () => {
       );
 
       expect(mockRepository.createCustomerProfiles).toHaveBeenCalledWith(payload, brand);
-      expect(mockLogger.error).toHaveBeenCalledWith('Error creating profile:', {
+      expect(mockLogger.error).toHaveBeenCalledWith({
+        message: 'Error creating profile:',
         error: 'Database error',
       });
     });
@@ -83,8 +83,9 @@ describe('MemberProfileService', () => {
         'Unknown error occurred while creating profile',
       );
 
-      expect(mockLogger.error).toHaveBeenCalledWith('Unknown error creating profile:', {
-        error: unknownError,
+      expect(mockLogger.error).toHaveBeenCalledWith({
+        message: 'Unknown error creating profile:',
+        error: JSON.stringify(unknownError),
       });
     });
   });

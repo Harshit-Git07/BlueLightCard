@@ -1,4 +1,4 @@
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { memberProfileCustomerCreateRepository } from '../repositories/memberProfileCustomerCreateRepository';
 import { AddressInsertPayload, CreateProfilePayload } from '../types/memberProfilesTypes';
 import { MemberProfileApp, transformDBToApp } from '../models/memberProfilesModel';
@@ -18,14 +18,22 @@ export class memberProfileCustomerCreateService {
         payload,
         brand,
       );
-      this.logger.info('Profile created successfully', { memberUuid, profileUuid });
+      this.logger.info({
+        message: `Profile created successfully: memberUuid: ${memberUuid} | profileUuid: ${profileUuid}`,
+      });
       return [memberUuid, profileUuid];
     } catch (error) {
       if (error instanceof Error) {
-        this.logger.error('Error creating profile:', { error: error.message });
+        this.logger.error({
+          message: 'Error creating profile:',
+          error: error.message,
+        });
         throw error;
       } else {
-        this.logger.error('Unknown error creating profile:', { error });
+        this.logger.error({
+          message: 'Unknown error creating profile:',
+          error: JSON.stringify(error),
+        });
         throw new Error('Unknown error occurred while creating profile');
       }
     }
@@ -37,24 +45,22 @@ export class memberProfileCustomerCreateService {
     try {
       const profileSK = await this.getProfileSortKey(memberKey, memberUUID);
       await this.repository.insertAddressAndUpdateProfile(memberKey, profileSK, payload);
-      this.logger.info('Address inserted and profile updated with county successfully', {
-        memberUUID,
+      this.logger.info({
+        message: `Address inserted and profile updated with county successfully | memberUuid: ${memberUUID}`,
       });
     } catch (error) {
-      if (error instanceof Error) {
-        this.logger.error('Error inserting address:', { error: error.message });
-        throw error;
-      } else {
-        this.logger.error('Unknown error inserting address:', { error });
-        throw new Error('Unknown error occurred while inserting address');
-      }
+      this.logger.error({
+        message: 'Error inserting address:',
+        error: error instanceof Error ? error.message : 'Unknown error inserting address',
+      });
+      throw error;
     }
   }
 
   private async getProfileSortKey(memberKey: string, memberUUID: string): Promise<string> {
     const profileSK = await this.repository.getProfileSortKey(memberKey);
     if (!profileSK) {
-      this.logger.warn('Member profile not found: ', { memberUUID });
+      this.logger.warn({ message: `Member profile not found: memberUuid: ${memberUUID} ` });
       throw new Error('Member profile not found');
     }
     return profileSK;

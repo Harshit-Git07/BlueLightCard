@@ -73,7 +73,7 @@ export class memberProfileCustomerCreateRepository {
       await this.dynamoDB.send(new TransactWriteCommand(params));
       const prefixSeparator = '#';
       return [memberKey.split(prefixSeparator)[1], profileSK.split(prefixSeparator)[1]];
-    } catch (error) {
+    } catch (error: Error | unknown) {
       if (error instanceof Error) {
         throw new Error(
           JSON.stringify({

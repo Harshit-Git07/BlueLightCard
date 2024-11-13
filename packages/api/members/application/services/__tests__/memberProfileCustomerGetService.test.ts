@@ -1,6 +1,6 @@
 import { MemberProfileCustomerGetService } from '../memberProfileCustomerGetService';
 import { MemberProfileCustomerGetRepository } from '../../repositories/memberProfileCustomerGetRepository';
-import { LambdaLogger } from '../../../../core/src/utils/logger/lambdaLogger';
+import { LambdaLogger as Logger } from '../../../../core/src/utils/logger/lambdaLogger';
 import { APIError } from '../../models/APIError';
 import { CustomerProfileModel } from '../../models/customer/customerProfileModel';
 import { GetCustomerProfileQueryPayload } from '../../types/customerProfileTypes';
@@ -12,7 +12,7 @@ jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 describe('MemberProfileCustomerGetService', () => {
   let service: MemberProfileCustomerGetService;
   let mockRepository: jest.Mocked<MemberProfileCustomerGetRepository>;
-  let mockLogger: jest.Mocked<LambdaLogger>;
+  let mockLogger: jest.Mocked<Logger>;
 
   const mockCustomerProfile: CustomerProfileModel = {
     firstName: 'John',
@@ -43,9 +43,9 @@ describe('MemberProfileCustomerGetService', () => {
       null as any,
       '',
     ) as jest.Mocked<MemberProfileCustomerGetRepository>;
-    mockLogger = new LambdaLogger({
+    mockLogger = new Logger({
       serviceName: 'memberProfileCustomerGetService',
-    }) as jest.Mocked<LambdaLogger>;
+    }) as jest.Mocked<Logger>;
     service = new MemberProfileCustomerGetService(mockRepository, mockLogger);
 
     jest.clearAllMocks();
@@ -113,7 +113,7 @@ describe('MemberProfileCustomerGetService', () => {
 
     expect(mockLogger.error).toHaveBeenCalledWith({
       message: `Error getting customer profile for 12345`,
-      body: { error: genericError },
+      error: genericError.message,
     });
   });
 });

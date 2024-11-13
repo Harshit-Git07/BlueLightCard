@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, Context as LambdaContext }
 import { memberProfileCustomerCreateService } from '../../services/memberProfileCustomerCreateService';
 import { CreateProfilePayload } from '../../types/memberProfilesTypes';
 
-jest.mock('@aws-lambda-powertools/logger');
+jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 jest.mock('../../repositories/memberProfileCustomerCreateRepository');
 jest.mock('../../services/memberProfileCustomerCreateService');
 

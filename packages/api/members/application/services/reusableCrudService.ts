@@ -1,4 +1,4 @@
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { APIError } from '../models/APIError';
 import { ReusableCrudRepository } from '../repositories/reusableCrudRepository';
 import { NamedZodType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
@@ -41,9 +41,12 @@ export class ReusableCrudService<
       });
 
       await this.repository.upsert(query, payload, isInsert);
-      this.logger.info(`Successfully ${action}ated ${this.entityName}`, { query });
+      this.logger.info({ message: `Successfully ${action}ated ${this.entityName}`, body: query });
     } catch (error) {
-      this.logger.error(`Unknown error ${action}ating ${this.entityName}:`, { error });
+      this.logger.error({
+        message: `Unknown error ${action}ating ${this.entityName}:`,
+        error: JSON.stringify(error),
+      });
       errorSet.push(
         new APIError(
           APIErrorCode.GENERIC_ERROR,

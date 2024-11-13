@@ -2,14 +2,14 @@ import { APIErrorCode } from '../../enums/APIErrorCode';
 import { APIError } from '../../models/APIError';
 import { OrganisationsRepository } from '../../repositories/organisationsRepository';
 import { OrganisationService } from '../organisationsService';
-import { LambdaLogger } from '@blc-mono/core/src/utils/logger/lambdaLogger';
+import { LambdaLogger as Logger } from '@blc-mono/core/src/utils/logger/lambdaLogger';
 
 jest.mock('../../repositories/organisationsRepository');
 jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 
 describe('organisationService', () => {
   let mockRepository: jest.MockedObject<OrganisationsRepository>;
-  let mockLogger: jest.MockedObject<LambdaLogger>;
+  let mockLogger: jest.MockedObject<Logger>;
   let organisationService: OrganisationService;
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('organisationService', () => {
     mockLogger = {
       info: jest.fn(),
       error: jest.fn(),
-    } as unknown as jest.MockedObject<LambdaLogger>;
+    } as unknown as jest.MockedObject<Logger>;
     organisationService = new OrganisationService(mockRepository, mockLogger);
   });
 

@@ -1,5 +1,5 @@
 import { APIGatewayEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { Response } from '../../utils/restResponse/response';
 import { ReusableCrudService } from '../../services/reusableCrudService';
@@ -11,7 +11,7 @@ import { handler } from './../reusableCrudGetHandler';
 import { ReusableCrudRepository } from '../../repositories/reusableCrudRepository';
 import { mockClient } from 'aws-sdk-client-mock';
 
-jest.mock('@aws-lambda-powertools/logger');
+jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 jest.mock('../../services/reusableCrudService');
 jest.mock('../../utils/restResponse/response');
 jest.mock('../../utils/mappers/reusableCrudQueryMapper');
@@ -23,7 +23,7 @@ describe('reusableCrudGetHandler', () => {
   const mockDynamoDB = mockClient(DynamoDBDocumentClient);
 
   beforeEach(() => {
-    mockLogger = new Logger() as jest.Mocked<Logger>;
+    mockLogger = new Logger({ serviceName: 'mockCrudHandler' }) as jest.Mocked<Logger>;
     const mockRepository = {
       // Mock the methods of ReusableCrudRepository as needed
       create: jest.fn(),

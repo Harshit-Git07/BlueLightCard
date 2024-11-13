@@ -4,14 +4,15 @@ import { OrganisationsRepository } from 'application/repositories/organisationsR
 import { OrganisationService } from 'application/services/organisationsService';
 import { APIGatewayEvent } from 'aws-lambda/trigger/api-gateway-proxy';
 import { datadog } from 'datadog-lambda-js';
-import { LambdaLogger } from '../../../../core/src/utils/logger/lambdaLogger';
+import 'dd-trace/init';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { APIError } from '../../models/APIError';
 import { Response } from '../../utils/restResponse/response';
 import { APIErrorCode } from '../../enums/APIErrorCode';
 
 const service: string = process.env.SERVICE as string;
-const logger = new LambdaLogger({ serviceName: `${service}-getOrganisations` });
-const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
+const logger = new Logger({ serviceName: `${service}-getOrganisations` });
+const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const tableName = process.env.IDENTITY_TABLE_NAME as string;
 const dynamoDB = DynamoDBDocumentClient.from(

@@ -1,4 +1,4 @@
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '../../../../core/src/utils/logger/lambdaLogger';
 import { MemberProfileCustomerRepository } from '../../repositories/memberProfileCustomerRepository';
 import { OrganisationsRepository } from '../../repositories/organisationsRepository';
 import { EmployersRepository } from '../../repositories/employersRepository';
@@ -17,7 +17,7 @@ import { Gender } from '../../enums/Gender';
 jest.mock('../../repositories/memberProfileCustomerRepository');
 jest.mock('../../repositories/organisationsRepository');
 jest.mock('../../repositories/employersRepository');
-jest.mock('@aws-lambda-powertools/logger');
+jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 jest.mock('../../models/memberProfileCustomerModel');
 
 const mockDynamoDBDocClient = {} as DynamoDBDocumentClient;
@@ -34,7 +34,7 @@ const mockEmployersRepository = new EmployersRepository(
   mockDynamoDBDocClient,
   mockTableName,
 ) as jest.Mocked<EmployersRepository>;
-const mockLogger = new Logger() as jest.Mocked<Logger>;
+const mockLogger = new Logger({ serviceName: 'mockProfileCustomerService' }) as jest.Mocked<Logger>;
 
 describe('MemberProfileCustomerService', () => {
   let service: MemberProfileCustomerService;
@@ -103,7 +103,10 @@ describe('MemberProfileCustomerService', () => {
         payload,
         true,
       );
-      expect(mockLogger.info).toHaveBeenCalledWith('Profile created successfully', { query });
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        message: 'Profile created successfully',
+        body: query,
+      });
       expect(errorSet).toHaveLength(0);
     });
 
@@ -119,7 +122,10 @@ describe('MemberProfileCustomerService', () => {
         payload,
         false,
       );
-      expect(mockLogger.info).toHaveBeenCalledWith('Profile updated successfully', { query });
+      expect(mockLogger.info).toHaveBeenCalledWith({
+        message: 'Profile updated successfully',
+        body: query,
+      });
       expect(errorSet).toHaveLength(0);
     });
 

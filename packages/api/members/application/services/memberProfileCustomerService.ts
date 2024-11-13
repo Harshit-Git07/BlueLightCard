@@ -1,4 +1,4 @@
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { MemberProfileCustomerRepository } from '../repositories/memberProfileCustomerRepository';
 import {
   MemberProfileCustomerQueryPayload,
@@ -95,7 +95,10 @@ export class MemberProfileCustomerService {
       if (errorSet.length > 0) return;
 
       await this.profileRepository.upsertMemberProfileCustomer(query, updatedProfile, isInsert);
-      this.logger.info(`Profile ${action}ated successfully`, { query });
+      this.logger.info({
+        message: `Profile ${action}ated successfully`,
+        body: query,
+      });
     } catch (error) {
       if (error instanceof ZodError) {
         (error as ZodError).errors.forEach((issue) => {
@@ -104,7 +107,10 @@ export class MemberProfileCustomerService {
           );
         });
       } else {
-        this.logger.error(`Unknown error ${action}ating profile:`, { error });
+        this.logger.error({
+          message: `Unknown error ${action}ating profile:`,
+          error: error instanceof Error ? error.message : `Unknown error ${action}ating profile:`,
+        });
         throw error;
       }
     }

@@ -1,4 +1,4 @@
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { MemberCardRepository } from '../repositories/memberCardRepository';
 import { MemberCardQueryPayload, MemberCardUpdatePayload } from '../types/memberCardTypes';
 import { MemberCardModel } from '../models/memberCardModel';
@@ -50,13 +50,12 @@ export class MemberCardService {
    */
   async getMemberCards(query: MemberCardQueryPayload): Promise<MemberCardModel[] | null> {
     try {
-      return this.repository.getMemberCards(query);
+      return await this.repository.getMemberCards(query);
     } catch (error) {
-      if (error instanceof Error) {
-        this.logger.error('Error updating card:', { error: error.message });
-      } else {
-        this.logger.error('Unknown error updating card:', { error });
-      }
+      this.logger.error({
+        message: 'Error updating card:',
+        error: error instanceof Error ? error.message : 'Unknown error updating card',
+      });
       throw error;
     }
   }
@@ -92,13 +91,12 @@ export class MemberCardService {
         ...updatedCard,
       });
       await this.repository.updateMemberCard(query, updatedCard, false);
-      this.logger.info('Card updated successfully', { query });
+      this.logger.info({ message: 'Card updated successfully', body: query });
     } catch (error) {
-      if (error instanceof Error) {
-        this.logger.error('Error updating card:', { error: error.message });
-      } else {
-        this.logger.error('Unknown error updating card:', { error });
-      }
+      this.logger.error({
+        message: 'Error updating card',
+        error: error instanceof Error ? error.message : 'Unknown error updating card',
+      });
       throw error;
     }
   }

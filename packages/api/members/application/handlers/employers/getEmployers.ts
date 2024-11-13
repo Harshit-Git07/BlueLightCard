@@ -3,15 +3,16 @@ import { DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
 import { EmployersRepository } from 'application/repositories/employersRepository';
 import { EmployersService } from 'application/services/employersService';
 import { APIGatewayEvent } from 'aws-lambda/trigger/api-gateway-proxy';
-import { datadog } from 'datadog-lambda-js';
-import { LambdaLogger } from '../../../../core/src/utils/logger/lambdaLogger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { OrganisationsRepository } from '../../repositories/organisationsRepository';
 import { Response } from '../../utils/restResponse/response';
 import { APIError } from '../../models/APIError';
 import { APIErrorCode } from '../../enums/APIErrorCode';
+import { datadog } from 'datadog-lambda-js';
+import 'dd-trace/init';
 
 const service: string = process.env.SERVICE as string;
-const logger = new LambdaLogger({ serviceName: `${service}-getEmployers` });
+const logger = new Logger({ serviceName: `${service}-getEmployers` });
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const tableName = process.env.IDENTITY_TABLE_NAME as string;
@@ -70,5 +71,4 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
     }),
   };
 };
-
 export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;

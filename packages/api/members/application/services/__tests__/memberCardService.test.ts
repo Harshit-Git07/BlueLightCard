@@ -1,4 +1,4 @@
-import { Logger } from '@aws-lambda-powertools/logger';
+import { LambdaLogger as Logger } from '../../../../core/src/utils/logger/lambdaLogger';
 import { MemberCardRepository } from '../../repositories/memberCardRepository';
 import { MemberCardService } from '../memberCardService';
 import { z } from 'zod';
@@ -8,7 +8,7 @@ import { PaymentStatus } from 'application/enums/PaymentStatus';
 
 // Mock the dependencies
 jest.mock('../../repositories/memberCardRepository');
-jest.mock('@aws-lambda-powertools/logger');
+jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 
 describe('MemberCardService', () => {
   let service: MemberCardService;

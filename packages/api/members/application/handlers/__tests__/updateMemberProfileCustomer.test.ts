@@ -9,6 +9,7 @@ import { APIError } from '../../models/APIError';
 jest.mock('../../utils/requestValidator');
 jest.mock('../../services/memberProfileCustomerService');
 jest.mock('../../utils/restResponse/response');
+jest.mock('../../../../core/src/utils/logger/lambdaLogger');
 
 const mockValidateRequest = validateRequest as jest.MockedFunction<typeof validateRequest>;
 const mockProfileCustomerService = MemberProfileCustomerService.prototype;

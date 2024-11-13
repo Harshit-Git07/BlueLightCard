@@ -1,4 +1,4 @@
-import { LambdaLogger } from '@blc-mono/core/src/utils/logger/lambdaLogger';
+import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { OrganisationsRepository } from 'application/repositories/organisationsRepository';
 import { OrganisationsQueryPayload } from 'application/types/organisationTypes';
 import { OrganisationModel } from '../models/organisationModel';
@@ -8,7 +8,7 @@ import { APIErrorCode } from '../enums/APIErrorCode';
 export class OrganisationService {
   constructor(
     private repository: OrganisationsRepository,
-    private logger: LambdaLogger,
+    private logger: Logger,
   ) {}
 
   async getOrganisations({ brand, organisationId }: OrganisationsQueryPayload): Promise<{

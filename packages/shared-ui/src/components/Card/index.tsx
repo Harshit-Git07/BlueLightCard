@@ -19,6 +19,7 @@ const Card: FC<CardProps> = ({
   onClick,
   ariaLabel,
   className,
+  canHover = true,
   ...props
 }) => {
   const [cardState, setCardState] = useState<CardState>(initialCardState);
@@ -60,6 +61,8 @@ const Card: FC<CardProps> = ({
   }, [onClick]);
 
   const handleMouseEnter = useCallback(() => {
+    if (!canHover) return;
+
     setIsHovered(true);
     if (cardState !== 'selected') {
       setCardState('hover');

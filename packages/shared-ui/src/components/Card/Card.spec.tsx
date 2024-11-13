@@ -105,6 +105,18 @@ describe('Card component', () => {
     );
   });
 
+  it('should not change state to hover on mouse enter when hover disabled', () => {
+    const props = { canHover: false };
+    const { cardElement, cardInnerDiv } = setupCard(props);
+
+    fireEvent.mouseEnter(cardElement()!);
+
+    expect(cardInnerDiv()).not.toHaveClass(
+      'border-colour-primary-hover',
+      'dark:border-colour-primary-hover-dark',
+    );
+  });
+
   it('should change state to default on mouse leave', () => {
     const { cardElement, cardInnerDiv } = setupCard();
 

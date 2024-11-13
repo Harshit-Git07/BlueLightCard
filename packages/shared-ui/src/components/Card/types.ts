@@ -19,6 +19,7 @@ export interface CardProps {
   ariaLabel?: string;
   className?: string;
   'data-testid'?: string;
+  canHover?: boolean;
 }
 
 export interface CardContentProps {

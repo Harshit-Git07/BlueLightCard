@@ -75,6 +75,7 @@ export const InterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
             cardTitle="Make a payment"
             description={paymentCardDescription}
             initialCardState="default"
+            canHover={false}
           />
         </div>
       </EligibilityBody>

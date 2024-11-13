@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import NavBar from '../../components/NavBar/NavBar';
 import { LayoutProps } from './types';
-import Footer from '../../../common/components/Footer/v2/Footer';
+import Footer from '../../../common/components/Footer/Footer';
 import { useMedia } from 'react-use';
 import LeftNavigation from './LeftNavigation';
 import { AccountDetails } from '@bluelightcard/shared-ui';

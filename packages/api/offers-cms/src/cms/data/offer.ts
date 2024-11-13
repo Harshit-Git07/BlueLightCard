@@ -1,12 +1,12 @@
 import { type Offer } from '@bluelightcard/sanity-types';
+import { Table } from 'sst/node/table';
 
-import { OFFERS_DATA_TABLE_NAME } from '../../../infrastructure/dynamo';
 import { dynamo } from '../../lib/dynamo';
 import { coerceNumber } from '../../lib/utils';
 
 async function _legacy_getOffer(id: number) {
   const res = await dynamo.query({
-    TableName: OFFERS_DATA_TABLE_NAME,
+    TableName: Table.cmsOffer.tableName,
     IndexName: 'legacyId',
     ExpressionAttributeValues: { ':legacyId': String(id) },
     KeyConditionExpression: 'offerId = :legacyId',
@@ -21,7 +21,7 @@ async function _legacy_getOffer(id: number) {
 
 async function _modern_getOffer(id: string) {
   const res = await dynamo.query({
-    TableName: OFFERS_DATA_TABLE_NAME,
+    TableName: Table.cmsOffer.tableName,
     ExpressionAttributeNames: { '#id': '_id' },
     ExpressionAttributeValues: { ':modernId': id },
     KeyConditionExpression: '#id = :modernId',
@@ -46,7 +46,7 @@ export async function getOffer(id: string | number) {
 
 export async function getOffersByCompanyId(companyId: string) {
   const res = await dynamo.query({
-    TableName: OFFERS_DATA_TABLE_NAME,
+    TableName: Table.cmsOffer.tableName,
     IndexName: 'companyId',
     ExpressionAttributeValues: { ':id': companyId },
     KeyConditionExpression: 'companyId = :id',

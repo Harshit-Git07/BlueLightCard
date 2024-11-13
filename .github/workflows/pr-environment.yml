@@ -608,8 +608,9 @@ jobs:
           restore-keys: |
             ${{matrix.brand}}-${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
       - name: Build
-        run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
+        run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npx sst types --stage $PR_PREFIX && npm run build -w packages/web
         env:
+          BRAND: BLC_UK
           NEXT_PUBLIC_IDENTITY_API_URL: ${{matrix.identity_api_url}}
           NEXT_PUBLIC_IDENTITY_API_KEY: ${{ secrets[matrix.identity_api_key] }}
           NEXT_PUBLIC_USER_PROFILE_ENDPOINT: /user
@@ -708,7 +709,9 @@ jobs:
           restore-keys: |
             ${{matrix.brand}}-${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
       - name: Build
-        run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/mobile-hybrid
+        run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npx sst types --stage $PR_PREFIX && npm run build -w packages/mobile-hybrid
+        env:
+          BRAND: BLC_UK
       - name: Publish
         uses: cloudflare/pages-action@1
         id: cloudflare-publish

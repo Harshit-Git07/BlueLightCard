@@ -1,13 +1,13 @@
 import { type Company } from '@bluelightcard/sanity-types';
+import { Table } from 'sst/node/table';
 
-import { COMPANY_DATA_TABLE_NAME } from '../../../infrastructure/dynamo';
 import { dynamo } from '../../lib/dynamo';
 import { env } from '../../lib/env';
 import { coerceNumber } from '../../lib/utils';
 
 async function _legacy_getCompany(id: number) {
   const res = await dynamo.query({
-    TableName: COMPANY_DATA_TABLE_NAME,
+    TableName: Table.cmsCompany.tableName,
     IndexName: 'legacyId',
     ExpressionAttributeValues: { ':legacyId': String(id) },
     KeyConditionExpression: 'companyId = :legacyId',
@@ -21,7 +21,7 @@ async function _legacy_getCompany(id: number) {
 
 async function _modern_getCompany(id: string) {
   const res = await dynamo.get({
-    TableName: COMPANY_DATA_TABLE_NAME,
+    TableName: Table.cmsCompany.tableName,
     Key: {
       _id: id,
     },

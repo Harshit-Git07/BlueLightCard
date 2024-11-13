@@ -296,6 +296,10 @@ jobs:
         uses: ./.github/actions/setup
       - name: remove mock login
         run: rm -rf packages/web/src/pages/mock-login.tsx
+      - name: Generate SST Types
+        env:
+          BRAND: BLC_UK
+        run: npx sst types --stage staging
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
       - name: Publish

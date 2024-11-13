@@ -1,7 +1,7 @@
+import { GENERIC, GIFTCARD, PREAPPLIED, SHOWCARD, VAULT, VAULTQR } from '@blc-mono/core/constants/redemptions';
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { EmailRepository, IEmailRepository } from '@blc-mono/redemptions/application/repositories/EmailRepository';
-import { redemptionTypeEnum } from '@blc-mono/redemptions/libs/database/schema';
 
 export interface IEmailService {
   sendRedemptionTransactionEmail(event: MemberRedemptionEvent): Promise<void>;
@@ -17,12 +17,11 @@ export class EmailService implements IEmailService {
 
   async sendRedemptionTransactionEmail(event: MemberRedemptionEvent): Promise<void> {
     const redemptionType = event.detail.redemptionDetails.redemptionType;
-    const [generic, vault, vaultQR, showCard, preApplied] = redemptionTypeEnum.enumValues;
 
     switch (redemptionType) {
-      case generic:
-      case vaultQR:
-      case vault: {
+      case GENERIC:
+      case VAULTQR:
+      case VAULT: {
         await this.emailRepository.sendVaultOrGenericTransactionalEmail(
           {
             affiliate: event.detail.redemptionDetails.affiliate,
@@ -39,17 +38,21 @@ export class EmailService implements IEmailService {
         );
         break;
       }
-      case preApplied: {
-        await this.emailRepository.sendPreAppliedTransactionalEmail({
-          brazeExternalUserId: event.detail.memberDetails.brazeExternalUserId,
-          memberId: event.detail.memberDetails.memberId,
-          companyName: event.detail.redemptionDetails.companyName,
-          offerName: event.detail.redemptionDetails.offerName,
-          url: event.detail.redemptionDetails.url,
-        });
+      case GIFTCARD:
+      case PREAPPLIED: {
+        await this.emailRepository.sendAffiliateTransactionalEmail(
+          {
+            brazeExternalUserId: event.detail.memberDetails.brazeExternalUserId,
+            memberId: event.detail.memberDetails.memberId,
+            companyName: event.detail.redemptionDetails.companyName,
+            offerName: event.detail.redemptionDetails.offerName,
+            url: event.detail.redemptionDetails.url,
+          },
+          redemptionType,
+        );
         break;
       }
-      case showCard:
+      case SHOWCARD:
         {
           await this.emailRepository.sendShowCardEmail({
             brazeExternalUserId: event.detail.memberDetails.brazeExternalUserId,

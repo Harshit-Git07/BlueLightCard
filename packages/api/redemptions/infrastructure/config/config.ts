@@ -4,7 +4,7 @@ import { BLC_AU_BRAND, BLC_UK_BRAND, DDS_UK_BRAND, MAP_BRAND } from '@blc-mono/c
 import { Brand, CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
-import { getEnv, getEnvOrDefaultValidated, getEnvValidated } from '@blc-mono/core/utils/getEnv';
+import { getEnv, getEnvOrDefault, getEnvOrDefaultValidated, getEnvValidated } from '@blc-mono/core/utils/getEnv';
 
 import { RedemptionsStackEnvironmentKeys } from '../constants/environment';
 import { PR_STAGE_REGEX } from '../constants/sst';
@@ -48,6 +48,7 @@ type BrazeConfig = {
 
 type BrazeEmailCampaignsConfig = {
   brazeGenericEmailCampaignId: string;
+  brazeGiftCardEmailCampaignId: string;
   brazePreAppliedEmailCampaignId: string;
   brazeShowCardEmailCampaignId: string;
   brazeVaultEmailCampaignId: string;
@@ -161,6 +162,7 @@ export class RedemptionsStackConfigResolver {
         brazeEmailCampaignsConfig: {
           brazeVaultEmailCampaignId: '23555377-445a-838a-74a0-0c274c8ae2f8',
           brazeGenericEmailCampaignId: '091d0923-b2a8-4884-9955-df72b8993e64',
+          brazeGiftCardEmailCampaignId: '1c758910-08bf-6914-a854-9b79106f8761',
           brazePreAppliedEmailCampaignId: 'da993fac-5fac-44ec-a703-c1f4c8fa8547',
           brazeVaultQrCodeEmailCampaignId: '31172aa1-2e31-4a77-b9ac-43896f511beb',
           brazeShowCardEmailCampaignId: 'bf54574e-f31e-418b-bd10-649762b74e6a',
@@ -213,6 +215,7 @@ export class RedemptionsStackConfigResolver {
         },
         brazeEmailCampaignsConfig: {
           brazeGenericEmailCampaignId: '440ecd00-0dcb-c47d-70a2-0a72adc53fa1',
+          brazeGiftCardEmailCampaignId: '',
           brazePreAppliedEmailCampaignId: '16c76b8a-ae02-7ce7-16f3-cf5c7a133f85',
           brazeShowCardEmailCampaignId: '16260349-af64-6342-693b-fcc610fa97ad',
           brazeVaultEmailCampaignId: '1392bce7-45a4-7e40-7f91-d053740c6a9c',
@@ -266,6 +269,7 @@ export class RedemptionsStackConfigResolver {
         },
         brazeEmailCampaignsConfig: {
           brazeGenericEmailCampaignId: 'ce7005e2-63a3-4a84-8376-965d35bcc3aa',
+          brazeGiftCardEmailCampaignId: '',
           brazePreAppliedEmailCampaignId: '352eedf0-0874-cc51-c498-fff31ed7e3a4',
           brazeShowCardEmailCampaignId: '781508f5-bea7-1532-bd7b-1cf73879c077',
           brazeVaultEmailCampaignId: '533ea136-1e73-52c4-e037-b95a4f545362',
@@ -334,6 +338,7 @@ export class RedemptionsStackConfigResolver {
         brazeEmailCampaignsConfig: {
           brazeVaultEmailCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
           brazeGenericEmailCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
+          brazeGiftCardEmailCampaignId: '4577b2b8-a5df-433a-b86b-5bdbe9974cb9',
           brazePreAppliedEmailCampaignId: '00816603-1b52-42b3-9816-903508163c7e',
           brazeVaultQrCodeEmailCampaignId: 'eb6dac40-f99b-4634-889b-2f6451beaa82',
           brazeShowCardEmailCampaignId: '27928c2b-3d29-4837-8b62-4989da1383a9',
@@ -391,6 +396,7 @@ export class RedemptionsStackConfigResolver {
         },
         brazeEmailCampaignsConfig: {
           brazeGenericEmailCampaignId: '03b77f7f-fa20-0146-e910-f62132b35443',
+          brazeGiftCardEmailCampaignId: '19180cd3-8165-4f51-8732-1ccee36bb711',
           brazePreAppliedEmailCampaignId: '3661f6b4-5e3f-5380-690b-34029be0e559',
           brazeShowCardEmailCampaignId: 'e08f6174-cff9-ca5d-8742-ff505843a821',
           brazeVaultEmailCampaignId: 'e5d1d088-b766-6edf-8b9a-85b26da52ea2',
@@ -448,6 +454,7 @@ export class RedemptionsStackConfigResolver {
         },
         brazeEmailCampaignsConfig: {
           brazeGenericEmailCampaignId: 'f3145cd5-6cc0-c2b8-0824-cb2f5df85072',
+          brazeGiftCardEmailCampaignId: 'ba77fc8d-94a8-44fa-b0ca-7a8467fb2442',
           brazePreAppliedEmailCampaignId: '701d81a5-17c0-8081-9976-a1fd1b60b52b',
           brazeShowCardEmailCampaignId: '1d187e2e-481b-a128-5a5d-e81e1291de01',
           brazeVaultEmailCampaignId: '3a791d7c-8a61-5fb9-d41f-68c861bbf87f',
@@ -507,6 +514,7 @@ export class RedemptionsStackConfigResolver {
       },
       brazeEmailCampaignsConfig: {
         brazeGenericEmailCampaignId: '6b91bac5-0c3a-4508-8978-8814d573b845',
+        brazeGiftCardEmailCampaignId: '4577b2b8-a5df-433a-b86b-5bdbe9974cb9',
         brazePreAppliedEmailCampaignId: '00816603-1b52-42b3-9816-903508163c7e',
         brazeShowCardEmailCampaignId: '27928c2b-3d29-4837-8b62-4989da1383a9',
         brazeVaultEmailCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
@@ -593,6 +601,10 @@ export class RedemptionsStackConfigResolver {
       },
       brazeEmailCampaignsConfig: {
         brazeGenericEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID),
+        brazeGiftCardEmailCampaignId: getEnvOrDefault(
+          RedemptionsStackEnvironmentKeys.BRAZE_GIFT_CARD_EMAIL_CAMPAIGN_ID,
+          '4577b2b8-a5df-433a-b86b-5bdbe9974cb9',
+        ),
         brazePreAppliedEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID),
         brazeShowCardEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID),
         brazeVaultEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID),

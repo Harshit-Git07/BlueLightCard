@@ -77,7 +77,7 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       affiliate: 'awin',
       companyId: 'company-9179',
       connection: 'affiliate',
-      offerId: '8726',
+      offerId: '8727',
       offerType: 'online',
       redemptionType: 'giftCard',
       url: 'https://www.awin1.com/',

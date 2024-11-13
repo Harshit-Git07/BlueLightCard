@@ -1,3 +1,4 @@
+import { as } from '@blc-mono/core/utils/testing';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import { memberRedemptionEventFactory } from '@blc-mono/redemptions/libs/test/factories/memberRedemptionEvent.factory';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
@@ -13,12 +14,10 @@ describe('EmailService', () => {
       async (redemptionType) => {
         // Arrange
         const logger = createTestLogger();
-        const emailRepository = {
+        const emailRepository: Partial<IEmailRepository> = {
           sendVaultOrGenericTransactionalEmail: jest.fn(),
-          sendPreAppliedTransactionalEmail: jest.fn(),
-          sendShowCardEmail: jest.fn(),
-        } satisfies IEmailRepository;
-        const service = new EmailService(logger, emailRepository);
+        };
+        const service = new EmailService(logger, as(emailRepository));
         const event = memberRedemptionEventFactory.build({
           detail: {
             redemptionDetails: {
@@ -35,15 +34,13 @@ describe('EmailService', () => {
       },
     );
 
-    it('should send email for preApplied redemption events', async () => {
+    it.each(['giftCard', 'preApplied'])('sends email for %s Affiliate redemption events', async () => {
       // Arrange
       const logger = createTestLogger();
-      const emailRepository = {
-        sendVaultOrGenericTransactionalEmail: jest.fn(),
-        sendPreAppliedTransactionalEmail: jest.fn(),
-        sendShowCardEmail: jest.fn(),
-      } satisfies IEmailRepository;
-      const service = new EmailService(logger, emailRepository);
+      const emailRepository: Partial<IEmailRepository> = {
+        sendAffiliateTransactionalEmail: jest.fn(),
+      };
+      const service = new EmailService(logger, as(emailRepository));
       const event = memberRedemptionEventFactory.build({
         detail: {
           redemptionDetails: {
@@ -56,18 +53,16 @@ describe('EmailService', () => {
       await service.sendRedemptionTransactionEmail(event);
 
       // Assert
-      expect(emailRepository.sendPreAppliedTransactionalEmail).toHaveBeenCalled();
+      expect(emailRepository.sendAffiliateTransactionalEmail).toHaveBeenCalled();
     });
 
-    it('should send email for showCard redemption events', async () => {
+    it('sends email for showCard redemption events', async () => {
       // Arrange
       const logger = createTestLogger();
-      const emailRepository = {
-        sendVaultOrGenericTransactionalEmail: jest.fn(),
-        sendPreAppliedTransactionalEmail: jest.fn(),
+      const emailRepository: Partial<IEmailRepository> = {
         sendShowCardEmail: jest.fn(),
-      } satisfies IEmailRepository;
-      const service = new EmailService(logger, emailRepository);
+      };
+      const service = new EmailService(logger, as(emailRepository));
       const event = memberRedemptionEventFactory.build({
         detail: {
           redemptionDetails: {

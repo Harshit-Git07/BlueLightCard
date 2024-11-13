@@ -1,5 +1,6 @@
 import { Braze, CampaignsTriggerSendObject } from 'braze-api';
 
+import { GIFTCARD, PREAPPLIED } from '@blc-mono/core/constants/redemptions';
 import { OfferData } from '@blc-mono/core/types/offerdata';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
@@ -46,7 +47,10 @@ export interface IEmailRepository {
     payload: VaultOrGenericTransactionalEmailParams,
     redemptionType: RedemptionType,
   ) => Promise<void>;
-  sendPreAppliedTransactionalEmail: (payload: PreAppliedTransactionalEmailParams) => Promise<void>;
+  sendAffiliateTransactionalEmail: (
+    payload: PreAppliedTransactionalEmailParams,
+    redemptionType: RedemptionType,
+  ) => Promise<void>;
   sendShowCardEmail: (payload: ShowCardTransactionalEmailParams) => Promise<void>;
 }
 
@@ -66,6 +70,15 @@ export class EmailRepository implements IEmailRepository {
       this.emailApiClient = await this.emailClientProvider.getClient();
     }
     return this.emailApiClient;
+  }
+
+  private getAffiliateCampaignId(redemptionType: RedemptionType) {
+    const map: Record<string, string> = {
+      [GIFTCARD]: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_GIFT_CARD_EMAIL_CAMPAIGN_ID),
+      [PREAPPLIED]: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID),
+    };
+
+    return map[redemptionType];
   }
 
   private buildEmailURL({
@@ -152,7 +165,7 @@ export class EmailRepository implements IEmailRepository {
     const { brazeExternalUserId, companyName, redemptionType } = params;
     if (redemptionType !== 'showCard') {
       this.logger.info({
-        message: `redemption type is incorrect for this email template: ${redemptionType}`,
+        message: `redemption type is incorrect for show card email template: ${redemptionType}`,
         context: params,
       });
       throw new Error('RedemptionType error, expects showCard');
@@ -211,7 +224,7 @@ export class EmailRepository implements IEmailRepository {
 
     if (!campaignId) {
       this.logger.info({
-        message: `redemption type is incorrect for this email template: ${redemptionType}`,
+        message: `redemption type is incorrect for vault/generic email template: ${redemptionType}`,
         context: params,
       });
       throw new Error('RedemptionType error, expects vault/generic');
@@ -262,14 +275,27 @@ export class EmailRepository implements IEmailRepository {
     });
   }
 
-  async sendPreAppliedTransactionalEmail(params: PreAppliedTransactionalEmailParams): Promise<void> {
+  async sendAffiliateTransactionalEmail(
+    params: PreAppliedTransactionalEmailParams,
+    redemptionType: RedemptionType,
+  ): Promise<void> {
     const emailClient = await this.getClient();
 
     const affiliateConfig = AffiliateHelper.getTrackingUrl(params.memberId, params.url);
     const emailLinkUrl = affiliateConfig.kind === AffiliateResultsKinds.Error ? params.url : affiliateConfig.data.url;
 
+    const campaignId = this.getAffiliateCampaignId(redemptionType);
+
+    if (!campaignId) {
+      this.logger.info({
+        message: `no campaign identifier for Affiliate email template: ${redemptionType}`,
+        context: params,
+      });
+      throw new Error('RedemptionType error, expects Affiliate');
+    }
+
     const emailPayload: CampaignsTriggerSendObject = {
-      campaign_id: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID),
+      campaign_id: campaignId,
       recipients: [
         {
           external_user_id: params.brazeExternalUserId,
@@ -286,14 +312,14 @@ export class EmailRepository implements IEmailRepository {
 
     if (!emailServiceResponse.message.includes('success')) {
       this.logger.info({
-        message: 'Failed to send preApplied email',
+        message: `Failed to send ${redemptionType} affiliate redemption email`,
         context: emailServiceResponse,
       });
-      throw new Error('Failed to send preApplied email');
+      throw new Error(`Failed to send ${redemptionType} affiliate redemption email`);
     }
 
     this.logger.info({
-      message: 'successfully sent preApplied email',
+      message: `successfully sent ${redemptionType} affiliate redemption email`,
       context: emailServiceResponse,
     });
   }

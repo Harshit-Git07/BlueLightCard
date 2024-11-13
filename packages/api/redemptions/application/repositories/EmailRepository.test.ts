@@ -1,24 +1,29 @@
 import { mocked } from 'jest-mock';
-import * as process from 'process';
 
+import { REDEMPTION_TYPES, RedemptionTypes } from '@blc-mono/core/constants/redemptions';
 import { as } from '@blc-mono/core/utils/testing';
 import { encodeBase64 } from '@blc-mono/redemptions/application/helpers/encodeBase64';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
-import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import { IBrazeEmailClientProvider } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
 import {
-  preAppliedEmailPayloadFactory,
+  affiliateEmailPayloadFactory,
   vaultOrGenericEmailPayloadFactory,
-} from '@blc-mono/redemptions/libs/test/factories/redemptionTransactionalEmailPayload.factory';
+} from '@blc-mono/redemptions/libs/test/factories/brazePayload.factory';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { EmailRepository } from './EmailRepository';
 
 jest.mock('../helpers/encodeBase64');
+
+const allExceptRedemptionTypes = (...redemptionTypes: RedemptionTypes[]): RedemptionTypes[] => {
+  return REDEMPTION_TYPES.filter((type) => !redemptionTypes.includes(type));
+};
+
 describe('EmailRepository', () => {
   beforeEach(() => {
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID] = 'test';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID] = 'test';
+    process.env[RedemptionsStackEnvironmentKeys.BRAZE_GIFT_CARD_EMAIL_CAMPAIGN_ID] = 'preApplied_env_val';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID] = 'preApplied_env_val';
     process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST] = 'https://staging.bluelightcard.co.uk';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID] = 'test';
@@ -28,6 +33,7 @@ describe('EmailRepository', () => {
   afterEach(() => {
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID];
+    delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_GIFT_CARD_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID];
@@ -35,8 +41,8 @@ describe('EmailRepository', () => {
   });
 
   describe('sendVaultOrGenericTransactionalEmail', () => {
-    it.each(['vault', 'generic'] satisfies RedemptionType[])(
-      'should send an email with the braze email client',
+    it.each(['vault', 'generic'] as const)(
+      'sends an email via Braze for %s redemption type',
       async (redemptionType) => {
         const logger = createTestLogger();
         const mockBrazeEmailClient = {
@@ -65,7 +71,7 @@ describe('EmailRepository', () => {
         await repository.sendVaultOrGenericTransactionalEmail(payload, redemptionType);
 
         // Assert
-        expect(mockBrazeEmailClient.campaigns.trigger.send).toHaveBeenCalled();
+        expect(mockBrazeEmailClient.campaigns.trigger.send).toHaveBeenCalledTimes(1);
         expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('test');
         expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
           payload.brazeExternalUserId,
@@ -80,7 +86,7 @@ describe('EmailRepository', () => {
       },
     );
 
-    it('should send an email with the braze email client for vaultQR redemption type', async () => {
+    it('sends an email via Braze for vaultQR redemption type', async () => {
       const logger = createTestLogger();
       const mockBrazeEmailClient = {
         campaigns: {
@@ -119,65 +125,7 @@ describe('EmailRepository', () => {
       });
     });
 
-    describe('sendPreAppliedTransactionalEmail', () => {
-      it('should send an email with the braze email client for preApplied redemption type', async () => {
-        const logger = createTestLogger();
-
-        const mockBrazeEmailClient = {
-          campaigns: {
-            trigger: {
-              send: jest.fn().mockResolvedValue({
-                message: 'success',
-              }),
-            },
-          },
-        };
-
-        const emailClientProvider: IBrazeEmailClientProvider = {
-          getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
-        };
-
-        const repository = new EmailRepository(logger, emailClientProvider);
-        const payload = preAppliedEmailPayloadFactory.build();
-
-        await repository.sendPreAppliedTransactionalEmail(payload);
-
-        expect(mockBrazeEmailClient.campaigns.trigger.send).toHaveBeenCalled();
-        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('preApplied_env_val');
-        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
-          payload.brazeExternalUserId,
-        );
-
-        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
-          companyName: payload.companyName,
-          offerName: payload.offerName,
-          url: payload.url,
-        });
-      });
-    });
-
-    it.each(['showCard', 'preApplied'] satisfies RedemptionType[])(
-      'should throw error for unhandled redemption type',
-      async (redemptionType) => {
-        // Arrange
-        const logger = createTestLogger();
-        const mockBrazeEmailClient = {};
-        const emailClientProvider: IBrazeEmailClientProvider = {
-          getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
-        };
-
-        const repository = new EmailRepository(logger, emailClientProvider);
-        const payload = vaultOrGenericEmailPayloadFactory.build();
-
-        // Act
-        const act = () => repository.sendVaultOrGenericTransactionalEmail(payload, redemptionType);
-
-        // Assert
-        await expect(act).rejects.toThrow('RedemptionType error, expects vault/generic');
-      },
-    );
-
-    it('should throw when success is not returned by Braze for vault or generic emails', async () => {
+    it('throws an error when Braze returns a failure', async () => {
       // Arrange
       const logger = createTestLogger();
       const mockBrazeEmailClient = {
@@ -195,16 +143,80 @@ describe('EmailRepository', () => {
 
       const repository = new EmailRepository(logger, emailClientProvider);
       const payload = vaultOrGenericEmailPayloadFactory.build();
-      const redemptionType: RedemptionType = 'vault';
 
       // Act
-      const act = () => repository.sendVaultOrGenericTransactionalEmail(payload, redemptionType);
+      const act = () => repository.sendVaultOrGenericTransactionalEmail(payload, 'vault');
 
       // Assert
       await expect(act).rejects.toThrow();
     });
 
-    it('should throw when success is not returned by Braze for preApplied emails', async () => {
+    it.each(allExceptRedemptionTypes('generic', 'vault', 'vaultQR'))(
+      'throws an error for unhandled redemption type %s',
+      async (redemptionType) => {
+        // Arrange
+        const logger = createTestLogger();
+        const mockEmailClient = {};
+        const emailClientProvider: IBrazeEmailClientProvider = {
+          getClient: () => Promise.resolve(as(mockEmailClient)),
+        };
+        const repository = new EmailRepository(logger, emailClientProvider);
+        const payload = vaultOrGenericEmailPayloadFactory.build();
+
+        // Act
+        const act = () => repository.sendVaultOrGenericTransactionalEmail(payload, redemptionType);
+
+        // Assert
+        await expect(act).rejects.toThrow('RedemptionType error, expects vault/generic');
+        expect(logger.info).toHaveBeenCalledWith(
+          expect.objectContaining({
+            message: `redemption type is incorrect for vault/generic email template: ${redemptionType}`,
+          }),
+        );
+      },
+    );
+  });
+
+  describe('sendAffiliateTransactionalEmail', () => {
+    it.each(['giftCard', 'preApplied'] as const)(
+      'sends an email with the braze email client for %s redemption type',
+      async (redemptionType) => {
+        const logger = createTestLogger();
+
+        const mockBrazeEmailClient = {
+          campaigns: {
+            trigger: {
+              send: jest.fn().mockResolvedValue({
+                message: 'success',
+              }),
+            },
+          },
+        };
+
+        const emailClientProvider: IBrazeEmailClientProvider = {
+          getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
+        };
+
+        const repository = new EmailRepository(logger, emailClientProvider);
+        const payload = affiliateEmailPayloadFactory.build();
+
+        await repository.sendAffiliateTransactionalEmail(payload, redemptionType);
+
+        expect(mockBrazeEmailClient.campaigns.trigger.send).toHaveBeenCalled();
+        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('preApplied_env_val');
+        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
+          payload.brazeExternalUserId,
+        );
+
+        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
+          companyName: payload.companyName,
+          offerName: payload.offerName,
+          url: payload.url,
+        });
+      },
+    );
+
+    it('throws an error when Braze returns a failure', async () => {
       // Arrange
       const logger = createTestLogger();
       const mockBrazeEmailClient = {
@@ -221,16 +233,43 @@ describe('EmailRepository', () => {
       };
 
       const repository = new EmailRepository(logger, emailClientProvider);
-      const payload = preAppliedEmailPayloadFactory.build();
+      const payload = affiliateEmailPayloadFactory.build();
 
       // Act
-      const act = () => repository.sendPreAppliedTransactionalEmail(payload);
+      const act = () => repository.sendAffiliateTransactionalEmail(payload, 'preApplied');
 
       // Assert
       await expect(act).rejects.toThrow();
     });
 
-    it('should send an email with type is showCard', async () => {
+    it.each(allExceptRedemptionTypes('giftCard', 'preApplied'))(
+      'throws an error for unhandled redemption type %s',
+      async (redemptionType) => {
+        // Arrange
+        const logger = createTestLogger();
+        const mockEmailClient = {};
+        const emailClientProvider: IBrazeEmailClientProvider = {
+          getClient: () => Promise.resolve(as(mockEmailClient)),
+        };
+        const repository = new EmailRepository(logger, emailClientProvider);
+        const payload = affiliateEmailPayloadFactory.build();
+
+        // Act
+        const act = () => repository.sendAffiliateTransactionalEmail(payload, redemptionType);
+
+        // Assert
+        await expect(act).rejects.toThrow(`RedemptionType error, expects Affiliate`);
+        expect(logger.info).toHaveBeenCalledWith(
+          expect.objectContaining({
+            message: `no campaign identifier for Affiliate email template: ${redemptionType}`,
+          }),
+        );
+      },
+    );
+  });
+
+  describe('sendShowCardEmail', () => {
+    it('sends an email for showCard redemption type', async () => {
       // Arrange
       const logger = createTestLogger();
       const mockEmailClient = {
@@ -250,8 +289,8 @@ describe('EmailRepository', () => {
       const payload = {
         brazeExternalUserId: 'test',
         companyName: 'test',
-        redemptionType: 'showCard' as RedemptionType,
-      };
+        redemptionType: 'showCard',
+      } as const;
 
       // Act
       await repository.sendShowCardEmail(payload);
@@ -266,8 +305,8 @@ describe('EmailRepository', () => {
       });
     });
 
-    it.each(['vault', 'preApplied'] satisfies RedemptionType[])(
-      'should throw error for unhandled redemption type',
+    it.each(allExceptRedemptionTypes('showCard'))(
+      'throws an error for unhandled redemption type %s',
       async (redemptionType) => {
         // Arrange
         const logger = createTestLogger();
@@ -287,26 +326,11 @@ describe('EmailRepository', () => {
 
         // Assert
         await expect(act).rejects.toThrow('RedemptionType error, expects showCard');
-      },
-    );
-
-    it.each(['showCard', 'preApplied'] satisfies RedemptionType[])(
-      'should throw error for unhandled redemption type',
-      async (redemptionType) => {
-        // Arrange
-        const logger = createTestLogger();
-        const mockEmailClient = {};
-        const emailClientProvider: IBrazeEmailClientProvider = {
-          getClient: () => Promise.resolve(as(mockEmailClient)),
-        };
-        const repository = new EmailRepository(logger, emailClientProvider);
-        const payload = vaultOrGenericEmailPayloadFactory.build();
-
-        // Act
-        const act = () => repository.sendVaultOrGenericTransactionalEmail(payload, redemptionType);
-
-        // Assert
-        await expect(act).rejects.toThrow('RedemptionType error, expects vault/generic');
+        expect(logger.info).toHaveBeenCalledWith(
+          expect.objectContaining({
+            message: `redemption type is incorrect for show card email template: ${redemptionType}`,
+          }),
+        );
       },
     );
   });

@@ -236,6 +236,9 @@ describe('GET Redemption Config', () => {
         offerId: redemptionConfig.offerId,
         redemptionType: 'creditCard',
         companyId: redemptionConfig.companyId,
+        affiliate: null,
+        connection: 'direct',
+        url: redemptionConfig.url,
       },
     };
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);

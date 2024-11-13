@@ -20,7 +20,7 @@ export const OfferDetailsLink: FC<OfferDetailsComponentProps> = () => {
   const cmsFlagResult = platformAdapter.getAmplitudeFeatureFlag('cms-offers');
 
   const offerQuery = useQueryCustomHook({
-    enabled: !!offerMeta.offerId && !!cmsFlagResult,
+    enabled: !!offerMeta.offerId,
     queryKeyArr: ['offerDetails', offerMeta.offerId?.toString() as string],
     queryFnCall: async () =>
       apiRequest({

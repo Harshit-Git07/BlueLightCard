@@ -18,6 +18,7 @@ import {
   PatchRedemptionConfigShowCardModel,
   PatchRedemptionConfigVaultModel,
 } from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
+import { giftCardFactory } from '@blc-mono/redemptions/libs/test/factories/affilate.factory';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
@@ -361,6 +362,39 @@ describe('UpdateRedemptionConfigService', () => {
       companyId: testPreAppliedBody.companyId,
       affiliate: testPreAppliedBody.affiliate,
       url: testPreAppliedBody.url,
+      offerType: 'online',
+    });
+    mockRedemptionConfigTransaction();
+
+    mockRedemptionConfigTransformer.transformToRedemptionConfig = jest
+      .fn()
+      .mockReturnValue(testPreAppliedRedemptionConfig);
+
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError =
+      await updateRedemptionConfigService.updateRedemptionConfig(String(testOfferId), testPreAppliedBody);
+
+    expect(actual.kind).toEqual('Ok');
+    expect(actual.data).toEqual(testPreAppliedRedemptionConfig);
+  });
+
+  it('should return kind "Ok" when a giftCard redemption record updates correctly', async () => {
+    const testPayloadFactory = giftCardFactory.build({
+      redemptionType: 'giftCard',
+    });
+    mockRedemptionConfigExist(true);
+
+    //mock repo(s) responses/resolves that execute inside transactionManager(s)
+    mockGenericTransaction();
+    mockVaultTransaction();
+
+    mockRedemptionConfigUpdateSucceeds(true, {
+      id: testPayloadFactory.id,
+      offerId: testPayloadFactory.offerId,
+      redemptionType: testPayloadFactory.redemptionType,
+      connection: testPayloadFactory.connection,
+      companyId: testPayloadFactory.companyId,
+      affiliate: testPayloadFactory.affiliate,
+      url: testPayloadFactory.url,
       offerType: 'online',
     });
     mockRedemptionConfigTransaction();

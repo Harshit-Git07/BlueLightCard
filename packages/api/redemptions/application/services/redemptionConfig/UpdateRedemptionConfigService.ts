@@ -7,6 +7,7 @@ import {
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { Affiliate, RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import {
+  AffiliatePatchRedemptionConfigGiftCardModel,
   PatchRedemptionConfigGenericModel,
   PatchRedemptionConfigModel,
   PatchRedemptionConfigPreAppliedModel,
@@ -128,6 +129,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
         case 'showCard':
           return await this.updateShowCard(patchRedemptionConfigModel, redemptionTransaction);
         case 'preApplied':
+        case 'giftCard':
           return await this.updatePreApplied(patchRedemptionConfigModel, redemptionTransaction);
         case 'generic':
           return await this.updateGeneric(patchRedemptionConfigModel, redemptionTransaction, genericsTransaction);
@@ -165,7 +167,9 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
   }
 
   private async updatePreApplied(
-    patchRedemptionConfigPreAppliedModel: PatchRedemptionConfigPreAppliedModel,
+    patchRedemptionConfigPreAppliedModel:
+      | PatchRedemptionConfigPreAppliedModel
+      | AffiliatePatchRedemptionConfigGiftCardModel,
     redemptionTransaction: RedemptionConfigRepository,
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
     const updateRedemptionConfigEntity: UpdateRedemptionConfigEntity = {

@@ -180,6 +180,48 @@ describe('PATCH Redemption Config', () => {
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
   });
 
+  it('returns redemptionConfig for giftCard redemptionType on update success', async () => {
+    const { redemptionConfig, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
+      redemptionType: 'giftCard',
+      connection: 'affiliate',
+      url: faker.internet.url(),
+      affiliate: 'awin',
+      offerType: 'online',
+    });
+    onTestFinished(redemptionConfigHooks.cleanup);
+    await redemptionConfigHooks.insert();
+
+    const payload: PatchRedemptionConfigModel = {
+      id: redemptionConfig.id,
+      offerId: redemptionConfig.offerId,
+      companyId: redemptionConfig.companyId,
+      redemptionType: 'giftCard',
+      connection: 'direct',
+      affiliate: null,
+      url: faker.internet.url(),
+    } as const;
+
+    const result = await callPatchRedemptionConfigEndpoint(payload);
+
+    expect(result.status).toBe(200);
+
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 200,
+      data: {
+        id: redemptionConfig.id,
+        offerId: redemptionConfig.offerId,
+        companyId: redemptionConfig.companyId,
+        redemptionType: 'gfiftCard',
+        connection: payload.connection,
+        affiliate: payload.affiliate,
+        url: payload.url,
+      },
+    };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+  });
+
   it('returns redemptionConfig for showCard redemptionType on update success', async () => {
     const { redemptionConfig, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
       redemptionType: 'showCard',

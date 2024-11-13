@@ -1,12 +1,12 @@
 import { faker } from '@faker-js/faker';
 
 import { as } from '@blc-mono/core/utils/testing';
+import { giftCardFactory } from '@blc-mono/redemptions/libs/test/factories/affilate.factory';
 import {
   affiliateFactory,
   affiliateRedemptionTypeFactory,
 } from '@blc-mono/redemptions/libs/test/factories/affiliate.factory';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
-import { giftCardFactory } from '@blc-mono/redemptions/libs/test/factories/giftCard.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
 import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
@@ -148,7 +148,7 @@ describe('GetRedemptionConfigService', () => {
   });
 
   it('should call transformToRedemptionConfig when redemptionType is giftCard', async () => {
-    const giftCardPayloadFactory: giftCardFactory = giftCardFactory.build();
+    const giftCardPayloadFactory = giftCardFactory.build();
 
     const giftCardRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
       redemptionType: 'giftCard',

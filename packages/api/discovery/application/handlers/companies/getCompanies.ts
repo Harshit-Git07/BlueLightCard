@@ -42,15 +42,21 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
   } else {
     try {
       const results = await openSearchService.queryAllCompanies(await openSearchService.getLatestIndexName(), dob);
+      const sortedResults = [...results].sort(sortByAlphabeticalOrder);
+      updateCache(sortedResults);
 
-      updateCache(results);
-
-      return Response.OK({ message: 'Success', data: results });
+      return Response.OK({ message: 'Success', data: sortedResults });
     } catch (error) {
       logger.error({ message: `Error querying OpenSearch: ${JSON.stringify(error)}` });
       return Response.Error(new Error('Error querying OpenSearch'), HttpStatusCode.INTERNAL_SERVER_ERROR);
     }
   }
+};
+
+const sortByAlphabeticalOrder = (a: CompanySummary, b: CompanySummary) => {
+  if (a.companyName.toLowerCase() < b.companyName.toLowerCase()) return -1;
+  else if (a.companyName.toLowerCase() > b.companyName.toLowerCase()) return 1;
+  return 0;
 };
 
 const getQueryParams = (event: APIGatewayEvent) => {

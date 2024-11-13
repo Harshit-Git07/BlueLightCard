@@ -10,7 +10,7 @@ import UserContext, { UserContextType } from '../../common/context/User/UserCont
 import { NextRouter } from 'next/router';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import userEvent from '@testing-library/user-event';
-import { makeNavbarQueryWithDislikeRestrictions, makeQuery } from '../../graphql/makeQuery';
+import { makeQuery } from '../../graphql/makeQuery';
 import {
   AuthedAmplitudeExperimentProvider,
   useAmplitudeExperiment,
@@ -29,6 +29,7 @@ import { experimentMakeSearch } from '@/utils/API/experimentMakeSearch';
 import { PlatformVariant } from '@bluelightcard/shared-ui/types';
 import { offerTypeLabelMap } from '@bluelightcard/shared-ui/index';
 import { ExperimentClient } from '@amplitude/experiment-js-client';
+import useFetchCompaniesOrCategories from '@/hooks/useFetchCompaniesOrCategories';
 
 expect.extend(toHaveNoViolations);
 
@@ -52,11 +53,12 @@ jest.mock('@/context/AmplitudeExperiment', () => ({
   ...jest.requireActual('@/context/AmplitudeExperiment'),
   useAmplitudeExperiment: jest.fn(),
 }));
+jest.mock('../../common/hooks/useFetchCompaniesOrCategories');
 
 const makeSearchMock = jest.mocked(makeSearch);
 const experimentMakeSearchMock = jest.mocked(experimentMakeSearch);
 const makeQueryMock = jest.mocked(makeQuery);
-const makeNavbarQueryMock = jest.mocked(makeNavbarQueryWithDislikeRestrictions);
+const useFetchCompaniesOrCategoriesMock = jest.mocked(useFetchCompaniesOrCategories);
 const mockRouter: Partial<NextRouter> = {
   push: jest.fn(),
   isReady: true,
@@ -96,15 +98,10 @@ describe('SearchPage', () => {
       loading: false,
       networkStatus: NetworkStatus.ready,
     });
-    makeNavbarQueryMock.mockResolvedValue({
-      data: {
-        response: {
-          categories: [],
-          companies: [],
-        },
-      },
-      loading: false,
-      networkStatus: NetworkStatus.ready,
+    useFetchCompaniesOrCategoriesMock.mockReturnValue({
+      categories: [],
+      companies: [],
+      isLoading: false,
     });
   });
 
@@ -168,9 +165,12 @@ describe('SearchPage', () => {
   });
 
   describe('and "search V5" experiment is not enabled', () => {
+    beforeEach(() => {
+      givenExperimentsReturn('control', 'control');
+    });
+
     it('Renders loading placeholders', async () => {
       makeSearchMock.mockReturnValue(new Promise((resolve) => setTimeout(resolve, 2000)));
-      givenExperimentsReturn('control', 'control');
 
       whenSearchPageIsRendered();
 
@@ -180,7 +180,6 @@ describe('SearchPage', () => {
 
     it('Renders no results message', async () => {
       makeSearchMock.mockResolvedValue({ results: [] });
-      givenExperimentsReturn('control', 'control');
 
       whenSearchPageIsRendered();
 
@@ -190,7 +189,6 @@ describe('SearchPage', () => {
 
     it('Renders results', async () => {
       givenResultsAreReturned();
-      givenExperimentsReturn('control', 'control');
 
       whenSearchPageIsRendered();
 
@@ -201,7 +199,6 @@ describe('SearchPage', () => {
     describe('Offer types', () => {
       it('Renders offer type 0 as an Online offer', async () => {
         givenResultsAreReturned();
-        givenExperimentsReturn('control', 'control');
 
         whenSearchPageIsRendered();
 
@@ -212,7 +209,6 @@ describe('SearchPage', () => {
 
       it('Renders offer type 2 as a Gift Card offer', async () => {
         givenResultsAreReturned();
-        givenExperimentsReturn('control', 'control');
 
         whenSearchPageIsRendered();
 
@@ -223,7 +219,6 @@ describe('SearchPage', () => {
 
       it('Renders offer type 5 as an In-store offer', async () => {
         givenResultsAreReturned();
-        givenExperimentsReturn('control', 'control');
 
         whenSearchPageIsRendered();
 
@@ -234,7 +229,6 @@ describe('SearchPage', () => {
 
       it('Renders offer type 6 as an In-store offer', async () => {
         givenResultsAreReturned();
-        givenExperimentsReturn('control', 'control');
 
         whenSearchPageIsRendered();
 
@@ -245,7 +239,6 @@ describe('SearchPage', () => {
 
       it('Renders other offer types as an Online offer', async () => {
         givenResultsAreReturned();
-        givenExperimentsReturn('control', 'control');
 
         whenSearchPageIsRendered();
 
@@ -257,25 +250,19 @@ describe('SearchPage', () => {
 
     it('Renders categories section', async () => {
       givenResultsAreReturned();
-      givenExperimentsReturn('control', 'control');
-      makeNavbarQueryMock.mockResolvedValue({
-        data: {
-          response: {
-            categories: [
-              {
-                id: '1',
-                name: 'Category One',
-              },
-              {
-                id: '2',
-                name: 'Category Two',
-              },
-            ],
-            companies: [],
+      useFetchCompaniesOrCategoriesMock.mockReturnValue({
+        categories: [
+          {
+            id: '1',
+            name: 'Category One',
           },
-        },
-        loading: false,
-        networkStatus: NetworkStatus.ready,
+          {
+            id: '2',
+            name: 'Category Two',
+          },
+        ],
+        companies: [],
+        isLoading: false,
       });
 
       whenSearchPageIsRendered();
@@ -292,26 +279,20 @@ describe('SearchPage', () => {
         },
         writable: true,
       });
-      givenExperimentsReturn('control', 'control');
       givenResultsAreReturned();
-      makeNavbarQueryMock.mockResolvedValue({
-        data: {
-          response: {
-            categories: [
-              {
-                id: '1',
-                name: 'Category One',
-              },
-              {
-                id: '2',
-                name: 'Category Two',
-              },
-            ],
-            companies: [],
+      useFetchCompaniesOrCategoriesMock.mockReturnValue({
+        categories: [
+          {
+            id: '1',
+            name: 'Category One',
           },
-        },
-        loading: false,
-        networkStatus: NetworkStatus.ready,
+          {
+            id: '2',
+            name: 'Category Two',
+          },
+        ],
+        companies: [],
+        isLoading: false,
       });
 
       whenSearchPageIsRendered();
@@ -323,7 +304,6 @@ describe('SearchPage', () => {
 
     it('Renders tenancy adverts', async () => {
       givenResultsAreReturned();
-      givenExperimentsReturn('control', 'control');
       makeQueryMock.mockResolvedValue({
         data: {
           banners: [
@@ -346,7 +326,6 @@ describe('SearchPage', () => {
 
     it('Has no accessibility violations', async () => {
       givenResultsAreReturned();
-      givenExperimentsReturn('control', 'control');
 
       const { container } = whenSearchPageIsRendered();
 
@@ -363,6 +342,11 @@ describe('Analytics', () => {
       data: [],
       loading: false,
       networkStatus: NetworkStatus.ready,
+    });
+    useFetchCompaniesOrCategoriesMock.mockReturnValue({
+      categories: [],
+      companies: [],
+      isLoading: false,
     });
   });
   it.each(['treatment', 'control'])('should logSearchCardClicked event', async (variant) => {
@@ -461,8 +445,8 @@ const whenSearchPageIsRendered = () => {
   return render(
     <QueryClientProvider client={new QueryClient()}>
       <UserContext.Provider value={userContext}>
-        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <AuthedAmplitudeExperimentProvider initExperimentClient={experimentClientMock}>
+        <AuthedAmplitudeExperimentProvider initExperimentClient={experimentClientMock}>
+          <PlatformAdapterProvider adapter={mockPlatformAdapter}>
             <RouterContext.Provider value={mockRouter as NextRouter}>
               <AuthContext.Provider value={mockAuthContext as AuthContextType}>
                 <UserContext.Provider value={userContext}>
@@ -470,8 +454,8 @@ const whenSearchPageIsRendered = () => {
                 </UserContext.Provider>
               </AuthContext.Provider>
             </RouterContext.Provider>
-          </AuthedAmplitudeExperimentProvider>
-        </PlatformAdapterProvider>
+          </PlatformAdapterProvider>
+        </AuthedAmplitudeExperimentProvider>
       </UserContext.Provider>
     </QueryClientProvider>
   );

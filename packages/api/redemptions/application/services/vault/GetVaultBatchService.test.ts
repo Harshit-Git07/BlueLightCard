@@ -11,14 +11,26 @@ describe('GetVaultBatchService', () => {
   it('returns vault batch information when provided a valid vaultId', async () => {
     //Arrange
     const vault = vaultEntityFactory.build();
-    const vaultBatches = vaultBatchEntityFactory.buildList(3, {
+
+    const vaultBatchOne = vaultBatchEntityFactory.build({
       vaultId: vault.id,
+      created: new Date('2021-01-01T00:00:00Z'),
+    });
+    const vaultBatchTwo = vaultBatchEntityFactory.build({
+      vaultId: vault.id,
+      created: new Date('2021-01-02T00:00:00Z'),
+    });
+    const vaultBatchThree = vaultBatchEntityFactory.build({
+      vaultId: vault.id,
+      created: new Date('2021-01-03T00:00:00Z'),
     });
 
+    const vaultBatches = [vaultBatchThree, vaultBatchOne, vaultBatchTwo];
+
     const codesRemainingByBatch = {
-      [vaultBatches[0].id]: 2,
-      [vaultBatches[1].id]: 5,
-      [vaultBatches[2].id]: 7,
+      [vaultBatchOne.id]: 2,
+      [vaultBatchTwo.id]: 5,
+      [vaultBatchThree.id]: 7,
     };
 
     const vaultsRepository = {
@@ -33,25 +45,25 @@ describe('GetVaultBatchService', () => {
 
     const expectedResult = [
       {
-        batchId: vaultBatches[0].id,
+        batchId: vaultBatchOne.id,
         vaultId: vault.id,
-        expiry: vaultBatches[0].expiry.toISOString(),
-        created: vaultBatches[0].created.toISOString(),
-        codesRemaining: codesRemainingByBatch[vaultBatches[0].id],
+        expiry: vaultBatchOne.expiry.toISOString(),
+        created: vaultBatchOne.created.toISOString(),
+        codesRemaining: codesRemainingByBatch[vaultBatchOne.id],
       },
       {
-        batchId: vaultBatches[1].id,
+        batchId: vaultBatchTwo.id,
         vaultId: vault.id,
-        expiry: vaultBatches[1].expiry.toISOString(),
-        created: vaultBatches[1].created.toISOString(),
-        codesRemaining: codesRemainingByBatch[vaultBatches[1].id],
+        expiry: vaultBatchTwo.expiry.toISOString(),
+        created: vaultBatchTwo.created.toISOString(),
+        codesRemaining: codesRemainingByBatch[vaultBatchTwo.id],
       },
       {
-        batchId: vaultBatches[2].id,
+        batchId: vaultBatchThree.id,
         vaultId: vault.id,
-        expiry: vaultBatches[2].expiry.toISOString(),
-        created: vaultBatches[2].created.toISOString(),
-        codesRemaining: codesRemainingByBatch[vaultBatches[2].id],
+        expiry: vaultBatchThree.expiry.toISOString(),
+        created: vaultBatchThree.created.toISOString(),
+        codesRemaining: codesRemainingByBatch[vaultBatchThree.id],
       },
     ];
 

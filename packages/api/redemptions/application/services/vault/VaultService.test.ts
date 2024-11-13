@@ -1,803 +1,528 @@
-import { faker } from '@faker-js/faker';
-
+import { ILogger, ILoggerDetail } from '@blc-mono/core/utils/logger/logger';
 import { as } from '@blc-mono/core/utils/testing';
 import {
-  ITransactionManager,
+  DatabaseTransactionOperator,
   TransactionManager,
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
-import { DatabaseConnection, IDatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
-import { redemptionsTable, vaultsTable } from '@blc-mono/redemptions/libs/database/schema';
+import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
+import { updateRedemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/updateRedemptionConfigEntity.factory';
+import {
+  newVaultEntityFactory,
+  updateVaultEntityFactory,
+  vaultEntityFactory,
+} from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
+import { vaultCreatedEventFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEvents.factory';
+import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
-import { vaultCreatedEventFactory, vaultUpdatedEventFactory } from '../../../libs/test/factories/vaultEvents.factory';
-import { RedemptionsTestDatabase } from '../../../libs/test/helpers/database';
-import { createTestLogger } from '../../../libs/test/helpers/logger';
 import { VaultCreatedEvent } from '../../controllers/eventBridge/vault/VaultCreatedController';
-import { VaultUpdatedEvent } from '../../controllers/eventBridge/vault/VaultUpdatedController';
-import { AffiliateConfigurationHelper } from '../../helpers/affiliate/AffiliateConfiguration';
-import { IRedemptionConfigRepository, RedemptionConfigRepository } from '../../repositories/RedemptionConfigRepository';
-import { IVaultCodesRepository } from '../../repositories/VaultCodesRepository';
-import { IVaultsRepository, VaultsRepository } from '../../repositories/VaultsRepository';
+import {
+  IRedemptionConfigRepository,
+  RedemptionConfigEntity,
+  UpdateRedemptionConfigEntity,
+} from '../../repositories/RedemptionConfigRepository';
+import { IVaultsRepository, NewVaultEntity, UpdateVaultEntity, VaultEntity } from '../../repositories/VaultsRepository';
 
+import { UpdateRedemptionConfigEntityBuilder } from './builders/UpdateRedemptionConfigEntityBuilder';
+import { VaultEntityBuilder } from './builders/VaultEntityBuilder';
 import { VaultService } from './VaultService';
 
-describe('VaultService', () => {
-  const mockedLogger = createTestLogger();
-  const defaultVaultId = `vlt-${faker.string.uuid()}`;
-  const defaultRedemptionId = `rdm-${faker.string.uuid()}`;
-  const defaultOfferId = faker.string.uuid();
-  const defaultCampaignId = faker.string.uuid();
+const mockRedemptionsConfigTransactionRepository: Partial<IRedemptionConfigRepository> = {};
+const mockRedemptionConfigRepository: Partial<IRedemptionConfigRepository> = {};
 
-  type MakeVaultServiceOptions = {
-    overrides: {
-      redemptionConfigRepository?: Partial<IRedemptionConfigRepository>;
-      vaultsRepository?: Partial<IVaultsRepository>;
-      vaultCodesRepository?: Partial<IVaultCodesRepository>;
-      transactionManager?: Partial<ITransactionManager>;
-    };
-  };
-  function makeVaultService(connection: IDatabaseConnection, options?: MakeVaultServiceOptions) {
-    const redemptionRepository =
-      options?.overrides.redemptionConfigRepository ?? new RedemptionConfigRepository(connection);
-    const vaultsRepository = options?.overrides.vaultsRepository ?? new VaultsRepository(connection);
-    const transactionManager = options?.overrides.transactionManager ? null : new TransactionManager(connection);
-    const service = new VaultService(
-      mockedLogger,
-      as(redemptionRepository),
-      as(vaultsRepository),
-      as(transactionManager),
+const mockVaultsTransactionRepository: Partial<IVaultsRepository> = {};
+const mockVaultsRepository: Partial<IVaultsRepository> = {};
+
+const mockDatabaseTransactionOperator: Partial<DatabaseTransactionOperator> = {};
+
+const stubTransactionManager: Partial<TransactionManager> = {
+  withTransaction(callback) {
+    return callback(as(mockDatabaseTransactionOperator));
+  },
+};
+
+const mockUpdateRedemptionConfigEntityBuilder: Partial<UpdateRedemptionConfigEntityBuilder> = {};
+const mockVaultEntityBuilder: Partial<VaultEntityBuilder> = {};
+
+const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build();
+
+const vaultEntity: VaultEntity = vaultEntityFactory.build();
+const newVaultEntity: NewVaultEntity = newVaultEntityFactory.build();
+const updateVaultEntity: UpdateVaultEntity = updateVaultEntityFactory.build();
+
+const updateRedemptionConfigEntity: UpdateRedemptionConfigEntity = updateRedemptionConfigEntityFactory.build();
+
+const vaultCreatedEvent: VaultCreatedEvent = vaultCreatedEventFactory.build({
+  detail: {
+    link: 'someLink',
+    linkId: 12346,
+  },
+});
+
+const vaultUpdatedEvent: VaultCreatedEvent = vaultCreatedEventFactory.build({
+  detail: {
+    link: 'someLink1',
+    linkId: 7654,
+  },
+});
+
+let mockLogger: ILogger<ILoggerDetail>;
+let vaultService: VaultService;
+
+beforeEach(() => {
+  jest.resetAllMocks();
+  mockRedemptionConfigRepository.withTransaction = jest
+    .fn()
+    .mockReturnValue(mockRedemptionsConfigTransactionRepository);
+  mockVaultsRepository.withTransaction = jest.fn().mockReturnValue(mockVaultsTransactionRepository);
+  mockLogger = createTestLogger();
+  vaultService = new VaultService(
+    mockLogger,
+    as(mockRedemptionConfigRepository),
+    as(mockVaultsRepository),
+    as(stubTransactionManager),
+    as(mockUpdateRedemptionConfigEntityBuilder),
+    as(mockVaultEntityBuilder),
+  );
+});
+
+describe('updateVault', () => {
+  it('update vault if vault is found', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(updateRedemptionConfigEntity);
+
+    mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValueOnce(vaultEntity);
+
+    mockVaultEntityBuilder.buildUpdateVaultEntity = jest.fn().mockReturnValueOnce(updateVaultEntity);
+
+    mockVaultsTransactionRepository.updateOneById = jest.fn().mockResolvedValueOnce('20');
+
+    await vaultService.updateVault(vaultUpdatedEvent);
+
+    expect(mockVaultsTransactionRepository.updateOneById).toHaveBeenCalledWith(vaultEntity.id, updateVaultEntity);
+  });
+
+  it('build UpdateVaultEntity if vault is found', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(updateRedemptionConfigEntity);
+
+    mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValueOnce(vaultEntity);
+
+    mockVaultEntityBuilder.buildUpdateVaultEntity = jest.fn().mockReturnValueOnce(updateVaultEntity);
+
+    mockVaultsTransactionRepository.updateOneById = jest.fn().mockResolvedValueOnce('20');
+
+    await vaultService.updateVault(vaultUpdatedEvent);
+
+    expect(mockVaultEntityBuilder.buildUpdateVaultEntity).toHaveBeenCalledWith(
+      vaultUpdatedEvent.detail,
+      redemptionConfigEntity.id,
     );
-    return service;
-  }
-
-  let database: RedemptionsTestDatabase;
-  let connection: DatabaseConnection;
-
-  beforeAll(async () => {
-    database = await RedemptionsTestDatabase.start();
-    connection = await database.getConnection();
-  }, 60_000);
-
-  afterEach(async () => {
-    await database.reset(connection);
   });
 
-  afterAll(async () => {
-    await database?.down?.();
+  it('creates new vault if no vault is found', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(updateRedemptionConfigEntity);
+
+    mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValueOnce(null);
+
+    mockVaultEntityBuilder.buildNewVaultEntity = jest.fn().mockReturnValueOnce(newVaultEntity);
+
+    mockVaultsTransactionRepository.create = jest.fn().mockResolvedValueOnce(vaultEntity);
+
+    await vaultService.updateVault(vaultUpdatedEvent);
+
+    expect(mockVaultsTransactionRepository.create).toHaveBeenCalledWith(newVaultEntity);
   });
 
-  describe('updateVault', () => {
-    function callUpdateVault(event: VaultUpdatedEvent) {
-      const service = makeVaultService(connection);
-      return service.updateVault(event);
-    }
+  it('build NewVaultEntity if no vault is found', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
 
-    describe('should map event data correctly', () => {
-      it('when link is equal to affiliateUrl, connection should be affiliate', async () => {
-        const linkEqual = 'https://www.awin1.com';
-        const affiliateConfig = new AffiliateConfigurationHelper(linkEqual).getConfig();
-        // Arrange
-        const event = vaultUpdatedEventFactory.build({
-          detail: {
-            link: linkEqual,
-            offerId: defaultOfferId,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          id: defaultRedemptionId,
-          connection: 'direct',
-          offerType: 'online',
-          redemptionType: 'vaultQR',
-          companyId: faker.string.uuid(),
-          offerId: defaultOfferId,
-          url: linkEqual,
-        });
-        await connection.db.insert(vaultsTable).values({
-          id: defaultVaultId,
-          redemptionId: defaultRedemptionId,
-          status: 'active',
-        });
-        // Act
-        await callUpdateVault(event);
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(updateRedemptionConfigEntity);
 
-        // Assert
-        const redemptions = await connection.db.select().from(redemptionsTable).execute();
-        expect(redemptions).toHaveLength(1);
-        expect(redemptions.at(0)?.connection).toBe('affiliate');
-        expect(redemptions.at(0)?.affiliate).toBe(affiliateConfig?.affiliate);
-      });
-      it('when link is not equal to affiliateUrl, connection should be direct', async () => {
-        // Arrange
-        const event = vaultUpdatedEventFactory.build({
-          detail: {
-            link: faker.internet.url(),
-            offerId: defaultOfferId,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          id: defaultRedemptionId,
-          connection: 'affiliate',
-          affiliate: 'awin',
-          offerType: 'online',
-          redemptionType: 'vaultQR',
-          companyId: faker.string.uuid(),
-          offerId: defaultOfferId,
-          url: faker.internet.url(),
-        });
-        await connection.db.insert(vaultsTable).values({
-          id: defaultVaultId,
-          redemptionId: defaultRedemptionId,
-          status: 'active',
-        });
+    mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValueOnce(null);
 
-        // Act
-        await callUpdateVault(event);
+    mockVaultEntityBuilder.buildNewVaultEntity = jest.fn().mockReturnValueOnce(newVaultEntity);
 
-        // Assert
-        const redemptions = await connection.db.select().from(redemptionsTable).execute();
-        expect(redemptions).toHaveLength(1);
-        expect(redemptions.at(0)?.connection).toBe('direct');
-        expect(redemptions.at(0)?.affiliate).toBeNull();
-      });
-      it('when vaultStatus is equal to true, status of vault should be active', async () => {
-        // Arrange
-        const event = vaultUpdatedEventFactory.build({
-          detail: {
-            offerId: defaultOfferId,
-            vaultStatus: true,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          id: defaultRedemptionId,
-          connection: 'affiliate',
-          affiliate: 'awin',
-          offerType: 'online',
-          redemptionType: 'vaultQR',
-          companyId: faker.string.uuid(),
-          offerId: defaultOfferId,
-          url: faker.internet.url(),
-        });
-        await connection.db.insert(vaultsTable).values({
-          id: defaultVaultId,
-          redemptionId: defaultRedemptionId,
-          status: 'in-active',
-        });
+    mockVaultsTransactionRepository.create = jest.fn().mockResolvedValueOnce(vaultEntity);
 
-        // Act
-        await callUpdateVault(event);
+    await vaultService.updateVault(vaultUpdatedEvent);
 
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults.at(0)?.status).toBe('active');
-      });
-      it('when vaultStatus is not equal to true, status of vault should be in-active', async () => {
-        // Arrange
-        const event = vaultUpdatedEventFactory.build({
-          detail: {
-            offerId: defaultOfferId,
-            vaultStatus: false,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          id: defaultRedemptionId,
-          connection: 'affiliate',
-          affiliate: 'awin',
-          offerType: 'online',
-          redemptionType: 'vaultQR',
-          companyId: faker.string.uuid(),
-          offerId: defaultOfferId,
-          url: faker.internet.url(),
-        });
-        await connection.db.insert(vaultsTable).values({
-          id: defaultVaultId,
-          redemptionId: defaultRedemptionId,
-          status: 'active',
-        });
+    expect(mockVaultEntityBuilder.buildNewVaultEntity).toHaveBeenCalledWith(
+      vaultUpdatedEvent.detail,
+      redemptionConfigEntity.id,
+    );
+  });
 
-        // Act
-        await callUpdateVault(event);
+  it('finds vault by redemptionId', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
 
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults.at(0)?.status).toBe('in-active');
-      });
-      it('when eeCampaignId is sent, integration of vault should be eagleeye and integrationId equal to eeCampaignId', async () => {
-        // Arrange
-        const event = vaultUpdatedEventFactory.build({
-          detail: {
-            offerId: defaultOfferId,
-            ucCampaignId: undefined,
-            eeCampaignId: defaultCampaignId,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          id: defaultRedemptionId,
-          connection: 'affiliate',
-          affiliate: 'awin',
-          offerType: 'online',
-          redemptionType: 'vaultQR',
-          companyId: faker.string.uuid(),
-          offerId: defaultOfferId,
-        });
-        await connection.db.insert(vaultsTable).values({
-          id: defaultVaultId,
-          redemptionId: defaultRedemptionId,
-          status: 'active',
-          integrationId: String(defaultCampaignId),
-        });
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(updateRedemptionConfigEntity);
 
-        // Act
-        await callUpdateVault(event);
+    mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValueOnce(vaultEntity);
 
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults.at(0)?.integration).toBe('eagleeye');
-        expect(vaults.at(0)?.integrationId).toBe(String(defaultCampaignId));
-      });
-      it('when ucCampaignId is sent, integration of vault should be uniqodo and integrationId equal to ucCampaignId', async () => {
-        // Arrange
-        const event = vaultUpdatedEventFactory.build({
-          detail: {
-            offerId: defaultOfferId,
-            ucCampaignId: defaultCampaignId,
-            eeCampaignId: undefined,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          id: defaultRedemptionId,
-          connection: 'affiliate',
-          affiliate: 'awin',
-          offerType: 'online',
-          redemptionType: 'vaultQR',
-          companyId: faker.string.uuid(),
-          offerId: defaultOfferId,
-        });
-        await connection.db.insert(vaultsTable).values({
-          id: defaultVaultId,
-          redemptionId: defaultRedemptionId,
-          status: 'active',
-          integrationId: String(defaultCampaignId),
-        });
+    mockVaultEntityBuilder.buildUpdateVaultEntity = jest.fn().mockReturnValueOnce(updateVaultEntity);
 
-        // Act
-        await callUpdateVault(event);
+    mockVaultsTransactionRepository.updateOneById = jest.fn().mockResolvedValueOnce('10');
 
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults.at(0)?.integration).toBe('uniqodo');
-        expect(vaults.at(0)?.integrationId).toBe(String(defaultCampaignId));
-      });
-      it('when eeCampaignId is null, integration of vault should be null and integrationId equal to null', async () => {
-        // Arrange
-        const event = vaultUpdatedEventFactory.build({
-          detail: {
-            offerId: defaultOfferId,
-            eeCampaignId: null,
-            ucCampaignId: undefined,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          id: defaultRedemptionId,
-          connection: 'affiliate',
-          affiliate: 'awin',
-          offerType: 'online',
-          redemptionType: 'vaultQR',
-          companyId: faker.string.uuid(),
-          offerId: defaultOfferId,
-        });
-        await connection.db.insert(vaultsTable).values({
-          id: defaultVaultId,
-          redemptionId: defaultRedemptionId,
-          status: 'active',
-          integration: 'eagleeye',
-          integrationId: String(defaultCampaignId),
-        });
+    await vaultService.updateVault(vaultUpdatedEvent);
 
-        // Act
-        await callUpdateVault(event);
+    expect(mockVaultsRepository.findOneByRedemptionId).toHaveBeenCalledWith(redemptionConfigEntity.id);
+  });
 
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults.at(0)?.integration).toBe(null);
-        expect(vaults.at(0)?.integrationId).toBe(null);
-      });
-      it('when ucCampaignId is null, integration of vault should be null and integrationId equal to null', async () => {
-        // Arrange
-        const event = vaultUpdatedEventFactory.build({
-          detail: {
-            offerId: defaultOfferId,
-            eeCampaignId: undefined,
-            ucCampaignId: null,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          id: defaultRedemptionId,
-          connection: 'affiliate',
-          affiliate: 'awin',
-          offerType: 'online',
-          redemptionType: 'vaultQR',
-          companyId: faker.string.uuid(),
-          offerId: defaultOfferId,
-        });
-        await connection.db.insert(vaultsTable).values({
-          id: defaultVaultId,
-          redemptionId: defaultRedemptionId,
-          status: 'active',
-          integration: 'eagleeye',
-          integrationId: String(defaultCampaignId),
-        });
+  it('updates redemption with updateRedemptionConfigEntity and offerId', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
 
-        // Act
-        await callUpdateVault(event);
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(updateRedemptionConfigEntity);
 
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults.at(0)?.integration).toBe(null);
-        expect(vaults.at(0)?.integrationId).toBe(null);
-      });
-      it('when linkId and link is sent, redemptionType of vault should be vault', async () => {
-        // Arrange
-        const event = vaultUpdatedEventFactory.build({
-          detail: {
-            offerId: defaultOfferId,
-            linkId: 1234,
-            link: 'https://www.example.com',
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          id: defaultRedemptionId,
-          connection: 'direct',
-          offerType: 'online',
-          redemptionType: 'vaultQR',
-          companyId: faker.string.uuid(),
-          offerId: defaultOfferId,
-        });
-        await connection.db.insert(vaultsTable).values({
-          id: defaultVaultId,
-          redemptionId: defaultRedemptionId,
-          status: 'active',
-        });
+    mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValueOnce(vaultEntity);
 
-        // Act
-        await callUpdateVault(event);
-        // Assert
-        const redemptions = await connection.db.select().from(redemptionsTable).execute();
-        expect(redemptions).toHaveLength(1);
-        expect(redemptions.at(0)?.redemptionType).toBe('vault');
-      });
-      it('when linkId and link is not sent, redemptionType of vault should be vaultQR', async () => {
-        // Arrange
-        const event = vaultUpdatedEventFactory.build({
-          detail: {
-            offerId: defaultOfferId,
-            linkId: null,
-            link: null,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          id: defaultRedemptionId,
-          connection: 'affiliate',
-          affiliate: 'awin',
-          offerType: 'online',
-          redemptionType: 'vault',
-          companyId: faker.string.uuid(),
-          offerId: defaultOfferId,
-        });
-        await connection.db.insert(vaultsTable).values({
-          id: defaultVaultId,
-          redemptionId: defaultRedemptionId,
-          status: 'active',
-        });
+    mockVaultEntityBuilder.buildUpdateVaultEntity = jest.fn().mockReturnValueOnce(updateVaultEntity);
 
-        // Act
-        await callUpdateVault(event);
-        // Assert
-        const redemptions = await connection.db.select().from(redemptionsTable).execute();
-        expect(redemptions).toHaveLength(1);
-        expect(redemptions.at(0)?.redemptionType).toBe('vaultQR');
-      });
+    mockVaultsTransactionRepository.updateOneById = jest.fn().mockResolvedValueOnce('10');
+
+    await vaultService.updateVault(vaultUpdatedEvent);
+
+    expect(mockRedemptionsConfigTransactionRepository.updateOneByOfferId).toHaveBeenCalledWith(
+      vaultUpdatedEvent.detail.offerId,
+      updateRedemptionConfigEntity,
+    );
+  });
+
+  it('calls buildUpdateRedemptionConfigEntity to build UpdateRedemptionConfigEntity', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(updateRedemptionConfigEntity);
+
+    mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValueOnce(vaultEntity);
+
+    mockVaultEntityBuilder.buildUpdateVaultEntity = jest.fn().mockReturnValueOnce(updateVaultEntity);
+
+    mockVaultsTransactionRepository.updateOneById = jest.fn().mockResolvedValueOnce('10');
+
+    await vaultService.updateVault(vaultUpdatedEvent);
+
+    expect(mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity).toHaveBeenCalledWith(
+      vaultUpdatedEvent.detail.link,
+    );
+  });
+
+  it('loads redemptionConfig by offerId', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(updateRedemptionConfigEntity);
+
+    mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValueOnce(vaultEntity);
+
+    mockVaultEntityBuilder.buildUpdateVaultEntity = jest.fn().mockReturnValueOnce(updateVaultEntity);
+
+    mockVaultsTransactionRepository.updateOneById = jest.fn().mockResolvedValueOnce('10');
+
+    await vaultService.updateVault(vaultUpdatedEvent);
+
+    expect(mockRedemptionConfigRepository.findOneByOfferId).toHaveBeenCalledWith(vaultUpdatedEvent.detail.offerId);
+  });
+
+  it('throws error if failure to update vault', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(updateRedemptionConfigEntity);
+
+    mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValueOnce(vaultEntity);
+
+    mockVaultEntityBuilder.buildUpdateVaultEntity = jest.fn().mockReturnValueOnce(updateVaultEntity);
+
+    mockVaultsTransactionRepository.updateOneById = jest.fn().mockResolvedValueOnce(null);
+
+    mockLogger.error = jest.fn();
+
+    await expect(() => vaultService.updateVault(vaultUpdatedEvent)).rejects.toThrow(
+      `Vault update failed: No vaults were updated (offerId="${vaultUpdatedEvent.detail.offerId}")`,
+    );
+
+    expect(mockLogger.error).toHaveBeenCalledWith({
+      context: {
+        offerId: vaultUpdatedEvent.detail.offerId,
+        updateVaultEntity,
+      },
+      message: 'Vault update failed: No vaults were updated',
     });
   });
 
-  describe('createVault', () => {
-    function callCreateVault(event: VaultCreatedEvent) {
-      const service = makeVaultService(connection);
-      return service.createVault(event);
-    }
+  it('throws error if failure to create vault', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
 
-    describe('should map event data correctly', () => {
-      it('for Eagle Eye vaults', async () => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build({
-          detail: {
-            eeCampaignId: faker.string.uuid(),
-            ucCampaignId: undefined,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          companyId: event.detail.companyId,
-          connection: 'direct',
-          offerId: event.detail.offerId,
-          offerType: 'online',
-          redemptionType: 'vault',
-        });
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(updateRedemptionConfigEntity);
 
-        // Act
-        await callCreateVault(event);
+    mockVaultsRepository.findOneByRedemptionId = jest.fn().mockResolvedValueOnce(null);
 
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults[0].integration).toBe('eagleeye');
-        expect(vaults[0].integrationId).toBe(String(event.detail.eeCampaignId));
-      });
-      it('for Uniqodo vaults', async () => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build({
-          detail: {
-            eeCampaignId: undefined,
-            ucCampaignId: faker.string.uuid(),
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          companyId: event.detail.companyId,
-          connection: 'direct',
-          offerId: event.detail.offerId,
-          offerType: 'online',
-          redemptionType: 'vault',
-        });
+    mockVaultEntityBuilder.buildNewVaultEntity = jest.fn().mockReturnValueOnce(newVaultEntity);
 
-        // Act
-        await callCreateVault(event);
+    mockVaultsTransactionRepository.create = jest.fn().mockResolvedValueOnce(null);
 
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults[0].integration).toBe('uniqodo');
-        expect(vaults[0].integrationId).toBe(String(event.detail.ucCampaignId));
-      });
-      it('for active vaults', async () => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build({
-          detail: {
-            vaultStatus: true,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          companyId: event.detail.companyId,
-          connection: 'direct',
-          offerId: event.detail.offerId,
-          offerType: 'online',
-          redemptionType: 'vault',
-        });
+    mockLogger.error = jest.fn();
 
-        // Act
-        await callCreateVault(event);
+    await expect(() => vaultService.updateVault(vaultUpdatedEvent)).rejects.toThrow(
+      `Vault create failed: No vaults were created (offerId="${vaultUpdatedEvent.detail.offerId}")`,
+    );
 
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults[0].status).toBe('active');
-      });
-      it('for in-active vaults', async () => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build({
-          detail: {
-            vaultStatus: false,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          companyId: event.detail.companyId,
-          connection: 'direct',
-          offerId: event.detail.offerId,
-          offerType: 'online',
-          redemptionType: 'vault',
-        });
-
-        // Act
-        await callCreateVault(event);
-
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults[0].status).toBe('in-active');
-      });
-      it('for admin email', async () => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build({
-          detail: {
-            adminEmail: faker.internet.email(),
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          companyId: event.detail.companyId,
-          connection: 'direct',
-          offerId: event.detail.offerId,
-          offerType: 'online',
-          redemptionType: 'vault',
-        });
-
-        // Act
-        await callCreateVault(event);
-
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults[0].email).toBe(event.detail.adminEmail);
-      });
-      it('for missing admin email', async () => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build({
-          detail: {
-            adminEmail: undefined,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          companyId: event.detail.companyId,
-          connection: 'direct',
-          offerId: event.detail.offerId,
-          offerType: 'online',
-          redemptionType: 'vault',
-        });
-
-        // Act
-        await callCreateVault(event);
-
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults[0].email).toBeNull();
-      });
-      it('for passthrough fields', async () => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build({
-          detail: {
-            alertBelow: faker.number.int(100),
-            maxPerUser: faker.number.int(100),
-            showQR: faker.datatype.boolean(),
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          companyId: event.detail.companyId,
-          connection: 'direct',
-          offerId: event.detail.offerId,
-          offerType: 'online',
-          redemptionType: 'vault',
-        });
-
-        // Act
-        await callCreateVault(event);
-
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults[0].alertBelow).toBe(event.detail.alertBelow);
-        expect(vaults[0].maxPerUser).toBe(event.detail.maxPerUser);
-        expect(vaults[0].showQR).toBe(event.detail.showQR);
-      });
-      it('for redemptionId', async () => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build();
-        const redemption = await connection.db
-          .insert(redemptionsTable)
-          .values({
-            companyId: event.detail.companyId,
-            connection: 'direct',
-            offerId: event.detail.offerId,
-            offerType: 'online',
-            redemptionType: 'vault',
-          })
-          .returning({
-            redemptionId: redemptionsTable.id,
-          });
-        const redemptionId = redemption[0].redemptionId;
-
-        // Act
-        await callCreateVault(event);
-
-        // Assert
-        const vaults = await connection.db.select().from(vaultsTable).execute();
-        expect(vaults).toHaveLength(1);
-        expect(vaults[0].redemptionId).toBe(redemptionId);
-      });
-      it.each([
-        ['awin', 'https://www.awin1.com/a/b?c=d'],
-        ['affiliateFuture', 'https://scripts.affiliatefuture.com/a/b?c=d'],
-        ['rakuten', 'https://click.linksynergy.com/a/b?c=d'],
-        ['affilinet', 'https://being.successfultogether.co.uk/a/b?c=d'],
-        ['webgains', 'https://track.webgains.com/a/b?c=d'],
-        ['partnerize', 'https://prf.hn/a/b?c=d'],
-        ['partnerize', 'https://prf.hn/a/MEMID/b?c=d'],
-        ['partnerize', 'https://prf.hn/a/destination:/b?c=d'],
-        ['partnerize', 'https://prf.hn/a/camref:/b?c=d'],
-        ['impactRadius', 'https://www.example.com/c/?c=d'],
-        ['adtraction', 'https://track.adtraction.com/a/b?c=d'],
-        ['affiliateGateway', 'https://www.tagserve.com/a/b?c=d'],
-        ['optimiseMedia', 'https://clk.omgt1.com/a/b?c=d'],
-        ['commissionJunction', 'https://www.anrdoezrs.net/a/b?c=d'],
-        ['commissionJunction', 'https://www.apmebf.com/a/b?c=d'],
-        ['commissionJunction', 'https://www.awltovhc.com/a/b?c=d'],
-        ['commissionJunction', 'https://www.dpbolvw.net/a/b?c=d'],
-        ['commissionJunction', 'https://www.emjcd.com/a/b?c=d'],
-        ['commissionJunction', 'https://www.ftjcfx.com/a/b?c=d'],
-        ['commissionJunction', 'https://www.jdoqocy.com/a/b?c=d'],
-        ['commissionJunction', 'https://www.kqzyfj.com/a/b?c=d'],
-        ['commissionJunction', 'https://www.lduhtrp.net/a/b?c=d'],
-        ['commissionJunction', 'https://www.mjbpab.com/a/b?c=d'],
-        ['commissionJunction', 'https://www.qksrv.net/a/b?c=d'],
-        ['commissionJunction', 'https://www.qksz.net/a/b?c=d'],
-        ['commissionJunction', 'https://www.tkqlhce.com/a/b?c=d'],
-        ['commissionJunction', 'https://www.tqlkg.com/a/b?c=d'],
-        ['commissionJunction', 'https://anrdoezrs.net/a/b?c=d'],
-        ['commissionJunction', 'https://apmebf.com/a/b?c=d'],
-        ['commissionJunction', 'https://awltovhc.com/a/b?c=d'],
-        ['commissionJunction', 'https://dpbolvw.net/a/b?c=d'],
-        ['commissionJunction', 'https://emjcd.com/a/b?c=d'],
-        ['commissionJunction', 'https://ftjcfx.com/a/b?c=d'],
-        ['commissionJunction', 'https://jdoqocy.com/a/b?c=d'],
-        ['commissionJunction', 'https://kqzyfj.com/a/b?c=d'],
-        ['commissionJunction', 'https://lduhtrp.net/a/b?c=d'],
-        ['commissionJunction', 'https://mjbpab.com/a/b?c=d'],
-        ['commissionJunction', 'https://qksrv.net/a/b?c=d'],
-        ['commissionJunction', 'https://qksz.net/a/b?c=d'],
-        ['commissionJunction', 'https://tkqlhce.com/a/b?c=d'],
-        ['commissionJunction', 'https://tqlkg.com/a/b?c=d'],
-        ['tradedoubler', 'https://tradedoubler.com/a/b?c=d'],
-      ])('for affiliate connections (%s)', async (affiliate, affiliateUrl) => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build({
-          detail: {
-            link: affiliateUrl,
-            linkId: faker.number.int({
-              min: 1,
-              max: 1_000_000,
-            }),
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          companyId: event.detail.companyId,
-          offerId: event.detail.offerId,
-          offerType: 'online',
-          redemptionType: 'vault',
-          // We expect these to be updated by the handler
-          connection: 'direct',
-          affiliate: null,
-          url: null,
-        });
-
-        // Act
-        await callCreateVault(event);
-
-        // Assert
-        const redemptions = await connection.db.select().from(redemptionsTable).execute();
-        expect(redemptions).toHaveLength(1);
-        expect(redemptions[0].connection).toBe('affiliate');
-        expect(redemptions[0].url).toBe(event.detail.link);
-        expect(redemptions[0].affiliate).toBe(affiliate);
-      });
-      it('for direct connections', async () => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build({
-          detail: {
-            link: faker.internet.url(),
-            linkId: faker.number.int({
-              min: 1,
-              max: 1_000_000,
-            }),
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          companyId: event.detail.companyId,
-          offerId: event.detail.offerId,
-          offerType: 'online',
-          redemptionType: 'vault',
-          // We expect these to be updated by the handler
-          connection: 'affiliate',
-          affiliate: 'awin',
-          url: 'https://www.awin1.com/a/b?c=d',
-        });
-
-        // Act
-        await callCreateVault(event);
-
-        // Assert
-        const redemptions = await connection.db.select().from(redemptionsTable).execute();
-        expect(redemptions).toHaveLength(1);
-        expect(redemptions[0].connection).toBe('direct');
-        expect(redemptions[0].url).toBe(event.detail.link);
-        expect(redemptions[0].affiliate).toBeNull();
-      });
-      it('for direct connections', async () => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build({
-          detail: {
-            link: faker.internet.url(),
-            linkId: faker.number.int({
-              min: 1,
-              max: 1_000_000,
-            }),
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          companyId: event.detail.companyId,
-          offerId: event.detail.offerId,
-          offerType: 'online',
-          redemptionType: 'vault',
-          // We expect these to be updated by the handler
-          connection: 'affiliate',
-          affiliate: 'awin',
-          url: 'https://www.awin1.com/a/b?c=d',
-        });
-
-        // Act
-        await callCreateVault(event);
-
-        // Assert
-        const redemptions = await connection.db.select().from(redemptionsTable).execute();
-        expect(redemptions).toHaveLength(1);
-        expect(redemptions[0].connection).toBe('direct');
-        expect(redemptions[0].url).toBe(event.detail.link);
-        expect(redemptions[0].affiliate).toBeNull();
-      });
-      it('for vault redemption types', async () => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build({
-          detail: {
-            link: faker.internet.url(),
-            linkId: faker.number.int({
-              min: 1,
-              max: 1_000_000,
-            }),
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          companyId: event.detail.companyId,
-          offerId: event.detail.offerId,
-          offerType: 'online',
-          connection: 'direct',
-          // We expect these to be updated by the handler
-          redemptionType: 'generic',
-        });
-
-        // Act
-        await callCreateVault(event);
-
-        // Assert
-        const redemptions = await connection.db.select().from(redemptionsTable).execute();
-        expect(redemptions).toHaveLength(1);
-        expect(redemptions[0].redemptionType).toBe('vault');
-      });
-      it('for vaultQR redemption types', async () => {
-        // Arrange
-        const event = vaultCreatedEventFactory.build({
-          detail: {
-            link: null,
-            linkId: null,
-          },
-        });
-        await connection.db.insert(redemptionsTable).values({
-          companyId: event.detail.companyId,
-          offerId: event.detail.offerId,
-          offerType: 'online',
-          connection: 'direct',
-          // We expect these to be updated by the handler
-          redemptionType: 'generic',
-        });
-
-        // Act
-        await callCreateVault(event);
-
-        // Assert
-        const redemptions = await connection.db.select().from(redemptionsTable).execute();
-        expect(redemptions).toHaveLength(1);
-        expect(redemptions[0].redemptionType).toBe('vaultQR');
-        expect(redemptions[0].connection).toBe('none');
-      });
+    expect(mockLogger.error).toHaveBeenCalledWith({
+      context: {
+        offerId: vaultUpdatedEvent.detail.offerId,
+        newVaultEntity,
+      },
+      message: 'Vault create failed: No vaults were created',
     });
+  });
+
+  it('throws error if failure to update redemption config entity', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest.fn().mockResolvedValueOnce(null);
+
+    mockLogger.error = jest.fn();
+
+    await expect(() => vaultService.updateVault(vaultUpdatedEvent)).rejects.toThrow(
+      `Redemption update by offer id failed: No redemptions found (offerId="${vaultUpdatedEvent.detail.offerId}")`,
+    );
+
+    expect(mockLogger.error).toHaveBeenCalledWith({
+      context: {
+        offerId: vaultUpdatedEvent.detail.offerId,
+        updateRedemptionConfigEntity: updateRedemptionConfigEntity,
+      },
+      message: 'Redemption update by offer id failed: No redemptions found',
+    });
+  });
+
+  it('throws error if redemption config entity can not be found', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(null);
+
+    mockLogger.error = jest.fn();
+
+    await expect(() => vaultService.updateVault(vaultUpdatedEvent)).rejects.toThrow(
+      `Redemption find one by offer id failed: No redemptions found (offerId="${vaultUpdatedEvent.detail.offerId}")`,
+    );
+
+    expect(mockLogger.error).toHaveBeenCalledWith({
+      context: { offerId: vaultUpdatedEvent.detail.offerId },
+      message: 'Redemption find one by offer id failed: Redemption not found',
+    });
+  });
+});
+
+describe('createVault', () => {
+  it('throws error if create vaultEntity fails', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(redemptionConfigEntity);
+
+    mockVaultEntityBuilder.buildNewVaultEntity = jest.fn().mockReturnValueOnce(vaultEntity);
+    mockVaultsTransactionRepository.create = jest.fn().mockResolvedValueOnce(null);
+
+    mockLogger.error = jest.fn();
+
+    const offerId = vaultCreatedEvent.detail.offerId;
+
+    await expect(() => vaultService.createVault(vaultCreatedEvent)).rejects.toThrow(
+      `Vault create failed: No vaults were created (offerId="${offerId}")`,
+    );
+
+    expect(mockLogger.error).toHaveBeenCalledWith({
+      context: { offerId: offerId, newVaultEntity: vaultEntity },
+      message: `Vault create failed: No vaults were created`,
+    });
+  });
+
+  it('creates new vaultEntity', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(redemptionConfigEntity);
+
+    mockVaultEntityBuilder.buildNewVaultEntity = jest.fn().mockReturnValueOnce(vaultEntity);
+    mockVaultsTransactionRepository.create = jest.fn().mockResolvedValueOnce(vaultEntity);
+
+    await vaultService.createVault(vaultCreatedEvent);
+
+    expect(mockVaultsTransactionRepository.create).toHaveBeenCalledWith(vaultEntity);
+  });
+
+  it('calls buildNewVaultEntity to build NewVaultEntity', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(redemptionConfigEntity);
+
+    mockVaultEntityBuilder.buildNewVaultEntity = jest.fn();
+    mockVaultsTransactionRepository.create = jest.fn().mockResolvedValueOnce(vaultEntity);
+
+    await vaultService.createVault(vaultCreatedEvent);
+
+    expect(mockVaultEntityBuilder.buildNewVaultEntity).toHaveBeenCalledWith(
+      vaultCreatedEvent.detail,
+      redemptionConfigEntity.id,
+    );
+  });
+
+  it('calls updateOneByOfferId to update redemption config entity', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(redemptionConfigEntity);
+
+    mockVaultEntityBuilder.buildNewVaultEntity = jest.fn();
+    mockVaultsTransactionRepository.create = jest.fn().mockResolvedValueOnce(vaultEntity);
+
+    await vaultService.createVault(vaultCreatedEvent);
+
+    expect(mockRedemptionsConfigTransactionRepository.updateOneByOfferId).toHaveBeenCalledWith(
+      vaultCreatedEvent.detail.offerId,
+      updateRedemptionConfigEntity,
+    );
+  });
+
+  it('calls buildUpdateRedemptionConfigEntity to build UpdateRedemptionConfigEntity', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(redemptionConfigEntity);
+
+    mockVaultEntityBuilder.buildNewVaultEntity = jest.fn();
+    mockVaultsTransactionRepository.create = jest.fn().mockResolvedValueOnce(vaultEntity);
+
+    await vaultService.createVault(vaultCreatedEvent);
+
+    expect(mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity).toHaveBeenCalledWith(
+      vaultCreatedEvent.detail.link,
+    );
+  });
+
+  it('throws error if failure to update redemption config entity', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest
+      .fn()
+      .mockReturnValueOnce(updateRedemptionConfigEntity);
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest.fn().mockResolvedValueOnce(null);
+
+    mockLogger.error = jest.fn();
+
+    const offerId = vaultCreatedEvent.detail.offerId;
+    await expect(() => vaultService.createVault(vaultCreatedEvent)).rejects.toThrow(
+      `Redemption update by offer id failed: No redemptions found (offerId="${offerId}")`,
+    );
+
+    expect(mockLogger.error).toHaveBeenCalledWith({
+      context: {
+        offerId: vaultCreatedEvent.detail.offerId,
+        updateRedemptionConfigEntity: updateRedemptionConfigEntity,
+      },
+      message: 'Redemption update by offer id failed: No redemptions found',
+    });
+  });
+
+  it('throws error if redemption config entity can not be found', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(null);
+
+    mockLogger.error = jest.fn();
+
+    await expect(() => vaultService.createVault(vaultCreatedEvent)).rejects.toThrow(
+      `Redemption find one by offer id failed: No redemptions found (offerId="${vaultCreatedEvent.detail.offerId}")`,
+    );
+
+    expect(mockLogger.error).toHaveBeenCalledWith({
+      context: { offerId: vaultCreatedEvent.detail.offerId },
+      message: 'Redemption find one by offer id failed: Redemption not found',
+    });
+  });
+
+  it('loads the redemption config entity by offerId', async () => {
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValueOnce(redemptionConfigEntity);
+    mockUpdateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity = jest.fn();
+    mockRedemptionsConfigTransactionRepository.updateOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(redemptionConfigEntity);
+
+    mockVaultEntityBuilder.buildNewVaultEntity = jest.fn();
+    mockVaultsTransactionRepository.create = jest.fn().mockResolvedValueOnce(vaultEntity);
+
+    await vaultService.createVault(vaultCreatedEvent);
+
+    expect(mockRedemptionConfigRepository.findOneByOfferId).toHaveBeenCalledWith(vaultCreatedEvent.detail.offerId);
   });
 });

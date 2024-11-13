@@ -51,8 +51,12 @@ describe('GET Vault Batches', () => {
 
   it('returns each associated Vault batch', async () => {
     const { vault, ...vaultHooks } = buildRedemptionConfig(connectionManager).addVault();
-    const { vaultBatch: firstVaultBatch } = vaultHooks.addBatch().addCodes(2);
-    const { vaultBatch: secondVaultBatch } = vaultHooks.addBatch().addCodes(3);
+    const { vaultBatch: firstVaultBatch } = vaultHooks
+      .addBatch({ created: new Date('2021-01-02T00:00:00Z') })
+      .addCodes(2);
+    const { vaultBatch: secondVaultBatch } = vaultHooks
+      .addBatch({ created: new Date('2021-01-03T00:00:00Z') })
+      .addCodes(3);
 
     onTestFinished(vaultHooks.cleanup);
     await vaultHooks.insert();

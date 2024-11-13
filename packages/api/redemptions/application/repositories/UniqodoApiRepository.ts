@@ -160,6 +160,6 @@ export class UniqodoApiRepository implements IUniqodoApiRepository {
       throw new Error('failed to fetch Uniqodo api secrets');
     }
 
-    return `${SecretsSchema.parse(uniqodoApiJson).apiKey}`;
+    return SecretsSchema.parse(uniqodoApiJson).apiKey;
   }
 }

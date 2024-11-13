@@ -4,9 +4,9 @@ import {
   TransactionManager,
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 
-import { VaultCreatedEvent, VaultCreatedEventDetail } from '../../controllers/eventBridge/vault/VaultCreatedController';
-import { VaultUpdatedEvent, VaultUpdatedEventDetail } from '../../controllers/eventBridge/vault/VaultUpdatedController';
-import { AffiliateConfigurationHelper } from '../../helpers/affiliate/AffiliateConfiguration';
+import { VaultCreatedEvent } from '../../controllers/eventBridge/vault/VaultCreatedController';
+import { VaultEventDetail } from '../../controllers/eventBridge/vault/VaultEventDetail';
+import { VaultUpdatedEvent } from '../../controllers/eventBridge/vault/VaultUpdatedController';
 import {
   IRedemptionConfigRepository,
   RedemptionConfigEntity,
@@ -22,6 +22,9 @@ import {
   VaultsRepository,
 } from '../../repositories/VaultsRepository';
 
+import { UpdateRedemptionConfigEntityBuilder } from './builders/UpdateRedemptionConfigEntityBuilder';
+import { VaultEntityBuilder } from './builders/VaultEntityBuilder';
+
 export interface IVaultService {
   updateVault(event: VaultUpdatedEvent): Promise<void>;
   createVault(event: VaultCreatedEvent): Promise<void>;
@@ -34,6 +37,8 @@ export class VaultService implements IVaultService {
     RedemptionConfigRepository.key,
     VaultsRepository.key,
     TransactionManager.key,
+    UpdateRedemptionConfigEntityBuilder.key,
+    VaultEntityBuilder.key,
   ] as const;
 
   constructor(
@@ -41,231 +46,160 @@ export class VaultService implements IVaultService {
     private readonly redemptionConfigRepository: IRedemptionConfigRepository,
     private readonly vaultsRepo: IVaultsRepository,
     private readonly transactionManager: ITransactionManager,
+    private readonly updateRedemptionConfigEntityBuilder: UpdateRedemptionConfigEntityBuilder,
+    private readonly vaultEntityBuilder: VaultEntityBuilder,
   ) {}
 
-  public async updateVault(event: VaultUpdatedEvent): Promise<void> {
-    const { detail } = event;
+  public async createVault(vaultCreatedEvent: VaultCreatedEvent): Promise<void> {
+    const vaultEventDetail: VaultEventDetail = vaultCreatedEvent.detail;
+    const offerId = vaultEventDetail.offerId;
 
-    const redemptionConfigEntity: RedemptionConfigEntity | null =
-      await this.redemptionConfigRepository.findOneByOfferId(detail.offerId);
+    this.logger.info({
+      message: 'create vault for redemption',
+      context: {
+        offerId,
+        companyId: vaultEventDetail.companyId,
+        vaultEventDetail,
+      },
+    });
 
-    if (!redemptionConfigEntity) {
-      this.logger.error({
-        message: 'Vault Update - Redemption find one by offer id failed: Redemption not found',
-        context: {
-          offerId: detail.offerId,
-          companyId: detail.companyId,
-        },
-      });
-      throw new Error(
-        `Vault Update - Redemption find one by offer id failed: Redemption not found (offerId=${detail.offerId})`,
-      );
-    }
-    //TODO: refactor logic here so that we are checking vault results are undefined and apply logic from line 151
-    let vaultId = 'VAULT_NOT_EXIST';
-    const vault = await this.vaultsRepo.findOneByRedemptionId(redemptionConfigEntity.id);
-    if (vault) {
-      vaultId = vault.id;
-    }
+    const redemptionConfigEntity: RedemptionConfigEntity = await this.loadRedemptionConfigByOfferId(offerId);
 
     await this.transactionManager.withTransaction(async (transaction) => {
       const transactionConnection = { db: transaction };
       const vaultTransaction = this.vaultsRepo.withTransaction(transactionConnection);
       const redemptionTransaction = this.redemptionConfigRepository.withTransaction(transactionConnection);
-      const redemptionData = this.makeRedemptionsData(detail);
 
-      const redemptionIdEntity: RedemptionConfigIdEntity | null = await redemptionTransaction.updateOneByOfferId(
-        detail.offerId,
-        redemptionData,
+      const updateRedemptionConfigEntity: UpdateRedemptionConfigEntity =
+        this.updateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity(vaultEventDetail.link);
+
+      await this.updateRedemptionConfigByOfferId(redemptionTransaction, updateRedemptionConfigEntity, offerId);
+
+      const newVaultEntity: NewVaultEntity = this.vaultEntityBuilder.buildNewVaultEntity(
+        vaultEventDetail,
+        redemptionConfigEntity.id,
       );
+      await this.createNewVault(vaultTransaction, newVaultEntity, offerId);
+    });
+  }
 
-      if (!redemptionIdEntity) {
-        this.logger.error({
-          message: 'Vault Update - Redemption update by offer id failed: No redemptions found',
-          context: {
-            redemptionId: redemptionConfigEntity.id,
-            offerId: detail.offerId,
-            companyId: detail.companyId,
-          },
-        });
-        throw new Error(
-          `Vault Update - Redemption update by offer id failed: No redemptions found (offerId="${detail.offerId}")`,
-        );
-      }
+  public async updateVault(vaultUpdatedEvent: VaultUpdatedEvent): Promise<void> {
+    const vaultEventDetail: VaultEventDetail = vaultUpdatedEvent.detail;
+    const offerId = vaultEventDetail.offerId;
 
-      if (vaultId === 'VAULT_NOT_EXIST') {
+    this.logger.info({
+      message: 'update vault for redemption',
+      context: {
+        offerId,
+        companyId: vaultEventDetail.companyId,
+        vaultEventDetail,
+      },
+    });
+
+    const redemptionConfigEntity: RedemptionConfigEntity = await this.loadRedemptionConfigByOfferId(offerId);
+
+    const redemptionId = redemptionConfigEntity.id;
+
+    await this.transactionManager.withTransaction(async (transaction) => {
+      const transactionConnection = { db: transaction };
+      const vaultTransaction = this.vaultsRepo.withTransaction(transactionConnection);
+      const redemptionTransaction = this.redemptionConfigRepository.withTransaction(transactionConnection);
+      const updateRedemptionConfigEntity: UpdateRedemptionConfigEntity =
+        this.updateRedemptionConfigEntityBuilder.buildUpdateRedemptionConfigEntity(vaultEventDetail.link);
+
+      await this.updateRedemptionConfigByOfferId(redemptionTransaction, updateRedemptionConfigEntity, offerId);
+
+      const vault = await this.vaultsRepo.findOneByRedemptionId(redemptionId);
+
+      if (!vault) {
         //vault does not exist, so may have been data sync issue in the past, so create it now
-        const vaultData: NewVaultEntity = {
-          alertBelow: detail.alertBelow,
-          status: detail.vaultStatus ? 'active' : 'in-active',
-          maxPerUser: detail.maxPerUser,
-          showQR: detail.showQR,
-          email: detail.adminEmail,
-          redemptionId: redemptionConfigEntity.id,
-          vaultType: 'legacy',
-          ...this.getIntegrationsSettings(detail),
-        };
-        const vaultInsert = await vaultTransaction.create(vaultData);
+        const newVaultEntity: NewVaultEntity = this.vaultEntityBuilder.buildNewVaultEntity(
+          vaultEventDetail,
+          redemptionId,
+        );
 
-        if (!vaultInsert) {
-          this.logger.error({
-            message: 'Vault Update - Vault create failed: No vaults were created',
-            context: {
-              offerId: detail.offerId,
-              companyId: detail.companyId,
-            },
-          });
-          throw new Error('Vault Update - Vault create failed: No vaults were created');
-        }
+        await this.createNewVault(vaultTransaction, newVaultEntity, offerId);
       } else {
         //vault exists, so update it
-        const vaultData: UpdateVaultEntity = {
-          alertBelow: detail.alertBelow,
-          status: detail.vaultStatus ? 'active' : 'in-active',
-          maxPerUser: detail.maxPerUser,
-          showQR: detail.showQR,
-          email: detail.adminEmail,
-          redemptionId: redemptionConfigEntity.id,
-          vaultType: 'legacy',
-          ...this.getIntegrationsSettings(detail),
-        };
-        const vaultUpdated = await vaultTransaction.updateOneById(vaultId, vaultData);
-
-        if (!vaultUpdated) {
-          this.logger.error({
-            message: 'Vault Update - Vault update failed: No vaults were updated',
-            context: {
-              redemptionId: redemptionConfigEntity.id,
-              offerId: detail.offerId,
-              companyId: detail.companyId,
-            },
-          });
-          throw new Error(
-            `Vault Update - Vault create failed: No vaults were updated (redemptionId=${redemptionConfigEntity.id})`,
-          );
-        }
+        const updateVaultEntity: UpdateVaultEntity = this.vaultEntityBuilder.buildUpdateVaultEntity(
+          vaultEventDetail,
+          redemptionId,
+        );
+        await this.updateVaultByVaultId(vaultTransaction, vault.id, updateVaultEntity, offerId);
       }
     });
   }
 
-  public async createVault(event: VaultCreatedEvent): Promise<void> {
-    const { detail } = event;
+  private async updateRedemptionConfigByOfferId(
+    redemptionTransaction: IRedemptionConfigRepository,
+    updateRedemptionConfigEntity: UpdateRedemptionConfigEntity,
+    offerId: string,
+  ) {
+    const redemptionIdEntity: RedemptionConfigIdEntity | null = await redemptionTransaction.updateOneByOfferId(
+      offerId,
+      updateRedemptionConfigEntity,
+    );
 
-    const redemptionConfigEntity: RedemptionConfigEntity | null =
-      await this.redemptionConfigRepository.findOneByOfferId(detail.offerId);
-    if (!redemptionConfigEntity) {
+    if (!redemptionIdEntity) {
       this.logger.error({
-        message: 'Vault create - Redemption find one by offer id failed: Redemption not found',
+        message: 'Redemption update by offer id failed: No redemptions found',
         context: {
-          offerId: detail.offerId,
-          companyId: detail.companyId,
+          offerId,
+          updateRedemptionConfigEntity,
         },
       });
-      throw new Error(
-        `Vault Create - Redemption find one by offer id failed: No redemptions found (offerId="${detail.offerId}")`,
-      );
+      throw new Error(`Redemption update by offer id failed: No redemptions found (offerId="${offerId}")`);
     }
-
-    await this.transactionManager.withTransaction(async (transaction) => {
-      const transactionConnection = { db: transaction };
-      const vaultTransaction = this.vaultsRepo.withTransaction(transactionConnection);
-      const redemptionTransaction = this.redemptionConfigRepository.withTransaction(transactionConnection);
-      const redemptionData = this.makeRedemptionsData(detail);
-
-      const redemptionIdEntity: RedemptionConfigIdEntity | null = await redemptionTransaction.updateOneByOfferId(
-        detail.offerId,
-        redemptionData,
-      );
-
-      if (!redemptionIdEntity) {
-        this.logger.error({
-          message: 'Vault Create - Redemption update by offer id failed: No redemptions found',
-          context: {
-            offerId: detail.offerId,
-            companyId: detail.companyId,
-          },
-        });
-        throw new Error(
-          `Vault Create - Redemption update by offer id failed: No redemptions found (offerId="${detail.offerId}")`,
-        );
-      }
-
-      const vaultData: NewVaultEntity = {
-        alertBelow: detail.alertBelow,
-        status: detail.vaultStatus ? 'active' : 'in-active',
-        maxPerUser: detail.maxPerUser,
-        showQR: detail.showQR,
-        email: detail.adminEmail,
-        redemptionId: redemptionConfigEntity.id,
-        vaultType: 'legacy',
-        ...this.getIntegrationsSettings(detail),
-      };
-      const vaultInsert = await vaultTransaction.create(vaultData);
-
-      if (!vaultInsert) {
-        this.logger.error({
-          message: 'Vault Create - Vault create failed: No vaults were created',
-          context: {
-            offerId: detail.offerId,
-            companyId: detail.companyId,
-          },
-        });
-        throw new Error('Vault Create - Vault create failed: No vaults were created');
-      }
-    });
   }
 
-  private makeRedemptionsData(detail: VaultCreatedEventDetail | VaultUpdatedEventDetail): UpdateRedemptionConfigEntity {
-    if (!detail.link) {
-      return {
-        redemptionType: 'vaultQR',
-        connection: 'none',
-        affiliate: null,
-        url: null,
-        offerType: 'in-store',
-      };
-    }
+  private async loadRedemptionConfigByOfferId(offerId: string) {
+    const redemptionConfigEntity: RedemptionConfigEntity | null =
+      await this.redemptionConfigRepository.findOneByOfferId(offerId);
 
-    const affiliateConfiguration = new AffiliateConfigurationHelper(detail.link).getConfig();
-    if (affiliateConfiguration) {
-      return {
-        redemptionType: 'vault',
-        connection: 'affiliate',
-        affiliate: affiliateConfiguration.affiliate,
-        url: detail.link,
-        offerType: 'online',
-      };
+    if (!redemptionConfigEntity) {
+      this.logger.error({
+        message: 'Redemption find one by offer id failed: Redemption not found',
+        context: {
+          offerId,
+        },
+      });
+      throw new Error(`Redemption find one by offer id failed: No redemptions found (offerId="${offerId}")`);
     }
-
-    return {
-      redemptionType: 'vault',
-      connection: 'direct',
-      affiliate: null,
-      url: detail.link,
-      offerType: 'online',
-    };
+    return redemptionConfigEntity;
   }
 
-  private getIntegrationsSettings(
-    detail: VaultCreatedEventDetail | VaultUpdatedEventDetail,
-  ): Pick<VaultEntity, 'integration' | 'integrationId'> | undefined {
-    if (detail?.eeCampaignId) {
-      return {
-        integration: 'eagleeye',
-        integrationId: String(detail?.eeCampaignId),
-      };
-    }
+  private async createNewVault(vaultTransaction: VaultsRepository, newVaultEntity: NewVaultEntity, offerId: string) {
+    const vaultInsert: VaultEntity = await vaultTransaction.create(newVaultEntity);
 
-    if (detail?.ucCampaignId) {
-      return {
-        integration: 'uniqodo',
-        integrationId: String(detail?.ucCampaignId),
-      };
+    if (!vaultInsert) {
+      this.logger.error({
+        message: 'Vault create failed: No vaults were created',
+        context: {
+          offerId,
+          newVaultEntity,
+        },
+      });
+      throw new Error(`Vault create failed: No vaults were created (offerId="${offerId}")`);
     }
+  }
 
-    return {
-      integration: null,
-      integrationId: null,
-    };
+  private async updateVaultByVaultId(
+    vaultTransaction: VaultsRepository,
+    vaultId: string,
+    updateVaultEntity: UpdateVaultEntity,
+    offerId: string,
+  ) {
+    const vaultUpdated = await vaultTransaction.updateOneById(vaultId, updateVaultEntity);
+
+    if (!vaultUpdated) {
+      this.logger.error({
+        message: 'Vault update failed: No vaults were updated',
+        context: {
+          offerId,
+          updateVaultEntity,
+        },
+      });
+      throw new Error(`Vault update failed: No vaults were updated (offerId="${offerId}")`);
+    }
   }
 }

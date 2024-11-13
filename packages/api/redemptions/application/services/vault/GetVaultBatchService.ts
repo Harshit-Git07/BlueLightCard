@@ -1,15 +1,17 @@
 import { IVaultBatchesRepository, VaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
 import { IVaultsRepository, VaultsRepository } from '../../repositories/VaultsRepository';
 
+type GetVaultBatchData = {
+  batchId: string;
+  vaultId: string;
+  expiry: string;
+  created: string;
+  codesRemaining: number;
+};
+
 type GetVaultBatchSuccess = {
   kind: 'Ok';
-  data: {
-    batchId: string;
-    vaultId: string;
-    expiry: string;
-    created: string;
-    codesRemaining: number;
-  }[];
+  data: GetVaultBatchData[];
 };
 
 type GetVaultBatchNotFound = {
@@ -40,7 +42,7 @@ export default class GetVaultBatchService {
     }
 
     const vaultBatches = await this.vaultBatchesRepository.findByVaultId(vaultId);
-    const data = await Promise.all(
+    const data: GetVaultBatchData[] = await Promise.all(
       vaultBatches.map(async (vaultBatch) => {
         return {
           batchId: vaultBatch.id,
@@ -52,9 +54,11 @@ export default class GetVaultBatchService {
       }),
     );
 
+    const sortedData = data.toSorted((a, b) => a.created.localeCompare(b.created));
+
     return {
       kind: 'Ok',
-      data,
+      data: sortedData,
     };
   }
 }

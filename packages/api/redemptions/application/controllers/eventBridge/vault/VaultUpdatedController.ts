@@ -1,8 +1,6 @@
 import { z } from 'zod';
 
-import { NON_NEGATIVE_INT } from '@blc-mono/core/schemas/common';
 import { eventSchema } from '@blc-mono/core/schemas/event';
-import { OPTIONAL_URL_SCHEMA } from '@blc-mono/core/schemas/utility';
 import { Result } from '@blc-mono/core/types/result';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { IVaultService, VaultService } from '@blc-mono/redemptions/application/services/vault/VaultService';
@@ -10,29 +8,14 @@ import { RedemptionsDatasyncEvents } from '@blc-mono/redemptions/infrastructure/
 
 import { EventBridgeController, UnknownEventBridgeEvent } from '../EventBridgeController';
 
-const VaultUpdatedEventDetailSchema = z.object({
-  adminEmail: z.string().email().nullable().optional(),
-  alertBelow: z.number(),
-  brand: z.string(),
-  companyId: z.coerce.string(),
-  companyName: z.string(),
-  eeCampaignId: z.coerce.string().nullable().optional(),
-  link: OPTIONAL_URL_SCHEMA,
-  linkId: NON_NEGATIVE_INT.nullable().optional(),
-  managerId: NON_NEGATIVE_INT.nullable().optional(),
-  maxPerUser: NON_NEGATIVE_INT,
-  offerId: z.coerce.string(),
-  showQR: z.boolean(),
-  ucCampaignId: z.coerce.string().nullable().optional(),
-  vaultStatus: z.boolean(),
-});
+import { VaultEventDetailSchema } from './VaultEventDetail';
+
 const VaultUpdatedEventSchema = eventSchema(
   RedemptionsDatasyncEvents.VAULT_UPDATED,
   z.string(),
-  VaultUpdatedEventDetailSchema,
+  VaultEventDetailSchema,
 );
 export type VaultUpdatedEvent = z.infer<typeof VaultUpdatedEventSchema>;
-export type VaultUpdatedEventDetail = z.infer<typeof VaultUpdatedEventDetailSchema>;
 
 export class VaultUpdatedController extends EventBridgeController<VaultUpdatedEvent> {
   static readonly inject = [Logger.key, VaultService.key] as const;

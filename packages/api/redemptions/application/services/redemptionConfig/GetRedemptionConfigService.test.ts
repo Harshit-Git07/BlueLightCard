@@ -1,6 +1,10 @@
 import { faker } from '@faker-js/faker';
 
 import { as } from '@blc-mono/core/utils/testing';
+import {
+  affiliateFactory,
+  affiliateRedemptionTypeFactory,
+} from '@blc-mono/redemptions/libs/test/factories/affiliate.factory';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { giftCardFactory } from '@blc-mono/redemptions/libs/test/factories/giftCard.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
@@ -201,6 +205,29 @@ describe('GetRedemptionConfigService', () => {
     expect(actulRedemptionConfigResult).toEqual({
       kind: 'Ok',
       data: redemptionConfig,
+    });
+  });
+
+  it('should call transformToRedemptionConfig when redemptionType is creditCard', async () => {
+    const creditCardPayloadFactory: affiliateRedemptionTypeFactory = affiliateFactory.build({
+      redemptionType: 'creditCard',
+    });
+
+    const creditCardRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'creditCard',
+    });
+
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValue(creditCardRedemptionConfigEntity);
+    mockGenericsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(creditCardPayloadFactory);
+    mockRedemptionConfigTransformer.transformToRedemptionConfig = jest.fn().mockReturnValue(redemptionConfig);
+
+    await getRedemptionConfigService.getRedemptionConfig(creditCardRedemptionConfigEntity.offerId);
+
+    expect(mockRedemptionConfigTransformer.transformToRedemptionConfig).toHaveBeenCalledWith({
+      redemptionConfigEntity: creditCardRedemptionConfigEntity,
+      genericEntity: null,
+      vaultEntity: null,
+      vaultBatchEntities: [],
     });
   });
 });

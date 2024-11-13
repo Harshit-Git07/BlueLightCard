@@ -1,4 +1,12 @@
-import { GENERIC, GIFTCARD, PREAPPLIED, REDEMPTION_TYPES, VAULT, VAULTQR } from '@blc-mono/core/constants/redemptions';
+import {
+  CREDITCARD,
+  GENERIC,
+  GIFTCARD,
+  PREAPPLIED,
+  REDEMPTION_TYPES,
+  VAULT,
+  VAULTQR,
+} from '@blc-mono/core/constants/redemptions';
 
 import { GenericEntity } from '../repositories/GenericsRepository';
 import { RedemptionConfigEntity } from '../repositories/RedemptionConfigRepository';
@@ -69,7 +77,7 @@ export class RedemptionConfigTransformer {
       redemptionProperties.connection = redemptionConfigDto.redemptionConfigEntity.connection;
     }
 
-    if (redemptionType === PREAPPLIED || redemptionType === GIFTCARD) {
+    if (redemptionType === PREAPPLIED || redemptionType === GIFTCARD || redemptionType === CREDITCARD) {
       redemptionProperties.url = redemptionConfigDto.redemptionConfigEntity.url;
       redemptionProperties.affiliate = redemptionConfigDto.redemptionConfigEntity.affiliate;
       redemptionProperties.connection = redemptionConfigDto.redemptionConfigEntity.connection;

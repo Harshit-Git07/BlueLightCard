@@ -1,7 +1,7 @@
 import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { MemberProfileRepository } from '../repositories/memberProfileRepository';
 import { MemberProfileQueryPayload, MemberProfileUpdatePayload } from '../types/memberProfileTypes';
-import { MemberProfileModel } from '../models/memberProfileModel';
+import { MemberProfileModel, UpdateIdUploadedSchema } from '../models/memberProfileModel';
 import { APIError } from '../models/APIError';
 import { APIErrorCode } from '../enums/APIErrorCode';
 import { ZodError } from 'zod';
@@ -146,6 +146,66 @@ export class MemberProfileService {
         });
         throw error;
       }
+    }
+  }
+
+  async updateIdUploaded(
+    query: MemberProfileQueryPayload,
+    updatedField: Partial<MemberProfileUpdatePayload>,
+    errorSet: APIError[],
+  ): Promise<void> {
+    try {
+      const parsedPayload = UpdateIdUploadedSchema.parse(updatedField);
+      const pk = `MEMBER#${query.memberUUID}`;
+      const sk = `PROFILE`;
+
+      await this.profileRepository.updateMemberProfileField(
+        pk,
+        sk,
+        'idUploaded',
+        parsedPayload.idUploaded,
+      );
+
+      this.logger.info({
+        message: `idUploaded updated successfully for member ${query.memberUUID}`,
+        body: query,
+      });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        error.errors.forEach((issue) => {
+          errorSet.push(
+            new APIError(APIErrorCode.VALIDATION_ERROR, issue.path.join('.'), issue.message),
+          );
+        });
+      } else {
+        this.logger.error({
+          message: `Unknown error updating idUploaded:`,
+          error: error instanceof Error ? error.message : `Unknown error updating Id:`,
+        });
+        throw error;
+      }
+    }
+  }
+
+  async createSystemNote(
+    memberUUID: string,
+    notePayload: { category: string; message: string },
+  ): Promise<void> {
+    try {
+      await this.profileRepository.createSystemNote(memberUUID, notePayload);
+      this.logger.info({
+        message: 'System note created successfully',
+        body: { memberUUID, ...notePayload },
+      });
+    } catch (error) {
+      this.logger.error({
+        message: 'Error creating system note:',
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Unknown error occurred while creating system note',
+      });
+      throw error;
     }
   }
 }

@@ -5,20 +5,27 @@ import {
   QueryCommand,
   QueryCommandInput,
   UpdateCommand,
+  PutCommand,
 } from '@aws-sdk/lib-dynamodb';
 
 export class MemberProfileRepository {
   private readonly dynamoDBDocClient: DynamoDBDocumentClient;
-  private tableName: string;
+  private profileTableName: string;
+  private noteTableName: string;
 
-  constructor(dynamoDBDocClient: DynamoDBDocumentClient, tableName: string) {
+  constructor(
+    dynamoDBDocClient: DynamoDBDocumentClient,
+    profileTableName: string,
+    noteTableName: string,
+  ) {
     this.dynamoDBDocClient = dynamoDBDocClient;
-    this.tableName = tableName;
+    this.profileTableName = profileTableName;
+    this.noteTableName = noteTableName;
   }
 
   async getMemberProfiles(query: MemberProfileQueryPayload): Promise<MemberProfileModel[] | null> {
     const queryParams: QueryCommandInput = {
-      TableName: this.tableName,
+      TableName: this.profileTableName,
       KeyConditionExpression: '#pk = :pk',
       ExpressionAttributeNames: {
         '#pk': 'pk',
@@ -74,7 +81,7 @@ export class MemberProfileRepository {
     }
 
     const updateParams = {
-      TableName: this.tableName,
+      TableName: this.profileTableName,
       Key: {
         pk: `MEMBER#${query.memberUUID}`,
         sk: `PROFILE#${query.profileId}`,
@@ -89,5 +96,35 @@ export class MemberProfileRepository {
     };
 
     await this.dynamoDBDocClient.send(new UpdateCommand(updateParams));
+  }
+
+  async updateMemberProfileField(pk: string, sk: string, field: string, value: any): Promise<void> {
+    const params = {
+      TableName: this.profileTableName,
+      Key: { pk, sk },
+      UpdateExpression: `set ${field} = :value`,
+      ExpressionAttributeValues: {
+        ':value': value,
+      },
+    };
+
+    await this.dynamoDBDocClient.send(new UpdateCommand(params));
+  }
+
+  async createSystemNote(
+    memberUUID: string,
+    notePayload: { category: string; message: string },
+  ): Promise<void> {
+    const params = {
+      TableName: this.noteTableName,
+      Item: {
+        pk: `MEMBER#${memberUUID}`,
+        sk: `NOTE#${Date.now()}`,
+        category: notePayload.category,
+        message: notePayload.message,
+        timestamp: new Date().toISOString(),
+      },
+    };
+    await this.dynamoDBDocClient.send(new PutCommand(params));
   }
 }

@@ -35,34 +35,20 @@ describe('Create Profile Lambda Handler', () => {
 
   it('should return a member UUID when profile is successfully created', async () => {
     mockEvent = {
-      pathParameters: { brand: 'BLC_UK' },
       body: JSON.stringify(body),
     } as unknown as APIGatewayProxyEvent;
 
     const memberUuid = '123e4567-e89b-12d3-a456-426614174000';
-    const profileUuid = '223e4567-e89b-12d3-a456-426614174000';
-    mockCreateCustomerProfiles.mockResolvedValue([memberUuid, profileUuid]);
+    mockCreateCustomerProfiles.mockResolvedValue(memberUuid);
 
     const response = await handler(mockEvent, mockContext);
     expect(response.statusCode).toBe(200);
-    expect(JSON.parse(response.body)).toEqual({ memberUuid: memberUuid, profileUuid: profileUuid });
-  });
-
-  it('should return a 400 if brand is missing from pathParameters', async () => {
-    mockEvent = {
-      pathParameters: {},
-      body: JSON.stringify(body),
-    } as unknown as APIGatewayProxyEvent;
-
-    const response = await handler(mockEvent, mockContext);
-    expect(response.statusCode).toBe(400);
-    expect(JSON.parse(response.body)).toEqual({ message: 'Missing brand' });
-    expect(mockCreateCustomerProfiles).not.toHaveBeenCalled();
+    expect(JSON.parse(response.body)).toEqual({ memberUuid: memberUuid });
   });
 
   it('should return a 400 if request body is missing', async () => {
     mockEvent = {
-      pathParameters: { brand: 'BLC_UK' },
+      pathParameters: {},
     } as unknown as APIGatewayProxyEvent;
 
     const response = await handler(mockEvent, mockContext);
@@ -74,7 +60,6 @@ describe('Create Profile Lambda Handler', () => {
   it('should return a 500 if profileService throws an error', async () => {
     const errorMessage = 'Error creating customer profile';
     mockEvent = {
-      pathParameters: { brand: 'BLC_UK' },
       body: JSON.stringify(body),
     } as unknown as APIGatewayProxyEvent;
 

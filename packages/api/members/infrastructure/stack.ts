@@ -1,5 +1,13 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { ApiGatewayV1Api, StackContext, use, Table } from 'sst/constructs';
+import {
+  ApiGatewayV1Api,
+  StackContext,
+  use,
+  Table,
+  Bucket,
+  Function as SSTFunction,
+} from 'sst/constructs';
+import { RemovalPolicy } from 'aws-cdk-lib';
 
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 
@@ -39,11 +47,13 @@ import { UpdateMemberProfileCustomerRoute } from './routes/UpdateMemberProfileCu
 import { CreateMemberProfileCustomerRoute } from './routes/CreateMemberProfileCustomerRoute';
 import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { createMemberCardsTable } from './dynamodb/createMemberCardsTable';
-
+import { IdUploadRoute } from './routes/IdUploadRoute';
+import { IdUploadBucketConstruct } from './s3/IdUploadBucketConstruct';
 import { GetCustomerProfileRoute } from './routes/GetCustomerProfileRoute';
 import { CustomerProfileModel } from '../application/models/customer/customerProfileModel';
 
 async function MembersStack({ stack, app }: StackContext) {
+  const noteTableName = `${stack.stage}-${app.name}-memberNotes`;
   const SERVICE_NAME = 'members';
   const memberProfilesTableName = `${stack.stage}-${app.name}-memberProfiles`;
   const promoCodeTableName = `${stack.stage}-${app.name}-memberPromos`;
@@ -150,8 +160,15 @@ async function MembersStack({ stack, app }: StackContext) {
 
   const agEmployerModel = apiGatewayModelGenerator.generateModelFromZodEffect(EmployerModel);
 
+  const idUploadBucketConstruct = new IdUploadBucketConstruct(stack, 'IdUploadBucketConstruct', {
+    memberProfilesTableName: memberProfilesTableName,
+    noteTableName: noteTableName,
+    stage: app.stage,
+    appName: app.name,
+  });
+
   membersApi.addRoutes(stack, {
-    'POST /members/v5/customers/{brand}': new CreateMemberProfileCustomerRoute(
+    'POST /members/v5/customers': new CreateMemberProfileCustomerRoute(
       apiGatewayModelGenerator,
       agMemberProfileModel,
       memberProfilesTableName,
@@ -198,6 +215,12 @@ async function MembersStack({ stack, app }: StackContext) {
       apiGatewayModelGenerator,
       agMemberProfileModel,
       memberProfilesTableName,
+    ).getRouteDetails(),
+    'GET /members/v5/profile/id/init/{memberUUID}': new IdUploadRoute(
+      apiGatewayModelGenerator,
+      agMembersProfileModel,
+      memberProfilesTableName,
+      idUploadBucketConstruct.bucket,
     ).getRouteDetails(),
     'POST /members/v5/applications/{brand}/{memberUUID}/{applicationId}':
       new UpdateMemberApplicationRoute(

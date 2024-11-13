@@ -21,7 +21,6 @@ describe('MemberApplicationService', () => {
   let mockLogger: jest.MockedObject<Logger>;
 
   let queryPayload: MemberApplicationQueryPayload = {
-    brand: 'blc-uk',
     memberUUID: '12345687-2134-1234-1234-123456781234',
     applicationId: '22345687-2134-1234-1234-123456781234',
   };

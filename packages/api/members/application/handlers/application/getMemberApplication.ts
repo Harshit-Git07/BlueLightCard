@@ -42,7 +42,6 @@ const handlerUnwrapped = async (event: APIGatewayEvent): Promise<APIGatewayProxy
   try {
     const payload: MemberApplicationQueryPayload = {
       memberUUID: memberUUID,
-      brand: brand,
       applicationId: applicationId ?? null,
     };
 

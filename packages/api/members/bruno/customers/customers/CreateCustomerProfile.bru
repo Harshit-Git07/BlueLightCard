@@ -5,7 +5,7 @@ meta {
 }
 
 post {
-  url: https://{{api_key_sst}}.execute-api.eu-west-2.amazonaws.com/v1/members/v5/customers/{{brand}}
+  url: https://{{api_key_sst}}.execute-api.eu-west-2.amazonaws.com/v1/members/v5/customers
   body: json
   auth: none
 }
@@ -15,6 +15,15 @@ body:json {
     "firstName": "John",
     "lastName": "Doe",
     "emailAddress": "john.doe@example.com'",
-    "dateOfBirth": "01/01/2000"
+    "dateOfBirth": "01/01/2000",
+    "gender": "male",
+    "phoneNumber": "07846457874",
+    "county": "county",
+    "employmentType": "type",
+    "organisationId": "1",
+    "employerId": "1",
+    "jobTitle": "title",
+    "jobReference": "ref"
   }
+  
 }

@@ -30,7 +30,6 @@ describe('memberProfileCustomerCreateRepository', () => {
   });
 
   describe('createCustomerProfiles', () => {
-    const brand = 'BLC_UK';
     const payload: CreateProfilePayload = {
       firstName: 'John',
       lastName: 'Doe',
@@ -38,22 +37,19 @@ describe('memberProfileCustomerCreateRepository', () => {
       emailAddress: 'test@mail.com',
     };
     const mockMemberUUID = '123e4567-e89b-12d3-a456-426614174000';
-    const mockProfileUUID = '223e4567-e89b-12d3-a456-426614174001';
     const mockApplicationUUID = '323e4567-e89b-12d3-a456-426614174002';
     const fixedDate = new Date('2024-07-19T00:00:00.000Z');
-    const mockMappedBrand = 'blc-uk';
 
     beforeEach(() => {
       (uuidv4 as jest.Mock)
         .mockReturnValueOnce(mockMemberUUID)
-        .mockReturnValueOnce(mockProfileUUID)
         .mockReturnValueOnce(mockApplicationUUID);
 
       jest.spyOn(global, 'Date').mockImplementation(() => fixedDate as any);
     });
 
-    it('should create a member profile, brand entry, and signup application successfully', async () => {
-      await repository.createCustomerProfiles(payload, brand);
+    it('should create a member profile, and signup application successfully', async () => {
+      await repository.createCustomerProfiles(payload);
 
       expect(mockDynamoDB).toHaveReceivedCommandWith(TransactWriteCommand, {
         TransactItems: [
@@ -62,20 +58,11 @@ describe('memberProfileCustomerCreateRepository', () => {
               TableName: 'TestTable',
               Item: {
                 pk: `MEMBER#${mockMemberUUID}`,
-                sk: `PROFILE#${mockProfileUUID}`,
+                sk: `PROFILE`,
                 firstName: payload.firstName,
                 lastName: payload.lastName,
                 dateOfBirth: payload.dateOfBirth,
                 emailAddress: payload.emailAddress,
-              },
-            },
-          },
-          {
-            Put: {
-              TableName: 'TestTable',
-              Item: {
-                pk: `MEMBER#${mockMemberUUID}`,
-                sk: `BRAND#${mockMappedBrand}`,
               },
             },
           },
@@ -97,57 +84,17 @@ describe('memberProfileCustomerCreateRepository', () => {
     });
 
     it('should return the member_uuid without the MEMBER# prefix', async () => {
-      const result = await repository.createCustomerProfiles(payload, brand);
+      const result = await repository.createCustomerProfiles(payload);
 
-      expect(result).toStrictEqual([mockMemberUUID, mockProfileUUID]);
+      expect(result).toStrictEqual(mockMemberUUID);
     });
 
     it('should throw an error if transactWrite fails', async () => {
       mockDynamoDB.on(TransactWriteCommand).rejects(new Error('DynamoDB error'));
 
-      await expect(repository.createCustomerProfiles(payload, brand)).rejects.toThrow(
+      await expect(repository.createCustomerProfiles(payload)).rejects.toThrow(
         'Failed to create member profiles',
       );
-    });
-  });
-
-  describe('getProfileSortKey', () => {
-    it('should return the sort key when profile is found', async () => {
-      const mockQueryResult = {
-        Items: [{ sk: 'PROFILE#123' }],
-      };
-      mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
-
-      const result = await repository.getProfileSortKey('MEMBER#456');
-
-      expect(result).toBe('PROFILE#123');
-      expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, {
-        TableName: 'TestTable',
-        KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :sk)',
-        ExpressionAttributeNames: {
-          '#pk': 'pk',
-          '#sk': 'sk',
-        },
-        ExpressionAttributeValues: {
-          ':pk': 'MEMBER#456',
-          ':sk': 'PROFILE#',
-        },
-      });
-    });
-
-    it('should return null when profile is not found', async () => {
-      const mockQueryResult = { Items: [] };
-      mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
-
-      const result = await repository.getProfileSortKey('MEMBER#456');
-
-      expect(result).toBeNull();
-    });
-
-    it('should throw an error when query fails', async () => {
-      mockDynamoDB.on(QueryCommand).rejects(new Error('DynamoDB error'));
-
-      await expect(repository.getProfileSortKey('MEMBER#456')).rejects.toThrow('DynamoDB error');
     });
   });
 
@@ -163,7 +110,7 @@ describe('memberProfileCustomerCreateRepository', () => {
         postcode: '12345',
       };
 
-      await repository.insertAddressAndUpdateProfile('MEMBER#456', 'PROFILE#123', payload);
+      await repository.insertAddressAndUpdateProfile('MEMBER#456', payload);
 
       expect(mockDynamoDB).toHaveReceivedCommandWith(TransactWriteCommand, {
         TransactItems: [
@@ -172,7 +119,7 @@ describe('memberProfileCustomerCreateRepository', () => {
               TableName: 'TestTable',
               Key: {
                 pk: 'MEMBER#456',
-                sk: 'PROFILE#123',
+                sk: 'PROFILE',
               },
               UpdateExpression: 'SET county = :county',
               ExpressionAttributeValues: {
@@ -208,9 +155,9 @@ describe('memberProfileCustomerCreateRepository', () => {
         postcode: '12345',
       };
 
-      await expect(
-        repository.insertAddressAndUpdateProfile('MEMBER#456', 'PROFILE#123', payload),
-      ).rejects.toThrow('DynamoDB error');
+      await expect(repository.insertAddressAndUpdateProfile('MEMBER#456', payload)).rejects.toThrow(
+        'DynamoDB error',
+      );
     });
   });
 });

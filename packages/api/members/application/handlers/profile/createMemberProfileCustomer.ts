@@ -18,14 +18,6 @@ const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const handlerUnwrapped = async (event: APIGatewayProxyEvent) => {
   try {
-    const brand = event.pathParameters?.brand;
-    if (!brand) {
-      logger.warn({ message: 'Missing brand' });
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message: 'Missing brand' }),
-      };
-    }
     if (!event.body) {
       return {
         statusCode: 400,
@@ -33,12 +25,10 @@ const handlerUnwrapped = async (event: APIGatewayProxyEvent) => {
       };
     }
     const payload: CreateProfilePayload = JSON.parse(event.body);
-
-    const [memberUuid, profileUuid] = await profileService.createCustomerProfiles(payload, brand);
-
+    const memberUuid = await profileService.createCustomerProfiles(payload);
     return {
       statusCode: 200,
-      body: JSON.stringify({ memberUuid: memberUuid, profileUuid: profileUuid }),
+      body: JSON.stringify({ memberUuid: memberUuid }),
     };
   } catch (error) {
     logger.error({

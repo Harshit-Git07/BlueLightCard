@@ -21,11 +21,12 @@ const service: string = process.env.SERVICE as string;
 const logger = new Logger({ serviceName: `${service}-updateMemberProfile` });
 
 const tableName = process.env.PROFILE_TABLE_NAME as string;
+const noteTableName = process.env.NOTE_TABLE_NAME as string;
 const dynamoDB = DynamoDBDocumentClient.from(
   new DynamoDBClient({ region: process.env.REGION ?? 'eu-west-2' }),
 );
 
-const repository = new MemberProfileRepository(dynamoDB, tableName);
+const repository = new MemberProfileRepository(dynamoDB, tableName, noteTableName);
 const organisationsRepository = new OrganisationsRepository(dynamoDB, tableName);
 const employersRepository = new EmployersRepository(dynamoDB, tableName);
 const profileService = new MemberProfileService(

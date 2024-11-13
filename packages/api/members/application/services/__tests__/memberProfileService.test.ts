@@ -22,9 +22,11 @@ jest.mock('../../models/memberProfileModel');
 
 const mockDynamoDBDocClient = {} as DynamoDBDocumentClient;
 const mockTableName = 'test-table';
+const mockNoteTableName = 'test-note-table';
 const mockProfileRepository = new MemberProfileRepository(
   mockDynamoDBDocClient,
   mockTableName,
+  mockNoteTableName,
 ) as jest.Mocked<MemberProfileRepository>;
 const mockOrganisationsRepository = new OrganisationsRepository(
   mockDynamoDBDocClient,

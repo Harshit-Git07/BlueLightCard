@@ -19,9 +19,10 @@ const mockMemberProfileModel = MemberProfileModel as jest.Mocked<typeof MemberPr
 describe('MemberProfileRepository', () => {
   let repository: MemberProfileRepository;
   const tableName = 'test-table';
+  const noteTableName = 'test-note-table';
 
   beforeEach(() => {
-    repository = new MemberProfileRepository(mockDynamoDBClient, tableName);
+    repository = new MemberProfileRepository(mockDynamoDBClient, tableName, noteTableName);
     jest.clearAllMocks();
   });
 
@@ -59,7 +60,7 @@ describe('MemberProfileRepository', () => {
       memberId: query.memberUUID,
       profileId: query.profileId,
       ...payload,
-    });
+    } as any);
 
     it('should successfully upsert (insert) a member profile', async () => {
       await repository.upsertMemberProfile(query, payload, true);

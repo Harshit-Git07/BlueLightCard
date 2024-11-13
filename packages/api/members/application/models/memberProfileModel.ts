@@ -76,6 +76,7 @@ export const MemberProfileModel = createZodNamedType(
       profileStatus: z.string().optional(),
       lastLogin: z.string(),
       lastIpAddress: z.string(),
+      idUploaded: z.boolean().optional(),
     })
     .transform((profile) => ({
       memberId: profile.pk.replace('MEMBER#', ''),
@@ -100,7 +101,13 @@ export const MemberProfileModel = createZodNamedType(
       profileStatus: profile.profileStatus,
       lastLogin: profile.lastLogin,
       lastIpAddress: profile.lastIpAddress,
+      idUploaded: profile.idUploaded ?? false,
     })),
 );
 
+export const UpdateIdUploadedSchema = z.object({
+  idUploaded: z.boolean(),
+});
+
+export type UpdateIdUploadedPayload = z.infer<typeof UpdateIdUploadedSchema>;
 export type MemberProfileModel = z.infer<typeof MemberProfileModel>;

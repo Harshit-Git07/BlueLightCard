@@ -1,9 +1,7 @@
 import { LambdaLogger as Logger } from '../../../../core/src/utils/logger/lambdaLogger';
 import { memberProfileCustomerCreateRepository } from '../../repositories/memberProfileCustomerCreateRepository';
 import { memberProfileCustomerCreateService } from '../memberProfileCustomerCreateService';
-import { AddressInsertPayload, CreateProfilePayload } from '../../types/memberProfilesTypes';
-import { MemberProfileApp, MemberProfileDB } from '../../models/memberProfilesModel';
-import { transformDBToApp } from '../../models/memberProfilesModel';
+import { CreateProfilePayload } from '../../types/memberProfilesTypes';
 
 // Mock the dependencies
 jest.mock('../../repositories/memberProfileCustomerCreateRepository');
@@ -22,7 +20,6 @@ describe('MemberProfileService', () => {
     mockRepository = {
       createCustomerProfiles: jest.fn(),
       getMemberProfiles: jest.fn(),
-      getProfileSortKey: jest.fn(),
       updateProfile: jest.fn(),
       insertAddressAndUpdateProfile: jest.fn(),
       insertCard: jest.fn(),
@@ -38,7 +35,6 @@ describe('MemberProfileService', () => {
   });
 
   describe('createCustomerProfiles', () => {
-    const brand = 'BLC_UK';
     const payload: CreateProfilePayload = {
       firstName: 'John',
       lastName: 'Doe',
@@ -46,32 +42,29 @@ describe('MemberProfileService', () => {
       emailAddress: 'test@mail.com',
     };
     const memberUuid = 'uuid-1234';
-    const profileUuid = 'uuid-5678';
 
     it('should create a member profile successfully and return memberUuid', async () => {
-      mockRepository.createCustomerProfiles.mockResolvedValue([memberUuid, profileUuid]);
+      mockRepository.createCustomerProfiles.mockResolvedValue(memberUuid);
 
-      const result = await service.createCustomerProfiles(payload, brand);
+      const result = await service.createCustomerProfiles(payload);
 
-      expect(mockRepository.createCustomerProfiles).toHaveBeenCalledWith(payload, brand);
+      expect(mockRepository.createCustomerProfiles).toHaveBeenCalledWith(payload);
       expect(mockLogger.info).toHaveBeenCalledWith({
-        message: `Profile created successfully: memberUuid: ${memberUuid} | profileUuid: ${profileUuid}`,
+        message: 'Profile created successfully: memberUuid: uuid-1234',
       });
-      expect(result).toStrictEqual([memberUuid, profileUuid]); // Check that the correct memberUuid is returned
+      expect(result).toStrictEqual(memberUuid);
     });
 
     it('should log and throw an error if profile creation fails', async () => {
       const error = new Error('Database error');
       mockRepository.createCustomerProfiles.mockRejectedValue(error);
 
-      await expect(service.createCustomerProfiles(payload, brand)).rejects.toThrow(
-        'Database error',
-      );
+      await expect(service.createCustomerProfiles(payload)).rejects.toThrow('Database error');
 
-      expect(mockRepository.createCustomerProfiles).toHaveBeenCalledWith(payload, brand);
+      expect(mockRepository.createCustomerProfiles).toHaveBeenCalledWith(payload);
       expect(mockLogger.error).toHaveBeenCalledWith({
-        message: 'Error creating profile:',
         error: 'Database error',
+        message: 'Error creating profile:',
       });
     });
 
@@ -79,7 +72,7 @@ describe('MemberProfileService', () => {
       const unknownError = 'Something went wrong';
       mockRepository.createCustomerProfiles.mockRejectedValue(unknownError);
 
-      await expect(service.createCustomerProfiles(payload, brand)).rejects.toThrow(
+      await expect(service.createCustomerProfiles(payload)).rejects.toThrow(
         'Unknown error occurred while creating profile',
       );
 

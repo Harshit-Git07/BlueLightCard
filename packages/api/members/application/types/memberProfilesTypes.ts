@@ -1,11 +1,4 @@
-export interface ProfileUpdatePayload {
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
-  mobile: string;
-  gender?: string;
-}
-
+import { Gender } from '../enums/Gender';
 export interface CreateProfilePayload {
   emailAddress: string;
   firstName: string;

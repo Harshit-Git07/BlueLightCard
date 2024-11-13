@@ -1,7 +1,6 @@
 import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { memberProfileCustomerCreateRepository } from '../repositories/memberProfileCustomerCreateRepository';
 import { AddressInsertPayload, CreateProfilePayload } from '../types/memberProfilesTypes';
-import { MemberProfileApp, transformDBToApp } from '../models/memberProfilesModel';
 
 export class memberProfileCustomerCreateService {
   constructor(
@@ -9,19 +8,13 @@ export class memberProfileCustomerCreateService {
     private logger: Logger,
   ) {}
 
-  async createCustomerProfiles(
-    payload: CreateProfilePayload,
-    brand: string,
-  ): Promise<[string, string]> {
+  async createCustomerProfiles(payload: CreateProfilePayload): Promise<string> {
     try {
-      const [memberUuid, profileUuid] = await this.repository.createCustomerProfiles(
-        payload,
-        brand,
-      );
+      const memberUuid = await this.repository.createCustomerProfiles(payload);
       this.logger.info({
-        message: `Profile created successfully: memberUuid: ${memberUuid} | profileUuid: ${profileUuid}`,
+        message: `Profile created successfully: memberUuid: ${memberUuid}`,
       });
-      return [memberUuid, profileUuid];
+      return memberUuid;
     } catch (error) {
       if (error instanceof Error) {
         this.logger.error({
@@ -43,8 +36,7 @@ export class memberProfileCustomerCreateService {
     const memberKey = `MEMBER#${memberUUID}`;
 
     try {
-      const profileSK = await this.getProfileSortKey(memberKey, memberUUID);
-      await this.repository.insertAddressAndUpdateProfile(memberKey, profileSK, payload);
+      await this.repository.insertAddressAndUpdateProfile(memberKey, payload);
       this.logger.info({
         message: `Address inserted and profile updated with county successfully | memberUuid: ${memberUUID}`,
       });
@@ -55,14 +47,5 @@ export class memberProfileCustomerCreateService {
       });
       throw error;
     }
-  }
-
-  private async getProfileSortKey(memberKey: string, memberUUID: string): Promise<string> {
-    const profileSK = await this.repository.getProfileSortKey(memberKey);
-    if (!profileSK) {
-      this.logger.warn({ message: `Member profile not found: memberUuid: ${memberUUID} ` });
-      throw new Error('Member profile not found');
-    }
-    return profileSK;
   }
 }

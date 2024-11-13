@@ -66,7 +66,7 @@ async function batchWriteItems(items) {
 }
 
 async function addCards() {
-  const lines = fs.readFileSync('membertable_cards_upload.json', 'utf-8').split(/\r?\n/);
+  const lines = fs.readFileSync('memberprofiles_cards_upload.json', 'utf-8').split(/\r?\n/);
   const items = lines.map((line) => JSON.parse(line));
 
   while (items.length) {

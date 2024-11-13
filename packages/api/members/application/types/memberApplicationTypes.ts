@@ -1,7 +1,6 @@
 import { ApplicationReason } from '../enums/ApplicationReason';
 
 export interface MemberApplicationQueryPayload {
-  brand: string;
   memberUUID: string;
   applicationId: string | null;
 }

@@ -60,7 +60,6 @@ const handlerUnwrapped: APIGatewayProxyHandler = async (event) => {
     const { body } = validationResult;
     const queryPayload: MemberApplicationQueryPayload = {
       memberUUID: memberUUID,
-      brand: brand,
       applicationId: applicationId,
     };
     const updatePayload: MemberApplicationUpdatePayload = body;

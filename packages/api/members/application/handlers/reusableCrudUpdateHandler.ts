@@ -1,7 +1,5 @@
 import { APIGatewayEvent, APIGatewayProxyHandler } from 'aws-lambda';
 import { LambdaLogger as Logger } from '@blc-mono/core/utils/logger/lambdaLogger';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { Response } from '../utils/restResponse/response';
 import { APIErrorCode } from '../enums/APIErrorCode';
 import { APIError } from '../models/APIError';
@@ -39,13 +37,18 @@ const pkQueryKey = process.env.PK_QUERY_KEY as string;
 const skQueryKey = process.env.SK_QUERY_KEY as string;
 
 const tableName = process.env.ENTITY_TABLE_NAME as string;
+const memberProfilesTableName = process.env.MEMBER_PROFILES_TABLE_NAME as string;
+const noteTableName = process.env.NOTE_TABLE_NAME as string;
+const promoCodeTableName = process.env.PROMO_CODE_TABLE_NAME as string;
 const dynamoDB = DynamoDBDocumentClient.from(
   new DynamoDBClient({ region: process.env.REGION ?? 'eu-west-2' }),
 );
+const memberProfilesRepository = new MemberProfileRepository(
+  dynamoDB,
+  memberProfilesTableName,
+  noteTableName,
+);
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
-const memberProfilesTableName = process.env.MEMBER_PROFILES_TABLE_NAME as string;
-const promoCodeTableName = process.env.PROMO_CODE_TABLE_NAME as string;
-const memberProfilesRepository = new MemberProfileRepository(dynamoDB, memberProfilesTableName);
 const organisationsRepository = new OrganisationsRepository(dynamoDB, memberProfilesTableName);
 const employersRepository = new EmployersRepository(dynamoDB, memberProfilesTableName);
 const memberProfilesService = new MemberProfileService(

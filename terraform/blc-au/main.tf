@@ -7,7 +7,7 @@ locals {
 
 # vpc
 module "vpc" {
-  source = "git@github.com:bluelightcard/terraform-modules.git//aws/network/vpc?ref=v1.5.1"
+  source = "git@github.com:bluelightcard/terraform-modules.git//aws/network/vpc?ref=v1.6.1"
 
   aws_availability_zones = var.aws_availability_zones
   aws_region             = var.aws_region
@@ -40,6 +40,18 @@ resource "aws_acm_certificate" "default" {
 # redshift
 # s3
 # streams
+module "firehose_streams" {
+  source = "git@github.com:bluelightcard/terraform-modules.git//aws/firehose?ref=v1.6.1"
+
+  brand  = local.brand
+  config = var.firehose_config
+
+  defaults = {
+    app   = local.app
+    stage = var.stage
+  }
+}
+
 # waf webacl
 resource "aws_wafv2_web_acl" "default" {
   # TODO
@@ -61,7 +73,7 @@ resource "aws_wafv2_web_acl" "default" {
 
 # bastionhost
 module "bastionhost" {
-  source = "git@github.com:bluelightcard/terraform-modules.git//aws/ec2/bastionhost?ref=v1.5.1"
+  source = "git@github.com:bluelightcard/terraform-modules.git//aws/ec2/bastionhost?ref=v1.6.1"
 
   aws_region = var.aws_region
   aws_vpc_id = module.vpc.vpc.id

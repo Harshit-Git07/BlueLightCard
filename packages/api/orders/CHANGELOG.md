@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/orders-v1.1.0...bluelightcard/orders-v1.2.0) (2024-11-13)
+
+
+### Features
+
+* add blc prod campaign id ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* add gift card push notification ([#2819](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2819)) ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* payment component ([#2698](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2698)) ([77aa9af](https://github.com/bluelightcard/BlueLightCard-2.0/commit/77aa9af1cf3db371d158862edff0e319ee1f8cff))
+* refactor ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* test ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+
+
+### Bug Fixes
+
+* authenticating payment rest call using aws4 ([#2774](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2774)) ([535606d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/535606d0171a9460454e212dcb2a4ee2c37027b4))
+* node lambda env missing cyrpto by default ([#2749](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2749)) ([8236ae4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8236ae40e62b70ae00945311ad400ecddfc0e9ac))
+
 ## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/orders-v1.0.0...bluelightcard/orders-v1.1.0) (2024-10-31)
 
 

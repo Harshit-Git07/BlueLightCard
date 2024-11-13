@@ -26,6 +26,28 @@ Example of creating a new TextField component in the shared-ui package:
 $ npx hygen component new --out packages/shared-ui/src/components/TextField --name TextField
 ```
 
+### Storybook config
+
+To create a new storybook config:
+
+```sh
+$ npx hygen storybook new
+
+flags:
+   --out: The path to output the new storybook config
+```
+
+Example of creating a new storybook config in a new package:
+
+```sh
+$ npx hygen storybook new --out packages/[new package]
+```
+
+The following files will be generated:
+
+- `packages/[new package]/.storybook/main.ts`
+- `packages/[new package]/.storybook/preview.ts`
+
 ## Contribution
 
 To add templates, simply use the hygen [generator](https://www.hygen.io/docs/generators) command:

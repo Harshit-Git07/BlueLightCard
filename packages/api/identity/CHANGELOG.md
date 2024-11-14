@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.108.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.107.0...bluelightcard/identity-v1.108.0) (2024-11-14)
+
+
+### Features
+
+* 1023 reverted the enpoint ([#2911](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2911)) ([ae3cadf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ae3cadf3731f28c1ed8b141a850b722ff063020f))
+
 ## [1.107.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.106.0...bluelightcard/identity-v1.107.0) (2024-11-14)
 
 

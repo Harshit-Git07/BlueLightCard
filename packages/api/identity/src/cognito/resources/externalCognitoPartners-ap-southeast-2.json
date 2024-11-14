@@ -1,4 +1,12 @@
 {
-    "BLC": [],
+    "BLC": [
+        {
+            "partnersName": "AU Zendesk",
+            "callBackUrl": "https://identity-au.blcshine.io/zendesk/callback",
+            "signoutUrl": "https://bluelightcardau.zendesk.com/",
+            "generateSecret": false,
+            "partnerUniqueId": "ZENDESK"
+        }
+    ],
     "DDS": []
 }

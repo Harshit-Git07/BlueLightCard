@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.86.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.85.1...bluelightcard/web-v1.86.0) (2024-11-14)
+
+
+### Features
+
+* [DISCO-1164] Integrate UI with v5 get companies & categories ([#2857](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2857)) ([6a15c10](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6a15c10f226110f43eaf8552a208010b8e59ead6))
+* [MER-182] Add an option to the organisation dropdown to allow testing multi-id flow on mobile ([#2923](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2923)) ([318b0e1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/318b0e116ebc9ca3049d98d3b2c789cae6d0245b))
+* Feature/disco 512 remove legacy footer ([#2881](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2881)) ([4ae595a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4ae595a7d4ba8debb2c51f1a292a576f2dd5126f))
+* MAMA-32-change-password ([#2816](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2816)) ([4c9bd2b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4c9bd2baa1d1ce983a544e62a705b5fc097a353a))
+* MER-326 Renewal fuzzy frontend ([#2901](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2901)) ([d60d6c2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d60d6c23deb13e53a6eb3fe1782e94bcba6854f5))
+* payment component ([#2698](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2698)) ([77aa9af](https://github.com/bluelightcard/BlueLightCard-2.0/commit/77aa9af1cf3db371d158862edff0e319ee1f8cff))
+* removed legacy Header ([#2667](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2667)) ([d2d0586](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d2d0586501e6601c936ce3fc54bbbd85be1e2b25))
+* TO-1316 mobile hybrid company page error ([#2848](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2848)) ([78db4a1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/78db4a1967bf560bdb758f81af34fad14c6d0de9))
+
+
+### Bug Fixes
+
+* [DISCO-1167] Add offers cms check to URL lookup for company offer details ([#2909](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2909)) ([15a38c1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/15a38c1fc31ae4d02ed0447b28519d14aceb3ec5))
+* [MER-333] Design tweaks to dropdown ([#2877](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2877)) ([d22e2f0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d22e2f0e2f966a8027d03ae5a6662f30ef8516ad))
+* MER-271-interstitial-screen-card-bug - add canHover prop plus test ([#2868](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2868)) ([364e2d1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/364e2d110a88b1c7f282ccfc4b3ea73dd07d5d96))
+
 ## [1.85.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.85.0...bluelightcard/web-v1.85.1) (2024-11-12)
 
 

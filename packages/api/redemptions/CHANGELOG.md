@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.33.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.32.0...bluelightcard/redemptions-v1.33.0) (2024-11-13)
+
+
+### Features
+
+* [TR-688] CreditCard redemption type and strategy ([#2845](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2845)) ([744760b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/744760b2a4d95f82987bc8329bbb7af190b28708))
+* [TR-735] gift card email ([#2842](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2842)) ([62211e4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/62211e45f2dfb58e26b69141de2ec973e1849ca1))
+* add push notification campaign ids for dds and blc-au ([#2884](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2884)) ([dcbb746](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dcbb746dccc74fb15c9c8439d219b152bf9e18a2))
+* admin api GET creditCard type ([#2880](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2880)) ([4b358aa](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4b358aa9bfcc02cfbbd37ad085ba8f11ff8b825a))
+* TR-1060 - improve failing unit tests ([#2849](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2849)) ([25a08f5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/25a08f510b698dedda82dd4d197a1c3ae75d250f))
+* TR-938 - add redemption type credit card to POST redmeption config api ([#2893](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2893)) ([c17da88](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c17da881192a0b17ca990d8a9d35a26149f6b487))
+* TR-940 patch update gift card ([#2824](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2824)) ([6fe10ba](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6fe10bac9a2f69bc777416340f98345c10a1fad2))
+
+
+### Bug Fixes
+
+* tst response ([#2892](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2892)) ([f13c242](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f13c24267265241d786ec3231fde2da3d0947103))
+
 ## [1.31.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.30.1...bluelightcard/redemptions-v1.31.0) (2024-11-04)
 
 

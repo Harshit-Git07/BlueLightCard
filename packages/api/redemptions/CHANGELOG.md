@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.34.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.33.0...bluelightcard/redemptions-v1.34.0) (2024-11-14)
+
+
+### Features
+
+* fix e2e ([#2921](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2921)) ([028bb50](https://github.com/bluelightcard/BlueLightCard-2.0/commit/028bb50b5881d470e41e5cc50392a6da94c3f437))
+
 ## [1.33.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.32.0...bluelightcard/redemptions-v1.33.0) (2024-11-13)
 
 

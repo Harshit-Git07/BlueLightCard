@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.107.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.106.0...bluelightcard/identity-v1.107.0) (2024-11-14)
+
+
+### Features
+
+* COT-1023 added new route for generating zendesk jwt token ([#2858](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2858)) ([319e1e2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/319e1e226e347a06e70184e56d8c89f69b64e73b))
+* COT-1042, added zendesk app client for dds & AU ([#2907](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2907)) ([e33c385](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e33c385d5a8b06e2ed65612efb214cd8553b9433))
+
 ## [1.106.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.105.0...bluelightcard/identity-v1.106.0) (2024-11-12)
 
 

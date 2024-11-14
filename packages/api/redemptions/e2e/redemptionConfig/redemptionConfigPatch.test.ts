@@ -213,7 +213,7 @@ describe('PATCH Redemption Config', () => {
         id: redemptionConfig.id,
         offerId: redemptionConfig.offerId,
         companyId: redemptionConfig.companyId,
-        redemptionType: 'gfiftCard',
+        redemptionType: 'giftCard',
         connection: payload.connection,
         affiliate: payload.affiliate,
         url: payload.url,

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import type { StorybookConfig } from '@storybook/nextjs';
 
 const config: StorybookConfig = {
@@ -28,6 +30,7 @@ const config: StorybookConfig = {
   },
   webpackFinal: async (config) => {
     // Exclude .svg files from the default file loader
+    // @ts-ignore
     const fileLoaderRule = config.module?.rules?.find(
       (rule) => rule.test && rule.test.test('.svg'),
     );

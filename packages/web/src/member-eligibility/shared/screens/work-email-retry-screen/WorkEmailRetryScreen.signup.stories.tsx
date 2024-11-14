@@ -1,26 +1,25 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { DeliveryAddressScreen } from './DeliveryAddressScreen';
+import { WorkEmailRetryScreen } from './WorkEmailRetryScreen';
 import { useSignupEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-signup-eligibility-details/UseSignupEligibilityDetails';
 
-const componentMeta: Meta<typeof DeliveryAddressScreen> = {
-  title: 'Pages/Signup Eligibility Flow/Delivery Address Screen',
-  component: DeliveryAddressScreen,
+const componentMeta: Meta<typeof WorkEmailRetryScreen> = {
+  title: 'Pages/Signup Eligibility Flow/Work Email Retry Screen',
+  component: WorkEmailRetryScreen,
   parameters: {
     layout: 'fullscreen',
   },
 };
 
-const ScreenTemplate: StoryFn<typeof DeliveryAddressScreen> = () => {
+const ScreenTemplate: StoryFn<typeof WorkEmailRetryScreen> = () => {
   const eligibilityDetailsState = useSignupEligibilityDetails({
-    currentScreen: 'Delivery Address Screen',
+    currentScreen: 'Work Email Retry Screen',
     employmentStatus: 'Employed',
     organisation: 'NHS',
     employer: 'Abbey Hospitals',
     jobTitle: 'Nurse',
-    emailVerification: 'test@nhs.com',
   });
 
-  return <DeliveryAddressScreen eligibilityDetailsState={eligibilityDetailsState} />;
+  return <WorkEmailRetryScreen eligibilityDetailsState={eligibilityDetailsState} />;
 };
 
 export const Screen = ScreenTemplate.bind({});

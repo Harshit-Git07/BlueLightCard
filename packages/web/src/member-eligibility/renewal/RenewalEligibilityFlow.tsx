@@ -1,8 +1,9 @@
 import React, { FC, useMemo } from 'react';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
-import { DeliveryAddressScreen } from '@/root/src/member-eligibility/sign-up/screens/delivery-address-screen/DeliveryAddressScreen';
-import { SignupInterstitialScreen } from '@/root/src/member-eligibility/sign-up/screens/signup-interstitial-screen/SignupInterstitialScreen';
+import { useRenewalEligibilityDetails } from '@/root/src/member-eligibility/renewal/hooks/use-renewal-eligibility-details/UseRenewalEligibilityDetails';
+import { RenewalInterstitialScreen } from '@/root/src/member-eligibility/renewal/screens/renewal-interstitial-screen/RenewalInterstitialScreen';
+import { RenewalAccountDetailsScreen } from './screens/renewal-account-details-screen/RenewalAccountDetailsScreen';
 import { EmploymentStatusScreen } from '@/root/src/member-eligibility/shared/screens/employment-status-screen/EmploymentStatusScreen';
 import { JobDetailsScreen } from '@/root/src/member-eligibility/shared/screens/job-details-screen/JobDetailsScreen';
 import { VerificationMethodScreen } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/VerificationMethodScreen';
@@ -10,15 +11,14 @@ import { WorkEmailVerificationScreen } from '@/root/src/member-eligibility/share
 import { WorkEmailRetryScreen } from '@/root/src/member-eligibility/shared/screens/work-email-retry-screen/WorkEmailRetryScreen';
 import { FileUploadVerificationScreen } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/FileUploadVerificationScreen';
 import { SuccessScreen } from '@/root/src/member-eligibility/shared/screens/success-screen/SuccessScreen';
-import { useSignupEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-signup-eligibility-details/UseSignupEligibilityDetails';
 import { PaymentScreenFuzzyFrontend } from '@/root/src/member-eligibility/shared/screens/payment-screen/PaymentScreenFuzzyFrontend';
 
 interface Props {
   initialState?: EligibilityDetails;
 }
 
-export const SignupEligibilityFlow: FC<Props> = ({ initialState }) => {
-  const eligibilityDetailsState = useSignupEligibilityDetails(initialState);
+export const RenewalEligibilityFlow: FC<Props> = ({ initialState }) => {
+  const eligibilityDetailsState = useRenewalEligibilityDetails(initialState);
 
   const currentScreen = useMemo(() => {
     const [eligibilityDetails] = eligibilityDetailsState;
@@ -34,7 +34,9 @@ export const SignupEligibilityFlow: FC<Props> = ({ initialState }) => {
 
   switch (currentScreen) {
     case 'Interstitial Screen':
-      return <SignupInterstitialScreen {...props} />;
+      return <RenewalInterstitialScreen {...props} />;
+    case 'Renewal Account Details Screen':
+      return <RenewalAccountDetailsScreen {...props} />;
     case 'Employment Status Screen':
       return <EmploymentStatusScreen {...props} />;
     case 'Job Details Screen':
@@ -47,8 +49,6 @@ export const SignupEligibilityFlow: FC<Props> = ({ initialState }) => {
       return <WorkEmailRetryScreen {...props} />;
     case 'File Upload Verification Screen':
       return <FileUploadVerificationScreen {...props} />;
-    case 'Delivery Address Screen':
-      return <DeliveryAddressScreen {...props} />;
     case 'Payment Screen':
       return <PaymentScreenFuzzyFrontend {...props} />;
     case 'Success Screen':

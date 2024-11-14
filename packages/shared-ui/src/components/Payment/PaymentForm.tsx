@@ -10,7 +10,7 @@ interface Result {
 }
 
 interface PaymentFormProps {
-  onBackButtonClicked: () => void;
+  onBackButtonClicked?: () => void;
   containerClassName?: string;
   onPaymentResult: (result: Result) => void;
   redirectUrl?: string;
@@ -58,16 +58,21 @@ const PaymentForm: FC<PaymentFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className={containerClassName}>
       <PaymentElement />
+
       {errorMessage && <p className={`mt-[6px] ${colours.textError}`}>{errorMessage}</p>}
+
       <div className="flex flex-row gap-2 mt-[24px]">
-        <Button
-          disabled={buttonsDisabled}
-          onClick={onBackButtonClicked}
-          size="Large"
-          variant={ThemeVariant.Secondary}
-        >
-          Back
-        </Button>
+        {onBackButtonClicked && (
+          <Button
+            disabled={buttonsDisabled}
+            onClick={onBackButtonClicked}
+            size="Large"
+            variant={ThemeVariant.Secondary}
+          >
+            Back
+          </Button>
+        )}
+
         <Button
           disabled={buttonsDisabled}
           type="submit"

@@ -1,26 +1,25 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { DeliveryAddressScreen } from './DeliveryAddressScreen';
+import { WorkEmailVerificationScreen } from './WorkEmailVerificationScreen';
 import { useSignupEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-signup-eligibility-details/UseSignupEligibilityDetails';
 
-const componentMeta: Meta<typeof DeliveryAddressScreen> = {
-  title: 'Pages/Signup Eligibility Flow/Delivery Address Screen',
-  component: DeliveryAddressScreen,
+const componentMeta: Meta<typeof WorkEmailVerificationScreen> = {
+  title: 'Pages/Signup Eligibility Flow/Work Email Verification Screen',
+  component: WorkEmailVerificationScreen,
   parameters: {
     layout: 'fullscreen',
   },
 };
 
-const ScreenTemplate: StoryFn<typeof DeliveryAddressScreen> = () => {
+const ScreenTemplate: StoryFn<typeof WorkEmailVerificationScreen> = () => {
   const eligibilityDetailsState = useSignupEligibilityDetails({
-    currentScreen: 'Delivery Address Screen',
+    currentScreen: 'Work Email Verification Screen',
     employmentStatus: 'Employed',
     organisation: 'NHS',
     employer: 'Abbey Hospitals',
     jobTitle: 'Nurse',
-    emailVerification: 'test@nhs.com',
   });
 
-  return <DeliveryAddressScreen eligibilityDetailsState={eligibilityDetailsState} />;
+  return <WorkEmailVerificationScreen eligibilityDetailsState={eligibilityDetailsState} />;
 };
 
 export const Screen = ScreenTemplate.bind({});

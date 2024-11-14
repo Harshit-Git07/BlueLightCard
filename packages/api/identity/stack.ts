@@ -352,16 +352,6 @@ export function Identity({ stack }: StackContext) {
             }),
           ],
         }
-      },
-      'GET /zendesk/token': {
-        function: {
-          handler: "packages/api/identity/src/external-provider/zendesk/generateToken.handler",
-          environment: {
-            ZENDESK_MESSAGING_JWT_SECRET: appSecret.secretValueFromJson('zendesk_messaging_jwt_secret').toString(),
-            ZENDESK_MESSAGING_KID: appSecret.secretValueFromJson('zendesk_messaging_kid').toString()
-          }
-        },
-        authorizer: 'identityAuthorizer'
       }
     });
 

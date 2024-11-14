@@ -3,7 +3,9 @@ import { experimentsAndFeatureFlags } from '../utils/amplitude/store';
 import { AmplitudeExperimentFlags } from '../utils/amplitude/AmplitudeExperimentFlags';
 
 export const getCompanyOfferDetailsUrl = (companyId: string) => {
-  return `/offerdetails.php?cid=${companyId}`;
+  const amplitudeFlags = amplitudeStore.get(experimentsAndFeatureFlags);
+  const enableOffersCms = amplitudeFlags[AmplitudeExperimentFlags.CMS_OFFERS] === 'on';
+  return enableOffersCms ? `/company?cid=${companyId}` : `/offerdetails.php?cid=${companyId}`;
 };
 
 export const getOffersByCategoryUrl = (categoryId: string) => {

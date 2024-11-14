@@ -7,4 +7,5 @@ export enum AmplitudeExperimentFlags {
   ENABLE_AUTH0_LOGIN_LOGOUT_WEB_BLC_UK = 'enable-auth0-login-logout-web-blc-uk',
   ENABLE_AUTH0_LOGIN_LOGOUT_WEB_BLC_AU = 'enable-auth0-login-logout-web-blc-au',
   ENABLE_AUTH0_LOGIN_LOGOUT_WEB_DDS_UK = 'enable-auth0-login-logout-web-dds-uk',
+  CMS_OFFERS = 'cms-offers',
 }

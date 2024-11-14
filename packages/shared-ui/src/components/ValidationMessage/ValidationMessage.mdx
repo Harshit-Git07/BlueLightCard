@@ -1,0 +1,59 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as ValidationMessage from './ValidationMessage.stories';
+
+<Meta of={ValidationMessage} />
+
+# ValidationMessage
+
+- [Overview](#overview)
+- [Props](#props)
+- [Variants](#variants)
+- [Implementation](#implementation)
+
+## Overview
+
+A component used to add validation information after input elements/form fields, including neutral, error and success states.
+
+## Props
+
+<Controls />
+
+## Variants
+
+Default/neutral
+
+<Canvas of={ValidationMessage.Default} />
+
+Valid/success
+
+<Canvas of={ValidationMessage.Valid} />
+
+Invalid/error
+
+<Canvas of={ValidationMessage.Invalid} />
+
+Disabled
+
+<Canvas of={ValidationMessage.Disabled} />
+
+## Implementation
+
+Usage example using jsx
+
+```jsx
+const Form: FC = () => {
+  return
+      <input
+        className="h-8 px-2 rounded-md outline outline-1 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark"
+        id="username"
+        type="text"
+        placeholder="Username"
+      />
+      <ValidationMessage
+        message="Username must be at least 6 characters long"
+        htmlFor="username"
+        isValid={false}
+        isDisabled={false}
+      />
+};
+```./ValidationMessage.stories

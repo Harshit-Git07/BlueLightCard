@@ -3,6 +3,7 @@
  */
 
 import type { V2ApisGetOfferResponse } from '@blc-mono/offers-cms/api';
+import { ChangeEventHandler } from 'react';
 
 export enum PlatformVariant {
   MobileHybrid = 'mobile-hybrid',
@@ -81,3 +82,17 @@ export enum BRAND {
   BLC_AU = 'blc-au',
   DDS_UK = 'dds-uk',
 }
+
+export type Brand = BRAND.BLC_UK | BRAND.BLC_AU | BRAND.DDS_UK;
+
+export type FieldProps = {
+  onChange?: ChangeEventHandler<HTMLInputElement>;
+  value?: string;
+  isValid?: boolean | undefined;
+  label?: string;
+  tooltip?: string;
+  description?: string;
+  placeholder?: string;
+  validationMessage?: string;
+  isDisabled?: boolean;
+};

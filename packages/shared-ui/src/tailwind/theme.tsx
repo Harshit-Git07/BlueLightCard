@@ -11,12 +11,13 @@ export const colours = {
   textSuccess: 'text-colour-success dark:text-colour-success-dark',
   textError: 'text-colour-error dark:text-colour-error-dark',
 
-  backgroundPrimaryContainer:
-    'bg-colour-primary-container-light dark:bg-colour-primary-container-dark',
+  backgroundSurface: 'bg-colour-surface-light dark:bg-colour-surface-dark',
   backgroundSurfaceContainer:
     'bg-colour-surface-container-light dark:bg-colour-surface-container-dark',
-  backgroundSurface: 'bg-colour-surface-light dark:bg-colour-surface-dark',
+  backgroundPrimaryContainer:
+    'bg-colour-primary-container-light dark:bg-colour-primary-container-dark',
 
+  borderPrimary: 'border-colour-primary dark:border-colour-primary-dark',
   borderPrimaryOnFocus: 'focus:border-colour-primary dark:focus:border-colour-primary-dark',
   borderPrimaryHover: 'border-colour-primary-hover dark:border-colour-primary-hover-dark',
   borderOnSurfaceOutline:
@@ -78,4 +79,28 @@ export const borders = {
   active: `rounded-md border outline-none ${colours.borderPrimaryOnFocus}`,
   error: `rounded-md border outline-none ${colours.borderError}`,
   disabled: `rounded-md border outline-none ${colours.borderOnSurfaceOutlineSubtle}`,
+};
+
+/**
+ * Helper for consistent border styles for input fields depending on focus/disabled/error state combinations
+ * @param isDisabled
+ * @param isFocused
+ * @param isValid
+ * @returns
+ */
+export const getInputBorderClasses = (
+  isDisabled: boolean,
+  isFocused: boolean,
+  isValid: boolean | undefined,
+) => {
+  if (isDisabled) {
+    return borders.disabled;
+  }
+
+  if (!isFocused) {
+    return borders.default;
+  }
+
+  const hasNotBeenValidatedYet = isValid === undefined;
+  return isValid || hasNotBeenValidatedYet ? borders.active : borders.error;
 };

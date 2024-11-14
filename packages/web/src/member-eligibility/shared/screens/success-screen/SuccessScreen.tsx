@@ -1,46 +1,54 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
-import { FuzzyFrontend } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/FuzzyFrontend';
-import { renewalEligibilityDetailsStub } from '@/root/src/member-eligibility/renewal/hooks/use-renewal-eligibility-details/UseRenewalEligibilityDetails';
+import { EligibilityModalTemplate } from '@/root/src/member-eligibility/shared/components/modal/EligibilityModalTemplate';
+import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
+import Button from '@bluelightcard/shared-ui/components/Button-V2';
+import { ThemeVariant } from '@bluelightcard/shared-ui/types';
+import { useRouter } from 'next/router';
+import { BRAND } from '@/global-vars';
+import { BRANDS } from '@/types/brands.enum';
+import { AppDownloadLinks } from '@/root/src/member-eligibility/shared/components/modal/AppDownloadLinks';
+import { getQrCodeForDownloadingApp } from '@/root/src/member-eligibility/shared/components/modal/helper';
 
-export const SuccessScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDetailsState }) => {
-  const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
-
-  const buttons = useMemo(() => {
-    if (eligibilityDetails.flow === 'Sign Up') {
-      return [
-        {
-          onClick: () => {
-            setEligibilityDetails({
-              flow: 'Sign Up',
-              currentScreen: 'Interstitial Screen',
-            });
-          },
-          text: 'Restart',
-        },
-      ];
-    }
-
-    return [
-      {
-        onClick: () => {
-          setEligibilityDetails({
-            ...renewalEligibilityDetailsStub,
-            currentScreen: 'Interstitial Screen',
-          });
-        },
-        text: 'Restart',
-      },
-    ];
-  }, [eligibilityDetails.flow, setEligibilityDetails]);
+export const SuccessScreen: FC<VerifyEligibilityScreenProps> = () => {
+  const router = useRouter();
+  const brandName = BRAND === BRANDS.DDS_UK ? 'Defence Discount Service' : 'Blue Light Card';
+  const QrCode = getQrCodeForDownloadingApp();
 
   return (
-    <FuzzyFrontend
-      numberOfStepsCompleted={6}
-      screenTitle="Success Screen (really a model, not a screen)"
-      figmaLink="https://www.figma.com/design/iym8VCmt8nanmcBkmw0573/Sign-up-%2B-Renewals-Handover?node-id=6453-48220&t=XRae5vPnKJi8i8kq-4"
-      eligibilityDetailsState={eligibilityDetailsState}
-      buttons={buttons}
-    />
+    <EligibilityModalTemplate data-testid="sign-up-success-screen">
+      <p
+        className={`mx-[50px] mb-[24px] lg:mt-[78px] md:portrait:mt-[0px] ${fonts.displaySmallText} ${colours.textOnSurface} truncate`}
+      >
+        Sign Up Complete!
+      </p>
+
+      <Button
+        className="mb-[60px] w-4/5"
+        variant={ThemeVariant.Primary}
+        size="Large"
+        // TODO: We need to figure out if this screen routes us to members-home or should we already be there at this stage and this button just closes the modal?
+        onClick={() => router.push('/members-home')}
+      >
+        Start saving
+      </Button>
+
+      <p
+        className={`text-center leading-relaxed ${fonts.headlineSmallBold} ${colours.textOnSurface}`}
+      >
+        Get the {brandName} App
+      </p>
+
+      <p
+        className={`mt-[8px] mb-[8px] text-center leading-relaxed ${fonts.body} ${colours.textOnSurface}`}
+      >
+        Easily search for stores or brands and get discounts on <br /> the go with your virtual
+        card.
+      </p>
+
+      <QrCode className="h-full" />
+
+      <AppDownloadLinks className="w-[148px] h-[43px] mt-[44px] mb-[78px] " />
+    </EligibilityModalTemplate>
   );
 };

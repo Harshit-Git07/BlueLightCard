@@ -4,6 +4,9 @@ import { userEvent } from '@testing-library/user-event';
 import { RenewalEligibilityFlow } from './RenewalEligibilityFlow';
 
 jest.mock('react-use');
+jest.mock('next/router', () => ({
+  useRouter: jest.fn(),
+}));
 
 const pngFile = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
 const pdfFile = new File(['(⌐□_□)'], 'test.pdf', { type: 'application/pdf' });
@@ -134,10 +137,8 @@ describe('given a signing up member that needs to prove their eligibility to use
                       });
 
                       it('should navigate to the success screen', () => {
-                        const title = screen.getByTestId('fuzzy-frontend-title');
-                        expect(title.textContent).toEqual(
-                          'Success Screen (really a model, not a screen)'
-                        );
+                        const title = screen.getByTestId('sign-up-success-screen');
+                        expect(title).toBeInTheDocument();
                       });
                     });
                   });
@@ -212,10 +213,8 @@ describe('given a signing up member that needs to prove their eligibility to use
                     });
 
                     it('should navigate to the success screen', () => {
-                      const title = screen.getByTestId('fuzzy-frontend-title');
-                      expect(title.textContent).toEqual(
-                        'Success Screen (really a model, not a screen)'
-                      );
+                      const title = screen.getByTestId('sign-up-success-screen');
+                      expect(title).toBeInTheDocument();
                     });
                   });
                 });
@@ -272,10 +271,8 @@ describe('given a signing up member that needs to prove their eligibility to use
                   });
 
                   it('should navigate to the success screen', () => {
-                    const title = screen.getByTestId('fuzzy-frontend-title');
-                    expect(title.textContent).toEqual(
-                      'Success Screen (really a model, not a screen)'
-                    );
+                    const title = screen.getByTestId('sign-up-success-screen');
+                    expect(title).toBeInTheDocument();
                   });
                 });
               });
@@ -305,8 +302,8 @@ describe('given a signing up member that needs to prove their eligibility to use
               });
 
               it('should navigate to the success screen', () => {
-                const title = screen.getByTestId('fuzzy-frontend-title');
-                expect(title.textContent).toEqual('Success Screen (really a model, not a screen)');
+                const title = screen.getByTestId('sign-up-success-screen');
+                expect(title).toBeInTheDocument();
               });
             });
           });
@@ -323,8 +320,8 @@ describe('given a signing up member that needs to prove their eligibility to use
             });
 
             it('should navigate to the success screen', () => {
-              const title = screen.getByTestId('fuzzy-frontend-title');
-              expect(title.textContent).toEqual('Success Screen (really a model, not a screen)');
+              const title = screen.getByTestId('sign-up-success-screen');
+              expect(title).toBeInTheDocument();
             });
           });
         });
@@ -386,10 +383,8 @@ describe('given a signing up member that needs to prove their eligibility to use
                   });
 
                   it('should navigate to the success screen', () => {
-                    const title = screen.getByTestId('fuzzy-frontend-title');
-                    expect(title.textContent).toEqual(
-                      'Success Screen (really a model, not a screen)'
-                    );
+                    const title = screen.getByTestId('sign-up-success-screen');
+                    expect(title).toBeInTheDocument();
                   });
                 });
               });
@@ -462,10 +457,8 @@ describe('given a signing up member that needs to prove their eligibility to use
                 });
 
                 it('should navigate to the success screen', () => {
-                  const title = screen.getByTestId('fuzzy-frontend-title');
-                  expect(title.textContent).toEqual(
-                    'Success Screen (really a model, not a screen)'
-                  );
+                  const title = screen.getByTestId('sign-up-success-screen');
+                  expect(title).toBeInTheDocument();
                 });
               });
             });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faXmark } from '@fortawesome/pro-solid-svg-icons';
-import { borders, colours, fonts } from 'src/tailwind/theme';
+import { borders, colours, fonts } from '../../../../tailwind/theme';
 
 export type Props = {
   validatedRequirements: Record<string, boolean | undefined>;

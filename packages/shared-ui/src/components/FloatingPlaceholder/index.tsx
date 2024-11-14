@@ -7,7 +7,6 @@ export type FloatingPlaceholderProps = {
   children: ReactNode;
   hasValue: boolean;
   isDisabled?: boolean;
-  isValid?: boolean;
 };
 
 const peerFocusBodyLight = [
@@ -23,19 +22,14 @@ const FloatingPlaceholder: FC<FloatingPlaceholderProps> = ({
   hasValue,
   children,
   isDisabled = false,
-  isValid = false,
 }) => {
-  const validButDisabled = isDisabled && isValid;
-  const validAndEnabled = !isDisabled && isValid;
-
   const placeHolderClasses = conditionalStrings({
     ['left-4 -translate-y-1/2 absolute transition-all pointer-events-none']: true,
     [`top-[25px] peer-focus:top-4 ${fonts.body} ${peerFocusBodyLight} peer-focus:text-xs`]:
       !hasValue,
     [`top-4 text-xs ${fonts.bodyLight}`]: hasValue,
-    [colours.textOnSurfaceDisabled]: validButDisabled,
-    [colours.textOnSurfaceSubtle]: validAndEnabled,
-    [colours.textError]: !isValid,
+    [colours.textOnSurfaceDisabled]: isDisabled,
+    [colours.textOnSurfaceSubtle]: !isDisabled,
   });
   return (
     <label

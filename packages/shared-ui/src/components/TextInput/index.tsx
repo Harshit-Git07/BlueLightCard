@@ -83,12 +83,7 @@ const TextInput: FC<TextInputProps> = ({
             aria-required={required}
             aria-describedby={getAriaDescribedBy()}
           />
-          <FloatingPlaceholder
-            htmlFor={elementId}
-            hasValue={hasValue}
-            isValid={isValid}
-            isDisabled={isDisabled}
-          >
+          <FloatingPlaceholder htmlFor={elementId} hasValue={hasValue} isDisabled={isDisabled}>
             {placeholder}
           </FloatingPlaceholder>
         </div>

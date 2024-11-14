@@ -89,11 +89,14 @@ describe('PasswordInput Component', () => {
     });
     expect(screen.queryByText('Your password must contain:')).toBeNull();
 
-    // Form dirty state should keep rules visible
+    // Blur event hides rules even if populated
     await act(async () => {
       await userEvent.type(input, 'password123');
     });
-    expect(screen.getByText('Your password must contain:')).toBeInTheDocument();
+    await act(async () => {
+      await userEvent.tab();
+    });
+    expect(screen.queryByText('Your password must contain:')).toBeNull();
   });
 
   it('disables input and interactions when isDisabled is true', async () => {

@@ -4,7 +4,7 @@ import { faEye, faEyeSlash, faInfoCircle } from '@fortawesome/pro-solid-svg-icon
 import { borders, colours, fonts } from '../../tailwind/theme';
 import FloatingPlaceholder from '../FloatingPlaceholder';
 import PasswordRequirements from './components/PasswordRequirements';
-import { usePasswordValidation } from 'src/hooks/usePasswordValidation';
+import { usePasswordValidation } from '../../hooks/usePasswordValidation';
 
 export type Props = {
   onChange: (input: string) => void;
@@ -16,6 +16,8 @@ export type Props = {
   infoMessage?: string;
   hideRequirements?: boolean;
   isDisabled?: boolean;
+  placeholderText?: string;
+  onBlur?: () => void;
 };
 
 const PasswordInput: FC<Props> = ({
@@ -28,6 +30,8 @@ const PasswordInput: FC<Props> = ({
   infoMessage = '',
   hideRequirements = false,
   isDisabled = false,
+  placeholderText = 'Password',
+  onBlur,
 }) => {
   const { getValidatedPasswordRequirements } = usePasswordValidation();
   const [showPassword, setShowPassword] = useState(false);
@@ -43,7 +47,8 @@ const PasswordInput: FC<Props> = ({
 
   const onPasswordBlur = () => {
     setIsFocused(false);
-    setShowRequirements(!hideRequirements && isInputDirty);
+    setShowRequirements(false);
+    onBlur && onBlur();
   };
 
   const onPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -59,10 +64,12 @@ const PasswordInput: FC<Props> = ({
   const getBorderClasses = () => {
     if (isDisabled) {
       return borders.disabled;
-    } else if (!isFocused) {
-      return borders.default;
+    } else if (!isValid && isValid !== undefined) {
+      return borders.error;
+    } else if (isFocused) {
+      return borders.active;
     } else {
-      return isValid || isValid === undefined ? borders.active : borders.error;
+      return borders.default;
     }
   };
 
@@ -114,12 +121,10 @@ const PasswordInput: FC<Props> = ({
         <FloatingPlaceholder
           htmlFor={`password-${componentId}`}
           hasValue={!!password}
-          isValid={isValid || !isInputDirty}
           isDisabled={isDisabled}
         >
-          Password
+          {placeholderText}
         </FloatingPlaceholder>
-
         <button
           type="button"
           className={classes.eyeIconButton}

@@ -5,4 +5,5 @@ export const V5_API_URL = {
   Companies: `/${V5_REGION}/discovery/companies`,
   Search: `/${V5_REGION}/discovery/search`,
   FlexibleOffers: `/${V5_REGION}/discovery/menu`,
+  User: `/${V5_REGION}/members/user`,
 } as const;

@@ -16,7 +16,6 @@ const DefaultTemplate: StoryFn<typeof FloatingPlaceholder> = (args) => {
     <TextInput
       label={'This is a component with floating label'}
       placeholder={'This is a placeholder'}
-      isValid={args.isValid}
       id={args.htmlFor}
       isDisabled={args.isDisabled}
       value={v}
@@ -29,7 +28,6 @@ export const Default = DefaultTemplate.bind({});
 
 Default.args = {
   htmlFor: 'fieldId',
-  isValid: true,
   isDisabled: false,
   hasValue: false,
 };
@@ -38,12 +36,6 @@ export const Disabled = DefaultTemplate.bind({});
 Disabled.args = {
   ...Default.args,
   isDisabled: true,
-};
-
-export const WithError = DefaultTemplate.bind({});
-WithError.args = {
-  ...Default.args,
-  isValid: false,
 };
 
 export const WithValue = DefaultTemplate.bind({});

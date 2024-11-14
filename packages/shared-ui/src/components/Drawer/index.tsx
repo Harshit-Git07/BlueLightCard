@@ -1,7 +1,7 @@
 import useDrawer from './useDrawer';
 import { SyntheticEvent, useCallback, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faX } from '@fortawesome/pro-solid-svg-icons';
+import { faXmark } from '@fortawesome/pro-solid-svg-icons';
 import { conditionalStrings } from '../../utils/conditionalStrings';
 
 const Drawer = () => {
@@ -50,12 +50,12 @@ const Drawer = () => {
         {isOpen && showCloseButton ? (
           <div className="flex w-full justify-end p-4 text-colour-onSurface dark:text-colour-onSurface-dark">
             <button className="cursor-pointer" onClick={onClose} aria-label={'close'}>
-              <FontAwesomeIcon icon={faX} />
+              <FontAwesomeIcon icon={faXmark} />
             </button>
           </div>
         ) : null}
         {isOpen ? (
-          <div className={'grow-1 overflow-y-auto'} aria-live={'polite'} aria-atomic={true}>
+          <div className={'h-full grow-1 overflow-y-auto'} aria-live={'polite'} aria-atomic={true}>
             {children}
           </div>
         ) : null}

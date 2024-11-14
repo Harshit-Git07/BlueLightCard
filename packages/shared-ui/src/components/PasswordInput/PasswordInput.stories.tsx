@@ -51,6 +51,7 @@ Default.args = {
   helpMessage: 'Start typing to see dynamic validation',
   hideRequirements: false,
   isDisabled: false,
+  placeholderText: 'Placeholder text',
 };
 Disabled.args = { isDisabled: true };
 

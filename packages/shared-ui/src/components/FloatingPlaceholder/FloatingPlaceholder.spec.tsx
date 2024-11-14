@@ -16,11 +16,9 @@ const testRender = (props: FloatingPlaceholderProps, value?: string) => {
 };
 
 describe('FloatingPlaceholder', () => {
-  const defaultProps = {
-    text: 'Test Label',
+  const defaultProps: FloatingPlaceholderProps = {
     htmlFor: 'test-input',
     isDisabled: false,
-    isValid: true,
     hasValue: false,
     children: 'Test Label',
   };
@@ -63,15 +61,5 @@ describe('FloatingPlaceholder', () => {
     expect(label).toHaveAttribute('aria-hidden', 'true');
     expect(label).toHaveAttribute('aria-disabled', 'true');
     expect(label).toHaveClass(colours.textOnSurfaceDisabled);
-  });
-
-  it('handles error state correctly', () => {
-    testRender({
-      ...defaultProps,
-      isValid: false,
-    });
-
-    const label = screen.getByText('Test Label');
-    expect(label).toHaveClass(colours.textError);
   });
 });

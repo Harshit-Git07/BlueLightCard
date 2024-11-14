@@ -7,6 +7,7 @@ import type {
   V2CompaniesGetCompanyOffersResponse,
   V2CompaniesGetCompanyResponse,
 } from '@blc-mono/offers-cms/api';
+import { getBrandedOffersPath } from '../utils/pathUtils';
 
 const offerTypeMap: { [key in LegacyOffer['type']]: V2ApisGetOfferResponse['type'] } = {
   Online: 'online',
@@ -21,7 +22,7 @@ const offerTypeMap: { [key in LegacyOffer['type']]: V2ApisGetOfferResponse['type
 } as const;
 
 export async function legacy_GetOffer(adapter: IPlatformAdapter, offerId: string) {
-  const result = await adapter.invokeV5Api(`/eu/offers/offers/${offerId}`, {
+  const result = await adapter.invokeV5Api(`${getBrandedOffersPath()}/offers/${offerId}`, {
     method: 'GET',
   });
 
@@ -83,7 +84,7 @@ export async function legacy_GetOffer(adapter: IPlatformAdapter, offerId: string
   } satisfies V2ApisGetOfferResponse;
 }
 export async function legacy_GetCompany(adapter: IPlatformAdapter, companyId: string) {
-  const result = await adapter.invokeV5Api(`/eu/offers/company/${companyId}`, {
+  const result = await adapter.invokeV5Api(`${getBrandedOffersPath()}/company/${companyId}`, {
     method: 'GET',
   });
 
@@ -122,9 +123,12 @@ export async function legacy_GetCompany(adapter: IPlatformAdapter, companyId: st
   } satisfies V2CompaniesGetCompanyResponse;
 }
 export async function legacy_GetOffersByCompany(adapter: IPlatformAdapter, companyId: string) {
-  const result = await adapter.invokeV5Api(`/eu/offers/company/${companyId}/offers`, {
-    method: 'GET',
-  });
+  const result = await adapter.invokeV5Api(
+    `${getBrandedOffersPath()}/company/${companyId}/offers`,
+    {
+      method: 'GET',
+    },
+  );
 
   if (result.status !== 200) {
     if (result.status === 404) {

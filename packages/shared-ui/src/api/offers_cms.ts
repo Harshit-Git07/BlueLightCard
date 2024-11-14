@@ -4,9 +4,10 @@ import type {
   V2CompaniesGetCompanyResponse,
 } from '@blc-mono/offers-cms/api';
 import type { IPlatformAdapter } from '../adapters';
+import { getBrandedOffersPath } from '../utils/pathUtils';
 
 export async function cms_GetOffer(adapter: IPlatformAdapter, offerId: string) {
-  const result = await adapter.invokeV5Api(`/eu/offers/v2/v2/offers/${offerId}`, {
+  const result = await adapter.invokeV5Api(`${getBrandedOffersPath(true)}/offers/${offerId}`, {
     method: 'GET',
   });
 
@@ -18,7 +19,7 @@ export async function cms_GetOffer(adapter: IPlatformAdapter, offerId: string) {
 }
 
 export async function cms_GetCompany(adapter: IPlatformAdapter, companyId: string) {
-  const result = await adapter.invokeV5Api(`/eu/offers/v2/v2/companies/${companyId}`, {
+  const result = await adapter.invokeV5Api(`${getBrandedOffersPath(true)}/companies/${companyId}`, {
     method: 'GET',
   });
 
@@ -32,9 +33,12 @@ export async function cms_GetCompany(adapter: IPlatformAdapter, companyId: strin
 }
 
 export async function cms_GetOffersByCompany(adapter: IPlatformAdapter, companyId: string) {
-  const result = await adapter.invokeV5Api(`/eu/offers/v2/v2/companies/${companyId}/offers`, {
-    method: 'GET',
-  });
+  const result = await adapter.invokeV5Api(
+    `${getBrandedOffersPath(true)}/companies/${companyId}/offers`,
+    {
+      method: 'GET',
+    },
+  );
 
   if (result.status !== 200) {
     if (result.status === 404) {

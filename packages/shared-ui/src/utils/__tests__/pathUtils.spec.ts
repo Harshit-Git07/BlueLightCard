@@ -42,40 +42,27 @@ describe('getPathFromUrl', () => {
   });
 });
 
-describe('getBrandedOffersPath', () => {
+describe.each([
+  ['blc-uk', false, '/eu/offers'],
+  ['blc-au', false, '/au/offers'],
+  ['dds-uk', false, '/eu/offers/dds'],
+  ['blc-uk', true, '/eu/offers/v2/v2'],
+  ['blc-au', true, '/au/offers/v2/v2'],
+  ['dds-uk', true, '/eu/offers/dds/v2/v2'],
+])('getBrandedOffersPath', (brand, useCms, expected) => {
   const originalEnv = process.env;
 
   afterAll(() => {
     process.env = originalEnv;
   });
 
-  describe('when the brand is BLC UK', () => {
+  describe(`when the brand is '${brand}' and useCms is ${useCms}`, () => {
     beforeEach(() => {
-      process.env = { ...originalEnv, NEXT_PUBLIC_APP_BRAND: 'blc-uk' };
+      process.env = { ...originalEnv, NEXT_PUBLIC_APP_BRAND: brand };
     });
 
-    it('should return /eu/offers', () => {
-      expect(getBrandedOffersPath()).toBe('/eu/offers');
-    });
-  });
-
-  describe('when the brand is BLC AU', () => {
-    beforeEach(() => {
-      process.env = { ...originalEnv, NEXT_PUBLIC_APP_BRAND: 'blc-au' };
-    });
-
-    it('should return /au/offers', () => {
-      expect(getBrandedOffersPath()).toBe('/au/offers');
-    });
-  });
-
-  describe('when the brand is DDS', () => {
-    beforeEach(() => {
-      process.env = { ...originalEnv, NEXT_PUBLIC_APP_BRAND: 'dds-uk' };
-    });
-
-    it('should return /eu/offers/dds', () => {
-      expect(getBrandedOffersPath()).toBe('/eu/offers/dds');
+    it(`should return ${expected}`, () => {
+      expect(getBrandedOffersPath(useCms)).toBe(expected);
     });
   });
 });

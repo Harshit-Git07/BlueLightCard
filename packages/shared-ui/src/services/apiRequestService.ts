@@ -110,9 +110,9 @@ export function apiDynamicPath({
   };
 
   const cmsEndpoints: Endpoints = {
-    COMPANY_DATA: `${getBrandedOffersPath()}/v2/v2/companies/${companyId}`,
-    OFFER_DETAILS_DATA: `${getBrandedOffersPath()}/v2/v2/offers/${offerId}`,
-    OFFERS_BY_COMPANY_DATA: `${getBrandedOffersPath()}/v2/v2/companies/${companyId}/offers`,
+    COMPANY_DATA: `${getBrandedOffersPath(true)}/companies/${companyId}`,
+    OFFER_DETAILS_DATA: `${getBrandedOffersPath(true)}/offers/${offerId}`,
+    OFFERS_BY_COMPANY_DATA: `${getBrandedOffersPath(true)}/companies/${companyId}/offers`,
   };
 
   if (!service) {

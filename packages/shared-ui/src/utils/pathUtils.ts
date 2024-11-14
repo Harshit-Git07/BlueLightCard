@@ -13,15 +13,16 @@ export const getPathFromUrl = (url: string): string => {
 
 /**
  * Generate the base path for the Offers API for a V5 API request.
- * Considers the current brand.
+ * Considers the current brand and has a flag to determine whether to use the CMS based endpoints or legacy.
  *
+ * @param useCms Whether to use the CMS based endpoints
  * @returns {string} The base Offers API path for the current brand
  */
-export const getBrandedOffersPath = (): string => {
+export const getBrandedOffersPath = (useCms: boolean = false): string => {
   const brand = process.env.NEXT_PUBLIC_APP_BRAND;
 
   const v5_region = brand === 'blc-au' ? 'au' : 'eu';
   const suffix = brand === 'dds-uk' ? '/dds' : '';
 
-  return `/${v5_region}/offers${suffix}`;
+  return `/${v5_region}/offers${suffix}${useCms ? '/v2/v2' : ''}`;
 };

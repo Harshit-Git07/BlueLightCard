@@ -1,4 +1,4 @@
-import { getOffer } from '../offers';
+import { getCompany, getOffer, getOffersByCompany } from '../offers';
 import { useMockPlatformAdapter } from 'src/adapters';
 import { convertStringToRichtextModule } from 'src/utils/rich-text-utils';
 import { createFactoryMethod } from 'src/utils/createFactoryMethod';
@@ -80,6 +80,28 @@ describe('getOffer', () => {
       }
     });
 
+    test('getCompany throws an error if the id is missing', async () => {
+      const mockPlatformAdapter = useMockPlatformAdapter(200);
+
+      expect.assertions(1);
+      try {
+        await getCompany(mockPlatformAdapter, undefined, useCms);
+      } catch (error) {
+        expect(error).toEqual(new Error('Missing id'));
+      }
+    });
+
+    test('getOffersByCompany throws an error if the id is missing', async () => {
+      const mockPlatformAdapter = useMockPlatformAdapter(200);
+
+      expect.assertions(1);
+      try {
+        await getOffersByCompany(mockPlatformAdapter, undefined, useCms);
+      } catch (error) {
+        expect(error).toEqual(new Error('Missing id'));
+      }
+    });
+
     test('getOffer calls the offer endpoint', async () => {
       const mockOffer = createModernOffer();
       const mockPlatformAdapter = useMockPlatformAdapter(200, mockOffer);
@@ -108,7 +130,46 @@ describe('getOffer', () => {
         expect(error).toEqual(new Error(message));
       }
     });
+
+    test.each([
+      [404, 'Company not found'],
+      [500, 'Unable to retrieve company details'],
+    ])('getCompany throws an error if the API request fails', async (statusCode, message) => {
+      const mockPlatformAdapter = useMockPlatformAdapter(statusCode);
+
+      expect.assertions(1);
+      try {
+        await getCompany(mockPlatformAdapter, '123', useCms);
+      } catch (error) {
+        expect(error).toEqual(new Error(message));
+      }
+    });
+
+    test.each([[500, 'Unable to retrieve company offers']])(
+      'getOffersByCompany throws an error if the API request fails',
+      async (statusCode, message) => {
+        const mockPlatformAdapter = useMockPlatformAdapter(statusCode);
+
+        expect.assertions(1);
+        try {
+          await getOffersByCompany(mockPlatformAdapter, '123', useCms);
+        } catch (error) {
+          expect(error).toEqual(new Error(message));
+        }
+      },
+    );
+
+    test.each([[404, []]])(
+      'getOffersByCompany returns an empty array if the API request fails by a 404',
+      async (statusCode, response) => {
+        const mockPlatformAdapter = useMockPlatformAdapter(statusCode);
+
+        const result = await getOffersByCompany(mockPlatformAdapter, '123', useCms);
+        expect(result).toEqual(response);
+      },
+    );
   });
+
   describe('when useCms is false', () => {
     const useCms = false;
     test('getOffer throws an error if the id is missing', async () => {
@@ -117,6 +178,28 @@ describe('getOffer', () => {
       expect.assertions(1);
       try {
         await getOffer(mockPlatformAdapter, undefined, useCms);
+      } catch (error) {
+        expect(error).toEqual(new Error('Missing id'));
+      }
+    });
+
+    test('getCompany throws an error if the id is missing', async () => {
+      const mockPlatformAdapter = useMockPlatformAdapter(200);
+
+      expect.assertions(1);
+      try {
+        await getCompany(mockPlatformAdapter, undefined, useCms);
+      } catch (error) {
+        expect(error).toEqual(new Error('Missing id'));
+      }
+    });
+
+    test('getOffersByCompany throws an error if the id is missing', async () => {
+      const mockPlatformAdapter = useMockPlatformAdapter(200);
+
+      expect.assertions(1);
+      try {
+        await getOffersByCompany(mockPlatformAdapter, undefined, useCms);
       } catch (error) {
         expect(error).toEqual(new Error('Missing id'));
       }
@@ -162,5 +245,43 @@ describe('getOffer', () => {
         expect(error).toEqual(new Error(message));
       }
     });
+
+    test.each([
+      [404, 'Company not found'],
+      [500, 'Unable to retrieve company details'],
+    ])('getCompany throws an error if the API request fails', async (statusCode, message) => {
+      const mockPlatformAdapter = useMockPlatformAdapter(statusCode);
+
+      expect.assertions(1);
+      try {
+        await getCompany(mockPlatformAdapter, '123', useCms);
+      } catch (error) {
+        expect(error).toEqual(new Error(message));
+      }
+    });
+
+    test.each([[500, 'Unable to retrieve company offers']])(
+      'getOffersByCompany throws an error if the API request fails',
+      async (statusCode, message) => {
+        const mockPlatformAdapter = useMockPlatformAdapter(statusCode);
+
+        expect.assertions(1);
+        try {
+          await getOffersByCompany(mockPlatformAdapter, '123', useCms);
+        } catch (error) {
+          expect(error).toEqual(new Error(message));
+        }
+      },
+    );
+
+    test.each([[404, []]])(
+      'getOffersByCompany returns an empty array if the API request fails by a 404',
+      async (statusCode, response) => {
+        const mockPlatformAdapter = useMockPlatformAdapter(statusCode);
+
+        const result = await getOffersByCompany(mockPlatformAdapter, '123', useCms);
+        expect(result).toEqual(response);
+      },
+    );
   });
 });

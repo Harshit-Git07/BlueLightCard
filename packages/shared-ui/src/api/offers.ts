@@ -18,7 +18,15 @@ export function getOffer(
   return cms_GetOffer(adapter, id);
 }
 
-export function getCompany(adapter: IPlatformAdapter, id: string, useCms: boolean) {
+export function getCompany(
+  adapter: IPlatformAdapter,
+  id: string | undefined | null,
+  useCms: boolean,
+) {
+  if (!id) {
+    throw new Error('Missing id');
+  }
+
   if (!useCms) {
     return legacy_GetCompany(adapter, id);
   }
@@ -26,7 +34,15 @@ export function getCompany(adapter: IPlatformAdapter, id: string, useCms: boolea
   return cms_GetCompany(adapter, id);
 }
 
-export function getOffersByCompany(adapter: IPlatformAdapter, id: string, useCms: boolean) {
+export function getOffersByCompany(
+  adapter: IPlatformAdapter,
+  id: string | undefined | null,
+  useCms: boolean,
+) {
+  if (!id) {
+    throw new Error('Missing id');
+  }
+
   if (!useCms) {
     return legacy_GetOffersByCompany(adapter, id);
   }

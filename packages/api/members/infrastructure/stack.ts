@@ -52,6 +52,9 @@ import { IdUploadBucketConstruct } from './s3/IdUploadBucketConstruct';
 import { GetCustomerProfileRoute } from './routes/GetCustomerProfileRoute';
 import { CustomerProfileModel } from '../application/models/customer/customerProfileModel';
 
+import { GetMarketingPreferencesRoute } from './routes/GetMarketingPreferencesRoute';
+import { GetBrazeAttributesRoute } from './routes/GetBrazeAttributesRoute';
+
 async function MembersStack({ stack, app }: StackContext) {
   const noteTableName = `${stack.stage}-${app.name}-memberNotes`;
   const SERVICE_NAME = 'members';
@@ -281,6 +284,17 @@ async function MembersStack({ stack, app }: StackContext) {
       apiGatewayModelGenerator,
       agEmployerModel,
       memberProfilesTableName,
+    ).getRouteDetails(),
+    'GET /members/v5/marketingPreferences/{brand}/{memberUUID}/{version}':
+      new GetMarketingPreferencesRoute(
+        apiGatewayModelGenerator,
+        agOrganisationModel,
+        app.stage,
+      ).getRouteDetails(),
+    'POST /members/v5/getBrazeAttributes/': new GetBrazeAttributesRoute(
+      apiGatewayModelGenerator,
+      agOrganisationModel,
+      app.stage,
     ).getRouteDetails(),
   });
 

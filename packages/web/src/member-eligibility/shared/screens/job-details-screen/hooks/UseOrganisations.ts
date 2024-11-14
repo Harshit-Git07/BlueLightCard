@@ -14,7 +14,7 @@ export function useOrganisations(): Organisation[] {
       { id: '3', label: 'Blood Bikes' },
       { id: '4', label: 'Ambulance' },
       { id: '5', label: 'Dentist' },
-      { id: '6', label: 'Option 6' },
+      { id: '6', label: 'Multi-ID stub' },
     ],
     []
   );

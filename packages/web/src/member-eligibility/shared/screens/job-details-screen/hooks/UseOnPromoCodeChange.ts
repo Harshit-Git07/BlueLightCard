@@ -1,12 +1,19 @@
 import { ChangeEventHandler, useCallback } from 'react';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
 
-export function useOnPromoCodeChange(eligibilityDetailsState: EligibilityDetailsState) {
+interface Result {
+  promoCode: EligibilityDetails['promoCode'];
+  onPromoCodeChanged: ChangeEventHandler<HTMLInputElement>;
+}
+
+export function useOnPromoCodeChange(eligibilityDetailsState: EligibilityDetailsState): Result {
   const [eligibilityDetails, setEligibilityDetailsState] = eligibilityDetailsState;
 
-  const onPromoCodeChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+  const onPromoCodeChanged: ChangeEventHandler<HTMLInputElement> = useCallback(
     (event) => {
       const promoCode = event.target.value;
+
       setEligibilityDetailsState({
         ...eligibilityDetails,
         promoCode,
@@ -15,5 +22,5 @@ export function useOnPromoCodeChange(eligibilityDetailsState: EligibilityDetails
     [eligibilityDetails, setEligibilityDetailsState]
   );
 
-  return { promoCode: eligibilityDetails.promoCode, onPromoCodeChange };
+  return { promoCode: eligibilityDetails.promoCode, onPromoCodeChanged };
 }

@@ -1,10 +1,25 @@
 import { useCallback } from 'react';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 
-export function useOnOrganisationChanged(eligibilityDetailsState: EligibilityDetailsState) {
+type Callback = (organisation: string) => void;
+
+export function useOnOrganisationChanged(
+  eligibilityDetailsState: EligibilityDetailsState
+): Callback {
   const [eligibilityDetails, setEligibilityDetailsState] = eligibilityDetailsState;
-  const onOrganisationSelected = useCallback(
-    (organisation: string) => {
+
+  return useCallback(
+    (organisation) => {
+      // TODO: This is added so that multi-id can be tested on mobile, it will be removed later
+      if (organisation === 'Multi-ID stub') {
+        setEligibilityDetailsState({
+          ...eligibilityDetails,
+          requireMultipleIds: true,
+          organisation,
+        });
+        return;
+      }
+
       setEligibilityDetailsState({
         ...eligibilityDetails,
         organisation,
@@ -12,6 +27,4 @@ export function useOnOrganisationChanged(eligibilityDetailsState: EligibilityDet
     },
     [eligibilityDetails, setEligibilityDetailsState]
   );
-
-  return { onOrganisationSelected };
 }

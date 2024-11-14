@@ -19,18 +19,20 @@ import { useEmployerChanged } from '@/root/src/member-eligibility/shared/screens
 import { useOnJobTitleChange } from './hooks/UseOnJobTitleChange';
 import { useOnPromoCodeChange } from './hooks/UseOnPromoCodeChange';
 import { useFuzzyFrontendButtons } from './hooks/UseFuzzyFrontEndButtons';
+import { useOnPromoCodeApplied } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/UseOnPromoCodeApplied';
 
 export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDetailsState }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
 
   const isNextButtonDisabled = useIsNextButtonDisabled(eligibilityDetails);
-  const employers = useEmployers(eligibilityDetails.organisation);
   const organisations = useOrganisations();
+  const employers = useEmployers(eligibilityDetails.organisation);
 
-  const { onOrganisationSelected } = useOnOrganisationChanged(eligibilityDetailsState);
-  const { onEmployerSelected } = useEmployerChanged(eligibilityDetailsState);
-  const { onJobTitleChange } = useOnJobTitleChange(eligibilityDetailsState);
-  const { promoCode, onPromoCodeChange } = useOnPromoCodeChange(eligibilityDetailsState);
+  const onOrganisationSelected = useOnOrganisationChanged(eligibilityDetailsState);
+  const onEmployerSelected = useEmployerChanged(eligibilityDetailsState);
+  const onJobTitleChange = useOnJobTitleChange(eligibilityDetailsState);
+  const { promoCode, onPromoCodeChanged } = useOnPromoCodeChange(eligibilityDetailsState);
+  const onPromoCodeApplied = useOnPromoCodeApplied(eligibilityDetailsState);
   const fuzzyFrontEndButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 
   const numberOfCompletedSteps = useMemo(() => {
@@ -104,8 +106,8 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
               />
               {showPromoCode && (
                 <PromoCode
-                  onApply={() => {}}
-                  onChange={onPromoCodeChange}
+                  onApply={onPromoCodeApplied}
+                  onChange={onPromoCodeChanged}
                   className={'mt-[24px] w-full'}
                   infoMessage={'This will allow you to skip some steps'}
                   icon={true}

@@ -12,9 +12,8 @@ export function useEmployers(organisation: string | undefined): Employer[] | und
      This is a stub implementation to represent the Api call return a list of employers based off organisation, some organisations will not have employers,
      therefore we return an empty array which is then used to not render the Select Employer dropdown.
      */
-    if (organisation === 'Blood Bikes') {
-      return [];
-    }
+    if (organisation === 'Blood Bikes') return [];
+
     return [
       { id: '1', label: 'Employer 1' },
       { id: '2', label: 'Employer 2' },

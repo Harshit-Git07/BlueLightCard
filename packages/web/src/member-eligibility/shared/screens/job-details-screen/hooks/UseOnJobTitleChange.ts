@@ -1,9 +1,12 @@
 import { ChangeEventHandler, useCallback } from 'react';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 
-export function useOnJobTitleChange(eligibilityDetailsState: EligibilityDetailsState) {
+type Callback = ChangeEventHandler<HTMLInputElement>;
+
+export function useOnJobTitleChange(eligibilityDetailsState: EligibilityDetailsState): Callback {
   const [eligibilityDetails, setEligibilityDetailsState] = eligibilityDetailsState;
-  const onJobTitleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+
+  return useCallback(
     (event) => {
       const jobTitle = event.target.value;
       setEligibilityDetailsState({
@@ -13,6 +16,4 @@ export function useOnJobTitleChange(eligibilityDetailsState: EligibilityDetailsS
     },
     [eligibilityDetails, setEligibilityDetailsState]
   );
-
-  return { onJobTitleChange };
 }

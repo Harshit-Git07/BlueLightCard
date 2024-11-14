@@ -2,9 +2,12 @@ import { useCallback } from 'react';
 
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 
-export function useEmployerChanged(eligibilityDetailsState: EligibilityDetailsState) {
+type Callback = (employer: string) => void;
+
+export function useEmployerChanged(eligibilityDetailsState: EligibilityDetailsState): Callback {
   const [eligibilityDetails, setEligibilityDetailsState] = eligibilityDetailsState;
-  const onEmployerSelected = useCallback(
+
+  return useCallback(
     (employer: string) => {
       setEligibilityDetailsState({
         ...eligibilityDetails,
@@ -13,6 +16,4 @@ export function useEmployerChanged(eligibilityDetailsState: EligibilityDetailsSt
     },
     [eligibilityDetails, setEligibilityDetailsState]
   );
-
-  return { onEmployerSelected };
 }

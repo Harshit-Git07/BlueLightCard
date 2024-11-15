@@ -255,8 +255,7 @@ const SheetHandler = ({ companyId, onSelectOffer }: SheetHandlerProps) => {
   const company = useSuspenseQuery(getCompanyQuery(companyId, cmsEnabled));
 
   useEffect(() => {
-    console.log('oid', oid);
-    if (oid) {
+    if (oid && oid !== 'null') {
       onSelectOffer(oid, company.data.id, company.data.name);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

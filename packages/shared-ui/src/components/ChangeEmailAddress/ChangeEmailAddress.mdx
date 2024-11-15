@@ -1,0 +1,31 @@
+import {Canvas, Controls, Meta} from '@storybook/blocks';
+import * as ChangeEmailAddress from './ChangeEmailAddress.stories';
+
+<Meta of={ChangeEmailAddress}/>
+
+# ChangeEmailAddress
+
+- [Overview](#overview)
+- [Props](#props)
+- [Implementation](#implementation)
+
+## Overview
+
+The UI screens for the member to change their email address in the sidebar
+
+## Props
+
+<Controls/>
+
+<Canvas of={ChangeEmailAddress.Default}/>
+
+## Implementation
+Usage example using jsx
+
+```jsx
+  <Button
+    onClick={() => open(<ChangeEmailAddress email={'something@example.com'} memberUuid={'abcd-1234'} />)}
+  >
+    Change email
+  </Button>
+```

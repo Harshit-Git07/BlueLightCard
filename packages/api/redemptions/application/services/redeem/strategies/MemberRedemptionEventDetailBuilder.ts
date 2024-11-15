@@ -116,9 +116,10 @@ export class MemberRedemptionEventDetailBuilder {
           },
         };
         return memberRedemptionEventDetail;
+      case 'creditCard':
       case 'giftCard':
       case 'preApplied':
-      case 'creditCard':
+      case 'verify':
         if (!url) {
           throw new RedemptionConfigError(
             `Url is required to build a ${redemptionConfigEntity.redemptionType} MemberRedemptionEventDetail`,

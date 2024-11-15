@@ -92,6 +92,10 @@ export const MemberRedemptionEventDetailSchema = z.object({
         redemptionType: z.literal('creditCard'),
         url: z.string(),
       }),
+      z.object({
+        redemptionType: z.literal('verify'),
+        url: z.string(),
+      }),
     ]),
   ),
 });

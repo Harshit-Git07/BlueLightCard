@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { CREDITCARD, GIFTCARD, PREAPPLIED } from '@blc-mono/core/constants/redemptions';
+import { CREDITCARD, GIFTCARD, PREAPPLIED, VERIFY } from '@blc-mono/core/constants/redemptions';
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
 import { as } from '@blc-mono/core/utils/testing';
 import { RedemptionConfigEntity } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
@@ -34,7 +34,7 @@ const mockMemberRedemptionEventDetailBuilder: Partial<MemberRedemptionEventDetai
   buildMemberRedemptionEventDetail: jest.fn(),
 };
 
-describe.each([GIFTCARD, PREAPPLIED, CREDITCARD])('%s Affiliate Redemption Strategy', (redemptionType) => {
+describe.each([CREDITCARD, GIFTCARD, PREAPPLIED, VERIFY])('%s Affiliate Redemption Strategy', (redemptionType) => {
   const testAffiliateRedemption = redemptionConfigEntityFactory.build({
     redemptionType: redemptionType,
   });

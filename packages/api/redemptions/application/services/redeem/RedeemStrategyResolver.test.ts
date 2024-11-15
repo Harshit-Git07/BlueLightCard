@@ -7,6 +7,7 @@ import {
   SHOWCARD,
   VAULT,
   VAULTQR,
+  VERIFY,
 } from '@blc-mono/core/constants/redemptions';
 import { as } from '@blc-mono/core/utils/testing';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
@@ -34,6 +35,7 @@ describe('RedeemStrategyResolver', () => {
     [SHOWCARD, redeemShowCardStrategy],
     [VAULT, redeemVaultStrategy],
     [VAULTQR, redeemVaultStrategy],
+    [VERIFY, redeemAffiliateStrategy],
     [BALLOT, redeemBallotStrategy],
   ] satisfies [RedemptionType, Partial<IRedeemStrategy>][])(
     'returns the correct strategy for each redemption type (%s)',

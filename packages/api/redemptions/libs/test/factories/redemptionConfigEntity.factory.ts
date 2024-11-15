@@ -8,13 +8,14 @@ import {
   PREAPPLIED,
   REDEMPTION_TYPES,
   VAULT,
+  VERIFY,
 } from '@blc-mono/core/constants/redemptions';
 import { RedemptionConfigEntity } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { affiliateEnum, createRedemptionsId } from '@blc-mono/redemptions/libs/database/schema';
 
 export const redemptionConfigEntityFactory = Factory.define<RedemptionConfigEntity>(
   ({ params: { redemptionType } }) => {
-    const onlineRedemptionType = [GENERIC, GIFTCARD, PREAPPLIED, VAULT, CREDITCARD];
+    const onlineRedemptionType = [GENERIC, GIFTCARD, PREAPPLIED, VAULT, CREDITCARD, VERIFY];
     const type = redemptionType ?? faker.helpers.arrayElement(REDEMPTION_TYPES);
 
     return {

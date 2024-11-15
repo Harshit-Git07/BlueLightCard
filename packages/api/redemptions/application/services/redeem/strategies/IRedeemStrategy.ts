@@ -7,6 +7,7 @@ import {
   SHOWCARD,
   VAULT,
   VAULTQR,
+  VERIFY,
 } from '@blc-mono/core/constants/redemptions';
 import { ClientType } from '@blc-mono/core/schemas/domain';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
@@ -30,7 +31,7 @@ export type RedeemGenericStrategyResult = {
   };
 };
 
-export type RedeemAffiliateStrategyResult<AffiliateRedemptionType extends RedemptionType = RedemptionType> = {
+export type RedeemAffiliateStrategyResultBaseType<AffiliateRedemptionType extends RedemptionType = RedemptionType> = {
   kind: 'Ok';
   redemptionType: AffiliateRedemptionType;
   redemptionDetails: {
@@ -39,9 +40,15 @@ export type RedeemAffiliateStrategyResult<AffiliateRedemptionType extends Redemp
   };
 };
 
-export type RedeemPreAppliedStrategyResult = RedeemAffiliateStrategyResult<typeof PREAPPLIED>;
-export type RedeemCreditCardStrategyResult = RedeemAffiliateStrategyResult<typeof CREDITCARD>;
-export type RedeemGiftCardStrategyResult = RedeemAffiliateStrategyResult<typeof GIFTCARD>;
+export type RedeemPreAppliedStrategyResult = RedeemAffiliateStrategyResultBaseType<typeof PREAPPLIED>;
+export type RedeemCreditCardStrategyResult = RedeemAffiliateStrategyResultBaseType<typeof CREDITCARD>;
+export type RedeemGiftCardStrategyResult = RedeemAffiliateStrategyResultBaseType<typeof GIFTCARD>;
+export type RedeemVerifyStrategyResult = RedeemAffiliateStrategyResultBaseType<typeof VERIFY>;
+export type RedeemAffiliateStrategyResult =
+  | RedeemPreAppliedStrategyResult
+  | RedeemCreditCardStrategyResult
+  | RedeemGiftCardStrategyResult
+  | RedeemVerifyStrategyResult;
 
 export type RedeemShowCardStrategyResult = {
   kind: 'Ok';
@@ -73,13 +80,11 @@ export type RedeemVaultStrategyResult =
   | { kind: 'MaxPerUserReached'; redemptionType?: never; redemptionDetails?: never };
 
 export type RedeemedStrategyResult =
+  | RedeemAffiliateStrategyResult
   | RedeemGenericStrategyResult
-  | RedeemGiftCardStrategyResult
-  | RedeemPreAppliedStrategyResult
   | RedeemShowCardStrategyResult
   | RedeemVaultStrategyResult
-  | RedeemBallotStrategyResult
-  | RedeemCreditCardStrategyResult;
+  | RedeemBallotStrategyResult;
 
 export type RedeemParams = {
   memberId: string;

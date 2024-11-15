@@ -230,97 +230,55 @@ describe('buildMemberRedemptionEventDetail', () => {
     expect(actualMemberRedemptionEventDetail).toEqual(expectedMemberRedemptionEventDetail);
   });
 
-  it('builds a preApplied MemberRedemptionEventDetail', () => {
-    const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
-      redemptionType: 'preApplied',
-    });
+  describe.each(['creditCard', 'giftCard', 'preApplied', 'verify'] as const)(
+    '%s Affiliate redemptions',
+    (redemptionType) => {
+      it(`builds a member redemption event detail`, () => {
+        const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+          redemptionType: redemptionType,
+        });
 
-    const actualMemberRedemptionEventDetail: MemberRedemptionEventDetail =
-      memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
-        redemptionConfigEntity,
-        params,
-        url,
+        const actualMemberRedemptionEventDetail: MemberRedemptionEventDetail =
+          memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
+            redemptionConfigEntity,
+            params,
+            url,
+          });
+
+        const expectedMemberRedemptionEventDetail: MemberRedemptionEventDetail = {
+          memberDetails: {
+            memberId: params.memberId,
+            brazeExternalUserId: params.brazeExternalUserId,
+          },
+          redemptionDetails: {
+            redemptionId: redemptionConfigEntity.id,
+            companyId: redemptionConfigEntity.companyId,
+            companyName: params.companyName,
+            offerId: redemptionConfigEntity.offerId,
+            offerName: params.offerName,
+            affiliate: redemptionConfigEntity.affiliate,
+            clientType: params.clientType,
+            redemptionType: redemptionType,
+            url,
+          },
+        };
+
+        expect(actualMemberRedemptionEventDetail).toEqual(expectedMemberRedemptionEventDetail);
       });
 
-    const expectedMemberRedemptionEventDetail: MemberRedemptionEventDetail = {
-      memberDetails: {
-        memberId: params.memberId,
-        brazeExternalUserId: params.brazeExternalUserId,
-      },
-      redemptionDetails: {
-        redemptionId: redemptionConfigEntity.id,
-        companyId: redemptionConfigEntity.companyId,
-        companyName: params.companyName,
-        offerId: redemptionConfigEntity.offerId,
-        offerName: params.offerName,
-        affiliate: redemptionConfigEntity.affiliate,
-        clientType: params.clientType,
-        redemptionType: 'preApplied',
-        url,
-      },
-    };
+      it(`throws error if no url is supplied`, () => {
+        const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+          redemptionType: redemptionType,
+        });
 
-    expect(actualMemberRedemptionEventDetail).toEqual(expectedMemberRedemptionEventDetail);
-  });
-
-  it('throws error if redemptionType is preApplied and there is no url', () => {
-    const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
-      redemptionType: 'preApplied',
-    });
-
-    expect(() =>
-      memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
-        redemptionConfigEntity,
-        params,
-        code,
-      }),
-    ).toThrow('Url is required to build a preApplied MemberRedemptionEventDetail');
-  });
-
-  it('builds a creditCard MemberRedemptionEventDetail', () => {
-    const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
-      redemptionType: 'creditCard',
-    });
-
-    const actualMemberRedemptionEventDetail: MemberRedemptionEventDetail =
-      memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
-        redemptionConfigEntity,
-        params,
-        url,
+        expect(() =>
+          memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
+            redemptionConfigEntity,
+            params,
+            code,
+          }),
+        ).toThrow(`Url is required to build a ${redemptionType} MemberRedemptionEventDetail`);
       });
-
-    const expectedMemberRedemptionEventDetail: MemberRedemptionEventDetail = {
-      memberDetails: {
-        memberId: params.memberId,
-        brazeExternalUserId: params.brazeExternalUserId,
-      },
-      redemptionDetails: {
-        redemptionId: redemptionConfigEntity.id,
-        companyId: redemptionConfigEntity.companyId,
-        companyName: params.companyName,
-        offerId: redemptionConfigEntity.offerId,
-        offerName: params.offerName,
-        affiliate: redemptionConfigEntity.affiliate,
-        clientType: params.clientType,
-        redemptionType: 'creditCard',
-        url,
-      },
-    };
-
-    expect(actualMemberRedemptionEventDetail).toEqual(expectedMemberRedemptionEventDetail);
-  });
-
-  it('throws error if redemptionType is creditCard and there is no url', () => {
-    const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
-      redemptionType: 'creditCard',
-    });
-
-    expect(() =>
-      memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
-        redemptionConfigEntity,
-        params,
-        code,
-      }),
-    ).toThrow('Url is required to build a creditCard MemberRedemptionEventDetail');
-  });
+    },
+  );
 });

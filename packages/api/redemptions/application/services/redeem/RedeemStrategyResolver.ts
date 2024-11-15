@@ -8,6 +8,7 @@ import {
   SHOWCARD,
   VAULT,
   VAULTQR,
+  VERIFY,
 } from '@blc-mono/core/constants/redemptions';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { redemptionTypeEnum } from '@blc-mono/redemptions/libs/database/schema';
@@ -50,6 +51,7 @@ export class RedeemStrategyResolver implements IRedeemStrategyResolver {
         return this.redeemGenericStrategy;
       case PREAPPLIED:
       case CREDITCARD:
+      case VERIFY:
         return this.redeemAffiliateStrategy;
       case SHOWCARD:
         return this.redeemShowCardStrategy;

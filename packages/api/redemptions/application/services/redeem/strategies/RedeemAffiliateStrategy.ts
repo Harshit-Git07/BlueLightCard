@@ -1,4 +1,4 @@
-import { CREDITCARD, GIFTCARD, PREAPPLIED } from '@blc-mono/core/constants/redemptions';
+import { CREDITCARD, GIFTCARD, PREAPPLIED, VERIFY } from '@blc-mono/core/constants/redemptions';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { AffiliateHelper } from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateHelper';
 import { RedemptionConfigEntity } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
@@ -7,13 +7,7 @@ import {
   RedemptionsEventsRepository,
 } from '@blc-mono/redemptions/application/repositories/RedemptionsEventsRepository';
 
-import {
-  IRedeemStrategy,
-  RedeemCreditCardStrategyResult,
-  RedeemGiftCardStrategyResult,
-  RedeemParams,
-  RedeemPreAppliedStrategyResult,
-} from './IRedeemStrategy';
+import { IRedeemStrategy, RedeemAffiliateStrategyResult, RedeemParams } from './IRedeemStrategy';
 import { MemberRedemptionEventDetailBuilder } from './MemberRedemptionEventDetailBuilder';
 import { RedemptionConfigError } from './redeemVaultStrategy/helpers/RedemptionConfigError';
 
@@ -35,11 +29,12 @@ export class RedeemAffiliateStrategy implements IRedeemStrategy {
   async redeem(
     redemptionConfigEntity: RedemptionConfigEntity,
     params: RedeemParams,
-  ): Promise<RedeemGiftCardStrategyResult | RedeemPreAppliedStrategyResult | RedeemCreditCardStrategyResult> {
+  ): Promise<RedeemAffiliateStrategyResult> {
     if (
       redemptionConfigEntity.redemptionType !== GIFTCARD &&
       redemptionConfigEntity.redemptionType !== PREAPPLIED &&
-      redemptionConfigEntity.redemptionType !== CREDITCARD
+      redemptionConfigEntity.redemptionType !== CREDITCARD &&
+      redemptionConfigEntity.redemptionType !== VERIFY
     ) {
       throw new Error('Unexpected redemption type');
     }

@@ -7,9 +7,10 @@ export const REDEMPTION_TYPES = [
   'ballot',
   'giftCard',
   'creditCard',
+  'verify'
 ] as const;
 export type RedemptionTypes = (typeof REDEMPTION_TYPES)[number];
-export const [GENERIC, VAULT, VAULTQR, SHOWCARD, PREAPPLIED, BALLOT, GIFTCARD, CREDITCARD] =
+export const [GENERIC, VAULT, VAULTQR, SHOWCARD, PREAPPLIED, BALLOT, GIFTCARD, CREDITCARD, VERIFY] =
   REDEMPTION_TYPES;
 
 // Events

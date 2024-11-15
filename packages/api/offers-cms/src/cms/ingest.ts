@@ -1,26 +1,10 @@
-import { type WebhookEventResult } from '@bluelightcard/sanity-types';
 import { Table } from 'sst/node/table';
 
 import { type ILogger } from '@blc-mono/core/utils/logger';
 
 import { dynamo } from '../lib/dynamo';
 import { env } from '../lib/env';
-import { type SanityChangeEvent } from '../lib/events';
-
-type ArrayElement<ArrayType> = ArrayType extends readonly (infer ElementType)[]
-  ? ElementType
-  : never;
-
-type WebhookResultRecord = ArrayElement<WebhookEventResult>;
-
-type RecordType = WebhookResultRecord['_type'];
-
-type Record<type extends RecordType> = Extract<
-  WebhookResultRecord,
-  {
-    _type: type;
-  }
->;
+import { type Record, type SanityChangeEvent, type WebhookResultRecord } from '../lib/events';
 
 export async function ingestOffer(record: Record<'offer'>, logger: ILogger) {
   const brand = record.brands?.find((brand) => brand?.code === env.BRAND);
@@ -69,5 +53,9 @@ export async function ingestRawRecord(record: WebhookResultRecord) {
 }
 
 export function extractEvent(event: SanityChangeEvent) {
-  return JSON.parse(event.body) as WebhookResultRecord;
+  // TODO: Remove following if clause once JSON format has been fully cutover
+  if (typeof event.body === 'string') {
+    return JSON.parse(event.body) as WebhookResultRecord;
+  }
+  return event.body;
 }

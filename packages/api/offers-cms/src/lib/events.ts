@@ -1,3 +1,15 @@
+import type { WebhookEventResult } from '@bluelightcard/sanity-types';
+
+type ArrayElement<ArrayType> = ArrayType extends readonly (infer ElementType)[]
+  ? ElementType
+  : never;
+
+export type WebhookResultRecord = ArrayElement<WebhookEventResult>;
+
+type RecordType = WebhookResultRecord['_type'];
+
+export type Record<type extends RecordType> = Extract<WebhookResultRecord, { _type: type }>;
+
 export interface SanityChangeEvent {
   version: string;
   routeKey: string;
@@ -5,7 +17,7 @@ export interface SanityChangeEvent {
   rawQueryString: string;
   headers: SanityChangeEventHeaders;
   requestContext: SanityChangeEventRequestContext;
-  body: string;
+  body: WebhookResultRecord;
   isBase64Encoded: boolean;
 }
 

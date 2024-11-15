@@ -14,11 +14,10 @@ import {
 import { Integration, RedemptionType, Status } from '@blc-mono/redemptions/libs/database/schema';
 import {
   PatchRedemptionConfigGenericModel,
-  PatchRedemptionConfigPreAppliedModel,
   PatchRedemptionConfigShowCardModel,
   PatchRedemptionConfigVaultModel,
 } from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
-import { giftCardFactory } from '@blc-mono/redemptions/libs/test/factories/affilate.factory';
+import { affiliateFactory } from '@blc-mono/redemptions/libs/test/factories/affiliate.factory';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
@@ -102,22 +101,6 @@ const testGenericBody = {
 const testGenericRedemptionConfig: RedemptionConfig = {
   ...testGenericBody,
   offerId: String(testOfferId),
-  companyId: testCompanyId,
-};
-
-const testPreAppliedBody = {
-  id: testRedemptionId,
-  offerId: testOfferId,
-  redemptionType: 'preApplied',
-  connection: 'none',
-  companyId: testCompanyId,
-  affiliate: null,
-  url: 'https://www.whatever.com/',
-} satisfies PatchRedemptionConfigPreAppliedModel;
-
-const testPreAppliedRedemptionConfig: RedemptionConfig = {
-  ...testPreAppliedBody,
-  offerId: testOfferId,
   companyId: testCompanyId,
 };
 
@@ -330,85 +313,76 @@ describe('UpdateRedemptionConfigService', () => {
     expect(actual.data).toEqual(testGenericRedemptionConfig);
   });
 
-  it('should return kind "Error" when the preApplied offer redemption record fails to update', async () => {
-    mockRedemptionConfigExist(true);
+  it.each(['preApplied', 'giftCard', 'creditCard'] as const)(
+    'should return kind "Error" when %s offer redemption record fails to update',
+    async (redemptionType) => {
+      const testPayloadFactory = affiliateFactory.build({
+        redemptionType: redemptionType,
+        id: testRedemptionId,
+        offerId: testOfferId,
+        companyId: testCompanyId,
+      });
 
-    //mock repo(s) responses/resolves that execute inside transactionManager(s)
-    mockGenericTransaction();
-    mockVaultTransaction();
+      mockRedemptionConfigExist(true, redemptionType);
 
-    mockRedemptionConfigUpdateSucceeds(false);
-    mockRedemptionConfigTransaction();
+      //mock repo(s) responses/resolves that execute inside transactionManager(s)
+      mockGenericTransaction();
+      mockVaultTransaction();
 
-    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError =
-      await updateRedemptionConfigService.updateRedemptionConfig(String(testOfferId), testPreAppliedBody);
+      mockRedemptionConfigUpdateSucceeds(false);
+      mockRedemptionConfigTransaction();
 
-    const expected: UpdateRedemptionConfigError = getExpectedError('Error', 'redemption record failed to update');
-    expect(actual).toEqual(expected);
-  });
+      const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError =
+        await updateRedemptionConfigService.updateRedemptionConfig(String(testOfferId), testPayloadFactory);
 
-  it('should return kind "Ok" when the preApplied offer redemptions record updates correctly', async () => {
-    mockRedemptionConfigExist(true);
+      const expected: UpdateRedemptionConfigError = getExpectedError('Error', 'redemption record failed to update');
+      expect(actual).toEqual(expected);
+    },
+  );
 
-    //mock repo(s) responses/resolves that execute inside transactionManager(s)
-    mockGenericTransaction();
-    mockVaultTransaction();
+  it.each(['preApplied', 'giftCard', 'creditCard'] as const)(
+    'should return kind "Ok" when %s redemption record updates correctly',
+    async (redemptionType) => {
+      const testPayloadFactory = affiliateFactory.build({
+        redemptionType: redemptionType,
+        id: testRedemptionId,
+        offerId: testOfferId,
+        companyId: testCompanyId,
+      });
+      const testAffiliateRedemptionConfig = {
+        ...testPayloadFactory,
+        offerId: testOfferId,
+        companyId: testCompanyId,
+      };
+      mockRedemptionConfigExist(true, redemptionType);
 
-    mockRedemptionConfigUpdateSucceeds(true, {
-      id: testRedemptionId,
-      offerId: testPreAppliedBody.offerId,
-      redemptionType: testPreAppliedBody.redemptionType,
-      connection: testPreAppliedBody.connection,
-      companyId: testPreAppliedBody.companyId,
-      affiliate: testPreAppliedBody.affiliate,
-      url: testPreAppliedBody.url,
-      offerType: 'online',
-    });
-    mockRedemptionConfigTransaction();
+      //mock repo(s) responses/resolves that execute inside transactionManager(s)
+      mockGenericTransaction();
+      mockVaultTransaction();
 
-    mockRedemptionConfigTransformer.transformToRedemptionConfig = jest
-      .fn()
-      .mockReturnValue(testPreAppliedRedemptionConfig);
+      mockRedemptionConfigUpdateSucceeds(true, {
+        id: testPayloadFactory.id,
+        offerId: testPayloadFactory.offerId,
+        redemptionType: testPayloadFactory.redemptionType,
+        connection: testPayloadFactory.connection,
+        companyId: testPayloadFactory.companyId,
+        affiliate: testPayloadFactory.affiliate,
+        url: testPayloadFactory.url,
+        offerType: 'online',
+      });
+      mockRedemptionConfigTransaction();
 
-    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError =
-      await updateRedemptionConfigService.updateRedemptionConfig(String(testOfferId), testPreAppliedBody);
+      mockRedemptionConfigTransformer.transformToRedemptionConfig = jest
+        .fn()
+        .mockReturnValue(testAffiliateRedemptionConfig);
 
-    expect(actual.kind).toEqual('Ok');
-    expect(actual.data).toEqual(testPreAppliedRedemptionConfig);
-  });
+      const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError =
+        await updateRedemptionConfigService.updateRedemptionConfig(String(testOfferId), testPayloadFactory);
 
-  it('should return kind "Ok" when a giftCard redemption record updates correctly', async () => {
-    const testPayloadFactory = giftCardFactory.build({
-      redemptionType: 'giftCard',
-    });
-    mockRedemptionConfigExist(true);
-
-    //mock repo(s) responses/resolves that execute inside transactionManager(s)
-    mockGenericTransaction();
-    mockVaultTransaction();
-
-    mockRedemptionConfigUpdateSucceeds(true, {
-      id: testPayloadFactory.id,
-      offerId: testPayloadFactory.offerId,
-      redemptionType: testPayloadFactory.redemptionType,
-      connection: testPayloadFactory.connection,
-      companyId: testPayloadFactory.companyId,
-      affiliate: testPayloadFactory.affiliate,
-      url: testPayloadFactory.url,
-      offerType: 'online',
-    });
-    mockRedemptionConfigTransaction();
-
-    mockRedemptionConfigTransformer.transformToRedemptionConfig = jest
-      .fn()
-      .mockReturnValue(testPreAppliedRedemptionConfig);
-
-    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError =
-      await updateRedemptionConfigService.updateRedemptionConfig(String(testOfferId), testPreAppliedBody);
-
-    expect(actual.kind).toEqual('Ok');
-    expect(actual.data).toEqual(testPreAppliedRedemptionConfig);
-  });
+      expect(actual.kind).toEqual('Ok');
+      expect(actual.data).toEqual(testAffiliateRedemptionConfig);
+    },
+  );
 
   it('should return kind "Error" when the showCard offer redemption record fails to update', async () => {
     mockRedemptionConfigExist(true, 'showCard');

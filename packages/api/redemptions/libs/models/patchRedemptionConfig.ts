@@ -61,6 +61,16 @@ export const PatchGiftCardModel = createZodNamedType(
     .strict(),
 );
 
+export const PatchCreditCardModel = createZodNamedType(
+  'PatchCreditCardModel',
+  z
+    .object({
+      redemptionType: z.literal(REDEMPTION_TYPES[7]),
+      url: z.string().url(),
+    })
+    .strict(),
+);
+
 export const PatchGenericModel = createZodNamedType(
   'PatchGenericModel',
   z
@@ -147,9 +157,14 @@ export const PatchRedemptionConfigVaultQRModel = createZodNamedType(
   PatchRedemptionConfigBaseModel.merge(PatchVaultQRModel),
 );
 
-export const AffiliatePatchRedemptionConfigGiftCardModel = createZodNamedType(
-  'AffiliatePatchRedemptionConfigGiftCardModel',
+export const PatchRedemptionConfigGiftCardModel = createZodNamedType(
+  'PatchRedemptionConfigGiftCardModel',
   PatchRedemptionConfigBaseModel.merge(PatchGiftCardModel),
+);
+
+export const PatchRedemptionConfigCreditCardModel = createZodNamedType(
+  'PatchRedemptionConfigCreditCardModel',
+  PatchRedemptionConfigBaseModel.merge(PatchCreditCardModel),
 );
 
 export const PatchRedemptionConfigModel = createZodNamedType(
@@ -160,7 +175,8 @@ export const PatchRedemptionConfigModel = createZodNamedType(
     PatchRedemptionConfigGenericModel,
     PatchRedemptionConfigVaultModel,
     PatchRedemptionConfigVaultQRModel,
-    AffiliatePatchRedemptionConfigGiftCardModel,
+    PatchRedemptionConfigGiftCardModel,
+    PatchRedemptionConfigCreditCardModel,
   ]),
 );
 
@@ -170,4 +186,5 @@ export type PatchRedemptionConfigPreAppliedModel = z.infer<typeof PatchRedemptio
 export type PatchRedemptionConfigGenericModel = z.infer<typeof PatchRedemptionConfigGenericModel>;
 export type PatchRedemptionConfigVaultModel = z.infer<typeof PatchRedemptionConfigVaultModel>;
 export type PatchRedemptionConfigVaultQRModel = z.infer<typeof PatchRedemptionConfigVaultQRModel>;
-export type AffiliatePatchRedemptionConfigGiftCardModel = z.infer<typeof AffiliatePatchRedemptionConfigGiftCardModel>;
+export type PatchRedemptionConfigGiftCardModel = z.infer<typeof PatchRedemptionConfigGiftCardModel>;
+export type PatchRedemptionConfigCreditCardModel = z.infer<typeof PatchRedemptionConfigCreditCardModel>;

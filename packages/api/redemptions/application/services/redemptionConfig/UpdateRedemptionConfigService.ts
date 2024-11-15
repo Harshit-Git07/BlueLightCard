@@ -1,4 +1,13 @@
-import { REDEMPTION_TYPES } from '@blc-mono/core/constants/redemptions';
+import {
+  CREDITCARD,
+  GENERIC,
+  GIFTCARD,
+  PREAPPLIED,
+  REDEMPTION_TYPES,
+  SHOWCARD,
+  VAULT,
+  VAULTQR,
+} from '@blc-mono/core/constants/redemptions';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import {
@@ -7,8 +16,9 @@ import {
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { Affiliate, RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import {
-  AffiliatePatchRedemptionConfigGiftCardModel,
+  PatchRedemptionConfigCreditCardModel,
   PatchRedemptionConfigGenericModel,
+  PatchRedemptionConfigGiftCardModel,
   PatchRedemptionConfigModel,
   PatchRedemptionConfigPreAppliedModel,
   PatchRedemptionConfigShowCardModel,
@@ -126,15 +136,16 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       const vaultsTransaction = this.vaultsRepository.withTransaction(transactionConnection);
 
       switch (patchRedemptionConfigModel.redemptionType) {
-        case 'showCard':
+        case SHOWCARD:
           return await this.updateShowCard(patchRedemptionConfigModel, redemptionTransaction);
-        case 'preApplied':
-        case 'giftCard':
-          return await this.updatePreApplied(patchRedemptionConfigModel, redemptionTransaction);
-        case 'generic':
+        case PREAPPLIED:
+        case GIFTCARD:
+        case CREDITCARD:
+          return await this.updateAffiliateTypes(patchRedemptionConfigModel, redemptionTransaction);
+        case GENERIC:
           return await this.updateGeneric(patchRedemptionConfigModel, redemptionTransaction, genericsTransaction);
-        case 'vault':
-        case 'vaultQR':
+        case VAULT:
+        case VAULTQR:
           return await this.updateVaultOrVaultQR(
             patchRedemptionConfigModel,
             redemptionTransaction,
@@ -166,20 +177,21 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
     );
   }
 
-  private async updatePreApplied(
-    patchRedemptionConfigPreAppliedModel:
+  private async updateAffiliateTypes(
+    patchRedemptionConfigAffiliateModel:
       | PatchRedemptionConfigPreAppliedModel
-      | AffiliatePatchRedemptionConfigGiftCardModel,
+      | PatchRedemptionConfigGiftCardModel
+      | PatchRedemptionConfigCreditCardModel,
     redemptionTransaction: RedemptionConfigRepository,
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
     const updateRedemptionConfigEntity: UpdateRedemptionConfigEntity = {
-      affiliate: patchRedemptionConfigPreAppliedModel.affiliate,
-      connection: patchRedemptionConfigPreAppliedModel.connection,
-      url: patchRedemptionConfigPreAppliedModel.url,
+      affiliate: patchRedemptionConfigAffiliateModel.affiliate,
+      connection: patchRedemptionConfigAffiliateModel.connection,
+      url: patchRedemptionConfigAffiliateModel.url,
     };
 
     return await this.updateRedemption(
-      patchRedemptionConfigPreAppliedModel,
+      patchRedemptionConfigAffiliateModel,
       updateRedemptionConfigEntity,
       redemptionTransaction,
       null,

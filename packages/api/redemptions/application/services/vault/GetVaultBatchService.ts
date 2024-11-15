@@ -42,7 +42,7 @@ export default class GetVaultBatchService {
     }
 
     const vaultBatches = await this.vaultBatchesRepository.findByVaultId(vaultId);
-    const data: GetVaultBatchData[] = await Promise.all(
+    const getVaultBatchData: GetVaultBatchData[] = await Promise.all(
       vaultBatches.map(async (vaultBatch) => {
         return {
           batchId: vaultBatch.id,
@@ -54,11 +54,11 @@ export default class GetVaultBatchService {
       }),
     );
 
-    const sortedData = data.toSorted((a, b) => a.created.localeCompare(b.created));
+    getVaultBatchData.sort((a, b) => a.created.localeCompare(b.created));
 
     return {
       kind: 'Ok',
-      data: sortedData,
+      data: getVaultBatchData,
     };
   }
 }

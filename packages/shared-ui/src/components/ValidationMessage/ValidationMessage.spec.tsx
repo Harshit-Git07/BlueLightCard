@@ -26,7 +26,7 @@ describe('ValidationMessage component', () => {
   it('applies success styles when isValid is true', () => {
     setup({ isValid: true, message: 'Success message' });
     const message = screen.getByText('Success message');
-    expect(message.parentElement).not.toHaveClass(colours.textSuccess); // green
+    expect(message.parentElement).toHaveClass(colours.textSuccess); // green
   });
 
   it('does not apply success styles when isDisabled is true', () => {
@@ -38,7 +38,7 @@ describe('ValidationMessage component', () => {
   it('applies error styles when isValid is false and not disabled', () => {
     setup({ isValid: false, message: 'Error message' });
     const message = screen.getByText('Error message');
-    expect(message.parentElement).toHaveClass(colours.textError); // green
+    expect(message.parentElement).toHaveClass(colours.textError); // red
   });
 
   it('does not apply error styles when isDisabled is true', () => {

@@ -97,10 +97,11 @@ export const getInputBorderClasses = (
     return borders.disabled;
   }
 
-  if (!isFocused) {
+  const isInvalid = isValid === false;
+
+  if (!isFocused && !isInvalid) {
     return borders.default;
   }
 
-  const hasNotBeenValidatedYet = isValid === undefined;
-  return isValid || hasNotBeenValidatedYet ? borders.active : borders.error;
+  return isInvalid ? borders.error : borders.active;
 };

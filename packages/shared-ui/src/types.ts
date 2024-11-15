@@ -86,7 +86,9 @@ export enum BRAND {
 export type Brand = BRAND.BLC_UK | BRAND.BLC_AU | BRAND.DDS_UK;
 
 export type FieldProps = {
-  onChange?: ChangeEventHandler<HTMLInputElement>;
+  id?: string;
+  name?: string;
+  onChange: ChangeEventHandler<HTMLInputElement>;
   value?: string;
   isValid?: boolean | undefined;
   label?: string;
@@ -94,5 +96,6 @@ export type FieldProps = {
   description?: string;
   placeholder?: string;
   validationMessage?: string;
+  isRequired?: boolean;
   isDisabled?: boolean;
 };

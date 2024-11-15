@@ -1,0 +1,65 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as FieldLabel from './FieldLabel.stories';
+
+<Meta of={FieldLabel} />
+
+# FieldLabel
+
+- [Overview](#overview)
+- [Props](#props)
+- [Variants](#variants)
+- [Implementation](#implementation)
+
+## Overview
+
+A component used to add information above input elements/form fields, including label, description text and a tooltip.
+
+<Canvas of={FieldLabel.ExampleUsage} />
+
+## Props
+
+<Controls />
+
+## Variants
+
+All Props
+
+<Canvas of={FieldLabel.AllProps} />
+
+Only Label
+
+<Canvas of={FieldLabel.Label} />
+
+Label And Help
+
+<Canvas of={FieldLabel.LabelAndHelp} />
+
+Label And Help On Top
+
+<Canvas of={FieldLabel.LabelAndHelpOnTop} />
+
+Label And Description
+
+<Canvas of={FieldLabel.LabelAndDescription} />
+
+## Implementation
+
+Usage example using jsx
+
+```jsx
+const Form: FC = () => {
+  return
+      <FieldLabel
+        label="Username"
+        htmlFor="username"
+        description="You cannot change this later"
+        tooltip="Your username is unique to you and will appear on your card"
+      />
+      <input
+        className="h-8 px-2 rounded-md outline outline-1 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark"
+        id="username"
+        type="text"
+        placeholder="Username"
+      />
+};
+```./FieldLabel.stories

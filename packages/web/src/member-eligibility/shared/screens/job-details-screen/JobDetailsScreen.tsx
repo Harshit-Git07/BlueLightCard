@@ -70,7 +70,6 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
           <ListSelector
             title={eligibilityDetails.employmentStatus}
             className="mt-[12px] mb-[16px]"
-            title="Employed"
             state={ListSelectorState.Selected}
             onClick={onBack}
           />

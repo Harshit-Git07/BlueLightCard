@@ -8,12 +8,15 @@ import ListSelector from '@bluelightcard/shared-ui/components/ListSelector';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/components/EligibilityHeading';
 import { useVerificationMethods } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/hooks/useVerificationMethods';
+import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
+import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/hooks/FuzzyFrontendButtons';
 
 export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
 
+  const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
   const verificationMethods = useVerificationMethods(eligibilityDetailsState);
 
   const numberOfCompletedSteps = useMemo(() => {
@@ -68,6 +71,7 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
           Back
         </Button>
       </EligibilityBody>
+      <FuzzyFrontendButtons buttons={fuzzyFrontendButtons} putInFloatingDock />
     </EligibilityScreen>
   );
 };

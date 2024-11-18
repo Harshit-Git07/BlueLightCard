@@ -49,7 +49,7 @@ describe('VerificationMethodScreen', () => {
       'We will send you a verification email in the next step',
       'Upload a picture of your NHS Smart Card',
       'Upload a picture of your Payslip',
-      'Upload a picture of your work ID card',
+      'Upload a picture of your Work ID Card',
     ];
 
     descriptions.forEach((description) => {

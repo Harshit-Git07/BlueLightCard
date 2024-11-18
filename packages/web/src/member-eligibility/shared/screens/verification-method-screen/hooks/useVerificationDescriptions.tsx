@@ -27,7 +27,7 @@ export function useVerificationDescriptions() {
       },
       'Work ID Card': {
         title: 'Work ID Card',
-        description: 'Upload a picture of your work ID card',
+        description: 'Upload a picture of your Work ID Card',
       },
     };
 

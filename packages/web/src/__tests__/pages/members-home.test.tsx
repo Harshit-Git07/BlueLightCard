@@ -13,9 +13,9 @@ import HomePage from '@/pages/members-home';
 import { Factory } from 'fishery';
 import { useMedia } from 'react-use';
 
-import { makeHomePageQueryWithDislikeRestrictions } from '@/root/src/graphql/makeQuery';
-import { NetworkStatus } from '@apollo/client';
 import AmplitudeContext from '@/root/src/common/context/AmplitudeContext';
+import useFetchHomepageData from '@/hooks/useFetchHomepageData';
+import { BannerType, FeaturedOffersType, FlexibleMenuType } from '@/page-types/members-home';
 
 jest.mock('@bluelightcard/shared-ui', () => {
   const eventBus = {
@@ -144,9 +144,9 @@ jest.mock('@/hooks/useBrazeContentCards', () => ({
   ]),
 }));
 
-jest.mock('@/root/src/graphql/makeQuery');
+jest.mock('@/hooks/useFetchHomepageData');
 
-const makeHomePageQueryMock = jest.mocked(makeHomePageQueryWithDislikeRestrictions);
+const useFetchHomepageDataMock = jest.mocked(useFetchHomepageData);
 
 const mockRouter: Partial<NextRouter> = {
   push: jest.fn(),
@@ -170,6 +170,24 @@ const userContextTypeFactory = Factory.define<UserContextType>(() => ({
 }));
 
 describe('Members-Home Page Tenancy Banner', () => {
+  beforeEach(() => {
+    useFetchHomepageDataMock.mockReturnValue({
+      dealsOfTheWeek: [],
+      featuredOffers: [],
+      flexibleMenu: [],
+      marketplaceMenus: [],
+      banners: [
+        {
+          imageSource: 'banner.jpg',
+          link: 'banner-link',
+          legacyCompanyId: '123',
+        },
+      ],
+      hasLoaded: true,
+      loadingError: false,
+    });
+  });
+
   it('renders a promo banner placeholder while Braze experiment is loading', async () => {
     whenMembersHomePageIsRendered('control');
 
@@ -178,35 +196,16 @@ describe('Members-Home Page Tenancy Banner', () => {
   });
 
   describe('GraphQL banner', () => {
-    beforeEach(() => {
-      makeHomePageQueryMock.mockResolvedValue({
-        data: {
-          offerMenus: {
-            deals: [],
-            flexible: [],
-            features: [],
-            marketPlace: [],
-          },
-          banners: [
-            {
-              imageSource: 'banner.jpg',
-              link: 'banner-link',
-            },
-          ],
-        },
-        loading: false,
-        networkStatus: NetworkStatus.ready,
-      });
-
-      whenMembersHomePageIsRendered('control');
-    });
-
     it('renders when Braze experiment is control', async () => {
+      whenMembersHomePageIsRendered('control');
+
       const graphQLCarousel = await screen.findByTestId('homepage-sponsor-banners');
       expect(graphQLCarousel).toBeInTheDocument();
     });
 
     it('does not render the Braze banner', async () => {
+      whenMembersHomePageIsRendered('control');
+
       await screen.findByTestId('homepage-sponsor-banners');
       const brazeCarousel = screen.queryByTestId('braze-tenancy-banner');
       expect(brazeCarousel).not.toBeInTheDocument();
@@ -250,22 +249,17 @@ describe('Members-Home Page Tracking', () => {
       image: 'test.jpg',
       logos: 'logo.jpg',
     };
-
-    makeHomePageQueryMock.mockResolvedValue({
-      data: {
-        offerMenus: {
-          deals: [dealOfTheWeek],
-          flexible: [],
-          features: [],
-          marketPlace: [],
-        },
-        banners: [],
-      },
-      loading: false,
-      networkStatus: NetworkStatus.ready,
+    useFetchHomepageDataMock.mockReturnValue({
+      dealsOfTheWeek: [dealOfTheWeek],
+      featuredOffers: [],
+      flexibleMenu: [],
+      marketplaceMenus: [],
+      banners: [],
+      hasLoaded: true,
+      loadingError: false,
     });
 
-    const { container } = whenMembersHomePageIsRendered('control');
+    whenMembersHomePageIsRendered('control');
 
     const interactionButton = await screen.findByTestId('carousel-interaction-deals-of-the-week');
     fireEvent.click(interactionButton);
@@ -289,21 +283,17 @@ describe('Members-Home Page Tracking', () => {
       logos: 'logo.jpg',
     };
 
-    makeHomePageQueryMock.mockResolvedValue({
-      data: {
-        offerMenus: {
-          deals: [dealOfTheWeek],
-          flexible: [],
-          features: [],
-          marketPlace: [],
-        },
-        banners: [],
-      },
-      loading: false,
-      networkStatus: NetworkStatus.ready,
+    useFetchHomepageDataMock.mockReturnValue({
+      dealsOfTheWeek: [dealOfTheWeek],
+      featuredOffers: [],
+      flexibleMenu: [],
+      marketplaceMenus: [],
+      banners: [],
+      hasLoaded: true,
+      loadingError: false,
     });
 
-    const { container } = whenMembersHomePageIsRendered('control');
+    whenMembersHomePageIsRendered('control');
 
     const offerCard = await screen.findByTestId('offer-card-0');
     fireEvent.click(offerCard);
@@ -320,23 +310,20 @@ describe('Members-Home Page Tracking', () => {
   });
 
   it('should track sponsor banner clicks', async () => {
-    const banner = {
+    const banner: BannerType = {
       imageSource: 'banner.jpg',
       link: 'banner-link',
+      legacyCompanyId: '123',
     };
 
-    makeHomePageQueryMock.mockResolvedValue({
-      data: {
-        offerMenus: {
-          deals: [],
-          flexible: [],
-          features: [],
-          marketPlace: [],
-        },
-        banners: [banner],
-      },
-      loading: false,
-      networkStatus: NetworkStatus.ready,
+    useFetchHomepageDataMock.mockReturnValue({
+      dealsOfTheWeek: [],
+      featuredOffers: [],
+      flexibleMenu: [],
+      marketplaceMenus: [],
+      banners: [banner],
+      hasLoaded: true,
+      loadingError: false,
     });
 
     whenMembersHomePageIsRendered('control');
@@ -350,18 +337,14 @@ describe('Members-Home Page Tracking', () => {
   });
 
   it('should track braze banner clicks when enabled', async () => {
-    makeHomePageQueryMock.mockResolvedValue({
-      data: {
-        offerMenus: {
-          deals: [],
-          flexible: [],
-          features: [],
-          marketPlace: [],
-        },
-        banners: [],
-      },
-      loading: false,
-      networkStatus: NetworkStatus.ready,
+    useFetchHomepageDataMock.mockReturnValue({
+      dealsOfTheWeek: [],
+      featuredOffers: [],
+      flexibleMenu: [],
+      marketplaceMenus: [],
+      banners: [],
+      hasLoaded: true,
+      loadingError: false,
     });
 
     whenMembersHomePageIsRendered('treatment');
@@ -375,27 +358,23 @@ describe('Members-Home Page Tracking', () => {
   });
 
   it('should track flexible menu carousel interaction', async () => {
-    const flexibleItem = {
+    const flexibleItem: FlexibleMenuType = {
       title: 'Flexible Offer',
       imagehome: 'test.jpg',
       hide: false,
     };
 
-    makeHomePageQueryMock.mockResolvedValue({
-      data: {
-        offerMenus: {
-          deals: [],
-          flexible: [flexibleItem],
-          features: [],
-          marketPlace: [],
-        },
-        banners: [],
-      },
-      loading: false,
-      networkStatus: NetworkStatus.ready,
+    useFetchHomepageDataMock.mockReturnValue({
+      dealsOfTheWeek: [],
+      featuredOffers: [],
+      flexibleMenu: [flexibleItem],
+      marketplaceMenus: [],
+      banners: [],
+      hasLoaded: true,
+      loadingError: false,
     });
 
-    const { container } = whenMembersHomePageIsRendered('control');
+    whenMembersHomePageIsRendered('control');
 
     const interactionButton = await screen.findByTestId('carousel-interaction-ways-to-save');
     fireEvent.click(interactionButton);
@@ -409,31 +388,26 @@ describe('Members-Home Page Tracking', () => {
   });
 
   it('should track featured offers carousel interaction and click', async () => {
-    const featuredOffer = {
+    const featuredOffer: FeaturedOffersType = {
       offername: 'Featured Offer',
       companyname: 'Featured Company',
-      href: 'url',
       compid: 7,
       id: 8,
       image: 'test.jpg',
       logos: 'logo.jpg',
     };
 
-    makeHomePageQueryMock.mockResolvedValue({
-      data: {
-        offerMenus: {
-          deals: [],
-          flexible: [],
-          features: [featuredOffer],
-          marketPlace: [],
-        },
-        banners: [],
-      },
-      loading: false,
-      networkStatus: NetworkStatus.ready,
+    useFetchHomepageDataMock.mockReturnValue({
+      dealsOfTheWeek: [],
+      featuredOffers: [featuredOffer],
+      flexibleMenu: [],
+      marketplaceMenus: [],
+      banners: [],
+      hasLoaded: true,
+      loadingError: false,
     });
 
-    const { container } = whenMembersHomePageIsRendered('control');
+    whenMembersHomePageIsRendered('control');
 
     const interactionButton = await screen.findByTestId('carousel-interaction-featured-offers');
     fireEvent.click(interactionButton);

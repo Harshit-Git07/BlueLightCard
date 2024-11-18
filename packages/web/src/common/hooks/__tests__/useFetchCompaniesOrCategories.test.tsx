@@ -108,7 +108,7 @@ describe('useFetchCompaniesOrCategories', () => {
       );
     });
 
-    it('should return results with company IDs set as legacy IDs when "cms-offers" experiment on', async () => {
+    it('should return results with company IDs not set as legacy IDs when "cms-offers" experiment on', async () => {
       givenExperimentsReturn('treatment', 'on');
 
       const { result } = renderHook(() => useFetchCompaniesOrCategories(mockUserContext), {

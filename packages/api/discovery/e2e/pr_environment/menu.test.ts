@@ -104,6 +104,7 @@ describe('Menu', async () => {
         offers: [
           {
             offerID: offers[0]._id,
+            legacyOfferID: offers[0].offerId,
             offerName: offers[0].name,
             offerDescription: offers[0]?.offerDescription?.content
               ? getBlockText(offers[0].offerDescription.content)
@@ -111,6 +112,7 @@ describe('Menu', async () => {
             offerType: offers[0].offerType?.offerType,
             imageURL: offers[0].image?.default?.asset?.url,
             companyID: offers[0].company?._id,
+            legacyCompanyID: offers[0].company?.companyId,
             companyName: offers[0].company?.brandCompanyDetails?.[0]?.companyName,
           },
         ],
@@ -127,12 +129,14 @@ describe('Menu', async () => {
           offers: [
             {
               companyID: offers[0].company?._id,
+              legacyCompanyID: offers[0].company?.companyId,
               companyName: offers[0].company?.brandCompanyDetails?.[0]?.companyName,
               imageURL: offers[0].image?.default?.asset?.url,
               offerDescription: offers[0]?.offerDescription?.content
                 ? getBlockText(offers[0].offerDescription.content)
                 : '',
               offerID: offers[0]._id,
+              legacyOfferID: offers[0].offerId,
               offerName: offers[0].name,
               offerType: offers[0].offerType?.offerType,
             },
@@ -143,12 +147,14 @@ describe('Menu', async () => {
           offers: [
             {
               companyID: offers[0].company?._id,
+              legacyCompanyID: offers[0].company?.companyId,
               companyName: offers[0].company?.brandCompanyDetails?.[0]?.companyName,
               imageURL: offers[0].image?.default?.asset?.url,
               offerDescription: offers[0]?.offerDescription?.content
                 ? getBlockText(offers[0].offerDescription.content)
                 : '',
               offerID: offers[0]._id,
+              legacyOfferID: offers[0].offerId,
               offerName: offers[0].name,
               offerType: offers[0].offerType?.offerType,
             },
@@ -162,6 +168,7 @@ describe('Menu', async () => {
             offers: [
               {
                 offerID: offers[0]._id,
+                legacyOfferID: offers[0].offerId,
                 offerName: offers[0].name,
                 offerDescription: offers[0]?.offerDescription?.content
                   ? getBlockText(offers[0].offerDescription.content)
@@ -169,6 +176,7 @@ describe('Menu', async () => {
                 offerType: offers[0].offerType?.offerType,
                 imageURL: offers[0].image?.default?.asset?.url,
                 companyID: offers[0].company?._id,
+                legacyCompanyID: offers[0].company?.companyId,
                 companyName: offers[0].company?.brandCompanyDetails?.[0]?.companyName,
               },
             ],

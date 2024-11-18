@@ -1,6 +1,6 @@
 export type BannerType = {
-  image: string;
-  href: string;
+  imageSource: string;
+  link: string;
   legacyCompanyId: string;
 };
 
@@ -10,8 +10,8 @@ export type DealsOfTheWeekType = {
   image?: string;
   logos?: string;
   href: string;
-  compid: number;
-  id: number;
+  compid: number | string;
+  id: number | string;
 };
 
 export type MarketPlaceItemType = {
@@ -19,8 +19,8 @@ export type MarketPlaceItemType = {
     offername: string;
     companyname: string;
     image: string;
-    compid: number;
-    offerId: number;
+    compid: number | string;
+    offerId: number | string;
     logos: string;
   };
 };
@@ -42,8 +42,8 @@ export type FeaturedOffersType = {
   companyname: string;
   image?: string;
   logos?: string;
-  compid: number;
-  id: number;
+  compid: number | string;
+  id: number | string;
 };
 
 export type CompanyType = {

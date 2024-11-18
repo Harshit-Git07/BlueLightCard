@@ -3,8 +3,8 @@ export interface CardCarouselOffer {
   companyname?: string;
   imageUrl: string;
   href: string;
-  offerId?: number;
-  companyId?: number;
+  offerId?: number | string;
+  companyId?: number | string;
   hasLink?: boolean;
   onClick?: () => void;
 }

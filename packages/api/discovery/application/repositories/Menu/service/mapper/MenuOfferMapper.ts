@@ -45,11 +45,13 @@ export function mapOfferToMenuOfferEntity(offer: Offer, menuId: string, menuType
 export function mapOfferToMenuOfferResponse(offer: Offer): OfferResponse {
   return {
     offerID: offer.id,
+    legacyOfferID: offer.legacyOfferId,
     offerName: offer.name,
     offerDescription: offer.offerDescription,
     offerType: offer.offerType,
     imageURL: offer.image,
     companyID: offer.company.id,
+    legacyCompanyID: offer.company.legacyCompanyId,
     companyName: offer.company.name,
   };
 }

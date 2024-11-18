@@ -156,8 +156,8 @@ export function trackHomepageCarouselInteraction(carouselType: string, carouselN
 export function trackHomepageCarouselClick(
   carouselType: string,
   carouselName: string,
-  offerId: number,
-  companyId: number,
+  offerId: number | string,
+  companyId: number | string,
   companyName: string
 ) {
   try {

@@ -1,17 +1,10 @@
-import { useContext, useEffect, useState } from 'react';
-import { homePageQuery } from '../graphql/homePageQueries';
-import { makeHomePageQueryWithDislikeRestrictions } from '../graphql/makeQuery';
+import { useContext, useEffect } from 'react';
 import getCDNUrl from '@/utils/getCDNUrl';
 
-import {
-  BLACK_FRIDAY_TIME_LOCK_START_DATE,
-  BLACK_FRIDAY_TIME_LOCK_END_DATE,
-  OFFERS_BRAND,
-} from '@/global-vars';
+import { BLACK_FRIDAY_TIME_LOCK_END_DATE, BLACK_FRIDAY_TIME_LOCK_START_DATE } from '@/global-vars';
 import PromoBanner from '@/offers/components/PromoBanner/PromoBanner';
 import CardCarousel from '@/offers/components/CardCarousel/CardCarousel';
 import {
-  BannerType,
   DealsOfTheWeekType,
   FeaturedOffersType,
   FlexibleMenuType,
@@ -20,28 +13,25 @@ import {
 } from '@/page-types/members-home';
 import {
   logMembersHomePage,
-  trackHomepageCarouselInteraction,
   trackHomepageCarouselClick,
+  trackHomepageCarouselInteraction,
   trackTenancyClick,
 } from '@/utils/amplitude';
 import PromoBannerPlaceholder from '@/offers/components/PromoBanner/PromoBannerPlaceholder';
 import AlertBox from '@/components/AlertBox/AlertBox';
 import Container from '@/components/Container/Container';
-import { SwiperCarousel } from '@bluelightcard/shared-ui';
+import { PlatformVariant, SwiperCarousel, useOfferDetails } from '@bluelightcard/shared-ui';
 import { NextPage } from 'next';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 
 import inTimePeriod from '@/utils/inTimePeriod';
-import { shuffle } from 'lodash';
-import AuthContext from '@/context/Auth/AuthContext';
-import UserContext from '@/context/User/UserContext';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
-import { PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
 import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 import AmplitudeContext from '../common/context/AmplitudeContext';
 import { useMedia } from 'react-use';
 import TenancyBanner from '../common/components/TenancyBanner';
+import useFetchHomepageData from '@/hooks/useFetchHomepageData';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -72,13 +62,6 @@ function handleImageFallbacks(
 }
 
 const HomePage: NextPage<any> = () => {
-  // Store data states
-  const [banners, setBanners] = useState<BannerType[]>([]);
-  const [dealsOfTheWeek, setDealsOfTheWeek] = useState<DealsOfTheWeekType[]>([]);
-  const [marketplaceMenus, setMarketplaceMenus] = useState<MarketPlaceMenuType[]>([]); // Ensure non-null initial state
-  const [flexibleMenu, setFlexibleMenu] = useState<FlexibleMenuType[]>([]);
-  const [featuredOffers, setFeaturedOffers] = useState<FeaturedOffersType[]>([]);
-  const [hasLoaded, setHasLoaded] = useState(false);
   const { viewOffer } = useOfferDetails();
 
   const isMobile = useMedia('(max-width: 500px)');
@@ -88,64 +71,27 @@ const HomePage: NextPage<any> = () => {
     'control'
   );
 
-  // Handle loading states
-  const [loadingError, setLoadingError] = useState(false);
-
-  // Auth context
-  const authCtx = useContext(AuthContext);
-  const userCtx = useContext(UserContext);
-
   const amplitude = useContext(AmplitudeContext);
 
-  // Fetch Data on first load
+  const {
+    banners,
+    dealsOfTheWeek,
+    featuredOffers,
+    marketplaceMenus,
+    flexibleMenu,
+    hasLoaded,
+    loadingError,
+  } = useFetchHomepageData();
+
   useEffect(() => {
     logMembersHomePage();
-    const fetchData = async () => {
-      let user = userCtx.user;
+  }, []);
 
-      // Fetch home page data
-      let homePage;
-
-      try {
-        const homePageData = await makeHomePageQueryWithDislikeRestrictions(
-          homePageQuery(
-            OFFERS_BRAND,
-            userCtx.isAgeGated ?? true,
-            user?.profile.organisation ?? 'NHS'
-          ),
-          userCtx.dislikes
-        );
-        homePage = homePageData.data;
-      } catch (e) {
-        setLoadingError(true);
-        return;
-      }
-      const slicedBanners = shuffle(homePage.banners).slice(0, 3);
-
-      setBanners(slicedBanners as BannerType[]);
-
-      setDealsOfTheWeek(homePage.offerMenus?.deals as DealsOfTheWeekType[]);
-      setMarketplaceMenus(homePage.offerMenus?.marketPlace as MarketPlaceMenuType[]);
-      setFlexibleMenu(homePage.offerMenus?.flexible as FlexibleMenuType[]);
-      setFeaturedOffers(homePage.offerMenus.features as FeaturedOffersType[]);
-      setLoadingError(false);
-
-      setHasLoaded(true);
-    };
-
-    if (userCtx.user || userCtx.error) {
-      fetchData();
-    }
-  }, [
-    authCtx.isReady,
-    authCtx.authState.idToken,
-    userCtx.user,
-    userCtx.isAgeGated,
-    userCtx.dislikes,
-    userCtx.error,
-  ]);
-
-  async function onSelectOffer(offerId: number, companyId: number, companyName: string) {
+  async function onSelectOffer(
+    offerId: number | string,
+    companyId: number | string,
+    companyName: string
+  ) {
     await viewOffer({
       offerId: offerId,
       companyId: companyId,

@@ -62,13 +62,12 @@ export const registerV2CompaniesGetCompanyOffers = (app: App) =>
 
     const offers = items.map((offer) => {
       invariant(offer.name, 'Missing `offer.name`');
-      invariant(offer.offerDescription, 'Missing `offer.offerDescription`');
       invariant(offer.offerType?.offerType, 'Missing `offer.offerType`');
 
       return {
         id: offer._id,
         name: offer.name,
-        description: offer.offerDescription,
+        description: offer.offerDescription ?? null,
         type: offer.offerType.offerType,
         expires: offer.expires ?? null,
         termsAndConditions: offer.termsAndConditions || null,

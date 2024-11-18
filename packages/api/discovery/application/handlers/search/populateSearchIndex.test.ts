@@ -101,7 +101,7 @@ describe('populateSearchIndex', () => {
           offerEnd: TOMORROW,
           evergreen: false,
           tags: ['tag1', 'tag2'],
-          includedTrusts: ['restriction1', 'restriction2'],
+          includedTrusts: ['NHS', 'DEN'],
           excludedTrusts: [],
           company: {
             id: 'company-1',
@@ -110,7 +110,7 @@ describe('populateSearchIndex', () => {
             logo: 'http://example.com/logo1.jpg',
             ageRestrictions: 'None',
             alsoKnownAs: ['Alias 1'],
-            includedTrusts: ['restriction1', 'restriction2'],
+            includedTrusts: [],
             excludedTrusts: [],
             categories: [
               {
@@ -167,7 +167,7 @@ describe('populateSearchIndex', () => {
           company_small_logo: 'http://example.com/logo1.jpg',
           company_tags: ['Alias 1'],
           age_restrictions: 'None',
-          included_trusts: ['restriction1', 'restriction2'],
+          included_trusts: ['NHS', 'DEN'],
           excluded_trusts: [],
           category_name: 'Category 1',
           category_id: 1,

@@ -2,7 +2,7 @@ import { spinner } from '@/modules/Spinner/store';
 import { useAtom, useSetAtom } from 'jotai';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState } from 'react';
 import { PortableTextBlock, toPlainText } from '@portabletext/react';
 import {
   CMS_SERVICES,
@@ -31,8 +31,6 @@ import CompanyPageError from '@/page-components/company/components/CompanyPageEr
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { ToastContainer } from 'react-toastify';
-import { ErrorBoundary } from 'react-error-boundary';
-import LoadingSpinner from '../../../shared-ui/src/components/LoadingSpinner';
 
 const analytics = new InvokeNativeAnalytics();
 
@@ -43,6 +41,7 @@ const Company: NextPage<any> = () => {
 
   const setSpinner = useSetAtom(spinner);
   const [company, setCompany] = useAtom(companyDataAtom);
+  const [hasError, setHasError] = useState<boolean>(false);
 
   const [retries, setRetries] = useState<number>(0);
   const maxRetries = 150; // maxRetries * 100ms is the timeout for the page load
@@ -96,6 +95,9 @@ const Company: NextPage<any> = () => {
 
       // Offer probably doesnt exist or at least somethings gone wrong with the data
       if (!companyResponse.data || !offersResponse.data) {
+        if (!companyResponse.data) {
+          setHasError(true);
+        }
         setSpinner(false);
         return;
       }
@@ -166,15 +168,10 @@ const Company: NextPage<any> = () => {
 
   return (
     <div className="px-4">
-      <ErrorBoundary fallback={<CompanyPageError message="Failed to load company" />}>
-        <Suspense
-          fallback={
-            <LoadingSpinner
-              containerClassName="w-full h-[100vh]"
-              spinnerClassName="text-[5em] text-palette-primary dark:text-palette-secondary"
-            />
-          }
-        >
+      {hasError ? (
+        <CompanyPageError message="Failed to load company" />
+      ) : (
+        <>
           <CompanyPageHeader />
           <PillsController />
           <CompanyOffers />
@@ -191,8 +188,8 @@ const Company: NextPage<any> = () => {
             />
           </div>
           <ToastContainer hideProgressBar />
-        </Suspense>
-      </ErrorBoundary>
+        </>
+      )}
     </div>
   );
 };

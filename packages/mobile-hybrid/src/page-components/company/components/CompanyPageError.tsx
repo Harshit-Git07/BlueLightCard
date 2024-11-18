@@ -9,14 +9,19 @@ type props = {
 };
 
 const CompanyPageError: FC<props> = ({ message }) => {
+  const backEvent = () => {
+    try {
+      lifecycleEvent.lifecycleEvent('onBackPressed');
+    } catch (e) {
+      console.error(e);
+    }
+  };
   return (
     <>
       <Heading headingLevel={'h2'} className="dark:text-white text-black pt-8">
         {message}
       </Heading>
-      <Button type="link" href="/" onClick={() => lifecycleEvent.lifecycleEvent('onBackPressed')}>
-        Return Home
-      </Button>
+      <Button onClick={backEvent}>Return Home</Button>
     </>
   );
 };

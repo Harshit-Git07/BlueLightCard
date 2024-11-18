@@ -1,54 +1,14 @@
 import React, { FC } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
-import { EligibilityModalTemplate } from '@/root/src/member-eligibility/shared/components/modal/EligibilityModalTemplate';
-import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
-import Button from '@bluelightcard/shared-ui/components/Button-V2';
-import { ThemeVariant } from '@bluelightcard/shared-ui/types';
-import { useRouter } from 'next/router';
-import { BRAND } from '@/global-vars';
-import { BRANDS } from '@/types/brands.enum';
-import { AppDownloadLinks } from '@/root/src/member-eligibility/shared/components/modal/AppDownloadLinks';
-import { getQrCodeForDownloadingApp } from '@/root/src/member-eligibility/shared/components/modal/helper';
+import { useMobileMediaQuery } from '@bluelightcard/shared-ui/hooks/useMediaQuery';
+import { SuccessScreenMobileView } from '@/root/src/member-eligibility/shared/screens/success-screen/SuccessScreenMobile';
+import { SuccessModal } from '@/root/src/member-eligibility/shared/screens/success-screen/SuccessModal';
 
 export const SuccessScreen: FC<VerifyEligibilityScreenProps> = () => {
-  const router = useRouter();
-  const brandName = BRAND === BRANDS.DDS_UK ? 'Defence Discount Service' : 'Blue Light Card';
-  const QrCode = getQrCodeForDownloadingApp();
+  const isMobile = useMobileMediaQuery();
 
-  return (
-    <EligibilityModalTemplate data-testid="sign-up-success-screen">
-      <p
-        className={`mx-[50px] mb-[24px] lg:mt-[78px] md:portrait:mt-[0px] ${fonts.displaySmallText} ${colours.textOnSurface} truncate`}
-      >
-        Sign Up Complete!
-      </p>
-
-      <Button
-        className="mb-[60px] w-4/5"
-        variant={ThemeVariant.Primary}
-        size="Large"
-        // TODO: We need to figure out if this screen routes us to members-home or should we already be there at this stage and this button just closes the modal?
-        onClick={() => router.push('/members-home')}
-      >
-        Start saving
-      </Button>
-
-      <p
-        className={`text-center leading-relaxed ${fonts.headlineSmallBold} ${colours.textOnSurface}`}
-      >
-        Get the {brandName} App
-      </p>
-
-      <p
-        className={`mt-[8px] mb-[8px] text-center leading-relaxed ${fonts.body} ${colours.textOnSurface}`}
-      >
-        Easily search for stores or brands and get discounts on <br /> the go with your virtual
-        card.
-      </p>
-
-      <QrCode className="h-full" />
-
-      <AppDownloadLinks className="w-[148px] h-[43px] mt-[44px] mb-[78px] " />
-    </EligibilityModalTemplate>
-  );
+  if (isMobile) {
+    return <SuccessScreenMobileView />;
+  }
+  return <SuccessModal />;
 };

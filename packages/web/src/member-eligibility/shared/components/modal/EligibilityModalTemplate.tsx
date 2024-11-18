@@ -6,11 +6,11 @@ import { useMedia } from 'react-use';
 export interface Props extends PropsWithChildren {
   image?: string;
   'data-testid'?: string;
-  classname?: string;
+  className?: string;
 }
 
 export const EligibilityModalTemplate: FC<Props> = ({
-  classname = '',
+  className = '',
   image,
   children,
   ...props
@@ -30,7 +30,7 @@ export const EligibilityModalTemplate: FC<Props> = ({
 
   return (
     <article
-      className={`${classname} z-50 fixed inset-0 bg-black bg-opacity-[78%] backdrop-blur-sm flex flex-col justify-center items-center`}
+      className={`${className} z-50 fixed inset-0 bg-black bg-opacity-[78%] backdrop-blur-sm flex flex-col justify-center items-center`}
       data-testid={props['data-testid']}
     >
       <div

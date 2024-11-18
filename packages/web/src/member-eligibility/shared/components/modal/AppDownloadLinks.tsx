@@ -1,7 +1,8 @@
 import Link from 'next/link';
-import AppleSVG from '@assets/google-store-button-white-text.svg';
-import GooglePlaySVG from '@assets/apple-store-button-white-text.svg';
-import { FC } from 'react';
+import GooglePlaySVG from '@assets/google-store-button-white-text.svg';
+import AppleSVG from '@assets/apple-store-button-white-text.svg';
+import { FC, useMemo } from 'react';
+import { useMedia } from 'react-use';
 import {
   getAppleStoreLinkForBrand,
   getGooglePlayStoreLinkForBrand,
@@ -11,19 +12,26 @@ type AppDownloadLinksProps = {
   className?: string;
 };
 
-export const AppDownloadLinks: FC<AppDownloadLinksProps> = ({ className }) => {
+export const AppDownloadLinks: FC<AppDownloadLinksProps> = ({ className = '' }) => {
   const appleStoreLink = getAppleStoreLinkForBrand();
   const googlePlayStoreLink = getGooglePlayStoreLinkForBrand();
+
+  const isStacked = useMedia('(max-width: 358px)');
+
+  const downloadLinksStyles = useMemo(() => {
+    return isStacked ? 'flex-col' : 'flex-row';
+  }, [isStacked]);
 
   return (
     <div
       data-testid="download-links"
-      className={`${className} col-span-3 order-4 my-4 mb-[48px] flex justify-center items-center gap-[23px]`}
+      className={`${className} ${downloadLinksStyles} col-span-3 order-4 flex justify-center items-center gap-[23px]`}
     >
-      <Link href={appleStoreLink} title={'Get the app on Apple store'}>
+      <Link href={appleStoreLink} title="Get the app on Apple store">
         <AppleSVG className="w-[150px] h-[43px]" />
       </Link>
-      <Link href={googlePlayStoreLink} title={'Get the app on Google Play store'}>
+
+      <Link href={googlePlayStoreLink} title="Get the app on Google Play store">
         <GooglePlaySVG className="w-[150px] h-[43px]" />
       </Link>
     </div>

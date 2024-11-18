@@ -36,7 +36,7 @@ export class WebPlatformAdapter implements IPlatformAdapter {
     const idToken = await refreshIdTokenIfRequired();
     const endpoint = `${API_PROXY_URL}${path}`;
     const queryParameters = options.queryParameters
-      ? '?' + new URLSearchParams(options.queryParameters).toString()
+      ? `?${new URLSearchParams(options.queryParameters).toString()}`
       : '';
 
     const headers: HeadersInit = {
@@ -47,7 +47,7 @@ export class WebPlatformAdapter implements IPlatformAdapter {
     const brandHeaderValue = getBrandHeaderValue();
     if (brandHeaderValue) headers['x-brand'] = brandHeaderValue;
 
-    const response = await fetch(endpoint + queryParameters, {
+    const response = await fetch(`${endpoint}${queryParameters}`, {
       method: options.method,
       headers,
       body: options.body,

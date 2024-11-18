@@ -1,67 +1,50 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { FC, useMemo } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import PaymentForm from '@bluelightcard/shared-ui/components/Payment/PaymentForm';
-import { Typography, usePlatformAdapter } from '@bluelightcard/shared-ui/index';
-import ProgressBar from '@bluelightcard/shared-ui/components/ProgressBar';
 import LoadingSpinner from '@bluelightcard/shared-ui/components/LoadingSpinner';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
 import { EligibilityBody } from '@/root/src/member-eligibility/shared/screens/shared/components/body/EligibilityBody';
-
-interface Result {
-  success: boolean;
-  errorMessage?: string;
-}
-
-//should we load this from somewhere else?
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY ?? '');
-
-//We need unique idempotency key so that we do not create duplicate payment intents.
-// It makes sense for this to be application id if such a thing exists as that is unique to each application per user
-// anything we pass down in the metadata will go into Stripe so think what makes sense to be in stripe for back office users
-const applicationId = 'application-id';
-const idempotencyKey = applicationId;
+import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/components/EligibilityHeading';
+import {
+  isSuccessResult,
+  useClientSecret,
+} from '@/root/src/member-eligibility/shared/screens/payment-screen/hooks/UseClientSecret';
+import { StripePaymentComponent } from '@/root/src/member-eligibility/shared/screens/payment-screen/components/StripePaymentComponent';
+import Button from '@bluelightcard/shared-ui/components/Button-V2';
+import { ThemeVariant } from '@bluelightcard/shared-ui/types';
+import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/payment-screen/hooks/UseFuzzyFrontendButtons';
+import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
 
 export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDetailsState }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
-  const [clientSecret, setClientSecret] = useState('');
 
-  const platformAdapter = usePlatformAdapter();
+  const getClientSecretResult = useClientSecret();
 
-  useEffect(() => {
-    platformAdapter
-      .invokeV5Api('/orders/checkout', {
-        method: 'POST',
-        body: JSON.stringify({
-          items: [
-            {
-              productId: 'membership',
-              quantity: 1,
-              metadata: { applicationId },
-            },
-          ],
-          idempotencyKey,
-          source: 'web',
-        }),
-      })
-      .then((result) => setClientSecret(JSON.parse(result.data).clientSecret))
-      .catch(console.error);
-  }, [platformAdapter]);
+  const clientSecret = useMemo(() => {
+    if (isSuccessResult(getClientSecretResult)) {
+      return getClientSecretResult.clientSecret;
+    }
 
-  const onPaymentResult = useCallback(
-    (result: Result) => {
-      if (result.success) {
-        setEligibilityDetails({
-          ...eligibilityDetails,
-          currentScreen: 'Success Screen',
-        });
-      } else {
-        //what to do in case of failure, payment component already displays the error message on the page
-      }
-    },
-    [eligibilityDetails, setEligibilityDetails]
-  );
+    return undefined;
+  }, [getClientSecretResult]);
+
+  const clientSecretResultError = useMemo(() => {
+    if (isSuccessResult(getClientSecretResult)) return undefined;
+
+    return getClientSecretResult?.error;
+  }, [getClientSecretResult]);
+
+  const showLoadingSpinner = useMemo(() => {
+    if (!getClientSecretResult) return true;
+
+    return clientSecretResultError === undefined;
+  }, [clientSecretResultError, getClientSecretResult]);
+
+  const subtitle = useMemo(() => {
+    const currencySymbol = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL ?? '';
+    const price = process.env.NEXT_PUBLIC_MEMBERSHIP_PRICE ?? '';
+
+    return `Unlock two years of exclusive access for just ${currencySymbol}${price}`;
+  }, []);
 
   const onBack = useMemo(() => {
     if (eligibilityDetails.flow === 'Sign Up') {
@@ -83,40 +66,42 @@ export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDet
     };
   }, [eligibilityDetails, setEligibilityDetails]);
 
+  const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
+
   return (
-    <EligibilityScreen data-testid="job-details-screen">
+    <EligibilityScreen data-testid="payment-screen">
       <EligibilityBody className="px-[18px]">
-        <div className="flex flex-col items-start">
-          <Typography variant="title-large" className="text-left md:text-nowrap">
-            Payment
-          </Typography>
+        <EligibilityHeading title="Payment" subtitle={subtitle} numberOfCompletedSteps={5} />
 
-          <Typography variant="body" className="mt-[4px] text-left md:text-nowrap">
-            {`Unlock two years of exclusive access for just ${
-              process.env.NEXT_PUBLIC_CURRENCY_SYMBOL ?? ''
-            }${process.env.NEXT_PUBLIC_MEMBERSHIP_PRICE ?? ''}`}
-          </Typography>
+        <div className="flex flex-col items-start w-full">
+          {showLoadingSpinner && (
+            <LoadingSpinner
+              containerClassName="w-full"
+              spinnerClassName="text-[1.5em] text-palette-primary dark:text-palette-secondary"
+            />
+          )}
 
-          <ProgressBar
-            totalNumberOfSteps={3}
-            numberOfCompletedSteps={1}
-            className="mb-[24px] mt-[16px]"
-          />
+          {clientSecret && (
+            <StripePaymentComponent
+              eligibilityDetailsState={eligibilityDetailsState}
+              clientSecret={clientSecret}
+              onBack={onBack}
+            />
+          )}
 
-          <div className="w-full">
-            {clientSecret ? (
-              <Elements stripe={stripePromise} options={{ clientSecret }}>
-                <PaymentForm onBackButtonClicked={onBack} onPaymentResult={onPaymentResult} />
-              </Elements>
-            ) : (
-              <LoadingSpinner
-                containerClassName="w-full"
-                spinnerClassName="text-[1.5em] text-palette-primary dark:text-palette-secondary"
-              />
-            )}
-          </div>
+          {clientSecretResultError && (
+            <div className="flex flex-col gap-2">
+              <div>{clientSecretResultError}</div>
+
+              <Button onClick={onBack} size="Large" variant={ThemeVariant.Secondary}>
+                Back
+              </Button>
+            </div>
+          )}
         </div>
       </EligibilityBody>
+
+      <FuzzyFrontendButtons buttons={fuzzyFrontendButtons} putInFloatingDock />
     </EligibilityScreen>
   );
 };

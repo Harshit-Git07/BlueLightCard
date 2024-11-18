@@ -29,7 +29,7 @@ export const FuzzyFrontendButtons: FC<Props> = ({ className = '', buttons, putIn
   }, [putInFloatingDock]);
 
   const containerClassNames = useMemo(() => {
-    return `${className} ${floatingDockClassNames} flex flex-col justify-center gap-2`;
+    return `${className} ${floatingDockClassNames} flex flex-col justify-center gap-2 z-50`;
   }, [className, floatingDockClassNames]);
 
   if (!showButtons) return null;

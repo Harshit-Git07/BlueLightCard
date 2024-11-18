@@ -11,7 +11,7 @@ import { WorkEmailRetryScreen } from '@/root/src/member-eligibility/shared/scree
 import { FileUploadVerificationScreen } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/FileUploadVerificationScreen';
 import { SuccessScreen } from '@/root/src/member-eligibility/shared/screens/success-screen/SuccessScreen';
 import { useSignupEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-signup-eligibility-details/UseSignupEligibilityDetails';
-import { PaymentScreenFuzzyFrontend } from '@/root/src/member-eligibility/shared/screens/payment-screen/PaymentScreenFuzzyFrontend';
+import { PaymentScreen } from '@/root/src/member-eligibility/shared/screens/payment-screen/PaymentScreen';
 
 interface Props {
   initialState?: EligibilityDetails;
@@ -50,7 +50,7 @@ export const SignupEligibilityFlow: FC<Props> = ({ initialState }) => {
     case 'Delivery Address Screen':
       return <DeliveryAddressScreen {...props} />;
     case 'Payment Screen':
-      return <PaymentScreenFuzzyFrontend {...props} />;
+      return <PaymentScreen {...props} />;
     case 'Success Screen':
       return <SuccessScreen {...props} />;
     default:

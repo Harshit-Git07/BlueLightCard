@@ -18,7 +18,12 @@ export const EligibilityHeading: FC<EligibilityHeadingProps> = ({
 }) => (
   <div className={`${className} flex flex-col gap-[16px] self-stretch`}>
     <div className="flex flex-col gap-[4px]">
-      <p className={`${fonts.titleLarge} ${colours.textOnSurface}`}>{title}</p>
+      <p
+        className={`${fonts.titleLarge} ${colours.textOnSurface}`}
+        data-testid="eligibility-heading-title"
+      >
+        {title}
+      </p>
 
       <p className={`${fonts.body} ${colours.textOnSurfaceSubtle}`}>{subtitle}</p>
     </div>

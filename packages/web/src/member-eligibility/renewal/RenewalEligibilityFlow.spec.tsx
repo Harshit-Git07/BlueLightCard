@@ -2,6 +2,7 @@ import '@testing-library/jest-dom';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { RenewalEligibilityFlow } from './RenewalEligibilityFlow';
+import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui/adapters';
 
 jest.mock('react-use');
 jest.mock('next/router', () => ({
@@ -16,7 +17,11 @@ describe('given a signing up member that needs to prove their eligibility to use
   // TODO: Will need another flow here for providing the "skip to address / payment flow"
   describe("given they haven't submitted enough details to skip straight to delivery address", () => {
     beforeEach(() => {
-      render(<RenewalEligibilityFlow />);
+      render(
+        <PlatformAdapterProvider adapter={useMockPlatformAdapter()}>
+          <RenewalEligibilityFlow />
+        </PlatformAdapterProvider>
+      );
     });
 
     it('should start with the interstitial page with the review account details card', () => {
@@ -126,12 +131,13 @@ describe('given a signing up member that needs to prove their eligibility to use
                     });
 
                     it('should navigate to the payment screen', () => {
-                      const title = screen.getByTestId('fuzzy-frontend-title');
-                      expect(title.textContent).toEqual('Payment Screen');
+                      const fuzzyFrontendTitle = screen.getByText('Payment');
+                      expect(fuzzyFrontendTitle).toBeInTheDocument();
                     });
 
                     describe('when they submit their payment details', () => {
                       beforeEach(async () => {
+                        fireEvent.keyDown(window, { key: '.', ctrlKey: true });
                         const nextButton = screen.getByTestId('next-button-1');
                         act(() => nextButton.click());
                       });
@@ -202,12 +208,13 @@ describe('given a signing up member that needs to prove their eligibility to use
                   });
 
                   it('should navigate to the payment screen', () => {
-                    const title = screen.getByTestId('fuzzy-frontend-title');
-                    expect(title.textContent).toEqual('Payment Screen');
+                    const title = screen.getByTestId('eligibility-heading-title');
+                    expect(title.textContent).toEqual('Payment');
                   });
 
                   describe('when they submit their payment details', () => {
                     beforeEach(async () => {
+                      fireEvent.keyDown(window, { key: '.', ctrlKey: true });
                       const nextButton = screen.getByTestId('next-button-1');
                       act(() => nextButton.click());
                     });
@@ -260,12 +267,13 @@ describe('given a signing up member that needs to prove their eligibility to use
                 });
 
                 it('should navigate to the payment screen', () => {
-                  const title = screen.getByTestId('fuzzy-frontend-title');
-                  expect(title.textContent).toEqual('Payment Screen');
+                  const title = screen.getByTestId('eligibility-heading-title');
+                  expect(title.textContent).toEqual('Payment');
                 });
 
                 describe('when they submit their payment details', () => {
                   beforeEach(async () => {
+                    fireEvent.keyDown(window, { key: '.', ctrlKey: true });
                     const nextButton = screen.getByTestId('next-button-1');
                     act(() => nextButton.click());
                   });
@@ -291,12 +299,13 @@ describe('given a signing up member that needs to prove their eligibility to use
             });
 
             it('should navigate to the payment screen', () => {
-              const title = screen.getByTestId('fuzzy-frontend-title');
-              expect(title.textContent).toEqual('Payment Screen');
+              const title = screen.getByTestId('eligibility-heading-title');
+              expect(title.textContent).toEqual('Payment');
             });
 
             describe('when they submit their payment details', () => {
               beforeEach(async () => {
+                fireEvent.keyDown(window, { key: '.', ctrlKey: true });
                 const nextButton = screen.getByTestId('next-button-1');
                 act(() => nextButton.click());
               });
@@ -372,12 +381,13 @@ describe('given a signing up member that needs to prove their eligibility to use
                 });
 
                 it('should navigate to the payment screen', () => {
-                  const title = screen.getByTestId('fuzzy-frontend-title');
-                  expect(title.textContent).toEqual('Payment Screen');
+                  const title = screen.getByTestId('eligibility-heading-title');
+                  expect(title.textContent).toEqual('Payment');
                 });
 
                 describe('when they submit their payment details', () => {
                   beforeEach(async () => {
+                    fireEvent.keyDown(window, { key: '.', ctrlKey: true });
                     const nextButton = screen.getByTestId('next-button-1');
                     act(() => nextButton.click());
                   });
@@ -446,12 +456,13 @@ describe('given a signing up member that needs to prove their eligibility to use
               });
 
               it('should navigate to the payment screen', () => {
-                const title = screen.getByTestId('fuzzy-frontend-title');
-                expect(title.textContent).toEqual('Payment Screen');
+                const title = screen.getByTestId('eligibility-heading-title');
+                expect(title.textContent).toEqual('Payment');
               });
 
               describe('when they submit their payment details', () => {
                 beforeEach(async () => {
+                  fireEvent.keyDown(window, { key: '.', ctrlKey: true });
                   const nextButton = screen.getByTestId('next-button-1');
                   act(() => nextButton.click());
                 });

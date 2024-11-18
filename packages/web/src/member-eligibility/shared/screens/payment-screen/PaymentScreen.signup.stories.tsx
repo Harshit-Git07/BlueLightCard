@@ -1,13 +1,23 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { PaymentScreen } from './PaymentScreen';
 import { useSignupEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-signup-eligibility-details/UseSignupEligibilityDetails';
-import { PaymentScreenFuzzyFrontend } from '@/root/src/member-eligibility/shared/screens/payment-screen/PaymentScreenFuzzyFrontend';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/adapters';
 
 const componentMeta: Meta<typeof PaymentScreen> = {
   title: 'Pages/Signup Eligibility Flow/Payment Screen',
   component: PaymentScreen,
+  decorators: [StorybookPlatformAdapterDecorator],
   parameters: {
     layout: 'fullscreen',
+    platformAdapter: {
+      invokeV5Api: async (path: string) => {
+        if (!path.includes('/orders/checkout')) return undefined;
+
+        return {
+          statusCode: 503,
+        };
+      },
+    },
   },
 };
 
@@ -27,7 +37,7 @@ const ScreenTemplate: StoryFn<typeof PaymentScreen> = () => {
     },
   });
 
-  return <PaymentScreenFuzzyFrontend eligibilityDetailsState={eligibilityDetailsState} />;
+  return <PaymentScreen eligibilityDetailsState={eligibilityDetailsState} />;
 };
 
 export const Screen = ScreenTemplate.bind({});

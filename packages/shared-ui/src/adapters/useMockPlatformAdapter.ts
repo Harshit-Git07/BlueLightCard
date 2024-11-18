@@ -1,11 +1,11 @@
 import { IPlatformAdapter } from './PlatformAdapter';
 import { PlatformVariant } from '../types';
 
-export const useMockPlatformAdapter = (
+export function useMockPlatformAdapter(
   status = 200,
   data = {},
   platform = PlatformVariant.MobileHybrid,
-) => {
+) {
   const getAmplitudeFeatureFlag = jest.fn();
   const invokeV5Api = jest.fn().mockResolvedValue({ status, data: JSON.stringify(data) });
   const logAnalyticsEvent = jest.fn();
@@ -14,7 +14,7 @@ export const useMockPlatformAdapter = (
   const writeTextToClipboard = jest.fn().mockReturnValue(Promise.resolve());
   const getBrandURL = jest.fn().mockReturnValue('https://bluelightcard.co.uk');
 
-  const mockPlatformAdapter = {
+  return {
     platform,
     getAmplitudeFeatureFlag,
     invokeV5Api,
@@ -24,6 +24,4 @@ export const useMockPlatformAdapter = (
     writeTextToClipboard,
     getBrandURL,
   } satisfies IPlatformAdapter;
-
-  return mockPlatformAdapter;
-};
+}

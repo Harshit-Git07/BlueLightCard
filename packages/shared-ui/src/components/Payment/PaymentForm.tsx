@@ -1,40 +1,39 @@
-import { FC, FormEvent, useState } from 'react';
+import { FC, FormEvent, useMemo, useState } from 'react';
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import Button from '../Button-V2';
 import { ThemeVariant } from '../../types';
 import { colours } from '../../tailwind/theme';
 
-interface Result {
+interface Props {
+  className?: string;
+  onBackButtonClicked?: () => void;
+  onPaymentResult: (result: StripePaymentResult) => void;
+  redirectUrl?: string;
+}
+
+export interface StripePaymentResult {
   success: boolean;
   errorMessage?: string;
 }
 
-interface PaymentFormProps {
-  onBackButtonClicked?: () => void;
-  containerClassName?: string;
-  onPaymentResult: (result: Result) => void;
-  redirectUrl?: string;
-}
-
-const PaymentForm: FC<PaymentFormProps> = ({
+const PaymentForm: FC<Props> = ({
+  className = '',
   onBackButtonClicked,
-  containerClassName,
   onPaymentResult,
   redirectUrl,
 }) => {
   const [paymentLoading, setPaymentLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   const stripe = useStripe();
   const elements = useElements();
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+
     setPaymentLoading(true);
 
-    if (!stripe || !elements) {
-      return;
-    }
+    if (!stripe || !elements) return;
 
     const result = await stripe.confirmPayment({
       elements,
@@ -47,19 +46,21 @@ const PaymentForm: FC<PaymentFormProps> = ({
     const errorMessage = result.error?.message;
     if (result.error) {
       setPaymentLoading(false);
-      setErrorMessage(errorMessage ?? '');
+      setErrorMessage(errorMessage);
     }
 
     onPaymentResult({ success: !result.error, errorMessage });
   };
 
-  const buttonsDisabled = paymentLoading || !stripe;
+  const buttonsDisabled = useMemo(() => {
+    return paymentLoading || !stripe;
+  }, [paymentLoading, stripe]);
 
   return (
-    <form onSubmit={handleSubmit} className={containerClassName}>
+    <form className={className} onSubmit={handleSubmit}>
       <PaymentElement />
 
-      {errorMessage && <p className={`mt-[6px] ${colours.textError}`}>{errorMessage}</p>}
+      {errorMessage && <p className={`${colours.textError} mt-[6px]`}>{errorMessage}</p>}
 
       <div className="flex flex-row gap-2 mt-[24px]">
         {onBackButtonClicked && (
@@ -74,11 +75,12 @@ const PaymentForm: FC<PaymentFormProps> = ({
         )}
 
         <Button
+          className="w-full"
           disabled={buttonsDisabled}
           type="submit"
           size="Large"
           variant={ThemeVariant.Primary}
-          className={'w-full'}
+          data-testid="payment-form-submit-button"
         >
           Pay and finish
         </Button>

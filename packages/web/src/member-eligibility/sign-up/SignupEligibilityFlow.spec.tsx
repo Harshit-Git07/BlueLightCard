@@ -14,15 +14,11 @@ const pdfFile = new File(['(⌐□_□)'], 'test.pdf', { type: 'application/pdf'
 
 // TODO: Test back button behaviour too
 describe('given a signing up member that needs to prove their eligibility to use the service', () => {
-  const mockPlatformAdapter = {
-    ...useMockPlatformAdapter(),
-  };
-
   // TODO: Will need another flow here for providing the "skip to address / payment flow"
   describe("given they haven't submitted enough details to skip straight to delivery address", () => {
     beforeEach(() => {
       render(
-        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <PlatformAdapterProvider adapter={useMockPlatformAdapter()}>
           <SignupEligibilityFlow />
         </PlatformAdapterProvider>
       );
@@ -140,12 +136,13 @@ describe('given a signing up member that needs to prove their eligibility to use
                     });
 
                     it('should navigate to the payment screen', () => {
-                      const fuzzyFrontendTitle = screen.getByText('Payment Screen');
-                      expect(fuzzyFrontendTitle).toBeInTheDocument();
+                      const title = screen.getByTestId('eligibility-heading-title');
+                      expect(title.textContent).toEqual('Payment');
                     });
 
                     describe('when they submit their payment details', () => {
                       beforeEach(async () => {
+                        fireEvent.keyDown(window, { key: '.', ctrlKey: true });
                         const nextButton = screen.getByTestId('next-button-1');
                         act(() => nextButton.click());
                       });
@@ -226,12 +223,13 @@ describe('given a signing up member that needs to prove their eligibility to use
                   });
 
                   it('should navigate to the payment screen', () => {
-                    const fuzzyFrontendTitle = screen.getByText('Payment Screen');
-                    expect(fuzzyFrontendTitle).toBeInTheDocument();
+                    const title = screen.getByTestId('eligibility-heading-title');
+                    expect(title.textContent).toEqual('Payment');
                   });
 
                   describe('when they submit their payment details', () => {
                     beforeEach(async () => {
+                      fireEvent.keyDown(window, { key: '.', ctrlKey: true });
                       const nextButton = screen.getByTestId('next-button-1');
                       act(() => nextButton.click());
                     });
@@ -296,12 +294,13 @@ describe('given a signing up member that needs to prove their eligibility to use
                 });
 
                 it('should navigate to the payment screen', () => {
-                  const fuzzyFrontendTitle = screen.getByText('Payment Screen');
-                  expect(fuzzyFrontendTitle).toBeInTheDocument();
+                  const title = screen.getByTestId('eligibility-heading-title');
+                  expect(title.textContent).toEqual('Payment');
                 });
 
                 describe('when they submit their payment details', () => {
                   beforeEach(async () => {
+                    fireEvent.keyDown(window, { key: '.', ctrlKey: true });
                     const nextButton = screen.getByTestId('next-button-1');
                     act(() => nextButton.click());
                   });
@@ -339,12 +338,13 @@ describe('given a signing up member that needs to prove their eligibility to use
             });
 
             it('should navigate to the payment screen', () => {
-              const fuzzyFrontendTitle = screen.getByText('Payment Screen');
-              expect(fuzzyFrontendTitle).toBeInTheDocument();
+              const title = screen.getByTestId('eligibility-heading-title');
+              expect(title.textContent).toEqual('Payment');
             });
 
             describe('when they submit their payment details', () => {
               beforeEach(async () => {
+                fireEvent.keyDown(window, { key: '.', ctrlKey: true });
                 const nextButton = screen.getByTestId('next-button-1');
                 act(() => nextButton.click());
               });

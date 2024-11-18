@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.35.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.34.0...bluelightcard/redemptions-v1.35.0) (2024-11-18)
+
+
+### Features
+
+* [TR-742] new Verify redemption config type ([#2928](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2928)) ([00edf4a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/00edf4aef010996de3fea3bc6506f08e48d3d9b9))
+* Check ballots lambda ([#2926](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2926)) ([21be56f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/21be56fe861dce9ea42f2c18fd84a51a6bf3e1a2))
+* tr-941-patch-credit-card-service ([#2943](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2943)) ([449954d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/449954dc307133046a2b229fd677cb2d808915e5))
+
+
+### Bug Fixes
+
+* TR-1084 - remove sorting code that needed newer version of node ([#2951](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2951)) ([7223a92](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7223a9217093a6c3c8239916f240b747bfcb9bbf))
+
 ## [1.34.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.33.0...bluelightcard/redemptions-v1.34.0) (2024-11-14)
 
 

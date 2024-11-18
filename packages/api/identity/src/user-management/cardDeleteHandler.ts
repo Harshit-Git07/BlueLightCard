@@ -19,7 +19,7 @@ const logger = new Logger({
   logLevel: logLevel,
 });
 
-export const cardHandler = async (event: EventBridgeEvent<any, any>) => {
+export const handler = async (event: EventBridgeEvent<any, any>) => {
   logger.info('event received', { event });
 
   if (!event.detail) {

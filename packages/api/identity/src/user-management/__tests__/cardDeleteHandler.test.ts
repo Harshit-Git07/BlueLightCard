@@ -1,4 +1,4 @@
-import { cardHandler } from '../cardDeleteHandler';
+import { handler } from '../cardDeleteHandler';
 import { Logger } from '@aws-lambda-powertools/logger';
 import { CardRepository } from '../../repositories/cardRepository';
 import { Response } from '../../../../core/src/utils/restResponse/response';
@@ -13,7 +13,7 @@ jest.mock('../../repositories/cardRepository');
 
 const mockCardRepository = CardRepository as jest.Mock;
 
-describe('cardHandler', () => {
+describe('handler', () => {
   let event: EventBridgeEvent<any, any>;
 
   beforeEach(() => {
@@ -38,14 +38,14 @@ describe('cardHandler', () => {
 
   it('should log and return bad request if event detail is missing', async () => {
     event.detail = null;
-    const response = await cardHandler(event);
+    const response = await handler(event);
     
     expect(response).toEqual(Response.BadRequest({ message: 'Please provide event details' }));
   });
 
   it('should log and return bad request if required parameters are missing', async () => {
     event.detail.uuid = '';
-    const response = await cardHandler(event);
+    const response = await handler(event);
     expect(response).toEqual(Response.BadRequest({ message: 'Required parameters are missing' }));
   });
 
@@ -55,7 +55,7 @@ describe('cardHandler', () => {
       deleteCard: mockDeleteCard,
     }));
 
-    const response = await cardHandler(event);
+    const response = await handler(event);
     expect(response).toEqual(Response.OK({ message: 'success' }));
   });
 
@@ -65,7 +65,7 @@ describe('cardHandler', () => {
       deleteCard: mockDeleteCard,
     }));
 
-    await cardHandler(event);
+    await handler(event);
 
     expect(mockedDlqSender.sendToDLQ).toHaveBeenCalledTimes(1);
   });

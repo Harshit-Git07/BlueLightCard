@@ -15,27 +15,13 @@ describe('RedemptionDetailsService', () => {
   const defaultOfferId = faker.string.sample(10);
   const defaultMemberId = faker.string.numeric(8);
 
-  function mockRedemptionsEventsRepository(): IRedemptionsEventsRepository {
-    return {
-      publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
-      publishMemberRedeemIntentEvent: jest.fn(),
-      publishRedemptionEvent: jest.fn(),
-      publishVaultBatchCreatedEvent: jest.fn(),
-    };
-  }
+  const mockRedemptionsEventsRepository = (): Partial<IRedemptionsEventsRepository> => ({
+    publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
+  });
 
-  function mockRedemptionConfigRepository(): IRedemptionConfigRepository {
-    return {
-      findOneByOfferId: jest.fn(),
-      findOneById: jest.fn(),
-      updateManyByOfferId: jest.fn(),
-      updateOneByOfferId: jest.fn(),
-      createRedemption: jest.fn(),
-      withTransaction: jest.fn(),
-      updateOneById: jest.fn(),
-      deleteById: jest.fn(),
-    };
-  }
+  const mockRedemptionConfigRepository = (): Partial<IRedemptionConfigRepository> => ({
+    findOneByOfferId: jest.fn(),
+  });
 
   it('should return a RedemptionNotFound result if the redemption is not found', async () => {
     // Arrange
@@ -45,7 +31,7 @@ describe('RedemptionDetailsService', () => {
     mockedRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(null);
     const service = new RedemptionDetailsService(
       logger,
-      mockedRedemptionsEventsRepository,
+      as(mockedRedemptionsEventsRepository),
       as(mockedRedemptionsRepository),
     );
 
@@ -70,7 +56,7 @@ describe('RedemptionDetailsService', () => {
     mockedRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(redemption);
     const service = new RedemptionDetailsService(
       logger,
-      mockedRedemptionsEventsRepository,
+      as(mockedRedemptionsEventsRepository),
       as(mockedRedemptionsRepository),
     );
 
@@ -98,7 +84,7 @@ describe('RedemptionDetailsService', () => {
     mockedRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(redemption);
     const service = new RedemptionDetailsService(
       logger,
-      mockedRedemptionsEventsRepository,
+      as(mockedRedemptionsEventsRepository),
       as(mockedRedemptionsRepository),
     );
 
@@ -131,7 +117,7 @@ describe('RedemptionDetailsService', () => {
     mockedRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(redemption);
     const service = new RedemptionDetailsService(
       logger,
-      mockedRedemptionsEventsRepository,
+      as(mockedRedemptionsEventsRepository),
       as(mockedRedemptionsRepository),
     );
 

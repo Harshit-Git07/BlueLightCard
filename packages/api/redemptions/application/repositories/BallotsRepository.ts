@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { between, eq } from 'drizzle-orm';
 
 import { every } from '@blc-mono/core/utils/drizzle';
 import { DatabaseTransactionConnection } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
@@ -9,7 +9,10 @@ import { Repository } from './Repository';
 
 export type BallotEntity = typeof ballotsTable.$inferSelect;
 
+export type BallotEntityWithId = { ballotId: (typeof ballotsTable.$inferSelect)['id'] };
+
 export interface IBallotsRepository {
+  findBallotsForDrawDate(startDrawDate: Date, endDrawDate: Date): Promise<BallotEntityWithId[]>;
   findOneById(id: string): Promise<BallotEntity | null>;
   findOneByRedemptionId(redemptionId: string): Promise<BallotEntity | null>;
   withTransaction(transaction: DatabaseTransactionConnection): BallotsRepository;
@@ -18,6 +21,14 @@ export interface IBallotsRepository {
 export class BallotsRepository extends Repository implements IBallotsRepository {
   static readonly key = 'BallotsRepository' as const;
   static readonly inject = [DatabaseConnection.key] as const;
+
+  public async findBallotsForDrawDate(startDrawDate: Date, endDrawDate: Date): Promise<BallotEntityWithId[]> {
+    return await this.connection.db
+      .select({ ballotId: ballotsTable.id })
+      .from(ballotsTable)
+      .where(between(ballotsTable.drawDate, startDrawDate, endDrawDate))
+      .execute();
+  }
 
   public async findOneByRedemptionId(redemptionId: string): Promise<BallotEntity | null> {
     const results = await this.connection.db

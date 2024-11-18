@@ -24,15 +24,38 @@ describe('BallotsRepository', () => {
     await database?.down();
   });
 
-  describe('findOneByRedemptionId', () => {
-    it('returns a ballot when given a valid redemptionId', async () => {
+  describe('findBallotsForDrawDate', () => {
+    it('returns a ballot ids when given a valid date range', async () => {
+      const today = new Date();
+      const repository = new BallotsRepository(connection);
+      const redemption = redemptionConfigEntityFactory.build();
+      const ballot = ballotActiveEntityFactory().build({ redemptionId: redemption.id, drawDate: today });
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+      await connection.db.insert(ballotsTable).values(ballot).execute();
+
+      const result = await repository.findBallotsForDrawDate(today, today);
+
+      expect(result).toEqual([{ ballotId: ballot.id }]);
+    });
+
+    it('returns empty array when no ballots are found', async () => {
+      const repository = new BallotsRepository(connection);
+
+      const result = await repository.findBallotsForDrawDate(new Date('2024-01-01'), new Date('2024-01-02'));
+
+      expect(result).toEqual([]);
+    });
+  });
+
+  describe('findOneById', () => {
+    it('returns a ballot when given a valid ballotId', async () => {
       const repository = new BallotsRepository(connection);
       const redemption = redemptionConfigEntityFactory.build();
       const ballot = ballotActiveEntityFactory().build({ redemptionId: redemption.id });
       await connection.db.insert(redemptionsTable).values(redemption).execute();
       await connection.db.insert(ballotsTable).values(ballot).execute();
 
-      const result = await repository.findOneByRedemptionId(redemption.id);
+      const result = await repository.findOneById(ballot.id);
 
       expect(result).toEqual(ballot);
     });
@@ -46,15 +69,15 @@ describe('BallotsRepository', () => {
     });
   });
 
-  describe('findOneById', () => {
-    it('returns a ballot when given a valid ballotId', async () => {
+  describe('findOneByRedemptionId', () => {
+    it('returns a ballot when given a valid redemptionId', async () => {
       const repository = new BallotsRepository(connection);
       const redemption = redemptionConfigEntityFactory.build();
       const ballot = ballotActiveEntityFactory().build({ redemptionId: redemption.id });
       await connection.db.insert(redemptionsTable).values(redemption).execute();
       await connection.db.insert(ballotsTable).values(ballot).execute();
 
-      const result = await repository.findOneById(ballot.id);
+      const result = await repository.findOneByRedemptionId(redemption.id);
 
       expect(result).toEqual(ballot);
     });

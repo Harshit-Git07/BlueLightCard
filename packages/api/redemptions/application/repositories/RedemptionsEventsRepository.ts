@@ -8,8 +8,10 @@ import {
 } from '@blc-mono/core/schemas/redemptions';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
+import { RedemptionsBallotEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/ballot';
 import { RedemptionsVaultBatchEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/vaultBatch';
 
+import { RunBallotSchemaEventDetail } from '../controllers/cron/ballot/CheckBallotsController';
 import { VaultBatchCreatedEventDetail } from '../controllers/eventBridge/vaultBatch/VaultBatchCreatedController';
 
 // TODO: Detail should not be passed in directly, the methods should have a separate type owned by the repository
@@ -18,6 +20,7 @@ export interface IRedemptionsEventsRepository {
   publishMemberRedeemIntentEvent(detail: MemberRedeemIntentEventDetail): Promise<void>;
   publishRedemptionEvent(detail: MemberRedemptionEventDetail): Promise<void>;
   publishVaultBatchCreatedEvent(detail: VaultBatchCreatedEventDetail): Promise<void>;
+  publishRunBallotEvent(detail: RunBallotSchemaEventDetail): Promise<void>;
 }
 
 export class RedemptionsEventsRepository implements IRedemptionsEventsRepository {
@@ -83,6 +86,22 @@ export class RedemptionsEventsRepository implements IRedemptionsEventsRepository
           Source: RedemptionsVaultBatchEvents.BATCH_CREATED,
           DetailType: RedemptionsVaultBatchEvents.BATCH_CREATED_DETAIL,
           Detail: JSON.stringify(detail satisfies VaultBatchCreatedEventDetail),
+        },
+      ],
+    });
+    await client.send(command);
+  }
+
+  public async publishRunBallotEvent(detail: RunBallotSchemaEventDetail): Promise<void> {
+    const client = new EventBridgeClient();
+    const command = new PutEventsCommand({
+      Entries: [
+        {
+          Time: new Date(),
+          EventBusName: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME),
+          Source: RedemptionsBallotEvents.BALLOT_RUN,
+          DetailType: RedemptionsBallotEvents.BALLOT_RUN_DETAIL,
+          Detail: JSON.stringify(detail satisfies RunBallotSchemaEventDetail),
         },
       ],
     });

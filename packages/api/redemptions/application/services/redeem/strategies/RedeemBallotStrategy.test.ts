@@ -35,6 +35,7 @@ describe('BallotRedemptioStrategy', () => {
       publishRedemptionEvent: jest.fn(),
       publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
       publishVaultBatchCreatedEvent: jest.fn(),
+      publishRunBallotEvent: jest.fn(),
     };
   }
 
@@ -43,6 +44,7 @@ describe('BallotRedemptioStrategy', () => {
       withTransaction: jest.fn(),
       findOneByRedemptionId: jest.fn(),
       findOneById: jest.fn(),
+      findBallotsForDrawDate: jest.fn(),
     };
   }
 

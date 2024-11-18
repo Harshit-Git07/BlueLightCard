@@ -26,6 +26,7 @@ describe('Redemption Strategies', () => {
       publishRedemptionEvent: jest.fn(),
       publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
       publishVaultBatchCreatedEvent: jest.fn(),
+      publishRunBallotEvent: jest.fn(),
     };
   }
 

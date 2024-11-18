@@ -217,4 +217,59 @@ describe('RedemptionsEventsRepository', () => {
       await expect(() => repository.publishRedemptionEvent(detail)).rejects.toThrow('test error');
     });
   });
+
+  describe('publishRunBallotEvent', () => {
+    it('publishes to the correct event bus', async () => {
+      // Arrange
+      const eventBusName = 'test-event-bus-name';
+      process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME] = eventBusName;
+      const repository = new RedemptionsEventsRepository();
+      const mockEventBridgeClient = mockClient(EventBridgeClient);
+      mockEventBridgeClient.on(PutEventsCommand);
+
+      // Act
+      await repository.publishRunBallotEvent({ ballotId: faker.string.uuid() });
+
+      // Assert
+      expect(mockEventBridgeClient).toHaveReceivedCommandTimes(PutEventsCommand, 1);
+      expect(mockEventBridgeClient).toHaveReceivedCommandWith(PutEventsCommand, {
+        Entries: [
+          expect.objectContaining({
+            EventBusName: eventBusName,
+          }),
+        ],
+      });
+    });
+
+    it('publishes the correct event details', async () => {
+      // Arrange
+      const ballotId = faker.string.uuid();
+      const eventBusName = 'test-event-bus-name';
+      process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME] = eventBusName;
+      const repository = new RedemptionsEventsRepository();
+      const mockEventBridgeClient = mockClient(EventBridgeClient);
+      mockEventBridgeClient.on(PutEventsCommand);
+
+      // Act
+      await repository.publishRunBallotEvent({ ballotId });
+
+      // Assert
+      expect(mockEventBridgeClient).toHaveReceivedCommandTimes(PutEventsCommand, 1);
+      const firstCall = mockEventBridgeClient.commandCalls(PutEventsCommand)[0];
+      const receivedDetail = JSON.parse(firstCall.args[0].input.Entries!.at(0)!.Detail ?? '');
+      expect(receivedDetail).toStrictEqual({ ballotId });
+    });
+
+    it('bubbles errors to the caller', async () => {
+      // Arrange
+      const ballotId = 'test-ballot-id';
+      const eventBusName = 'test-event-bus-name';
+      process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME] = eventBusName;
+      const repository = new RedemptionsEventsRepository();
+      const mockEventBridgeClient = mockClient(EventBridgeClient);
+      mockEventBridgeClient.on(PutEventsCommand).rejects('test error');
+
+      await expect(() => repository.publishRunBallotEvent({ ballotId })).rejects.toThrow('test error');
+    });
+  });
 });

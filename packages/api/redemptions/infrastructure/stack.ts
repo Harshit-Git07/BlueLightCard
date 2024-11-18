@@ -34,6 +34,7 @@ import { createDwhMemberRedeemIntentRule } from './eventBridge/rules/dwhMemberRe
 import { createDwhMemberRedemptionRule } from './eventBridge/rules/dwhMemberRedemptionRule';
 import { createDwhMemberRetrievedRedemptionDetailsRule } from './eventBridge/rules/dwhMemberRetrievedRedemptionDetailsRule';
 import { createRedemptionPushNotificationRule } from './eventBridge/rules/redemptionPushNotificationRule';
+import { runBallotRule } from './eventBridge/rules/redemptionRunBallotRule';
 import { createVaultBatchCreatedRule } from './eventBridge/rules/vaultBatchCreatedRule';
 import { createVaultCodesUploadRule } from './eventBridge/rules/vaultCodesUploadRule';
 import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
@@ -133,6 +134,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
       vaultBatchCreatedRule: createVaultBatchCreatedRule(stack, config, database),
       vaultThresholdEmailRule: createVaultThresholdEmailRule(stack, config, database),
       redemptionPushNotificationRule: createRedemptionPushNotificationRule(stack, config),
+      runBallotRule: runBallotRule(stack, database),
     },
     {
       vaultCodesUploadRule: createVaultCodesUploadRule(stack, database, vaultCodesUpload, bus.eventBusName),
@@ -140,7 +142,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
   );
 
   // Create cron jobs for checking ballots
-  checkBallotsCron(stack, database);
+  checkBallotsCron(stack, database, bus.eventBusName);
 
   // Create permissions
   // TODO: Specify the resource for the secrets manager from Secret.fromSecretCompleteArn (It was not getting the final 6 characters as expected, need to investigate further)

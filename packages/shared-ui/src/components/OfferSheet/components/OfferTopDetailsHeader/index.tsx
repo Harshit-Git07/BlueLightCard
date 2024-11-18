@@ -21,22 +21,6 @@ export type Props = {
   showExclusions?: boolean;
 };
 
-export const getShareButtonTargetPage = (
-  companyPageExperiment: string | undefined,
-  companyId: number | string | null,
-  offerId: number | string | undefined,
-) => {
-  let targetUrl = '/';
-
-  if (companyPageExperiment === 'treatment') {
-    targetUrl += 'company';
-  } else {
-    targetUrl += 'offerdetails.php';
-  }
-
-  return `${targetUrl}?cid=${companyId}&oid=${offerId}`;
-};
-
 const OfferTopDetailsHeader: FC<Props> = ({
   showOfferDescription = true,
   showShareFavorite = true,
@@ -143,13 +127,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
                       typeof window !== 'undefined'
                         ? `${window.location.protocol}//${hostname}`
                         : ''
-                    }${getShareButtonTargetPage(
-                      adapter.platform == PlatformVariant.MobileHybrid
-                        ? adapter.getAmplitudeFeatureFlag('app-new-company-page')
-                        : adapter.getAmplitudeFeatureFlag('web-new-company-sheet'),
-                      offerData.companyId,
-                      offerData.id,
-                    )}`,
+                    }/company?cid=${offerData.companyId}&oid=${offerData.id}`,
                   },
                   shareLabel: 'Share offer',
                   amplitudeDetails: {

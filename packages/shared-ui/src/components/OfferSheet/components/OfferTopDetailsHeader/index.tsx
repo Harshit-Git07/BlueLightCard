@@ -110,7 +110,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
                 }`}
               >
                 <PortableText
-                  value={offerData.description.content as unknown as PortableTextBlock}
+                  value={offerData.description?.content as unknown as PortableTextBlock}
                 />
               </div>
 
@@ -216,7 +216,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
                 }}
               >
                 <PortableText
-                  value={offerData.termsAndConditions.content as unknown as PortableTextBlock}
+                  value={offerData.termsAndConditions?.content as unknown as PortableTextBlock}
                 />
               </Accordion>
             </div>

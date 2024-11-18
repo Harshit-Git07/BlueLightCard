@@ -42,7 +42,7 @@ const CompanyAbout: FC<Props> = ({ CompanyName, CompanyDescription, platform }) 
       )}
 
       <div className={cssDescription}>
-        <PortableText value={CompanyDescription.content} />
+        <PortableText value={CompanyDescription?.content} />
       </div>
     </div>
   );

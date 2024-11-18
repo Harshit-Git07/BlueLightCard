@@ -1,6 +1,7 @@
 import * as target from './UseOnOrganisationChanged';
 import { useCallback } from 'react';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import { organisationMultiIdStub } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-organisations/stubs/OrganisationStubs';
 
 jest.mock('react');
 
@@ -22,13 +23,13 @@ beforeEach(() => {
 describe('given the organisation is changed', () => {
   beforeEach(() => {
     result = target.useOnOrganisationChanged([eligibilityDetails, setEligibilityDetailsStateMock]);
-    result('Test org');
+    result({ id: '1', label: 'Test org' });
   });
 
   it('should return update eligibility details object', () => {
     expect(setEligibilityDetailsStateMock).toHaveBeenCalledWith(<EligibilityDetails>{
       ...eligibilityDetails,
-      organisation: 'Test org',
+      organisation: { id: '1', label: 'Test org' },
     });
   });
 });
@@ -36,14 +37,14 @@ describe('given the organisation is changed', () => {
 describe('given the organisation is changed to "Multi-ID stub"', () => {
   beforeEach(() => {
     result = target.useOnOrganisationChanged([eligibilityDetails, setEligibilityDetailsStateMock]);
-    result('Multi-ID stub');
+    result(organisationMultiIdStub);
   });
 
   it('should return update eligibility details object', () => {
     expect(setEligibilityDetailsStateMock).toHaveBeenCalledWith(<EligibilityDetails>{
       ...eligibilityDetails,
       requireMultipleIds: true,
-      organisation: 'Multi-ID stub',
+      organisation: organisationMultiIdStub,
     });
   });
 });

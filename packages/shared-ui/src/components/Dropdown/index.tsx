@@ -154,6 +154,10 @@ const Dropdown: FC<DropdownProps> = ({
   );
 
   useEffect(() => {
+    setFilteredOptions(options);
+  }, [options]);
+
+  useEffect(() => {
     document.addEventListener('click', handleClickOutside, true);
 
     return () => {

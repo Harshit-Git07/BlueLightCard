@@ -14,7 +14,7 @@ const SingleIdTemplate: StoryFn<typeof FileUploadVerificationScreen> = () => {
   const eligibilityDetailsState = useSignupEligibilityDetails({
     currentScreen: 'File Upload Verification Screen',
     employmentStatus: 'Employed',
-    organisation: 'NHS',
+    organisation: { id: '1', label: 'NHS' },
     employer: 'Abbey Hospitals',
     jobTitle: 'Nurse',
     fileVerificationType: 'Work Contract',
@@ -28,7 +28,7 @@ const MultiIdTemplate: StoryFn<typeof FileUploadVerificationScreen> = () => {
   const eligibilityDetailsState = useSignupEligibilityDetails({
     currentScreen: 'File Upload Verification Screen',
     employmentStatus: 'Employed',
-    organisation: 'NHS',
+    organisation: { id: '1', label: 'NHS' },
     employer: 'Abbey Hospitals',
     jobTitle: 'Nurse',
     requireMultipleIds: true,

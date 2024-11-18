@@ -14,7 +14,7 @@ const ScreenTemplate: StoryFn<typeof SuccessScreen> = () => {
   const eligibilityDetailsState = useSignupEligibilityDetails({
     currentScreen: 'Success Screen',
     employmentStatus: 'Employed',
-    organisation: 'NHS',
+    organisation: { id: '1', label: 'NHS' },
     employer: 'Abbey Hospitals',
     jobTitle: 'Nurse',
     emailVerification: 'test@nhs.com',

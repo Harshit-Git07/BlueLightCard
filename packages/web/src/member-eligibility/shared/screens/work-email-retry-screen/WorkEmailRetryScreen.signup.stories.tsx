@@ -14,7 +14,7 @@ const ScreenTemplate: StoryFn<typeof WorkEmailRetryScreen> = () => {
   const eligibilityDetailsState = useSignupEligibilityDetails({
     currentScreen: 'Work Email Retry Screen',
     employmentStatus: 'Employed',
-    organisation: 'NHS',
+    organisation: { id: '1', label: 'NHS' },
     employer: 'Abbey Hospitals',
     jobTitle: 'Nurse',
   });

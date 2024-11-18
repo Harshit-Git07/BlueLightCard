@@ -14,7 +14,7 @@ const ScreenTemplate: StoryFn<typeof VerificationMethodScreen> = () => {
   const eligibilityDetailsState = useSignupEligibilityDetails({
     currentScreen: 'Verification Method Screen',
     employmentStatus: 'Employed',
-    organisation: 'NHS',
+    organisation: { id: '1', label: 'NHS' },
     employer: 'Abbey Hospitals',
     jobTitle: 'Nurse',
   });

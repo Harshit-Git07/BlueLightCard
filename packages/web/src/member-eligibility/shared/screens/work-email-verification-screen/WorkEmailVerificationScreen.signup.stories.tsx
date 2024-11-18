@@ -14,7 +14,7 @@ const ScreenTemplate: StoryFn<typeof WorkEmailVerificationScreen> = () => {
   const eligibilityDetailsState = useSignupEligibilityDetails({
     currentScreen: 'Work Email Verification Screen',
     employmentStatus: 'Employed',
-    organisation: 'NHS',
+    organisation: { id: '1', label: 'NHS' },
     employer: 'Abbey Hospitals',
     jobTitle: 'Nurse',
   });

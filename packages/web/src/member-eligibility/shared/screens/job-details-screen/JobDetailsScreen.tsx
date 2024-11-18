@@ -12,14 +12,15 @@ import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/scree
 import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/components/EligibilityHeading';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import { useIsNextButtonDisabled } from './hooks/UseIsButtonDisabled';
-import { useEmployers } from './hooks/UseEmployers';
 import { useOnOrganisationChanged } from './hooks/UseOnOrganisationChanged';
-import { useOrganisations } from './hooks/UseOrganisations';
 import { useEmployerChanged } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/UseEmployerChanged';
 import { useOnJobTitleChange } from './hooks/UseOnJobTitleChange';
 import { useOnPromoCodeChange } from './hooks/UseOnPromoCodeChange';
 import { useFuzzyFrontendButtons } from './hooks/UseFuzzyFrontEndButtons';
 import { useOnPromoCodeApplied } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/UseOnPromoCodeApplied';
+import { useOrganisations } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-organisations/UseOrganisations';
+import { useEmployers } from './hooks/use-employers/UseEmployers';
+import { useShouldShowPromoCode } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/UseShouldShowPromoCode';
 
 export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDetailsState }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
@@ -32,7 +33,10 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
   const onEmployerSelected = useEmployerChanged(eligibilityDetailsState);
   const onJobTitleChange = useOnJobTitleChange(eligibilityDetailsState);
   const { promoCode, onPromoCodeChanged } = useOnPromoCodeChange(eligibilityDetailsState);
+
+  const shouldShowPromoCode = useShouldShowPromoCode(eligibilityDetails);
   const onPromoCodeApplied = useOnPromoCodeApplied(eligibilityDetailsState);
+
   const fuzzyFrontEndButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 
   const numberOfCompletedSteps = useMemo(() => {
@@ -43,9 +47,6 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
         return 2;
     }
   }, [eligibilityDetails.flow]);
-
-  // This will be replaced by logic from APIs - for now it's just displaying the fact that promo codes are not available to every type of organisation
-  const showPromoCode = eligibilityDetails.organisation !== 'Police';
 
   const onBack = useCallback(() => {
     setEligibilityDetails({
@@ -67,8 +68,8 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
           <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>EMPLOYMENT STATUS</p>
 
           <ListSelector
-            title="Employed"
             className="mt-[12px] mb-[16px]"
+            title="Employed"
             state={ListSelectorState.Selected}
             onClick={onBack}
           />
@@ -76,21 +77,21 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
           <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>JOB DETAILS</p>
 
           <Dropdown
+            className="mt-[12px]"
+            placeholder="Select your organisation"
             options={organisations}
-            className={'mt-[12px]'}
-            showTooltipIcon={true}
             maxItemsShown={5}
-            placeholder={'Select your organisation'}
+            showTooltipIcon
             onSelect={(option) => {
-              onOrganisationSelected(option.label);
+              onOrganisationSelected(option);
             }}
           />
 
           {employers !== undefined && employers.length !== 0 && (
             <Dropdown
-              className={'mt-[16px]  mt-4'}
+              className="mt-[16px] mt-4"
+              placeholder="Select your employer"
               options={employers}
-              placeholder={'Select your employer'}
               onSelect={(option) => {
                 onEmployerSelected(option.label);
               }}
@@ -98,28 +99,29 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
           )}
 
           {(employers?.length === 0 || eligibilityDetails.employer) && (
-            <div className={'mt-[16px] w-full'}>
+            <div className="mt-[16px] w-full">
               <TextInput
-                placeholder={'Enter job title'}
+                placeholder="Enter job title"
                 onChange={onJobTitleChange}
                 value={eligibilityDetails.jobTitle}
               />
-              {showPromoCode && (
+
+              {shouldShowPromoCode && (
                 <PromoCode
+                  className="mt-[24px] w-full"
+                  infoMessage="This will allow you to skip some steps"
+                  value={promoCode}
                   onApply={onPromoCodeApplied}
                   onChange={onPromoCodeChanged}
-                  className={'mt-[24px] w-full'}
-                  infoMessage={'This will allow you to skip some steps'}
-                  icon={true}
-                  value={promoCode}
+                  icon
                 />
               )}
             </div>
           )}
 
           <Button
-            size={'Large'}
-            className={'mt-[24px] w-full'}
+            className="mt-[24px] w-full"
+            size="Large"
             disabled={!isNextButtonDisabled}
             onClick={() => {
               setEligibilityDetails({
@@ -132,6 +134,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
           </Button>
         </div>
       </EligibilityBody>
+
       <FuzzyFrontendButtons buttons={fuzzyFrontEndButtons} putInFloatingDock />
     </EligibilityScreen>
   );

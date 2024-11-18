@@ -4,7 +4,7 @@ export interface EligibilityDetails {
   skipAccountDetails?: boolean;
   accountDetailsChanged?: boolean;
   employmentStatus?: EmploymentStatus;
-  organisation?: string;
+  organisation?: EligibilityOrganisation;
   employer?: string;
   jobTitle?: string;
   promoCode?: string;
@@ -31,6 +31,11 @@ export type EligibilityScreen =
   | 'Success Screen';
 
 export type EmploymentStatus = 'Employed' | 'Retired' | 'Volunteer';
+
+export interface EligibilityOrganisation {
+  id: string;
+  label: string;
+}
 
 export interface EligibilityDetailsAddress {
   line1: string;

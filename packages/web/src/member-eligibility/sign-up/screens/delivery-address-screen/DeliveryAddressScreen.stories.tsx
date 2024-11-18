@@ -14,7 +14,7 @@ const ScreenTemplate: StoryFn<typeof DeliveryAddressScreen> = () => {
   const eligibilityDetailsState = useSignupEligibilityDetails({
     currentScreen: 'Delivery Address Screen',
     employmentStatus: 'Employed',
-    organisation: 'NHS',
+    organisation: { id: '1', label: 'NHS' },
     employer: 'Abbey Hospitals',
     jobTitle: 'Nurse',
     emailVerification: 'test@nhs.com',

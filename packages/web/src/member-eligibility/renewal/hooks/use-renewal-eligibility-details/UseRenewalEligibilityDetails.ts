@@ -7,7 +7,7 @@ export const renewalEligibilityDetailsStub: EligibilityDetails = {
   flow: 'Renewal',
   currentScreen: 'Interstitial Screen',
   employmentStatus: 'Employed',
-  organisation: 'NHS',
+  organisation: { id: '1', label: 'NHS' },
   employer: 'Abbey Hospitals',
   jobTitle: 'Nurse',
   emailVerification: 'test@nhs.com',

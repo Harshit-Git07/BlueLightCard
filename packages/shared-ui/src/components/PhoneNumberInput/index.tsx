@@ -15,10 +15,10 @@ import {
   ParsedCountry,
   usePhoneInput,
 } from 'react-international-phone';
-import ClickableFlag from './ClickableFlag';
-import DropdownList from './DropdownList';
-import InfoWrapper from '../InfoWrapper';
+import ClickableFlag from './components/ClickableFlag';
+import DropdownList from './components/DropdownList';
 import { env } from '../../env';
+import InfoWrapper from '../InfoWrapper';
 
 type Props = {
   id?: string;

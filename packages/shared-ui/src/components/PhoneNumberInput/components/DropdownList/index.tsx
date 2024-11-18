@@ -1,7 +1,7 @@
 import { ChangeEventHandler, FC, useEffect, useMemo, useState } from 'react';
 import { CountryData, CountryIso2, parseCountry, ParsedCountry } from 'react-international-phone';
-import RowItem from './RowItem';
-import SearchRowItem from './SearchRowItem';
+import RowItem from '../RowItem';
+import SearchRowItem from '../SearchRowItem';
 
 export type Props = {
   dropdownOpen: boolean;

@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import DropdownList, { Props } from './DropdownList';
+import DropdownList, { Props } from '.';
 import { defaultCountries, parseCountry } from 'react-international-phone';
 
 const countryList = defaultCountries.slice(0, 5);

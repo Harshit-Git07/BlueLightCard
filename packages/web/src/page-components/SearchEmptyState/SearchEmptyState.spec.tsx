@@ -1,6 +1,6 @@
 import renderer from 'react-test-renderer';
 import ReactDom from 'react-dom';
-import SearchEmptyState from '../../SearchEmptyState/SearchEmptyState';
+import SearchEmptyState from './SearchEmptyState';
 import { NextRouter } from 'next/router';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 

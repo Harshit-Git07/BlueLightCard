@@ -3,14 +3,13 @@ import { conditionalStrings } from '../../utils/conditionalStrings';
 import { colours, fonts } from '../../tailwind/theme';
 
 export type Props = {
-  id?: string;
   message?: string;
   htmlFor: string;
   isValid: boolean | undefined;
   isDisabled: boolean;
 };
 
-const ValidationMessage: FC<Props> = ({ id, message, htmlFor, isValid, isDisabled }) => {
+const ValidationMessage: FC<Props> = ({ message, htmlFor, isValid, isDisabled }) => {
   const hasBeenValidated = isValid !== undefined;
   const success = !isDisabled && hasBeenValidated && isValid;
   const error = !isDisabled && hasBeenValidated && !isValid;
@@ -25,7 +24,12 @@ const ValidationMessage: FC<Props> = ({ id, message, htmlFor, isValid, isDisable
 
   return message ? (
     <div className={classes} aria-hidden={isDisabled}>
-      <label htmlFor={htmlFor} id={id} role="alert" aria-live="assertive">
+      <label
+        htmlFor={htmlFor}
+        id={`${htmlFor}-validation-message`}
+        role="alert"
+        aria-live="assertive"
+      >
         {message}
       </label>
     </div>

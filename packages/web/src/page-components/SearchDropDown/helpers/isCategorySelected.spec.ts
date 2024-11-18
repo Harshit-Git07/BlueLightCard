@@ -1,4 +1,4 @@
-import { isCategorySelected } from '../../SearchDropDown/isCategorySelected';
+import { isCategorySelected } from './isCategorySelected';
 
 describe('isCategorySelected', () => {
   const mockCategoryId = 'mockCategoryId';

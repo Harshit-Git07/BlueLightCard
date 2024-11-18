@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import SearchRowItem from './SearchRowItem';
+import SearchRowItem from '.';
 import { defaultCountries, parseCountry } from 'react-international-phone';
 
 const ukCountry = defaultCountries.map(parseCountry).find((country) => country.iso2 === 'gb')!;

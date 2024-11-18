@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import ClickableFlag, { Props } from './ClickableFlag';
+import ClickableFlag, { Props } from '.';
 import { defaultCountries, parseCountry } from 'react-international-phone';
 
 const ukCountry = defaultCountries.map(parseCountry).find((country) => country.iso2 === 'gb')!;

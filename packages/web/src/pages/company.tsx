@@ -21,16 +21,16 @@ import AmplitudeContext from '@/context/AmplitudeContext';
 import amplitudeEvents from '@/utils/amplitude/events';
 import { logCompanyView } from '@/utils/amplitude/logCompanyView';
 import { BRANDS } from '../common/types/brands.enum';
-import type { BannerDataType } from '../page-components/company/types';
-import CompanyPageWebHeader from '../page-components/company/CompanyPageWebHeader';
 import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { useCmsEnabled } from '../common/hooks/useCmsEnabled';
-import CompanyPageOffers from '../page-components/company/CompanyPageOffers';
-import CompanyPageFilters from '../page-components/company/CompanyPageFilters';
+import CompanyPageOffers from '../page-components/Company/CompanyPageOffers';
+import CompanyPageFilters from '../page-components/Company/CompanyPageFilters';
 import { ErrorBoundary } from 'react-error-boundary';
-import CompanyPageError from '../page-components/company/CompanyPageError';
 import LoadingSpinner from '@bluelightcard/shared-ui/components/LoadingSpinner';
 import { useRouter } from 'next/router';
+import CompanyPageWebHeader from '../page-components/Company/CompanyPageWebHeader';
+import { BannerDataType } from '../page-components/Company/types';
+import CompanyPageError from '../page-components/Company/CompanyPageError';
 
 const getBrand = () => {
   switch (BRAND) {

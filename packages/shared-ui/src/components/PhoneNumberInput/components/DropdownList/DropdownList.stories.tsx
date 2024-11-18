@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import DropdownList, { Props as DropdownProps } from './DropdownList';
+import DropdownList, { Props as DropdownProps } from '.';
 import { defaultCountries, parseCountry } from 'react-international-phone';
 import type { FC } from 'react';
 

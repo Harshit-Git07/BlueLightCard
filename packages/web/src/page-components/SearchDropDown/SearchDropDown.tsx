@@ -7,7 +7,7 @@ import { Dropdown, PillGroup } from '@bluelightcard/shared-ui';
 import UserContext from '@/context/User/UserContext';
 import useFetchCompaniesOrCategories, { CompanyType } from '@/hooks/useFetchCompaniesOrCategories';
 import { PillProps } from '@bluelightcard/shared-ui/components/PillGroup/types';
-import { isCategorySelected } from './isCategorySelected';
+import { isCategorySelected } from './helpers/isCategorySelected';
 
 type SearchDropDownPresenterProps = {
   onSearchCategoryChange: (categoryId: string, categoryName: string) => void;

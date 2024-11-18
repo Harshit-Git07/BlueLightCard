@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, fireEvent, render } from '@testing-library/react';
-import { ClipboardCard } from '@/page-components/ClipbaordCard/ClipboardCard';
+import { ClipboardCard } from '@/root/src/page-components/ClipboardCard/ClipboardCard';
 import '@testing-library/jest-dom/extend-expect';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import { NextRouter } from 'next/router';

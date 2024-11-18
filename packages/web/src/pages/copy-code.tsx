@@ -1,5 +1,5 @@
 'use client';
-import { ClipboardCard } from '@/page-components/ClipbaordCard/ClipboardCard';
+import { ClipboardCard } from '@/root/src/page-components/ClipboardCard/ClipboardCard';
 import { useContext, useEffect, useState, useRef } from 'react';
 import { OfferData } from '@core/types/offerdata';
 import { decodeBase64 } from '@/utils/base64';

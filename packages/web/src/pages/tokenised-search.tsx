@@ -37,7 +37,7 @@ import {
 import AmplitudeContext from '../common/context/AmplitudeContext';
 import { z } from 'zod';
 import useFetchCompaniesOrCategories from '../common/hooks/useFetchCompaniesOrCategories';
-import { isCategorySelected } from '@/page-components/SearchDropDown/isCategorySelected';
+import { isCategorySelected } from '@/root/src/page-components/SearchDropDown/helpers/isCategorySelected';
 import { experimentMakeSearch } from '@/utils/API/experimentMakeSearch';
 import { darkRead } from '@bluelightcard/shared-ui/utils/darkRead/darkRead';
 

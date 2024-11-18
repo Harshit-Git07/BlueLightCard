@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import RowItem, { Props } from './RowItem';
+import RowItem, { Props } from '.';
 import { defaultCountries, parseCountry } from 'react-international-phone';
 
 jest.mock('react-international-phone', () => ({

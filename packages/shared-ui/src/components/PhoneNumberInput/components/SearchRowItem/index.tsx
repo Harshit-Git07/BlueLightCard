@@ -1,6 +1,6 @@
 import { ChangeEventHandler, FC } from 'react';
 import { CountryIso2, FlagImage } from 'react-international-phone';
-import { RowStyles } from './RowItem';
+import { RowStyles } from '../RowItem';
 
 export type Props = {
   iso2: CountryIso2;

@@ -1,7 +1,7 @@
 import { act, render, fireEvent, within, cleanup } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { composeStories } from '@storybook/react';
-import * as stories from '../../SearchDropDown/SearchDropDown.stories';
+import * as stories from './SearchDropDown.stories';
 
 const { Default, Interaction } = composeStories(stories);
 

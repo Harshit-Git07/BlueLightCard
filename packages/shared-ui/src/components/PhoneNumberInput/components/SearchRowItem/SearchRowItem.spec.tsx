@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import SearchRowItem, { Props } from './SearchRowItem';
+import SearchRowItem, { Props } from '.';
 
 describe('SearchRowItem component', () => {
   const defaultProps: Props = {

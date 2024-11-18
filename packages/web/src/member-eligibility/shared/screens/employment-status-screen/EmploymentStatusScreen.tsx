@@ -25,6 +25,12 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
 
   const onEmploymentStatusSelect = useCallback(
     (employmentStatus: EmploymentStatus) => {
+      if (eligibilityDetails.employmentStatus !== employmentStatus) {
+        eligibilityDetails.organisation = undefined;
+        eligibilityDetails.employer = undefined;
+        eligibilityDetails.jobTitle = undefined;
+      }
+
       setEligibilityDetails({
         ...eligibilityDetails,
         currentScreen: 'Job Details Screen',

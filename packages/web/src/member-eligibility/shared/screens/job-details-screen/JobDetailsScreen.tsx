@@ -68,6 +68,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
           <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>EMPLOYMENT STATUS</p>
 
           <ListSelector
+            title={eligibilityDetails.employmentStatus}
             className="mt-[12px] mb-[16px]"
             title="Employed"
             state={ListSelectorState.Selected}

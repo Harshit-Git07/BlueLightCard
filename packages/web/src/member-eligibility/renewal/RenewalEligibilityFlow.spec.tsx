@@ -25,12 +25,16 @@ describe('given a signing up member that needs to prove their eligibility to use
     });
 
     it('should start with the interstitial page with the review account details card', () => {
-      const reviewAccountDetailsCard = screen.getByText('Renewal Intersititial Screen');
+      const reviewAccountDetailsCard = screen.getByTestId('Renewal Intersititial Screen');
       expect(reviewAccountDetailsCard).toBeInTheDocument();
     });
 
     describe('when the start button is pressed', () => {
       beforeEach(async () => {
+        fireEvent.keyDown(window, {
+          key: '.',
+          ctrlKey: true,
+        });
         const startButton = screen.getByTestId('next-button-1');
         act(() => startButton.click());
       });

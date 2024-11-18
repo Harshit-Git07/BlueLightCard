@@ -39,17 +39,15 @@ export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
   return (
     <EligibilityScreen data-testid="SignupInterstitialScreen">
       <EligibilityBody>
-        <div className={welcomeMessageStyles}>{welcomeMessage.line1}</div>
-
         <div className={welcomeMessageStyles}>
+          {welcomeMessage.line1} <br />
           <span className="bg-gradient-to-b from-colour-secondary-gradient-bright-fixed to-colour-secondary-gradient-centre-fixed bg-clip-text text-transparent">
             {welcomeMessage.line2}
           </span>
-
           {welcomeMessage.line3}
         </div>
 
-        <div className={subtitleStyles}>
+        <div className={`mt-[-8px] ${subtitleStyles}`}>
           You have two steps to complete
           <br />
           before you can start saving

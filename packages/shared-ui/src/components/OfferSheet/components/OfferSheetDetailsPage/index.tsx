@@ -232,7 +232,7 @@ const OfferSheetDetailsPage: FC = () => {
         primaryButtonTextValue = 'Copy discount code';
         break;
       case 'preApplied':
-        if (offerData.type === offerTypeLabelMap['gift-card']) {
+        if (offerData.type === 'gift-card') {
           primaryButtonTextValue = 'Get voucher';
         } else {
           primaryButtonTextValue = 'Get discount';
@@ -269,7 +269,7 @@ const OfferSheetDetailsPage: FC = () => {
         break;
       case 'preApplied':
         // TODO ADD if statement for giftcards offer type that are pre-applied redemption type
-        if (offerData.type === offerTypeLabelMap['gift-card']) {
+        if (offerData.type === 'gift-card') {
           secondaryButtonTextValue = 'Get instant savings';
           secondaryButtonSubtextValue = 'Redirecting to voucher shop';
         } else {
@@ -303,7 +303,7 @@ const OfferSheetDetailsPage: FC = () => {
 
     switch (redemptionType) {
       case 'preApplied':
-        if (offerData.type === offerTypeLabelMap['gift-card']) {
+        if (offerData.type === 'gift-card') {
           webSecondaryButtonTextValue = 'Continue to voucher shop';
           webSecondaryButtonSubtextValue = 'Get instant savings';
         } else {

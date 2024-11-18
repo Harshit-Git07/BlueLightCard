@@ -1,13 +1,6 @@
 name: "Terraform Plan"
 
 on:
-  push:
-    branches:
-      - main
-      - fea*
-    paths:
-      - terraform/**
-      - .github/workflows/terraform-*.yml
   pull_request:
     paths:
       - terraform/**
@@ -20,9 +13,43 @@ env:
   TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
 
 jobs:
+  pr-cleanup:
+    name: Cleanup PR comments
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Cleanup
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        id: plan-comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 1. Retrieve existing bot comments for the PR
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const botComments = comments.filter(comment => {
+              return comment.user.type === 'Bot' && comment.body.includes('Terraform Cloud Plan Output')
+            });
+            botComments?.forEach(botComment => {
+              github.rest.issues.deleteComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+              });
+              console.log('Deleted comment id: ' + botComment.id)
+            });
+
   terraform:
     name: "Plan"
     runs-on: ubuntu-latest
+    needs:
+      - pr-cleanup
     permissions:
       contents: read
       pull-requests: write
@@ -39,9 +66,9 @@ jobs:
           - dir: blc
             environment: pr
             path: blc-shared
-          # - dir: blc
-          #   environment: production
-          #   path: blc-shared
+          - dir: blc
+            environment: production
+            path: blc-shared
 
           ## blc-au
           # - dir: blc-au
@@ -53,9 +80,9 @@ jobs:
           - dir: blc-au
             environment: pr
             path: blc-au-shared
-          # - dir: blc-au
-          #   environment: production
-          #   path: blc-au-shared
+          - dir: blc-au
+            environment: production
+            path: blc-au-shared
 
           ## dds
           - dir: dds
@@ -67,9 +94,9 @@ jobs:
           - dir: dds
             environment: pr
             path: dds-shared
-          # - dir: dds
-          #   environment: production
-          #   path: dds-shared
+          - dir: dds
+            environment: production
+            path: dds-shared
 
           ## shared
           - dir: shared
@@ -131,3 +158,25 @@ jobs:
         id: plan-output
         with:
           plan: ${{ fromJSON(steps.plan-run.outputs.payload).data.relationships.plan.data.id }}
+      
+      - name: Update PR
+        if: ${{ github.event_name == 'pull_request' && (steps.plan-output.outputs.add != '0' || steps.plan-output.outputs.change != '0' || steps.plan-output.outputs.destroy != '0') }}
+        uses: actions/github-script@v6
+        id: plan-comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 1. Create comment for the PR
+            const output = `#### Terraform Cloud Plan Output
+               ##### ${{ matrix.dir }} (${{ matrix.environment }})
+               \`\`\`
+               Plan: ${{ steps.plan-output.outputs.add }} to add, ${{ steps.plan-output.outputs.change }} to change, ${{ steps.plan-output.outputs.destroy }} to destroy.
+               \`\`\`
+               [Terraform Cloud Plan](${{ steps.plan-run.outputs.run_link }}).
+               `;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });

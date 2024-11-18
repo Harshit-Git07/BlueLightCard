@@ -4,7 +4,7 @@ locals {
   my_workspace_env = var.TFC_WORKSPACE_NAME != "" ? trimprefix(var.TFC_WORKSPACE_NAME, "${local.app}-shared-") : terraform.workspace
 }
 
-# ses
+# SES
 resource "aws_sesv2_email_identity" "default" {
   email_identity = var.aws_ses_email_identity
 }

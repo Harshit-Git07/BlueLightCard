@@ -76,7 +76,7 @@ describe('PaymentEventHandlerService', () => {
       metadata: { memberId: '232' },
       amount: 4900,
       paymentMethodId: 'pm_1',
-      memberId: '1232',
+      member: { id: '1232', brazeExternalId: '' },
     });
     expect(paymentEventStoreRepository.writePaymentEvent).toHaveBeenCalledWith('1232', translatedPaymentEvent);
   });
@@ -120,6 +120,10 @@ describe('PaymentEventHandlerService', () => {
     paymentEventStoreRepository.queryEventsByTypeAndObjectId.mockResolvedValue([
       {
         pk: 'MEMBER#1232',
+        metadata: {
+          brazeExternalId: '123433',
+          name: 'Firstname Lastname',
+        },
       },
     ]);
 
@@ -142,7 +146,7 @@ describe('PaymentEventHandlerService', () => {
       metadata: { memberId: '232' },
       amount: 4900,
       paymentMethodId: 'pm_1',
-      memberId: '1232',
+      member: { id: '1232', brazeExternalId: '123433', name: 'Firstname Lastname' },
     });
     expect(paymentEventStoreRepository.writePaymentEvent).toHaveBeenCalledWith('1232', translatedPaymentEvent);
   });
@@ -201,7 +205,6 @@ describe('PaymentEventHandlerService', () => {
       metadata: { memberId: '232' },
       amount: 4900,
       paymentMethodId: 'pm_1',
-      memberId: 'NO_MEMBER_ID',
     });
     expect(paymentEventStoreRepository.writePaymentEvent).toHaveBeenCalledWith('NO_MEMBER_ID', translatedPaymentEvent);
   });
@@ -263,7 +266,6 @@ describe('PaymentEventHandlerService', () => {
       metadata: { memberId: '232' },
       amount: 4900,
       paymentMethodId: 'pm_1',
-      memberId: 'NO_MEMBER_ID',
     });
     expect(paymentEventStoreRepository.writePaymentEvent).toHaveBeenCalledWith('NO_MEMBER_ID', translatedPaymentEvent);
   });

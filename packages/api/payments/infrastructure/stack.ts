@@ -22,8 +22,8 @@ import { createTransactionsEventTable } from './database/createTransactionsEvent
 import { StripeEventBridge } from './eventBridge/stripeEventBridge';
 import { Route } from './routes/route';
 
-function PaymentsStack({ app, stack }: StackContext) {
-  const { certificateArn, vpc, bus, dwhKenisisFirehoseStreams, bastionHost } = use(Shared);
+function PaymentsStack({ stack }: StackContext) {
+  const { certificateArn, bus } = use(Shared);
   const SERVICE_NAME = 'payments';
 
   // set tag service identity to all resources
@@ -165,7 +165,7 @@ function PaymentsStack({ app, stack }: StackContext) {
         new PolicyStatement({
           actions: ['dynamodb:*'],
           effect: Effect.ALLOW,
-          resources: [transactionsEventsTable.tableArn],
+          resources: [transactionsEventsTable.tableArn, `${transactionsEventsTable.tableArn}/index/*`],
         }),
         new PolicyStatement({
           actions: ['events:PutEvents'],

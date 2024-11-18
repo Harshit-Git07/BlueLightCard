@@ -1,8 +1,13 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { EventBus, Rule } from 'aws-cdk-lib/aws-events';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { ApiGatewayV1Api, StackContext, use } from 'sst/constructs';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
+import { ApiGatewayV1Api, Queue, StackContext, use } from 'sst/constructs';
 
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
+import { MAP_BRAND } from '@blc-mono/core/constants/common';
+import { PAYMENTS_EVENT_SOURCE, PaymentsEventDetailType } from '@blc-mono/core/constants/payments';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
@@ -16,10 +21,11 @@ import { PostCheckoutModel } from '../application/models/postCheckout';
 import { OrdersStackConfigResolver } from './config/config';
 import { productionDomainNames, stagingDomainNames } from './constants/domains';
 import { OrdersStackEnvironmentKeys } from './constants/environment';
+import { SSTFunction } from './constructs/SSTFunction';
 import { Route } from './routes/route';
 
 function OrdersStack({ stack }: StackContext) {
-  const { certificateArn } = use(Shared);
+  const { certificateArn, bus } = use(Shared);
   const { authorizer } = use(Identity);
   const SERVICE_NAME = 'orders';
 
@@ -93,6 +99,13 @@ function OrdersStack({ stack }: StackContext) {
     resources: ['*'],
   });
 
+  const USE_DATADOG_AGENT = getEnvOrDefault(OrdersStackEnvironmentKeys.USE_DATADOG_AGENT, 'false');
+  // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
+  const layers =
+    USE_DATADOG_AGENT.toLowerCase() === 'true' && stack.region
+      ? [`arn:aws:lambda:${stack.region}:464622532012:layer:Datadog-Extension:60`]
+      : undefined;
+
   // functionName is automatically appended with the stage name
 
   api.addRoutes(stack, {
@@ -113,8 +126,49 @@ function OrdersStack({ stack }: StackContext) {
       },
       defaultAllowedOrigins: config.networkConfig.apiDefaultAllowedOrigins,
       permissions: [executeApiPolicy],
+      layers,
     }),
   });
+
+  const eventBus = EventBus.fromEventBusArn(stack, 'ExistingSharedEventBus', bus.eventBusArn);
+
+  const brandSuffix = MAP_BRAND[getBrandFromEnv()];
+  const secretName = `orders-svc-braze-api-key-${brandSuffix}`;
+
+  const brazeApiKey = Secret.fromSecretNameV2(stack, 'braze-api-key', secretName);
+
+  const paymentSucceededDLQ = new Queue(stack, 'DLQOrdersPaymentSucceededEventsHandler');
+  const paymentSucceededEventHandler = new LambdaFunction(
+    new SSTFunction(stack, 'PaymentSucceededEventsHandler', {
+      permissions: [
+        new PolicyStatement({
+          actions: ['secretsmanager:GetSecretValue'],
+          effect: Effect.ALLOW,
+          resources: [brazeApiKey.secretArn + '-??????'],
+        }),
+      ],
+      handler: 'packages/api/orders/application/handlers/eventBridge/paymentSucceededEmailHandler.handler',
+      retryAttempts: 2,
+      deadLetterQueueEnabled: true,
+      deadLetterQueue: paymentSucceededDLQ.cdk.queue,
+      environment: {
+        //TODO: continue here
+        [OrdersStackEnvironmentKeys.CURRENCY_CODE]: config.currencyCode,
+        [OrdersStackEnvironmentKeys.BRAZE_API_URL]: config.emailConfig.brazeApiUrl,
+        [OrdersStackEnvironmentKeys.BRAZE_PAYMENT_SUCCEEDED_EMAIL_CAMPAIGN_ID]:
+          config.emailConfig.brazePaymentSucceededEmailCampaignId,
+      },
+      layers,
+    }),
+  );
+
+  new Rule(stack, 'PaymentSucceededEvents', {
+    eventBus: eventBus,
+    eventPattern: {
+      source: [PAYMENTS_EVENT_SOURCE],
+      detailType: [PaymentsEventDetailType.PAYMENT_SUCCEEDED],
+    },
+  }).addTarget(paymentSucceededEventHandler);
 
   stack.addOutputs({
     OrdersApiEndpoint: api.url,

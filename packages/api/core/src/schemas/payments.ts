@@ -10,8 +10,12 @@ export const PaymentObjectEventDetailSchema = z.object({
   created: z.number(),
   metadata: z.record(z.string(), z.string()),
   amount: z.number(),
-  paymentMethodId: z.string().optional(),
-  memberId: z.string().optional(),
+  paymentMethodId: z.string().optional().or(z.string().nullable()),
+  member: z.object({
+    id: z.string(),
+    brazeExternalId: z.string(),
+    name: z.string().optional(),
+  }).optional(),
 });
 export type PaymentObjectEventDetail = z.infer<typeof PaymentObjectEventDetailSchema>;
 

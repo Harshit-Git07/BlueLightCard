@@ -96,7 +96,7 @@ describe('PaymentInitiationService', () => {
       description,
     );
     expect(paymentEventsRepository.publishPaymentInitiatedEvent).toHaveBeenCalledWith({
-      memberId: user.memberId,
+      member: { id: user.memberId, brazeExternalId: user.brazeExternalId, name: user.name },
       amount,
       metadata: metaddataToAssert,
       created: expect.any(Number),

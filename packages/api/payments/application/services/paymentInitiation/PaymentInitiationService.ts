@@ -104,7 +104,7 @@ export class PaymentInitiationService implements IPaymentInitiationService {
     this.logger.info({ message: 'Payment Initiated', context: { memberId, paymentInitiation } });
 
     await this.paymentEventsRepository.publishPaymentInitiatedEvent({
-      memberId: user.memberId,
+      member: { id: user.memberId, brazeExternalId: user.brazeExternalId, name: user.name },
       amount,
       metadata: metadataToUse,
       created: new Date().getTime(),

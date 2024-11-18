@@ -36,7 +36,10 @@ describe('PaymentEventsRepository', () => {
       max: 1_000_000,
     }),
     paymentMethodId: faker.string.uuid(),
-    memberId: faker.string.uuid(),
+    member: {
+      id: faker.string.uuid(),
+      brazeExternalId: faker.string.uuid(),
+    },
   };
 
   beforeEach(() => {
@@ -83,7 +86,7 @@ describe('PaymentEventsRepository', () => {
         amount: defaultPaymentObjectEventDetail.amount,
         metadata: defaultPaymentObjectEventDetail.metadata,
         paymentMethodId: defaultPaymentObjectEventDetail.paymentMethodId,
-        memberId: defaultPaymentObjectEventDetail.memberId,
+        member: defaultPaymentObjectEventDetail.member,
       });
     });
   });
@@ -122,7 +125,7 @@ describe('PaymentEventsRepository', () => {
         amount: defaultPaymentObjectEventDetail.amount,
         metadata: defaultPaymentObjectEventDetail.metadata,
         paymentMethodId: defaultPaymentObjectEventDetail.paymentMethodId,
-        memberId: defaultPaymentObjectEventDetail.memberId,
+        member: defaultPaymentObjectEventDetail.member,
       });
     });
   });
@@ -161,7 +164,7 @@ describe('PaymentEventsRepository', () => {
         amount: defaultPaymentObjectEventDetail.amount,
         metadata: defaultPaymentObjectEventDetail.metadata,
         paymentMethodId: defaultPaymentObjectEventDetail.paymentMethodId,
-        memberId: defaultPaymentObjectEventDetail.memberId,
+        member: defaultPaymentObjectEventDetail.member,
       });
     });
   });

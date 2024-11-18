@@ -22,7 +22,6 @@ export type RouteOptions = {
   handler: string;
   model: Model;
   functionName: string;
-  database?: IDatabase;
   requestValidatorName: string;
   restApi: RestApi;
   stack: Stack;
@@ -30,6 +29,7 @@ export type RouteOptions = {
   defaultAllowedOrigins: string[];
   permissions?: PolicyStatement[];
   authorizer?: 'ordersAuthorizer' | 'none' | string;
+  layers: string[] | undefined;
 };
 
 export class Route {
@@ -42,10 +42,10 @@ export class Route {
     requestValidatorName,
     restApi,
     stack,
-    database,
     defaultAllowedOrigins,
     permissions,
     authorizer,
+    layers,
   }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'redemptionsAuthorizer' | 'none' | string> {
     const requestModels = model ? { 'application/json': model.getModel() } : undefined;
     const methodResponses = MethodResponses.toMethodResponses(
@@ -55,13 +55,6 @@ export class Route {
         apiGatewayModelGenerator.getError500(),
       ].filter(Boolean),
     );
-
-    const USE_DATADOG_AGENT = getEnvOrDefault(OrdersStackEnvironmentKeys.USE_DATADOG_AGENT, 'false');
-    // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
-    const layers =
-      USE_DATADOG_AGENT.toLowerCase() === 'true' && stack.region
-        ? [`arn:aws:lambda:${stack.region}:464622532012:layer:Datadog-Extension:60`]
-        : undefined;
 
     return {
       authorizer: authorizer ? authorizer : 'ordersAuthorizer',
@@ -73,7 +66,6 @@ export class Route {
             ...environment,
             [OrdersStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS]: JSON.stringify(defaultAllowedOrigins),
           },
-          database,
           layers,
         }),
         method: {

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { PaymentObjectEventDetail } from '@blc-mono/core/schemas/payments';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 
 import { IPaymentEventsRepository, PaymentEventsRepository } from '../../repositories/PaymentEventsRepository';
@@ -58,14 +59,20 @@ export class PaymentEventHandlerService implements IPaymentEventHandlerService {
 
     //TODO: what do we want to do here if externalCustomerId (which is mapped from customerId in Stripe) is not set.
     // setting customer when initiating payment is not mandatory so it doesn't make sense to enforce and kick up a fuss here...?
-    let memberId = 'NO_MEMBER_ID';
+    let member: PaymentObjectEventDetail['member'];
     if (paymentEvent.externalCustomerId) {
       const items = await this.paymentEventStoreRepository.queryEventsByTypeAndObjectId(
         'customerCreated',
         paymentEvent.externalCustomerId,
       );
+
       if (items.length > 0) {
-        memberId = items[0].pk.split('#')[1];
+        const customerEvent = items[0];
+        member = {
+          id: customerEvent.pk.split('#')[1],
+          brazeExternalId: customerEvent.metadata?.brazeExternalId || '',
+          name: customerEvent.metadata?.name,
+        };
       }
     }
 
@@ -78,7 +85,7 @@ export class PaymentEventHandlerService implements IPaymentEventHandlerService {
           metadata: paymentEvent.metadata,
           amount: paymentEvent.amount,
           paymentMethodId: paymentEvent.paymentMethodId,
-          memberId,
+          member,
         });
         break;
       case 'paymentFailed':
@@ -89,11 +96,11 @@ export class PaymentEventHandlerService implements IPaymentEventHandlerService {
           metadata: paymentEvent.metadata,
           amount: paymentEvent.amount,
           paymentMethodId: paymentEvent.paymentMethodId,
-          memberId,
+          member,
         });
         break;
     }
 
-    await this.paymentEventStoreRepository.writePaymentEvent(memberId, paymentEvent);
+    await this.paymentEventStoreRepository.writePaymentEvent(member?.id || 'NO_MEMBER_ID', paymentEvent);
   }
 }

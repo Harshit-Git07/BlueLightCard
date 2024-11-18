@@ -67,16 +67,13 @@ const AuthenticatedNavBar = ({
     [searchOverlayOpen, onBack]
   );
 
-  const onFocusListener = useCallback(
-    (event: FocusEvent) => {
-      if (!searchOverlayOpen) return;
+  const onFocusListener = useCallback(() => {
+    if (!searchOverlayOpen) return;
 
-      if (!navBarRef.current?.contains(document.activeElement)) {
-        onBack();
-      }
-    },
-    [searchOverlayOpen, navBarRef, onBack]
-  );
+    if (!navBarRef.current?.contains(document.activeElement)) {
+      onBack();
+    }
+  }, [searchOverlayOpen, navBarRef, onBack]);
 
   useEffect(() => {
     document.addEventListener('keydown', onKeyDownListener);

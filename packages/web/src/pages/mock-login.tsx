@@ -34,7 +34,7 @@ function MockLogin() {
     const secret = secretHash(username, COGNITO_CLIENT_ID, COGNITO_CLIENT_SECRET);
 
     const axios = require('axios');
-    let data = {
+    const data = {
       AuthParameters: {
         USERNAME: username,
         PASSWORD: password,
@@ -44,7 +44,7 @@ function MockLogin() {
       ClientId: COGNITO_CLIENT_ID,
     };
 
-    let config = {
+    const config = {
       method: 'post',
       maxBodyLength: Infinity,
       url: `https://cognito-idp.${COGNITO_CLIENT_REGION}.amazonaws.com`,

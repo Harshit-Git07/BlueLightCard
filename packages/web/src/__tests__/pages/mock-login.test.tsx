@@ -3,10 +3,8 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import AuthContext, { AuthContextType, AuthState } from '@/context/Auth/AuthContext';
 import { useRouter } from 'next/router';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
-import axios from 'axios';
 import '@testing-library/jest-dom';
 import MockLogin from '@/pages/mock-login';
-import { AUTH0_LOGIN_URL, COGNITO_CLIENT_ID, COGNITO_CLIENT_REGION } from '@/global-vars';
 import { Auth0Service } from '@/root/src/common/services/auth0Service';
 
 jest.mock('next/router', () => ({

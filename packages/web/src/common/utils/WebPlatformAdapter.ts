@@ -70,16 +70,18 @@ export class WebPlatformAdapter implements IPlatformAdapter {
 
   navigateExternal(path: string, options: NavigationOptions): IPlatformWindowHandle {
     switch (options.target) {
-      case 'blank':
+      case 'blank': {
         const windowHandle = window.open(path, '_blank');
         return {
           isOpen: () => windowHandle?.closed === false,
         };
-      case 'self':
+      }
+      case 'self': {
         window.location.href = path;
         return {
           isOpen: () => true,
         };
+      }
     }
   }
 

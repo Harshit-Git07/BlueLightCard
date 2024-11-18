@@ -6,7 +6,7 @@ import offersData from '@/data/offersData';
  * @TODO Add category logic
  * @returns
  */
-const getOffersStaticProps: GetStaticProps = async (context) => {
+const getOffersStaticProps: GetStaticProps = async () => {
   // Query params - Hardcoded as using params is not viable.
   const offerType = 2;
   const searchQuery = undefined;
@@ -33,7 +33,7 @@ const getOffersStaticProps: GetStaticProps = async (context) => {
   }
 
   // Offer Preset Pages (online, highstreet, giftcard)
-  const offersFilter = offersData.offerCategories.filter((offerCat, index) => {
+  const offersFilter = offersData.offerCategories.filter((offerCat) => {
     return offerCat.offerIndex == offerType;
   });
 

@@ -49,7 +49,7 @@ export function AuthedAmplitudeExperimentProvider({
   );
 }
 
-async function _initExperimentClientLoggedOut(deviceId: string): Promise<ExperimentClient> {
+async function _initExperimentClientLoggedOut(): Promise<ExperimentClient> {
   const client = await AmplitudeDeviceExperimentClient.Instance();
 
   const variants = transformObjVariants(amplitudeExperimentClient.all());
@@ -74,7 +74,7 @@ export function LoggedOutAmplitudeExperimentProvider({
 
   const queryClient = useQuery({
     queryKey: ['amplitudeExperimentClient'],
-    queryFn: () => initExperimentClient(deviceFingerprint),
+    queryFn: () => initExperimentClient(),
     enabled: Boolean(deviceFingerprint),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

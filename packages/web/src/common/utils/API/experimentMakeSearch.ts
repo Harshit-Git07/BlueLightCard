@@ -35,13 +35,12 @@ export async function experimentMakeSearch(
   platFormAdapter: WebPlatformAdapter,
   useLegacyId = true
 ) {
-  let params = {
+  const params = {
     query: he.escape(queryRaw),
     dob: dateOfBirth,
     organisation: service,
   };
-
-  let output: SearchResultsType = {};
+  const output: SearchResultsType = {};
 
   try {
     const response = await platFormAdapter.invokeV5Api(V5_API_URL.Search, {

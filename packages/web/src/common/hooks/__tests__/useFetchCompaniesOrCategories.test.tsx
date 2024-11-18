@@ -1,11 +1,7 @@
 import '@testing-library/jest-dom';
 import { renderHook, RenderOptions, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import {
-  PlatformAdapterProvider,
-  useMockPlatformAdapter,
-  V5RequestOptions,
-} from '@bluelightcard/shared-ui';
+import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
 import useFetchCompaniesOrCategories from '@/hooks/useFetchCompaniesOrCategories';
 import { UserContextType } from '@/context/User/UserContext';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
@@ -65,47 +61,45 @@ describe('useFetchCompaniesOrCategories', () => {
   describe('it calls the companies or categories V5 API', () => {
     beforeEach(() => {
       jest.resetAllMocks();
-      mockPlatformAdapter.invokeV5Api.mockImplementation(
-        (path: string, _options: V5RequestOptions) => {
-          if (path.includes('/companies')) {
-            return Promise.resolve({
-              status: 200,
-              data: JSON.stringify({
-                data: [
-                  {
-                    companyID: 'test-company-id-1',
-                    companyName: 'Test Company 1',
-                    legacyCompanyID: 1234,
-                  },
-                  {
-                    companyID: 'test-company-id-2',
-                    companyName: 'Test Company 2',
-                    legacyCompanyID: 5678,
-                  },
-                ],
-              }),
-            });
-          } else if (path.includes('/categories')) {
-            return Promise.resolve({
-              status: 200,
-              data: JSON.stringify({
-                data: [
-                  {
-                    id: '1',
-                    name: 'Test Category 1',
-                  },
-                  {
-                    id: '2',
-                    name: 'Test Category 2',
-                  },
-                ],
-              }),
-            });
-          } else {
-            return Promise.reject(new Error('Invalid path provided'));
-          }
+      mockPlatformAdapter.invokeV5Api.mockImplementation((path: string) => {
+        if (path.includes('/companies')) {
+          return Promise.resolve({
+            status: 200,
+            data: JSON.stringify({
+              data: [
+                {
+                  companyID: 'test-company-id-1',
+                  companyName: 'Test Company 1',
+                  legacyCompanyID: 1234,
+                },
+                {
+                  companyID: 'test-company-id-2',
+                  companyName: 'Test Company 2',
+                  legacyCompanyID: 5678,
+                },
+              ],
+            }),
+          });
+        } else if (path.includes('/categories')) {
+          return Promise.resolve({
+            status: 200,
+            data: JSON.stringify({
+              data: [
+                {
+                  id: '1',
+                  name: 'Test Category 1',
+                },
+                {
+                  id: '2',
+                  name: 'Test Category 2',
+                },
+              ],
+            }),
+          });
+        } else {
+          return Promise.reject(new Error('Invalid path provided'));
         }
-      );
+      });
     });
 
     it('should return results with company IDs not set as legacy IDs when "cms-offers" experiment on', async () => {

@@ -1,5 +1,5 @@
 import AmplitudeContext from '@/root/src/common/context/AmplitudeContext';
-import UserContext, { User, UserContextType } from '@/root/src/common/context/User/UserContext';
+import UserContext, { UserContextType } from '@/root/src/common/context/User/UserContext';
 import { Amplitude } from '@/root/src/common/utils/amplitude/amplitude';
 import { act, renderHook } from '@testing-library/react';
 import { useNavigationTracking } from '../../../NavBar/hooks/useNavigationTracking';

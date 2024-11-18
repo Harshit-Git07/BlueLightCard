@@ -1,7 +1,7 @@
 import { NextPage } from 'next';
-import { JSXElementConstructor, ReactElement, ReactNode } from 'react';
+import { JSXElementConstructor, ReactElement } from 'react';
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (
     page: ReactElement
   ) =>

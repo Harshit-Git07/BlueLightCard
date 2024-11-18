@@ -2,16 +2,12 @@ import '@testing-library/jest-dom';
 import { fireEvent, render, screen } from '@testing-library/react';
 import IconListItem from '@/components/IconListItem/IconListItem';
 import { IconListItemProps } from '@/components/IconListItem/types';
-import { useRouter } from 'next/router';
-import exp from 'constants';
 
 const mockOnClickLink = jest.fn();
 
 describe('IconListItem component', () => {
-  let props: IconListItemProps;
-
   it('should render IconListItem link with onClick function', () => {
-    const props = {
+    const props: IconListItemProps = {
       iconSrc: '/assets/box-open-light-slash.svg',
       title: 'Not valid on certain item(s)',
       link: 'View details',
@@ -28,7 +24,7 @@ describe('IconListItem component', () => {
   });
 
   it('should render IconListItem link with href', () => {
-    const props = {
+    const props: IconListItemProps = {
       iconSrc: '/assets/box-open-light-slash.svg',
       title: 'Not valid on certain item(s)',
       link: 'View details',
@@ -54,7 +50,7 @@ describe('IconListItem component', () => {
   });
 
   it('should render IconListItem with no link', () => {
-    const props = {
+    const props: IconListItemProps = {
       emoji: '🚫',
       title: 'Not valid on certain item(s)',
     };

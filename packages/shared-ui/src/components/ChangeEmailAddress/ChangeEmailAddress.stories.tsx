@@ -22,7 +22,7 @@ const DefaultTemplate: StoryFn<typeof ChangeEmailAddress> = (args) => {
   const adapter = { ...storybookPlatformAdapter };
   adapter.invokeV5Api = async (url, options) => {
     await new Promise((accept) => setTimeout(accept, 1000));
-    const payload = jsonOrNull(options.body ?? '');
+    const payload = jsonOrNull<any>(options.body ?? '');
     if (payload?.email.startsWith('e')) {
       return Promise.resolve({
         status: 400,

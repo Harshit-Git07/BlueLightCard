@@ -6,7 +6,7 @@ const componentMeta: Meta<typeof HorizontalCard> = {
   component: HorizontalCard,
 };
 
-const DefaultList: StoryFn = (args) => (
+const DefaultList: StoryFn = () => (
   <HorizontalCard
     img={'https://placehold.co/600x400'}
     title={'Shop name'}

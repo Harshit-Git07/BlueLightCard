@@ -3,10 +3,8 @@ import { LabelProps } from '@/components/Label/types';
 import renderer from 'react-test-renderer';
 
 describe('Label component', () => {
-  let props: LabelProps;
-
   it('should render normal label', () => {
-    const props = {
+    const props: LabelProps = {
       text: 'Online',
       type: 'normal',
     };
@@ -16,7 +14,7 @@ describe('Label component', () => {
   });
 
   it('should render red label', () => {
-    const props = {
+    const props: LabelProps = {
       text: '0/3 codes remaining',
       type: 'alert',
     };

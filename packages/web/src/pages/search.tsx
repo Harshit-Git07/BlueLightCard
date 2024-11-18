@@ -6,7 +6,7 @@ import React, { useContext, useEffect } from 'react';
 import OfferCard from '@/offers/components/OfferCard/OfferCard';
 import { makeQuery } from 'src/graphql/makeQuery';
 
-import { AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB, BRAND, CDN_URL } from '@/global-vars';
+import { AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB, BRAND } from '@/global-vars';
 import { advertQuery } from 'src/graphql/advertQuery';
 
 import AuthContext from '@/context/Auth/AuthContext';
@@ -94,9 +94,8 @@ const Search: NextPage = () => {
         setError('An unknown error occurred. Please try again later.');
       }
 
-      // Banner Data
       try {
-        let bannerData = await makeQuery(advertQuery(BRAND, userCtx.isAgeGated ?? true));
+        const bannerData = await makeQuery(advertQuery(BRAND, userCtx.isAgeGated ?? true));
         setAdverts(shuffle(bannerData.data.banners).slice(0, 2) as BannerDataType[]);
       } catch (error) {
         setAdverts([]);

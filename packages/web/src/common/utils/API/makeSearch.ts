@@ -39,14 +39,14 @@ export async function makeSearch(
     ? `${SEARCH_ENDPOINT}/expSearch`
     : `${SEARCH_ENDPOINT}/newSearch`;
 
-  let data = {
+  const data = {
     searchTerm: he.escape(queryRaw),
     siteId: getSiteIdFromBrandId(BRAND),
     allowAgeGated,
     service,
   };
 
-  let config = {
+  const config = {
     method: 'post',
     maxBodyLength: Infinity,
     url: searchPath,
@@ -57,7 +57,7 @@ export async function makeSearch(
     data: data,
   };
 
-  let output: SearchResultsType = {};
+  const output: SearchResultsType = {};
 
   try {
     const response = await axios.request(config);

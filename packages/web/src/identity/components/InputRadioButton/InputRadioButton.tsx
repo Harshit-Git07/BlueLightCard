@@ -10,10 +10,10 @@ const InputRadioButton: FC<InputRadioButtonProps> = ({
   value,
   required,
   name,
-  onChange,
   selectedByDefault,
 }) => {
   const [selected, setSelected] = useState(selectedByDefault);
+
   return (
     <>
       <input
@@ -23,9 +23,9 @@ const InputRadioButton: FC<InputRadioButtonProps> = ({
         aria-label={name}
         required={required}
         type="radio"
-        onClick={(e) => setSelected(!selected)}
+        onClick={() => setSelected(!selected)}
         checked={selected}
-        onChange={(e) => {}}
+        onChange={() => {}}
       />
       <label className="m-2">{name}</label>
     </>
@@ -38,7 +38,7 @@ const InputRadioButton: FC<InputRadioButtonProps> = ({
  * @deprecated Please read the above note carefully.
  */
 // eslint-disable-next-line react/display-name
-const InputRadioButtonWithRef = forwardRef<unknown, InputRadioButtonProps>((props, ref) => (
+const InputRadioButtonWithRef = forwardRef<unknown, InputRadioButtonProps>((props) => (
   <InputRadioButton {...props} />
 ));
 

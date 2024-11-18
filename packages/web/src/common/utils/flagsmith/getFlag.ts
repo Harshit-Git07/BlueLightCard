@@ -1,4 +1,3 @@
-import { IFlagsmith } from 'flagsmith/types';
 import { FlagsmithFeatureFlags } from './flagsmithFlags';
 import cookies from 'js-cookie';
 import { BRAND } from '@/global-vars';

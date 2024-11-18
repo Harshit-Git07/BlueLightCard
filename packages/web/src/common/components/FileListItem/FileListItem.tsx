@@ -47,7 +47,7 @@ const FileListItem: FC<FileListItemProps> = ({
     'flex flex-col justify-center w-full rounded-lg border',
   ]);
   const wrapperClasses = cssUtil([
-    !!imageSrc ? 'gap-2' : 'gap-4 tablet:flex-row items-center',
+    imageSrc ? 'gap-2' : 'gap-4 tablet:flex-row items-center',
     'flex flex-col py-3 px-5',
   ]);
   const prefixIconClasses = cssUtil([textColor ?? '', 'block']);

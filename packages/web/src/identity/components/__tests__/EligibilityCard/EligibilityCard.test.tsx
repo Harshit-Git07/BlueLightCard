@@ -4,7 +4,7 @@ import EligibilityCard from '../../EligibilityCard/EligibilityCard';
 import { EligibilityCardProps } from '../../EligibilityCard/Types';
 import { UserEvent } from '@testing-library/user-event';
 import userEvent from '@testing-library/user-event';
-import { useRouter } from 'next/router';
+
 const getById = queryByAttribute.bind(null, 'id');
 
 jest.mock('next/router', () => ({
@@ -18,7 +18,7 @@ jest.mock('next/router', () => ({
   },
 }));
 jest.mock('src/services/EligibilityApi.ts', () => ({
-  fetchOrganisationData(employment: string) {
+  fetchOrganisationData() {
     return {
       message: 'Success',
       data: [
@@ -56,7 +56,7 @@ jest.mock('src/services/EligibilityApi.ts', () => ({
       ],
     };
   },
-  fetchEmployerData(employment: string) {
+  fetchEmployerData() {
     return {
       message: 'Success',
       data: [
@@ -72,10 +72,11 @@ jest.mock('src/services/EligibilityApi.ts', () => ({
     };
   },
 }));
+
 describe('EligibilityCard component', () => {
   let props: EligibilityCardProps;
   let user: UserEvent;
-  const router = useRouter();
+
   beforeEach(() => {
     props = {
       isLoading: false,
@@ -129,6 +130,7 @@ describe('EligibilityCard component', () => {
       expect(eligibility_card).toBeTruthy();
     });
   });
+
   describe('disabled button rendering', () => {
     it('Next button should be disabled while form is incomplete', () => {
       render(<EligibilityCard {...props} />);
@@ -148,6 +150,7 @@ describe('EligibilityCard component', () => {
         expect(next_button).toBeDisabled();
       }
     });
+
     it('Submit button should be disabled while form is incomplete', () => {
       render(<EligibilityCard {...props} currentStep={2} />);
       const submit_button = screen.getByRole('button', { name: 'Submit' });
@@ -174,6 +177,7 @@ describe('EligibilityCard component', () => {
       //buttons will gain focus when clicked, so it should be a solid indicator of click
       expect(button).toHaveFocus();
     });
+
     it('should invoke event when finish button is clicked', async () => {
       render(<EligibilityCard {...props} currentStep={3} />);
       const button = screen.getByRole('button', { name: 'Finish' });
@@ -181,18 +185,21 @@ describe('EligibilityCard component', () => {
       //buttons will gain focus when clicked, so it should be a solid indicator of click event
       expect(button).toHaveFocus();
     });
+
     it('should invoke event when next button is clicked', async () => {
       render(<EligibilityCard {...props} jobRole="Nurse" />);
       const button = screen.getByRole('button', { name: 'Next' });
       await act(() => user.click(button));
       expect(props.onNext).toHaveBeenCalled();
     });
+
     it('should invoke event when submit button is clicked', async () => {
       render(<EligibilityCard {...props} currentStep={2} acceptedId="Payslip" />);
       const button = screen.getByRole('button', { name: 'Submit' });
       await act(() => user.click(button));
       expect(props.onSubmit).toHaveBeenCalled();
     });
+
     it('should invoke event when back button is clicked', async () => {
       render(<EligibilityCard {...props} currentStep={2} />);
       const this_step = 2;
@@ -200,6 +207,7 @@ describe('EligibilityCard component', () => {
       await act(() => user.click(button));
       expect(props.currentStep).toBeLessThan(this_step);
     });
+
     it('should invoke event when sign-up now button is clicked', async () => {
       render(<EligibilityCard {...props} currentStep={3} eligible="Yes" />);
       const button = screen.getByRole('button', { name: 'Sign up now' });
@@ -208,6 +216,7 @@ describe('EligibilityCard component', () => {
       expect(button).toBeInTheDocument();
     });
   });
+
   describe('EligibilityCard Happy Path final step text rendering', () => {
     it('should render correct text when user is eligible', () => {
       render(<EligibilityCard {...props} currentStep={3} eligible="Yes" />);

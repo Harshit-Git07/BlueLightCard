@@ -13,11 +13,11 @@ export async function retrieveFavourites(companyId?: string) {
   if (idToken && companyId) {
     let { 'custom:blc_old_id': userId } = unpackJWT(idToken);
     userId = userId ?? null;
-    let data = {
+    const data = {
       userId: parseInt(userId, 10),
       brand: LEGACY_MICROSERVICE_BRAND,
     };
-    let config = {
+    const config = {
       method: 'post',
       maxBodyLength: Infinity,
       url: RETRIEVE_FAVOURITE_ENDPOINT,
@@ -45,13 +45,13 @@ export async function UpdateFavourites(
   idToken: string,
   userId?: string
 ): Promise<boolean> {
-  let data = {
+  const data = {
     companyId: offerMeta.companyId,
     brand: LEGACY_MICROSERVICE_BRAND,
     userId: userId,
   };
 
-  let config = {
+  const config = {
     method: 'post',
     maxBodyLength: Infinity,
     url: UPDATE_FAVOURITE_ENDPOINT,

@@ -1,4 +1,3 @@
-import * as globals from '@/global-vars';
 import { getCompanyOfferDetailsUrl, getOffersBySearchTermUrl } from '../externalPageUrls';
 import { amplitudeStore } from '../../context/AmplitudeExperiment';
 import { experimentsAndFeatureFlags } from '../../utils/amplitude/store';
@@ -9,8 +8,6 @@ jest.mock('@/global-vars', () => ({
   BRAND: 'blc-uk',
   AMPLITUDE_DEPLOYMENT_KEY: '',
 }));
-
-const mockGlobals = globals as { BRAND: string };
 
 describe('getOffersBySearchTermUrl', () => {
   afterAll(() => {

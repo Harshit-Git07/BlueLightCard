@@ -3,7 +3,6 @@ import * as target from '../index';
 import jwtDecode from 'jwt-decode';
 import EVENTS from '../../amplitude/events';
 import {
-  logMembersHomePageScrollDepth,
   logSearchTermEvent,
   logSearchCompanyEvent,
   logSearchCategoryEvent,

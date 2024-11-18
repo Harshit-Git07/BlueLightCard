@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import { as } from '@core/utils/testing';
-import { act, renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor } from '@testing-library/react';
 import { useAmplitudeExperiment, useAmplitudeExperimentComponent } from '../hooks';
 import { AuthedAmplitudeExperimentProvider } from '../provider';
 import UserContext, { UserContextType } from '@/context/User/UserContext';

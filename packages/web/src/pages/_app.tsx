@@ -61,7 +61,7 @@ const ReactQueryDevtoolsPreview = lazy(() =>
 const queryClient = new QueryClient();
 
 const App: FC<AppProps> = ({ Component, pageProps }) => {
-  const amplitude = useContext(AmplitudeContext);
+  useContext(AmplitudeContext);
   // Use the layout defined at the page level, if available
   const getLayout = (Component as NextPageWithLayout).getLayout || ((page: ReactElement) => page);
 

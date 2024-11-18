@@ -1,4 +1,3 @@
-import { AMPLITUDE_DEPLOYMENT_KEY } from '@/root/global-vars';
 import { ExperimentClient } from '@amplitude/experiment-js-client';
 
 export default class AmplitudeExperimentClient {

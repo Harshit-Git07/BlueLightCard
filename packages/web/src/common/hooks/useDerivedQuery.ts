@@ -1,5 +1,4 @@
 import {
-  UseQueryResult,
   DefinedQueryObserverResult,
   QueryObserverLoadingErrorResult,
   QueryObserverLoadingResult,

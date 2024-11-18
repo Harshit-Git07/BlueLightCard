@@ -7,7 +7,7 @@ const getLoggedInUserId = () => {
   const idToken = AuthTokensService.getIdToken();
 
   if (idToken) {
-    let { 'custom:blc_old_uuid': userUuid } = unpackJWT(idToken);
+    const { 'custom:blc_old_uuid': userUuid } = unpackJWT(idToken);
     userId = userUuid ?? null;
   }
 

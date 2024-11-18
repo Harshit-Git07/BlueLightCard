@@ -1,5 +1,5 @@
 import { UseQueryResult } from '@tanstack/react-query';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AmplitudeExperimentContext } from './context';
 import { ExperimentClient } from '@amplitude/experiment-js-client';
 import { UseDerivedQueryResult, useDerivedQuery } from '@/hooks/useDerivedQuery';

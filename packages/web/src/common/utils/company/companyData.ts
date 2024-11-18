@@ -2,7 +2,7 @@ import { OFFERS_API_GATEWAY_ENDPOINT } from '@/root/global-vars';
 import axios from 'axios';
 
 export const getCompany = async (idToken: string, companyId: any) => {
-  let config = {
+  const config = {
     method: 'get',
     url: `${OFFERS_API_GATEWAY_ENDPOINT}/company/${companyId}`,
     headers: {
@@ -19,7 +19,7 @@ export const getCompany = async (idToken: string, companyId: any) => {
 };
 
 export const getOffersByCompany = async (idToken: string, companyId: any) => {
-  let config = {
+  const config = {
     method: 'get',
     url: `${OFFERS_API_GATEWAY_ENDPOINT}/company/${companyId}/offers`,
     headers: {

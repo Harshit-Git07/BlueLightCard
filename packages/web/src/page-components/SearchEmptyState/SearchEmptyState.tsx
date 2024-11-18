@@ -1,9 +1,6 @@
 import React, { FC } from 'react';
-import { SearchEmptyStateProps } from './types';
 
-type SearchEmptyStatePresenterProps = {};
-
-export const SearchEmptyStatePresenter: FC<SearchEmptyStatePresenterProps> = () => {
+export const SearchEmptyStatePresenter: FC = () => {
   return (
     <div className="w-full">
       <p className="font-typography-title-large text-typography-title-large font-typography-title-large-weight tracking-typography-title-large leading-typography-title-large pb-[25px]">
@@ -14,7 +11,7 @@ export const SearchEmptyStatePresenter: FC<SearchEmptyStatePresenterProps> = () 
   );
 };
 
-const SearchEmptyState: FC<SearchEmptyStateProps> = () => {
+const SearchEmptyState: FC = () => {
   return <SearchEmptyStatePresenter />;
 };
 

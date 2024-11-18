@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next';
 import offersData from '../../../../data/offersData';
 
-const getMobileSearchStaticProps: GetStaticProps = async (context) => {
+const getMobileSearchStaticProps: GetStaticProps = async () => {
   return {
     props: {
       offers: offersData.offerCategories[0].offers,

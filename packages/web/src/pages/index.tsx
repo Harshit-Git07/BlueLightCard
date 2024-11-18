@@ -9,7 +9,7 @@ import Heading from '@/components/Heading/Heading';
 
 export const getStaticProps = getI18nStaticProps;
 
-const Home: NextPage<any> = (props) => {
+const Home: NextPage<any> = () => {
   const { t } = useBrandTranslation(['common', 'description']);
   const router = useRouter();
 

@@ -232,7 +232,7 @@ describe('SearchPage', () => {
 
         whenSearchPageIsRendered();
 
-        const [_, instoreOffer2] = await screen.findAllByText('In-store');
+        const [, instoreOffer2] = await screen.findAllByText('In-store');
         expect(instoreOffer2).toBeInTheDocument();
         expect(instoreOffer2.parentElement).toHaveTextContent('In-store Offer 2');
       });
@@ -242,7 +242,7 @@ describe('SearchPage', () => {
 
         whenSearchPageIsRendered();
 
-        const [_, onlineOffer2] = await screen.findAllByText('Online');
+        const [, onlineOffer2] = await screen.findAllByText('Online');
         expect(onlineOffer2).toBeInTheDocument();
         expect(onlineOffer2.parentElement).toHaveTextContent('Apple');
       });
@@ -462,7 +462,7 @@ const whenSearchPageIsRendered = () => {
 };
 
 const whenOfferCardClicked = async () => {
-  let user = userEvent.setup();
+  const user = userEvent.setup();
 
   const offerCard = await screen.findByTestId('offer-card-123');
 

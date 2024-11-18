@@ -1,14 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import NavBar from '../../NavBar/NavBar';
-import { BRANDS } from '@/types/brands.enum';
 import '@testing-library/jest-dom';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui/adapters';
 
 jest.mock('../../NavBar/helpers/getNavigationItems', () => {
   return {
-    getNavigationItems: (brand: BRANDS, isAuthenticated: boolean) => [
-      { id: 'mockNavItem', label: 'Mock Label' },
-    ],
+    getNavigationItems: () => [{ id: 'mockNavItem', label: 'Mock Label' }],
   };
 });
 
@@ -28,11 +25,13 @@ jest.mock('next/router', () => ({
 
 describe('Navbar', () => {
   const mockPlatformAdapter = useMockPlatformAdapter();
+
   it('renders the authenticatedNavBar correctly when isAuthenticated is true', () => {
     const { container } = whenNavBarIsRenderedWithAuth(true);
     expect(container).toMatchSnapshot();
     expect(screen.getByTestId('authenticated-navbar')).toBeDefined();
   });
+
   it('renders the unauthenticated header when isAuthenticated if false', () => {
     const { container } = whenNavBarIsRenderedWithAuth(false);
     expect(container).toMatchSnapshot();

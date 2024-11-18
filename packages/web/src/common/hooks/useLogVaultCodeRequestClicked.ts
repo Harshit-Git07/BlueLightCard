@@ -1,6 +1,5 @@
 import AmplitudeContext from '@/context/AmplitudeContext';
 import UserContext from '@/context/User/UserContext';
-import { logOfferView } from '@/utils/amplitude/logOfferView';
 import { logVaultCodeRequestClicked } from '@/utils/amplitude/logVaultCodeRequestClicked';
 import { useRouter } from 'next/router';
 import { useCallback, useContext } from 'react';

@@ -95,7 +95,7 @@ const Form: FC<FormProps> = ({ submitButtonText, onSubmit, fields }) => {
         return acc;
       },
       {}
-    ) as {},
+    ),
     mode: 'all',
     criteriaMode: 'all',
     resolver: yupResolver(validationSchema, {

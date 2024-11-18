@@ -8,7 +8,7 @@ describe('renders SocialLinks component with correct text', () => {
 
     expect(screen.getByText(/download the/i)).toBeInTheDocument();
     expect(screen.getByText(/blue light card/i)).toBeInTheDocument();
-    expect(screen.getByText(/app for a better in\-store experience\./i)).toBeInTheDocument();
+    expect(screen.getByText(/app for a better in-store experience\./i)).toBeInTheDocument();
   });
 
   it('should render an social links', () => {

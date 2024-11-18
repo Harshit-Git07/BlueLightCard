@@ -4,7 +4,7 @@ import { screen } from '@testing-library/dom';
 
 describe('Custom Link component which allows for legacy routing', () => {
   it('should use an anchor tag when useLegacyRouting is true', () => {
-    const {} = render(
+    render(
       <Link useLegacyRouting={true} href="/test">
         Test
       </Link>
@@ -16,7 +16,8 @@ describe('Custom Link component which allows for legacy routing', () => {
 
   it('should include onClick handler when useLegacyRouting is true', () => {
     const onClickLinkMock = jest.fn();
-    const {} = render(
+
+    render(
       <Link useLegacyRouting={true} href="/test" onClickLink={onClickLinkMock}>
         Test
       </Link>
@@ -29,7 +30,7 @@ describe('Custom Link component which allows for legacy routing', () => {
   });
 
   it('should use an Next Link when useLegacyRouting is false', () => {
-    const {} = render(
+    render(
       <Link useLegacyRouting={false} href="/test">
         Test
       </Link>
@@ -41,7 +42,8 @@ describe('Custom Link component which allows for legacy routing', () => {
 
   it('should use an Next Link with click handler when useLegacyRouting is false and href present', () => {
     const onClickLinkMock = jest.fn();
-    const {} = render(
+
+    render(
       <Link useLegacyRouting={false} href="/test" onClickLink={onClickLinkMock}>
         Test
       </Link>
@@ -54,7 +56,7 @@ describe('Custom Link component which allows for legacy routing', () => {
   });
 
   it('should use a div when there is no href and an onLinkClick function is passed on', () => {
-    const {} = render(
+    render(
       <Link useLegacyRouting={false} onClickLink={() => {}}>
         Test
       </Link>

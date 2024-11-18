@@ -1,5 +1,5 @@
 import renderer from 'react-test-renderer';
-import { render, fireEvent, act, waitFor } from '@testing-library/react';
+import { render, fireEvent, act } from '@testing-library/react';
 import ShareButton from '@/components/ShareButton/ShareButton';
 import { useMedia } from 'react-use';
 
@@ -87,9 +87,7 @@ describe('ShareButton component', () => {
     (useMedia as jest.Mock).mockReturnValue(false); // not mobile
     Reflect.deleteProperty(global.navigator, 'clipboard'); // copy is unsuccessful
 
-    const { getByText, queryByText, getByTestId } = render(
-      <ShareButton shareDetails={shareDetails} />
-    );
+    const { queryByText, getByTestId } = render(<ShareButton shareDetails={shareDetails} />);
 
     fireEvent.click(getByTestId('share_cta'));
 

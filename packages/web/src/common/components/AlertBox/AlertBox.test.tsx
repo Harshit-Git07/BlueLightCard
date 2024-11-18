@@ -3,10 +3,8 @@ import { AlertBoxProps } from '@/components/AlertBox/types';
 import renderer from 'react-test-renderer';
 
 describe('AlertBox component', () => {
-  let props: AlertBoxProps;
-
   it('should render success alert', () => {
-    const props = {
+    const props: AlertBoxProps = {
       alertType: 'success',
       title: 'Success Alert',
       description: 'This is a success message.',
@@ -18,7 +16,7 @@ describe('AlertBox component', () => {
   });
 
   it('should render info alert', () => {
-    const props = {
+    const props: AlertBoxProps = {
       alertType: 'info',
       title: 'Info Alert',
       description: 'This is an info message.',
@@ -30,7 +28,7 @@ describe('AlertBox component', () => {
   });
 
   it('should render warning alert', () => {
-    const props = {
+    const props: AlertBoxProps = {
       alertType: 'warning',
       title: 'Warning Alert',
       description: 'This is a warning message.',
@@ -42,7 +40,7 @@ describe('AlertBox component', () => {
   });
 
   it('should render danger alert', () => {
-    const props = {
+    const props: AlertBoxProps = {
       alertType: 'danger',
       title: 'Error Alert',
       description: 'This is an error message.',

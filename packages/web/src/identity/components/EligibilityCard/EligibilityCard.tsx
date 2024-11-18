@@ -81,7 +81,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
   };
   const getOrganisations = async (employment: string) => {
     // Starts a timer, if it reaches 1 second, setLoading will be called
-    let timeout = setTimeout(() => props.setLoading(true), 2000);
+    const timeout = setTimeout(() => props.setLoading(true), 2000);
     const result = await fetchOrganisationData(employment);
     // When data is fetched, the timer cleared before it reaches 1 second
     clearTimeout(timeout);
@@ -100,7 +100,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
 
   const getEmployers = async (organisation: string, employment: string) => {
     // Starts a timer, if it reaches 1.5 seconds, setLoading will be called
-    let timeout = setTimeout(() => props.setLoading(true), 2000);
+    const timeout = setTimeout(() => props.setLoading(true), 2000);
     const result = await fetchEmployerData(organisation, employment);
     // When data is fetched, clear the timer before it reaches 1.5 seconds
     clearTimeout(timeout);
@@ -445,7 +445,7 @@ const EligibilityCard: FC<EligibilityCardProps> = (props) => {
                         }
                         // if organisation is NHS dental practice, make sure employer set to Dentist.
                         else if (props.organisation == 'b9a66aa1-480b-4d8c-b1f0-ea8ac07392bf') {
-                          let temp: string | undefined = props.empOptions.find(
+                          const temp = props.empOptions.find(
                             (emp) => emp.key == 'c5591f0d-0075-4257-9f8f-1ebfd9514c19'
                           )?.value;
                           props.setEmployer(temp ? temp : '');

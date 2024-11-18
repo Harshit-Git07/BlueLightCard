@@ -22,7 +22,7 @@ const componentMeta: Meta<typeof FlexibleOffersPage> = {
       },
     },
     platformAdapter: {
-      invokeV5Api: (path: string) =>
+      invokeV5Api: () =>
         Promise.resolve({
           status: 200,
           data: JSON.stringify({
@@ -53,7 +53,7 @@ Loading.parameters = {
     },
   },
   platformAdapter: {
-    invokeV5Api: (path: string) => new Promise(() => {}),
+    invokeV5Api: () => new Promise(() => {}),
   },
 };
 
@@ -67,7 +67,7 @@ Error.parameters = {
     },
   },
   platformAdapter: {
-    invokeV5Api: (path: string) => Promise.resolve({ status: 500 }),
+    invokeV5Api: () => Promise.resolve({ status: 500 }),
   },
 };
 

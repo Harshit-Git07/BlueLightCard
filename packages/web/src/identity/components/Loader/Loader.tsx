@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-const Loader: FC = ({}) => {
+const Loader: FC = () => {
   return (
     <svg
       aria-hidden="true"

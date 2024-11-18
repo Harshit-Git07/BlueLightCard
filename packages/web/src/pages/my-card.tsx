@@ -6,7 +6,6 @@ import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
 
 const MyCardPage: NextPage = () => {
   const accountNumber = 'BLC0000000';
-  const expiryDate = new Date();
 
   return (
     <div className="flex flex-col gap-5">

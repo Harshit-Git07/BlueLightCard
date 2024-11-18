@@ -153,9 +153,8 @@ export const TokenisedSearch: NextPage = () => {
         setError('An unknown error occurred. Please try again later.');
       }
 
-      // Banner Data
       try {
-        let bannerData = await makeQuery(advertQuery(BRAND, userCtx.isAgeGated ?? true));
+        const bannerData = await makeQuery(advertQuery(BRAND, userCtx.isAgeGated ?? true));
         setAdverts(shuffle(bannerData.data.banners).slice(0, 2) as BannerDataType[]);
       } catch (error) {
         setAdverts([]);

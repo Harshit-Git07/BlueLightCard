@@ -97,7 +97,7 @@ export async function fetchEmployerData(organisationId: string, employment: stri
   return data;
 }
 
-export async function addECFormOutputData(trackingData: Object) {
+export async function addECFormOutputData(trackingData: object) {
   // Make the request manually
   return fetcherWithHeaders(IDENTITY_ELIGIBILITY_FORM_OUTPUT_ENDPOINT, trackingData, {
     ['x-api-key']: IDENTITY_API_KEY,

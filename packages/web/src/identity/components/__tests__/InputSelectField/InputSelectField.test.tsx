@@ -1,5 +1,5 @@
 import InputSelectField from '../../InputSelectField/InputSelectField';
-import { InputSelectFieldProps, KeyValue } from '../../InputSelectField/Types';
+import { InputSelectFieldProps } from '../../InputSelectField/Types';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 

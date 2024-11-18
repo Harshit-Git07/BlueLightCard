@@ -175,7 +175,7 @@ const whenSearchPageIsRendered = (variant: string) => {
 };
 
 const whenOfferCardClicked = async () => {
-  let user = userEvent.setup();
+  const user = userEvent.setup();
 
   const offerCard = await screen.findByTestId('_offer_card_0');
 

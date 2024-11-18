@@ -13,10 +13,10 @@ const origin = 'origin';
 const givenMockAmplitudeIsInitialised = () => {
   const trackEventAsyncMock = jest
     .spyOn(Amplitude.prototype, 'trackEventAsync')
-    .mockImplementation((_event, _data) => Promise.resolve({} as any));
+    .mockImplementation(() => Promise.resolve({} as any));
   const setUserIdMock = jest
     .spyOn(Amplitude.prototype, 'setUserId')
-    .mockImplementation((_userId) => Promise.resolve());
+    .mockImplementation(() => Promise.resolve());
   const amplitude = new Amplitude();
 
   return { trackEventAsyncMock, setUserIdMock, amplitude };
@@ -66,7 +66,7 @@ describe('logGlobalNavigation', () => {
   });
 
   it('should handle amplitude timeout', async () => {
-    trackEventAsyncMock.mockImplementationOnce(async (_event, _data) => {
+    trackEventAsyncMock.mockImplementationOnce(async () => {
       await new Promise((resolve) => setTimeout(resolve, 2001));
       return {} as any;
     });

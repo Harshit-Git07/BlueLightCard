@@ -1,6 +1,7 @@
 import React from 'react';
 import ContentLoader from 'react-content-loader';
-function PromoBannerPlaceholder({ ...props }) {
+
+function PromoBannerPlaceholder() {
   return (
     <div className="w-full relative mb-2">
       <ContentLoader

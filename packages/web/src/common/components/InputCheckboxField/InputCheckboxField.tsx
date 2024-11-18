@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, forwardRef, useEffect, useState } from 'react';
+import { ChangeEvent, FC, forwardRef, useState } from 'react';
 import { InputCheckboxFieldProps } from '@/components/InputCheckboxField/types';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

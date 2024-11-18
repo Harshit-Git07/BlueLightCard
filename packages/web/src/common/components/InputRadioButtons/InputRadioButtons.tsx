@@ -52,7 +52,7 @@ const InputRadioButton: FC<InputRadioButtonsProps> = ({
  * @deprecated Please read the above note carefully.
  */
 // eslint-disable-next-line react/display-name
-const InputRadioButtons = forwardRef<HTMLInputElement, InputRadioButtonsProps>((props, ref) => (
+const InputRadioButtons = forwardRef<HTMLInputElement, InputRadioButtonsProps>((props) => (
   <InputRadioButton {...props} />
 ));
 

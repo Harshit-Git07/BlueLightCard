@@ -1,6 +1,5 @@
 import { useContext, useEffect } from 'react';
 import getCDNUrl from '@/utils/getCDNUrl';
-
 import { BLACK_FRIDAY_TIME_LOCK_END_DATE, BLACK_FRIDAY_TIME_LOCK_START_DATE } from '@/global-vars';
 import PromoBanner from '@/offers/components/PromoBanner/PromoBanner';
 import CardCarousel from '@/offers/components/CardCarousel/CardCarousel';
@@ -23,7 +22,6 @@ import Container from '@/components/Container/Container';
 import { PlatformVariant, SwiperCarousel, useOfferDetails } from '@bluelightcard/shared-ui';
 import { NextPage } from 'next';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
-
 import inTimePeriod from '@/utils/inTimePeriod';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';

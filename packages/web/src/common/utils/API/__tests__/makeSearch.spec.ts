@@ -22,7 +22,7 @@ describe('Search api requests', () => {
       results: {},
     });
 
-    const response = await makeSearch('apple', 'sasas', true, 'service', false);
+    await makeSearch('apple', 'sasas', true, 'service', false);
 
     expect(axiosMockRequest).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -36,7 +36,7 @@ describe('Search api requests', () => {
       results: {},
     });
 
-    const response = await makeSearch('apple', 'sasas', true, 'service', true);
+    await makeSearch('apple', 'sasas', true, 'service', true);
 
     expect(axiosMockRequest).toHaveBeenCalledWith(
       expect.objectContaining({

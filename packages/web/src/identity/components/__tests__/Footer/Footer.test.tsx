@@ -1,12 +1,10 @@
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import Footer from '../../Footer/Footer';
 import { FooterProps } from '../../Footer/Types';
-import { UserEvent } from '@testing-library/user-event';
-import userEvent from '@testing-library/user-event';
 
 describe('Footer component', () => {
   let props: FooterProps;
-  let user: UserEvent;
+
   beforeEach(() => {
     props = {
       navItems: [
@@ -18,7 +16,6 @@ describe('Footer component', () => {
       mobileBreakpoint: 768,
     };
   });
-  user = userEvent.setup();
 
   describe('smoke test', () => {
     it('should render component without error', () => {
@@ -29,6 +26,7 @@ describe('Footer component', () => {
       expect(footer).toBeTruthy();
     });
   });
+
   describe('Footer link rendering', () => {
     it('should render footer links with correct href', async () => {
       render(<Footer {...props} />);

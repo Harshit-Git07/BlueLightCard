@@ -43,7 +43,7 @@ describe('InfoCard Component', () => {
     it('should invoke onClick callback on click event', async () => {
       const onClickMockFn = jest.fn();
       props.onClick = onClickMockFn;
-      const element = render(<InfoCard {...props} />);
+      render(<InfoCard {...props} />);
 
       await act(() => user.click(screen.getByRole('button')));
 

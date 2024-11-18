@@ -61,6 +61,7 @@ describe('withAuth HOC', () => {
 
   afterEach(() => {
     localStorage.clear();
+    // eslint-disable-next-line no-global-assign
     window = originWindow;
   });
 
@@ -80,7 +81,7 @@ describe('withAuth HOC', () => {
 
   it('should fail to authenticate due to no token, therefore failing to show the component', () => {
     const text = 'Hello World';
-    const Comp: NextPage<any> = (props: any) => {
+    const Comp: NextPage<any> = () => {
       return <h1>{text}</h1>;
     };
 
@@ -98,7 +99,7 @@ describe('withAuth HOC', () => {
 
   it('should refresh id token when it is expired and then show the component', () => {
     const text = 'Hello World';
-    const Comp: NextPage<any> = (props: any) => {
+    const Comp: NextPage<any> = () => {
       return <h1>{text}</h1>;
     };
 
@@ -124,7 +125,7 @@ describe('withAuth HOC', () => {
   // Success Cases
   it('should authenticate due to valid and in date JWT, therefore showing the component', () => {
     const text = 'Hello World';
-    const Comp: NextPage<any> = (props: any) => {
+    const Comp: NextPage<any> = () => {
       return <h1>{text}</h1>;
     };
 
@@ -142,7 +143,7 @@ describe('withAuth HOC', () => {
   });
 
   it('Should update the localstorage accessToken and idToken values', () => {
-    const TestComp: FC = (props: any) => {
+    const TestComp: FC = () => {
       const ctx = useContext(AuthContext);
 
       useEffect(() => {
@@ -191,7 +192,7 @@ describe('withAuth HOC', () => {
 
     // Page comp to be located behind auth
     const text = 'Hello World';
-    const Comp: NextPage<any> = (props: any) => {
+    const Comp: NextPage<any> = () => {
       return <h1>{text}</h1>;
     };
 

@@ -57,7 +57,7 @@ const CompanyPage = () => {
     queryFn: async () => {
       const bannerData = await makeQuery(advertQuery(BRAND, userCtx.isAgeGated ?? true));
       const banners = shuffle(bannerData.data.banners).slice(0, 2) as BannerDataType[];
-      return banners.map((advert, index) => {
+      return banners.map((advert) => {
         const splitLink = advert.link.split('cid=');
         const cidSplit = splitLink[1].split('&');
         const cid = cidSplit[0];

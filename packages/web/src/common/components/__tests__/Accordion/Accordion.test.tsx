@@ -4,10 +4,8 @@ import Markdown from '@/components/Markdown/Markdown';
 import renderer from 'react-test-renderer';
 
 describe('Accordion component', () => {
-  let props: AccordionProps;
-
   it('should render an accordion with simple text', () => {
-    const props = {
+    const props: AccordionProps = {
       title: 'Simple accordion message',
     };
 
@@ -19,7 +17,7 @@ describe('Accordion component', () => {
   });
 
   it('should render an accordion with Markdown bold text', () => {
-    const props = {
+    const props: AccordionProps = {
       title: 'Terms and Conditions',
     };
 

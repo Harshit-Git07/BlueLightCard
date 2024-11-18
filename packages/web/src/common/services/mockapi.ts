@@ -1,5 +1,3 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-
 export const formSubmit: any = async (encoded: string) => {
   try {
     const url = '/api/form';
@@ -17,8 +15,7 @@ export const formSubmit: any = async (encoded: string) => {
       throw new Error('API request failed');
     }
 
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     // Handle error
     console.error('Error calling API endpoint:', error);
@@ -27,7 +24,7 @@ export const formSubmit: any = async (encoded: string) => {
 };
 
 export const getOrganisationsMock: any = (employment: string) => {
-  let result: any = { data: [] };
+  const result: any = { data: [] };
 
   switch (employment) {
     case 'employed':

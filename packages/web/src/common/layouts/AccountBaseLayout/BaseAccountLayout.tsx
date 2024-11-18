@@ -29,17 +29,17 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
     router.push(href);
   };
 
-  const onSearchCompanyChange = async (companyId: string, company: string) => {
+  const onSearchCompanyChange = async () => {
     // await logSearchCompanyEvent(companyId, company);
     // window.location.href = getCompanyOfferDetailsUrl(companyId);
   };
 
-  const onSearchCategoryChange = async (categoryId: string, categoryName: string) => {
+  const onSearchCategoryChange = async () => {
     // await logSearchCategoryEvent(categoryId, categoryName);
     // window.location.href = getOffersByCategoryUrl(categoryId);
   };
 
-  const onSearchTerm = async (searchTerm: string) => {
+  const onSearchTerm = async () => {
     // await logSearchTermEvent(searchTerm);
     // window.location.href = getOffersBySearchTermUrl(searchTerm);
   };

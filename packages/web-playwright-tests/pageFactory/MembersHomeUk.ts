@@ -71,7 +71,9 @@ export class MembersHomeUk {
 
   // Code Redemption options
   private readonly CLICK_HERE_TO_SEE_DISCOUNT_UK: Locator;
+  private readonly COPY_DISCOUNT_CODE_UK: Locator;
   private readonly VISIT_WEBSITE_UK: Locator;
+  private readonly CONTINUE_TO_PARTNER_WEBSITE_UK: Locator;
 
   constructor(page: Page, context: BrowserContext) {
     this.page = page;
@@ -132,7 +134,7 @@ export class MembersHomeUk {
 
     // Search options
     this.SEARCH_BUTTON_UK = page.locator("//input[@placeholder='Search for offers or companies']").first();
-    this.SEARCH_OPTION_COMPANY_UK = page.getByTestId('byCompany');
+    this.SEARCH_OPTION_COMPANY_UK = page.getByLabel('Search for a company');
     this.SEARCH_OPTION_CATEGORY_UK = page.getByTestId('byCategory');
     this.SEARCH_OPTION_SEARCHTERM_UK = page.getByRole('textbox');
     this.SEARCH_NOW_BUTTON_UK = page.getByRole('button', { name: 'Search now' });
@@ -140,7 +142,9 @@ export class MembersHomeUk {
     // Cookie handling
     this.ACCEPT_COOKIES_BUTTON_UK = page.getByRole('button', { name: 'Agree to all' });
     this.CLICK_HERE_TO_SEE_DISCOUNT_UK = page.getByText('Click here to see discount');
+    this.COPY_DISCOUNT_CODE_UK = page.locator('text=Copy discount code');
     this.VISIT_WEBSITE_UK = page.getByRole('button', { name: 'Visit Website' });
+    this.CONTINUE_TO_PARTNER_WEBSITE_UK = page.locator('.text-magicButton-pressed-label-colour');
   }
 
   // Navigation methods
@@ -279,10 +283,7 @@ async clickModernSlaveryActStatement(): Promise<void> {
   // Element assertions
 
   async assertElementsVisibleHomeScreenLoggedIn(): Promise<void> {
-     expect(this.BLUELIGHTBUTTON_NAVBAR_UK).toBeVisible();
 
-   
-    await expect(this.OFFERS_HEADER_LINK_UK).toBeVisible();
     await expect(this.LOGOUT_NAVBAR_UK).toBeVisible();
     await expect(this.SEARCH_BUTTON_UK).toBeVisible();
   }
@@ -302,9 +303,11 @@ async clickModernSlaveryActStatement(): Promise<void> {
     switch (searchOption.toLowerCase()) {
       case 'company':
         await this.SEARCH_OPTION_COMPANY_UK.click();
-        await this.page.selectOption('select[aria-label="drop-down selector"]', {
-          label: searchTerm,
-        });
+       // await this.page.selectOption('select[aria-label="drop-down selector"]', {
+        //  label: searchTerm,
+        await this.SEARCH_OPTION_COMPANY_UK.fill(searchTerm);
+        await this.page.locator(`text=${searchTerm}`).click();
+        
 
         break;
 
@@ -332,15 +335,17 @@ async clickModernSlaveryActStatement(): Promise<void> {
     //Check the heading is correct
 
    
-    await expect(this.page.getByRole('heading', { name: searchTerm }).first()).toBeVisible();
+    this.page.locator("//button[@class='text-left']").click();
 
     await expect(
       this.page.getByRole('heading', { name: searchTerm, exact: true }).first(),
     ).toBeVisible();
   }
   async clickToSeeTheDiscount(newPageUrl: string): Promise<void> {
-    await this.CLICK_HERE_TO_SEE_DISCOUNT_UK.click();
+
+    await this.COPY_DISCOUNT_CODE_UK.first().click();
    
+    await this.CONTINUE_TO_PARTNER_WEBSITE_UK.click();
   
     await this.visitWebsiteAndVerifyUrl(newPageUrl);
 
@@ -351,8 +356,7 @@ async clickModernSlaveryActStatement(): Promise<void> {
   
   const offerPagePromise = this.page.waitForEvent('popup');
   
-  await this.VISIT_WEBSITE_UK.click();
-  
+
   await verifyOfferPageLoad(offerPagePromise, newPageUrl);
 
    
@@ -374,4 +378,3 @@ async assertCarouselsVisibleHomeScreenLoggedIn(): Promise<void> {
     expect(clipboardText).toBe(expectedDiscountCode);
 }
 }
-

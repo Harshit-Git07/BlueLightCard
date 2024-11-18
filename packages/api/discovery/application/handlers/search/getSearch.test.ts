@@ -61,7 +61,7 @@ describe('getSearch Handler', () => {
     const results = await whenSearchCalled('');
 
     const expectedResponse = Response.BadRequest({
-      message: 'Missing data on request - searchTerm: , service: DEN, dob: 2001-01-01',
+      message: 'Missing data on request - searchTerm: , organisation: DEN, dob: 2001-01-01',
     });
 
     expect(results).toEqual(expectedResponse);
@@ -71,7 +71,7 @@ describe('getSearch Handler', () => {
     const results = await whenSearchCalled('nike', '');
 
     const expectedResponse = Response.BadRequest({
-      message: 'Missing data on request - searchTerm: nike, service: , dob: 2001-01-01',
+      message: 'Missing data on request - searchTerm: nike, organisation: , dob: 2001-01-01',
     });
 
     expect(results).toEqual(expectedResponse);
@@ -81,7 +81,7 @@ describe('getSearch Handler', () => {
     const results = await whenSearchCalled('nike', 'DEN', '');
 
     const expectedResponse = Response.BadRequest({
-      message: 'Missing data on request - searchTerm: nike, service: DEN, dob: ',
+      message: 'Missing data on request - searchTerm: nike, organisation: DEN, dob: ',
     });
 
     expect(results).toEqual(expectedResponse);

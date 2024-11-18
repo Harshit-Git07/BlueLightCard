@@ -15,10 +15,15 @@ export interface SearchResult {
   CompanyName: string;
 }
 
-export const mapSearchResults = (result: SearchResponse): SearchResult[] => {
-  let mappedResults: SearchResult[] = [];
+export type InternalSearchResult = SearchResult & {
+  IncludedTrusts: string[];
+  ExcludedTrusts: string[];
+};
+
+export const mapSearchResults = (result: SearchResponse): InternalSearchResult[] => {
+  let mappedResults: InternalSearchResult[] = [];
   if (result.hits?.hits) {
-    const uniqueSearchResults = new Set<SearchResult>();
+    const uniqueSearchResults = new Set<InternalSearchResult>();
     result.hits.hits.forEach((searchHit) => {
       const hit = searchHit as SearchHit<OpenSearchBody>;
       uniqueSearchResults.add({
@@ -31,6 +36,8 @@ export const mapSearchResults = (result: SearchResponse): SearchResult[] => {
         CompID: hit._source?.company_id ?? '',
         LegacyCompanyID: hit._source?.legacy_company_id,
         CompanyName: hit._source?.company_name ?? '',
+        IncludedTrusts: hit._source?.included_trusts ?? [],
+        ExcludedTrusts: hit._source?.excluded_trusts ?? [],
       });
     });
 
@@ -38,6 +45,20 @@ export const mapSearchResults = (result: SearchResponse): SearchResult[] => {
   }
 
   return mappedResults;
+};
+
+export const mapInternalSearchResult = (internalSearchResult: InternalSearchResult): SearchResult => {
+  return {
+    ID: internalSearchResult.ID,
+    LegacyID: internalSearchResult.LegacyID,
+    OfferName: internalSearchResult.OfferName,
+    OfferType: internalSearchResult.OfferType,
+    offerimg: internalSearchResult.offerimg,
+    OfferDescription: internalSearchResult.OfferDescription,
+    CompID: internalSearchResult.CompID,
+    LegacyCompanyID: internalSearchResult.LegacyCompanyID,
+    CompanyName: internalSearchResult.CompanyName,
+  };
 };
 
 interface AggregateCompanyResult {

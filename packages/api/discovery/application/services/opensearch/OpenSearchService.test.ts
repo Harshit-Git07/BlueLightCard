@@ -12,17 +12,21 @@ const mockAddBlock = jest.fn().mockResolvedValue({});
 const mockClone = jest.fn().mockResolvedValue({});
 const mockPutSettings = jest.fn().mockResolvedValue({});
 const mockIndex = jest.fn().mockResolvedValue({ result: 'created' });
+const baseSearchResult = {
+  title: 'dummyTitle',
+  description: 'dummyDescription',
+  offer_id: '123',
+  offer_name: 'OfferName',
+  offer_type: '1',
+  offer_image: 'img',
+  company_id: '456',
+  company_name: 'CompanyName',
+  excluded_trusts: [],
+  restricted_to: [],
+};
 const mockSearchHit = {
   _source: {
-    title: 'dummyTitle',
-    description: 'dummyDescription',
-    offer_id: '123',
-    offer_name: 'OfferName',
-    offer_type: '1',
-    offer_image: 'img',
-    company_id: '456',
-    company_name: 'CompanyName',
-    restricted_to: [],
+    ...baseSearchResult,
   },
 };
 const mockSearch = jest.fn().mockResolvedValue({
@@ -161,8 +165,10 @@ describe('OpenSearchService', () => {
   });
 
   describe('Search', () => {
+    const organisation = 'NHS';
+    const dob = '2001-01-01';
     it('should Search Index', async () => {
-      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, '2001-01-01');
+      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, dob, organisation);
 
       expect(mockSearch).toHaveBeenCalledTimes(5);
       expect(results[0]).toMatchObject({
@@ -185,7 +191,7 @@ describe('OpenSearchService', () => {
       });
       jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithDuplicates);
 
-      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, '2001-01-01');
+      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, dob, organisation);
 
       expect(results).toStrictEqual([
         {
@@ -202,20 +208,93 @@ describe('OpenSearchService', () => {
       ]);
     });
 
+    it('should return search results with trust exclusions', async () => {
+      const mockSearchHitWithTrustExclusion = {
+        _source: {
+          ...baseSearchResult,
+          offer_id: '456',
+          offer_name: 'OfferName with Trust Exclusion',
+          excluded_trusts: ['NHS'],
+        },
+      };
+      const mockSearchWithTrustExclusions = jest.fn().mockResolvedValue({
+        body: {
+          hits: {
+            hits: [mockSearchHit, mockSearchHitWithTrustExclusion],
+          },
+        },
+      });
+      jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithTrustExclusions);
+
+      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, dob, organisation);
+
+      expect(results).toStrictEqual([
+        {
+          ID: '123',
+          LegacyID: undefined,
+          OfferDescription: '',
+          OfferName: 'OfferName',
+          OfferType: '1',
+          offerimg: 'img',
+          CompID: '456',
+          LegacyCompanyID: undefined,
+          CompanyName: 'CompanyName',
+        },
+      ]);
+    });
+
+    it('should return search results with trust inclusions', async () => {
+      const mockSearchHitWithTrustInclusion = {
+        _source: {
+          ...baseSearchResult,
+          offer_id: '789',
+          offer_name: 'OfferName with Trust Inclusion',
+          included_trusts: ['NHS'],
+        },
+      };
+      const mockSearchWithTrustInclusions = jest.fn().mockResolvedValue({
+        body: {
+          hits: {
+            hits: [mockSearchHit, mockSearchHitWithTrustInclusion],
+          },
+        },
+      });
+      jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithTrustInclusions);
+
+      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, dob, organisation);
+
+      expect(results).toStrictEqual([
+        {
+          ID: '123',
+          LegacyID: undefined,
+          OfferDescription: '',
+          OfferName: 'OfferName',
+          OfferType: '1',
+          offerimg: 'img',
+          CompID: '456',
+          LegacyCompanyID: undefined,
+          CompanyName: 'CompanyName',
+        },
+        {
+          CompID: '456',
+          CompanyName: 'CompanyName',
+          ID: '789',
+          OfferDescription: '',
+          OfferName: 'OfferName with Trust Inclusion',
+          OfferType: '1',
+          offerimg: 'img',
+          LegacyCompanyID: undefined,
+          LegacyID: undefined,
+        },
+      ]);
+    });
+
     it('should return unique search results with legacy ID', async () => {
       const mockSearchHitWithLegacyID = {
         _source: {
-          title: 'dummyTitle',
-          description: 'dummyDescription',
-          offer_id: '123',
+          ...baseSearchResult,
           legacy_offer_id: 456,
-          offer_name: 'OfferName',
-          offer_type: '1',
-          offer_image: 'img',
-          company_id: '456',
           legacy_company_id: 789,
-          company_name: 'CompanyName',
-          restricted_to: [],
         },
       };
       const mockSearchWithDuplicates = jest.fn().mockResolvedValue({
@@ -227,7 +306,7 @@ describe('OpenSearchService', () => {
       });
       jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithDuplicates);
 
-      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, '2001-01-01');
+      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, dob, organisation);
 
       expect(results).toStrictEqual([
         {
@@ -255,7 +334,7 @@ describe('OpenSearchService', () => {
       });
       jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWith41Results);
 
-      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, '2001-01-01');
+      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, dob, organisation);
 
       expect(results.length).toBe(40);
     });
@@ -318,11 +397,13 @@ describe('OpenSearchService', () => {
     });
   });
 
-  describe('Search By Cateogry', () => {
+  describe('Search By Category', () => {
     const categoryId = '1';
     const dob = '1990-01-01';
+    const organisation = 'NHS';
+
     it('should search by category ID', async () => {
-      const results = await openSearchService.queryByCategory(indexName, dob, categoryId);
+      const results = await openSearchService.queryByCategory(indexName, dob, organisation, categoryId);
 
       expect(mockSearch).toHaveBeenCalled();
       expect(results[0]).toMatchObject({
@@ -333,6 +414,83 @@ describe('OpenSearchService', () => {
         CompID: '456',
         CompanyName: 'CompanyName',
       });
+    });
+
+    it('should search by category ID with trust exclusions', async () => {
+      const mockSearchHitWithTrustExclusion = {
+        _source: {
+          ...baseSearchResult,
+          title: 'dummyTitle',
+          offer_id: '456',
+          offer_name: 'OfferName with Trust Exclusion',
+          excluded_trusts: ['NHS'],
+        },
+      };
+      const mockSearchWithTrustExclusions = jest.fn().mockResolvedValue({
+        body: {
+          hits: {
+            hits: [mockSearchHit, mockSearchHitWithTrustExclusion],
+          },
+        },
+      });
+      jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithTrustExclusions);
+
+      const results = await openSearchService.queryByCategory(indexName, dob, organisation, categoryId);
+
+      expect(results[0]).toMatchObject({
+        ID: '123',
+        OfferName: 'OfferName',
+        OfferType: '1',
+        offerimg: 'img',
+        CompID: '456',
+        CompanyName: 'CompanyName',
+      });
+    });
+
+    it('should search by category ID with trust inclusions', async () => {
+      const mockSearchHitWithTrustInclusion = {
+        _source: {
+          ...baseSearchResult,
+          offer_id: '456',
+          offer_name: 'OfferName with Trust Inclusion',
+          included_trusts: ['NHS'],
+        },
+      };
+      const mockSearchWithTrustInclusion = jest.fn().mockResolvedValue({
+        body: {
+          hits: {
+            hits: [mockSearchHit, mockSearchHitWithTrustInclusion],
+          },
+        },
+      });
+      jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithTrustInclusion);
+
+      const results = await openSearchService.queryByCategory(indexName, dob, organisation, categoryId);
+
+      expect(results).toEqual([
+        {
+          ID: '123',
+          OfferName: 'OfferName',
+          OfferType: '1',
+          offerimg: 'img',
+          CompID: '456',
+          CompanyName: 'CompanyName',
+          LegacyCompanyID: undefined,
+          LegacyID: undefined,
+          OfferDescription: '',
+        },
+        {
+          ID: '456',
+          OfferName: 'OfferName with Trust Inclusion',
+          OfferType: '1',
+          offerimg: 'img',
+          CompID: '456',
+          CompanyName: 'CompanyName',
+          LegacyCompanyID: undefined,
+          LegacyID: undefined,
+          OfferDescription: '',
+        },
+      ]);
     });
 
     it('should return max 1000 search results', async () => {
@@ -346,7 +504,7 @@ describe('OpenSearchService', () => {
       });
       jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWith1001Results);
 
-      const results = await openSearchService.queryByCategory(indexName, dob, categoryId);
+      const results = await openSearchService.queryByCategory(indexName, dob, organisation, categoryId);
 
       expect(results.length).toBe(1000);
     });

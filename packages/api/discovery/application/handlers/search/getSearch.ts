@@ -15,16 +15,17 @@ const logger = new LambdaLogger({ serviceName: 'search-get' });
 const openSearchService = new OpenSearchService();
 
 const handlerUnwrapped = async (event: APIGatewayEvent) => {
-  const { searchTerm, service, dob } = getQueryParams(event);
+  const { searchTerm, organisation, dob } = getQueryParams(event);
 
-  if (searchTerm && service && dob) {
-    logger.info({ message: `Search term: ${searchTerm}, service: ${service}, dob: ${dob}` });
+  if (searchTerm && organisation && dob) {
+    logger.info({ message: `Search term: ${searchTerm}, organisation: ${organisation}, dob: ${dob}` });
 
     try {
       const results = await openSearchService.queryBySearchTerm(
         searchTerm,
         await openSearchService.getLatestIndexName(),
         dob,
+        organisation,
       );
 
       return Response.OK({ message: 'Success', data: results });
@@ -34,7 +35,7 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
     }
   } else {
     return Response.BadRequest({
-      message: `Missing data on request - searchTerm: ${searchTerm}, service: ${service}, dob: ${dob}`,
+      message: `Missing data on request - searchTerm: ${searchTerm}, organisation: ${organisation}, dob: ${dob}`,
     });
   }
 };
@@ -44,9 +45,9 @@ export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) 
 const getQueryParams = (event: APIGatewayEvent) => {
   const queryParams = event.queryStringParameters as APIGatewayProxyEventQueryStringParameters;
   const searchTerm = queryParams?.query;
-  const service = queryParams?.organisation;
+  const organisation = queryParams?.organisation;
   const dob = queryParams?.dob;
   const authToken = event.headers.Authorization as string;
 
-  return { searchTerm, service, dob, authToken };
+  return { searchTerm, organisation, dob, authToken };
 };

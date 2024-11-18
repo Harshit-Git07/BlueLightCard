@@ -21,7 +21,7 @@ const logger = new LambdaLogger({ serviceName: 'categories-get' });
 const openSearchService = new OpenSearchService();
 const handlerUnwrapped = async (event: APIGatewayEvent) => {
   const categoryId = (event.pathParameters as APIGatewayProxyEventPathParameters)?.id ?? '';
-  const { dob } = getQueryParams(event);
+  const { dob, organisation } = getQueryParams(event);
 
   logger.info({ message: `Getting category for id ${categoryId}` });
 
@@ -29,6 +29,7 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
     const results = await openSearchService.queryByCategory(
       await openSearchService.getLatestIndexName(),
       dob,
+      organisation,
       categoryId,
     );
     const mappedResults = results.map((result) => mapSearchResultToOfferResponse(result));
@@ -54,8 +55,9 @@ const getCategoryName = (categoryId: string) => {
 const getQueryParams = (event: APIGatewayEvent) => {
   const queryParams = event.queryStringParameters as APIGatewayProxyEventQueryStringParameters;
   const dob = queryParams?.dob;
+  const organisation = queryParams?.organisation;
 
-  return { dob: dob ?? '' };
+  return { dob: dob ?? '', organisation: organisation ?? '' };
 };
 
 const mapSearchResultToOfferResponse = (result: SearchResult): OfferResponse => {

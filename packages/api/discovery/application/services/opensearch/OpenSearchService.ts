@@ -9,11 +9,14 @@ import { CompanySummary } from '@blc-mono/discovery/application/models/Companies
 import { openSearchFieldMapping } from '@blc-mono/discovery/application/models/OpenSearchFieldMapping';
 import { OpenSearchBulkCommand } from '@blc-mono/discovery/application/models/OpenSearchType';
 import {
+  InternalSearchResult,
   mapAllCompanies,
+  mapInternalSearchResult,
   mapSearchResults,
   SearchResult,
 } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
 import { OpenSearchSearchRequests } from '@blc-mono/discovery/application/services/opensearch/OpenSearchSearchRequests';
+import { isValidTrust } from '@blc-mono/discovery/application/utils/trustRules';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
@@ -115,6 +118,7 @@ export class OpenSearchService {
     term: string,
     indexName: string,
     dob: string,
+    organisation: string,
     offerType?: string,
   ): Promise<SearchResult[]> {
     const searchResults = new OpenSearchSearchRequests(indexName, dob)
@@ -126,7 +130,7 @@ export class OpenSearchService {
         });
       });
 
-    let allSearchResults: SearchResult[] = [];
+    let allSearchResults: InternalSearchResult[] = [];
     await Promise.all(searchResults).then((results) => {
       results.forEach((result) => {
         const mappedSearchResults = mapSearchResults(result.body as SearchResponse);
@@ -137,7 +141,9 @@ export class OpenSearchService {
       });
     });
 
-    return this.buildUniqueSearchResults(allSearchResults);
+    return this.buildUniqueSearchResults(
+      allSearchResults.filter((result) => isValidTrust(organisation, result.IncludedTrusts, result.ExcludedTrusts)),
+    );
   }
 
   public async queryAllCompanies(indexName: string, dob: string): Promise<CompanySummary[]> {
@@ -151,7 +157,12 @@ export class OpenSearchService {
     return mapAllCompanies(allCompaniesResults.body as SearchResponse);
   }
 
-  public async queryByCategory(indexName: string, dob: string, categoryId: string): Promise<SearchResult[]> {
+  public async queryByCategory(
+    indexName: string,
+    dob: string,
+    organisation: string,
+    categoryId: string,
+  ): Promise<SearchResult[]> {
     const MAX_RESULTS_PER_CATEGORY = 1000;
     const searchRequest = new OpenSearchSearchRequests(indexName, dob).buildCategorySearch(categoryId);
     const searchResults = await this.openSearchClient.search({
@@ -161,15 +172,18 @@ export class OpenSearchService {
 
     const mappedSearchResults = mapSearchResults(searchResults.body as SearchResponse);
 
-    return this.buildUniqueSearchResults(mappedSearchResults, MAX_RESULTS_PER_CATEGORY);
+    return this.buildUniqueSearchResults(
+      mappedSearchResults.filter((result) => isValidTrust(organisation, result.IncludedTrusts, result.ExcludedTrusts)),
+      MAX_RESULTS_PER_CATEGORY,
+    );
   }
 
-  private buildUniqueSearchResults(allSearchResults: SearchResult[], maxResults = 40): SearchResult[] {
+  private buildUniqueSearchResults(allSearchResults: InternalSearchResult[], maxResults = 40): SearchResult[] {
     const uniqueSearchResults: SearchResult[] = [];
 
     allSearchResults.forEach((searchResult) => {
       if (!uniqueSearchResults.some(({ ID }) => ID === searchResult.ID)) {
-        uniqueSearchResults.push(searchResult);
+        uniqueSearchResults.push(mapInternalSearchResult(searchResult));
       }
     });
 

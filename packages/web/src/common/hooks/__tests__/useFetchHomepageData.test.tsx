@@ -518,15 +518,9 @@ const mockV5MenuData = {
   },
   flexible: [
     {
-      id: '1',
-      title: 'Ways to Save',
-      menus: [
-        {
-          id: '100',
-          title: 'Flexible Menu 1',
-          imageURL: 'image-1',
-        },
-      ],
+      id: '100',
+      title: 'Flexible Menu 1',
+      imageURL: 'image-1',
     },
   ],
 };

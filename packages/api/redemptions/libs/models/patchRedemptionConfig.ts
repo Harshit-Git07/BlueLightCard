@@ -25,9 +25,9 @@ export const PatchRedemptionConfigBaseModel = createZodNamedType(
         .optional()
         .nullable(),
       id: z.string(),
-      companyId: z.union([z.string(), z.number()]).transform((value) => String(value)),
+      companyId: z.union([z.string().min(1), z.number().min(1)]).transform((value) => String(value)),
       connection: z.enum(['affiliate', 'direct', 'spotify', 'none']).default('none'),
-      offerId: z.union([z.string(), z.number()]).transform((value) => String(value)),
+      offerId: z.union([z.string().min(1), z.number().min(1)]).transform((value) => String(value)),
     })
     .strict(),
 );

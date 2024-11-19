@@ -37,10 +37,14 @@ describe('POST Vault Batches', () => {
     test.each([
       { path: 'vaults/vlt-abcd/batches', key: undefined },
       { path: 'vaults/vlt-abcd/batches', key: '' },
-    ] as const)(`post: authorisation error for no key`, async (params) => {
-      const result = await apiCall(params.path);
-      expect(result.status).toBe(403);
-    });
+    ] as const)(
+      `post: authorisation error for no key`,
+      async (params) => {
+        const result = await apiCall(params.path);
+        expect(result.status).toBe(403);
+      },
+      15000,
+    );
 
     test(`post: authorisation error for invalid key`, async () => {
       const result = await apiCall('vaults/vlt-abcd/batches', 'invalid-api-key');

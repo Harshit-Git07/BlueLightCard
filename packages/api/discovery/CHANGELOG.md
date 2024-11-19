@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.18.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.17.0...bluelightcard/discovery-v1.18.0) (2024-11-19)
+
+
+### Features
+
+* [DISCO-1070] Link homepage menus to new V5 menu API ([#2906](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2906)) ([cc8c63c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cc8c63c69cbbc267d94d1fb6bb40bb92aaa90c3a))
+* [DISCO-1164] Integrate UI with v5 get companies & categories ([#2857](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2857)) ([6a15c10](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6a15c10f226110f43eaf8552a208010b8e59ead6))
+
+
+### Bug Fixes
+
+* [DISCO-1023] Add trust rules to search by term and category ([#2955](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2955)) ([ce9bec7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ce9bec70242bd43a878ae5109cd3b19439b28f65))
+* [DISCO-1023] Pull trust restrictions from the offer level ([#2961](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2961)) ([3a1a031](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3a1a031ac8396dc37ccaf1eb7479e1ca7def5ce8))
+
 ## [1.17.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.16.0...bluelightcard/discovery-v1.17.0) (2024-11-11)
 
 

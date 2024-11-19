@@ -8,6 +8,7 @@ const Card: FC<CardProps> = ({
   initialCardState = 'default',
   cardTitle,
   description,
+  truncateDescription = true,
   buttonTitle,
   imageAlt,
   imageSrc,
@@ -126,6 +127,7 @@ const Card: FC<CardProps> = ({
             <Index
               title={cardTitle}
               description={description}
+              truncateDescription={truncateDescription}
               showDescription={showDescription}
               centerContent={centerContent}
               ariaLabel={ariaLabel}

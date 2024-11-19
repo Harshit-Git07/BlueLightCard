@@ -35,6 +35,7 @@ export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
             data-testid="verify-eligibility-card"
             cardTitle="Verify Eligibility"
             description="Provide your job details and work email for quick verification or upload an eligible form of ID"
+            truncateDescription={false}
             buttonTitle="Start"
             initialCardState="selected"
             showButton

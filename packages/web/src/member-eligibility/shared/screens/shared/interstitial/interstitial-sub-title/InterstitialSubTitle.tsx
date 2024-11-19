@@ -18,7 +18,7 @@ export const InterstitialSubTitle: FC<Props> = ({
   const subtitleStyles = useMemo(() => {
     const font = isMobile ? fonts.titleMedium : fonts.titleLarge;
 
-    return `${className} ${font} text-center mt-4 mb-6 text-nowrap`;
+    return `${className} ${font} text-center mt-4 mb-[32px] text-nowrap`;
   }, [className, isMobile]);
 
   return (

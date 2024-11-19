@@ -7,6 +7,7 @@ export interface CardProps {
   initialCardState?: CardState;
   cardTitle?: string;
   description?: string;
+  truncateDescription?: boolean
   buttonTitle?: string;
   imageAlt?: string;
   imageSrc?: string;
@@ -29,4 +30,5 @@ export interface CardContentProps {
   centerContent?: boolean;
   ariaLabel?: string;
   descriptionRef: RefObject<HTMLParagraphElement>;
+  truncateDescription?: boolean;
 }

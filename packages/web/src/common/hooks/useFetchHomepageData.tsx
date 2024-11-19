@@ -187,7 +187,8 @@ const mapMenusResponse = (
       mapMarketplaceMenu(menu, useLegacyIds)
     ),
     featuredOffers: mapFeaturedOffers(menusResponse.featured, useLegacyIds),
-    flexibleMenu: menusResponse.flexible.map((menu: any) => mapFlexibleMenu(menu)),
+    flexibleMenu:
+      menusResponse.flexible.length > 0 ? menusResponse.flexible[0].menus.map(mapFlexibleMenu) : [],
   };
 };
 

@@ -1,5 +1,35 @@
 # Changelog
 
+## [1.87.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.86.0...bluelightcard/web-v1.87.0) (2024-11-19)
+
+
+### Features
+
+* [DISCO-1070] Link homepage menus to new V5 menu API ([#2906](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2906)) ([cc8c63c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cc8c63c69cbbc267d94d1fb6bb40bb92aaa90c3a))
+* [MER-257] Add initial integration with service layer for organisations and employers lookup ([#2969](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2969)) ([9e284d8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9e284d88222d8578de028b7fe50b1ebda455f845))
+* [MER-34] Add payment screen ([#2949](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2949)) ([cf72fca](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cf72fca517ede185fe6dd747f5d3515302359d65))
+* [MER-372] - Mobile success screen ([#2944](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2944)) ([7e04b50](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7e04b5073601ba0d351894c887ed286dc0055c25))
+* [MER-374] - Interstitial Screen renewals  ([#2953](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2953)) ([376e361](https://github.com/bluelightcard/BlueLightCard-2.0/commit/376e36197191e7be1db5099b91dbad5e341fcdda))
+* Company Page Legacy Redirects ([#2967](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2967)) ([55145f6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/55145f6c05eb5bf525b5b7a4e4ea8c072ec60de9))
+* MER-181-Sign-Up-Complete-Modal ([#2908](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2908)) ([2db0d59](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2db0d5948ca7b303124269bac8e95cc3fe82551e))
+* modified redirect company links from legacy to modern within offers domain ([55145f6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/55145f6c05eb5bf525b5b7a4e4ea8c072ec60de9))
+* TO-1316 mobile hybrid company page error ([#2929](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2929)) ([12ca647](https://github.com/bluelightcard/BlueLightCard-2.0/commit/12ca6475004e6851aff1cb37cfcbbc1386e9c719))
+
+
+### Bug Fixes
+
+* [MER-337] choose verification method sub text copy to case to match title ([#2919](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2919)) ([aaea4c3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/aaea4c31a4bc6e16223e9e4f83c0a823a52942f8))
+* Duplicate props bug ([#2975](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2975)) ([3ece630](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3ece630c5d5f5acc736b128142bbf3b9e9f54276))
+* Remove unused old eligibility flow ([#2976](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2976)) ([23d1129](https://github.com/bluelightcard/BlueLightCard-2.0/commit/23d11290ab74efa5febca5ea53dc61435a175b7f))
+* Update web eslint to match shared-ui eslint and fix any issues raised ([#2942](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2942)) ([e2f2ed0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e2f2ed06f96e1e72e7359d7f381a83581cc96101))
+* when oid is null on web OfferSheet does not open ([#2938](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2938)) ([21e0f0a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/21e0f0a67192cea529232dbb44f49d0f5ffe74b7))
+
+
+### Other Changes
+
+* [DISCO-536] Remove header footer flag ([#2935](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2935)) ([b5a998b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b5a998b01b2f3513d1f6e110c3a99326adad4cf6))
+* MAMA-174-folder-restructure : reorganise some subcomponentsa… ([#2954](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2954)) ([b0a8451](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b0a8451e7e8bac7d8f268a43fa5b97351cad00f5))
+
 ## [1.86.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.85.1...bluelightcard/web-v1.86.0) (2024-11-14)
 
 

@@ -119,20 +119,35 @@ describe('given a signing up member that needs to prove their eligibility to use
                 // TODO: This will require probably a new render with state injected in
                 describe('when they click the verification link on the email', () => {
                   beforeEach(async () => {
-                    fireEvent.keyDown(window, { key: '.', ctrlKey: true });
+                    fireEvent.keyDown(window, {
+                      key: '.',
+                      ctrlKey: true,
+                    });
                     const nextButton = screen.getByTestId('next-button-1');
                     act(() => nextButton.click());
                   });
 
                   it('should navigate to the delivery address screen', () => {
-                    const title = screen.getByTestId('fuzzy-frontend-title');
-                    expect(title.textContent).toEqual('Delivery Address Screen');
+                    const deliveryAddressScreen = screen.getByTestId('delivery-address-screen');
+                    expect(deliveryAddressScreen).toBeInTheDocument();
                   });
 
                   describe('when they submit their address', () => {
                     beforeEach(async () => {
-                      const nextButton = screen.getByTestId('next-button-1');
-                      act(() => nextButton.click());
+                      fireEvent.change(screen.getByLabelText('Address line 1'), {
+                        target: { value: '123 Test Street' },
+                      });
+                      fireEvent.change(screen.getByLabelText('City'), {
+                        target: { value: 'Test City' },
+                      });
+                      fireEvent.change(screen.getByLabelText('Postcode'), {
+                        target: { value: 'TE12 3ST' },
+                      });
+
+                      const nextButton = screen.getByText('Next');
+                      await act(async () => {
+                        fireEvent.click(nextButton);
+                      });
                     });
 
                     it('should navigate to the payment screen', () => {
@@ -212,14 +227,26 @@ describe('given a signing up member that needs to prove their eligibility to use
                 });
 
                 it('should navigate to the delivery address screen', () => {
-                  const title = screen.getByTestId('fuzzy-frontend-title');
-                  expect(title.textContent).toEqual('Delivery Address Screen');
+                  const deliveryAddressScreen = screen.getByTestId('delivery-address-screen');
+                  expect(deliveryAddressScreen).toBeInTheDocument();
                 });
 
                 describe('when they submit their address', () => {
                   beforeEach(async () => {
-                    const nextButton = screen.getByTestId('next-button-1');
-                    act(() => nextButton.click());
+                    fireEvent.change(screen.getByLabelText('Address line 1'), {
+                      target: { value: '123 Test Street' },
+                    });
+                    fireEvent.change(screen.getByLabelText('City'), {
+                      target: { value: 'Test City' },
+                    });
+                    fireEvent.change(screen.getByLabelText('Postcode'), {
+                      target: { value: 'TE12 3ST' },
+                    });
+
+                    const nextButton = screen.getByText('Next');
+                    await act(async () => {
+                      fireEvent.click(nextButton);
+                    });
                   });
 
                   it('should navigate to the payment screen', () => {
@@ -283,14 +310,26 @@ describe('given a signing up member that needs to prove their eligibility to use
               });
 
               it('should navigate to the delivery address screen', () => {
-                const title = screen.getByTestId('fuzzy-frontend-title');
-                expect(title.textContent).toEqual('Delivery Address Screen');
+                const deliveryAddressScreen = screen.getByTestId('delivery-address-screen');
+                expect(deliveryAddressScreen).toBeInTheDocument();
               });
 
               describe('when they submit their address', () => {
                 beforeEach(async () => {
-                  const nextButton = screen.getByTestId('next-button-1');
-                  act(() => nextButton.click());
+                  fireEvent.change(screen.getByLabelText('Address line 1'), {
+                    target: { value: '123 Test Street' },
+                  });
+                  fireEvent.change(screen.getByLabelText('City'), {
+                    target: { value: 'Test City' },
+                  });
+                  fireEvent.change(screen.getByLabelText('Postcode'), {
+                    target: { value: 'TE12 3ST' },
+                  });
+
+                  const nextButton = screen.getByText('Next');
+                  await act(async () => {
+                    fireEvent.click(nextButton);
+                  });
                 });
 
                 it('should navigate to the payment screen', () => {
@@ -327,14 +366,26 @@ describe('given a signing up member that needs to prove their eligibility to use
           });
 
           it('should navigate to the delivery address screen', () => {
-            const title = screen.getByTestId('fuzzy-frontend-title');
-            expect(title.textContent).toEqual('Delivery Address Screen');
+            const deliveryAddressScreen = screen.getByTestId('delivery-address-screen');
+            expect(deliveryAddressScreen).toBeInTheDocument();
           });
 
           describe('when they submit their address', () => {
             beforeEach(async () => {
-              const nextButton = screen.getByTestId('next-button-1');
-              act(() => nextButton.click());
+              fireEvent.change(screen.getByLabelText('Address line 1'), {
+                target: { value: '123 Test Street' },
+              });
+              fireEvent.change(screen.getByLabelText('City'), {
+                target: { value: 'Test City' },
+              });
+              fireEvent.change(screen.getByLabelText('Postcode'), {
+                target: { value: 'TE12 3ST' },
+              });
+
+              const nextButton = screen.getByText('Next');
+              await act(async () => {
+                fireEvent.click(nextButton);
+              });
             });
 
             it('should navigate to the payment screen', () => {
@@ -369,12 +420,16 @@ describe('given a signing up member that needs to prove their eligibility to use
           });
 
           it('should navigate to the delivery address screen', () => {
-            const title = screen.getByTestId('fuzzy-frontend-title');
-            expect(title.textContent).toEqual('Delivery Address Screen');
+            const deliveryAddressScreen = screen.getByTestId('delivery-address-screen');
+            expect(deliveryAddressScreen).toBeInTheDocument();
           });
 
           describe('when they submit their address', () => {
             beforeEach(async () => {
+              fireEvent.keyDown(window, {
+                key: '.',
+                ctrlKey: true,
+              });
               const nextButton = screen.getByTestId('next-button-1');
               act(() => nextButton.click());
             });

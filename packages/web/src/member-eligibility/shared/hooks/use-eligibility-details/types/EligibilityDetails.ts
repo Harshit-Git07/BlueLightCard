@@ -32,14 +32,24 @@ export type EligibilityScreen =
 
 export type EmploymentStatus = 'Employed' | 'Retired' | 'Volunteer';
 
+export type EligibilityDetailsAddress = UkAddress | AusAddress;
+
+export interface UkAddress {
+  line1: string;
+  line2?: string;
+  city: string;
+  postcode: string;
+}
+
+export interface AusAddress {
+  line1: string;
+  line2?: string;
+  city: string;
+  state: string;
+  postcode: string;
+}
+
 export interface EligibilityOrganisation {
   id: string;
   label: string;
-}
-
-export interface EligibilityDetailsAddress {
-  line1: string;
-  line2: string;
-  city: string;
-  postcode: string;
 }

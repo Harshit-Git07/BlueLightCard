@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.110.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.109.0...bluelightcard/identity-v1.110.0) (2024-11-19)
+
+
+### Features
+
+* COT-814 fixing issue in handler card delete ([#2959](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2959)) ([a4dda98](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a4dda98beb5ed72ff62b868a48c7502e5488c2c9))
+
 ## [1.109.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.108.0...bluelightcard/identity-v1.109.0) (2024-11-14)
 
 

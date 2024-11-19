@@ -6,14 +6,14 @@ import { BRANDS } from '@/types/brands.enum';
 
 export const EligibilityHeader: FC = () => {
   const brandSpecificWidth =
-    BRAND === BRANDS.DDS_UK ? ' min-w-28 sm:pt-2 md:w-40' : 'min-w-40 md:w-60';
+    BRAND === BRANDS.DDS_UK ? 'min-w-28 sm:pt-2 md:w-40' : 'min-w-40 md:w-60';
 
   return (
     <header
       className="min-h-[50px] md:h-[70px] bg-white flex items-center justify-center w-full"
       data-testid="app-header"
     >
-      <div className={`flex justify-center ${brandSpecificWidth} `}>
+      <div className={`${brandSpecificWidth} flex justify-center`}>
         <Logo url={navLinks.homeUrl} className="w-full  h-full" />
       </div>
     </header>

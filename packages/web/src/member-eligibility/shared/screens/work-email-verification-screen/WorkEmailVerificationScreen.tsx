@@ -2,25 +2,25 @@ import React, { FC, useMemo } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
 import { EligibilityBody } from '@/root/src/member-eligibility/shared/screens/shared/components/body/EligibilityBody';
-import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/components/EligibilityHeading';
+import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import ListSelector from '@bluelightcard/shared-ui/components/ListSelector';
 import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 import { ListSelectorState } from '@bluelightcard/shared-ui/components/ListSelector/types';
 import TextInput from '@bluelightcard/shared-ui/components/TextInput';
-import { useOnWorkEmailChange } from '@/root/src/member-eligibility/shared/screens/work-email-verification-screen/hooks/UseOnWorkEmailChange';
+import { useOnWorkEmailChanged } from '@/root/src/member-eligibility/shared/screens/work-email-verification-screen/hooks/UseOnWorkEmailChanged';
 import { useOnSendVerificationLink } from '@/root/src/member-eligibility/shared/screens/work-email-verification-screen/hooks/UseOnSendVerificationLink';
-import { useReturnToVerificationScreen } from '@/root/src/member-eligibility/shared/screens/work-email-verification-screen/hooks/UseOnReturnToVerificationScreen';
+import { useOnBack } from '@/root/src/member-eligibility/shared/screens/work-email-verification-screen/hooks/UseOnReturnToVerificationScreen';
 
 export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
   const [eligibilityDetails] = eligibilityDetailsState;
 
-  const { onWorkEmailChange } = useOnWorkEmailChange(eligibilityDetailsState);
+  const onBack = useOnBack(eligibilityDetailsState);
+  const onWorkEmailChanged = useOnWorkEmailChanged(eligibilityDetailsState);
   const sendVerificationLink = useOnSendVerificationLink(eligibilityDetailsState);
-  const returnToVerificationScreen = useReturnToVerificationScreen(eligibilityDetailsState);
 
   const numberOfCompletedSteps = useMemo(() => {
     switch (eligibilityDetails.flow) {
@@ -32,7 +32,9 @@ export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails.flow]);
 
   //TODO: This value of this boolean needs to be set by the logic of the API when verifying the email address - functionality/usage will remain the same
-  const emailHasBeenVerified = eligibilityDetails?.emailVerification;
+  const emailHasBeenVerified = useMemo(() => {
+    return eligibilityDetails?.emailVerification !== undefined;
+  }, [eligibilityDetails]);
 
   return (
     <EligibilityScreen data-testid="work-email-verification-screen">
@@ -45,28 +47,24 @@ export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
         <div className="flex flex-col gap-[16px]">
           <div className="flex flex-col gap-[12px]">
-            <p className={` ${fonts.bodySemiBold} ${colours.textOnSurface}`}>VERIFICATION METHOD</p>
+            <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>VERIFICATION METHOD</p>
 
-            <ListSelector
-              title="Work Email"
-              state={ListSelectorState.Selected}
-              onClick={returnToVerificationScreen}
-            />
+            <ListSelector title="Work Email" state={ListSelectorState.Selected} onClick={onBack} />
           </div>
 
           <TextInput
-            className={'w-full'}
-            placeholder={'Enter work email address'}
-            onChange={onWorkEmailChange}
+            className="w-full"
+            placeholder="Enter work email address"
+            onChange={onWorkEmailChanged}
             value={eligibilityDetails?.emailVerification ?? undefined}
           />
         </div>
 
         <Button
           className="w-full"
+          size="Large"
           variant={ThemeVariant.Primary}
           disabled={!emailHasBeenVerified}
-          size="Large"
           onClick={sendVerificationLink}
           data-testid="send-verification-link-button"
         >

@@ -2,58 +2,35 @@ import React, { FC, useMemo } from 'react';
 import Card from '@bluelightcard/shared-ui/components/Card';
 import { BRAND } from '@/global-vars';
 import { BRANDS } from '@/types/brands.enum';
-import { generateWelcomeMessage } from '@/root/src/member-eligibility/sign-up/screens/signup-interstitial-screen/hooks/WelcomeMessageBuilder';
-import { useMobileMediaQuery } from '@bluelightcard/shared-ui/hooks/useMediaQuery';
-import { fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
 import { EligibilityBody } from '@/root/src/member-eligibility/shared/screens/shared/components/body/EligibilityBody';
+import { buildSignupTitle } from '@/root/src/member-eligibility/sign-up/screens/signup-interstitial-screen/hooks/SignupTitleBuilder';
+import { InterstitialSubTitle } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-sub-title/InterstitialSubTitle';
+import { InterstitialScreenTitle } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-screen-title/InterstitialScreenTitle';
+import { InterstitialScreenCardContainer } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-screen-card-container/InterstitialScreenCardContainer';
 
 export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
 
-  const welcomeMessage = generateWelcomeMessage();
-
-  const isMobile = useMobileMediaQuery();
-
-  const welcomeMessageStyles = useMemo(() => {
-    const font = isMobile ? fonts.headline : fonts.displaySmallText;
-
-    return `text-center md:text-nowrap ${font}`;
-  }, [isMobile]);
-
-  const subtitleStyles = useMemo(() => {
-    const font = isMobile ? fonts.titleMedium : fonts.titleLarge;
-
-    return `text-center mt-4 mb-6 text-nowrap ${font}`;
-  }, [isMobile]);
+  const title = buildSignupTitle();
 
   const paymentCardDescription = useMemo(() => {
-    return `Enter your delivery address and unlock two years of exclusive access for just ${
-      BRAND === BRANDS.BLC_AU ? '$9.95' : '£4.99'
-    }`;
+    const cost = BRAND === BRANDS.BLC_AU ? '$9.95' : '£4.99';
+
+    return `Enter your delivery address and unlock two years of exclusive access for just ${cost}.`;
   }, []);
 
   return (
     <EligibilityScreen data-testid="SignupInterstitialScreen">
       <EligibilityBody>
-        <div className={welcomeMessageStyles}>
-          {welcomeMessage.line1} <br />
-          <span className="bg-gradient-to-b from-colour-secondary-gradient-bright-fixed to-colour-secondary-gradient-centre-fixed bg-clip-text text-transparent">
-            {welcomeMessage.line2}
-          </span>
-          {welcomeMessage.line3}
-        </div>
+        <InterstitialScreenTitle title={title} />
 
-        <div className={`mt-[-8px] ${subtitleStyles}`}>
-          You have two steps to complete
-          <br />
-          before you can start saving
-        </div>
+        <InterstitialSubTitle numberOfStepsAsWord="two" status="start" />
 
-        <div className="flex flex-col self-center md:w-[450px] sm:w-[400px] gap-[24px]">
+        <InterstitialScreenCardContainer>
           <Card
             data-testid="verify-eligibility-card"
             cardTitle="Verify Eligibility"
@@ -75,7 +52,7 @@ export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
             initialCardState="default"
             canHover={false}
           />
-        </div>
+        </InterstitialScreenCardContainer>
       </EligibilityBody>
     </EligibilityScreen>
   );

@@ -3,9 +3,9 @@ import { VerifyEligibilityScreenProps } from '../../../shared/screens/shared/typ
 import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/sign-up/screens/delivery-address-screen/hooks/UseFuzzyFrontendButtons';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
 import { EligibilityBody } from '@/root/src/member-eligibility/shared/screens/shared/components/body/EligibilityBody';
-import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/components/EligibilityHeading';
 import { ManualAddressForm } from '@/root/src/member-eligibility/sign-up/screens/delivery-address-screen/components/ManualAddressForm/ManualAddressForm';
 import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
+import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
 
 export const DeliveryAddressScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,

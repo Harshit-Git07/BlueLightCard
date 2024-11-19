@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { SuccessScreen } from './SuccessScreen';
 import { useSignupEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-signup-eligibility-details/UseSignupEligibilityDetails';
+import { EligibilityDetailsWithoutFlow } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
 
 const componentMeta: Meta<typeof SuccessScreen> = {
   title: 'Pages/Signup Eligibility Flow/Success Screen',
@@ -10,25 +11,33 @@ const componentMeta: Meta<typeof SuccessScreen> = {
   },
 };
 
-const ScreenTemplate: StoryFn<typeof SuccessScreen> = () => {
-  const eligibilityDetailsState = useSignupEligibilityDetails({
-    currentScreen: 'Success Screen',
-    employmentStatus: 'Employed',
-    organisation: { id: '1', label: 'NHS' },
-    employer: 'Abbey Hospitals',
-    jobTitle: 'Nurse',
-    emailVerification: 'test@nhs.com',
-    address: {
-      line1: 'Charnwood Edge Business Park',
-      line2: 'Syston Road',
-      city: 'Leicester',
-      postcode: 'LE7 4UZ',
-    },
-  });
+const initialState: EligibilityDetailsWithoutFlow = {
+  currentScreen: 'Success Screen',
+  employmentStatus: 'Employed',
+  organisation: { id: '1', label: 'NHS' },
+  employer: 'Abbey Hospitals',
+  jobTitle: 'Nurse',
+  emailVerification: 'test@nhs.com',
+  address: {
+    line1: 'Charnwood Edge Business Park',
+    line2: 'Syston Road',
+    city: 'Leicester',
+    postcode: 'LE7 4UZ',
+  },
+};
+
+const DesktopTemplate: StoryFn<typeof SuccessScreen> = () => {
+  const eligibilityDetailsState = useSignupEligibilityDetails(initialState);
 
   return <SuccessScreen eligibilityDetailsState={eligibilityDetailsState} />;
 };
+export const Desktop = DesktopTemplate.bind({});
 
-export const Screen = ScreenTemplate.bind({});
+const MobileTemplate: StoryFn<typeof SuccessScreen> = () => {
+  const eligibilityDetailsState = useSignupEligibilityDetails(initialState);
+
+  return <SuccessScreen eligibilityDetailsState={eligibilityDetailsState} forceMobileView />;
+};
+export const Mobile = MobileTemplate.bind({});
 
 export default componentMeta;

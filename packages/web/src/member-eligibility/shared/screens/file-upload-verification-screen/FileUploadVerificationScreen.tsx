@@ -8,7 +8,7 @@ import { ListSelectorState } from '@bluelightcard/shared-ui/components/ListSelec
 import ListSelector from '@bluelightcard/shared-ui/components/ListSelector';
 import Alert from '@bluelightcard/shared-ui/components/Alert';
 import Button from '@bluelightcard/shared-ui/components/Button-V2';
-import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/components/EligibilityHeading';
+import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 import { useFuzzyFrontendButtons } from './hooks/FuzzyFrontendButtons';
 import { useVerificationMethodDetails } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/hooks/VeificationMethodDetails';

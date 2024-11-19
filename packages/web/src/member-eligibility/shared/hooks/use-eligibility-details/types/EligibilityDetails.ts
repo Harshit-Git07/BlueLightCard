@@ -53,3 +53,5 @@ export interface EligibilityOrganisation {
   id: string;
   label: string;
 }
+
+export type EligibilityDetailsWithoutFlow = Omit<EligibilityDetails, 'flow'>;

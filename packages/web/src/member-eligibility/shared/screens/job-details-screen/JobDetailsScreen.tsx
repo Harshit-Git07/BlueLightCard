@@ -9,7 +9,7 @@ import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import TextInput from '@bluelightcard/shared-ui/components/TextInput';
 import PromoCode from '@bluelightcard/shared-ui/components/PromoCode';
 import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
-import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/components/EligibilityHeading';
+import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import { useIsNextButtonDisabled } from './hooks/UseIsButtonDisabled';
 import { useOnOrganisationChanged } from './hooks/UseOnOrganisationChanged';

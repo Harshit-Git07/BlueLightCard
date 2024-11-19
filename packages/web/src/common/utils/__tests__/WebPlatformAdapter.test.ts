@@ -9,7 +9,8 @@ jest.mock('@/root/global-vars', () => ({
   BRAND_URL: 'https://bluelightcard.co.uk',
 }));
 
-import vars from '@/root/global-vars';
+import { BRANDS } from '@/types/brands.enum';
+import { mockBrand } from '@/root/src/common/test-utils/BrandMocker';
 
 jest.mock('next/router', () => ({
   __esModule: true,
@@ -40,12 +41,14 @@ describe('Web Platform Adapter', () => {
     });
 
     it.each([
-      ['blc-uk', 'BLC_UK'],
-      ['dds-uk', 'DDS_UK'],
-      ['blc-au', 'BLC_AU'],
+      [BRANDS.BLC_UK, 'BLC_UK'],
+      [BRANDS.DDS_UK, 'DDS_UK'],
+      [BRANDS.BLC_AU, 'BLC_AU'],
     ])('should map brand: %s to x-brand header %s', async (brand, header) => {
-      vars.BRAND = brand;
+      mockBrand(brand);
 
+      // Need to re-import the module to get the updated brand from the global vars
+      const platformAdapter = new (require('../WebPlatformAdapter').WebPlatformAdapter)();
       await platformAdapter.invokeV5Api('/mock-endpoint', { method: 'GET' });
 
       expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/mock-endpoint'), {

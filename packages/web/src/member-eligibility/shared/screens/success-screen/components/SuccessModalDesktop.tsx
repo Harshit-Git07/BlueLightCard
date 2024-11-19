@@ -1,23 +1,22 @@
-import { EligibilityModalTemplate } from '@/root/src/member-eligibility/shared/components/modal/EligibilityModalTemplate';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
-import { AppDownloadLinks } from '@/root/src/member-eligibility/shared/components/modal/AppDownloadLinks';
 import { useRouter } from 'next/router';
 import { BRAND } from '@/global-vars';
 import { BRANDS } from '@/types/brands.enum';
-import { getQrCodeForDownloadingApp } from '@/root/src/member-eligibility/shared/components/modal/helper';
 import React, { FC } from 'react';
+import { EligibilityModalBody } from '@/root/src/member-eligibility/shared/screens/shared/components/modal/EligibilityModalBody';
+import { AppStoreQrCode } from '@/components/AppStoreQrCode/AppStoreQrCode';
+import { AppStoreLinks } from '@/root/src/member-eligibility/shared/screens/shared/components/modal/AppStoreLinks';
 
-export const SuccessModal: FC = () => {
+export const SuccessModalDesktop: FC = () => {
   const router = useRouter();
   const brandName = BRAND === BRANDS.DDS_UK ? 'Defence Discount Service' : 'Blue Light Card';
-  const QrCode = getQrCodeForDownloadingApp();
 
   return (
-    <EligibilityModalTemplate data-testid="sign-up-success-screen">
+    <EligibilityModalBody data-testid="sign-up-success-screen">
       <p
-        className={`mx-[50px] mb-[24px] lg:mt-[78px] md:portrait:mt-[0px] ${fonts.displaySmallText} ${colours.textOnSurface} truncate`}
+        className={`${fonts.displaySmallText} ${colours.textOnSurface} mx-[50px] mb-[24px] lg:mt-[78px] md:portrait:mt-[0px] truncate`}
       >
         Sign Up Complete!
       </p>
@@ -33,21 +32,21 @@ export const SuccessModal: FC = () => {
       </Button>
 
       <p
-        className={`text-center leading-relaxed ${fonts.headlineSmallBold} ${colours.textOnSurface}`}
+        className={`${fonts.headlineSmallBold} ${colours.textOnSurface} text-center leading-relaxed`}
       >
         Get the {brandName} App
       </p>
 
       <p
-        className={`mt-[8px] mb-[8px] text-center leading-relaxed ${fonts.body} ${colours.textOnSurface}`}
+        className={`${fonts.body} ${colours.textOnSurface} mt-[8px] mb-[8px] text-center leading-relaxed`}
       >
         Easily search for stores or brands and get discounts on <br /> the go with your virtual
         card.
       </p>
 
-      <QrCode className="h-full" />
+      <AppStoreQrCode className="h-full" />
 
-      <AppDownloadLinks className="mt-[44px] mb-[78px] " />
-    </EligibilityModalTemplate>
+      <AppStoreLinks className="mt-[44px] mb-[78px]" />
+    </EligibilityModalBody>
   );
 };

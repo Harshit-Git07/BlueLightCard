@@ -1,16 +1,16 @@
 import { ChangeEventHandler, useCallback } from 'react';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 
-export function useOnWorkEmailChange(eligibilityDetailsState: EligibilityDetailsState): {
-  onWorkEmailChange: ChangeEventHandler<HTMLInputElement>;
-} {
+type Callback = ChangeEventHandler<HTMLInputElement>;
+
+export function useOnWorkEmailChanged(eligibilityDetailsState: EligibilityDetailsState): Callback {
   const [eligibilityDetails, setEligibilityDetailsState] = eligibilityDetailsState;
-  const onWorkEmailChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+
+  return useCallback(
     (event) => {
       const emailVerification = event.target.value;
 
-      //TODO: We will need to make a call to verify the email address
-
+      // TODO: Need to do some email verification here
       setEligibilityDetailsState({
         ...eligibilityDetails,
         emailVerification,
@@ -18,6 +18,4 @@ export function useOnWorkEmailChange(eligibilityDetailsState: EligibilityDetails
     },
     [eligibilityDetails, setEligibilityDetailsState]
   );
-
-  return { onWorkEmailChange };
 }

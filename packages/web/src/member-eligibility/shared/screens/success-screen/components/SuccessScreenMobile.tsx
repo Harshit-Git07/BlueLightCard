@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
-import { AppDownloadLinks } from '@/root/src/member-eligibility/shared/components/modal/AppDownloadLinks';
 import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 import { useRouter } from 'next/router';
 import DefaultImage from '@assets/modalPlaceholder.svg';
+import { AppStoreLinks } from '@/root/src/member-eligibility/shared/screens/shared/components/modal/AppStoreLinks';
 
 export const SuccessScreenMobileView: FC = () => {
   const router = useRouter();
@@ -14,20 +14,18 @@ export const SuccessScreenMobileView: FC = () => {
     <EligibilityScreen data-testid="success-screen-mobile">
       <div className="mx-[18px]">
         <p
-          className={`mt-[32px] text-center leading-relaxed ${fonts.headlineBold} ${colours.textOnSurface}`}
+          className={`${fonts.headlineBold} ${colours.textOnSurface} mt-[32px] text-center leading-relaxed`}
         >
           Sign Up Complete! <br /> Get the App
         </p>
 
         <p
-          className={`mt-[4px] text-center leading-relaxed ${fonts.body} ${colours.textOnSurface}`}
+          className={`${fonts.body} ${colours.textOnSurface} mt-[4px] text-center leading-relaxed`}
         >
           Easily search for stores or brands and get discounts on the go with your virtual card.
         </p>
 
-        <div>
-          <AppDownloadLinks className="mt-[24px]" />
-        </div>
+        <AppStoreLinks className="mt-[24px]" />
 
         <Button
           className="mt-[24px] mb-[24px] w-full"

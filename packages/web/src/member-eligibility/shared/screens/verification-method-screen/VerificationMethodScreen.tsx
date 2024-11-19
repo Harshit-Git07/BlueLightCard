@@ -6,7 +6,7 @@ import { ThemeVariant } from '@bluelightcard/shared-ui/index';
 import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import ListSelector from '@bluelightcard/shared-ui/components/ListSelector';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
-import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/components/EligibilityHeading';
+import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
 import { useVerificationMethods } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/hooks/useVerificationMethods';
 import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
 import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/hooks/FuzzyFrontendButtons';
@@ -71,6 +71,7 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
           Back
         </Button>
       </EligibilityBody>
+
       <FuzzyFrontendButtons buttons={fuzzyFrontendButtons} putInFloatingDock />
     </EligibilityScreen>
   );

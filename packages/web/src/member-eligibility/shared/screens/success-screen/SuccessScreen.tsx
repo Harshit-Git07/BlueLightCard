@@ -1,14 +1,21 @@
-import React, { FC } from 'react';
-import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import React, { FC, useMemo } from 'react';
 import { useMobileMediaQuery } from '@bluelightcard/shared-ui/hooks/useMediaQuery';
-import { SuccessScreenMobileView } from '@/root/src/member-eligibility/shared/screens/success-screen/SuccessScreenMobile';
-import { SuccessModal } from '@/root/src/member-eligibility/shared/screens/success-screen/SuccessModal';
+import { SuccessScreenMobileView } from '@/root/src/member-eligibility/shared/screens/success-screen/components/SuccessScreenMobile';
+import { SuccessModalDesktop } from '@/root/src/member-eligibility/shared/screens/success-screen/components/SuccessModalDesktop';
+import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 
-export const SuccessScreen: FC<VerifyEligibilityScreenProps> = () => {
+interface Props extends VerifyEligibilityScreenProps {
+  forceMobileView?: boolean;
+}
+
+export const SuccessScreen: FC<Props> = ({ forceMobileView }) => {
   const isMobile = useMobileMediaQuery();
 
-  if (isMobile) {
-    return <SuccessScreenMobileView />;
-  }
-  return <SuccessModal />;
+  const useMobileView = useMemo(() => {
+    return forceMobileView ?? isMobile;
+  }, [forceMobileView, isMobile]);
+
+  if (useMobileView) return <SuccessScreenMobileView />;
+
+  return <SuccessModalDesktop />;
 };

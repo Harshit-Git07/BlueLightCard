@@ -1,0 +1,21 @@
+import { BRAND } from '@/global-vars';
+import { BRANDS } from '@/types/brands.enum';
+import { InterstitialScreenTitleProps } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-screen-title/InterstitialScreenTitle';
+
+export function buildSignupTitle(): InterstitialScreenTitleProps {
+  if (BRAND === BRANDS.DDS_UK) {
+    return {
+      part1: 'Welcome to the',
+      part2: 'Defence Discount',
+      part3: ' Service!',
+      lineBreakBeforeBrand: true,
+    };
+  }
+
+  return {
+    part1: 'Welcome to',
+    part2: 'Blue Light',
+    part3: ' Card!',
+    lineBreakBeforeBrand: true,
+  };
+}

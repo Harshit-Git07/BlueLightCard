@@ -1,13 +1,14 @@
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { MouseEventHandler, useCallback } from 'react';
 
+type Callback = MouseEventHandler<HTMLButtonElement>;
+
 export function useOnSendVerificationLink(
   eligibilityDetailsState: EligibilityDetailsState
-): MouseEventHandler<HTMLButtonElement> {
+): Callback {
   const [eligibilityDetails, setEligibilityDetailsState] = eligibilityDetailsState;
 
-  //TODO: An API call to send the email is needed here.
-
+  // TODO: An API call to send the email is needed here.
   return useCallback<MouseEventHandler<HTMLButtonElement>>(
     (event) => {
       event.preventDefault();

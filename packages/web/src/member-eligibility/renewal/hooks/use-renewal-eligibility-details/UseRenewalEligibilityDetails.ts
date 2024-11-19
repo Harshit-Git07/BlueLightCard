@@ -1,6 +1,9 @@
 import { Dispatch } from 'react';
 import { useEligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import {
+  EligibilityDetails,
+  EligibilityDetailsWithoutFlow,
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
 
 // TODO: This is stubbed out until we make a real service layer call to fill this in
 export const renewalEligibilityDetailsStub: EligibilityDetails = {
@@ -19,10 +22,8 @@ export const renewalEligibilityDetailsStub: EligibilityDetails = {
   },
 };
 
-type WithoutFlow = Omit<EligibilityDetails, 'flow'>;
-
 export function useRenewalEligibilityDetails(
-  initialState: WithoutFlow = renewalEligibilityDetailsStub
+  initialState: EligibilityDetailsWithoutFlow = renewalEligibilityDetailsStub
 ): [EligibilityDetails, Dispatch<EligibilityDetails>] {
   return useEligibilityDetails({
     ...initialState,

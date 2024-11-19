@@ -3,7 +3,7 @@ import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shar
 import LoadingSpinner from '@bluelightcard/shared-ui/components/LoadingSpinner';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
 import { EligibilityBody } from '@/root/src/member-eligibility/shared/screens/shared/components/body/EligibilityBody';
-import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/components/EligibilityHeading';
+import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
 import {
   isSuccessResult,
   useClientSecret,

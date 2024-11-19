@@ -1,22 +1,19 @@
+import '@/root/public/modalPlaceholder.png';
 import React, { FC, PropsWithChildren, useMemo } from 'react';
-import '../../../../../public/modalPlaceholder.png';
 import DefaultImage from '@assets/modalPlaceholder.svg';
 import { useMedia } from 'react-use';
 
 export interface Props extends PropsWithChildren {
+  className?: string;
   image?: string;
   'data-testid'?: string;
-  className?: string;
 }
 
-export const EligibilityModalTemplate: FC<Props> = ({
-  className = '',
-  image,
-  children,
-  ...props
-}) => {
-  // This can be a https link or a local image stored in the web/public folder
-  const Image = image ?? DefaultImage;
+export const EligibilityModalBody: FC<Props> = ({ className = '', image, children, ...props }) => {
+  const Image = useMemo(() => {
+    // This could be either a remote https image, or from a local image stored in the web/public folder
+    return image ?? DefaultImage;
+  }, [image]);
 
   const isPadPro = useMedia(
     '(min-width: 1024px) and (max-width: 1024px) and (orientation: portrait)'

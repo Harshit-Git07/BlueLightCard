@@ -80,6 +80,8 @@ describe('smoke test', () => {
     fireEvent.click(getByRole('button'));
 
     expect(mockPlatformAdapter.navigate).toHaveBeenCalledTimes(1);
-    expect(mockPlatformAdapter.navigate).toHaveBeenCalledWith(`/company?cid=${mockCompanyId}`);
+    expect(mockPlatformAdapter.navigate).toHaveBeenCalledWith(
+      `/offerdetails.php?cid=${mockCompanyId}`,
+    );
   });
 });

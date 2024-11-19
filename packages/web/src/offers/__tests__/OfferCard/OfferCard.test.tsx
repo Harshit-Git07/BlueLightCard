@@ -8,7 +8,7 @@ describe('OfferCard component', () => {
     alt: 'Forest Holidays',
     offerName: '20% off OLED TVs',
     companyName: 'LG',
-    offerLink: 'https://www.bluelightcard.co.uk/company',
+    offerLink: 'https://www.bluelightcard.co.uk/offerdetails.php',
     showFindOutMore: true,
     id: '123',
     offerId: 123,

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import OfferTopDetailsHeader from '.';
+import OfferTopDetailsHeader, { getShareButtonTargetPage } from '.';
 import { fireEvent, render } from '@testing-library/react';
 import { useHydrateAtoms } from 'jotai/utils';
 import { Provider } from 'jotai';
@@ -64,6 +64,38 @@ const OfferTopDetailsHeaderProvider = (props: OfferTopDetailsHeaderProviderProps
 };
 
 describe('smoke test', () => {
+  const testCases = [
+    {
+      description: 'should return "company" when company page experiment returns "treatment"',
+      companyPageExperiment: 'treatment',
+      companyId: 1,
+      offerId: 1,
+      expected: '/company?cid=1&oid=1',
+    },
+    {
+      description:
+        'should return "offerDetails.php" when company page experiment returns undefined',
+      companyPageExperiment: undefined,
+      companyId: 2,
+      offerId: 2,
+      expected: '/offerdetails.php?cid=2&oid=2',
+    },
+    {
+      description: 'should return "offerdetails.php"  company page experiment returns "control"',
+      companyPageExperiment: 'control',
+      companyId: 3,
+      offerId: 3,
+      expected: '/offerdetails.php?cid=3&oid=3',
+    },
+  ];
+
+  testCases.forEach(({ description, companyPageExperiment, companyId, offerId, expected }) => {
+    it(description, () => {
+      const result = getShareButtonTargetPage(companyPageExperiment, companyId, offerId);
+      expect(result).toBe(expected);
+    });
+  });
+
   it('should render component without error', () => {
     const platformAdapter = useMockPlatformAdapter();
     render(

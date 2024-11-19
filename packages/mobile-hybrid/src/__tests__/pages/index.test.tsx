@@ -54,7 +54,6 @@ const useOffersMock = jest.mocked(useOffers);
 
 let userProfileValue: UserProfile = { uuid: 'mock-uuid-1', canRedeemOffer: true, isAgeGated: true };
 let amplitudeFlagsAndExperiments: Record<string, string>;
-let controlGroup = false;
 let mockPlatformAdapter: IPlatformAdapter;
 
 describe('Home', () => {
@@ -64,20 +63,23 @@ describe('Home', () => {
     jest.resetAllMocks();
 
     useOffersMock.mockReturnValue({
-      flexible: {
-        title: 'Flexible offer carousel',
-        random: false,
-        subtitle: '',
-        items: [],
-      },
-      deal: [],
-      groups: [
-        {
-          title: 'Standard offer carousel',
+      offerPromos: {
+        flexible: {
+          title: 'Flexible offer carousel',
           random: false,
+          subtitle: '',
           items: [],
         },
-      ],
+        deal: [],
+        groups: [
+          {
+            title: 'Standard offer carousel',
+            random: false,
+            items: [],
+          },
+        ],
+      },
+      getOfferPromos: jest.fn(),
     });
     amplitudeFlagsAndExperiments = {
       [Experiments.POPULAR_OFFERS]: 'treatment',
@@ -101,6 +103,10 @@ describe('Home', () => {
   });
 
   describe('Offers', () => {
+    it('should call "getOfferPromos" function', () => {
+      expect(useOffersMock).toHaveBeenCalled();
+    });
+
     it("should render 'Flexible offer carousel' when home page is rendered", () => {
       const flexibleOfferCarousel = screen.getByText('Flexible offer carousel');
       expect(flexibleOfferCarousel).toBeInTheDocument();
@@ -267,20 +273,23 @@ describe('Popular brands blc-aus & dds ', () => {
     jest.resetAllMocks();
 
     useOffersMock.mockReturnValue({
-      flexible: {
-        title: 'Flexible offer carousel',
-        random: false,
-        subtitle: '',
-        items: [],
-      },
-      deal: [],
-      groups: [
-        {
-          title: 'Standard offer carousel',
+      offerPromos: {
+        flexible: {
+          title: 'Flexible offer carousel',
           random: false,
+          subtitle: '',
           items: [],
         },
-      ],
+        deal: [],
+        groups: [
+          {
+            title: 'Standard offer carousel',
+            random: false,
+            items: [],
+          },
+        ],
+      },
+      getOfferPromos: jest.fn(),
     });
     amplitudeFlagsAndExperiments = {
       [Experiments.POPULAR_OFFERS]: 'control',

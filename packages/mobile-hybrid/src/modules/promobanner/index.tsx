@@ -2,19 +2,23 @@ import { FC, useMemo } from 'react';
 import BannerCarousel from '@/components/Banner/BannerCarousel';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeAnalytics from '@/invoke/analytics';
-import { OfferDataModel, OfferPromosModel } from '@/models/offer';
+import { OfferPromosModel } from '@/models/offer';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
-import useAPI, { APIResponse } from '@/hooks/useAPI';
-import { APIUrl } from '@/globals';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { useAmplitude } from '@/hooks/useAmplitude';
 import { AmplitudeExperimentState } from '@/components/AmplitudeProvider/types';
+import useOffers from '@/hooks/useOffers';
+import { usePlatformAdapter } from '@bluelightcard/shared-ui';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const PromoBanner: FC = () => {
   const { is } = useAmplitude();
+  const platformAdapter = usePlatformAdapter();
+  const {
+    offerPromos: { deal },
+  } = useOffers(platformAdapter);
 
   const onSlideItemClick = ({ compid, companyname, offername }: OfferPromosModel) => {
     const companyPageExperiment = is(
@@ -35,17 +39,15 @@ const PromoBanner: FC = () => {
     });
   };
 
-  const response = useAPI(APIUrl.OfferPromos) as APIResponse<OfferDataModel>;
-
   const deals = useMemo(
     () =>
-      (response?.data.deal ?? []).reduce((acc, deal) => {
+      (deal ?? []).reduce((acc, deal) => {
         deal.items.forEach((item) => {
           acc.push(item);
         });
         return acc;
       }, [] as OfferPromosModel[]),
-    [response?.data],
+    [deal],
   );
 
   return (

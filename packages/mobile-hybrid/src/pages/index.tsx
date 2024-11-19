@@ -24,6 +24,7 @@ import USPBanner from '@/components/UspBanner/UspBanner';
 import Amplitude from '@/components/Amplitude/Amplitude';
 import { useAmplitude } from '@/hooks/useAmplitude';
 import { AmplitudeExperimentState } from '@/components/AmplitudeProvider/types';
+import useOffers from '@/hooks/useOffers';
 
 const apiCall = new InvokeNativeAPICall();
 const navigation = new InvokeNativeNavigation();
@@ -36,12 +37,17 @@ const Home: NextPage<any> = () => {
   const [seeAllNews, setSeeAllNews] = useAtom(newsPanelStore);
   const bodyHeight = useRef<HTMLElement>(null);
   const { is } = useAmplitude();
+  const { getOfferPromos } = useOffers(platformAdapter);
   const request = useCallback(() => {
-    const homePageServices = [APIUrl.News, APIUrl.FavouritedBrands, APIUrl.OfferPromos];
+    const homePageServices = [APIUrl.News, APIUrl.FavouritedBrands];
     homePageServices.forEach((url) => {
       apiCall.requestData(url);
     });
   }, []);
+
+  useEffect(() => {
+    getOfferPromos();
+  }, [getOfferPromos]);
 
   const seeAllClick = () => {
     document.getElementById('app-body')?.classList.remove('noscroll');

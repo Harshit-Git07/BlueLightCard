@@ -77,7 +77,7 @@ const List: FC<ListProps> = ({ listVariant, entityId }) => {
     // eslint-disable-next-line  react-hooks/exhaustive-deps
   }, [listResponse?.data]);
 
-  const onOfferClick = useCallback<(companyId: number, offerId: number) => void>(
+  const onOfferClick = useCallback<(companyId: number | string, offerId: number | string) => void>(
     (companyId, offerId) => {
       navigation.navigate(`/offerdetails.php?cid=${companyId}&oid=${offerId}`);
     },

@@ -1,6 +1,6 @@
 interface OfferBaseModel {
-  id: number;
-  compid: number;
+  id: number | string;
+  compid: number | string;
   offername: string;
   logos: string;
   companyname: string;
@@ -27,7 +27,7 @@ export interface OfferSharedModel {
 }
 
 export interface OfferFlexibleItemModel {
-  id: number;
+  id: number | string;
   title: string;
   imagehome: string;
   imagedetail: string;

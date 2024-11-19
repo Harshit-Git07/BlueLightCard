@@ -5,7 +5,7 @@ export interface BannerCarouselProps {
 }
 
 export interface Slide {
-  id: number;
+  id: number | string;
   text: string;
   title?: string;
   imageSrc: string;

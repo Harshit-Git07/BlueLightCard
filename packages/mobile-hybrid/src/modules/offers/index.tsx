@@ -1,5 +1,5 @@
 import { FC, useMemo } from 'react';
-import { PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
+import { PlatformVariant, useOfferDetails, usePlatformAdapter } from '@bluelightcard/shared-ui';
 import useOffers from '@/hooks/useOffers';
 import Heading from '@/components/Heading/Heading';
 import CardCarousel from '@/components/Carousel/CardCarousel';
@@ -16,7 +16,10 @@ const analytics = new InvokeNativeAnalytics();
 
 const Offers: FC = () => {
   const { is } = useAmplitude();
-  const { flexible, groups } = useOffers();
+  const platformAdapter = usePlatformAdapter();
+  const {
+    offerPromos: { flexible, groups },
+  } = useOffers(platformAdapter);
   const { viewOffer } = useOfferDetails();
 
   /**

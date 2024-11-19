@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.88.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.87.0...bluelightcard/web-v1.88.0) (2024-11-19)
+
+
+### Features
+
+* [DISCO-1071] Get mobile hybrid menus from CMS ([#2991](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2991)) ([0140355](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0140355db1bffe2d629496584258acc4b7f55dd1))
+* [MER-178] verify eligibility manual address ([#2874](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2874)) ([a0a30f6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a0a30f618957d4c3f2a4dad563465d196d7ec73c))
+* DISCO-1139 Removed old links from Web header and footer ([#2958](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2958)) ([5242ac6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5242ac67774bef8c406ef46571be168408953f9a))
+
+
+### Bug Fixes
+
+* [DISCO-1070] Handle updated flexible menu response ([#3001](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3001)) ([4465c67](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4465c67a118477c85bff806457e777b21c82ce82))
+* [DISCO-1070] Revert homepage menu ([#2998](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2998)) ([3cb0e32](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3cb0e323f1d2d391c95972c89fa8ebacd0800eb5))
+* Small refactor and add type for brand so we get some type safety ([#2977](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2977)) ([af6f562](https://github.com/bluelightcard/BlueLightCard-2.0/commit/af6f562fbc3ace2983f33022b5800a2704f7004e))
+
 ## [1.87.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.86.0...bluelightcard/web-v1.87.0) (2024-11-19)
 
 

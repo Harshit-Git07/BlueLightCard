@@ -1,6 +1,10 @@
 import { Meta, StoryFn } from '@storybook/react';
 import FlexibleOffersPage from '@/pages/flexible-offers';
-import { StorybookPlatformAdapterDecorator, flexibleOfferMock } from '@bluelightcard/shared-ui';
+import {
+  StorybookPlatformAdapterDecorator,
+  StorybookSharedUIConfigDecorator,
+  flexibleOfferMock,
+} from '@bluelightcard/shared-ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 
@@ -21,10 +25,12 @@ const componentMeta: Meta<typeof FlexibleOffersPage> = {
       type: 'figma',
       url: 'https://www.figma.com/design/ts9XtrAAIbvPNJnZ56INRi/Globalisation?node-id=3905-33472&node-type=section&m=dev',
     },
-    router: {
-      pathname: '/flexible-offers',
-      query: {
-        id: 'list1',
+    nextjs: {
+      router: {
+        pathname: '/flexible-offers',
+        query: {
+          id: 'list1',
+        },
       },
     },
     platformAdapter: {
@@ -37,7 +43,11 @@ const componentMeta: Meta<typeof FlexibleOffersPage> = {
         }),
     },
   },
-  decorators: [StorybookPlatformAdapterDecorator, withQueryClientProvider],
+  decorators: [
+    StorybookPlatformAdapterDecorator,
+    withQueryClientProvider,
+    StorybookSharedUIConfigDecorator,
+  ],
 };
 
 const DefaultTemplate: StoryFn<typeof FlexibleOffersPage> = (args) => {

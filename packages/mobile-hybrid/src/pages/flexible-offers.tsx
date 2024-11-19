@@ -6,6 +6,7 @@ import {
   Typography,
   useOfferDetails,
   usePlatformAdapter,
+  ErrorState,
 } from '@bluelightcard/shared-ui';
 import { NextPage } from 'next';
 import Image from 'next/image';
@@ -98,7 +99,7 @@ const FlexibleOffersContent: FC = () => {
 
 const FlexibleOffersPage: NextPage = () => {
   return (
-    <ErrorBoundary fallback={<p>Something went wrong</p>}>
+    <ErrorBoundary fallback={<ErrorState page="flexi_menu" />}>
       <Suspense fallback={<FlexibleOffersSkeleton />}>
         <FlexibleOffersContent />
       </Suspense>

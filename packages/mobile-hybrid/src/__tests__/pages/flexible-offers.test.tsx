@@ -5,9 +5,12 @@ import {
   OfferDetailsContext,
   PlatformAdapterProvider,
   useMockPlatformAdapter,
+  SharedUIConfigProvider,
+  SharedUIConfig,
 } from '@bluelightcard/shared-ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import FlexibleOffersPage from '@/pages/flexible-offers';
+import { BRAND, CDN_URL } from '@/globals';
 import useFlexibleOffersData from '@/hooks/useFlexibleOffersData';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 
@@ -23,6 +26,13 @@ jest.mock('next/image', () => {
 });
 
 const viewOfferMock = jest.fn();
+
+const mockSharedUIConfig: SharedUIConfig = {
+  globalConfig: {
+    cdnUrl: CDN_URL,
+    brand: BRAND,
+  },
+};
 
 const mockFlexibleOffersData = {
   title: 'Exclusive Offers',
@@ -53,11 +63,13 @@ describe('Flexible Offers Page', () => {
     return (
       <QueryClientProvider client={new QueryClient()}>
         <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <RouterContext.Provider value={mockRouter as NextRouter}>
-            <OfferDetailsContext.Provider value={{ viewOffer: viewOfferMock }}>
-              {children}
-            </OfferDetailsContext.Provider>
-          </RouterContext.Provider>
+          <SharedUIConfigProvider value={mockSharedUIConfig}>
+            <RouterContext.Provider value={mockRouter as NextRouter}>
+              <OfferDetailsContext.Provider value={{ viewOffer: viewOfferMock }}>
+                {children}
+              </OfferDetailsContext.Provider>
+            </RouterContext.Provider>
+          </SharedUIConfigProvider>
         </PlatformAdapterProvider>
       </QueryClientProvider>
     );
@@ -89,7 +101,11 @@ describe('Flexible Offers Page', () => {
 
     renderComponent();
 
-    const errorMessage = await screen.findByText('Something went wrong');
+    const errorMessage = await screen.findByText('Oops! Something went wrong.');
+    const tryAgainButton = await screen.findByRole('button', {
+      name: /Please try again/i,
+    });
+    expect(tryAgainButton).toBeInTheDocument();
     expect(errorMessage).toBeInTheDocument();
   });
 });

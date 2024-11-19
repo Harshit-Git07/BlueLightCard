@@ -93,4 +93,24 @@ export class CardRepository implements ICardRepository {
     }
   }
 
+  async createCard(uuid: any, legacyCardId: any,  expiry: any, cardStatus: any) {
+    const now = new Date();
+    const params = {
+      TableName: this.tableName,
+      Item: {
+        pk: `MEMBER#${uuid}`,
+        sk: `CARD#${legacyCardId}`,
+        expires: `${setDate(expiry)}`,
+        posted: `${setDate(now)}`,
+        status: cardStatus
+      },
+    };
+    try {
+      const command = new PutCommand(params);
+      const data = await this.dynamodb.send(command);
+      logger.info('Created card:', { data });
+    } catch (error) {
+      logger.error('Unable to create card. Error:', { error });
+    }
+  }
 }

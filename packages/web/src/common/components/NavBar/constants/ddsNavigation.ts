@@ -26,11 +26,6 @@ export const AUTHENTICATED_NAVIGATION_DDS: NavigationItem[] = [
         url: '/offers.php?type=3',
       },
       {
-        id: 'offers-near-you',
-        label: 'Offers New You',
-        url: '/nearme.php',
-      },
-      {
         id: 'deals-of-the-week',
         label: 'Deals of the week',
         url: '/memhome.php',

@@ -1,8 +1,5 @@
 import React, { FC, useContext, useEffect, useRef } from 'react';
 import { SearchDropDownProps } from './types';
-import Link from '@/components/Link/Link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot } from '@fortawesome/pro-solid-svg-icons';
 import { Dropdown, PillGroup } from '@bluelightcard/shared-ui';
 import UserContext from '@/context/User/UserContext';
 import useFetchCompaniesOrCategories, { CompanyType } from '@/hooks/useFetchCompaniesOrCategories';
@@ -66,19 +63,7 @@ export const SearchDropDownPresenter = ({
         onCancel={onClose}
       >
         <div className="mx-auto tablet:pt-[54px] pb-[100px] max-w-[1408px]">
-          <div className="flex gap-2 px-4 py-[10px]">
-            <Link tabIndex={0} href={`/nearme.php`} useLegacyRouting>
-              <button
-                onClick={onClose}
-                className="font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body"
-              >
-                <FontAwesomeIcon icon={faLocationDot} size="lg" className="mr-2" />
-                Offers near you
-              </button>
-            </Link>
-          </div>
-
-          <div className="my-[22px] px-4">
+          <div className="mb-[22px] px-4">
             <PillGroup
               title={'Browse categories'}
               pillGroup={categoriesForPillGroup}

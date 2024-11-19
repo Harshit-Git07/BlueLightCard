@@ -1,4 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui';
 import NavBar from './NavBar';
 import AuthenticatedNavBar from './components/organisms/AuthenticatedNavBar';
 import UnauthenticatedNavBar from './components/organisms/UnauthenticatedNavBar';
@@ -56,6 +57,7 @@ const componentMeta: Meta = {
       defaultViewport: 'desktop',
     },
   },
+  decorators: [StorybookPlatformAdapterDecorator],
 };
 
 export default componentMeta;

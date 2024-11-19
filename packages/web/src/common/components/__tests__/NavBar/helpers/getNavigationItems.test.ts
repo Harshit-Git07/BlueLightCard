@@ -203,11 +203,6 @@ describe('getNavigationItems', () => {
             url: '/offers.php?type=3',
           },
           {
-            id: 'offers-near-you',
-            label: 'Offers Near You',
-            url: '/nearme.php',
-          },
-          {
             id: 'deals-of-the-week',
             label: 'Deals of the week',
             url: '/members-home',

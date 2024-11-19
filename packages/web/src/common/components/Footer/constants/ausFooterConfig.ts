@@ -11,7 +11,6 @@ export const AUS_FOOTER_CONFIG_AUTHENTICATED: FooterConfig = {
         { label: 'Giftcard Discounts', url: '/offers.php?type=2' },
         { label: 'High Street Offers', url: '/offers.php?type=5' },
         { label: 'Popular Discounts', url: '/offers.php?type=3' },
-        { label: 'Offers Near You', url: '/nearme.php' },
         { label: 'Deals of the Week', url: '/members-home' },
       ],
     },

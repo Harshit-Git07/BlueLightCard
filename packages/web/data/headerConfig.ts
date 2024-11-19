@@ -131,14 +131,6 @@ export const getNavItems = (
           },
         },
         {
-          text: 'Offers Near You',
-          link: '/nearme.php',
-          onClickLink: async (target) => {
-            await logOffersClicked(target);
-            redirect('/nearme.php');
-          },
-        },
-        {
           text: 'Deals of the Week',
           link: '/members-home',
           onClickLink: async (target) => {

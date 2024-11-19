@@ -181,7 +181,7 @@ Interaction.play = async ({ canvasElement }) => {
   const category = within(canvasElement).getByText('Children and toys');
   fireEvent.click(category);
 
-  const companyDropdown = within(canvasElement).getByPlaceholderText('Search for a company');
+  const companyDropdown = within(canvasElement).getByLabelText('Search for a company');
   await userEvent.type(companyDropdown, 'you');
 
   const company = await within(canvasElement).findByText('Youth & Earth');

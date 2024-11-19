@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import DesktopNavigation from './DesktopNavigation';
-import NotificationButton from '../atoms/NotificationButton';
 import MobileNavToggleButton from '../atoms/MobileNavToggleButton';
 import { AuthenticatedNavBarProps } from '../../types';
 import MobileNavigation from './MobileNavigation';
@@ -122,8 +121,6 @@ const AuthenticatedNavBar = ({
                   <FontAwesomeIcon icon={faWindowFrameOpen} />
                 </button>
               ) : null}
-
-              <NotificationButton href="/notifications.php" />
 
               <MobileNavToggleButton
                 onIconClick={onShowMobileMenuClick}

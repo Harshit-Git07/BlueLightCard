@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.41.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.40.1...bluelightcard/mobile-hybrid-v1.41.0) (2024-11-19)
+
+
+### Features
+
+* [DISCO-1071] Get mobile hybrid menus from CMS ([#2991](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2991)) ([0140355](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0140355db1bffe2d629496584258acc4b7f55dd1))
+* [DISCO-1160] add error state page on mobile hybrid ([#2972](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2972)) ([0a9632f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0a9632ffa96f7df306420b481a1c9a322377c960))
+* Company Page Legacy Redirects ([#2967](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2967)) ([55145f6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/55145f6c05eb5bf525b5b7a4e4ea8c072ec60de9))
+* modified redirect company links from legacy to modern within offers domain ([55145f6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/55145f6c05eb5bf525b5b7a4e4ea8c072ec60de9))
+* TO-1316 mobile hybrid company page error ([#2929](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2929)) ([12ca647](https://github.com/bluelightcard/BlueLightCard-2.0/commit/12ca6475004e6851aff1cb37cfcbbc1386e9c719))
+
 ## [1.40.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.40.0...bluelightcard/mobile-hybrid-v1.40.1) (2024-11-13)
 
 

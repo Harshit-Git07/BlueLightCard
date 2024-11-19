@@ -3,6 +3,7 @@ import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
 
 import {
   BALLOT,
+  CREDITCARD,
   GENERIC,
   GIFTCARD,
   PREAPPLIED,
@@ -60,7 +61,7 @@ export function createRedemptionPushNotificationRule(stack: Stack, config: Redem
       detailType: [RedemptionEventDetailType.MEMBER_REDEMPTION],
       detail: {
         redemptionDetails: {
-          redemptionType: [VAULT, VAULTQR, GENERIC, PREAPPLIED, SHOWCARD, BALLOT, GIFTCARD],
+          redemptionType: [VAULT, VAULTQR, GENERIC, PREAPPLIED, SHOWCARD, BALLOT, GIFTCARD, CREDITCARD],
         },
       },
     },

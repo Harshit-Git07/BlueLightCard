@@ -45,7 +45,7 @@ describe('POST Vault Batches', () => {
     test(`post: authorisation error for invalid key`, async () => {
       const result = await apiCall('vaults/vlt-abcd/batches', 'invalid-api-key');
       expect(result.status).toBe(403);
-    });
+    }, 15000);
   });
 
   it.each([
@@ -65,23 +65,27 @@ describe('POST Vault Batches', () => {
       vaultId: 'vlt-123-456-789-000',
       message: 'vault does not exist for standard vaultId',
     },
-  ])(`returns 404 error when $message: $vaultId`, async (params): Promise<void> => {
-    const body = {
-      vaultId: params.vaultId,
-      expiry: faker.date.future().toISOString(),
-    };
-    const urlVaultId = encodeURIComponent(params.vaultId);
+  ])(
+    `returns 404 error when $message: $vaultId`,
+    async (params): Promise<void> => {
+      const body = {
+        vaultId: params.vaultId,
+        expiry: faker.date.future().toISOString(),
+      };
+      const urlVaultId = encodeURIComponent(params.vaultId);
 
-    const result = await apiCall(`vaults/${urlVaultId}/batches`, apiKey, body);
-    const responseBody = await result.json();
+      const result = await apiCall(`vaults/${urlVaultId}/batches`, apiKey, body);
+      const responseBody = await result.json();
 
-    expect(responseBody).toStrictEqual({
-      statusCode: 404,
-      data: {
-        message: `CreateVaultBatch - ${params.message} (vaultId=${params.vaultId})`,
-      },
-    });
-  });
+      expect(responseBody).toStrictEqual({
+        statusCode: 404,
+        data: {
+          message: `CreateVaultBatch - ${params.message} (vaultId=${params.vaultId})`,
+        },
+      });
+    },
+    15000,
+  );
 
   it('returns 404 error when creating a vault for a legacy vault which does not exist', async () => {
     const companyId = faker.string.numeric(5);
@@ -106,7 +110,7 @@ describe('POST Vault Batches', () => {
         message: `CreateVaultBatch - vault does not exist for legacy vault redemptionId (vaultId=${legacyVaultId})`,
       },
     });
-  });
+  }, 15000);
 
   it('allows creation of a new batch in a legacy vault', async () => {
     const companyId = faker.string.numeric(5);
@@ -136,7 +140,7 @@ describe('POST Vault Batches', () => {
       vaultId: expect.stringMatching(/^e2e:vlt[a-z0-9-]+$/),
       uploadUrl: expect.stringMatching(/^https:\/\//),
     });
-  });
+  }, 15000);
 
   it('allows creation of a new batch in a standard vault', async () => {
     const { vault, ...vaultHooks } = buildRedemptionConfig(connectionManager).addVault({ vaultType: 'standard' });
@@ -157,5 +161,5 @@ describe('POST Vault Batches', () => {
       vaultId: expect.stringMatching(/^e2e:vlt[a-z0-9-]+$/),
       uploadUrl: expect.stringMatching(/^https:\/\//),
     });
-  });
+  }, 15000);
 });

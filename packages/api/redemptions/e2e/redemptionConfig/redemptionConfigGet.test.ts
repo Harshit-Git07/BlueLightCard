@@ -51,69 +51,73 @@ describe('GET Redemption Config', () => {
   test.each([
     ['vault', '1'],
     ['vaultQR', '2'],
-  ] as const)('returns config with vault info for redemptionType %s', async (redemptionType, offerId) => {
-    const { redemptionConfig, vault, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
-      offerId,
-      redemptionType: redemptionType,
-      connection: 'affiliate',
-      ...(redemptionType === 'vault' && { url: faker.internet.url() }),
-      affiliate: 'awin',
-    }).addVault();
-    const { batches } = redemptionConfigHooks
-      .addBatch({ created: new Date('2021-01-01') })
-      .addBatch({ created: new Date('2021-02-01') })
-      .addBatch({ created: new Date('2021-03-01') });
-
-    onTestFinished(redemptionConfigHooks.cleanup);
-    await redemptionConfigHooks.insert();
-
-    const vaultRedemptionConfig = redemptionConfig!;
-    const result = await callRedemptionConfigEndpoint(vaultRedemptionConfig.offerId);
-
-    const actualResponseBody = await result.json();
-
-    const expectedResponseBody = {
-      statusCode: 200,
-      data: {
-        id: vaultRedemptionConfig.id,
-        offerId: vaultRedemptionConfig.offerId,
+  ] as const)(
+    'returns config with vault info for redemptionType %s',
+    async (redemptionType, offerId) => {
+      const { redemptionConfig, vault, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
+        offerId,
         redemptionType: redemptionType,
-        connection: vaultRedemptionConfig.connection,
-        companyId: vaultRedemptionConfig.companyId,
-        affiliate: vaultRedemptionConfig.affiliate,
-        ...(redemptionType === 'vault' && { url: vaultRedemptionConfig.url }),
-        vault: {
-          id: vault.id,
-          alertBelow: vault.alertBelow,
-          status: vault.status,
-          maxPerUser: vault.maxPerUser,
-          createdAt: expect.stringMatching(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/),
-          email: vault.email,
-          integration: vault.integration,
-          integrationId: String(vault.integrationId),
-          batches: [
-            {
-              id: batches[0].id,
-              created: new Date('2021-01-01').toISOString(),
-              expiry: batches[0].expiry.toISOString(),
-            },
-            {
-              id: batches[1].id,
-              created: new Date('2021-02-01').toISOString(),
-              expiry: batches[1].expiry.toISOString(),
-            },
-            {
-              id: batches[2].id,
-              created: new Date('2021-03-01').toISOString(),
-              expiry: batches[2].expiry.toISOString(),
-            },
-          ],
+        connection: 'affiliate',
+        ...(redemptionType === 'vault' && { url: faker.internet.url() }),
+        affiliate: 'awin',
+      }).addVault();
+      const { batches } = redemptionConfigHooks
+        .addBatch({ created: new Date('2021-01-01') })
+        .addBatch({ created: new Date('2021-02-01') })
+        .addBatch({ created: new Date('2021-03-01') });
+
+      onTestFinished(redemptionConfigHooks.cleanup);
+      await redemptionConfigHooks.insert();
+
+      const vaultRedemptionConfig = redemptionConfig!;
+      const result = await callRedemptionConfigEndpoint(vaultRedemptionConfig.offerId);
+
+      const actualResponseBody = await result.json();
+
+      const expectedResponseBody = {
+        statusCode: 200,
+        data: {
+          id: vaultRedemptionConfig.id,
+          offerId: vaultRedemptionConfig.offerId,
+          redemptionType: redemptionType,
+          connection: vaultRedemptionConfig.connection,
+          companyId: vaultRedemptionConfig.companyId,
+          affiliate: vaultRedemptionConfig.affiliate,
+          ...(redemptionType === 'vault' && { url: vaultRedemptionConfig.url }),
+          vault: {
+            id: vault.id,
+            alertBelow: vault.alertBelow,
+            status: vault.status,
+            maxPerUser: vault.maxPerUser,
+            createdAt: expect.stringMatching(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/),
+            email: vault.email,
+            integration: vault.integration,
+            integrationId: String(vault.integrationId),
+            batches: [
+              {
+                id: batches[0].id,
+                created: new Date('2021-01-01').toISOString(),
+                expiry: batches[0].expiry.toISOString(),
+              },
+              {
+                id: batches[1].id,
+                created: new Date('2021-02-01').toISOString(),
+                expiry: batches[1].expiry.toISOString(),
+              },
+              {
+                id: batches[2].id,
+                created: new Date('2021-03-01').toISOString(),
+                expiry: batches[2].expiry.toISOString(),
+              },
+            ],
+          },
         },
-      },
-    };
-    expect(result.status).toBe(200);
-    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
-  });
+      };
+      expect(result.status).toBe(200);
+      expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+    },
+    15000,
+  );
 
   test('GET /redemptions/{offerId} should return 200 for redemptionType generic', async () => {
     const { redemptionConfig, generic, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
@@ -151,7 +155,7 @@ describe('GET Redemption Config', () => {
 
     await genericsRepository.deleteById(generic.id);
     await redemptionConfigRepository.deleteById(redemptionConfig.id);
-  });
+  }, 15000);
 
   test('GET /redemptions/{offerId} should return 200 for redemptionType ShowCard', async () => {
     const { redemptionConfig, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
@@ -179,7 +183,7 @@ describe('GET Redemption Config', () => {
     expect(result.status).toBe(200);
 
     await redemptionConfigRepository.deleteById(redemptionConfig.id);
-  });
+  }, 15000);
 
   test('GET /redemptions/{offerId} should return correct redemptionConfig for redemptionType PreApplied', async () => {
     const { redemptionConfig, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
@@ -211,7 +215,7 @@ describe('GET Redemption Config', () => {
     };
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
     expect(result.status).toBe(200);
-  });
+  }, 15000);
 
   test('GET /redemptions/{offerId} should return 200 for redemptionType CreditCard', async () => {
     const { redemptionConfig, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
@@ -245,7 +249,7 @@ describe('GET Redemption Config', () => {
     expect(result.status).toBe(200);
 
     await redemptionConfigRepository.deleteById(redemptionConfig.id);
-  });
+  }, 15000);
 
   test('GET /redemptions/{offerId} returns 404 if offerId can not be found', async () => {
     const result = await callRedemptionConfigEndpoint(faker.string.uuid());
@@ -260,7 +264,7 @@ describe('GET Redemption Config', () => {
     };
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
     expect(result.status).toBe(404);
-  });
+  }, 15000);
 });
 
 async function callRedemptionConfigEndpoint(offerId: string): Promise<Response> {

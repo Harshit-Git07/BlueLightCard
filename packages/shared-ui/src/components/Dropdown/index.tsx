@@ -155,6 +155,7 @@ const Dropdown: FC<DropdownProps> = ({
 
   useEffect(() => {
     setFilteredOptions(options);
+    setSelectedOption(getSelectedOption(options, placeholder, selectedValue));
   }, [options]);
 
   useEffect(() => {

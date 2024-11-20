@@ -5,7 +5,7 @@ export interface EligibilityDetails {
   accountDetailsChanged?: boolean;
   employmentStatus?: EmploymentStatus;
   organisation?: EligibilityOrganisation;
-  employer?: string;
+  employer?: EligibilityEmployer;
   jobTitle?: string;
   promoCode?: string;
   requireMultipleIds?: boolean;
@@ -50,6 +50,11 @@ export interface AusAddress {
 }
 
 export interface EligibilityOrganisation {
+  id: string;
+  label: string;
+}
+
+export interface EligibilityEmployer {
   id: string;
   label: string;
 }

@@ -4,11 +4,11 @@ import { BRAND } from '@/global-vars';
 import { BRANDS } from '@/types/brands.enum';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
-import { EligibilityBody } from '@/root/src/member-eligibility/shared/screens/shared/components/body/EligibilityBody';
 import { buildSignupTitle } from '@/root/src/member-eligibility/sign-up/screens/signup-interstitial-screen/hooks/SignupTitleBuilder';
 import { InterstitialSubTitle } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-sub-title/InterstitialSubTitle';
 import { InterstitialScreenTitle } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-screen-title/InterstitialScreenTitle';
 import { InterstitialScreenCardContainer } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-screen-card-container/InterstitialScreenCardContainer';
+import { InterstitialScreenBody } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-screen-body/InterstitialScreenBody';
 
 export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -25,7 +25,7 @@ export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <EligibilityScreen data-testid="SignupInterstitialScreen">
-      <EligibilityBody>
+      <InterstitialScreenBody>
         <InterstitialScreenTitle title={title} />
 
         <InterstitialSubTitle numberOfStepsAsWord="two" status="start" />
@@ -54,7 +54,7 @@ export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
             canHover={false}
           />
         </InterstitialScreenCardContainer>
-      </EligibilityBody>
+      </InterstitialScreenBody>
     </EligibilityScreen>
   );
 };

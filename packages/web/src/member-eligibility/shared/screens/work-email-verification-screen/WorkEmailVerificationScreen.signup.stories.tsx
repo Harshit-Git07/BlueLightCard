@@ -15,7 +15,7 @@ const ScreenTemplate: StoryFn<typeof WorkEmailVerificationScreen> = () => {
     currentScreen: 'Work Email Verification Screen',
     employmentStatus: 'Employed',
     organisation: { id: '1', label: 'NHS' },
-    employer: 'Abbey Hospitals',
+    employer: { id: '1', label: 'Abbey Hospitals' },
     jobTitle: 'Nurse',
   });
 

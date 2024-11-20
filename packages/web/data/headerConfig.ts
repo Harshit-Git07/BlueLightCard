@@ -164,7 +164,7 @@ export const getNavItems = (
     {
       text: 'My Card',
       link: '/highstreetcard.php',
-      onClickLink: async (target) => {
+      onClickLink: async () => {
         await logMyCardClicked();
         redirect('/highstreetcard.php');
       },
@@ -172,7 +172,7 @@ export const getNavItems = (
     {
       text: 'My Account',
       link: '/account.php',
-      onClickLink: async (target) => {
+      onClickLink: async () => {
         await logMyAccountClicked();
         redirect('/account.php');
       },

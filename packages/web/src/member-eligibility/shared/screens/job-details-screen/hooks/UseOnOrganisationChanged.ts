@@ -24,6 +24,8 @@ export function useOnOrganisationChanged(
 
       setEligibilityDetailsState({
         ...eligibilityDetails,
+        employer: undefined,
+        jobTitle: undefined,
         organisation,
       });
     },

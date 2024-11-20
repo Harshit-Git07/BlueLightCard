@@ -96,7 +96,7 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <EligibilityScreen>
-      <EligibilityBody className="gap-[32px]">
+      <EligibilityBody>
         <div className="flex flex-col gap-[24px]">
           <EligibilityHeading
             title="Verify Eligibility"

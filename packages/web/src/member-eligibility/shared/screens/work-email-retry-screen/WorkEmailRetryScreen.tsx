@@ -18,8 +18,6 @@ export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
 
   const { formattedTime, countDownFinished, restartTimer } = useCountDownInSeconds(30);
   const editEmail = useOnEditEmail(eligibilityDetailsState);
-  // TODO: These will be replaced by logic from APIs
-  const fuzzyFrontEndButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 
   const numberOfCompletedSteps = useMemo(() => {
     switch (eligibilityDetails.flow) {
@@ -34,6 +32,8 @@ export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
   const resendVerificationEmail = useCallback(() => {
     restartTimer();
   }, [restartTimer]);
+
+  const fuzzyFrontEndButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 
   const isEmailResendButtonDisabled = !countDownFinished;
 

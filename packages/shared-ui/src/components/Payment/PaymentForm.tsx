@@ -3,6 +3,7 @@ import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import Button from '../Button-V2';
 import { ThemeVariant } from '../../types';
 import { colours } from '../../tailwind/theme';
+import { StripePaymentElementOptions } from '@stripe/stripe-js';
 
 interface Props {
   className?: string;
@@ -52,13 +53,22 @@ const PaymentForm: FC<Props> = ({
     onPaymentResult({ success: !result.error, errorMessage });
   };
 
+  const paymentElementOptions: StripePaymentElementOptions = useMemo(() => {
+    return {
+      wallets: {
+        googlePay: 'auto',
+        applePay: 'auto',
+      },
+    };
+  }, []);
+
   const buttonsDisabled = useMemo(() => {
     return paymentLoading || !stripe;
   }, [paymentLoading, stripe]);
 
   return (
     <form className={className} onSubmit={handleSubmit}>
-      <PaymentElement />
+      <PaymentElement options={paymentElementOptions} />
 
       {errorMessage && <p className={`${colours.textError} mt-[6px]`}>{errorMessage}</p>}
 

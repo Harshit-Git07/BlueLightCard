@@ -2,9 +2,8 @@ import { Elements } from '@stripe/react-stripe-js';
 import PaymentForm, {
   StripePaymentResult,
 } from '@bluelightcard/shared-ui/components/Payment/PaymentForm';
-import React, { FC, useCallback, useMemo, useState } from 'react';
-import { Stripe } from '@stripe/stripe-js';
-import { getStripeClient } from '@/root/src/member-eligibility/shared/screens/payment-screen/providers/Stripe';
+import React, { FC, useCallback } from 'react';
+import { useStripeClient } from '@/root/src/member-eligibility/shared/screens/payment-screen/providers/Stripe';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 
 interface Props {
@@ -20,27 +19,7 @@ export const StripePaymentComponent: FC<Props> = ({
 }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
 
-  const [stripeInitialisationError, setStripeInitialisationError] = useState<string | undefined>(
-    undefined
-  );
-
-  const stripeClient = useMemo(async (): Promise<Stripe | null> => {
-    try {
-      const stripeClient = await getStripeClient;
-      setStripeInitialisationError(undefined);
-      return stripeClient;
-    } catch (error) {
-      console.error('Failed to initalise stripe client', error);
-
-      if (error instanceof Error) {
-        setStripeInitialisationError(error.message);
-        return null;
-      }
-
-      setStripeInitialisationError('Unknown error');
-      return null;
-    }
-  }, []);
+  const stripeClient = useStripeClient();
 
   const onPaymentResult = useCallback(
     (result: StripePaymentResult) => {
@@ -57,17 +36,11 @@ export const StripePaymentComponent: FC<Props> = ({
     [eligibilityDetails, setEligibilityDetails]
   );
 
-  return (
-    <>
-      {stripeInitialisationError && (
-        <div data-testid="strip-payment-component-error">Payment provider failed to initialise</div>
-      )}
+  if (!stripeClient) return null;
 
-      {!stripeInitialisationError && (
-        <Elements stripe={stripeClient} options={{ clientSecret }}>
-          <PaymentForm onPaymentResult={onPaymentResult} onBackButtonClicked={onBack} />
-        </Elements>
-      )}
-    </>
+  return (
+    <Elements stripe={stripeClient} options={{ clientSecret }}>
+      <PaymentForm onPaymentResult={onPaymentResult} onBackButtonClicked={onBack} />
+    </Elements>
   );
 };

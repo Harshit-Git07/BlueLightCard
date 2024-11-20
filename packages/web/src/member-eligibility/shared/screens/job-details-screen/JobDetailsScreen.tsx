@@ -21,6 +21,11 @@ import { useOnPromoCodeApplied } from '@/root/src/member-eligibility/shared/scre
 import { useOrganisations } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-organisations/UseOrganisations';
 import { useEmployers } from './hooks/use-employers/UseEmployers';
 import { useShouldShowPromoCode } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/UseShouldShowPromoCode';
+import {
+  employmentDetailsSubTitle,
+  employmentDetailsTitle,
+} from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
+import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 
 export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDetailsState }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
@@ -28,7 +33,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
   const isNextButtonDisabled = useIsNextButtonDisabled(eligibilityDetails);
   const organisations = useOrganisations();
   const employers = useEmployers(eligibilityDetails.organisation);
-
+  const isRenewalFlow = eligibilityDetails.flow === 'Renewal';
   const onOrganisationSelected = useOnOrganisationChanged(eligibilityDetailsState);
   const onEmployerSelected = useEmployerChanged(eligibilityDetailsState);
   const onJobTitleChange = useOnJobTitleChange(eligibilityDetailsState);
@@ -59,13 +64,15 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
     <EligibilityScreen data-testid="job-details-screen">
       <EligibilityBody>
         <EligibilityHeading
-          title="Verify Eligibility"
-          subtitle="Provide details about your employment status and job role"
+          title={employmentDetailsTitle(eligibilityDetails.flow)}
+          subtitle={employmentDetailsSubTitle(eligibilityDetails.flow)}
           numberOfCompletedSteps={numberOfCompletedSteps}
         />
 
         <div className="flex flex-col items-start w-full">
-          <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>EMPLOYMENT STATUS</p>
+          <p className={`mt-[24px] ${fonts.bodySemiBold} ${colours.textOnSurface}`}>
+            EMPLOYMENT STATUS
+          </p>
 
           <ListSelector
             title={eligibilityDetails.employmentStatus}
@@ -81,6 +88,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
             placeholder="Select your organisation"
             options={organisations}
             maxItemsShown={5}
+            selectedValue={eligibilityDetails.organisation?.id}
             showTooltipIcon
             onSelect={(option) => {
               onOrganisationSelected(option);
@@ -92,8 +100,9 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
               className="mt-[16px] mt-4"
               placeholder="Select your employer"
               options={employers}
+              selectedValue={eligibilityDetails.employer?.id}
               onSelect={(option) => {
-                onEmployerSelected(option.label);
+                onEmployerSelected(option);
               }}
             />
           )}
@@ -119,19 +128,36 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
             </div>
           )}
 
-          <Button
-            className="mt-[24px] w-full"
-            size="Large"
-            disabled={!isNextButtonDisabled}
-            onClick={() => {
-              setEligibilityDetails({
-                ...eligibilityDetails,
-                currentScreen: 'Verification Method Screen',
-              });
-            }}
-          >
-            Next
-          </Button>
+          <div className="flex w-full mt-[24px] gap-[8px]">
+            {isRenewalFlow && (
+              <Button
+                variant={ThemeVariant.Secondary}
+                className="w-1/5"
+                size="Large"
+                onClick={() => {
+                  setEligibilityDetails({
+                    ...eligibilityDetails,
+                    currentScreen: 'Renewal Account Details Screen',
+                  });
+                }}
+              >
+                Back
+              </Button>
+            )}
+            <Button
+              className={isRenewalFlow ? 'w-4/5 ml-auto' : 'w-full'}
+              size="Large"
+              disabled={!isNextButtonDisabled}
+              onClick={() => {
+                setEligibilityDetails({
+                  ...eligibilityDetails,
+                  currentScreen: 'Verification Method Screen',
+                });
+              }}
+            >
+              Next
+            </Button>
+          </div>
         </div>
       </EligibilityBody>
 

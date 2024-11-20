@@ -15,7 +15,7 @@ const ScreenTemplate: StoryFn<typeof DeliveryAddressScreen> = () => {
     currentScreen: 'Delivery Address Screen',
     employmentStatus: 'Employed',
     organisation: { id: '1', label: 'NHS' },
-    employer: 'Abbey Hospitals',
+    employer: { id: '1', label: 'Abbey Hospitals' },
     jobTitle: 'Nurse',
     emailVerification: 'test@nhs.com',
   });

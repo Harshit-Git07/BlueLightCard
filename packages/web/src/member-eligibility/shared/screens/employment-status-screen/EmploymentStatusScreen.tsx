@@ -7,6 +7,11 @@ import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import { EmploymentStatus } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
 import { EligibilityBody } from '@/root/src/member-eligibility/shared/screens/shared/components/body/EligibilityBody';
+import {
+  employmentDetailsSubTitle,
+  employmentDetailsTitle,
+} from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
+
 import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
 
 export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
@@ -65,10 +70,10 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <EligibilityScreen>
-      <EligibilityBody className="gap-[24px]">
+      <EligibilityBody>
         <EligibilityHeading
-          title="Verify Eligibility"
-          subtitle="Provide details about your employment status and job role"
+          title={employmentDetailsTitle(eligibilityDetails.flow)}
+          subtitle={employmentDetailsSubTitle(eligibilityDetails.flow)}
           numberOfCompletedSteps={numberOfCompletedSteps}
         />
 

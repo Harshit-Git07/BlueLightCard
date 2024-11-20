@@ -34,10 +34,8 @@ export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDet
   }, [getClientSecretResult]);
 
   const showLoadingSpinner = useMemo(() => {
-    if (!getClientSecretResult) return true;
-
-    return clientSecretResultError === undefined;
-  }, [clientSecretResultError, getClientSecretResult]);
+    return getClientSecretResult === undefined;
+  }, [getClientSecretResult]);
 
   const subtitle = useMemo(() => {
     const currencySymbol = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL ?? '';
@@ -70,10 +68,10 @@ export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDet
 
   return (
     <EligibilityScreen data-testid="payment-screen">
-      <EligibilityBody className="px-[18px]">
+      <EligibilityBody>
         <EligibilityHeading title="Payment" subtitle={subtitle} numberOfCompletedSteps={5} />
 
-        <div className="flex flex-col items-start w-full">
+        <div className="flex flex-col items-stretech w-full">
           {showLoadingSpinner && (
             <LoadingSpinner
               containerClassName="w-full"

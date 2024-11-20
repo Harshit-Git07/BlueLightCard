@@ -10,8 +10,8 @@ export const renewalEligibilityDetailsStub: EligibilityDetails = {
   flow: 'Renewal',
   currentScreen: 'Interstitial Screen',
   employmentStatus: 'Employed',
-  organisation: { id: '1', label: 'NHS' },
-  employer: 'Abbey Hospitals',
+  organisation: { id: 'eadc26a7-e2cf-4f5a-92ba-a298f15d396c', label: 'NHS' },
+  employer: { id: '004d4e03-4843-4b9b-96fd-a86a859870bd', label: 'Bedford Hospital NHS Trust' },
   jobTitle: 'Nurse',
   emailVerification: 'test@nhs.com',
   address: {

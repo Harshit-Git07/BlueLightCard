@@ -33,7 +33,7 @@ export const FuzzyFrontend: FC<Props> = ({
 
   return (
     <EligibilityScreen>
-      <EligibilityBody className="gap-8">
+      <EligibilityBody>
         <div className="flex flex-col justify-center gap-1">
           <div className={fonts.titleLarge} data-testid="fuzzy-frontend-title">
             {screenTitle}

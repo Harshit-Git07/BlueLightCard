@@ -1,7 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
-import { EligibilityBody } from '@/root/src/member-eligibility/shared/screens/shared/components/body/EligibilityBody';
 import Card from '@bluelightcard/shared-ui/components/Card';
 import { buildRenewalTitle } from '@/root/src/member-eligibility/renewal/screens/renewal-interstitial-screen/hooks/RenewalTitleBuilder';
 import { BRAND } from '@/global-vars';
@@ -11,6 +10,7 @@ import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/renewal/s
 import { InterstitialSubTitle } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-sub-title/InterstitialSubTitle';
 import { InterstitialScreenTitle } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-screen-title/InterstitialScreenTitle';
 import { InterstitialScreenCardContainer } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-screen-card-container/InterstitialScreenCardContainer';
+import { InterstitialScreenBody } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-screen-body/InterstitialScreenBody';
 
 export const RenewalInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -29,7 +29,7 @@ export const RenewalInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
 
   return (
     <EligibilityScreen data-testid="Renewal Intersititial Screen">
-      <EligibilityBody>
+      <InterstitialScreenBody>
         <InterstitialScreenTitle title={title} />
 
         <InterstitialSubTitle numberOfStepsAsWord="three" status="continue" />
@@ -64,7 +64,7 @@ export const RenewalInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
             canHover={false}
           />
         </InterstitialScreenCardContainer>
-      </EligibilityBody>
+      </InterstitialScreenBody>
 
       <FuzzyFrontendButtons buttons={fuzzyFrontEndButtons} putInFloatingDock />
     </EligibilityScreen>

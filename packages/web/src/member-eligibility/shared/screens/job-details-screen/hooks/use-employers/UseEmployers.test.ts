@@ -2,7 +2,7 @@ import * as target from './UseEmployers';
 import { organisationNoEmployersStub } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-organisations/stubs/OrganisationStubs';
 import { renderHook, RenderHookResult, waitFor } from '@testing-library/react';
 import { getEmployers } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/service-layer/GetEmployers';
-import { EligibilityEmployer } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/types/EligibilityEmployer';
+import { EligibilityEmployer } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
 import { v4 as createUuid } from 'uuid';
 
 jest.mock(

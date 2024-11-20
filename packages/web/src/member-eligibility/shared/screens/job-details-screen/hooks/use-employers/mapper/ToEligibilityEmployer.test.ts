@@ -1,5 +1,5 @@
 import * as target from './ToEligibilityEmployer';
-import { EligibilityEmployer } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/types/EligibilityEmployer';
+import { EligibilityEmployer } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
 
 it('should map service layer type to eligibility type', () => {
   const result = target.toEligibilityEmployer({

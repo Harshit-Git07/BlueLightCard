@@ -14,31 +14,10 @@ export const RenewalAccountDetailsScreen: FC<VerifyEligibilityScreenProps> = ({
           setEligibilityDetails({
             ...eligibilityDetails,
             accountDetailsChanged: false,
-            currentScreen: 'Verification Method Screen',
+            currentScreen: 'Job Details Screen',
           });
         },
-        text: 'Details stayed the same',
-      },
-      {
-        onClick: () => {
-          setEligibilityDetails({
-            ...eligibilityDetails,
-            accountDetailsChanged: true,
-            employmentStatus: undefined,
-            organisation: undefined,
-            employer: undefined,
-            jobTitle: undefined,
-            promoCode: undefined,
-            fileVerification: undefined,
-            fileVerificationType: undefined,
-            emailVerification: undefined,
-            requireMultipleIds: undefined,
-            canSkipIdVerification: undefined,
-            canSkipPayment: undefined,
-            currentScreen: 'Employment Status Screen',
-          });
-        },
-        text: 'Details changed',
+        text: 'Job Details Screen',
       },
     ];
   }, [eligibilityDetails, setEligibilityDetails]);

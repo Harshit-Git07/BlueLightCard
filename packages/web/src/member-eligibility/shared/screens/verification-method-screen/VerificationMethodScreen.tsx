@@ -10,6 +10,10 @@ import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens
 import { useVerificationMethods } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/hooks/useVerificationMethods';
 import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
 import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/hooks/FuzzyFrontendButtons';
+import {
+  employmentDetailsTitle,
+  verifyEligibilitySubTitle,
+} from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
 
 export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -29,14 +33,6 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails.flow]);
 
   const onBack = useCallback(() => {
-    if (eligibilityDetails.flow === 'Renewal' && !eligibilityDetails.accountDetailsChanged) {
-      setEligibilityDetails({
-        ...eligibilityDetails,
-        currentScreen: 'Renewal Account Details Screen',
-      });
-      return;
-    }
-
     setEligibilityDetails({
       ...eligibilityDetails,
       currentScreen: 'Job Details Screen',
@@ -47,8 +43,8 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
     <EligibilityScreen>
       <EligibilityBody>
         <EligibilityHeading
-          title="Verify Eligibility"
-          subtitle="Verify your eligibility by providing a valid ID"
+          title={employmentDetailsTitle(eligibilityDetails.flow)}
+          subtitle={verifyEligibilitySubTitle(eligibilityDetails.flow)}
           numberOfCompletedSteps={numberOfCompletedSteps}
         />
 

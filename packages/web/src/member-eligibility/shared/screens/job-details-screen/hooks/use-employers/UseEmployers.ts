@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { EligibilityEmployer } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/types/EligibilityEmployer';
 import { getEmployers } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/service-layer/GetEmployers';
 import { toEligibilityEmployer } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/mapper/ToEligibilityEmployer';
-import { EligibilityOrganisation } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import {
+  EligibilityOrganisation,
+  EligibilityEmployer,
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
 import { validate } from 'uuid';
 import { organisationNoEmployersStub } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-organisations/stubs/OrganisationStubs';
 

@@ -15,7 +15,7 @@ const SingleIdTemplate: StoryFn<typeof FileUploadVerificationScreen> = () => {
     currentScreen: 'File Upload Verification Screen',
     employmentStatus: 'Employed',
     organisation: { id: '1', label: 'NHS' },
-    employer: 'Abbey Hospitals',
+    employer: { id: '1', label: 'Abbey Hospitals' },
     jobTitle: 'Nurse',
     fileVerificationType: 'Work Contract',
   });
@@ -29,7 +29,7 @@ const MultiIdTemplate: StoryFn<typeof FileUploadVerificationScreen> = () => {
     currentScreen: 'File Upload Verification Screen',
     employmentStatus: 'Employed',
     organisation: { id: '1', label: 'NHS' },
-    employer: 'Abbey Hospitals',
+    employer: { id: '1', label: 'Abbey Hospitals' },
     jobTitle: 'Nurse',
     requireMultipleIds: true,
     fileVerificationType: ['Work Contract', 'Bank Statement'],

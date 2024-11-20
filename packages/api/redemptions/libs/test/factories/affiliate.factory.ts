@@ -6,7 +6,7 @@ import { Affiliate, Connection, createRedemptionsId } from '@blc-mono/redemption
 export type affiliateRedemptionTypeFactory = {
   id: string;
   offerId: string;
-  redemptionType: 'preApplied' | 'giftCard' | 'creditCard';
+  redemptionType: 'preApplied' | 'giftCard' | 'creditCard' | 'verify';
   companyId: string;
   url: string;
   affiliate: Affiliate;

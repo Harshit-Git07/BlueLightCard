@@ -7,6 +7,7 @@ import {
   SHOWCARD,
   VAULT,
   VAULTQR,
+  VERIFY,
 } from '@blc-mono/core/constants/redemptions';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
@@ -24,6 +25,7 @@ import {
   PatchRedemptionConfigShowCardModel,
   PatchRedemptionConfigVaultModel,
   PatchRedemptionConfigVaultQRModel,
+  PatchRedemptionConfigVerifyModel,
 } from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
 
 import { GenericEntity, GenericsRepository, UpdateGenericEntity } from '../../repositories/GenericsRepository';
@@ -141,6 +143,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
         case PREAPPLIED:
         case GIFTCARD:
         case CREDITCARD:
+        case VERIFY:
           return await this.updateAffiliateTypes(patchRedemptionConfigModel, redemptionTransaction);
         case GENERIC:
           return await this.updateGeneric(patchRedemptionConfigModel, redemptionTransaction, genericsTransaction);
@@ -181,7 +184,8 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
     patchRedemptionConfigAffiliateModel:
       | PatchRedemptionConfigPreAppliedModel
       | PatchRedemptionConfigGiftCardModel
-      | PatchRedemptionConfigCreditCardModel,
+      | PatchRedemptionConfigCreditCardModel
+      | PatchRedemptionConfigVerifyModel,
     redemptionTransaction: RedemptionConfigRepository,
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
     const updateRedemptionConfigEntity: UpdateRedemptionConfigEntity = {

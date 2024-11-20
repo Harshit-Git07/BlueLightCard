@@ -71,6 +71,16 @@ export const PatchCreditCardModel = createZodNamedType(
     .strict(),
 );
 
+export const PatchVerifyModel = createZodNamedType(
+  'PatchVerifyModel',
+  z
+    .object({
+      redemptionType: z.literal(REDEMPTION_TYPES[8]),
+      url: z.string().url(),
+    })
+    .strict(),
+);
+
 export const PatchGenericModel = createZodNamedType(
   'PatchGenericModel',
   z
@@ -167,6 +177,11 @@ export const PatchRedemptionConfigCreditCardModel = createZodNamedType(
   PatchRedemptionConfigBaseModel.merge(PatchCreditCardModel),
 );
 
+export const PatchRedemptionConfigVerifyModel = createZodNamedType(
+  'PatchRedemptionConfigVerifyModel',
+  PatchRedemptionConfigBaseModel.merge(PatchVerifyModel),
+);
+
 export const PatchRedemptionConfigModel = createZodNamedType(
   'PatchRedemptionConfigModel',
   z.discriminatedUnion('redemptionType', [
@@ -177,6 +192,7 @@ export const PatchRedemptionConfigModel = createZodNamedType(
     PatchRedemptionConfigVaultQRModel,
     PatchRedemptionConfigGiftCardModel,
     PatchRedemptionConfigCreditCardModel,
+    PatchRedemptionConfigVerifyModel,
   ]),
 );
 
@@ -188,3 +204,4 @@ export type PatchRedemptionConfigVaultModel = z.infer<typeof PatchRedemptionConf
 export type PatchRedemptionConfigVaultQRModel = z.infer<typeof PatchRedemptionConfigVaultQRModel>;
 export type PatchRedemptionConfigGiftCardModel = z.infer<typeof PatchRedemptionConfigGiftCardModel>;
 export type PatchRedemptionConfigCreditCardModel = z.infer<typeof PatchRedemptionConfigCreditCardModel>;
+export type PatchRedemptionConfigVerifyModel = z.infer<typeof PatchRedemptionConfigVerifyModel>;

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.42.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.41.0...bluelightcard/mobile-hybrid-v1.42.0) (2024-11-20)
+
+
+### Features
+
+* Added Mobile Hybrid Dev Tools ([#3007](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3007)) ([988115f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/988115f6b24228cc2e8655522c9327ac7869a72f))
+
 ## [1.41.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.40.1...bluelightcard/mobile-hybrid-v1.41.0) (2024-11-19)
 
 

@@ -1,6 +1,6 @@
 import { Braze, CampaignsTriggerSendObject } from 'braze-api';
 
-import { GIFTCARD, PREAPPLIED } from '@blc-mono/core/constants/redemptions';
+import { CREDITCARD, GIFTCARD, PREAPPLIED } from '@blc-mono/core/constants/redemptions';
 import { OfferData } from '@blc-mono/core/types/offerdata';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
@@ -76,6 +76,7 @@ export class EmailRepository implements IEmailRepository {
     const map: Record<string, string> = {
       [GIFTCARD]: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_GIFT_CARD_EMAIL_CAMPAIGN_ID),
       [PREAPPLIED]: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID),
+      [CREDITCARD]: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_CREDIT_CARD_EMAIL_CAMPAIGN_ID),
     };
 
     return map[redemptionType];

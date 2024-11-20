@@ -1,4 +1,12 @@
-import { GENERIC, GIFTCARD, PREAPPLIED, SHOWCARD, VAULT, VAULTQR } from '@blc-mono/core/constants/redemptions';
+import {
+  CREDITCARD,
+  GENERIC,
+  GIFTCARD,
+  PREAPPLIED,
+  SHOWCARD,
+  VAULT,
+  VAULTQR,
+} from '@blc-mono/core/constants/redemptions';
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { EmailRepository, IEmailRepository } from '@blc-mono/redemptions/application/repositories/EmailRepository';
@@ -39,6 +47,7 @@ export class EmailService implements IEmailService {
         break;
       }
       case GIFTCARD:
+      case CREDITCARD:
       case PREAPPLIED: {
         await this.emailRepository.sendAffiliateTransactionalEmail(
           {

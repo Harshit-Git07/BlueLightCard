@@ -23,11 +23,12 @@ describe('EmailRepository', () => {
   beforeEach(() => {
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID] = 'test';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_GENERIC_EMAIL_CAMPAIGN_ID] = 'test';
-    process.env[RedemptionsStackEnvironmentKeys.BRAZE_GIFT_CARD_EMAIL_CAMPAIGN_ID] = 'preApplied_env_val';
+    process.env[RedemptionsStackEnvironmentKeys.BRAZE_GIFT_CARD_EMAIL_CAMPAIGN_ID] = 'giftCard_env_val';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_PRE_APPLIED_EMAIL_CAMPAIGN_ID] = 'preApplied_env_val';
     process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST] = 'https://staging.bluelightcard.co.uk';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID] = 'test';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID] = 'test';
+    process.env[RedemptionsStackEnvironmentKeys.BRAZE_CREDIT_CARD_EMAIL_CAMPAIGN_ID] = 'creditCard_env_val';
   });
 
   afterEach(() => {
@@ -38,6 +39,7 @@ describe('EmailRepository', () => {
     delete process.env[RedemptionsStackEnvironmentKeys.REDEMPTIONS_WEB_HOST];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID];
+    delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_CREDIT_CARD_EMAIL_CAMPAIGN_ID];
   });
 
   describe('sendVaultOrGenericTransactionalEmail', () => {
@@ -178,7 +180,7 @@ describe('EmailRepository', () => {
   });
 
   describe('sendAffiliateTransactionalEmail', () => {
-    it.each(['giftCard', 'preApplied'] as const)(
+    it.each(['creditCard', 'giftCard', 'preApplied'] as const)(
       'sends an email with the braze email client for %s redemption type',
       async (redemptionType) => {
         const logger = createTestLogger();
@@ -203,7 +205,9 @@ describe('EmailRepository', () => {
         await repository.sendAffiliateTransactionalEmail(payload, redemptionType);
 
         expect(mockBrazeEmailClient.campaigns.trigger.send).toHaveBeenCalled();
-        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('preApplied_env_val');
+        expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual(
+          `${redemptionType}_env_val`,
+        );
         expect(mockBrazeEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
           payload.brazeExternalUserId,
         );
@@ -242,7 +246,7 @@ describe('EmailRepository', () => {
       await expect(act).rejects.toThrow();
     });
 
-    it.each(allExceptRedemptionTypes('giftCard', 'preApplied'))(
+    it.each(allExceptRedemptionTypes('creditCard', 'giftCard', 'preApplied'))(
       'throws an error for unhandled redemption type %s',
       async (redemptionType) => {
         // Arrange

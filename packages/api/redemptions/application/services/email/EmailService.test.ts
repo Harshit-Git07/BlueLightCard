@@ -34,7 +34,7 @@ describe('EmailService', () => {
       },
     );
 
-    it.each(['giftCard', 'preApplied'])('sends email for %s Affiliate redemption events', async () => {
+    it.each(['creditCard', 'giftCard', 'preApplied'])('sends email for %s Affiliate redemption events', async () => {
       // Arrange
       const logger = createTestLogger();
       const emailRepository: Partial<IEmailRepository> = {

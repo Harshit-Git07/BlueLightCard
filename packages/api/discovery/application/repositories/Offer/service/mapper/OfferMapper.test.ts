@@ -48,6 +48,7 @@ describe('Offer Mapper', () => {
     const offer = offerFactory.build();
     const offerEntity: OfferEntity = {
       ...offer,
+      includedTrusts: ['offerTrustRestriction1'],
       partitionKey: OfferKeyBuilders.buildPartitionKey(offer.id),
       sortKey: OfferKeyBuilders.buildSortKey(offer.company.id),
       gsi1PartitionKey: OfferKeyBuilders.buildGsi1PartitionKey(offer.local),
@@ -58,6 +59,9 @@ describe('Offer Mapper', () => {
 
     const result = target.mapOfferEntityToOffer(offerEntity);
 
-    expect(result).toEqual(offer);
+    expect(result).toEqual({
+      ...offer,
+      includedTrusts: ['offerTrustRestriction1', 'companyTrustRestriction1', 'companyTrustRestriction2'],
+    });
   });
 });

@@ -46,8 +46,8 @@ export function mapOfferEntityToOffer(offerEntity: OfferEntity): Offer {
     offerEnd: offerEntity.offerEnd,
     evergreen: offerEntity.evergreen,
     tags: offerEntity.tags,
-    includedTrusts: offerEntity.includedTrusts,
-    excludedTrusts: offerEntity.excludedTrusts,
+    includedTrusts: mapTrusts(offerEntity.includedTrusts, offerEntity.company.includedTrusts),
+    excludedTrusts: mapTrusts(offerEntity.excludedTrusts, offerEntity.company.excludedTrusts),
     company: offerEntity.company,
     categories: offerEntity.categories,
     local: offerEntity.local,
@@ -57,3 +57,6 @@ export function mapOfferEntityToOffer(offerEntity: OfferEntity): Offer {
     updatedAt: offerEntity.updatedAt,
   };
 }
+
+const mapTrusts = (offerTrusts: string[], companyTrusts: string[]) =>
+  Array.from(new Set([...offerTrusts, ...companyTrusts]));

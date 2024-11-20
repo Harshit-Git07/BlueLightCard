@@ -11,7 +11,7 @@ export const companyFactory = Factory.Sync.makeFactory<Company>({
   logo: 'https://cdn.bluelightcard.co.uk/offerimages/1724052659175.jpg',
   ageRestrictions: '18+',
   alsoKnownAs: ['Alias1', 'Alias2'],
-  includedTrusts: ['restriction1', 'restriction2'],
+  includedTrusts: ['companyTrustRestriction1', 'companyTrustRestriction2'],
   excludedTrusts: [],
   categories: [categoryFactory.build()],
   local: true,

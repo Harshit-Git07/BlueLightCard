@@ -8,6 +8,12 @@ import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructur
 
 import * as target from './OfferService';
 
+const offers = offerFactory.buildList(3);
+const expectedOffers = offers.map((offer) => ({
+  ...offer,
+  includedTrusts: ['companyTrustRestriction1', 'companyTrustRestriction2'],
+}));
+
 describe('Offer Service', () => {
   beforeEach(() => {
     process.env[DiscoveryStackEnvironmentKeys.REGION] = 'eu-west-2';
@@ -101,7 +107,10 @@ describe('Offer Service', () => {
 
       const result = await target.getOfferById(offer.id, offer.company.id);
 
-      expect(result).toEqual(offer);
+      expect(result).toEqual({
+        ...offer,
+        includedTrusts: ['companyTrustRestriction1', 'companyTrustRestriction2'],
+      });
     });
 
     it('should return "undefined" when no offer found', async () => {
@@ -132,14 +141,12 @@ describe('Offer Service', () => {
   });
 
   describe('getNonLocalOffers', () => {
-    const offers = offerFactory.buildList(3);
-
     it('should get a list of offers successfully', async () => {
       givenOfferRepositoryGetNonOffersReturns(offers);
 
       const result = await target.getNonLocalOffers();
 
-      expect(result).toEqual(offers);
+      expect(result).toEqual(expectedOffers);
     });
 
     it('should return an empty list of offers if no offers found', async () => {
@@ -170,7 +177,6 @@ describe('Offer Service', () => {
   });
 
   describe('getOffersByCompany', () => {
-    const offers = offerFactory.buildList(3);
     const companyId = 'companyId';
 
     it('should offers by company successfully', async () => {
@@ -178,7 +184,7 @@ describe('Offer Service', () => {
 
       const result = await target.getOffersByCompany(companyId);
 
-      expect(result).toEqual(offers);
+      expect(result).toEqual(expectedOffers);
     });
 
     it('should return an empty list of offers if no offers found for company', async () => {
@@ -210,10 +216,9 @@ describe('Offer Service', () => {
 
   describe('getOffersByIds', () => {
     it('should getOffersByIds successfully', async () => {
-      const offers = offerFactory.buildList(3);
       givenOfferRepositoryRetrieveByIdsReturns(offers);
       const result = await target.getOffersByIds([{ id: 'offerId', companyId: 'companyId' }]);
-      expect(result).toEqual(offers);
+      expect(result).toEqual(expectedOffers);
     });
 
     it('should throw error when failure in retrieving offer by ids', async () => {

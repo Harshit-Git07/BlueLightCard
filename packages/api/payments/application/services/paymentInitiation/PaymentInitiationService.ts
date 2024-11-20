@@ -89,7 +89,7 @@ export class PaymentInitiationService implements IPaymentInitiationService {
 
     const customerid = await this.createExternalCustomerIfNotExist(user);
 
-    const currency = getEnv(PaymentsStackEnvironmentKeys.CURRENCY_CODE) as Currency;
+    const currency = getEnv(PaymentsStackEnvironmentKeys.CURRENCY_CODE).toLowerCase() as Currency;
 
     const metadataToUse = { ...metadata, memberId, brazeExternalId: user.brazeExternalId };
     const paymentInitiation = await this.stripeRepository.createPaymentIntent(

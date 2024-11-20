@@ -61,6 +61,7 @@ export class DwhKenisisFirehoseStreams {
   public readonly compAppClickStream: IFirehoseStreamAdapter;
   public readonly vaultStream: IFirehoseStreamAdapter;
   public readonly redemptionTypeStream: IFirehoseStreamAdapter;
+  public readonly paymentStream: IFirehoseStreamAdapter;
 	public readonly callbackVaultRedemptionStream: IFirehoseStreamAdapter;
 
   constructor(stack: Stack) {
@@ -82,6 +83,9 @@ export class DwhKenisisFirehoseStreams {
     this.vaultStream = new KenisisFirehoseStream(stack, 'dwh-vault', `dwh-${brandPrefix}-production-vault`).setup();
     this.redemptionTypeStream = new KenisisFirehoseStream(stack, 'dwh-redemption', `dwh-${brandPrefix}-redemption`, {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.tblredemption` : undefined)
+    }).setup();
+    this.paymentStream = new KenisisFirehoseStream(stack, 'dwh-payments', `dwh-${brandPrefix}-payments`, {
+      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.tblpayments` : undefined)
     }).setup();
 		this.callbackVaultRedemptionStream = new KenisisFirehoseStream(stack, 'dwh-vaultIntegrationCallback', callbackVaultRedemptionStreamNames[brandFromEnv]).setup();
 

@@ -38,7 +38,13 @@ export class CheckoutService implements ICheckoutService {
       HTTPRequestMethods.POST,
     );
 
-    const responseData = JSON.parse(response.data).data;
+    const jsonResponse = JSON.parse(response.data);
+
+    const responseData = jsonResponse.data;
+
+    if (jsonResponse.statusCode !== 200) {
+      throw new Error(responseData.error);
+    }
 
     return {
       clientSecret: responseData.clientSecret,

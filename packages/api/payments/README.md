@@ -4,6 +4,12 @@ This service manages payments and exposes a number of endpoints intended to be u
 
 It uses Stripe as the payment provider
 
+This service is intened to be used by other BLC internal services only as it is a low level payment component.
+
+If you are looking to understand it's integration for web and mobile. Look at Orders service which exposes a `checkout` endpoint to the client and talks to this service to initiate payment.
+
+# Authentication
+
 It uses IAM to protect the rest endpoints so the caller needs `execute-api:Invoke` permisson and needs to sign the request in order to call payment endpoints
 
 ## Database

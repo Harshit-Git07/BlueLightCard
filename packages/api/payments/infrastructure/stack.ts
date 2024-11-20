@@ -1,4 +1,5 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { EventBus } from 'aws-cdk-lib/aws-events';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -19,11 +20,12 @@ import { productionDomainNames, stagingDomainNames } from './constants/domains';
 import { PaymentsStackEnvironmentKeys } from './constants/environment';
 import { SSTFunction } from './constructs/SSTFunction';
 import { createTransactionsEventTable } from './database/createTransactionsEventsTable';
+import { DWHEventBridge } from './eventBridge/dwhEventBridge';
 import { StripeEventBridge } from './eventBridge/stripeEventBridge';
 import { Route } from './routes/route';
 
 function PaymentsStack({ stack }: StackContext) {
-  const { certificateArn, bus } = use(Shared);
+  const { certificateArn, bus, dwhKenisisFirehoseStreams } = use(Shared);
   const SERVICE_NAME = 'payments';
 
   // set tag service identity to all resources
@@ -189,6 +191,12 @@ function PaymentsStack({ stack }: StackContext) {
   );
 
   new StripeEventBridge(stack, config.stripeEventBusArn, config.stripeEventSourcePrefix, stripeEventHandler);
+
+  const eventBus = EventBus.fromEventBusArn(stack, 'ExistingSharedEventBus', bus.eventBusArn);
+  const dwh = new DWHEventBridge(stack, eventBus);
+  dwh.paymentSucceededHandlerRule(dwhKenisisFirehoseStreams, layers);
+  dwh.paymentFailedHandlerRule(dwhKenisisFirehoseStreams, layers);
+  dwh.paymentIntentHandlerRule(dwhKenisisFirehoseStreams, layers);
 
   stack.addOutputs({
     PaymentsApiEndpoint: api.url,

@@ -1,21 +1,11 @@
 # Orders
 
-## Automated Tests
+This is the service that will be responsible for checkout from web and client. it will accept a list of products, calculate the price and initiate the payment via the payment service.
 
-### E2E Tests
+Currently this is a very thin service with hard coded prices as membership is the only thing we want to take payment for, for now.
 
-## Test Users
+The idea is that once we have more requirements around taking payments, we will add that logic in here
 
-### Generating Testing Tokens
+## Payment emails
 
-## Database
-
-### Accessing the DB via the Bastion Host
-
-#### Architecture
-
-#### Getting Started
-
-### Testing
-
-### Running locally and querying redemptions app
+This service listens to payment events found in `packages/api/core/src/schemas/payments.ts` and sends payment successful emails to customers via braze

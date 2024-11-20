@@ -87,6 +87,15 @@ const creditCardRequestBody: PostRedemptionConfigModel = {
   url: 'www.url.com',
 };
 
+const verifyRequestBody: PostRedemptionConfigModel = {
+  companyId: faker.string.uuid(),
+  offerId: faker.string.uuid(),
+  connection: 'none',
+  redemptionType: 'verify',
+  affiliate: 'awin',
+  url: 'www.url.com',
+};
+
 describe('transformToNewRedemptionConfigEntity', () => {
   it.each([
     ['showCard' as const, showCardRequestBody],
@@ -113,6 +122,7 @@ describe('transformToNewRedemptionConfigEntity', () => {
     ['generic' as const, genericRequestBody],
     ['giftCard' as const, giftCardRequestBody],
     ['creditCard' as const, creditCardRequestBody],
+    ['verify' as const, verifyRequestBody],
   ])('maps %s to "online" offerType', (redemptionType, redemptionConfigRequestBody) => {
     const expectedNewRedemptionConfigEntity: NewRedemptionConfigEntity = {
       companyId: redemptionConfigRequestBody.companyId,

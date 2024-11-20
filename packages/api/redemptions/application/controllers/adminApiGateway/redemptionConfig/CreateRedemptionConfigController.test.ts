@@ -54,6 +54,34 @@ describe('CreateRedemptionConfigController', () => {
       delete process.env[RedemptionsStackEnvironmentKeys.ADMIN_API_DEFAULT_ALLOWED_ORIGINS];
     });
 
+    it('returns 200 when request body is valid verify redemptionType', async () => {
+      MockCreateRedemptionConfigService.createRedemptionConfig.mockResolvedValue({
+        kind: 'Ok',
+        data: { some: 'data' },
+      });
+
+      const requestBody = {
+        affiliate: 'awin',
+        companyId: 'UUID',
+        connection: 'affiliate',
+        offerId: 'UUID',
+        redemptionType: 'verify',
+        url: 'https://www.awin1.com',
+      };
+
+      const request: APIGatewayProxyEventV2 = {
+        body: JSON.stringify(requestBody),
+        requestContext: {
+          requestId: 'requestId',
+        },
+        headers: {},
+      } as unknown as APIGatewayProxyEventV2;
+
+      const result = await controller.invoke(request);
+
+      expect(result.statusCode).toEqual(200);
+    });
+
     it('returns 200 when request body is valid creditCard redemptionType', async () => {
       MockCreateRedemptionConfigService.createRedemptionConfig.mockResolvedValue({
         kind: 'Ok',

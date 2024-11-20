@@ -44,6 +44,7 @@ describe('POST Redemption Config', () => {
       '105',
       '106',
       '107',
+      '108',
     ]);
 
     // Set a conservative timeout
@@ -61,6 +62,8 @@ describe('POST Redemption Config', () => {
       '104',
       '105',
       '106',
+      '107',
+      '108',
     ]);
     await connectionManager?.cleanup();
   });
@@ -93,7 +96,7 @@ describe('POST Redemption Config', () => {
 
     it('POST /redemptions returns 200 for preApplied redemptionType', async () => {
       const redemptionConfigRequest = {
-        affiliate: null,
+        affiliate: 'awin',
         companyId: faker.string.uuid(),
         connection: 'direct',
         offerId: 102,
@@ -110,7 +113,7 @@ describe('POST Redemption Config', () => {
       const expectedResponseBody = {
         statusCode: 200,
         data: {
-          affiliate: null,
+          affiliate: redemptionConfigRequest.affiliate,
           companyId: redemptionConfigRequest.companyId,
           connection: redemptionConfigRequest.connection,
           offerId: '102',
@@ -141,7 +144,7 @@ describe('POST Redemption Config', () => {
       const expectedResponseBody = {
         statusCode: 200,
         data: {
-          affiliate: 'awin',
+          affiliate: redemptionConfigRequest.affiliate,
           companyId: redemptionConfigRequest.companyId,
           connection: redemptionConfigRequest.connection,
           offerId: '106',
@@ -172,7 +175,7 @@ describe('POST Redemption Config', () => {
       const expectedResponseBody = {
         statusCode: 200,
         data: {
-          affiliate: 'awin',
+          affiliate: redemptionConfigRequest.affiliate,
           companyId: redemptionConfigRequest.companyId,
           connection: redemptionConfigRequest.connection,
           offerId: '107',
@@ -186,7 +189,7 @@ describe('POST Redemption Config', () => {
 
     it('POST /redemptions returns 200 for generic redemptionType', async () => {
       const redemptionConfigRequest = {
-        affiliate: null,
+        affiliate: 'awin',
         companyId: faker.string.uuid(),
         connection: 'direct',
         offerId: faker.string.uuid(),
@@ -206,7 +209,7 @@ describe('POST Redemption Config', () => {
       const expectedResponseBody = {
         statusCode: 200,
         data: {
-          affiliate: null,
+          affiliate: redemptionConfigRequest.affiliate,
           companyId: redemptionConfigRequest.companyId,
           connection: redemptionConfigRequest.connection,
           offerId: redemptionConfigRequest.offerId,
@@ -227,7 +230,7 @@ describe('POST Redemption Config', () => {
       ['vaultQR', 105],
     ])('POST /redemptions returns 200 for %s redemptionType', async (redemptionType, offerId) => {
       const redemptionConfigRequest = {
-        affiliate: null,
+        affiliate: 'awin',
         companyId: faker.string.uuid(),
         connection: 'direct',
         offerId: offerId,
@@ -253,7 +256,7 @@ describe('POST Redemption Config', () => {
       const expectedResponseBody = {
         statusCode: 200,
         data: {
-          affiliate: null,
+          affiliate: redemptionConfigRequest.affiliate,
           companyId: redemptionConfigRequest.companyId,
           connection: redemptionConfigRequest.connection,
           offerId: String(redemptionConfigRequest.offerId),
@@ -271,6 +274,37 @@ describe('POST Redemption Config', () => {
             id: expect.any(String),
             batches: [],
           },
+        },
+      };
+      expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+    });
+
+    it('POST /redemptions returns 200 for verify redemptionType', async () => {
+      const redemptionConfigRequest = {
+        affiliate: 'awin',
+        companyId: faker.string.uuid(),
+        connection: 'direct',
+        offerId: 108,
+        redemptionType: 'verify',
+        url: 'https://www.whatever.com/',
+      };
+
+      const result = await callPOSTRedemptionConfigEndpoint(redemptionConfigRequest);
+
+      expect(result.status).toBe(200);
+
+      const actualResponseBody = await result.json();
+
+      const expectedResponseBody = {
+        statusCode: 200,
+        data: {
+          affiliate: redemptionConfigRequest.affiliate,
+          companyId: redemptionConfigRequest.companyId,
+          connection: redemptionConfigRequest.connection,
+          offerId: '108',
+          id: expect.any(String),
+          redemptionType: redemptionConfigRequest.redemptionType,
+          url: redemptionConfigRequest.url,
         },
       };
       expect(actualResponseBody).toStrictEqual(expectedResponseBody);

@@ -119,6 +119,28 @@ describe('transformToRedemptionConfig', () => {
     expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
   });
 
+  it('returns formatted RedemptionConfig when redemptionType is showCard', () => {
+    const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'showCard',
+    });
+
+    const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
+      redemptionConfigEntity: redemptionConfigEntity,
+      genericEntity,
+      vaultEntity: null,
+      vaultBatchEntities: [],
+    });
+
+    const expectedRedemptionConfig = {
+      id: redemptionConfigEntity.id,
+      offerId: redemptionConfigEntity.offerId.toString(),
+      redemptionType: redemptionConfigEntity.redemptionType,
+      companyId: redemptionConfigEntity.companyId.toString(),
+    };
+
+    expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
+  });
+
   it('returns formatted RedemptionConfig when redemptionType is generic', () => {
     const genericRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
       redemptionType: 'generic',
@@ -148,50 +170,31 @@ describe('transformToRedemptionConfig', () => {
     expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
   });
 
-  it('returns formatted RedemptionConfig when redemptionType is preApplied', () => {
-    const preAppliedRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
-      redemptionType: 'preApplied',
-    });
+  it.each(['verify', 'preApplied', 'giftCard', 'creditCard'] as const)(
+    'returns formatted RedemptionConfig when redemptionType is [%s]',
+    (redemptionType) => {
+      const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+        redemptionType,
+      });
 
-    const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
-      redemptionConfigEntity: preAppliedRedemptionConfigEntity,
-      genericEntity: null,
-      vaultEntity: null,
-      vaultBatchEntities: [],
-    });
+      const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
+        redemptionConfigEntity: redemptionConfigEntity,
+        genericEntity: null,
+        vaultEntity: null,
+        vaultBatchEntities: [],
+      });
 
-    const expectedRedemptionConfig = {
-      id: preAppliedRedemptionConfigEntity.id,
-      offerId: preAppliedRedemptionConfigEntity.offerId.toString(),
-      redemptionType: preAppliedRedemptionConfigEntity.redemptionType,
-      connection: preAppliedRedemptionConfigEntity.connection,
-      companyId: preAppliedRedemptionConfigEntity.companyId.toString(),
-      affiliate: preAppliedRedemptionConfigEntity.affiliate,
-      url: preAppliedRedemptionConfigEntity.url,
-    };
+      const expectedRedemptionConfig = {
+        id: redemptionConfigEntity.id,
+        offerId: redemptionConfigEntity.offerId.toString(),
+        redemptionType: redemptionConfigEntity.redemptionType,
+        connection: redemptionConfigEntity.connection,
+        companyId: redemptionConfigEntity.companyId.toString(),
+        affiliate: redemptionConfigEntity.affiliate,
+        url: redemptionConfigEntity.url,
+      };
 
-    expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
-  });
-
-  it('returns formatted RedemptionConfig when redemptionType is showCard', () => {
-    const preAppliedRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
-      redemptionType: 'showCard',
-    });
-
-    const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
-      redemptionConfigEntity: preAppliedRedemptionConfigEntity,
-      genericEntity: null,
-      vaultEntity: null,
-      vaultBatchEntities: [],
-    });
-
-    const expectedRedemptionConfig = {
-      id: preAppliedRedemptionConfigEntity.id,
-      offerId: preAppliedRedemptionConfigEntity.offerId.toString(),
-      redemptionType: preAppliedRedemptionConfigEntity.redemptionType,
-      companyId: preAppliedRedemptionConfigEntity.companyId.toString(),
-    };
-
-    expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
-  });
+      expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
+    },
+  );
 });

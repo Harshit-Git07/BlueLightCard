@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.111.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.110.0...bluelightcard/identity-v1.111.0) (2024-11-20)
+
+
+### Features
+
+* cot-1000 adding card create handler ([#2978](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2978)) ([8f499c6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8f499c6b4974891e979b6b1c0b76a5c8e560e0d6))
+
+
+### Other Changes
+
+* terraform ( identity ) : adding databases and cognito ([#2948](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2948)) ([3de5a1e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3de5a1e4a1ba8b02422481c0b369a30bc22b659e))
+
 ## [1.110.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.109.0...bluelightcard/identity-v1.110.0) (2024-11-19)
 
 

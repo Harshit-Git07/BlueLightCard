@@ -691,7 +691,7 @@ jobs:
     env:
       NEXT_PUBLIC_BRAND_URL: staging.bluelightcard.co.uk
       NEXT_PUBLIC_ENV: 'preview'
-      NEXT_PUBLIC_USE_NATIVE_MOCK: 'true'
+      NEXT_PUBLIC_USE_DEV_TOOLS: 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -904,7 +904,6 @@ jobs:
             </td></tr>
             </table>
 
-  
   commentBackendMembers:
     name: Comment Backend Members on PR
     if: github.actor!= 'dependabot[bot]'
@@ -1048,7 +1047,7 @@ jobs:
           IDENTITY_COGNITO_E2E_USER_POOL_ID: ${{ needs.backend-shared.outputs.dds-cognito-user-pool-id }}
           E2E_TESTS_PASSWORD: ${{ secrets.E2E_TESTS_PASSWORD_DDS_UK }}
         run: npx sst bind --stage $PR_PREFIX_DDS vitest e2e
-  
+
   # e2e-members:
   #   name: Run E2E tests (members)
   #   runs-on: ubuntu-latest

@@ -7,12 +7,14 @@ import * as globals from '@/globals';
 const mockGlobals = globals as {
   IS_SSR: boolean;
   USE_NATIVE_MOCK: boolean;
+  USE_DEV_TOOLS: boolean;
 };
 jest.mock('@/globals', () => ({
   ...jest.requireActual('@/globals'),
   __esModule: true,
   IS_SSR: false,
   USE_NATIVE_MOCK: true,
+  USE_DEV_TOOLS: false,
 }));
 
 const mockRouter: Router = {
@@ -47,5 +49,29 @@ describe('App template', () => {
     const element = screen.getByText('Hello World!');
 
     expect(element).toBeInTheDocument();
+  });
+
+  describe('dev tools drawer', () => {
+    it('does not render when disabled', () => {
+      mockGlobals.USE_DEV_TOOLS = false;
+      render(
+        <AppTemplate Component={() => <p>Hello World!</p>} pageProps={{}} router={mockRouter} />,
+      );
+
+      const devToolsButton = screen.queryByText('Open Dev Tools');
+
+      expect(devToolsButton).not.toBeInTheDocument();
+    });
+
+    it('renders when enabled', () => {
+      mockGlobals.USE_DEV_TOOLS = true;
+      render(
+        <AppTemplate Component={() => <p>Hello World!</p>} pageProps={{}} router={mockRouter} />,
+      );
+
+      const devToolsButton = screen.getByText('Open Dev Tools');
+
+      expect(devToolsButton).toBeInTheDocument();
+    });
   });
 });

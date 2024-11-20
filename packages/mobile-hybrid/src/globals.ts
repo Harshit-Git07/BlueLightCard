@@ -34,3 +34,4 @@ export const CDN_URL = process.env.NEXT_PUBLIC_APP_CDN_URL ?? 'https://cdn.bluel
 export const BRAND = process.env.NEXT_PUBLIC_APP_BRAND ?? 'blc-uk';
 export const IS_SSR = typeof window === 'undefined';
 export const USE_NATIVE_MOCK = process.env.NEXT_PUBLIC_USE_NATIVE_MOCK === 'true';
+export const USE_DEV_TOOLS = process.env.NEXT_PUBLIC_USE_DEV_TOOLS === 'true';

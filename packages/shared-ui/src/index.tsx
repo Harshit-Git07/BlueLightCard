@@ -1,6 +1,7 @@
 export { default as AmplitudeEvents } from './utils/amplitude/events';
 export { default as Button } from './components/Button';
 export { default as ButtonV2 } from './components/Button-V2';
+export { default as Drawer } from './components/Drawer';
 export { default as Search } from './components/Search';
 export { default as SearchBar } from './components/SearchBar';
 export { default as Iso } from './components/Iso';
@@ -29,6 +30,7 @@ export { default as PillGroup } from './components/PillGroup';
 export { default as Typography } from './components/Typography';
 export { default as PaginationControls } from './components/PaginationControls';
 export { default as EventBus } from './lib/eventBus';
+export { default as useDrawer } from './components/Drawer/useDrawer';
 
 export * from './adapters';
 export * from './api';

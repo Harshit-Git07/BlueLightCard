@@ -10,7 +10,7 @@ import '@/nativeReceive';
 import { museoFont, sourceSansPro } from '@/font';
 import Spinner from '@/modules/Spinner';
 import AmplitudeProvider from '@/components/AmplitudeProvider/AmplitudeProvider';
-import { BRAND, CDN_URL } from '@/globals';
+import { BRAND, CDN_URL, USE_DEV_TOOLS } from '@/globals';
 import { SharedUIConfigProvider, ViewOfferProvider } from '@bluelightcard/shared-ui';
 import { experimentKeys, featureFlagKeys } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { PlatformAdapterProvider } from '@bluelightcard/shared-ui';
@@ -19,6 +19,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { QueryClientProvider } from '@tanstack/react-query';
 import UserProfileProvider from '@/components/UserProfileProvider/UserProfileProvider';
 import DeeplinkOverrideRouter from '@/components/DeeplinkOverrideRouter/DeeplinkOverrideRouter';
+import DevToolsDrawer from '@/components/DevToolsDrawer';
 import useNativeMock from '@/hooks/mocks/useNativeMock';
 
 dayjs.extend(CustomParseFormat);
@@ -46,6 +47,8 @@ export default function App({ Component, pageProps }: AppProps) {
           */}
             <UserProfileProvider>
               <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
+                {USE_DEV_TOOLS ? <DevToolsDrawer /> : null}
+
                 <ViewOfferProvider>
                   <DeeplinkOverrideRouter>
                     <Component {...pageProps} />

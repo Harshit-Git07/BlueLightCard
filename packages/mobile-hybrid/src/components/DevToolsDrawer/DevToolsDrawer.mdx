@@ -1,0 +1,43 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import ComponentStatus from '@bluelightcard/shared-ui/storybook-config/blocks/ComponentStatus';
+import FigmaEmbed from '@bluelightcard/shared-ui/storybook-config/blocks/FigmaEmbed';
+import * as DevToolsDrawer from './DevToolsDrawer.stories';
+
+<Meta of={DevToolsDrawer} />
+
+# Error State
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Usage Guidelines](#usage-guidelines)
+- [Design](#design)
+
+## Status
+
+This component is purely for testing in development environments. <b>It should not be used in production!</b>
+
+## Overview
+
+This component renders a dev tools drawer for use in development environments.
+
+## Props
+
+This component uses no props.
+
+<Controls />
+
+## State
+
+This component uses local React state for tracking the values of the inputs in the drawer.
+
+## Variants and States
+
+List of variants can be shown below here.
+
+### Default
+
+<Canvas of={DevToolsDrawer.Default} />

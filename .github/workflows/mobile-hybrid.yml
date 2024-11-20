@@ -190,6 +190,7 @@ jobs:
     env:
       NEXT_PUBLIC_APP_BRAND: ${{ matrix.brand }}
       NEXT_PUBLIC_BRAND_URL: ${{matrix.brand_url}}
+      NEXT_PUBLIC_USE_DEV_TOOLS: 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4

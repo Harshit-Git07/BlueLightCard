@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.88.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.88.0...bluelightcard/web-v1.88.1) (2024-11-20)
+
+
+### Bug Fixes
+
+* [DISCO-1228] Fix offer card aspect ratio ([#3005](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3005)) ([dd69829](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dd698299435cea15a3e628358193b1c05532ccc2))
+* MER-267-interstitial-screen-sizing-bugs ([#2968](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2968)) ([252423d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/252423da37ddf453e549f135762a12282cb71072))
+
 ## [1.88.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.87.0...bluelightcard/web-v1.88.0) (2024-11-19)
 
 

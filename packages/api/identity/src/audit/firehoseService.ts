@@ -16,7 +16,7 @@ export async function sendDataToFireHose(data: any) {
   };
 
   try {
-    firehose.send(new PutRecordCommand(input));
+    await firehose.send(new PutRecordCommand(input));
   } catch (error) {
     logger.error({ message: 'Error sending to firehose', body: { error } });
   }

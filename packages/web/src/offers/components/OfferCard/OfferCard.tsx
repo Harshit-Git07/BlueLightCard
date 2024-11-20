@@ -58,7 +58,7 @@ const OfferCard: FC<OfferCardProps> = ({
 
   const body = (
     <>
-      <div className="w-full h-auto aspect-[2/1]">
+      <div className="w-full h-auto">
         <Image
           src={imageSource}
           alt={alt}
@@ -66,7 +66,7 @@ const OfferCard: FC<OfferCardProps> = ({
           width={0}
           height={0}
           sizes="100vw"
-          className={`h-auto w-full ${backgroundSecondaryClasses} !relative`}
+          className={`h-auto w-full aspect-[2/1] object-cover ${backgroundSecondaryClasses} !relative`}
           quality={75}
           onError={() => {
             setImageSource(fallbackImage);

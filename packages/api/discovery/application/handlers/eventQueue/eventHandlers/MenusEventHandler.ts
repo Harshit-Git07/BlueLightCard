@@ -3,8 +3,7 @@ import { isAfter } from 'date-fns';
 import { LambdaLogger } from '@blc-mono/core/utils/logger';
 import { MenuOffer } from '@blc-mono/discovery/application/models/Menu';
 import {
-  deleteMenuWithOffers,
-  getMenuAndOffersByMenuId,
+  deleteMenuWithSubMenusAndOffers,
   getMenuById,
   insertMenuWithOffers,
 } from '@blc-mono/discovery/application/repositories/Menu/service/MenuService';
@@ -17,7 +16,9 @@ export async function handleMenusUpdated(newMenuOfferRecord: MenuOffer): Promise
   if (!currentMenu || isAfter(new Date(newMenuOfferRecord.updatedAt), new Date(currentMenu.updatedAt))) {
     const { offers: newMenuOffers, ...newMenu } = newMenuOfferRecord;
     const offers = await getOffersByIds(newMenuOffers.map((offer) => ({ id: offer.id, companyId: offer.company.id })));
-    await deleteMenuWithOffers(newMenuOfferRecord.id);
+    if (currentMenu) {
+      await deleteMenuWithSubMenusAndOffers(newMenuOfferRecord.id);
+    }
     await insertMenuWithOffers(newMenu, offers);
   } else {
     logger.info({
@@ -28,13 +29,13 @@ export async function handleMenusUpdated(newMenuOfferRecord: MenuOffer): Promise
 
 export async function handleMenusDeleted(deleteMenuOfferRecord: MenuOffer): Promise<void> {
   logger.info({ message: `Handling delete menu offer event for menu id: [${deleteMenuOfferRecord.id}]` });
-  const currentMenuRecord = await getMenuAndOffersByMenuId(deleteMenuOfferRecord.id);
+  const currentMenuRecord = await getMenuById(deleteMenuOfferRecord.id);
   if (!currentMenuRecord) {
     return logger.info({
       message: `Menu record with id: [${deleteMenuOfferRecord.id}] does not exist, so cannot be deleted.`,
     });
   }
   if (isAfter(new Date(deleteMenuOfferRecord.updatedAt), new Date(currentMenuRecord.updatedAt))) {
-    await deleteMenuWithOffers(deleteMenuOfferRecord.id);
+    await deleteMenuWithSubMenusAndOffers(deleteMenuOfferRecord.id);
   }
 }

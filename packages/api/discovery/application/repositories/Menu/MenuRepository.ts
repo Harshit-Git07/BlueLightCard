@@ -1,11 +1,20 @@
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
+import { MenuType } from '../../models/MenuResponse';
 import { DynamoDBService } from '../../services/DynamoDbService';
-import { GSI1_NAME, GSI2_NAME } from '../constants/DynamoDBConstants';
-import { MENU_PREFIX, OFFER_PREFIX } from '../constants/PrimaryKeyPrefixes';
-import { MenuEntity, MenuEntityWithOfferEntities, MenuKeyBuilders } from '../schemas/MenuEntity';
+import { GSI1_NAME, GSI2_NAME, GSI3_NAME } from '../constants/DynamoDBConstants';
+import { MENU_PREFIX, OFFER_PREFIX, SUB_MENU_PREFIX } from '../constants/PrimaryKeyPrefixes';
+import {
+  MenuEntity,
+  MenuEntityWithOfferEntities,
+  MenuEntityWithSubMenuEntities,
+  MenuKeyBuilders,
+} from '../schemas/MenuEntity';
 import { MenuOfferEntity, MenuOfferKeyBuilders } from '../schemas/MenuOfferEntity';
+import { SubMenuEntity, SubMenuEntityWithOfferEntities } from '../schemas/SubMenuEntity';
+
+type MenuRepositoryEntity = MenuEntity | MenuOfferEntity | SubMenuEntity;
 
 export class MenuRepository {
   private readonly tableName: string;
@@ -14,25 +23,22 @@ export class MenuRepository {
     this.tableName = getEnv(DiscoveryStackEnvironmentKeys.MENUS_TABLE_NAME);
   }
 
-  async insert(menuEntity: MenuEntity | MenuOfferEntity): Promise<void> {
+  async insert(menuEntity: MenuRepositoryEntity): Promise<void> {
     await DynamoDBService.put({
       Item: menuEntity,
       TableName: this.tableName,
     });
   }
 
-  async batchInsert(items: (MenuEntity | MenuOfferEntity)[]): Promise<void> {
+  async batchInsert(items: MenuRepositoryEntity[]): Promise<void> {
     await DynamoDBService.batchInsert(items, this.tableName);
   }
 
-  async batchDelete(items: (MenuEntity | MenuOfferEntity)[]): Promise<void> {
+  async batchDelete(items: MenuRepositoryEntity[]): Promise<void> {
     await DynamoDBService.batchDelete(items, this.tableName);
   }
 
-  async transactWrite(
-    itemsToPut: (MenuEntity | MenuOfferEntity)[],
-    itemsToDelete: (MenuEntity | MenuOfferEntity)[],
-  ): Promise<void> {
+  async transactWrite(itemsToPut: MenuRepositoryEntity[], itemsToDelete: MenuRepositoryEntity[]): Promise<void> {
     const transactWriteCommandInput = [
       ...itemsToPut.map((item) => ({
         Put: {
@@ -56,22 +62,23 @@ export class MenuRepository {
     });
   }
 
-  async retrieveAllMenusAndOffers(): Promise<(MenuEntity | MenuOfferEntity)[]> {
-    const data = await DynamoDBService.scan({ TableName: this.tableName });
-    if (!data) {
-      return [];
-    }
-    return data as (MenuEntity | MenuOfferEntity)[];
+  async retrieveAllTopLevelMenuData(): Promise<MenuRepositoryEntity[]> {
+    return (
+      ((await DynamoDBService.scan({
+        TableName: this.tableName,
+        IndexName: GSI1_NAME,
+      })) as MenuRepositoryEntity[]) ?? []
+    );
   }
 
-  async deleteMenuWithOffers(menuId: string): Promise<void> {
+  async deleteMenuWithSubMenuAndOffers(menuId: string): Promise<void> {
     const menuWithOffers = (await DynamoDBService.query({
       KeyConditionExpression: 'partitionKey = :partition_key',
       ExpressionAttributeValues: {
         ':partition_key': MenuKeyBuilders.buildPartitionKey(menuId),
       },
       TableName: this.tableName,
-    })) as (MenuEntity | MenuOfferEntity)[];
+    })) as MenuRepositoryEntity[];
     await DynamoDBService.batchDelete(menuWithOffers, this.tableName);
   }
 
@@ -80,6 +87,28 @@ export class MenuRepository {
       Key: {
         partitionKey: MenuOfferKeyBuilders.buildPartitionKey(menuId),
         sortKey: MenuOfferKeyBuilders.buildSortKey(offerId),
+      },
+      TableName: this.tableName,
+    });
+  }
+
+  async deleteThemedMenuOffer(subMenuId: string, offerId: string): Promise<void> {
+    const menuOffer = (await DynamoDBService.query({
+      KeyConditionExpression: 'gsi2PartitionKey = :gsi2_partition_key and gsi2SortKey = :gsi2_sort_key',
+      ExpressionAttributeValues: {
+        ':gsi2_partition_key': MenuOfferKeyBuilders.buildGsi2PartitionKey(subMenuId),
+        ':gsi2_sort_key': MenuOfferKeyBuilders.buildGsi2SortKey(offerId),
+      },
+      TableName: this.tableName,
+      IndexName: GSI2_NAME,
+    })) as MenuOfferEntity[] | undefined;
+    if (!menuOffer || menuOffer.length === 0) {
+      return;
+    }
+    await DynamoDBService.delete({
+      Key: {
+        partitionKey: menuOffer[0].partitionKey,
+        sortKey: menuOffer[0].sortKey,
       },
       TableName: this.tableName,
     });
@@ -106,6 +135,25 @@ export class MenuRepository {
     })) as MenuOfferEntity[];
   }
 
+  async retrieveThemedMenuWithOffers(subMenuId: string): Promise<SubMenuEntityWithOfferEntities | undefined> {
+    const subMenuWithOffers = (await DynamoDBService.query({
+      KeyConditionExpression: 'gsi2PartitionKey = :gsi2_partition_key',
+      ExpressionAttributeValues: {
+        ':gsi2_partition_key': MenuOfferKeyBuilders.buildGsi2PartitionKey(subMenuId),
+      },
+      IndexName: GSI2_NAME,
+      TableName: this.tableName,
+    })) as (SubMenuEntity | MenuOfferEntity)[];
+    if (!subMenuWithOffers || subMenuWithOffers.length === 0) {
+      return undefined;
+    }
+    const themedMenuAndOffersGrouped = groupThemedMenuWithOffers(subMenuWithOffers);
+    if (themedMenuAndOffersGrouped.length > 1) {
+      throw new Error('Retrieving by single themed menu id has returned more than one themed menu');
+    }
+    return themedMenuAndOffersGrouped[0];
+  }
+
   async retrieveMenuWithOffers(menuId: string): Promise<MenuEntityWithOfferEntities | undefined> {
     const menuWithOffers = (await DynamoDBService.query({
       KeyConditionExpression: 'partitionKey = :partition_key',
@@ -113,18 +161,18 @@ export class MenuRepository {
         ':partition_key': MenuKeyBuilders.buildPartitionKey(menuId),
       },
       TableName: this.tableName,
-    })) as (MenuEntity | MenuOfferEntity)[];
+    })) as (MenuOfferEntity | MenuEntity)[];
     if (!menuWithOffers || menuWithOffers.length === 0) {
       return undefined;
     }
-    const menuAndOffersGrouped = groupMenusWithOffers(menuWithOffers);
+    const menuAndOffersGrouped = groupMenusWithTopLevelData(menuWithOffers) as MenuEntityWithOfferEntities[];
     if (menuAndOffersGrouped.length > 1) {
       throw new Error('Retrieving by single menu id has returned more than one menu');
     }
     return menuAndOffersGrouped[0];
   }
 
-  async retrieveMenusWithOffersByMenuType(menuType: string): Promise<MenuEntityWithOfferEntities[]> {
+  async retrieveMenusWithOffersByMenuType(menuType: MenuType): Promise<MenuEntityWithOfferEntities[]> {
     const menusAndOffers = (await DynamoDBService.query({
       KeyConditionExpression: 'gsi1PartitionKey = :menu_type',
       ExpressionAttributeValues: {
@@ -132,20 +180,35 @@ export class MenuRepository {
       },
       IndexName: GSI1_NAME,
       TableName: this.tableName,
-    })) as (MenuEntity | MenuOfferEntity)[];
+    })) as (MenuOfferEntity | MenuEntity)[];
     if (!menusAndOffers || menusAndOffers.length === 0) {
       return [];
     }
-    return groupMenusWithOffers(menusAndOffers);
+    return groupMenusWithTopLevelData(menusAndOffers) as MenuEntityWithOfferEntities[];
+  }
+
+  async retrieveThemedMenusWithSubMenus(): Promise<MenuEntityWithSubMenuEntities[]> {
+    const menusAndSubMenus = (await DynamoDBService.query({
+      KeyConditionExpression: 'gsi1PartitionKey = :menu_type',
+      ExpressionAttributeValues: {
+        ':menu_type': MenuKeyBuilders.buildGsi1PartitionKey(MenuType.FLEXIBLE),
+      },
+      IndexName: GSI1_NAME,
+      TableName: this.tableName,
+    })) as (SubMenuEntity | MenuEntity)[];
+    if (!menusAndSubMenus || menusAndSubMenus.length === 0) {
+      return [];
+    }
+    return groupMenusWithTopLevelData(menusAndSubMenus) as MenuEntityWithSubMenuEntities[];
   }
 
   async getOfferInMenusByOfferId(offerId: string): Promise<MenuOfferEntity[]> {
     return (await DynamoDBService.query({
       TableName: this.tableName,
-      KeyConditionExpression: 'gsi2PartitionKey = :offer_id and begins_with(gsi2SortKey, :menu_prefix)',
-      IndexName: GSI2_NAME,
+      KeyConditionExpression: 'gsi3PartitionKey = :offer_id and begins_with(gsi3SortKey, :menu_prefix)',
+      IndexName: GSI3_NAME,
       ExpressionAttributeValues: {
-        ':offer_id': MenuOfferKeyBuilders.buildGsi1PartitionKey(offerId),
+        ':offer_id': MenuOfferKeyBuilders.buildGsi3PartitionKey(offerId),
         ':menu_prefix': MENU_PREFIX,
       },
     })) as MenuOfferEntity[];
@@ -160,44 +223,85 @@ export class MenuRepository {
 
   async deleteOfferFromMenus(offerId: string): Promise<void> {
     const menuOffers = (await DynamoDBService.query({
-      IndexName: GSI2_NAME,
-      KeyConditionExpression: 'gsi2PartitionKey = :offer_id',
+      IndexName: GSI3_NAME,
+      KeyConditionExpression: 'gsi3PartitionKey = :offer_id',
       TableName: this.tableName,
       ExpressionAttributeValues: {
-        ':offer_id': MenuOfferKeyBuilders.buildGsi2PartitionKey(offerId),
+        ':offer_id': MenuOfferKeyBuilders.buildGsi3PartitionKey(offerId),
       },
     })) as MenuOfferEntity[];
     return await this.batchDelete(menuOffers);
   }
 }
 
-export const groupMenusWithOffers = (
-  menusAndOffers: (MenuEntity | MenuOfferEntity)[],
-): MenuEntityWithOfferEntities[] => {
-  if (menusAndOffers.length === 0) {
+export const groupMenusWithTopLevelData = (
+  menusWithTopLevelData: MenuRepositoryEntity[],
+): (MenuEntityWithOfferEntities | MenuEntityWithSubMenuEntities)[] => {
+  if (menusWithTopLevelData.length === 0) {
     return [];
   }
-  const menusAndOffersGrouped = {} as { [partitionKey: string]: { menu?: MenuEntity; offers: MenuOfferEntity[] } };
-  menusAndOffers.forEach((item) => {
-    if (!menusAndOffersGrouped[item.partitionKey]) {
+  const menuAndSubItemsGrouped = {} as {
+    [partitionKey: string]: { menu?: MenuEntity; items: (MenuOfferEntity | SubMenuEntity)[] };
+  };
+  menusWithTopLevelData.forEach((item) => {
+    if (!menuAndSubItemsGrouped[item.partitionKey]) {
       if (item.sortKey.startsWith(MENU_PREFIX)) {
-        menusAndOffersGrouped[item.partitionKey] = { menu: item as MenuEntity, offers: [] };
+        menuAndSubItemsGrouped[item.partitionKey] = { menu: item as MenuEntity, items: [] };
       }
-      if (item.sortKey.startsWith(OFFER_PREFIX)) {
-        menusAndOffersGrouped[item.partitionKey] = { offers: [item as MenuOfferEntity] };
+      if (item.sortKey.startsWith(OFFER_PREFIX) || item.sortKey.startsWith(SUB_MENU_PREFIX)) {
+        menuAndSubItemsGrouped[item.partitionKey] = { items: [item as MenuOfferEntity | SubMenuEntity] };
       }
     } else {
-      if (item.sortKey.startsWith(OFFER_PREFIX)) {
-        menusAndOffersGrouped[item.partitionKey].offers.push(item as MenuOfferEntity);
+      if (item.sortKey.startsWith(OFFER_PREFIX) || item.sortKey.startsWith(SUB_MENU_PREFIX)) {
+        menuAndSubItemsGrouped[item.partitionKey].items.push(item as MenuOfferEntity | SubMenuEntity);
       }
       if (item.sortKey.startsWith(MENU_PREFIX)) {
-        menusAndOffersGrouped[item.partitionKey].menu = item as MenuEntity;
+        menuAndSubItemsGrouped[item.partitionKey].menu = item as MenuEntity;
       }
     }
   });
-  const menuAndOffersArr = Object.values(menusAndOffersGrouped);
-  if (menuAndOffersArr.find((item) => !item.menu)) {
+  const menuAndItemsArr = Object.values(menuAndSubItemsGrouped);
+  if (menuAndItemsArr.find((item) => !item.menu)) {
     throw new Error('Offers have been returned without a menu');
   }
-  return menuAndOffersArr.map(({ offers, menu }) => ({ ...menu, offers })) as MenuEntityWithOfferEntities[];
+  return menuAndItemsArr.map(({ items, menu }) => {
+    if (menu?.menuType === MenuType.FLEXIBLE) {
+      return { ...menu, subMenus: items } as MenuEntityWithSubMenuEntities;
+    } else {
+      return { ...menu, offers: items } as MenuEntityWithOfferEntities;
+    }
+  });
+};
+
+export const groupThemedMenuWithOffers = (
+  themedMenuWithOffers: (SubMenuEntity | MenuOfferEntity)[],
+): SubMenuEntityWithOfferEntities[] => {
+  const menuAndOffersGrouped = {} as {
+    [gsi2PartitionKey: string]: { subMenu?: SubMenuEntity; offers: MenuOfferEntity[] };
+  };
+  themedMenuWithOffers.forEach((item) => {
+    if (!item.gsi2PartitionKey || !item.gsi2SortKey) {
+      throw new Error('Themed menu offer called with undefined gsi2PartitionKey/gsi2SortKey');
+    }
+    if (!menuAndOffersGrouped[item.gsi2PartitionKey]) {
+      if (item.gsi2SortKey.startsWith(SUB_MENU_PREFIX)) {
+        menuAndOffersGrouped[item.gsi2PartitionKey] = { subMenu: item as SubMenuEntity, offers: [] };
+      }
+      if (item.gsi2SortKey.startsWith(OFFER_PREFIX)) {
+        menuAndOffersGrouped[item.gsi2PartitionKey] = { offers: [item as MenuOfferEntity] };
+      }
+    } else {
+      if (item.gsi2SortKey.startsWith(SUB_MENU_PREFIX)) {
+        menuAndOffersGrouped[item.gsi2PartitionKey].subMenu = item as SubMenuEntity;
+      }
+      if (item.gsi2SortKey.startsWith(OFFER_PREFIX)) {
+        menuAndOffersGrouped[item.gsi2PartitionKey].offers.push(item as MenuOfferEntity);
+      }
+    }
+  });
+  const menuAndOffersArr = Object.values(menuAndOffersGrouped);
+  if (menuAndOffersArr.find((item) => !item.subMenu)) {
+    throw new Error('Offers have been returned without a themed menu');
+  }
+  return menuAndOffersArr.map(({ offers, subMenu }) => ({ ...subMenu, offers })) as SubMenuEntityWithOfferEntities[];
 };

@@ -1,12 +1,13 @@
 import { MenuType } from './MenuResponse';
 import { Offer } from './Offer';
+import { SubMenu } from './ThemedMenu';
 
 export type Menu = {
   id: string;
   menuType: MenuType;
   name: string;
-  startTime: string;
-  endTime: string;
+  startTime?: string;
+  endTime?: string;
   updatedAt: string;
 };
 
@@ -18,6 +19,15 @@ export type MenuOffer = Menu & {
       id: string;
     };
   }[];
+};
+
+export type MenuWithSubMenus = Menu & {
+  subMenus: SubMenu[];
+};
+
+export type MenuWithSubMenuAndOffers = Menu & {
+  subMenus: SubMenu[];
+  offers: Offer[];
 };
 
 // Expected internal type

@@ -2,7 +2,11 @@ import { AttributeType, GlobalSecondaryIndexPropsV2, TableV2 } from 'aws-cdk-lib
 import { Stack } from 'sst/constructs';
 
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
-import { GSI1_NAME, GSI2_NAME } from '@blc-mono/discovery/application/repositories/constants/DynamoDBConstants';
+import {
+  GSI1_NAME,
+  GSI2_NAME,
+  GSI3_NAME,
+} from '@blc-mono/discovery/application/repositories/constants/DynamoDBConstants';
 
 export function createTable(
   stack: Stack,
@@ -51,6 +55,17 @@ export const getGlobalSecondaryIndexes = (numberOfGSIs: number): GlobalSecondary
       },
       sortKey: {
         name: 'gsi2SortKey',
+        type: AttributeType.STRING,
+      },
+    },
+    {
+      indexName: GSI3_NAME,
+      partitionKey: {
+        name: 'gsi3PartitionKey',
+        type: AttributeType.STRING,
+      },
+      sortKey: {
+        name: 'gsi3SortKey',
         type: AttributeType.STRING,
       },
     },

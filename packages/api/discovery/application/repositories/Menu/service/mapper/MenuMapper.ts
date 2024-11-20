@@ -1,12 +1,14 @@
-import { Menu, MenuWithOffers } from '@blc-mono/discovery/application/models/Menu';
+import { Menu, MenuWithOffers, MenuWithSubMenus } from '@blc-mono/discovery/application/models/Menu';
 import { MenuResponse, MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import {
   MenuEntity,
   MenuEntityWithOfferEntities,
+  MenuEntityWithSubMenuEntities,
   MenuKeyBuilders,
 } from '@blc-mono/discovery/application/repositories/schemas/MenuEntity';
 
 import { mapMenuOfferEntityToOffer, mapOfferToMenuOfferResponse } from './MenuOfferMapper';
+import { mapSubMenuEntityToSubMenu } from './SubMenuMapper';
 
 export function mapMenuEntityToMenu(menuEntity: MenuEntity): Menu {
   return {
@@ -34,6 +36,16 @@ export function mapMenuToMenuEntity(menu: Menu): MenuEntity {
   };
 }
 
+export function mapMenuEntityWithSubMenuEntitiesToMenuWithSubMenus(
+  menuEntityWithSubMenuEntities: MenuEntityWithSubMenuEntities,
+): MenuWithSubMenus {
+  const { subMenus, ...menu } = menuEntityWithSubMenuEntities;
+  return {
+    ...mapMenuEntityToMenu(menu),
+    subMenus: subMenus.map(mapSubMenuEntityToSubMenu),
+  };
+}
+
 export function mapMenuEntityWithOfferEntitiesToMenuWithOffers(
   menuEntityWithOfferEntities: MenuEntityWithOfferEntities,
 ): MenuWithOffers {
@@ -57,11 +69,11 @@ export function mapMenuAndOfferToSingletonMenuResponse(menuWithOffers: MenuWithO
   };
 }
 
-export function mapMenuWithOffersToFlexibleMenuResponse(menuWithOffers: MenuWithOffers[]) {
-  return menuWithOffers.map((menuWithOffer) => ({
-    id: menuWithOffer.id,
-    title: menuWithOffer.name,
-    imageURL: '',
+export function mapMenuWithSubMenusToFlexibleMenuResponse(menuWithOffers: MenuWithSubMenus[]) {
+  return menuWithOffers.map(({ subMenus, ...menu }) => ({
+    id: menu.id,
+    title: menu.name,
+    menus: subMenus.map(({ id, title, imageURL }) => ({ id, title, imageURL })),
   }));
 }
 
@@ -74,16 +86,20 @@ export function mapMenuWithOffersToMarketplaceMenuResponses(menuWithOffers: Menu
 }
 
 export function mapMenusAndOffersToMenuResponse(
-  menusWithOffers: Partial<Record<MenuType, MenuWithOffers[]>>,
+  menusWithOffers: Partial<Record<MenuType, MenuWithOffers[] | MenuWithSubMenus[]>>,
 ): MenuResponse {
   return {
     dealsOfTheWeek: menusWithOffers.dealsOfTheWeek
-      ? mapMenuAndOfferToSingletonMenuResponse(menusWithOffers.dealsOfTheWeek)
+      ? mapMenuAndOfferToSingletonMenuResponse(menusWithOffers.dealsOfTheWeek as MenuWithOffers[])
       : undefined,
-    featured: menusWithOffers.featured ? mapMenuAndOfferToSingletonMenuResponse(menusWithOffers.featured) : undefined,
+    featured: menusWithOffers.featured
+      ? mapMenuAndOfferToSingletonMenuResponse(menusWithOffers.featured as MenuWithOffers[])
+      : undefined,
     marketplace: menusWithOffers.marketplace
-      ? mapMenuWithOffersToMarketplaceMenuResponses(menusWithOffers.marketplace)
+      ? mapMenuWithOffersToMarketplaceMenuResponses(menusWithOffers.marketplace as MenuWithOffers[])
       : undefined,
-    flexible: menusWithOffers.flexible ? mapMenuWithOffersToFlexibleMenuResponse(menusWithOffers.flexible) : undefined,
+    flexible: menusWithOffers.flexible
+      ? mapMenuWithSubMenusToFlexibleMenuResponse(menusWithOffers.flexible as MenuWithSubMenus[])
+      : undefined,
   };
 }

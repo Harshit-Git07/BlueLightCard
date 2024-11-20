@@ -1,0 +1,25 @@
+{
+  "FlexibleMenu": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string"
+      },
+      "title": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "imageURL": {
+        "type": "string"
+      },
+      "offers": {
+        "type": "array",
+        "items": {
+          "$ref": "./MenuOffers.json#/MenuOffer"
+        }
+      }
+    }
+  }
+}

@@ -296,6 +296,59 @@
           }
         ]
       }
+    },
+    "/flexible/{id}": {
+      "get": {
+        "tags": ["Flexible"],
+        "summary": "Get flexible offer",
+        "description": "Get flexible offer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The id of the offer to retrieve",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "organisation",
+            "in": "query",
+            "description": "The organisation the user belongs to",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dob",
+            "in": "query",
+            "description": "The users DOB in YYYY-MM-DD format",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./schemas/FlexibleMenuResponse.json#/CategoryResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {

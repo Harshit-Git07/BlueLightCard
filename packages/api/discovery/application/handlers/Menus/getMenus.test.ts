@@ -4,7 +4,7 @@ import { Response } from '@blc-mono/core/utils/restResponse/response';
 
 import { menuFactory } from '../../factories/MenuFactory';
 import { offerFactory } from '../../factories/OfferFactory';
-import { MenuWithOffers } from '../../models/Menu';
+import { subMenuFactory } from '../../factories/SubMenuFactory';
 import { MenuType } from '../../models/MenuResponse';
 import { mapMenusAndOffersToMenuResponse } from '../../repositories/Menu/service/mapper/MenuMapper';
 import { getMenusByMenuType, getMenusByMenuTypes } from '../../repositories/Menu/service/MenuService';
@@ -16,9 +16,7 @@ jest.mock('../../repositories/Menu/service/MenuService');
 const getMenusByMenuTypeMock = jest.mocked(getMenusByMenuType);
 const getMenusByMenuTypesMock = jest.mocked(getMenusByMenuTypes);
 
-const mockgetMenusResponse: {
-  [menuType: string]: MenuWithOffers[];
-} = {
+const mockgetMenusResponse = {
   dealsOfTheWeek: [
     {
       ...menuFactory.build({ menuType: MenuType.DEALS_OF_THE_WEEK }),
@@ -31,8 +29,8 @@ const mockgetMenusResponse: {
     { ...menuFactory.build({ menuType: MenuType.MARKETPLACE }), offers: offerFactory.buildList(2) },
   ],
   flexible: [
-    { ...menuFactory.build({ menuType: MenuType.FLEXIBLE }), offers: offerFactory.buildList(2) },
-    { ...menuFactory.build({ menuType: MenuType.FLEXIBLE }), offers: offerFactory.buildList(2) },
+    { ...menuFactory.build({ menuType: MenuType.FLEXIBLE }), subMenus: subMenuFactory.buildList(2) },
+    { ...menuFactory.build({ menuType: MenuType.FLEXIBLE }), subMenus: subMenuFactory.buildList(2) },
   ],
 };
 

@@ -160,6 +160,16 @@ async function DiscoveryStack({ stack, app }: StackContext) {
         MENUS_TABLE_NAME: menusTable.tableName,
       },
     }),
+    'GET /menus/flexible/{id}': Route.createRoute({
+      ...baseRouteParams,
+      functionName: 'GetFlexibleMenuHandler',
+      handler: 'packages/api/discovery/application/handlers/Menus/getFlexibleMenus.handler',
+      requestValidatorName: 'GetFlexibleMenuValidator',
+      permissions: ['dynamodb:*', menusTable.tableName],
+      environment: {
+        MENUS_TABLE_NAME: menusTable.tableName,
+      },
+    }),
   });
 
   const populateSearchIndexFunction: FunctionDefinition = {

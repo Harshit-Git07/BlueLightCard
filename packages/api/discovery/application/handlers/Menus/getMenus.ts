@@ -40,12 +40,12 @@ export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) 
 
 const getQueryParams = (event: APIGatewayEvent) => {
   const queryParams = event.queryStringParameters as APIGatewayProxyEventQueryStringParameters;
-  let menusRequested: string[] = [];
+  let menusRequested: MenuType[] = [];
   const idList = queryParams?.id ?? '';
   if (idList.length > 0) {
     menusRequested = decodeURIComponent(idList)
       .split(',')
-      .map((id) => id.trim());
+      .map((id) => id.trim() as MenuType);
     const queryValidation = querySchema.safeParse({ type: menusRequested });
     if (!queryValidation.success) {
       logger.error({ message: `Error queryValidation getMenus: ${JSON.stringify(queryValidation)}` });

@@ -1,7 +1,7 @@
 import { menuEntityFactory } from '@blc-mono/discovery/application/factories/MenuEntityFactory';
 import { menuFactory } from '@blc-mono/discovery/application/factories/MenuFactory';
-import { offerEntityFactory } from '@blc-mono/discovery/application/factories/OfferEntityFactory';
 import { offerFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
+import { subMenuFactory } from '@blc-mono/discovery/application/factories/SubMenuFactory';
 import { Menu } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import { MenuEntity } from '@blc-mono/discovery/application/repositories/schemas/MenuEntity';
@@ -10,12 +10,14 @@ import {
   mapMenuAndOfferToSingletonMenuResponse,
   mapMenuEntityToMenu,
   mapMenuEntityWithOfferEntitiesToMenuWithOffers,
+  mapMenuEntityWithSubMenuEntitiesToMenuWithSubMenus,
   mapMenusAndOffersToMenuResponse,
   mapMenuToMenuEntity,
-  mapMenuWithOffersToFlexibleMenuResponse,
   mapMenuWithOffersToMarketplaceMenuResponses,
+  mapMenuWithSubMenusToFlexibleMenuResponse,
 } from './MenuMapper';
-import { mapOfferToMenuOfferResponse } from './MenuOfferMapper';
+import { mapOfferToMenuOfferEntity, mapOfferToMenuOfferResponse } from './MenuOfferMapper';
+import { mapSubMenuToSubMenuEntity } from './SubMenuMapper';
 
 const menu: Menu = menuFactory.build();
 
@@ -23,7 +25,11 @@ const menuEntity: MenuEntity = menuEntityFactory.build();
 
 const offer = offerFactory.build();
 
-const offerEntity = offerEntityFactory.build();
+const offerEntity = mapOfferToMenuOfferEntity(offer, menu.id, menu.menuType);
+
+const subMenu = subMenuFactory.build();
+
+const subMenuEntity = mapSubMenuToSubMenuEntity(menu.id, subMenu);
 
 describe('MenuMapper', () => {
   describe('mapMenuEntityToMenu', () => {
@@ -37,6 +43,16 @@ describe('MenuMapper', () => {
     it('should map Menu to MenuEntity', () => {
       const result = mapMenuToMenuEntity(menu);
       expect(result).toEqual(menuEntity);
+    });
+  });
+
+  describe('mapMenuEntityWithSubMenuEntitiesToMenuWithSubMenus', () => {
+    it('should map MenuEntityWithSubMenuEntities to MenuWithSubMenus', () => {
+      const result = mapMenuEntityWithSubMenuEntitiesToMenuWithSubMenus({ ...menuEntity, subMenus: [subMenuEntity] });
+      expect(result).toEqual({
+        ...menu,
+        subMenus: [subMenu],
+      });
     });
   });
 
@@ -87,14 +103,14 @@ describe('MenuMapper', () => {
     });
   });
 
-  describe('mapMenuWithOffersToFlexibleMenuResponse', () => {
+  describe('mapMenuWithSubMenusToFlexibleMenuResponse', () => {
     it('should map menuWithOffersToFlexibleMenuResponse', () => {
-      const result = mapMenuWithOffersToFlexibleMenuResponse([{ ...menu, offers: [offer] }]);
+      const result = mapMenuWithSubMenusToFlexibleMenuResponse([{ ...menu, subMenus: [subMenu] }]);
       expect(result).toEqual([
         {
           id: menu.id,
           title: menu.name,
-          imageURL: '',
+          menus: [{ id: subMenu.id, title: subMenu.title, imageURL: subMenu.imageURL }],
         },
       ]);
     });
@@ -104,6 +120,7 @@ describe('MenuMapper', () => {
     const testCases = [
       {
         menuType: MenuType.MARKETPLACE,
+        input: [{ ...menu, menuType: MenuType.MARKETPLACE, offers: [offer] }],
         expected: {
           [MenuType.MARKETPLACE]: mapMenuWithOffersToMarketplaceMenuResponses([{ ...menu, offers: [offer] }]),
           [MenuType.DEALS_OF_THE_WEEK]: undefined,
@@ -113,6 +130,7 @@ describe('MenuMapper', () => {
       },
       {
         menuType: MenuType.DEALS_OF_THE_WEEK,
+        input: [{ ...menu, menuType: MenuType.DEALS_OF_THE_WEEK, offers: [offer] }],
         expected: {
           [MenuType.MARKETPLACE]: undefined,
           [MenuType.DEALS_OF_THE_WEEK]: mapMenuAndOfferToSingletonMenuResponse([
@@ -124,6 +142,7 @@ describe('MenuMapper', () => {
       },
       {
         menuType: MenuType.FEATURED,
+        input: [{ ...menu, menuType: MenuType.FEATURED, offers: [offer] }],
         expected: {
           [MenuType.MARKETPLACE]: undefined,
           [MenuType.DEALS_OF_THE_WEEK]: undefined,
@@ -135,18 +154,19 @@ describe('MenuMapper', () => {
       },
       {
         menuType: MenuType.FLEXIBLE,
+        input: [{ ...menu, menuType: MenuType.FLEXIBLE, subMenus: [subMenu] }],
         expected: {
           [MenuType.MARKETPLACE]: undefined,
           [MenuType.DEALS_OF_THE_WEEK]: undefined,
           [MenuType.FEATURED]: undefined,
-          [MenuType.FLEXIBLE]: mapMenuWithOffersToFlexibleMenuResponse([
-            { ...menu, menuType: MenuType.FLEXIBLE, offers: [offer] },
+          [MenuType.FLEXIBLE]: mapMenuWithSubMenusToFlexibleMenuResponse([
+            { ...menu, menuType: MenuType.FLEXIBLE, subMenus: [subMenu] },
           ]),
         },
       },
     ];
-    it.each(testCases)('should map %s menusAndOffersToMenuResponse', ({ menuType, expected }) => {
-      const result = mapMenusAndOffersToMenuResponse({ [menuType]: [{ ...menu, menuType, offers: [offer] }] });
+    it.each(testCases)('should map %s menusAndOffersToMenuResponse', ({ menuType, expected, input }) => {
+      const result = mapMenusAndOffersToMenuResponse({ [menuType]: input });
       expect(result).toEqual(expected);
     });
   });

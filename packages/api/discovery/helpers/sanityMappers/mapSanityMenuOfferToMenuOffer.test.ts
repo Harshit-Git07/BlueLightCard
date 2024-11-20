@@ -90,7 +90,7 @@ const richTextModuleData = {
   tocPosition: 'left' as const,
 };
 
-const validSanityOffer: SanityOffer = {
+export const validSanityOffer: SanityOffer = {
   _id: '1',
   offerId: 123,
   _type: 'offer',
@@ -287,20 +287,6 @@ describe('mapSanityMenuOfferToOffer', () => {
       menuOffer: {
         ...sanityMenuOffer,
         title: undefined,
-      },
-    },
-    {
-      field: 'start',
-      menuOffer: {
-        ...sanityMenuOffer,
-        start: undefined,
-      },
-    },
-    {
-      field: 'end',
-      menuOffer: {
-        ...sanityMenuOffer,
-        end: undefined,
       },
     },
     {

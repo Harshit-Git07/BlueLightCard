@@ -1,6 +1,10 @@
 import { AttributeType } from 'aws-cdk-lib/aws-dynamodb';
 
-import { GSI1_NAME, GSI2_NAME } from '@blc-mono/discovery/application/repositories/constants/DynamoDBConstants';
+import {
+  GSI1_NAME,
+  GSI2_NAME,
+  GSI3_NAME,
+} from '@blc-mono/discovery/application/repositories/constants/DynamoDBConstants';
 
 import { getGlobalSecondaryIndexes } from './createTable';
 
@@ -49,6 +53,44 @@ describe('getGlobalSecondaryIndexes', () => {
         },
         sortKey: {
           name: 'gsi2SortKey',
+          type: AttributeType.STRING,
+        },
+      },
+    ]);
+  });
+  it('should return three GSIs when numberOfGSIs is 3', () => {
+    const result = getGlobalSecondaryIndexes(3);
+    expect(result).toEqual([
+      {
+        indexName: GSI1_NAME,
+        partitionKey: {
+          name: 'gsi1PartitionKey',
+          type: AttributeType.STRING,
+        },
+        sortKey: {
+          name: 'gsi1SortKey',
+          type: AttributeType.STRING,
+        },
+      },
+      {
+        indexName: GSI2_NAME,
+        partitionKey: {
+          name: 'gsi2PartitionKey',
+          type: AttributeType.STRING,
+        },
+        sortKey: {
+          name: 'gsi2SortKey',
+          type: AttributeType.STRING,
+        },
+      },
+      {
+        indexName: GSI3_NAME,
+        partitionKey: {
+          name: 'gsi3PartitionKey',
+          type: AttributeType.STRING,
+        },
+        sortKey: {
+          name: 'gsi3SortKey',
           type: AttributeType.STRING,
         },
       },

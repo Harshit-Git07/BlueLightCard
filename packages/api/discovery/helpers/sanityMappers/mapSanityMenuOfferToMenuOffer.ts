@@ -19,12 +19,6 @@ export async function mapSanityMenuOfferToMenuOffer(menuOffer: SanityMenuOffer):
   if (!menuOffer.title) {
     throw new Error('Missing sanity field: title');
   }
-  if (!menuOffer.start) {
-    throw new Error('Missing sanity field: start');
-  }
-  if (!menuOffer.end) {
-    throw new Error('Missing sanity field: end');
-  }
   const menuType = await determineMenuType(menuOffer);
   return {
     id: menuOffer._id,

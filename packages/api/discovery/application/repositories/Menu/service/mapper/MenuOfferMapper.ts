@@ -1,3 +1,4 @@
+import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import { Offer } from '@blc-mono/discovery/application/models/Offer';
 import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
 import {
@@ -30,15 +31,22 @@ export function mapMenuOfferEntityToOffer(menuOfferEntity: MenuOfferEntity): Off
   };
 }
 
-export function mapOfferToMenuOfferEntity(offer: Offer, menuId: string, menuType: string): MenuOfferEntity {
+export function mapOfferToMenuOfferEntity(
+  offer: Offer,
+  menuId: string,
+  menuType: MenuType,
+  subMenuId?: string,
+): MenuOfferEntity {
   return {
     ...offer,
     partitionKey: MenuOfferKeyBuilders.buildPartitionKey(menuId),
     sortKey: MenuOfferKeyBuilders.buildSortKey(offer.id),
-    gsi1PartitionKey: MenuOfferKeyBuilders.buildGsi1PartitionKey(menuType),
-    gsi1SortKey: MenuOfferKeyBuilders.buildGsi1SortKey(menuType),
-    gsi2PartitionKey: MenuOfferKeyBuilders.buildGsi2PartitionKey(offer.id),
-    gsi2SortKey: MenuOfferKeyBuilders.buildGsi2SortKey(menuId),
+    gsi1PartitionKey: menuType !== MenuType.FLEXIBLE ? MenuOfferKeyBuilders.buildGsi1PartitionKey(menuType) : undefined,
+    gsi1SortKey: menuType !== MenuType.FLEXIBLE ? MenuOfferKeyBuilders.buildGsi1SortKey(menuType) : undefined,
+    gsi2PartitionKey: subMenuId ? MenuOfferKeyBuilders.buildGsi2PartitionKey(subMenuId) : undefined,
+    gsi2SortKey: subMenuId ? MenuOfferKeyBuilders.buildGsi2SortKey(offer.id) : undefined,
+    gsi3PartitionKey: MenuOfferKeyBuilders.buildGsi3PartitionKey(offer.id),
+    gsi3SortKey: MenuOfferKeyBuilders.buildGsi3SortKey(menuId),
   };
 }
 

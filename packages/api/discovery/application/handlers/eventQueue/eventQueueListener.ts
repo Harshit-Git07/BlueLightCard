@@ -2,6 +2,7 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import {
   Company as SanityCompany,
   MenuOffer as SanityMenuOffer,
+  MenuThemedOffer as SanityThemedMenu,
   Offer as SanityOffer,
   Site as SanitySite,
 } from '@bluelightcard/sanity-types';
@@ -16,9 +17,11 @@ import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/sanityMap
 import { mapSanityMenuOfferToMenuOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
 import { mapSanitySiteToSite } from '@blc-mono/discovery/helpers/sanityMappers/mapSanitySiteToSite';
+import { mapSanityThemedMenuToThemedMenu } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityThemedMenuToThemedMenu';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
 import { handleMenusDeleted, handleMenusUpdated } from './eventHandlers/MenusEventHandler';
+import { handleMenuThemedDeleted, handleMenuThemedUpdated } from './eventHandlers/MenuThemedEventHandler';
 import { handleSiteDeleted, handleSiteUpdated } from './eventHandlers/SiteEventHandler';
 
 const logger = new Logger({ serviceName: 'event-queue-listener' });
@@ -56,6 +59,15 @@ const unwrappedHandler = async (event: SQSEvent) => {
         }
         case Events.SITE_DELETED: {
           await handleSiteDeleted(mapSanitySiteToSite(body.detail as SanitySite));
+          break;
+        }
+        case Events.MENU_THEMED_OFFER_CREATED:
+        case Events.MENU_THEMED_OFFER_UPDATED: {
+          await handleMenuThemedUpdated(mapSanityThemedMenuToThemedMenu(body.detail as SanityThemedMenu));
+          break;
+        }
+        case Events.MENU_THEMED_OFFER_DELETED: {
+          await handleMenuThemedDeleted(mapSanityThemedMenuToThemedMenu(body.detail as SanityThemedMenu));
           break;
         }
         default:

@@ -2,12 +2,15 @@ import { DynamoDBService } from '@blc-mono/discovery/application/services/Dynamo
 
 import { menuEntityFactory } from '../../factories/MenuEntityFactory';
 import { menuOfferEntityFactory } from '../../factories/MenuOfferEntityFactory';
-import { DYNAMODB_MAX_BATCH_WRITE_SIZE, GSI1_NAME, GSI2_NAME } from '../constants/DynamoDBConstants';
+import { subMenuEntityFactory } from '../../factories/SubMenuEntityFactory';
+import { MenuType } from '../../models/MenuResponse';
+import { DYNAMODB_MAX_BATCH_WRITE_SIZE, GSI1_NAME, GSI2_NAME, GSI3_NAME } from '../constants/DynamoDBConstants';
 import { MENU_PREFIX, OFFER_PREFIX } from '../constants/PrimaryKeyPrefixes';
 import { MenuKeyBuilders } from '../schemas/MenuEntity';
-import { MenuOfferKeyBuilders } from '../schemas/MenuOfferEntity';
+import { MenuOfferEntity, MenuOfferKeyBuilders } from '../schemas/MenuOfferEntity';
+import { SubMenuEntity } from '../schemas/SubMenuEntity';
 
-import { groupMenusWithOffers, MenuRepository } from './MenuRepository';
+import { groupMenusWithTopLevelData, groupThemedMenuWithOffers, MenuRepository } from './MenuRepository';
 
 jest.mock('@blc-mono/discovery/application/services/DynamoDbService');
 
@@ -29,8 +32,11 @@ jest.mock('@blc-mono/core/utils/getEnv', () => {
 });
 
 const menuEntity = menuEntityFactory.build();
+const subMenuEntity = subMenuEntityFactory.build();
+const subMenuEntities = subMenuEntityFactory.buildList(3);
 const menuOfferEntity = menuOfferEntityFactory.build();
 const menuOfferEntities = menuOfferEntityFactory.buildList(3);
+const flexibleMenuEntity = { ...menuEntity, menuType: MenuType.FLEXIBLE };
 
 describe('Menu Repository', () => {
   const createBatchOfMenuAndOffers = () => {
@@ -47,8 +53,8 @@ describe('Menu Repository', () => {
   const mockTransactWrite = jest.fn().mockResolvedValue(() => Promise.resolve());
   const mockDelete = jest.fn().mockResolvedValue(() => Promise.resolve());
   const mockGet = jest.fn();
-  const mockQuery = jest.fn();
   const mockScan = jest.fn();
+  const mockQuery = jest.fn();
 
   describe('insert', () => {
     DynamoDBService.put = mockSave;
@@ -128,23 +134,29 @@ describe('Menu Repository', () => {
     });
   });
 
-  describe('retrieveAllMenusAndOffers', () => {
+  describe('retrieveAllTopLevelMenuData', () => {
     DynamoDBService.scan = mockScan;
     it('should call scan method with correct parameters', async () => {
       mockScan.mockResolvedValue([menuEntity, menuOfferEntity]);
 
-      const result = await new MenuRepository().retrieveAllMenusAndOffers();
+      const result = await new MenuRepository().retrieveAllTopLevelMenuData();
 
-      expect(mockScan).toHaveBeenCalledWith({ TableName: 'menus-table' });
+      expect(mockScan).toHaveBeenCalledWith({
+        IndexName: GSI1_NAME,
+        TableName: 'menus-table',
+      });
       expect(result).toEqual([menuEntity, menuOfferEntity]);
     });
 
     it('should return back an empty array if no data is returned', async () => {
       mockScan.mockResolvedValue(undefined);
 
-      const result = await new MenuRepository().retrieveAllMenusAndOffers();
+      const result = await new MenuRepository().retrieveAllTopLevelMenuData();
 
-      expect(mockScan).toHaveBeenCalledWith({ TableName: 'menus-table' });
+      expect(mockScan).toHaveBeenCalledWith({
+        IndexName: GSI1_NAME,
+        TableName: 'menus-table',
+      });
       expect(result).toEqual([]);
     });
   });
@@ -155,7 +167,7 @@ describe('Menu Repository', () => {
     it('should call "Query" and "batchDelete" method with correct parameters', async () => {
       mockQuery.mockResolvedValue([menuEntity, menuOfferEntity]);
 
-      await new MenuRepository().deleteMenuWithOffers(menuEntity.id);
+      await new MenuRepository().deleteMenuWithSubMenuAndOffers(menuEntity.id);
 
       expect(mockQuery).toHaveBeenCalledWith({
         KeyConditionExpression: 'partitionKey = :partition_key',
@@ -181,6 +193,49 @@ describe('Menu Repository', () => {
         },
         TableName: 'menus-table',
       });
+    });
+  });
+
+  describe('deleteThemedMenuOffer', () => {
+    DynamoDBService.delete = mockDelete;
+    DynamoDBService.query = mockQuery;
+    it('should call the "Query" and "Delete" method with correct parameters', async () => {
+      mockQuery.mockResolvedValue([menuOfferEntity]);
+
+      await new MenuRepository().deleteThemedMenuOffer(menuEntity.id, menuOfferEntity.id);
+
+      expect(mockQuery).toHaveBeenCalledWith({
+        KeyConditionExpression: 'gsi2PartitionKey = :gsi2_partition_key and gsi2SortKey = :gsi2_sort_key',
+        ExpressionAttributeValues: {
+          ':gsi2_partition_key': MenuOfferKeyBuilders.buildGsi2PartitionKey(menuEntity.id),
+          ':gsi2_sort_key': MenuOfferKeyBuilders.buildGsi2SortKey(menuOfferEntity.id),
+        },
+        TableName: 'menus-table',
+        IndexName: GSI2_NAME,
+      });
+      expect(mockDelete).toHaveBeenCalledWith({
+        Key: {
+          partitionKey: menuOfferEntity.partitionKey,
+          sortKey: menuOfferEntity.sortKey,
+        },
+        TableName: 'menus-table',
+      });
+    });
+
+    it('should not call the "Delete" method if no data is returned', async () => {
+      mockQuery.mockResolvedValue(undefined);
+
+      await new MenuRepository().deleteThemedMenuOffer(menuEntity.id, menuOfferEntity.id);
+
+      expect(mockBatchDelete).not.toHaveBeenCalled();
+    });
+
+    it('should not call the "Delete" method if an empty array is returned', async () => {
+      mockQuery.mockResolvedValue([]);
+
+      await new MenuRepository().deleteThemedMenuOffer(menuEntity.id, menuOfferEntity.id);
+
+      expect(mockBatchDelete).not.toHaveBeenCalled();
     });
   });
 
@@ -218,6 +273,49 @@ describe('Menu Repository', () => {
         TableName: 'menus-table',
       });
       expect(result).toEqual([menuOfferEntity]);
+    });
+  });
+
+  describe('retrieveThemedMenuWithOffers', () => {
+    DynamoDBService.query = mockQuery;
+    it('should call "Query" method with correct parameters', async () => {
+      mockQuery.mockResolvedValue([subMenuEntity, menuOfferEntity]);
+
+      const result = await new MenuRepository().retrieveThemedMenuWithOffers(subMenuEntity.id);
+
+      expect(mockQuery).toHaveBeenCalledWith({
+        KeyConditionExpression: 'gsi2PartitionKey = :gsi2_partition_key',
+        ExpressionAttributeValues: {
+          ':gsi2_partition_key': MenuOfferKeyBuilders.buildGsi2PartitionKey(subMenuEntity.id),
+        },
+        TableName: 'menus-table',
+        IndexName: GSI2_NAME,
+      });
+      expect(result).toEqual({ ...subMenuEntity, offers: [menuOfferEntity] });
+    });
+
+    it('should return an empty array if no data is returned', async () => {
+      mockQuery.mockResolvedValue(undefined);
+
+      const result = await new MenuRepository().retrieveThemedMenuWithOffers(subMenuEntity.id);
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should return an empty array if an empty array is returned', async () => {
+      mockQuery.mockResolvedValue([]);
+
+      const result = await new MenuRepository().retrieveThemedMenuWithOffers(menuEntity.id);
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should throw an error if more than one menu entity comes back from the db', async () => {
+      mockQuery.mockResolvedValue([...subMenuEntities, ...menuOfferEntities]);
+
+      await expect(new MenuRepository().retrieveThemedMenuWithOffers(subMenuEntity.id)).rejects.toThrow(
+        'Retrieving by single themed menu id has returned more than one themed menu',
+      );
     });
   });
 
@@ -259,7 +357,7 @@ describe('Menu Repository', () => {
     });
   });
 
-  describe('retriveMenusWithOffersByMenuType', () => {
+  describe('retrieveMenusWithOffersByMenuType', () => {
     DynamoDBService.query = mockQuery;
     it('should call "Query" method with correct parameters', async () => {
       mockQuery.mockResolvedValue([menuEntity, menuOfferEntity]);
@@ -304,6 +402,41 @@ describe('Menu Repository', () => {
     });
   });
 
+  describe('retrieveThemedMenusWithSubMenus', () => {
+    DynamoDBService.query = mockQuery;
+    it('should call "Query" method with correct parameters', async () => {
+      mockQuery.mockResolvedValue([subMenuEntity, flexibleMenuEntity]);
+
+      const result = await new MenuRepository().retrieveThemedMenusWithSubMenus();
+
+      expect(mockQuery).toHaveBeenCalledWith({
+        KeyConditionExpression: 'gsi1PartitionKey = :menu_type',
+        ExpressionAttributeValues: {
+          ':menu_type': MenuKeyBuilders.buildGsi1PartitionKey(MenuType.FLEXIBLE),
+        },
+        IndexName: GSI1_NAME,
+        TableName: 'menus-table',
+      });
+      expect(result).toEqual([{ ...flexibleMenuEntity, subMenus: [subMenuEntity] }]);
+    });
+
+    it('should return an empty array if no data is returned', async () => {
+      mockQuery.mockResolvedValue(undefined);
+
+      const result = await new MenuRepository().retrieveThemedMenusWithSubMenus();
+
+      expect(result).toEqual([]);
+    });
+
+    it('should return an empty array if an empty array is returned', async () => {
+      mockQuery.mockResolvedValue([]);
+
+      const result = await new MenuRepository().retrieveThemedMenusWithSubMenus();
+
+      expect(result).toEqual([]);
+    });
+  });
+
   describe('getOfferInMenusByOfferId', () => {
     it('should call "Query" method with correct parameters', async () => {
       DynamoDBService.query = mockQuery;
@@ -313,10 +446,10 @@ describe('Menu Repository', () => {
 
       expect(mockQuery).toHaveBeenCalledWith({
         TableName: 'menus-table',
-        IndexName: GSI2_NAME,
-        KeyConditionExpression: 'gsi2PartitionKey = :offer_id and begins_with(gsi2SortKey, :menu_prefix)',
+        IndexName: GSI3_NAME,
+        KeyConditionExpression: 'gsi3PartitionKey = :offer_id and begins_with(gsi3SortKey, :menu_prefix)',
         ExpressionAttributeValues: {
-          ':offer_id': MenuOfferKeyBuilders.buildGsi1PartitionKey(menuOfferEntity.id),
+          ':offer_id': MenuOfferKeyBuilders.buildGsi3PartitionKey(menuOfferEntity.id),
           ':menu_prefix': MENU_PREFIX,
         },
       });
@@ -346,11 +479,11 @@ describe('Menu Repository', () => {
       await new MenuRepository().deleteOfferFromMenus(menuOfferEntity.id);
 
       expect(mockQuery).toHaveBeenCalledWith({
-        IndexName: GSI2_NAME,
-        KeyConditionExpression: 'gsi2PartitionKey = :offer_id',
+        IndexName: GSI3_NAME,
+        KeyConditionExpression: 'gsi3PartitionKey = :offer_id',
         TableName: 'menus-table',
         ExpressionAttributeValues: {
-          ':offer_id': MenuOfferKeyBuilders.buildGsi2PartitionKey(menuOfferEntity.id),
+          ':offer_id': MenuOfferKeyBuilders.buildGsi3PartitionKey(menuOfferEntity.id),
         },
       });
 
@@ -358,46 +491,144 @@ describe('Menu Repository', () => {
     });
   });
 
-  describe('groupMenusWithOffers', () => {
+  describe('groupMenusWithTopLevelData', () => {
     const secondMenuEntity = menuEntityFactory.build({ partitionKey: MenuKeyBuilders.buildPartitionKey('2') });
+    const secondMenuOfferEntity = menuOfferEntityFactory.build({
+      partitionKey: MenuOfferKeyBuilders.buildPartitionKey('2'),
+    });
     const testCases = [
       {
-        menusAndOffers: [menuEntity, menuOfferEntity],
+        menusAndItems: [menuEntity, menuOfferEntity],
         expected: [{ ...menuEntity, offers: [menuOfferEntity] }],
       },
       {
-        menusAndOffers: [menuOfferEntity, menuOfferEntity, menuEntity],
+        menusAndItems: [menuOfferEntity, menuOfferEntity, menuEntity],
         expected: [{ ...menuEntity, offers: [menuOfferEntity, menuOfferEntity] }],
       },
       {
-        menusAndOffers: [menuEntity, menuOfferEntity, secondMenuEntity],
+        menusAndItems: [menuEntity, menuOfferEntity, secondMenuEntity],
         expected: [
           { ...menuEntity, offers: [menuOfferEntity] },
           { ...secondMenuEntity, offers: [] },
         ],
       },
       {
-        menusAndOffers: [],
+        menusAndItems: [flexibleMenuEntity, subMenuEntity],
+        expected: [{ ...flexibleMenuEntity, subMenus: [subMenuEntity] }],
+      },
+      {
+        menusAndItems: [flexibleMenuEntity, subMenuEntity, secondMenuEntity, secondMenuOfferEntity],
+        expected: [
+          { ...flexibleMenuEntity, subMenus: [subMenuEntity] },
+          { ...secondMenuEntity, offers: [secondMenuOfferEntity] },
+        ],
+      },
+      {
+        menusAndItems: [],
         expected: [],
       },
     ];
-    it.each(testCases)('should return back the correct grouped menus and offers', (testCase) => {
-      const result = groupMenusWithOffers(testCase.menusAndOffers);
+    it.each(testCases)('should return back the correct grouped menus and items', (testCase) => {
+      const result = groupMenusWithTopLevelData(testCase.menusAndItems);
       expect(result).toEqual(testCase.expected);
     });
 
     const testCasesWithInvalidData = [
       {
-        menusAndOffers: [menuOfferEntity],
+        menusAndItems: [menuOfferEntity],
       },
       {
-        menusAndOffers: [menuEntity, ...menuOfferEntities],
+        menusAndItems: [menuEntity, ...menuOfferEntities],
+      },
+      {
+        menusAndItems: [flexibleMenuEntity, ...menuOfferEntities],
+      },
+      {
+        menusAndItems: [subMenuEntity, ...menuOfferEntities],
+      },
+      {
+        menusAndItems: [flexibleMenuEntity, ...subMenuEntities],
       },
     ];
     it.each(testCasesWithInvalidData)(
-      'should throw an error if a menu offer is passed without a menu',
-      ({ menusAndOffers }) => {
-        expect(() => groupMenusWithOffers(menusAndOffers)).toThrow('Offers have been returned without a menu');
+      'should throw an error if a menu offer or submenu is passed without a menu',
+      ({ menusAndItems }) => {
+        expect(() => groupMenusWithTopLevelData(menusAndItems)).toThrow('Offers have been returned without a menu');
+      },
+    );
+  });
+
+  describe('groupThemedMenuWithOffers', () => {
+    const secondSubMenuEntity = subMenuEntityFactory.build({
+      partitionKey: MenuOfferKeyBuilders.buildGsi2PartitionKey('2'),
+    });
+    const testCases = [
+      {
+        menusAndItems: [subMenuEntity, menuOfferEntity],
+        expected: [{ ...subMenuEntity, offers: [menuOfferEntity] }],
+      },
+      {
+        menusAndItems: [subMenuEntity, menuOfferEntity, menuOfferEntity],
+        expected: [{ ...subMenuEntity, offers: [menuOfferEntity, menuOfferEntity] }],
+      },
+      {
+        menusAndItems: [menuOfferEntity, subMenuEntity],
+        expected: [{ ...subMenuEntity, offers: [menuOfferEntity] }],
+      },
+      {
+        menusAndItems: [subMenuEntity, secondSubMenuEntity, menuOfferEntity],
+        expected: [
+          { ...subMenuEntity, offers: [menuOfferEntity] },
+          { ...secondSubMenuEntity, offers: [] },
+        ],
+      },
+      {
+        menusAndItems: [subMenuEntity],
+        expected: [{ ...subMenuEntity, offers: [] }],
+      },
+      {
+        menusAndItems: [],
+        expected: [],
+      },
+    ];
+    it.each(testCases)('should return back the correct grouped themed menu and offers', (testCase) => {
+      const result = groupThemedMenuWithOffers(testCase.menusAndItems);
+      expect(result).toEqual(testCase.expected);
+    });
+
+    const testCasesWithInvalidData = [
+      {
+        menusAndItems: [menuOfferEntity],
+      },
+      {
+        menusAndItems: [subMenuEntity, ...menuOfferEntities],
+      },
+    ];
+
+    it.each(testCasesWithInvalidData)(
+      'should throw an error if a menu offer or menu is passed without a themed menu',
+      ({ menusAndItems }) => {
+        expect(() => groupThemedMenuWithOffers(menusAndItems as (MenuOfferEntity | SubMenuEntity)[])).toThrow(
+          'Offers have been returned without a themed menu',
+        );
+      },
+    );
+
+    const testCasesWithInvalidThemedMenuData = [
+      {
+        menusAndItems: [{ ...subMenuEntity, gsi2PartitionKey: undefined }, ...menuOfferEntities],
+      },
+      {
+        menusAndItems: [{ ...subMenuEntity, gsi2PartitionKey: undefined }, ...menuOfferEntities],
+      },
+    ];
+
+    it.each(testCasesWithInvalidThemedMenuData)(
+      'should throw an error if a menu offer or menu is passed without a themed menu',
+      ({ menusAndItems }) => {
+        expect(() => groupThemedMenuWithOffers(menusAndItems as (MenuOfferEntity | SubMenuEntity)[])).toThrow(
+          'Themed menu offer called with undefined gsi2PartitionKey/gsi2SortKey',
+        );
       },
     );
   });

@@ -19,7 +19,7 @@ export type MenuResponse = {
   flexible?: {
     id: string;
     title: string;
-    imageURL: string;
+    menus: { id: string; title: string; imageURL: string }[];
   }[];
 };
 

@@ -46,23 +46,41 @@ const offer: Offer = {
   updatedAt: new Date().toLocaleDateString(),
 };
 
-const menuOfferEntity: MenuOfferEntity = {
+const defaultMenuOfferEntity: MenuOfferEntity = {
   ...offer,
-  partitionKey: 'MENU-offer1',
+  partitionKey: 'MENU-menu1',
   sortKey: 'OFFER-offer1',
   gsi1PartitionKey: 'MENU_TYPE-marketplace',
   gsi1SortKey: 'MENU_TYPE-marketplace',
-  gsi2PartitionKey: 'OFFER-offer1',
-  gsi2SortKey: 'MENU-offer1',
+  gsi2PartitionKey: 'SUB_MENU-submenu1',
+  gsi2SortKey: 'OFFER-offer1',
+  gsi3PartitionKey: 'OFFER-offer1',
+  gsi3SortKey: 'MENU-menu1',
 };
+
+const mapOffersToMenuOfferEntitiesTestCases = [
+  {
+    menuType: MenuType.MARKETPLACE,
+    subMenuId: undefined,
+    menuOfferEntity: { ...defaultMenuOfferEntity, gsi2PartitionKey: undefined, gsi2SortKey: undefined },
+  },
+  {
+    menuType: MenuType.FLEXIBLE,
+    subMenuId: 'submenu1',
+    menuOfferEntity: { ...defaultMenuOfferEntity, gsi1PartitionKey: undefined, gsi1SortKey: undefined },
+  },
+];
 describe('MenuOfferMapper', () => {
-  it('should map Offer to MenuOfferEntity', () => {
-    const result = mapOfferToMenuOfferEntity(offer, 'offer1', MenuType.MARKETPLACE);
-    expect(result).toEqual(menuOfferEntity);
-  });
+  it.each(mapOffersToMenuOfferEntitiesTestCases)(
+    'should map Offer to MenuOfferEntity',
+    ({ menuType, menuOfferEntity, subMenuId }) => {
+      const result = mapOfferToMenuOfferEntity(offer, 'menu1', menuType, subMenuId);
+      expect(result).toEqual(menuOfferEntity);
+    },
+  );
 
   it('should map MenuOfferEntity to Offer', () => {
-    const result = mapMenuOfferEntityToOffer(menuOfferEntity);
+    const result = mapMenuOfferEntityToOffer(defaultMenuOfferEntity);
     expect(result).toEqual(offer);
   });
 });

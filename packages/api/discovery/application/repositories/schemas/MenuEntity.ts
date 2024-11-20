@@ -2,6 +2,7 @@ import { Menu } from '../../models/Menu';
 import { MENU_PREFIX, MENU_TYPE_PREFIX } from '../constants/PrimaryKeyPrefixes';
 
 import { MenuOfferEntity } from './MenuOfferEntity';
+import { SubMenuEntity } from './SubMenuEntity';
 
 export type MenuEntity = Menu & {
   partitionKey: string;
@@ -12,6 +13,10 @@ export type MenuEntity = Menu & {
 
 export type MenuEntityWithOfferEntities = MenuEntity & {
   offers: MenuOfferEntity[];
+};
+
+export type MenuEntityWithSubMenuEntities = MenuEntity & {
+  subMenus: SubMenuEntity[];
 };
 
 export class MenuKeyBuilders {

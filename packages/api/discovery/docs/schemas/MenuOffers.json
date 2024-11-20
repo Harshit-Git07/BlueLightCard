@@ -96,8 +96,22 @@
         "title": {
           "type": "string"
         },
-        "imageURL": {
-          "type": "string"
+        "menus": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "imageURL": {
+                "type": "string"
+              }
+            }
+          }
         }
       }
     }

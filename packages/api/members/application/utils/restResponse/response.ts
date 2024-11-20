@@ -1,5 +1,4 @@
 import { HttpStatusCode } from '@blc-mono/core/types/http-status-code.enum';
-import { APIError } from '../../models/APIError';
 
 interface ResponseHeaders {
   [header: string]: boolean | number | string;
@@ -13,9 +12,8 @@ export interface ResponsePayload {
 }
 
 interface BodyPayload {
-  message: string;
+  message?: string;
   data?: any;
-  errors?: APIError[];
   error?: string;
 }
 

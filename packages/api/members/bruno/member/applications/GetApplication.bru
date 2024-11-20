@@ -1,0 +1,11 @@
+meta {
+  name: GetApplication
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{memberApiBaseUrl}}/members/applications/{{memberId}}/{{applicationId}}
+  body: none
+  auth: none
+}

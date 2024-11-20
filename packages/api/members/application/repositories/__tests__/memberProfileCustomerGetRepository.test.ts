@@ -2,7 +2,7 @@ import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 import { MemberProfileCustomerGetRepository } from '../memberProfileCustomerGetRepository';
 import { CustomerProfileModel } from '../../models/customer/customerProfileModel';
-import { EligibilityStatus } from '../../enums/EligibilityStatus';
+import { EligibilityStatus } from '../../models/enums/EligibilityStatus';
 
 const ddbMock = mockClient(DynamoDBDocumentClient);
 

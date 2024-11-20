@@ -1,0 +1,11 @@
+meta {
+  name: GetOrganisationById
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{memberApiBaseUrl}}/members/orgs/{{organisationId}}
+  body: none
+  auth: none
+}

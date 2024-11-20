@@ -1,5 +1,5 @@
 import { mockClient } from 'aws-sdk-client-mock';
-import { EmployersRepository } from '../employersRepository';
+import { EmployerRepository } from '../employerRepository';
 import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb';
 
 const idRequirements = [
@@ -72,11 +72,11 @@ const paramsWithoutEmployerId = {
 const mockDynamoDB = mockClient(DynamoDBDocumentClient);
 
 describe('EmployersRepository', () => {
-  let repository: EmployersRepository;
+  let repository: EmployerRepository;
 
   beforeEach(() => {
     mockDynamoDB.reset();
-    repository = new EmployersRepository(mockDynamoDB as any, 'testTable');
+    repository = new EmployerRepository(mockDynamoDB as any, 'testTable');
   });
 
   it('should return validated employer when found and employerId is present', async () => {

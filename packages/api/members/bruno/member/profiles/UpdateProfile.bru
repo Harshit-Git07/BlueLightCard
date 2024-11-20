@@ -1,0 +1,28 @@
+meta {
+  name: UpdateProfile
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{memberApiBaseUrl}}/members/profiles
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "alsl@sls.com",
+    "memberId": "{{memberId}}",
+    "firstName": "John",
+    "lastName": "Doe",
+    "dateOfBirth": "1960-01-01",
+    "phoneNumber": "123-456-7890",
+    "gender": "MALE",
+    "county": "Antrim",
+    "organisationId": "{{organisationId}}",
+    "employerId": "{{employerId}}",
+    "jobTitle": "Software Engineer",
+    "jobReference": "REF123"
+  }
+}

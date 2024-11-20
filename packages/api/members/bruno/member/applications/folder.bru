@@ -1,0 +1,12 @@
+meta {
+  name: applications
+}
+
+vars:pre-request {
+  memberId: 89d8a1ab-7a82-40c3-88d0-dd8ca8b9b762
+  applicationId: 17f8587e-d853-44f1-ac82-37a974b49f11
+}
+
+vars:post-response {
+  preSignedUrl: res.body.preSignedUrl
+}

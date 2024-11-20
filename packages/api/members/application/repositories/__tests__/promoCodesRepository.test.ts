@@ -1,7 +1,7 @@
 import { mockClient } from 'aws-sdk-client-mock';
 import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb';
-import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
-import { PromoCodeType } from '@blc-mono/members/application/enums/PromoCodeType';
+import { PromoCodeRepository } from '@blc-mono/members/application/repositories/promoCodeRepository';
+import { PromoCodeType } from '@blc-mono/members/application/models/enums/PromoCodeType';
 import 'aws-sdk-client-mock-jest';
 
 const mockDynamoDB = mockClient(DynamoDBDocumentClient);
@@ -10,10 +10,10 @@ describe('PromoCodesRepository', () => {
   const mockPromoCode = 'CODE123';
   const mockParentPromoCodeUuid = 'fdb27574-d07d-463d-9f74-3c783cc086ac';
 
-  let repository: PromoCodesRepository;
+  let repository: PromoCodeRepository;
 
   beforeEach(() => {
-    repository = new PromoCodesRepository(mockDynamoDB as any, 'memberPromosTest');
+    repository = new PromoCodeRepository(mockDynamoDB as any, 'memberPromosTest');
   });
 
   afterEach(() => {

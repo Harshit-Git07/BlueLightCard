@@ -1,0 +1,20 @@
+meta {
+  name: CreateApplication
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{memberApiBaseUrl}}/members/applications
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "memberId": "{{memberId}}",
+    "startDate": "2024-09-09",
+    "eligibilityStatus": "INELIGIBLE",
+    "applicationReason": "LOST_CARD"
+  }
+}

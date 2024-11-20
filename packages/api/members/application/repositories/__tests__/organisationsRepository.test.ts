@@ -1,5 +1,5 @@
 import { mockClient } from 'aws-sdk-client-mock';
-import { OrganisationsRepository } from '../organisationsRepository';
+import { OrganisationRepository } from '../organisationRepository';
 import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import 'aws-sdk-client-mock-jest';
 
@@ -71,11 +71,11 @@ const paramsWithoutOrgId = {
 const mockDynamoDB = mockClient(DynamoDBDocumentClient);
 
 describe('OrganisationsRepository', () => {
-  let repository: OrganisationsRepository;
+  let repository: OrganisationRepository;
 
   beforeEach(() => {
     mockDynamoDB.reset();
-    repository = new OrganisationsRepository(mockDynamoDB as any, 'testTable');
+    repository = new OrganisationRepository(mockDynamoDB as any, 'testTable');
   });
 
   it('should return validated organisation when found and organisationId is present', async () => {

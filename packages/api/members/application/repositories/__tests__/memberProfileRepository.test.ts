@@ -1,11 +1,11 @@
 import { DynamoDBDocumentClient, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { MemberProfileRepository } from '../memberProfileRepository';
-import { MemberProfileModel } from '../../models/memberProfileModel';
+import { MemberProfileModel } from '../../models/profileModel';
 import {
   MemberProfileUpdatePayload,
   MemberProfileQueryPayload,
 } from '../../types/memberProfileTypes';
-import { Gender } from '../../enums/Gender';
+import { Gender } from '../../models/enums/Gender';
 
 jest.mock('@aws-sdk/lib-dynamodb');
 jest.mock('../../models/memberProfileModel');

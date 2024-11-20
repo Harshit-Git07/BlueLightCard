@@ -12,31 +12,34 @@ export function createZodNamedType<T extends z.ZodTypeAny>(name: string, type: T
 }
 
 export class ApiGatewayModelGenerator {
-  private model?: Model;
   private genericModel: Model;
   private badRequestModel: Model;
+  private modelCache: Record<string, Model> = {};
 
   constructor(private api: RestApi) {
-     this.genericModel = new Model(this.api, "GenericModel", GenericResponseSchema);
-     this.badRequestModel = new Model(this.api, "BadRequestModel", BadRequestModelSchema);
+    this.genericModel = new Model(this.api, "GenericModel", GenericResponseSchema);
+    this.badRequestModel = new Model(this.api, "BadRequestModel", BadRequestModelSchema);
   }
 
   generateModel<T extends z.AnyZodObject>(model: NamedZodType<T>): Model {
-    const _modelName = (model as any)._ModelName;
-    const modelSchema = zodToJsonSchema(model, _modelName);
-    const modelDefinition = modelSchema.definitions?.[_modelName];
-      this.model = new Model(this.api, _modelName, modelDefinition);
-    return this.model;
+    return this.getModelFromCache(model);
   }
 
   generateModelFromZodEffect<T extends z.ZodEffects<any>>(model: NamedZodType<T>): Model {
-    const _modelName = (model as any)._ModelName;
-    const modelSchema = zodToJsonSchema(model, _modelName);
-    const modelDefinition = modelSchema.definitions?.[_modelName];
-    if (!this.model) {
-      this.model = new Model(this.api, _modelName, modelDefinition);
+    return this.getModelFromCache(model);
+  }
+
+  private getModelFromCache<T extends (z.AnyZodObject | z.ZodEffects<any>)>(model: NamedZodType<T>): Model {
+    const modelName = (model as any)._ModelName;
+    const modelSchema = zodToJsonSchema(model, modelName);
+    const modelDefinition = modelSchema.definitions?.[modelName];
+
+    let apiModel = this.modelCache[modelName];
+    if (!apiModel) {
+      apiModel = new Model(this.api, modelName, modelDefinition);
+      this.modelCache[modelName] = apiModel;
     }
-    return this.model;
+    return apiModel;
   }
 
   generateGenericModel() {
@@ -60,7 +63,7 @@ export class ApiGatewayModelGenerator {
   }
 
   getError404() {
-   return this.makeErrorResponseModel('404')
+    return this.makeErrorResponseModel('404')
   }
 
   getError500() {

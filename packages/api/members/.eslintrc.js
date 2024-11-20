@@ -1,3 +1,5 @@
+const { exclude } = require('tsafe');
+
 module.exports = {
   env: {
     browser: true,
@@ -18,6 +20,7 @@ module.exports = {
     project: 'tsconfig.json',
     tsconfigRootDir: __dirname,
   },
+  ignorePatterns: ['application/braze/__tests__/*', 'application/repositories/__tests__/*'],
   rules: {
     'prettier/prettier': [
       'error',

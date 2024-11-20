@@ -1,321 +1,167 @@
-import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
-import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
-import { LambdaLogger } from '@blc-mono/core/utils/logger';
-import { APIError } from '@blc-mono/members/application/models/APIError';
-import { APIErrorCode } from '@blc-mono/members/application/enums/APIErrorCode';
-import { PromoCodeType } from '@blc-mono/members/application/enums/PromoCodeType';
-import { PromoCodeModel } from '@blc-mono/members/application/models/promoCodeModel';
-import { MemberProfileModel } from '@blc-mono/members/application/models/memberProfileModel';
-import { MemberProfileService } from '@blc-mono/members/application/services/memberProfileService';
+import { PromoCodeService } from '../../services/promoCodeService';
+import { PromoCodeRepository } from '../../repositories/promoCodeRepository';
+import { ProfileService } from '../../services/profileService';
+import { ValidationError } from '../../errors/ValidationError';
+import { PromoCodeType } from '../../models/enums/PromoCodeType';
+import { PromoCodeModel } from '../../models/promoCodeModel';
+import { v4 as uuidv4 } from 'uuid';
+import { ProfileModel } from '../../models/profileModel';
 
-jest.mock('../../repositories/promoCodesRepository');
-jest.mock('../../../../core/src/utils/logger/lambdaLogger');
-jest.mock('../memberProfileService');
+jest.mock('../../repositories/promoCodeRepository');
+jest.mock('../../services/profileService');
+jest.mock('sst/node/table', () => ({
+  Table: jest.fn(),
+}));
 
-describe('PromoCodesService', () => {
-  let service: PromoCodesService;
-  let mockRepository: jest.MockedObject<PromoCodesRepository>;
-  let mockLogger: jest.MockedObject<LambdaLogger>;
-  let mockMemberProfileService: jest.MockedObject<MemberProfileService>;
-  let errorSet: APIError[] = [];
-  const memberUuid = '96cc6f7a-ef23-4696-8a49-50a11877653d';
-  const promoCode = 'CODE123';
+describe('PromoCodeService', () => {
+  let service: PromoCodeService;
+  let promoCodeRepositoryMock: jest.Mocked<PromoCodeRepository>;
+  let profileServiceMock: jest.Mocked<ProfileService>;
+  const memberId = uuidv4();
+  const promoCodeId = 'CODE123';
+
+  const profile: ProfileModel = {
+    memberId,
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@example.com',
+    dateOfBirth: '2024-01-01',
+    organisationId: uuidv4(),
+    employerId: uuidv4(),
+    applications: [],
+  };
 
   beforeEach(() => {
-    mockRepository = {
-      getMultiUseOrSingleUseChildPromoCode: jest.fn(),
-      getSingleUseParentPromoCode: jest.fn(),
-    } as unknown as jest.MockedObject<PromoCodesRepository>;
+    promoCodeRepositoryMock = new PromoCodeRepository() as jest.Mocked<PromoCodeRepository>;
+    profileServiceMock = new ProfileService() as jest.Mocked<ProfileService>;
 
-    mockLogger = {
-      error: jest.fn(),
-    } as unknown as jest.MockedObject<LambdaLogger>;
-
-    mockMemberProfileService = {
-      getMemberProfiles: jest.fn(),
-    } as unknown as jest.MockedObject<MemberProfileService>;
-
-    service = new PromoCodesService(
-      mockRepository as PromoCodesRepository,
-      mockLogger as LambdaLogger,
-      mockMemberProfileService as MemberProfileService,
-    );
+    service = new PromoCodeService(promoCodeRepositoryMock, profileServiceMock);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
-    errorSet = [];
   });
 
-  describe('on validate promo code', () => {
-    describe('and call to get multi or single use code is unsuccessful', () => {
-      describe('and call throws error', () => {
-        it('should return undefined and error message for error while fetching', async () => {
-          mockRepository.getMultiUseOrSingleUseChildPromoCode.mockRejectedValue(
-            new Error('Database error'),
-          );
+  describe('validatePromoCode', () => {
+    it('should throw ValidationError if promo code does not exist', async () => {
+      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue(null);
 
-          const result = await service.validatePromoCode(memberUuid, promoCode, errorSet);
+      await expect(service.validatePromoCode(memberId, promoCodeId)).rejects.toThrow(
+        new ValidationError('Promo code does not exist'),
+      );
+    });
 
-          expect(mockRepository.getMultiUseOrSingleUseChildPromoCode).toHaveBeenCalled();
-          expect(result).toBe(undefined);
-          expect(errorSet).toEqual([
-            new APIError(
-              APIErrorCode.GENERIC_ERROR,
-              'getMultiUseOrSingleUseChildPromoCode',
-              'Error fetching promo code',
-            ),
-          ]);
-        });
-      });
+    it('should throw ValidationError if single use promo code has already been used', async () => {
+      const singleUseCodeModel = singleUseCodeModelWithUsed(true);
+      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+        singleUseCodeModel,
+      ]);
 
-      describe('and call does not find promo code', () => {
-        it('should return undefined and error message for promo code not existing', async () => {
-          mockRepository.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue(null);
+      await expect(service.validatePromoCode(memberId, promoCodeId)).rejects.toThrow(
+        new ValidationError('Promo code has already been used'),
+      );
+    });
 
-          const result = await service.validatePromoCode(memberUuid, promoCode, errorSet);
+    it('should throw ValidationError if parent promo code details cannot be found', async () => {
+      const singleUseCodeModel = singleUseCodeModelWithUsed(false);
+      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+        singleUseCodeModel,
+      ]);
+      promoCodeRepositoryMock.getSingleUseParentPromoCode.mockResolvedValue(null);
 
-          expect(mockRepository.getMultiUseOrSingleUseChildPromoCode).toHaveBeenCalled();
-          expect(result).toBe(undefined);
-          expect(errorSet).toEqual([
-            new APIError(APIErrorCode.VALIDATION_ERROR, 'promoCode', 'Promo code does not exist'),
-          ]);
-        });
+      await expect(service.validatePromoCode(memberId, promoCodeId)).rejects.toThrow(
+        new ValidationError('Promo code details cannot be found'),
+      );
+    });
+
+    it('should throw ValidationError if promo code is invalid', async () => {
+      const parentCodeModel = parentCodeModelWithType(PromoCodeType.MULTI_USE, false);
+      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+        parentCodeModel,
+      ]);
+
+      await expect(service.validatePromoCode(memberId, promoCodeId)).rejects.toThrow(
+        new ValidationError('Promo code is invalid'),
+      );
+    });
+
+    it('should throw ValidationError if promo code is not applicable for this employer', async () => {
+      const parentCodeModel = parentCodeModelWithType(PromoCodeType.MULTI_USE);
+      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+        parentCodeModel,
+      ]);
+      profileServiceMock.getProfile.mockResolvedValue(profile);
+
+      await expect(service.validatePromoCode(memberId, promoCodeId)).rejects.toThrow(
+        new ValidationError('Promo code is not applicable for this employer'),
+      );
+    });
+
+    it('should return promo code response model if promo code is valid and has no code provider', async () => {
+      const parentCodeModel = parentCodeModelWithType(
+        PromoCodeType.MULTI_USE,
+        true,
+        true,
+        true,
+        false,
+      );
+      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+        parentCodeModel,
+      ]);
+
+      const result = await service.validatePromoCode(memberId, promoCodeId);
+
+      expect(result).toStrictEqual({
+        bypassPayment: parentCodeModel.bypassPayment,
+        bypassVerification: parentCodeModel.bypassVerification,
       });
     });
 
-    describe('and call to get multi or single use code is successful', () => {
-      describe('and promo code is single use type', () => {
-        describe('and promo code is used', () => {
-          it('should return undefined and error message for promo code having already been used', async () => {
-            const singleUseCodeModel = singleUseCodeModelWithUsed(true);
-
-            mockRepository.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
-              singleUseCodeModel,
-            ]);
-
-            const result = await service.validatePromoCode(memberUuid, promoCode, errorSet);
-
-            expect(mockRepository.getMultiUseOrSingleUseChildPromoCode).toHaveBeenCalled();
-            expect(mockRepository.getSingleUseParentPromoCode).not.toHaveBeenCalled();
-            expect(result).toBe(undefined);
-            expect(errorSet).toEqual([
-              new APIError(
-                APIErrorCode.VALIDATION_ERROR,
-                'promoCode',
-                'Promo code has already been used',
-              ),
-            ]);
-          });
-        });
-
-        describe('and promo code is not used', () => {
-          describe('and parent promo code cannot be found', () => {
-            it('should return undefined and error message for promo code details not being found', async () => {
-              const singleUseCodeModel = singleUseCodeModelWithUsed(false);
-
-              mockRepository.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
-                singleUseCodeModel,
-              ]);
-              mockRepository.getSingleUseParentPromoCode.mockResolvedValue(null);
-
-              const result = await service.validatePromoCode(memberUuid, promoCode, errorSet);
-
-              expect(mockRepository.getMultiUseOrSingleUseChildPromoCode).toHaveBeenCalled();
-              expect(mockRepository.getSingleUseParentPromoCode).toHaveBeenCalled();
-              expect(result).toBe(undefined);
-              expect(errorSet).toEqual([
-                new APIError(
-                  APIErrorCode.VALIDATION_ERROR,
-                  'promoCode',
-                  'Promo code details cannot be found',
-                ),
-              ]);
-            });
-          });
-        });
+    it('should return promo code response model if promo code is valid and code provider matches member profile', async () => {
+      const parentCodeModel = parentCodeModelWithType(PromoCodeType.MULTI_USE);
+      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+        parentCodeModel,
+      ]);
+      profileServiceMock.getProfile.mockResolvedValue({
+        ...profile,
+        employerId: parentCodeModel.codeProvider,
       });
 
-      describe('and promo code is multi use type', () => {
-        it('should not call get single use parent promo code', async () => {
-          mockRepository.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
-            parentCodeModelWithType(PromoCodeType.MULTI_USE, true, true, true, true),
-          ]);
+      const result = await service.validatePromoCode(memberId, promoCodeId);
 
-          await service.validatePromoCode(memberUuid, promoCode, errorSet);
-
-          expect(mockRepository.getMultiUseOrSingleUseChildPromoCode).toHaveBeenCalled();
-          expect(mockRepository.getSingleUseParentPromoCode).not.toHaveBeenCalled();
-        });
-      });
-
-      describe('and promo code is not active', () => {
-        it('should return undefined and error message for promo code being invalid', async () => {
-          mockRepository.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
-            parentCodeModelWithType(PromoCodeType.MULTI_USE, false, true, true, true),
-          ]);
-
-          const result = await service.validatePromoCode(memberUuid, promoCode, errorSet);
-
-          expect(mockRepository.getMultiUseOrSingleUseChildPromoCode).toHaveBeenCalled();
-          expect(result).toBe(undefined);
-          expect(errorSet).toEqual([
-            new APIError(APIErrorCode.VALIDATION_ERROR, 'promoCode', 'Promo code is invalid'),
-          ]);
-        });
-      });
-
-      describe('and promo code is not within valid dates', () => {
-        it('should return undefined and error message for promo code being invalid', async () => {
-          mockRepository.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
-            parentCodeModelWithType(PromoCodeType.MULTI_USE, true, false, true, true),
-          ]);
-
-          const result = await service.validatePromoCode(memberUuid, promoCode, errorSet);
-
-          expect(mockRepository.getMultiUseOrSingleUseChildPromoCode).toHaveBeenCalled();
-          expect(result).toBe(undefined);
-          expect(errorSet).toEqual([
-            new APIError(APIErrorCode.VALIDATION_ERROR, 'promoCode', 'Promo code is invalid'),
-          ]);
-        });
-      });
-
-      describe('and promo code is not within usage limit', () => {
-        it('should return undefined and error message for promo code being invalid', async () => {
-          mockRepository.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
-            parentCodeModelWithType(PromoCodeType.MULTI_USE, true, true, false, true),
-          ]);
-
-          const result = await service.validatePromoCode(memberUuid, promoCode, errorSet);
-
-          expect(mockRepository.getMultiUseOrSingleUseChildPromoCode).toHaveBeenCalled();
-          expect(result).toBe(undefined);
-          expect(errorSet).toEqual([
-            new APIError(APIErrorCode.VALIDATION_ERROR, 'promoCode', 'Promo code is invalid'),
-          ]);
-        });
-      });
-
-      describe('and promo code is valid', () => {
-        describe('and promo code has code provider', () => {
-          describe('and code provider does not match member profile', () => {
-            it('should return undefined and error message for promo code not being applicable for employer', async () => {
-              const memberProfile: Partial<MemberProfileModel> = {
-                employerId: '63d17bbb-66d8-446e-95ad-17717e58ca5d',
-              };
-              const promoCodeDetails = parentCodeModelWithType(
-                PromoCodeType.MULTI_USE,
-                true,
-                true,
-                true,
-                true,
-              );
-              mockRepository.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
-                promoCodeDetails,
-              ]);
-              mockMemberProfileService.getMemberProfiles.mockResolvedValue([
-                memberProfile,
-              ] as MemberProfileModel[]);
-
-              const result = await service.validatePromoCode(memberUuid, promoCode, errorSet);
-
-              expect(mockRepository.getMultiUseOrSingleUseChildPromoCode).toHaveBeenCalled();
-              expect(result).toBe(undefined);
-              expect(errorSet).toEqual([
-                new APIError(
-                  APIErrorCode.VALIDATION_ERROR,
-                  'promoCode',
-                  'Promo code is not applicable for this employer',
-                ),
-              ]);
-            });
-          });
-
-          describe('and code provider does match member profile', () => {
-            it('should return promo code response model', async () => {
-              const memberProfile: Partial<MemberProfileModel> = {
-                employerId: '4489d238-245d-472f-ba17-582d68fd2bd7',
-              };
-              const promoCodeDetails = parentCodeModelWithType(
-                PromoCodeType.MULTI_USE,
-                true,
-                true,
-                true,
-                true,
-              );
-              mockRepository.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
-                promoCodeDetails,
-              ]);
-              mockMemberProfileService.getMemberProfiles.mockResolvedValue([
-                memberProfile,
-              ] as MemberProfileModel[]);
-
-              const result = await service.validatePromoCode(memberUuid, promoCode, errorSet);
-
-              expect(mockRepository.getMultiUseOrSingleUseChildPromoCode).toHaveBeenCalled();
-              expect(result).toStrictEqual({
-                bypassPayment: promoCodeDetails.bypassPayment,
-                bypassVerification: promoCodeDetails.bypassVerification,
-              });
-              expect(errorSet).toEqual([]);
-            });
-          });
-        });
-
-        describe('and promo code does not have code provider', () => {
-          it('should return promo code response model', async () => {
-            const promoCodeDetails = parentCodeModelWithType(
-              PromoCodeType.MULTI_USE,
-              true,
-              true,
-              true,
-              false,
-            );
-            mockRepository.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
-              promoCodeDetails,
-            ]);
-
-            const result = await service.validatePromoCode(memberUuid, promoCode, errorSet);
-
-            expect(mockRepository.getMultiUseOrSingleUseChildPromoCode).toHaveBeenCalled();
-            expect(result).toStrictEqual({
-              bypassPayment: promoCodeDetails.bypassPayment,
-              bypassVerification: promoCodeDetails.bypassVerification,
-            });
-            expect(errorSet).toEqual([]);
-          });
-        });
+      expect(result).toStrictEqual({
+        bypassPayment: parentCodeModel.bypassPayment,
+        bypassVerification: parentCodeModel.bypassVerification,
       });
     });
   });
 
   const parentCodeModelWithType = (
     type: PromoCodeType,
-    active: boolean,
-    inDate: boolean,
-    withinUsages: boolean,
-    hasCodeProvider: boolean,
+    active: boolean = true,
+    inDate: boolean = true,
+    withinUsages: boolean = true,
+    hasCodeProvider: boolean = true,
   ): PromoCodeModel => {
     return {
-      parentUuid: 'fdb27574-d07d-463d-9f74-3c783cc086ac',
+      parentId: 'fdb27574-d07d-463d-9f74-3c783cc086ac',
       active: active,
       bypassPayment: false,
       bypassVerification: true,
       cardValidityTerm: 2,
-      code: promoCode,
-      codeProvider: hasCodeProvider ? '4489d238-245d-472f-ba17-582d68fd2bd7' : '',
+      code: promoCodeId,
+      codeProvider: hasCodeProvider ? uuidv4() : '',
       createdDate: '2021-09-07',
       currentUsages: withinUsages ? 300 : 1000,
       description: 'For NHS employees',
       lastUpdatedDate: '2021-09-07',
       maxUsages: 1000,
       name: 'NHS',
-      promoCodeType: type,
+      type: type,
       validityEndDate: inDate ? '2122-09-07' : '2021-09-10',
       validityStartDate: '2021-09-07',
       addedDate: undefined,
-      singleCodeUuid: undefined,
+      singleCodeId: undefined,
       used: undefined,
       usedDate: undefined,
     };
@@ -323,12 +169,12 @@ describe('PromoCodesService', () => {
 
   const singleUseCodeModelWithUsed = (used: boolean): PromoCodeModel => {
     return {
-      parentUuid: 'fdb27574-d07d-463d-9f74-3c783cc086ac',
+      parentId: 'fdb27574-d07d-463d-9f74-3c783cc086ac',
       active: undefined,
       bypassPayment: undefined,
       bypassVerification: undefined,
       cardValidityTerm: undefined,
-      code: promoCode,
+      code: promoCodeId,
       codeProvider: undefined,
       createdDate: undefined,
       currentUsages: undefined,
@@ -336,11 +182,11 @@ describe('PromoCodesService', () => {
       lastUpdatedDate: undefined,
       maxUsages: undefined,
       name: undefined,
-      promoCodeType: PromoCodeType.SINGLE_USE,
+      type: PromoCodeType.SINGLE_USE,
       validityEndDate: undefined,
       validityStartDate: undefined,
       addedDate: '2021-09-07',
-      singleCodeUuid: '70f4995f-4c86-48ff-b700-79f1b7b216c2',
+      singleCodeId: '70f4995f-4c86-48ff-b700-79f1b7b216c2',
       used: used,
       usedDate: '2021-10-15',
     };

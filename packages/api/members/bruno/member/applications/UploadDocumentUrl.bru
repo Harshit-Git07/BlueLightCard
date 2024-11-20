@@ -1,0 +1,15 @@
+meta {
+  name: UploadDocumentUrl
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{preSignedUrl}}
+  body: none
+  auth: none
+}
+
+docs {
+  test.txt
+}

@@ -1,0 +1,11 @@
+meta {
+  name: UploadDocument
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{memberApiBaseUrl}}/members/applications/{{memberId}}/{{applicationId}}/uploadDocument
+  body: none
+  auth: none
+}

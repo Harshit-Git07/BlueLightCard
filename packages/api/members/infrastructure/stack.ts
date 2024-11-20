@@ -1,70 +1,140 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
-import {
-  ApiGatewayV1Api,
-  StackContext,
-  use,
-  Table,
-  Bucket,
-  Function as SSTFunction,
-} from 'sst/constructs';
-import { RemovalPolicy } from 'aws-cdk-lib';
-
+import { ApiGatewayV1Api, App, Stack, StackContext, use } from 'sst/constructs';
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
-
 import { Shared } from '../../../../stacks/stack';
 import {
   MemberStackConfigResolver,
   MemberStackRegion,
 } from '@blc-mono/members/infrastructure/config/config';
-
-import { createMemberAdminTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberAdminTable';
-import { createMemberBatchesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberBatchesTable';
-import { createMemberCodesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberCodesTable';
-import { createMemberNotesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberNotesTable';
-import { createMemberPromosTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberPromosTable';
-import { createMemberProfilesTable } from '@blc-mono/members/infrastructure/dynamodb/createMemberProfilesTable';
-
+import { createAdminTable } from '@blc-mono/members/infrastructure/dynamodb/createAdminTable';
+import { createOrganisationsTable } from '@blc-mono/members/infrastructure/dynamodb/createOrganisationsTable';
+import { createProfilesTable } from '@blc-mono/members/infrastructure/dynamodb/createProfilesTable';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
-import { MemberProfileModel } from '../application/models/memberProfileModel';
-import { GetMemberCardRoute } from './routes/GetMemberCardRoute';
-import { GetMemberApplicationRoute } from './routes/GetMemberApplicationRoute';
-import { UpdateMemberApplicationRoute } from './routes/UpdateMemberApplicationRoute';
-import { UpdateMemberCardRoute } from './routes/UpdateMemberCardRoute';
-import { MemberCardModel } from '../application/models/memberCardModel';
-import { MemberApplicationModel } from '../application/models/memberApplicationModel';
-import { GetOrganisationsRoute } from './routes/GetOrganisationsRoute';
-import { OrganisationModel } from 'application/models/organisationModel';
-import { ReusableCrudGetRoute } from './routes/ReusableCrudGetRoute';
-import { MemberApplicationExternalModel } from '../application/models/reusableCrudPayloadModels';
-import { ReusableCrudUpdateRoute } from './routes/ReusableCrudUpdateRoute';
-import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
+import { getEnvOrDefault, getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
-import { EmployerModel } from '../application/models/employerModel';
-import { GetEmployersRoute } from './routes/GetEmployersRoute';
-import { MemberProfileCustomerModel } from '../application/models/memberProfileCustomerModel';
-import { UpdateMemberProfileRoute } from './routes/UpdateMemberProfileRoute';
-import { UpdateMemberProfileCustomerRoute } from './routes/UpdateMemberProfileCustomerRoute';
-import { CreateMemberProfileCustomerRoute } from './routes/CreateMemberProfileCustomerRoute';
-import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { createMemberCardsTable } from './dynamodb/createMemberCardsTable';
-import { IdUploadRoute } from './routes/IdUploadRoute';
-import { IdUploadBucketConstruct } from './s3/IdUploadBucketConstruct';
-import { GetCustomerProfileRoute } from './routes/GetCustomerProfileRoute';
-import { CustomerProfileModel } from '../application/models/customer/customerProfileModel';
+import { memberProfileRoutes } from '@blc-mono/members/infrastructure/routes/member/MemberProfileRoutes';
+import { memberApplicationRoutes } from '@blc-mono/members/infrastructure/routes/member/MemberApplicationRoutes';
+import { memberOrganisationsRoutes } from '@blc-mono/members/infrastructure/routes/member/MemberOrganisationsRoutes';
+import { memberMarketingRoutes } from './routes/member/MemberMarketingRoutes';
+import { adminMarketingRoutes } from './routes/admin/AdminMarketingRoutes';
+import { adminApplicationRoutes } from './routes/admin/AdminApplicationRoutes';
+import { adminOrganisationsRoutes } from './routes/admin/AdminOrganisationsRoutes';
+import { adminCardRoutes } from './routes/admin/AdminCardRoutes';
+import { adminAllocationRoutes } from './routes/admin/AdminAllocationRoutes';
+import { adminPaymentRoutes } from './routes/admin/AdminPaymentRoutes';
+import { adminProfileRoutes } from './routes/admin/AdminProfileRoutes';
+import { DocumentUpload } from './s3/DocumentUploadBucket';
 
-import { GetMarketingPreferencesRoute } from './routes/GetMarketingPreferencesRoute';
-import { GetBrazeAttributesRoute } from './routes/GetBrazeAttributesRoute';
+const SERVICE_NAME = 'members';
 
 async function MembersStack({ stack, app }: StackContext) {
-  const noteTableName = `${stack.stage}-${app.name}-memberNotes`;
-  const SERVICE_NAME = 'members';
-  const memberProfilesTableName = `${stack.stage}-${app.name}-memberProfiles`;
-  const promoCodeTableName = `${stack.stage}-${app.name}-memberPromos`;
-
-  const { certificateArn } = use(Shared);
-
   stack.tags.setTag('service', SERVICE_NAME);
 
+  // Profile table - profiles, cards, notes, applications, promo codes
+  // Orgs tables - orgs, employers, ID requirements, trusted domains
+  // Admin table - batches, allocations
+  const profilesTable = createProfilesTable(stack);
+  const organisationsTable = createOrganisationsTable(stack);
+  const adminTable = createAdminTable(stack);
+
+  const documentUpload = new DocumentUpload(stack, 'DocumentUpload', {
+    profilesTable: profilesTable,
+    organisationsTable: organisationsTable,
+    stage: app.stage,
+    appName: app.name,
+  });
+
+  return {
+    profilesTable,
+    organisationsTable,
+    adminTable,
+    documentUploadBucket: documentUpload.bucket,
+  };
+}
+
+async function MembersApiStack({ stack, app }: StackContext) {
+  stack.tags.setTag('service', SERVICE_NAME);
+
+  const { profilesTable, organisationsTable, documentUploadBucket } = use(MembersStack);
+
+  const api = createRestApi(app, stack, 'members');
+  const restApi = api.cdk.restApi;
+
+  stack.addOutputs({
+    MembersApiEndpoint: api.url,
+    MembersApiCustomDomain: api.customDomainUrl,
+  });
+
+  const apiGatewayModelGenerator = new ApiGatewayModelGenerator(restApi);
+  api.addRoutes(
+    stack,
+    memberProfileRoutes(
+      stack,
+      restApi,
+      apiGatewayModelGenerator,
+      profilesTable,
+      organisationsTable,
+    ),
+  );
+  api.addRoutes(stack, memberMarketingRoutes(stack, restApi, apiGatewayModelGenerator));
+  api.addRoutes(
+    stack,
+    memberApplicationRoutes(
+      stack,
+      restApi,
+      apiGatewayModelGenerator,
+      profilesTable,
+      organisationsTable,
+      documentUploadBucket,
+    ),
+  );
+  api.addRoutes(
+    stack,
+    memberOrganisationsRoutes(stack, restApi, apiGatewayModelGenerator, organisationsTable),
+  );
+}
+
+async function MembersAdminApiStack({ stack, app }: StackContext) {
+  stack.tags.setTag('service', SERVICE_NAME);
+
+  const { profilesTable, organisationsTable, adminTable, documentUploadBucket } = use(MembersStack);
+
+  const api = createRestApi(app, stack, 'members-admin');
+  const restApi = api.cdk.restApi;
+
+  stack.addOutputs({
+    MembersAdminApiEndpoint: api.url,
+    MembersAdminApiCustomDomain: api.customDomainUrl,
+  });
+
+  const apiGatewayModelGenerator = new ApiGatewayModelGenerator(restApi);
+  api.addRoutes(
+    stack,
+    adminProfileRoutes(stack, restApi, apiGatewayModelGenerator, profilesTable, organisationsTable),
+  );
+  api.addRoutes(stack, adminMarketingRoutes(stack, restApi, apiGatewayModelGenerator));
+  api.addRoutes(
+    stack,
+    adminApplicationRoutes(
+      stack,
+      restApi,
+      apiGatewayModelGenerator,
+      profilesTable,
+      organisationsTable,
+      documentUploadBucket,
+    ),
+  );
+  api.addRoutes(
+    stack,
+    adminOrganisationsRoutes(stack, restApi, apiGatewayModelGenerator, organisationsTable),
+  );
+  api.addRoutes(stack, adminCardRoutes(stack, restApi, apiGatewayModelGenerator, adminTable));
+  api.addRoutes(stack, adminAllocationRoutes(stack, restApi, apiGatewayModelGenerator, adminTable));
+  api.addRoutes(stack, adminPaymentRoutes(stack, restApi, apiGatewayModelGenerator, profilesTable));
+}
+
+function createRestApi(app: App, stack: Stack, name: string) {
+  const { certificateArn } = use(Shared);
   const config = MemberStackConfigResolver.for(stack, app.region as MemberStackRegion);
   const globalConfig = GlobalConfigResolver.for(stack.stage);
   const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
@@ -91,7 +161,7 @@ async function MembersStack({ stack, app }: StackContext) {
     layers,
   });
 
-  const membersApi = new ApiGatewayV1Api(stack, SERVICE_NAME, {
+  const api = new ApiGatewayV1Api(stack, name, {
     authorizers: {
       // memberAuthorizer: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', authorizer),
     },
@@ -104,7 +174,7 @@ async function MembersStack({ stack, app }: StackContext) {
         ...(['production', 'staging'].includes(stack.stage) &&
           certificateArn && {
             domainName: {
-              domainName: getDomainName(stack.stage, app.region),
+              domainName: getDomainName(stack.stage, app.region, name),
               certificate: Certificate.fromCertificateArn(
                 stack,
                 'DomainCertificate',
@@ -126,215 +196,48 @@ async function MembersStack({ stack, app }: StackContext) {
     },
   });
 
-  const memberAdminTable = createMemberAdminTable(stack);
-  const memberBatchesTable = createMemberBatchesTable(stack);
-  const memberCodesTable = createMemberCodesTable(stack);
-  const memberNotesTable = createMemberNotesTable(stack);
-  const memberPromosTable = createMemberPromosTable(stack);
-  const memberProfilesTable = createMemberProfilesTable(stack);
-  const memberCardsTable = createMemberCardsTable(stack);
+  const apikey = api.cdk.restApi.addApiKey('members-api-key');
 
-  const restApi = membersApi.cdk.restApi;
-
-  const apiGatewayModelGenerator = new ApiGatewayModelGenerator(membersApi.cdk.restApi);
-
-  const agMembersProfileModel =
-    apiGatewayModelGenerator.generateModelFromZodEffect(MemberProfileModel);
-
-  const agMemberCardModel = apiGatewayModelGenerator.generateModelFromZodEffect(MemberCardModel);
-
-  const agMemberApplicationModel =
-    apiGatewayModelGenerator.generateModelFromZodEffect(MemberApplicationModel);
-  const agMemberProfileModel =
-    apiGatewayModelGenerator.generateModelFromZodEffect(MemberProfileModel);
-  const agMemberProfileCustomerModel = apiGatewayModelGenerator.generateModelFromZodEffect(
-    MemberProfileCustomerModel,
-  );
-
-  const agMemberApplicationExternalModel = apiGatewayModelGenerator.generateModelFromZodEffect(
-    MemberApplicationExternalModel,
-  );
-
-  const agOrganisationModel =
-    apiGatewayModelGenerator.generateModelFromZodEffect(OrganisationModel);
-
-  const agCustomerProfileModel =
-    apiGatewayModelGenerator.generateModelFromZodEffect(CustomerProfileModel);
-
-  const agEmployerModel = apiGatewayModelGenerator.generateModelFromZodEffect(EmployerModel);
-
-  const idUploadBucketConstruct = new IdUploadBucketConstruct(stack, 'IdUploadBucketConstruct', {
-    memberProfilesTableName: memberProfilesTableName,
-    noteTableName: noteTableName,
-    stage: app.stage,
-    appName: app.name,
-  });
-
-  membersApi.addRoutes(stack, {
-    'POST /members/v5/customers': new CreateMemberProfileCustomerRoute(
-      apiGatewayModelGenerator,
-      agMemberProfileModel,
-      memberProfilesTableName,
-    ).getRouteDetails(),
-    'PUT /members/v5/customers/{brand}/{memberUUID}/{profileId}':
-      new UpdateMemberProfileCustomerRoute(
-        apiGatewayModelGenerator,
-        agMemberProfileModel,
-        memberProfilesTableName,
-      ).getRouteDetails(),
-    'GET /members/v5/cards/{brand}/{uuid}': new GetMemberCardRoute(
-      apiGatewayModelGenerator,
-      agMemberCardModel,
-      memberProfilesTableName,
-    ).getRouteDetails(),
-    'GET /members/v5/cards/{brand}/{uuid}/{cardNumber}': new GetMemberCardRoute(
-      apiGatewayModelGenerator,
-      agMemberCardModel,
-      memberProfilesTableName,
-    ).getRouteDetails(),
-    'PUT /members/v5/cards/{brand}/{uuid}/{cardNumber}': new UpdateMemberCardRoute(
-      apiGatewayModelGenerator,
-      agMemberCardModel,
-      memberProfilesTableName,
-    ).getRouteDetails(),
-    'GET /members/v5/applications/{brand}/{memberUUID}': new GetMemberApplicationRoute(
-      apiGatewayModelGenerator,
-      agMemberApplicationModel,
-      memberProfilesTableName,
-    ).getRouteDetails(),
-    'GET /members/v5/applications/{brand}/{memberUUID}/{applicationId}':
-      new GetMemberApplicationRoute(
-        apiGatewayModelGenerator,
-        agMemberApplicationModel,
-        memberProfilesTableName,
-      ).getRouteDetails(),
-    'PUT /members/v5/applications/{brand}/{memberUUID}/{applicationId}':
-      new UpdateMemberApplicationRoute(
-        apiGatewayModelGenerator,
-        agMemberApplicationModel,
-        memberProfilesTableName,
-      ).getRouteDetails(),
-    'PUT /members/v5/profiles/{memberUUID}/{profileId}': new UpdateMemberProfileRoute(
-      apiGatewayModelGenerator,
-      agMemberProfileModel,
-      memberProfilesTableName,
-    ).getRouteDetails(),
-    'GET /members/v5/profile/id/init/{memberUUID}': new IdUploadRoute(
-      apiGatewayModelGenerator,
-      agMembersProfileModel,
-      memberProfilesTableName,
-      idUploadBucketConstruct.bucket,
-    ).getRouteDetails(),
-    'POST /members/v5/applications/{brand}/{memberUUID}/{applicationId}':
-      new UpdateMemberApplicationRoute(
-        apiGatewayModelGenerator,
-        agMemberApplicationModel,
-        memberProfilesTableName,
-      ).getRouteDetails(),
-    'GET /members/v5/customers/applications/{memberUUID}/{applicationId}': new ReusableCrudGetRoute(
-      apiGatewayModelGenerator,
-      agMemberApplicationExternalModel,
-      memberProfilesTableName,
-      'application',
-      'applications',
-      'MEMBER',
-      'APPLICATION',
-      'memberUUID',
-      'applicationId',
-      'MemberApplicationExternalModel',
-      'MemberApplicationCustomerPayload',
-    ).getRouteDetails(),
-    'PUT /members/v5/customers/applications/{memberUUID}/{applicationId}':
-      new ReusableCrudUpdateRoute(
-        apiGatewayModelGenerator,
-        agMemberApplicationExternalModel,
-        memberProfilesTableName,
-        'application',
-        'applications',
-        memberProfilesTableName,
-        promoCodeTableName,
-        'MEMBER',
-        'APPLICATION',
-        'memberUUID',
-        'applicationId',
-        'MemberApplicationExternalModel',
-        'MemberApplicationCustomerPayload',
-      ).getRouteDetails(),
-    'GET /members/v5/orgs/{brand}': new GetOrganisationsRoute(
-      apiGatewayModelGenerator,
-      agOrganisationModel,
-      memberProfilesTableName,
-    ).getRouteDetails(),
-    'GET /members/v5/orgs/{brand}/{organisationId}': new GetOrganisationsRoute(
-      apiGatewayModelGenerator,
-      agOrganisationModel,
-      memberProfilesTableName,
-    ).getRouteDetails(),
-    'GET /members/v5/customer/{brand}/{memberUuid}/{profileUuid}': new GetCustomerProfileRoute(
-      apiGatewayModelGenerator,
-      agCustomerProfileModel,
-      memberProfilesTableName,
-    ).getRouteDetails(),
-    'GET /members/v5/orgs/employers/{brand}/{organisationId}': new GetEmployersRoute(
-      apiGatewayModelGenerator,
-      agEmployerModel,
-      memberProfilesTableName,
-    ).getRouteDetails(),
-    'GET /members/v5/orgs/employers/{brand}/{organisationId}/{employerId}': new GetEmployersRoute(
-      apiGatewayModelGenerator,
-      agEmployerModel,
-      memberProfilesTableName,
-    ).getRouteDetails(),
-    'GET /members/v5/marketingPreferences/{brand}/{memberUUID}/{version}':
-      new GetMarketingPreferencesRoute(
-        apiGatewayModelGenerator,
-        agOrganisationModel,
-        app.stage,
-      ).getRouteDetails(),
-    'POST /members/v5/getBrazeAttributes/': new GetBrazeAttributesRoute(
-      apiGatewayModelGenerator,
-      agOrganisationModel,
-      app.stage,
-    ).getRouteDetails(),
-  });
-
-  stack.addOutputs({
-    MembersApiEndpoint: membersApi.url,
-    MembersApiCustomDomain: membersApi.customDomainUrl,
-  });
-
-  const apikey = membersApi.cdk.restApi.addApiKey('members-api-key');
-
-  const usagePlan = membersApi.cdk.restApi.addUsagePlan('members-api-usage-plan', {
+  const usagePlan = api.cdk.restApi.addUsagePlan('members-api-usage-plan', {
     throttle: {
       rateLimit: 1,
       burstLimit: 2,
     },
     apiStages: [
       {
-        api: membersApi.cdk.restApi,
-        stage: membersApi.cdk.restApi.deploymentStage,
+        api: api.cdk.restApi,
+        stage: api.cdk.restApi.deploymentStage,
       },
     ],
   });
   usagePlan.addApiKey(apikey);
 
-  return {
-    membersApi: membersApi,
-  };
+  return api;
 }
 
-const getDomainName = (stage: string, region: string) => {
-  return region === 'ap-southeast-2' ? getAustraliaDomainName(stage) : getUKDomainName(stage);
+const getDomainName = (stage: string, region: string, name: string) => {
+  return region === 'ap-southeast-2'
+    ? getAustraliaDomainName(stage, name)
+    : getUKDomainName(stage, name);
 };
 
-const getAustraliaDomainName = (stage: string) =>
-  stage === 'production' ? 'members-au.blcshine.io' : `${stage}-members-au.blcshine.io`;
+const getAustraliaDomainName = (stage: string, name: string) =>
+  stage === 'production' ? `${name}-au.blcshine.io` : `${stage}-${name}-au.blcshine.io`;
 
-const getUKDomainName = (stage: string) =>
-  stage === 'production' ? 'members.blcshine.io' : `${stage}-members.blcshine.io`;
+const getUKDomainName = (stage: string, name: string) =>
+  stage === 'production' ? `${name}.blcshine.io` : `${stage}-${name}.blcshine.io`;
 
 export const Members =
   getEnvRaw(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK) === 'false'
     ? MembersStack
+    : () => Promise.resolve();
+
+export const MembersApi =
+  getEnvRaw(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK) === 'false'
+    ? MembersApiStack
+    : () => Promise.resolve();
+
+export const MembersAdminApi =
+  getEnvRaw(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK) === 'false'
+    ? MembersAdminApiStack
     : () => Promise.resolve();

@@ -3,36 +3,26 @@ import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtensio
 
 export const OrganisationModel = createZodNamedType(
   'OrganisationModel',
-  z
-    .object({
-      pk: z.string().startsWith('ORGANISATION#'),
-      name: z.string(),
-      type: z.string().nullable().optional(),
-      active: z.string().default('TRUE'),
-      volunteers: z.string().nullable(),
-      retired: z.string().nullable(),
-      idRequirements: z
-        .array(
-          z.object({
-            id: z.string(),
-            title: z.string(),
-            criteria: z.array(z.string()),
-            allowedFormats: z.string(),
-          }),
-        )
-        .default([]),
-      trustedDomains: z.array(z.string()).default([]),
-    })
-    .transform((organisation) => ({
-      organisationId: organisation.pk.replace('ORGANISATION#', ''),
-      name: organisation.name,
-      type: organisation.type,
-      active: organisation.active === 'TRUE',
-      volunteer: organisation.volunteers === 'TRUE',
-      retired: organisation.retired === 'TRUE',
-      idRequirements: JSON.stringify(organisation.idRequirements),
-      trustedDomains: organisation.trustedDomains,
-    })),
+  z.object({
+    organisationId: z.string().uuid(),
+    name: z.string(),
+    type: z.string().nullable().optional(),
+    active: z.boolean().default(true),
+    volunteers: z.boolean().default(false),
+    retired: z.boolean().default(false),
+    idRequirements: z
+      .array(
+        z.object({
+          id: z.string(),
+          title: z.string().optional(),
+          description: z.string().optional(),
+          criteria: z.array(z.string()).optional(),
+          allowedFormats: z.string().optional(),
+        }),
+      )
+      .default([]),
+    trustedDomains: z.array(z.string()).default([]),
+  }),
 );
 
 export type OrganisationModel = z.infer<typeof OrganisationModel>;

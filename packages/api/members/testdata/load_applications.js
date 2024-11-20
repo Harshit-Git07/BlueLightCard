@@ -9,89 +9,71 @@ const options = {
 
 const client = new DynamoDBClient(options);
 
-let tableName = process.env['MEMBER_TABLE_DYNAMO'];
-if (tableName === undefined)
-  throw new Error('Please set MEMBER_TABLE_DYNAMO environmental variable for target tabel');
+if (!process.env.SST_STAGE) {
+  console.error('Please set SST_STAGE environment variable');
+  process.exit(1);
+}
+const tableName = `${process.env.SST_STAGE}-blc-mono-memberProfiles`;
 
 async function batchWriteItems(items) {
-  const requestItems = items.map((item) => ({
-    PutRequest: {
-      Item: {
-        pk: {
-          S: item.pk,
-        },
-        sk: {
-          S: item.sk,
-        },
-        StartDate: {
-          S: item.StartDate,
-        },
-        EligibilityStatus: {
-          S: item.EligibilityStatus,
-        },
-        ApplicationReason: {
-          S: item.ApplicationReason,
-        },
-        VerificationMethod: {
-          S: item.VerificationMethod,
-        },
-        Address1: {
-          NULL: true,
-        },
-        Address2: {
-          NULL: true,
-        },
-        City: {
-          NULL: true,
-        },
-        Postcode: {
-          NULL: true,
-        },
-        Country: {
-          NULL: true,
-        },
-        PromoCode: {
-          NULL: true,
-        },
-        IdS3LocationPrimary: {
-          NULL: true,
-        },
-        IdS3LocationSecondary: {
-          NULL: true,
-        },
-        IdLastUploadDate: {
-          NULL: true,
-        },
-        TrustedDomainEmail: {
-          NULL: true,
-        },
-        TrustedDomainEmailCode: {
-          NULL: true,
-        },
-        TrustedDomainValidated: {
-          BOOL: false,
-        },
-        NameChangeReason: {
-          NULL: true,
-        },
-        NameChangeFirstName: {
-          NULL: true,
-        },
-        NameChangeLastName: {
-          NULL: true,
-        },
-        NameChangeDocType: {
-          NULL: true,
-        },
-        RejectionReason: {
-          NULL: true,
-        },
-        Updated: {
-          S: item.Updated,
-        },
-      },
-    },
-  }));
+  const requestItems = items.map((item) => {
+    const sanitisedItem = {
+      pk: { S: item.pk },
+      sk: { S: item.sk },
+      memberId: { S: item.memberId },
+      applicationId: { S: item.applicationId },
+      startDate: { S: item.startDate },
+      eligibilityStatus: { S: item.eligibilityStatus },
+      applicationReason: { S: item.applicationReason },
+      verificationMethod: { S: item.verificationMethod },
+      updated: { S: item.updated },
+    };
+
+    if (item.address1) {
+      sanitisedItem.address1 = { S: item.address1 };
+    }
+    if (item.address2) {
+      sanitisedItem.address2 = { S: item.address2 };
+    }
+    if (item.city) {
+      sanitisedItem.city = { S: item.city };
+    }
+    if (item.postcode) {
+      sanitisedItem.postcode = { S: item.postcode };
+    }
+    if (item.country) {
+      sanitisedItem.country = { S: item.country };
+    }
+    if (item.promoCode) {
+      sanitisedItem.promoCode = { S: item.promoCode };
+    }
+    if (item.idS3LocationPrimary) {
+      sanitisedItem.idS3LocationPrimary = { S: item.idS3LocationPrimary };
+    }
+    if (item.idS3LocationSecondary) {
+      sanitisedItem.idS3LocationSecondary = { S: item.idS3LocationSecondary };
+    }
+    if (item.IdLastUploadDate) {
+      sanitisedItem.IdLastUploadDate = { S: item.IdLastUploadDate };
+    }
+    if (item.trustedDomainEmail) {
+      sanitisedItem.trustedDomainEmail = { S: item.trustedDomainEmail };
+    }
+    if (item.trustedDomainEmailCode) {
+      sanitisedItem.trustedDomainEmailCode = { S: item.trustedDomainEmailCode };
+    }
+    if (item.trustedDomainValidated) {
+      sanitisedItem.trustedDomainValidated = { BOOL: item.trustedDomainValidated };
+    }
+    if (item.nameChangeReason) {
+      sanitisedItem.nameChangeReason = { S: item.nameChangeReason };
+    }
+    if (item.nameChangeFirstName) {
+      sanitisedItem.nameChangeFirstName = { S: item.nameChangeFirstName };
+    }
+
+    return { PutRequest: { Item: sanitisedItem } };
+  });
 
   const command = new BatchWriteItemCommand({
     RequestItems: {
@@ -105,8 +87,10 @@ async function batchWriteItems(items) {
 }
 
 async function addApplications() {
-  const lines = fs.readFileSync('memberprofiles_applications_upload.json', 'utf-8').split(/\r?\n/);
-  const items = lines.map((line) => JSON.parse(line));
+  const lines = fs.readFileSync('data/applications.json', 'utf-8').split(/\r?\n/);
+  const items = lines
+    .filter((line) => line.length > 0 && !line.trim().startsWith('//'))
+    .map((line) => JSON.parse(line));
 
   while (items.length) {
     const batch = items.splice(0, 25);

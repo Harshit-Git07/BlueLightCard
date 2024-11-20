@@ -1,8 +1,13 @@
 import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
-import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { ApiGatewayV1ApiFunctionRouteProps, Function, Stack } from 'sst/constructs';
+import {
+  ApiGatewayV1Api,
+  ApiGatewayV1ApiFunctionRouteProps,
+  Function,
+  Stack,
+} from 'sst/constructs';
 import { SSTConstruct } from 'sst/constructs/Construct';
+import { Permissions } from 'sst/constructs/util/permission';
 
 import {
   ApiGatewayModelGenerator,
@@ -14,42 +19,47 @@ import {
 import { MemberStackEnvironmentKeys } from '../constants/environment';
 
 export type RouteOptions = {
+  stack: Stack;
+  name: string;
   apiGatewayModelGenerator: ApiGatewayModelGenerator;
   environment?: Partial<Record<MemberStackEnvironmentKeys, string>>;
   handler: string;
-  model?: Model;
-  functionName: string;
-  requestValidatorName: string;
   restApi: RestApi;
-  stack: Stack;
+  requestModel?: Model;
+  responseModel?: Model;
   bind?: SSTConstruct[];
   defaultAllowedOrigins: string[];
-  permissions?: PolicyStatement[];
-  authorizer?: 'memberAuthorizer' | 'none' | string;
+  permissions?: Permissions;
   apiKeyRequired?: boolean;
 };
 
 export class Route {
   public static createRoute({
+    stack,
+    name,
     apiGatewayModelGenerator,
     environment,
     handler,
-    model,
-    functionName,
-    requestValidatorName,
     restApi,
-    stack,
+    requestModel,
+    responseModel,
     bind,
     defaultAllowedOrigins,
     permissions,
-    authorizer,
     apiKeyRequired,
-  }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer' | 'none' | string> {
-    const requestModels = model ? { 'application/json': model.getModel() } : undefined;
-    const methodResponses = model
+  }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<never> {
+    const requestModels = requestModel
+      ? { 'application/json': requestModel.getModel() }
+      : undefined;
+    const methodResponses = responseModel
       ? MethodResponses.toMethodResponses(
           [
-            new ResponseModel('200', model),
+            new ResponseModel('200', responseModel),
+            new ResponseModel('201', apiGatewayModelGenerator.generateGenericModel()),
+            new ResponseModel('204', apiGatewayModelGenerator.generateGenericModel()),
+            apiGatewayModelGenerator.getError400(),
+            apiGatewayModelGenerator.getError401(),
+            apiGatewayModelGenerator.getError403(),
             apiGatewayModelGenerator.getError404(),
             apiGatewayModelGenerator.getError500(),
           ].filter(Boolean),
@@ -57,13 +67,13 @@ export class Route {
       : undefined;
 
     return {
-      authorizer: authorizer ? authorizer : 'memberAuthorizer',
       cdk: {
-        function: new Function(stack, functionName, {
+        function: new Function(stack, `${name}Function`, {
           bind: bind,
           permissions,
           handler,
           environment: {
+            SERVICE: 'member',
             ...environment,
             [MemberStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS]:
               JSON.stringify(defaultAllowedOrigins),
@@ -73,13 +83,25 @@ export class Route {
           apiKeyRequired: apiKeyRequired,
           requestModels,
           methodResponses,
-          requestValidator: new RequestValidator(stack, requestValidatorName, {
-            restApi,
-            validateRequestBody: true,
-            validateRequestParameters: true,
-          }),
+          requestValidator: Route.requestValidator(stack, restApi),
         },
       },
     };
+  }
+
+  private static requestValidators: Record<string, RequestValidator> = {};
+
+  private static requestValidator(stack: Stack, restApi: RestApi): RequestValidator {
+    let validator = Route.requestValidators[stack.stackName];
+    if (!validator) {
+      validator = new RequestValidator(stack, `${stack.stackName}-RequestValidator`, {
+        restApi,
+        validateRequestBody: true,
+        validateRequestParameters: true,
+      });
+    }
+    Route.requestValidators[stack.stackName] = validator;
+
+    return validator;
   }
 }

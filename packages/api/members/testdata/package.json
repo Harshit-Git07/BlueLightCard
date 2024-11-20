@@ -1,5 +1,15 @@
 {
   "type": "module",
+  "scripts": {
+    "load": "npm run load:orgs load:employers load:org_domains load:domains load:profiles load:cards load:applications", 
+    "load:orgs": "SST_STAGE=$(cat ../../../../.sst/stage) node load_organisations.js",
+    "load:org_domains": "SST_STAGE=$(cat ../../../../.sst/stage) node load_organisation_trusted_domains.js",
+    "load:domains": "SST_STAGE=$(cat ../../../../.sst/stage) node load_trusted_domains.js",
+    "load:employers": "SST_STAGE=$(cat ../../../../.sst/stage) node load_employers.js",
+    "load:profiles": "SST_STAGE=$(cat ../../../../.sst/stage) node load_profiles.js",
+    "load:cards": "SST_STAGE=$(cat ../../../../.sst/stage) node load_cards.js",
+    "load:applications": "SST_STAGE=$(cat ../../../../.sst/stage) node load_applications.js"
+  },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.665.0",
     "@smithy/util-retry": "^3.0.7",

@@ -1,0 +1,11 @@
+meta {
+  name: GetProfile
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{memberApiBaseUrl}}/members/profiles/{{memberId}}
+  body: none
+  auth: none
+}

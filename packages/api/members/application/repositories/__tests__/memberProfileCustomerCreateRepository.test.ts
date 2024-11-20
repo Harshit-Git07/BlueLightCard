@@ -4,8 +4,8 @@ import { AddressInsertPayload, CreateProfilePayload } from '../../types/memberPr
 import { mockClient } from 'aws-sdk-client-mock';
 import 'aws-sdk-client-mock-jest';
 import { v4 as uuidv4 } from 'uuid';
-import { ApplicationReason } from '../../enums/ApplicationReason';
-import { EligibilityStatus } from '../../enums/EligibilityStatus';
+import { ApplicationReason } from '../../models/enums/ApplicationReason';
+import { EligibilityStatus } from '../../models/enums/EligibilityStatus';
 
 jest.mock('../../models/memberProfilesModel', () => ({
   MemberProfileDBSchema: {

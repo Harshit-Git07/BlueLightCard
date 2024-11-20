@@ -1,0 +1,11 @@
+meta {
+  name: GetEmployers
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{memberApiBaseUrl}}/members/orgs/{{organisationId}}/employers
+  body: none
+  auth: none
+}

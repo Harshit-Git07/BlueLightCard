@@ -5,7 +5,14 @@ const { compilerOptions } = require('./tsconfig');
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
-  modulePaths: [compilerOptions.baseUrl],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/application/braze/',
+    '<rootDir>/application/repositories/',
+  ],
+  moduleNameMapper: {
+    ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
+    'sst/node/.*': '<rootDir>/__mocks__/sst.js',
+    '@aws-lambda-powertools/logger': '<rootDir>/__mocks__/logger.js',
+  },
 };

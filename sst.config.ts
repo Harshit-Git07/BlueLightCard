@@ -10,7 +10,7 @@ import { Orders } from '@blc-mono/orders/infrastructure/stack';
 import { MemberServicesHub } from 'member-services-hub/stack';
 import { Discovery } from '@blc-mono/discovery/infrastructure/stack';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
-import { Members } from '@blc-mono/members/infrastructure/stack';
+import { Members, MembersAdminApi, MembersApi } from '@blc-mono/members/infrastructure/stack';
 
 export default {
   config(_input) {
@@ -45,6 +45,9 @@ export default {
       app.stack(Orders, { id: 'orders' }),
     ]);
 
+    app.stack(MembersApi, { id: 'membersApi' });
+    app.stack(MembersAdminApi, { id: 'membersAdminApi' });
+    
     app.stack(Web, { id: 'web' }).stack(MemberServicesHub, { id: 'member-services-hub' });
   },
 } satisfies SSTConfig;

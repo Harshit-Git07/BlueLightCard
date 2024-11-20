@@ -5,7 +5,7 @@ import {
   MemberProfileCustomerUpdatePayload,
   MemberProfileCustomerQueryPayload,
 } from '../../types/memberProfileCustomerTypes';
-import { Gender } from '../../enums/Gender';
+import { Gender } from '../../models/enums/Gender';
 
 jest.mock('@aws-sdk/lib-dynamodb');
 jest.mock('../../models/memberProfileCustomerModel');

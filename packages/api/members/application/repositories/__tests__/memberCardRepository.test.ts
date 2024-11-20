@@ -1,8 +1,8 @@
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import { MemberCardRepository } from '../memberCardRepository';
+import { MemberCardRepository } from '../cardRepository';
 import { MemberCardQueryPayload, MemberCardUpdatePayload } from '../../types/memberCardTypes';
-import { CardStatus } from 'application/enums/CardStatus';
-import { PaymentStatus } from 'application/enums/PaymentStatus';
+import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
+import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
 import { mockClient } from 'aws-sdk-client-mock';
 import 'aws-sdk-client-mock-jest';
 

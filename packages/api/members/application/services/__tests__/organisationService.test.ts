@@ -1,74 +1,115 @@
-import { APIErrorCode } from '../../enums/APIErrorCode';
-import { APIError } from '../../models/APIError';
-import { OrganisationsRepository } from '../../repositories/organisationsRepository';
-import { OrganisationService } from '../organisationsService';
-import { LambdaLogger as Logger } from '@blc-mono/core/src/utils/logger/lambdaLogger';
+import { OrganisationService } from '../organisationService';
+import { OrganisationModel } from '../../models/organisationModel';
+import { EmployerModel } from '../../models/employerModel';
+import { v4 as uuidv4 } from 'uuid';
+import { OrganisationRepository } from '../../repositories/organisationRepository';
 
-jest.mock('../../repositories/organisationsRepository');
-jest.mock('../../../../core/src/utils/logger/lambdaLogger');
+jest.mock('../../repositories/organisationRepository');
+jest.mock('sst/node/table', () => ({
+  Table: jest.fn(),
+}));
 
-describe('organisationService', () => {
-  let mockRepository: jest.MockedObject<OrganisationsRepository>;
-  let mockLogger: jest.MockedObject<Logger>;
+describe('OrganisationService', () => {
+  const organisationId = uuidv4();
+  const employerId = uuidv4();
+  const organisations: OrganisationModel[] = [
+    {
+      organisationId,
+      name: 'Org1',
+      active: true,
+      volunteers: false,
+      retired: false,
+      idRequirements: [],
+      trustedDomains: [],
+    },
+  ];
+  const employers: EmployerModel[] = [
+    {
+      employerId,
+      name: 'Employer1',
+      active: true,
+      volunteers: false,
+      retired: false,
+      trustedDomains: [],
+    },
+  ];
+
+  let organisationRepositoryMock: jest.Mocked<OrganisationRepository>;
   let organisationService: OrganisationService;
 
   beforeEach(() => {
-    mockRepository = {
-      getOrganisations: jest.fn(),
-    } as unknown as jest.MockedObject<OrganisationsRepository>;
-
-    mockLogger = {
-      info: jest.fn(),
-      error: jest.fn(),
-    } as unknown as jest.MockedObject<Logger>;
-    organisationService = new OrganisationService(mockRepository, mockLogger);
+    organisationRepositoryMock =
+      new OrganisationRepository() as jest.Mocked<OrganisationRepository>;
+    organisationService = new OrganisationService(organisationRepositoryMock);
   });
 
-  test('should return data when getOrganisations is called successfully', async () => {
-    const mockData = [
-      {
-        organisationId: '0001',
-        name: 'Highway Traffic Officers',
-        type: 'HIGHWAYS',
-        active: true,
-        volunteer: false,
-        idRequirements: 'idRequirement',
-        retired: false,
-        trustedDomains: [],
-      },
-    ] as never;
+  describe('getOrganisations', () => {
+    it('should return organisations', async () => {
+      organisationRepositoryMock.getOrganisations.mockResolvedValue(organisations);
 
-    mockRepository.getOrganisations.mockResolvedValue(mockData);
+      const result = await organisationService.getOrganisations();
 
-    const { organisationList, errorSet } = await organisationService.getOrganisations({
-      brand: 'BLC_UK',
-      organisationId: '123',
+      expect(result).toEqual(organisations);
     });
 
-    const expectedErrorSet: APIError[] = [];
+    it('should throw an error if fetching organisations fails', async () => {
+      organisationRepositoryMock.getOrganisations.mockRejectedValue(new Error('Failed to fetch'));
 
-    expect(organisationList).toEqual(mockData);
-    expect(errorSet).toEqual(expectedErrorSet);
-    expect(mockRepository.getOrganisations).toHaveBeenCalledWith({
-      brand: 'BLC_UK',
-      organisationId: '123',
+      await expect(organisationService.getOrganisations()).rejects.toThrow('Failed to fetch');
     });
   });
 
-  test('should log an error and return empty list when getOrganisations fails', async () => {
-    const errorMessage = 'Error fetching organisations';
-    mockRepository.getOrganisations.mockRejectedValue(new Error(errorMessage));
+  describe('getOrganisation', () => {
+    it('should return an organisation', async () => {
+      organisationRepositoryMock.getOrganisation.mockResolvedValue(organisations[0]);
 
-    const { organisationList, errorSet } = await organisationService.getOrganisations({
-      brand: 'BLC_UK',
-      organisationId: '123',
+      const result = await organisationService.getOrganisation(organisationId);
+
+      expect(result).toEqual(organisations[0]);
     });
-    const expectedErrorSet: APIError[] = [
-      new APIError(APIErrorCode.GENERIC_ERROR, 'getOrganisations', 'Error fetching organisations'),
-    ];
 
-    expect(organisationList).toEqual([]);
-    expect(errorSet).toEqual(expectedErrorSet);
-    expect(mockLogger.error).toHaveBeenCalled();
+    it('should throw an error if fetching organisation fails', async () => {
+      organisationRepositoryMock.getOrganisation.mockRejectedValue(new Error('Failed to fetch'));
+
+      await expect(organisationService.getOrganisation(organisationId)).rejects.toThrow(
+        'Failed to fetch',
+      );
+    });
+  });
+
+  describe('getEmployers', () => {
+    it('should return employers', async () => {
+      organisationRepositoryMock.getEmployers.mockResolvedValue(employers);
+
+      const result = await organisationService.getEmployers(organisationId);
+
+      expect(result).toEqual(employers);
+    });
+
+    it('should throw an error if fetching employers fails', async () => {
+      organisationRepositoryMock.getEmployers.mockRejectedValue(new Error('Failed to fetch'));
+
+      await expect(organisationService.getEmployers(organisationId)).rejects.toThrow(
+        'Failed to fetch',
+      );
+    });
+  });
+
+  describe('getEmployer', () => {
+    it('should return an employer', async () => {
+      organisationRepositoryMock.getEmployer.mockResolvedValue(employers[0]);
+
+      const result = await organisationService.getEmployer(organisationId, employerId);
+
+      expect(result).toEqual(employers[0]);
+    });
+
+    it('should throw an error if fetching employer fails', async () => {
+      organisationRepositoryMock.getEmployer.mockRejectedValue(new Error('Failed to fetch'));
+
+      await expect(organisationService.getEmployer(organisationId, employerId)).rejects.toThrow(
+        'Failed to fetch',
+      );
+    });
   });
 });

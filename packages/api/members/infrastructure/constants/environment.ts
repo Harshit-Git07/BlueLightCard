@@ -11,4 +11,5 @@ export enum MemberStackEnvironmentKeys {
   DD_GIT_COMMIT_SHA = '',
   DD_GIT_REPOSITORY_URL = 'https://github.com/bluelightcard/BlueLightCard-2.0',
   DD_VERSION = '',
+  MEMBER_PROFILE_TABLE_NAME = 'MEMBER_PROFILE_TABLE_NAME',
 }

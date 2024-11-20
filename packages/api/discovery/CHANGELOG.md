@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.19.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.18.0...bluelightcard/discovery-v1.19.0) (2024-11-20)
+
+
+### Features
+
+* Disco 1068 - Ingest Flexible Menus ([#2864](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2864)) ([30e16e4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/30e16e46175de735b69e0f6db16b98f1a068b6a5))
+
+
+### Bug Fixes
+
+* [DISCO-1023] Merge company included and excluded trusts into the offer level ([#2988](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2988)) ([5a0728e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5a0728ee0623ca2bcc8ce7fdbbb723782d67512d))
+
 ## [1.18.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.17.0...bluelightcard/discovery-v1.18.0) (2024-11-19)
 
 

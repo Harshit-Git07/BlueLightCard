@@ -1,8 +1,8 @@
-import { Route } from '@blc-mono/members/infrastructure/routes/route';
+import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
 import { Stack, Table } from 'sst/constructs';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs/ApiGatewayV1Api';
-import { RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { RequestValidator, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { EmailChangeModel } from '@blc-mono/members/application/models/emailChangeModel';
 import { PasswordChangeModel } from '@blc-mono/members/application/models/passwordChangeModel';
 import {
@@ -13,71 +13,59 @@ import {
 import { NoteModel } from '@blc-mono/members/application/models/noteModel';
 
 export function adminProfileRoutes(
-  stack: Stack,
-  restApi: RestApi,
-  apiGatewayModelGenerator: ApiGatewayModelGenerator,
-  memberProfilesTable: Table,
-  memberOrganisationsTable: Table,
+  defaultRouteProps: DefaultRouteProps,
 ): Record<string, ApiGatewayV1ApiRouteProps<never>> {
-  const defaultRouteParams = {
-    stack,
-    restApi,
-    defaultAllowedOrigins: ['*'],
-    apiGatewayModelGenerator,
-    bind: [memberProfilesTable, memberOrganisationsTable],
-  };
-
   return {
     'GET /admin/members/profiles': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminGetProfiles',
       handler: 'packages/api/members/application/handlers/admin/profile/getProfiles.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(ProfileModel),
+      responseModelType: ProfileModel,
     }),
     'GET /admin/members/profiles/{memberId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminGetProfile',
       handler: 'packages/api/members/application/handlers/admin/profile/getProfile.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(ProfileModel),
+      responseModelType: ProfileModel,
     }),
     'POST /admin/members/profiles': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminCreateProfile',
       handler: 'packages/api/members/application/handlers/admin/profile/createProfile.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(CreateProfileModel),
+      requestModelType: CreateProfileModel,
     }),
     'PUT /admin/members/profiles': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminUpdateProfile',
       handler: 'packages/api/members/application/handlers/admin/profile/updateProfile.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(UpdateProfileModel),
+      requestModelType: UpdateProfileModel,
     }),
     'PUT /admin/members/profiles/{memberId}/email': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminChangeEmail',
       handler: 'packages/api/members/application/handlers/admin/profile/changeEmail.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(EmailChangeModel),
+      requestModelType: EmailChangeModel,
     }),
     'PUT /admin/members/profiles/{memberId}/password': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminChangePassword',
       handler: 'packages/api/members/application/handlers/admin/profile/changePassword.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(PasswordChangeModel),
+      requestModelType: PasswordChangeModel,
     }),
     'GET /admin/members/profiles/{memberId}/notes': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminGetNotes',
       handler: 'packages/api/members/application/handlers/admin/profile/getNotes.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(NoteModel),
+      responseModelType: NoteModel,
     }),
     'PUT /admin/members/profiles/{memberId}/notes': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminUpdateNotes',
       handler: 'packages/api/members/application/handlers/admin/profile/updateNotes.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(NoteModel),
+      requestModelType: NoteModel,
     }),
     'POST /admin/members/profiles/bulk': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminBulkUpload',
       handler: 'packages/api/members/application/handlers/admin/profile/bulkUpload.handler',
     }),

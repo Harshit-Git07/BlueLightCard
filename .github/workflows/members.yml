@@ -173,7 +173,7 @@ jobs:
           DD_API_KEY: '${{ secrets.DATADOG_AWS_INSTRUMENTATION_TOKEN }}'
           USE_DATADOG_AGENT: 'true'
           SKIP_MEMBERS_STACK: false
-        run: npx sst deploy global --stage ${{ matrix.stage }} --region ${{ matrix.region }} && npx sst deploy members --stage ${{ matrix.stage }} --region ${{ matrix.region }}
+        run: npx sst deploy global --stage ${{ matrix.stage }} --region ${{ matrix.region }} && npx sst deploy members members-api members-admin-api --stage ${{ matrix.stage }} --region ${{ matrix.region }}
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog
         with:
@@ -231,70 +231,70 @@ jobs:
   #         E2E_TESTS_PASSWORD: ${{ secrets[matrix.e2e_test_password] }}
   #       run: npx sst bind --stage ${{ matrix.stage }} --region ${{ matrix.region }} vitest e2e
 
-  # release:
-  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
-  #   name: Release
-  #   environment: Production
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       include:
-  #         - deployment: 'blc-uk-production'
-  #           region: eu-west-2
-  #           brand: BLC_UK
-  #           stage: production
-  #   needs:
-  #     - install
-  #     - test
-  #     - staging
-  #     - changelog
-  #     - build
-  #     - e2e-test-staging
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #     - name: Setup
-  #       uses: ./.github/actions/setup
-  #     - name: Configure Prod AWS Credentials
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         aws-region: ${{ matrix.region }}
-  #         role-to-assume: arn:aws:iam::676719682338:role/github-action-role
-  #     - name: Build
-  #       run: npm run build
-  #     - name: Get Service Tags
-  #       run: |
-  #         echo "DD_VERSION=$(date +%m-%d-%Y)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-  #         echo "DD_ENV=production" >> $GITHUB_ENV
-  #         echo "DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
-  #         echo "DD_GIT_REPOSITORY_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
-  #     - name: Deploy
-  #       env:
-  #         BRAND: ${{ matrix.brand }}
-  #         DD_VERSION: '${{ env.DD_VERSION }}'
-  #         DD_ENV: '${{ env.DD_ENV }}'
-  #         DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
-  #         DD_GIT_REPOSITORY_URL: '${{ env.DD_GIT_REPOSITORY_URL }}'
-  #         DD_API_KEY: '${{ secrets.DATADOG_AWS_INSTRUMENTATION_TOKEN }}'
-  #         USE_DATADOG_AGENT: 'true'
-  #       run: npx sst deploy global --stage ${{matrix.stage}} --region ${{matrix.region}} && npx sst deploy members --stage ${{matrix.stage}} --region ${{matrix.region}}
-  #     - name: Datadog deployment metrics
-  #       uses: ./.github/actions/datadog
-  #       with:
-  #         environment: ${{matrix.stage}}
-  #         service_name: 'members'
-  #         workflow_run_id: ${{ github.run_id }}
-  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #         DATADOG_DORA_METRICS_CLIENT_TOKEN: ${{ secrets.DATADOG_DORA_METRICS_CLIENT_TOKEN }}
-  #     - name: Send Slack message on failure
-  #       if: ${{ failure() }}
-  #       uses: bluelightcard/github-actions-slack-notification@v1
-  #       with:
-  #         webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
-  #         title: "@here :x: Production deployment failed for Members!"
-  #     - name: Send Slack message on success
-  #       if: ${{ success() }}
-  #       uses: bluelightcard/github-actions-slack-notification@v1
-  #       with:
-  #         webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
-  #         title: ":rocket: Production deployment for Members was successful!"
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
+    name: Release
+    environment: Production
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - deployment: 'blc-uk-production'
+            region: eu-west-2
+            brand: BLC_UK
+            stage: production
+    needs:
+      - install
+      - test
+      - staging
+      - changelog
+      - build
+      # - e2e-test-staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ matrix.region }}
+          role-to-assume: arn:aws:iam::676719682338:role/github-action-role
+      - name: Build
+        run: npm run build
+      - name: Get Service Tags
+        run: |
+          echo "DD_VERSION=$(date +%m-%d-%Y)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "DD_ENV=production" >> $GITHUB_ENV
+          echo "DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          echo "DD_GIT_REPOSITORY_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
+      - name: Deploy
+        env:
+          BRAND: ${{ matrix.brand }}
+          DD_VERSION: '${{ env.DD_VERSION }}'
+          DD_ENV: '${{ env.DD_ENV }}'
+          DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
+          DD_GIT_REPOSITORY_URL: '${{ env.DD_GIT_REPOSITORY_URL }}'
+          DD_API_KEY: '${{ secrets.DATADOG_AWS_INSTRUMENTATION_TOKEN }}'
+          USE_DATADOG_AGENT: 'true'
+        run: npx sst deploy global --stage ${{matrix.stage}} --region ${{matrix.region}} && npx sst deploy members members-api members-admin-api --stage ${{matrix.stage}} --region ${{matrix.region}}
+      - name: Datadog deployment metrics
+        uses: ./.github/actions/datadog
+        with:
+          environment: ${{matrix.stage}}
+          service_name: 'members'
+          workflow_run_id: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATADOG_DORA_METRICS_CLIENT_TOKEN: ${{ secrets.DATADOG_DORA_METRICS_CLIENT_TOKEN }}
+      - name: Send Slack message on failure
+        if: ${{ failure() }}
+        uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
+          title: "@here :x: Production deployment failed for Members!"
+      - name: Send Slack message on success
+        if: ${{ success() }}
+        uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
+          title: ":rocket: Production deployment for Members was successful!"

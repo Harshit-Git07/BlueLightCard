@@ -1,8 +1,5 @@
-import { Route } from '@blc-mono/members/infrastructure/routes/route';
-import { ApiGatewayV1Api, Bucket, Stack, Table } from 'sst/constructs';
-import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
+import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs/ApiGatewayV1Api';
-import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import {
   ApplicationModel,
   CreateApplicationModel,
@@ -11,56 +8,43 @@ import {
 import { DocumentUploadLocation } from '@blc-mono/members/application/models/documentUpload';
 
 export function memberApplicationRoutes(
-  stack: Stack,
-  restApi: RestApi,
-  apiGatewayModelGenerator: ApiGatewayModelGenerator,
-  memberProfilesTable: Table,
-  memberOrganisationsTable: Table,
-  documentUploadBucket: Bucket,
+  defaultRouteProps: DefaultRouteProps,
 ): Record<string, ApiGatewayV1ApiRouteProps<never>> {
-  const defaultRouteParams = {
-    stack,
-    restApi,
-    defaultAllowedOrigins: ['*'],
-    apiGatewayModelGenerator,
-    bind: [memberProfilesTable, memberOrganisationsTable, documentUploadBucket],
-  };
-
   return {
     'POST /members/applications': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'MemberCreateApplication',
       handler:
         'packages/api/members/application/handlers/member/applications/createApplication.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(CreateApplicationModel),
+      requestModelType: CreateApplicationModel,
     }),
     'PUT /members/applications': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'MemberUpdateApplication',
       handler:
         'packages/api/members/application/handlers/member/applications/updateApplication.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(UpdateApplicationModel),
+      requestModelType: UpdateApplicationModel,
     }),
     'GET /members/applications/{memberId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'MemberGetApplications',
       handler:
         'packages/api/members/application/handlers/member/applications/getApplications.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(ApplicationModel),
+      responseModelType: ApplicationModel,
     }),
     'GET /members/applications/{memberId}/{applicationId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'MemberGetApplication',
       handler:
         'packages/api/members/application/handlers/member/applications/getApplication.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(ApplicationModel),
+      responseModelType: ApplicationModel,
     }),
     'GET /members/applications/{memberId}/{applicationId}/uploadDocument': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'MemberUploadDocument',
       handler:
         'packages/api/members/application/handlers/member/applications/uploadDocument.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(DocumentUploadLocation),
+      responseModelType: DocumentUploadLocation,
     }),
   };
 }

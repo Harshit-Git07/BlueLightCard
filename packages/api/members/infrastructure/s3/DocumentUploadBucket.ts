@@ -5,8 +5,6 @@ import { RemovalPolicy } from 'aws-cdk-lib';
 interface DocumentUploadProps {
   profilesTable: Table;
   organisationsTable: Table;
-  stage: string;
-  appName: string;
 }
 
 export class DocumentUpload extends Construct {
@@ -16,14 +14,11 @@ export class DocumentUpload extends Construct {
   constructor(scope: Construct, id: string, props: DocumentUploadProps) {
     super(scope, id);
 
-    const { profilesTable, organisationsTable, stage, appName } = props;
-
-    const bucketName = `${stage}-${appName}-id-upload-bucket`;
+    const { profilesTable, organisationsTable } = props;
 
     this.bucket = new Bucket(this, 'documentUploadBucket', {
       cdk: {
         bucket: {
-          bucketName,
           removalPolicy: RemovalPolicy.RETAIN,
           autoDeleteObjects: false,
         },

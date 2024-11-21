@@ -1,45 +1,35 @@
-import { Route, RouteOptions } from '@blc-mono/members/infrastructure/routes/route';
-import { Stack, Table } from 'sst/constructs';
-import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
+import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs/ApiGatewayV1Api';
-import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { MarketingPreferencesModel } from '@blc-mono/members/application/models/marketingPreferences';
 import { BrazeAttributesModel } from '@blc-mono/members/application/models/brazeAttributesModel';
 
 export function memberMarketingRoutes(
-  stack: Stack,
-  restApi: RestApi,
-  apiGatewayModelGenerator: ApiGatewayModelGenerator,
+  defaultRouteProps: DefaultRouteProps,
 ): Record<string, ApiGatewayV1ApiRouteProps<never>> {
-  const defaultRouteParams = {
-    stack,
-    restApi,
-    defaultAllowedOrigins: ['*'],
-    apiGatewayModelGenerator,
-    permissions: ['secretsmanager:GetSecretValue'],
-  };
-
   return {
     'POST /members/marketing/braze/{memberId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'MemberFetchBrazeAttributes',
       handler:
         'packages/api/members/application/handlers/member/marketing/getBrazeAttributes.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(BrazeAttributesModel),
+      requestModelType: BrazeAttributesModel,
+      permissions: ['secretsmanager:GetSecretValue'],
     }),
     'GET /members/marketing/preferences/{memberId}/{environment}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'MemberGetMarketingPreferences',
       handler:
         'packages/api/members/application/handlers/member/marketing/getMarketingPreferences.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(MarketingPreferencesModel),
+      responseModelType: MarketingPreferencesModel,
+      permissions: ['secretsmanager:GetSecretValue'],
     }),
     'PUT /members/marketing/preferences/{memberId}/{environment}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'MemberUpdateMarketingPreferences',
       handler:
         'packages/api/members/application/handlers/member/marketing/updateMarketingPreferences.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(MarketingPreferencesModel),
+      requestModelType: MarketingPreferencesModel,
+      permissions: ['secretsmanager:GetSecretValue'],
     }),
   };
 }

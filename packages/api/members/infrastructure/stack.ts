@@ -1,5 +1,12 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
-import { ApiGatewayV1Api, App, Stack, StackContext, use } from 'sst/constructs';
+import {
+  ApiGatewayV1Api,
+  ApiGatewayV1ApiRouteProps,
+  App,
+  Stack,
+  StackContext,
+  use,
+} from 'sst/constructs';
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { Shared } from '../../../../stacks/stack';
 import {
@@ -24,10 +31,12 @@ import { adminAllocationRoutes } from './routes/admin/AdminAllocationRoutes';
 import { adminPaymentRoutes } from './routes/admin/AdminPaymentRoutes';
 import { adminProfileRoutes } from './routes/admin/AdminProfileRoutes';
 import { DocumentUpload } from './s3/DocumentUploadBucket';
+import { RequestValidator, ResponseType } from 'aws-cdk-lib/aws-apigateway';
+import { DefaultRouteProps, RouteProps } from './routes/route';
 
 const SERVICE_NAME = 'members';
 
-async function MembersStack({ stack, app }: StackContext) {
+export function Members({ app, stack }: StackContext) {
   stack.tags.setTag('service', SERVICE_NAME);
 
   // Profile table - profiles, cards, notes, applications, promo codes
@@ -40,8 +49,6 @@ async function MembersStack({ stack, app }: StackContext) {
   const documentUpload = new DocumentUpload(stack, 'DocumentUpload', {
     profilesTable: profilesTable,
     organisationsTable: organisationsTable,
-    stage: app.stage,
-    appName: app.name,
   });
 
   return {
@@ -52,12 +59,18 @@ async function MembersStack({ stack, app }: StackContext) {
   };
 }
 
-async function MembersApiStack({ stack, app }: StackContext) {
+export async function MembersApiStack({ app, stack }: StackContext) {
   stack.tags.setTag('service', SERVICE_NAME);
 
-  const { profilesTable, organisationsTable, documentUploadBucket } = use(MembersStack);
+  const { profilesTable, organisationsTable, documentUploadBucket } = use(Members);
+  const { certificateArn } = use(Shared);
 
-  const api = createRestApi(app, stack, 'members');
+  const { api, requestValidator, config } = createRestApi(
+    app,
+    stack,
+    'members-api',
+    certificateArn,
+  );
   const restApi = api.cdk.restApi;
 
   stack.addOutputs({
@@ -66,40 +79,36 @@ async function MembersApiStack({ stack, app }: StackContext) {
   });
 
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(restApi);
-  api.addRoutes(
+  const defaultRouteProps: DefaultRouteProps = {
     stack,
-    memberProfileRoutes(
-      stack,
-      restApi,
-      apiGatewayModelGenerator,
-      profilesTable,
-      organisationsTable,
-    ),
-  );
-  api.addRoutes(stack, memberMarketingRoutes(stack, restApi, apiGatewayModelGenerator));
-  api.addRoutes(
-    stack,
-    memberApplicationRoutes(
-      stack,
-      restApi,
-      apiGatewayModelGenerator,
-      profilesTable,
-      organisationsTable,
-      documentUploadBucket,
-    ),
-  );
-  api.addRoutes(
-    stack,
-    memberOrganisationsRoutes(stack, restApi, apiGatewayModelGenerator, organisationsTable),
-  );
+    requestValidator,
+    apiGatewayModelGenerator,
+    defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+  };
+  const routes: Record<string, ApiGatewayV1ApiRouteProps<never>> = {
+    ...memberProfileRoutes({ ...defaultRouteProps, bind: [profilesTable, organisationsTable] }),
+    ...memberApplicationRoutes({
+      ...defaultRouteProps,
+      bind: [profilesTable, organisationsTable, documentUploadBucket],
+    }),
+    ...memberOrganisationsRoutes({ ...defaultRouteProps, bind: [organisationsTable] }),
+    ...memberMarketingRoutes(defaultRouteProps),
+  };
+  api.addRoutes(stack, routes);
 }
 
-async function MembersAdminApiStack({ stack, app }: StackContext) {
+export async function MembersAdminApiStack({ app, stack }: StackContext) {
   stack.tags.setTag('service', SERVICE_NAME);
 
-  const { profilesTable, organisationsTable, adminTable, documentUploadBucket } = use(MembersStack);
+  const { profilesTable, organisationsTable, adminTable, documentUploadBucket } = use(Members);
+  const { certificateArn } = use(Shared);
 
-  const api = createRestApi(app, stack, 'members-admin');
+  const { api, requestValidator, config } = createRestApi(
+    app,
+    stack,
+    'members-admin-api',
+    certificateArn,
+  );
   const restApi = api.cdk.restApi;
 
   stack.addOutputs({
@@ -108,33 +117,28 @@ async function MembersAdminApiStack({ stack, app }: StackContext) {
   });
 
   const apiGatewayModelGenerator = new ApiGatewayModelGenerator(restApi);
-  api.addRoutes(
+  const defaultRouteProps: DefaultRouteProps = {
     stack,
-    adminProfileRoutes(stack, restApi, apiGatewayModelGenerator, profilesTable, organisationsTable),
-  );
-  api.addRoutes(stack, adminMarketingRoutes(stack, restApi, apiGatewayModelGenerator));
-  api.addRoutes(
-    stack,
-    adminApplicationRoutes(
-      stack,
-      restApi,
-      apiGatewayModelGenerator,
-      profilesTable,
-      organisationsTable,
-      documentUploadBucket,
-    ),
-  );
-  api.addRoutes(
-    stack,
-    adminOrganisationsRoutes(stack, restApi, apiGatewayModelGenerator, organisationsTable),
-  );
-  api.addRoutes(stack, adminCardRoutes(stack, restApi, apiGatewayModelGenerator, adminTable));
-  api.addRoutes(stack, adminAllocationRoutes(stack, restApi, apiGatewayModelGenerator, adminTable));
-  api.addRoutes(stack, adminPaymentRoutes(stack, restApi, apiGatewayModelGenerator, profilesTable));
+    requestValidator,
+    apiGatewayModelGenerator,
+    defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
+  };
+  const routes: Record<string, ApiGatewayV1ApiRouteProps<never>> = {
+    ...adminProfileRoutes({ ...defaultRouteProps, bind: [profilesTable, organisationsTable] }),
+    ...adminMarketingRoutes(defaultRouteProps),
+    ...adminApplicationRoutes({
+      ...defaultRouteProps,
+      bind: [profilesTable, organisationsTable, documentUploadBucket],
+    }),
+    ...adminOrganisationsRoutes({ ...defaultRouteProps, bind: [organisationsTable] }),
+    ...adminCardRoutes({ ...defaultRouteProps, bind: [adminTable] }),
+    ...adminAllocationRoutes({ ...defaultRouteProps, bind: [adminTable] }),
+    ...adminPaymentRoutes({ ...defaultRouteProps, bind: [adminTable] }),
+  };
+  api.addRoutes(stack, routes);
 }
 
-function createRestApi(app: App, stack: Stack, name: string) {
-  const { certificateArn } = use(Shared);
+function createRestApi(app: App, stack: Stack, name: string, certificateArn?: string) {
   const config = MemberStackConfigResolver.for(stack, app.region as MemberStackRegion);
   const globalConfig = GlobalConfigResolver.for(stack.stage);
   const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
@@ -196,7 +200,32 @@ function createRestApi(app: App, stack: Stack, name: string) {
     },
   });
 
-  const apikey = api.cdk.restApi.addApiKey('members-api-key');
+  const requestValidator = api.cdk.restApi.addRequestValidator('RequestValidator', {
+    validateRequestBody: true,
+    validateRequestParameters: true,
+  });
+
+  api.cdk.restApi.addGatewayResponse('BadRequestParametersResponse', {
+    type: ResponseType.BAD_REQUEST_PARAMETERS,
+    statusCode: '400',
+    templates: {
+      'application/json': JSON.stringify({
+        error: '$context.error.validationErrorString',
+      }),
+    },
+  });
+
+  api.cdk.restApi.addGatewayResponse('BadRequestBodyResponse', {
+    type: ResponseType.BAD_REQUEST_BODY,
+    statusCode: '400',
+    templates: {
+      'application/json': JSON.stringify({
+        error: '$context.error.validationErrorString',
+      }),
+    },
+  });
+
+  const apiKey = api.cdk.restApi.addApiKey('members-api-key');
 
   const usagePlan = api.cdk.restApi.addUsagePlan('members-api-usage-plan', {
     throttle: {
@@ -210,9 +239,9 @@ function createRestApi(app: App, stack: Stack, name: string) {
       },
     ],
   });
-  usagePlan.addApiKey(apikey);
+  usagePlan.addApiKey(apiKey);
 
-  return api;
+  return { api, requestValidator, config };
 }
 
 const getDomainName = (stage: string, region: string, name: string) => {
@@ -226,11 +255,6 @@ const getAustraliaDomainName = (stage: string, name: string) =>
 
 const getUKDomainName = (stage: string, name: string) =>
   stage === 'production' ? `${name}.blcshine.io` : `${stage}-${name}.blcshine.io`;
-
-export const Members =
-  getEnvRaw(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK) === 'false'
-    ? MembersStack
-    : () => Promise.resolve();
 
 export const MembersApi =
   getEnvRaw(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK) === 'false'

@@ -109,7 +109,7 @@ jobs:
       - changes
       - install
     name: Deploy Backend for PR (global & identity)
-    if: ${{ (needs.changes.outputs.backend-shared == 'true' || needs.changes.outputs.backend-discovery == 'true' || needs.changes.outputs.backend-offers == 'true' || needs.changes.outputs.backend-redemptions == 'true' ) && github.actor != 'dependabot[bot]'}}
+    if: ${{ (needs.changes.outputs.backend-shared == 'true' || needs.changes.outputs.backend-discovery == 'true' || needs.changes.outputs.backend-offers == 'true' || needs.changes.outputs.backend-redemptions == 'true' || needs.changes.outputs.backend-members == 'true' ) && github.actor != 'dependabot[bot]'}}
     runs-on: ubuntu-latest
     outputs:
       identity-api-endpoint: ${{ steps.sst-identity-outputs.outputs.identityApiUrl }}
@@ -417,6 +417,7 @@ jobs:
         region: ['eu-west-2']
     outputs:
       members-api-endpoint: ${{ steps.sst-members-outputs.outputs.membersApiUrl }}
+      members-admin-api-endpoint: ${{ steps.sst-members-outputs.outputs.membersAdminApiUrl }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -432,16 +433,19 @@ jobs:
         env:
           BRAND: BLC_UK
           SKIP_MEMBERS_STACK: false
-        run: npx sst deploy members --stage $PR_PREFIX --region ${{matrix.region}}
+        run: npx sst deploy members members-api members-admin-api --stage $PR_PREFIX --region ${{matrix.region}} --verbose
       - name: Extract Api URL and set output
         id: sst-members-outputs
         run: |
           cat .sst/outputs.json
           MEMBERS_URL=$(jq -r '.[].MembersApiEndpoint | select(. != null)' .sst/outputs.json)
+          MEMBERS_ADMIN_URL=$(jq -r '.[].MembersAdminApiEndpoint | select(. != null)' .sst/outputs.json)
           echo "membersApiUrl=$MEMBERS_URL" >> $GITHUB_OUTPUT
+          echo "membersAdminApiUrl=$MEMBERS_ADMIN_URL" >> $GITHUB_OUTPUT
       - name: Echo outputs
         run: |
           echo ${{ steps.sst-members-outputs.outputs.membersApiUrl }}
+          echo ${{ steps.sst-members-outputs.outputs.membersAdminApiUrl }}
 
   # Deploy the frontend
   # Matrix Deployment for each brand does not allow dynamic outputs which is needed to be able to create the comment
@@ -932,11 +936,19 @@ jobs:
             <table><tr><td><strong>Latest commit:</strong> </td><td>
             <code>${{ github.sha }}</code>
             </td></tr>
-            <tr><td><strong>Members API URL:</strong></td><td>
+            <tr>
+            <td><strong>Members API URL:</strong></td>
+            <td>
             <a href='${{ needs.backend-members.outputs.members-api-endpoint }}'>
               ${{ needs.backend-members.outputs.members-api-endpoint }}
             </a>
-            </td></tr>
+            </td>
+            <td>
+            <a href='${{ needs.backend-members.outputs.members-admin-api-endpoint }}'>
+              ${{ needs.backend-members.outputs.members-admin-api-endpoint }}
+            </a>
+            </td>
+            </tr>
             </table>
 
   e2e-redemptions:

@@ -1,47 +1,33 @@
-import { Route } from '@blc-mono/members/infrastructure/routes/route';
-import { ApiGatewayV1Api, Stack, Table } from 'sst/constructs';
-import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
+import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs/ApiGatewayV1Api';
-import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { ApprovalAllocationModel } from '@blc-mono/members/application/models/approvalAllocationModel';
 
 export function adminAllocationRoutes(
-  stack: Stack,
-  restApi: RestApi,
-  apiGatewayModelGenerator: ApiGatewayModelGenerator,
-  adminTable: Table,
+  defaultRouteProps: DefaultRouteProps,
 ): Record<string, ApiGatewayV1ApiRouteProps<never>> {
-  const defaultRouteParams = {
-    stack,
-    restApi,
-    defaultAllowedOrigins: ['*'],
-    apiGatewayModelGenerator,
-    bind: [adminTable],
-  };
-
   return {
     'GET /admin/allocations': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminGetAllocations',
       handler: 'packages/api/members/application/handlers/admin/allocations/getAllocations.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(ApprovalAllocationModel),
+      responseModelType: ApprovalAllocationModel,
     }),
     'POST /admin/allocations/{adminId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminCreateAllocation',
       handler:
         'packages/api/members/application/handlers/admin/allocations/createAllocation.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(ApprovalAllocationModel),
+      requestModelType: ApprovalAllocationModel,
     }),
     'PUT /admin/allocations/{adminId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminUpdateAllocation',
       handler:
         'packages/api/members/application/handlers/admin/allocations/updateAllocation.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(ApprovalAllocationModel),
+      requestModelType: ApprovalAllocationModel,
     }),
     'DELETE /admin/allocations/{adminId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminDeleteAllocation',
       handler:
         'packages/api/members/application/handlers/admin/allocations/deleteAllocation.handler',

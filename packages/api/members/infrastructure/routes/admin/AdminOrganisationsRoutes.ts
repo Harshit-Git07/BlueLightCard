@@ -1,81 +1,65 @@
-import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { Route } from '@blc-mono/members/infrastructure/routes/route';
-import { ApiGatewayV1Api, Stack, Table } from 'sst/constructs';
-import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
+import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
 import { ApiGatewayV1ApiRouteProps } from 'sst/constructs/ApiGatewayV1Api';
-import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { EmployerModel } from '@blc-mono/members/application/models/employerModel';
 import { OrganisationModel } from '@blc-mono/members/application/models/organisationModel';
 
-// Need to handle filtering on employment status for eligibility
 export function adminOrganisationsRoutes(
-  stack: Stack,
-  restApi: RestApi,
-  apiGatewayModelGenerator: ApiGatewayModelGenerator,
-  organisationsTable: Table,
+  defaultRouteProps: DefaultRouteProps,
 ): Record<string, ApiGatewayV1ApiRouteProps<never>> {
-  const defaultRouteParams = {
-    stack,
-    restApi,
-    defaultAllowedOrigins: ['*'],
-    apiGatewayModelGenerator,
-    bind: [organisationsTable],
-  };
-
   return {
     'POST /admin/members/orgs': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminCreateOrganisation',
       handler:
         'packages/api/members/application/handlers/admin/organisations/createOrganisation.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(OrganisationModel),
+      requestModelType: OrganisationModel,
     }),
     'PUT /admin/members/orgs/{organisationId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminUpdateOrganisation',
       handler:
         'packages/api/members/application/handlers/admin/organisations/updateOrganisation.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(OrganisationModel),
+      requestModelType: OrganisationModel,
     }),
     'GET /admin/members/orgs': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminGetOrganisations',
       handler:
         'packages/api/members/application/handlers/admin/organisations/getOrganisations.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(OrganisationModel),
+      responseModelType: OrganisationModel,
     }),
     'GET /admin/members/orgs/{organisationId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminGetOrganisation',
       handler:
         'packages/api/members/application/handlers/admin/organisations/getOrganisation.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(OrganisationModel),
+      responseModelType: OrganisationModel,
     }),
     'POST /admin/members/orgs/{organisationId}/employers': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminCreateEmployer',
       handler:
         'packages/api/members/application/handlers/admin/organisations/createEmployer.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(EmployerModel),
+      requestModelType: EmployerModel,
     }),
     'PUT /admin/members/orgs/{organisationId}/employers/{employerId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminUpdateEmployer',
       handler:
         'packages/api/members/application/handlers/admin/organisations/updateEmployer.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(EmployerModel),
+      requestModelType: EmployerModel,
     }),
     'GET /admin/members/orgs/{organisationId}/employers': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminGetEmployers',
       handler: 'packages/api/members/application/handlers/admin/organisations/getEmployers.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(EmployerModel),
+      responseModelType: EmployerModel,
     }),
     'GET /admin/members/orgs/{organisationId}/employers/{employerId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminGetEmployer',
       handler: 'packages/api/members/application/handlers/admin/organisations/getEmployer.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(EmployerModel),
+      responseModelType: EmployerModel,
     }),
   };
 }

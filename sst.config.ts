@@ -33,6 +33,7 @@ export default {
       app.setDefaultRemovalPolicy('destroy');
     }
     app.stack(Shared, { id: 'global' }).stack(Identity, { id: 'identity' });
+    app.stack(Members, { id: 'members' });
 
     await Promise.all([
       // Add async stacks here https://docs.sst.dev/constructs/Stack#async-stacks
@@ -40,14 +41,12 @@ export default {
       app.stack(Offers, { id: 'offers' }),
       app.stack(Discovery, { id: 'discovery' }),
       app.stack(OffersCMS, { id: 'offers-cms' }),
-      app.stack(Members, { id: 'members' }),
+      app.stack(MembersApi, { id: 'members-api' }),
+      app.stack(MembersAdminApi, { id: 'members-admin-api' }),
       app.stack(Payments, { id: 'payments' }),
       app.stack(Orders, { id: 'orders' }),
     ]);
 
-    app.stack(MembersApi, { id: 'membersApi' });
-    app.stack(MembersAdminApi, { id: 'membersAdminApi' });
-    
     app.stack(Web, { id: 'web' }).stack(MemberServicesHub, { id: 'member-services-hub' });
   },
 } satisfies SSTConfig;

@@ -1,42 +1,33 @@
-import { Route, RouteOptions } from '@blc-mono/members/infrastructure/routes/route';
-import { Stack, Table } from 'sst/constructs';
-import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
-import { ApiGatewayV1ApiRouteProps } from 'sst/constructs/ApiGatewayV1Api';
-import { RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
 import { MarketingPreferencesModel } from '@blc-mono/members/application/models/marketingPreferences';
+import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
 
 export function adminMarketingRoutes(
-  stack: Stack,
-  restApi: RestApi,
-  apiGatewayModelGenerator: ApiGatewayModelGenerator,
+  defaultRouteProps: DefaultRouteProps,
 ): Record<string, ApiGatewayV1ApiRouteProps<never>> {
-  const defaultRouteParams = {
-    stack,
-    restApi,
-    defaultAllowedOrigins: ['*'],
-    apiGatewayModelGenerator,
-  };
-
   return {
     'POST /admin/members/marketing/brazeAttributes': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminFetchBrazeAttributes',
       handler:
         'packages/api/members/application/handlers/admin/marketing/fetchBrazeAttributes.handler',
+      permissions: ['secretsmanager:GetSecretValue'],
     }),
     'GET /admin/members/marketing/preferences/{memberId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminGetMarketingPreferences',
       handler:
         'packages/api/members/application/handlers/admin/marketing/getMarketingPreferences.handler',
-      responseModel: apiGatewayModelGenerator.generateModel(MarketingPreferencesModel),
+      responseModelType: MarketingPreferencesModel,
+      permissions: ['secretsmanager:GetSecretValue'],
     }),
     'PUT /admin/members/marketing/preferences/{memberId}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminUpdateMarketingPreferences',
       handler:
         'packages/api/members/application/handlers/admin/marketing/updateMarketingPreferences.handler',
-      requestModel: apiGatewayModelGenerator.generateModel(MarketingPreferencesModel),
+      requestModelType: MarketingPreferencesModel,
+      permissions: ['secretsmanager:GetSecretValue'],
     }),
   };
 }

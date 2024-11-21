@@ -1,70 +1,74 @@
 import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
-import { RestApi } from 'aws-cdk-lib/aws-apigateway';
-import {
-  ApiGatewayV1Api,
-  ApiGatewayV1ApiFunctionRouteProps,
-  Function,
-  Stack,
-} from 'sst/constructs';
+import { ApiGatewayV1ApiFunctionRouteProps, Function, Stack } from 'sst/constructs';
 import { SSTConstruct } from 'sst/constructs/Construct';
 import { Permissions } from 'sst/constructs/util/permission';
-
 import {
   ApiGatewayModelGenerator,
   MethodResponses,
-  Model,
   ResponseModel,
 } from '@blc-mono/core/extensions/apiGatewayExtension';
 
 import { MemberStackEnvironmentKeys } from '../constants/environment';
+import { NamedZodType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
+import { z } from 'zod';
 
-export type RouteOptions = {
+export type RouteProps<Request extends z.AnyZodObject, Response extends z.AnyZodObject> = {
   stack: Stack;
   name: string;
   apiGatewayModelGenerator: ApiGatewayModelGenerator;
   environment?: Partial<Record<MemberStackEnvironmentKeys, string>>;
   handler: string;
-  restApi: RestApi;
-  requestModel?: Model;
-  responseModel?: Model;
+  requestValidator: RequestValidator;
+  requestModelType?: NamedZodType<Request>;
+  responseModelType?: NamedZodType<Response>;
   bind?: SSTConstruct[];
   defaultAllowedOrigins: string[];
   permissions?: Permissions;
   apiKeyRequired?: boolean;
 };
 
+export type DefaultRouteProps = Pick<
+  RouteProps<never, never>,
+  'stack' | 'apiGatewayModelGenerator' | 'requestValidator' | 'bind' | 'defaultAllowedOrigins'
+>;
+
 export class Route {
-  public static createRoute({
+  public static createRoute<Request extends z.AnyZodObject, Response extends z.AnyZodObject>({
     stack,
     name,
     apiGatewayModelGenerator,
     environment,
     handler,
-    restApi,
-    requestModel,
-    responseModel,
+    requestValidator,
+    requestModelType,
+    responseModelType,
     bind,
     defaultAllowedOrigins,
     permissions,
     apiKeyRequired,
-  }: RouteOptions): ApiGatewayV1ApiFunctionRouteProps<never> {
-    const requestModels = requestModel
-      ? { 'application/json': requestModel.getModel() }
-      : undefined;
-    const methodResponses = responseModel
-      ? MethodResponses.toMethodResponses(
-          [
-            new ResponseModel('200', responseModel),
-            new ResponseModel('201', apiGatewayModelGenerator.generateGenericModel()),
-            new ResponseModel('204', apiGatewayModelGenerator.generateGenericModel()),
-            apiGatewayModelGenerator.getError400(),
-            apiGatewayModelGenerator.getError401(),
-            apiGatewayModelGenerator.getError403(),
-            apiGatewayModelGenerator.getError404(),
-            apiGatewayModelGenerator.getError500(),
-          ].filter(Boolean),
-        )
-      : undefined;
+  }: RouteProps<Request, Response>): ApiGatewayV1ApiFunctionRouteProps<never> {
+    let requestModels;
+    if (requestModelType) {
+      const requestModel = apiGatewayModelGenerator.generateModel(requestModelType);
+      requestModels = { 'application/json': requestModel.getModel() };
+    }
+
+    let methodResponses;
+    if (responseModelType) {
+      const responseModel = apiGatewayModelGenerator.generateModel(responseModelType);
+      methodResponses = MethodResponses.toMethodResponses(
+        [
+          new ResponseModel('200', responseModel),
+          new ResponseModel('201', apiGatewayModelGenerator.generateGenericModel()),
+          new ResponseModel('204', apiGatewayModelGenerator.generateGenericModel()),
+          apiGatewayModelGenerator.getError400(),
+          apiGatewayModelGenerator.getError401(),
+          apiGatewayModelGenerator.getError403(),
+          apiGatewayModelGenerator.getError404(),
+          apiGatewayModelGenerator.getError500(),
+        ].filter(Boolean),
+      );
+    }
 
     return {
       cdk: {
@@ -83,25 +87,9 @@ export class Route {
           apiKeyRequired: apiKeyRequired,
           requestModels,
           methodResponses,
-          requestValidator: Route.requestValidator(stack, restApi),
+          requestValidator,
         },
       },
     };
-  }
-
-  private static requestValidators: Record<string, RequestValidator> = {};
-
-  private static requestValidator(stack: Stack, restApi: RestApi): RequestValidator {
-    let validator = Route.requestValidators[stack.stackName];
-    if (!validator) {
-      validator = new RequestValidator(stack, `${stack.stackName}-RequestValidator`, {
-        restApi,
-        validateRequestBody: true,
-        validateRequestParameters: true,
-      });
-    }
-    Route.requestValidators[stack.stackName] = validator;
-
-    return validator;
   }
 }

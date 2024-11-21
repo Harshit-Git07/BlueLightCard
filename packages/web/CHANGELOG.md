@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.89.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.88.1...bluelightcard/web-v1.89.0) (2024-11-21)
+
+
+### Features
+
+* [DISCO-1079] add amplitude tracking for `mobile-hybrid` flexi menu page ([#3033](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3033)) ([a280bd4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a280bd4d21db97f158d89ff83acd6c8807c7a8f9))
+* [MER-144] renewal review account details ([#3014](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3014)) ([3a3c63c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3a3c63c4d39fde4af126bfd8544ad1e4d41584dd))
+* [MER-147] - Initial commit ([#3030](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3030)) ([723cb66](https://github.com/bluelightcard/BlueLightCard-2.0/commit/723cb66270440cf33c1627a852db58750a5615ce))
+
+
+### Bug Fixes
+
+* disco 1072 mobile hybrid search from homepage is still using legacy search ([#3026](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3026)) ([4dcfeb6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4dcfeb611e96c52b495c43a029a4713e440188b0))
+* My account ([#3048](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3048)) ([8d20832](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8d20832696032713ac8e50542f7c531549b7cce5))
+
+
+### Other Changes
+
+* Modern API environment ([#3021](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3021)) ([7f759ed](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7f759ed1fdfa481d0a196de7375885dfc16a6f6e))
+
 ## [1.88.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.88.0...bluelightcard/web-v1.88.1) (2024-11-20)
 
 

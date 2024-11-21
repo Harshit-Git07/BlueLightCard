@@ -17,7 +17,7 @@ exports[`Company Offers Component should render offers when available on desktop
       >
         <img
           alt="Offer 1 offer"
-          class="h-auto w-full !relative"
+          class="h-auto w-full aspect-[2/1] object-cover !relative"
           data-nimg="fill"
           decoding="async"
           height="0"
@@ -51,7 +51,7 @@ exports[`Company Offers Component should render offers when available on desktop
       >
         <img
           alt="Offer 2 offer"
-          class="h-auto w-full !relative"
+          class="h-auto w-full aspect-[2/1] object-cover !relative"
           data-nimg="fill"
           decoding="async"
           height="0"
@@ -90,7 +90,7 @@ exports[`Company Offers Component should render offers when available on mobile 
       >
         <img
           alt="Offer 1 offer"
-          class="h-auto w-full !relative"
+          class="h-auto w-full aspect-[2/1] object-cover !relative"
           data-nimg="fill"
           decoding="async"
           height="0"
@@ -124,7 +124,7 @@ exports[`Company Offers Component should render offers when available on mobile 
       >
         <img
           alt="Offer 2 offer"
-          class="h-auto w-full !relative"
+          class="h-auto w-full aspect-[2/1] object-cover !relative"
           data-nimg="fill"
           decoding="async"
           height="0"

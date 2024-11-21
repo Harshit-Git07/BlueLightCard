@@ -108,7 +108,7 @@ const ResponsiveOfferCard: FC<Props> = ({
           width={0}
           height={0}
           sizes="100vw"
-          className={`h-auto w-full !relative`}
+          className={`h-auto w-full aspect-[2/1] object-cover !relative`}
           quality={quality}
           onError={() => {
             setImageSource(fallbackImage);

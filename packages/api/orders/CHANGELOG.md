@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/orders-v1.2.0...bluelightcard/orders-v1.3.0) (2024-11-20)
+
+
+### Features
+
+* dwh logging code ([#2979](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2979)) ([9b07e17](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9b07e174f313e8a5e505064ac2b70ebe660e0c6e))
+* Payment emails ([#2939](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2939)) ([2b17c50](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2b17c50544e07ab3190a1ee8120edb70d213582f))
+
 ## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/orders-v1.1.0...bluelightcard/orders-v1.2.0) (2024-11-13)
 
 

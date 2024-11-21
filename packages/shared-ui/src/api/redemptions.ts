@@ -21,7 +21,7 @@ export async function getRedemptionDetails(
 }
 
 export const RedeemResultKind = {
-  MaxPerUserReached: 'MaxPerUserReached',
+  MaxPerUserReached: 'MaxPerUserReachedError',
   OK: 'Ok',
 } as const;
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.43.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.42.0...bluelightcard/mobile-hybrid-v1.43.0) (2024-11-21)
+
+
+### Features
+
+* [DISCO-1079] add amplitude tracking for `mobile-hybrid` flexi menu page ([#3033](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3033)) ([a280bd4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a280bd4d21db97f158d89ff83acd6c8807c7a8f9))
+* [DISCO-1228] Fix Responsive Offer Card for aspect ratio ([#3016](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3016)) ([b9c3169](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b9c316938fba94ffcccb7ec6796666c528ca06f7))
+* [DISCO-1242] Map "Featured Offers" for mobile hybrid V5 ([#3032](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3032)) ([5f59f98](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5f59f989f00e50ce11f2080b9ef11ad7c1f82479))
+
+
+### Bug Fixes
+
+* disco 1072 mobile hybrid search from homepage is still using legacy search ([#3026](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3026)) ([4dcfeb6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4dcfeb611e96c52b495c43a029a4713e440188b0))
+
 ## [1.42.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.41.0...bluelightcard/mobile-hybrid-v1.42.0) (2024-11-20)
 
 

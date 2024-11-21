@@ -1,15 +1,15 @@
-import { FC, MouseEventHandler, ReactNode, SyntheticEvent } from 'react';
+import { FC, MouseEventHandler, ReactNode } from 'react';
 import { ToastStatus } from './ToastTypes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { fonts } from '../../tailwind/theme';
 import {
   faCheckCircle,
+  faCircle,
+  faExclamationTriangle,
+  faInfoCircle,
   faXmark,
   faXmarkCircle,
-  faInfoCircle,
-  faExclamationTriangle,
-  faCircle,
 } from '@fortawesome/pro-solid-svg-icons';
 import useToaster from './Toaster/useToaster';
 
@@ -66,7 +66,7 @@ const Toast: FC<ToastProps> = ({
     closeToast();
   };
 
-  const handleHover = (hovering: boolean) => (e: SyntheticEvent) => {
+  const handleHover = (hovering: boolean) => () => {
     if (!pauseOnHover || !timer) return;
     hovering ? timer.pause() : timer.resume();
   };

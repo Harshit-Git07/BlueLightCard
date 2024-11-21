@@ -131,7 +131,7 @@ WithBorder.args = {
   withBorder: true,
 };
 
-export const AllStatesAndVariants: StoryFn<typeof RadioButton> = (args) => {
+export const AllStatesAndVariants: StoryFn<typeof RadioButton> = () => {
   return (
     <table cellPadding={20} className={'text-colour-onSurface dark:text-colour-onSurface-dark'}>
       <tr>
@@ -196,7 +196,7 @@ export const AllStatesAndVariants: StoryFn<typeof RadioButton> = (args) => {
   );
 };
 
-export const CompositionExample: StoryFn<typeof RadioButton> = (args) => {
+export const CompositionExample: StoryFn<typeof RadioButton> = () => {
   const [selectedId, setSelectedId] = useState('batman');
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>, id = '') => {
     setSelectedId(id);

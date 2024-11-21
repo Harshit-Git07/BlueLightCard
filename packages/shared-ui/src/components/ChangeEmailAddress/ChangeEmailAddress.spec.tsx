@@ -114,7 +114,7 @@ describe('ChangeEmailAddress component', () => {
     });
 
     it('should show error if emails are not the same', async () => {
-      const { mockPlatformAdapter, newEmail, confirmEmail, saveBtn } = testHarness();
+      const { newEmail, confirmEmail, saveBtn } = testHarness();
 
       // type a new email address
       await act(async () => {

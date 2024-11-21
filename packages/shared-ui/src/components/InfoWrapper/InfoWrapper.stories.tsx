@@ -35,7 +35,6 @@ const componentMeta: Meta<typeof InfoWrapper> = {
 const DefaultTemplate: StoryFn<typeof InfoWrapper> = (args) => <InfoWrapper {...args} />;
 const PaddedTemplate: StoryFn<typeof InfoWrapper> = (args) => (
   <div className="pt-10">
-    {' '}
     <InfoWrapper {...args} />
   </div>
 );

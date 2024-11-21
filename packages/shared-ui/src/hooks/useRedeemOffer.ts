@@ -1,6 +1,6 @@
-import { UseQueryResult, useQuery } from '@tanstack/react-query';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 import { usePlatformAdapter } from '../adapters';
-import { RedeemResponse, redeemOffer, RedeemDataStateData } from '../api';
+import { RedeemDataStateData, redeemOffer } from '../api';
 
 export type UseRedeemOfferOptions = {
   offerId: number;

@@ -1,4 +1,3 @@
-import { PluginAPI } from 'tailwindcss/types/config';
 import { fontCSSPlugin, tailwindCSSTransform } from '../tailwind';
 import { mockColourTokens } from './__mocks__/colourTokens';
 import { mockTypographyTokens } from './__mocks__/typographyTokens';

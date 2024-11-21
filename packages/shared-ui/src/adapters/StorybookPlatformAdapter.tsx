@@ -4,7 +4,7 @@ import { PlatformVariant } from '../types';
 
 export const storybookPlatformAdapter: IPlatformAdapter = {
   getAmplitudeFeatureFlag: () => 'control',
-  invokeV5Api: (path: string) => Promise.resolve({ status: 200, data: '{}' }),
+  invokeV5Api: () => Promise.resolve({ status: 200, data: '{}' }),
   logAnalyticsEvent: () => {},
   navigate: () => {},
   navigateExternal: () => ({

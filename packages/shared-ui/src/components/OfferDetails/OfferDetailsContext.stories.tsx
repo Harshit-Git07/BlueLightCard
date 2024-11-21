@@ -1,10 +1,10 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { within } from '@storybook/testing-library';
 import { SharedUIConfigProvider } from 'src/providers';
 import { StorybookPlatformAdapterDecorator } from '../../adapters/StorybookPlatformAdapter';
 import { PlatformVariant } from 'src/types';
-import { ViewOfferProvider, useOfferDetails } from './OfferDetailsContext';
+import { useOfferDetails, ViewOfferProvider } from './OfferDetailsContext';
 
 const mockQueryClient = new QueryClient();
 
@@ -64,7 +64,7 @@ const ViewOfferChild = () => {
   return <button onClick={onClick}>View Offer</button>;
 };
 
-const DefaultTemplate: StoryFn<typeof ViewOfferProvider> = (args) => {
+const DefaultTemplate: StoryFn<typeof ViewOfferProvider> = () => {
   return (
     <div style={{ minHeight: 250 }}>
       <SharedUIConfigProvider

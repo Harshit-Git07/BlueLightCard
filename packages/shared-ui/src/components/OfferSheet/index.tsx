@@ -1,4 +1,4 @@
-import { PlatformVariant, SharedProps } from '../../types';
+import { SharedProps } from '../../types';
 import { FC, useEffect, useState } from 'react';
 import DynamicSheet from '../DynamicSheet';
 import { offerSheetAtom } from './store';

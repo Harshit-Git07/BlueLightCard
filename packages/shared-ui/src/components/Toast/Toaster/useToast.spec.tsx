@@ -6,7 +6,7 @@ import { createStore, Provider } from 'jotai';
 import { act, ReactNode } from 'react';
 import { ToastPosition } from '../ToastTypes';
 import { initializeToastAtom, toastAtom } from '../toastState';
-import { createTimer, PausableTimer } from '../../../utils/pausableTimer';
+import { createTimer } from '../../../utils/pausableTimer';
 
 const store = createStore();
 const TestHarness = ({ children }: { children: ReactNode }) => (

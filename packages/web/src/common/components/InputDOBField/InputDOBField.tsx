@@ -7,12 +7,12 @@ import useKeyConstraint from '@/hooks/useKeyConstraint';
 const maxDayNumber = 31;
 const maxMonthNumber = 12;
 const defaultDate = new Date();
-
 /**
- * InputDOBField component
- * @param props
- * @returns React component
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/DatePicker/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
  */
+
 const InputDOBField: FC<InputDOBFieldProps> = ({
   value,
   error,
@@ -110,6 +110,11 @@ const InputDOBField: FC<InputDOBFieldProps> = ({
   );
 };
 
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/DatePicker/index.tsx
+ *
+ * @deprecated Please read the above note carefully.
+ */
 // eslint-disable-next-line react/display-name
 const InputDOBFieldWithRef = forwardRef<unknown, InputDOBFieldProps>((props, ref) => (
   <InputDOBField {...props} _ref={ref} />

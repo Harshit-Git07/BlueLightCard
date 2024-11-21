@@ -55,7 +55,7 @@ const Template: StoryFn<Props> = (args) => {
   );
 };
 
-export const AllStatesAndVariants: StoryFn<typeof CheckboxWrapper> = (args) => {
+export const AllStatesAndVariants: StoryFn<typeof CheckboxWrapper> = () => {
   return (
     <table cellPadding={20} className={'text-colour-onSurface dark:text-colour-onSurface-dark'}>
       <tr>

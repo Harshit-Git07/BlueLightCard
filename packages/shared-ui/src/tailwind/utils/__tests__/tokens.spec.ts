@@ -14,10 +14,8 @@ jest.mock('fs', () => ({
 }));
 
 describe('Tokens', () => {
-  let readFileSyncMock: jest.Mock;
-
   beforeEach(() => {
-    readFileSyncMock = jest.mocked(readFileSync);
+    jest.mocked(readFileSync);
   });
 
   describe('get source paths', () => {

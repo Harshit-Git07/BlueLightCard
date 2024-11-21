@@ -44,7 +44,7 @@ const componentMeta: Meta<typeof ProgressBar> = {
 };
 
 const DefaultTemplate: StoryFn<typeof ProgressBar> = (args) => {
-  const [_, updateArgs] = useArgs();
+  const [, updateArgs] = useArgs();
 
   const handleNext = () => {
     if (args.numberOfCompletedSteps < args.totalNumberOfSteps) {

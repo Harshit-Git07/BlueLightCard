@@ -24,11 +24,11 @@ const useToaster = () => {
         closeToast();
       }, duration);
 
-      setToastAtom((state) => ({ toast, timer: newTimer, options }));
+      setToastAtom(() => ({ toast, timer: newTimer, options }));
       return;
     }
 
-    setToastAtom((state) => ({ toast, timer: undefined, options }));
+    setToastAtom(() => ({ toast, timer: undefined, options }));
   };
 
   return { ...toastValue, openToast, closeToast };

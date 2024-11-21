@@ -4,7 +4,8 @@ import { faCircleInfo } from '@fortawesome/pro-solid-svg-icons';
 import Tooltip from '../Tooltip';
 import { colours, fonts } from '../../tailwind/theme';
 
-interface Props extends PropsWithChildren {
+export interface InfoWrapperProps extends PropsWithChildren {
+  id?: string;
   label?: string;
   description?: string;
   htmlFor?: string;
@@ -12,7 +13,8 @@ interface Props extends PropsWithChildren {
   helpPosition?: 'top' | 'bottom' | 'left' | 'right';
 }
 
-const InfoWrapper: FC<Props> = ({
+const InfoWrapper: FC<InfoWrapperProps> = ({
+  id,
   label,
   description,
   helpText,
@@ -24,7 +26,7 @@ const InfoWrapper: FC<Props> = ({
     <div className="flex flex-col gap-2">
       {label ? (
         <div className="flex items-center gap-[7px]">
-          <label className={`${fonts.body} ${colours.textOnSurface}`} htmlFor={htmlFor}>
+          <label className={`${fonts.body} ${colours.textOnSurface}`} id={id} htmlFor={htmlFor}>
             {label}
           </label>
           {helpText ? (

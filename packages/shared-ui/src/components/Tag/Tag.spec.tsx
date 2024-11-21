@@ -1,15 +1,9 @@
 import Tag from './index';
-import { TagProps, TagState } from './types';
+import { TagState } from './types';
 import renderer from 'react-test-renderer';
 import { faCircleBolt } from '@fortawesome/pro-solid-svg-icons';
 
 describe('Tag', () => {
-  let props: TagProps;
-
-  beforeEach(() => {
-    props = {};
-  });
-
   describe('snapshot Test', () => {
     it('renders a tag in default state', () => {
       const component = renderer.create(

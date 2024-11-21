@@ -1,4 +1,3 @@
-import type { RedemptionType } from '../../../components/OfferSheet/types';
 import { useMockPlatformAdapter } from '../../../adapters';
 import { PlatformVariant } from '../../../types';
 import { getPlatformExperimentForRedemptionType } from '../offerDetailsExperiments';

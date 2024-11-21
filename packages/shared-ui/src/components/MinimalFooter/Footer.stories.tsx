@@ -6,7 +6,7 @@ const meta: Meta<typeof MainContainer> = {
   component: MainContainer,
 };
 
-const MainContainerTemplate: StoryFn<typeof MainContainer> = (args) => <MainContainer />;
+const MainContainerTemplate: StoryFn<typeof MainContainer> = () => <MainContainer />;
 export const Default = MainContainerTemplate.bind({});
 Default.args = {};
 

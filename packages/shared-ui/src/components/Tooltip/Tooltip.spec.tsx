@@ -103,7 +103,7 @@ describe('Tooltip Component', () => {
   it('Should show the tooltip when isOpen property is set to true', async () => {
     const text = 'My tooltip is displayed by default';
 
-    const { getByText } = render(
+    render(
       <Tooltip position="right" text="Tooltip Text" isOpen={true}>
         <span>{text}</span>
       </Tooltip>,

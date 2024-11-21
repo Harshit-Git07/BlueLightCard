@@ -1,6 +1,5 @@
 import { useMockPlatformAdapter } from '../../adapters';
 import { getRedemptionDetails, redeemOffer, RedeemResultKind } from '../redemptions';
-import { undefined } from 'zod';
 
 describe('getRedemptionDetails', () => {
   test('getRedemptionDetails calls the redemption details endpoint', async () => {

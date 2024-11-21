@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { TransformedToken, TransformedTokens, DesignTokens } from 'style-dictionary';
+import { DesignTokens, TransformedToken, TransformedTokens } from 'style-dictionary';
 import {
   SyntheticDesignToken,
   SyntheticDesignTokenSet,
@@ -8,7 +8,7 @@ import {
 } from '../types';
 import { PluginAPI } from 'tailwindcss/types/config';
 import { IS_STORYBOOK_LIFECYCLE } from '../../constants';
-import { FontWeightKey, fontWeightMap, getFontWeight } from './fontMap';
+import { FontWeightKey, getFontWeight } from './fontMap';
 
 function transformColorToken(token: SyntheticDesignToken, group: DesignTokens) {
   const transformed = group;

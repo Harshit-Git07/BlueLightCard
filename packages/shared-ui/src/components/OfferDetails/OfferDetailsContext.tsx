@@ -1,4 +1,4 @@
-import { Context, FC, createContext, useContext } from 'react';
+import { Context, createContext, FC, useContext } from 'react';
 import { useOfferDetailsComponent } from './useOfferDetailsComponent';
 import { Amplitude, usePlatformAdapter } from '../../adapters';
 import { useAtomValue, useSetAtom } from 'jotai';
@@ -18,7 +18,11 @@ type IOfferDetailsContext = {
   viewOffer: (offerData: OfferData) => Promise<void>;
 };
 export const OfferDetailsContext: Context<IOfferDetailsContext> = createContext({
-  viewOffer: (offerData: OfferData) => Promise.resolve(),
+  viewOffer: (offerData: OfferData) => {
+    // [TODO] What is offerData here for? Temp for something later?
+    console.log(offerData);
+    return Promise.resolve();
+  },
 });
 export const useOfferDetails = () => useContext(OfferDetailsContext);
 

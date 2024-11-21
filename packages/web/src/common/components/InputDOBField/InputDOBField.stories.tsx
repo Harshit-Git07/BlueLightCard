@@ -1,8 +1,11 @@
 import { Meta, StoryFn } from '@storybook/react';
-import InputDOBField from '@/components/InputDOBField/InputDOBField';
+import InputDOBField from './InputDOBField';
 
+/**
+ * **IMPORTANT:** This has been deprecated - please use /packages/shared-ui/src/components/DatePicker/index.tsx
+ */
 const componentMeta: Meta<typeof InputDOBField> = {
-  title: 'Component System/Form/InputDOBField',
+  title: 'Deprecated/Component System/Form/InputDOBField',
   component: InputDOBField,
   argTypes: {
     error: {

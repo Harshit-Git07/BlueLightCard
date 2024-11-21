@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import { passwordRules, passwordSchema } from './';
 
 describe('Password Schema', () => {

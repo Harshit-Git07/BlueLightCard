@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.112.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.111.0...bluelightcard/identity-v1.112.0) (2024-11-21)
+
+
+### Features
+
+* add await on send function ([#3034](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3034)) ([3287341](https://github.com/bluelightcard/BlueLightCard-2.0/commit/32873415804768dc0cfa4e46908d21b241425106))
+
 ## [1.111.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.110.0...bluelightcard/identity-v1.111.0) (2024-11-20)
 
 

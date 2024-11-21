@@ -481,6 +481,9 @@ jobs:
             auth0_redirect_url: 'https://www.staging.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0'
             auth0_client_id: 'RykFoOxMBh3AGX8o13qSkT063SuUOn58'
             auth0_client_secret: 'BLC_UK_AUTH0_CLIENT_SECRET'
+            stripe_publishable_key: 'pk_test_51QACN4S9N5NHrlGYTj7qmy768u9A2lqFqL2AWQbOX3tbJhJO3tjDS74KuBcOwyiz6Dov35tox4aMi97bWX4Z2MCM00boCBdcYs'
+            currency_symbol: '£'
+            membership_price: '4.99'
             # Brand Specific Variables needed for Seeding of QA Environment
             event_bus_name: staging-blc-mono-eventBus
             cognito_web_pool_client: eu-west-2_Ow2L8azIb
@@ -502,6 +505,9 @@ jobs:
             auth0_redirect_url: 'https://www.develop.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0'
             auth0_client_id: 'iIIpjE1a3VyAeal66XDVaIAWxlqfEvq4'
             auth0_client_secret: 'BLC_AU_AUTH0_CLIENT_SECRET'
+            stripe_publishable_key: 'pk_test_51QDnRh4I1xKGJ9IaK8cbogDKvzETPhdg8d5OaWzYnKx3RfC2OLKKjeWyEy2GP1Y6yziqaphIpX5tsiW56Sz2efVN00m9FM9UTI'
+            currency_symbol: '$'
+            membership_price: '4.99'
             # Brand Specific Variables needed for Seeding of QA Environment
             event_bus_name: staging-blc-mono-eventBus
             cognito_web_pool_client: ap-southeast-2_CDHxjtsV3
@@ -523,6 +529,9 @@ jobs:
             auth0_redirect_url: 'https://www.ddsstaging.bluelightcard.tech/auth/callback.php%3Fprovider%3Dauth0'
             auth0_client_id: 'EpyfTT48gUFhcRWptlFb1vA6q4y1XZRf'
             auth0_client_secret: 'DDS_UK_AUTH0_CLIENT_SECRET'
+            stripe_publishable_key: 'pk_test_51QDnVMRKWQ2ywD57QCtBLA63lMYr0atSNttufBF3pMmmFE6sI7cl4Pghi54yoeO1Twgv69ri1BaKZNwmTagRJxiF00iOOLy93p'
+            currency_symbol: '£'
+            membership_price: '4.99'
             # Brand Specific Variables needed for Seeding of QA Environment
             event_bus_name: staging-blc-mono-eventBus
             cognito_web_pool_client: eu-west-2_VdsvVVUrI
@@ -572,6 +581,9 @@ jobs:
       NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2
       NEXT_PUBLIC_BRAND_URL: staging.bluelightcard.co.uk
       NEXT_PUBLIC_ENV: 'preview'
+      NEXT_PUBLIC_STRIPE_KEY: ${{matrix.stripe_publishable_key}}
+      NEXT_PUBLIC_CURRENCY_SYMBOL: ${{matrix.currency_symbol}}
+      NEXT_PUBLIC_MEMBERSHIP_PRICE: ${{matrix.membership_price}}
       NEXT_ZENDESK_V1_BLC_UK_URL: ${{ matrix.zendesk_url }}
       # ENV VARIABLES NEEDED TO CREATE USERNAME & PASSWORD FOR QA ENVIRONMENT
       PR_PREFIX: pr-${{ github.event.pull_request.number }}-blc-mono

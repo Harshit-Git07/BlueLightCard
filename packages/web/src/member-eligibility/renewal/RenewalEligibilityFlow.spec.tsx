@@ -35,10 +35,15 @@ describe('given a signing up member that needs to prove their eligibility to use
         act(() => startButton.click());
       });
 
-      describe('when the account details have changed', () => {
+      describe('when the account details have been entered', () => {
+        // TODO: Fill this in with real behaviour once end to end flow is implemented
         beforeEach(() => {
-          const accountDetailsChangedButton = screen.getByTestId('next-button-1');
-          act(() => accountDetailsChangedButton.click());
+          fireEvent.keyDown(window, {
+            key: '.',
+            ctrlKey: true,
+          });
+          const nextButton = screen.getByTestId('next-button-1');
+          act(() => nextButton.click());
         });
 
         it('should navigate to the job details screen', () => {
@@ -90,7 +95,10 @@ describe('given a signing up member that needs to prove their eligibility to use
                 // TODO: This will require probably a new render with state injected in
                 describe('when they click the verification link on the email', () => {
                   beforeEach(async () => {
-                    fireEvent.keyDown(window, { key: '.', ctrlKey: true });
+                    fireEvent.keyDown(window, {
+                      key: '.',
+                      ctrlKey: true,
+                    });
                     const nextButton = screen.getByTestId('next-button-1');
                     act(() => nextButton.click());
                   });
@@ -102,7 +110,10 @@ describe('given a signing up member that needs to prove their eligibility to use
 
                   describe('when they submit their payment details', () => {
                     beforeEach(async () => {
-                      fireEvent.keyDown(window, { key: '.', ctrlKey: true });
+                      fireEvent.keyDown(window, {
+                        key: '.',
+                        ctrlKey: true,
+                      });
                       const nextButton = screen.getByTestId('next-button-1');
                       act(() => nextButton.click());
                     });
@@ -177,7 +188,10 @@ describe('given a signing up member that needs to prove their eligibility to use
 
                 describe('when they submit their payment details', () => {
                   beforeEach(async () => {
-                    fireEvent.keyDown(window, { key: '.', ctrlKey: true });
+                    fireEvent.keyDown(window, {
+                      key: '.',
+                      ctrlKey: true,
+                    });
                     const nextButton = screen.getByTestId('next-button-1');
                     act(() => nextButton.click());
                   });
@@ -238,7 +252,10 @@ describe('given a signing up member that needs to prove their eligibility to use
 
               describe('when they submit their payment details', () => {
                 beforeEach(async () => {
-                  fireEvent.keyDown(window, { key: '.', ctrlKey: true });
+                  fireEvent.keyDown(window, {
+                    key: '.',
+                    ctrlKey: true,
+                  });
                   const nextButton = screen.getByTestId('next-button-1');
                   act(() => nextButton.click());
                 });
@@ -270,7 +287,10 @@ describe('given a signing up member that needs to prove their eligibility to use
 
           describe('when they submit their payment details', () => {
             beforeEach(async () => {
-              fireEvent.keyDown(window, { key: '.', ctrlKey: true });
+              fireEvent.keyDown(window, {
+                key: '.',
+                ctrlKey: true,
+              });
               const nextButton = screen.getByTestId('next-button-1');
               act(() => nextButton.click());
             });

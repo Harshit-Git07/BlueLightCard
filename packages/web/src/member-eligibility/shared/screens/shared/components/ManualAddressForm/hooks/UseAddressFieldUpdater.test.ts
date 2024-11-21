@@ -2,7 +2,7 @@ import * as target from './UseAddressFieldUpdater';
 import {
   ausAddressStub,
   ukAddressStub,
-} from '@/root/src/member-eligibility/sign-up/screens/delivery-address-screen/components/ManualAddressForm/hooks/utils/AddressTestUtils';
+} from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/hooks/utils/AddressTestUtils';
 import { renderHook } from '@testing-library/react';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
 

@@ -15,6 +15,7 @@ export interface EligibilityDetails {
   fileVerificationType?: string | [string, string];
   fileVerification?: Blob[];
   address?: EligibilityDetailsAddress;
+  member?: EligibilityDetailsMember;
 }
 
 export type EligibilityScreen =
@@ -57,6 +58,12 @@ export interface EligibilityOrganisation {
 export interface EligibilityEmployer {
   id: string;
   label: string;
+}
+
+export interface EligibilityDetailsMember {
+  firstName: string;
+  surname: string;
+  dob?: string;
 }
 
 export type EligibilityDetailsWithoutFlow = Omit<EligibilityDetails, 'flow'>;

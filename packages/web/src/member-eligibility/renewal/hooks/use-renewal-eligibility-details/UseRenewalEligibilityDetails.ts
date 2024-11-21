@@ -10,15 +10,19 @@ export const renewalEligibilityDetailsStub: EligibilityDetails = {
   flow: 'Renewal',
   currentScreen: 'Interstitial Screen',
   employmentStatus: 'Employed',
-  organisation: { id: 'eadc26a7-e2cf-4f5a-92ba-a298f15d396c', label: 'NHS' },
-  employer: { id: '004d4e03-4843-4b9b-96fd-a86a859870bd', label: 'Bedford Hospital NHS Trust' },
+  organisation: {
+    id: 'eadc26a7-e2cf-4f5a-92ba-a298f15d396c',
+    label: 'NHS',
+  },
+  employer: {
+    id: '004d4e03-4843-4b9b-96fd-a86a859870bd',
+    label: 'Bedford Hospital NHS Trust',
+  },
   jobTitle: 'Nurse',
   emailVerification: 'test@nhs.com',
-  address: {
-    line1: 'Charnwood Edge Business Park',
-    line2: 'Syston Road',
-    city: 'Leicester',
-    postcode: 'LE7 4UZ',
+  member: {
+    firstName: 'John',
+    surname: 'Doe',
   },
 };
 

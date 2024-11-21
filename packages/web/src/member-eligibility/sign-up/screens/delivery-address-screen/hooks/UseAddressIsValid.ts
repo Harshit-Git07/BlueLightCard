@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
-import { isAusAddress } from '@/root/src/member-eligibility/sign-up/screens/delivery-address-screen/components/ManualAddressForm/hooks/utils/AddressType';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import { isAusAddress } from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/hooks/utils/AddressType';
 import { useIsAusBrand } from '@/root/src/member-eligibility/shared/hooks/use-is-aus-brand/UseIsAusBrand';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 
-export function useAddressIsValid(eligibilityDetails: EligibilityDetails): boolean {
+export function useAddressIsValid(eligibilityDetailsState: EligibilityDetailsState): boolean {
+  const [eligibilityDetails] = eligibilityDetailsState;
   const isAus = useIsAusBrand();
 
   return useMemo(() => {

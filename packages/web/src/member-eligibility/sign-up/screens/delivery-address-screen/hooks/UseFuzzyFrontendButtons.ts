@@ -7,7 +7,7 @@ import { FuzzyFrontendButtonProps } from '@/root/src/member-eligibility/shared/s
 import {
   ausAddressStub,
   ukAddressStub,
-} from '@/root/src/member-eligibility/sign-up/screens/delivery-address-screen/components/ManualAddressForm/hooks/utils/AddressTestUtils';
+} from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/hooks/utils/AddressTestUtils';
 
 const stubAddress: EligibilityDetailsAddress =
   BRAND === BRANDS.BLC_AU ? ausAddressStub : ukAddressStub;

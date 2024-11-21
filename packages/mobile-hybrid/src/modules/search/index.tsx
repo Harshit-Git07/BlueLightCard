@@ -1,17 +1,83 @@
-import { FC } from 'react';
-import SearchWithNavContainer from './components/use-cases/SearchWithNavContainer';
-import SearchWithDeeplinkContainer from './components/use-cases/SearchWithDeeplinkContainer';
+import { FC, useCallback, useState } from 'react';
+import { SearchModuleProps, SearchProps } from './types';
+import Amplitude from '@/components/Amplitude/Amplitude';
+import { SearchBar } from '@bluelightcard/shared-ui';
+import RecentSearchButton from '@/components/RecentSearchButton/RecentSearchButton';
+import useSearch from '@/hooks/useSearch';
+import { recentSearchesData } from '@/constants';
+import { useRouter } from 'next/router';
+import { backNavagationalPaths } from './paths';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { usePlatformAdapter } from '../../../../shared-ui/src/adapters';
 
-export type Props = {
-  useDeeplinkVersion?: boolean;
-};
+const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
+  const router = useRouter();
+  const [searchOverlayOpen, setSearchOverlayOpen] = useState<boolean>(false);
 
-const SearchModule: FC<Props> = ({ useDeeplinkVersion }) => {
-  if (useDeeplinkVersion) {
-    return <SearchWithDeeplinkContainer />;
-  }
+  const platformAdapter = usePlatformAdapter();
+  const { searchTerm, resetSearch } = useSearch(platformAdapter);
 
-  return <SearchWithNavContainer />;
+  const canBackNav = backNavagationalPaths.includes(router.route) && !searchOverlayOpen;
+
+  const onSearchInputFocus = useCallback(() => {
+    setSearchOverlayOpen(true);
+  }, []);
+
+  const onBack = useCallback(() => {
+    setSearchOverlayOpen(false);
+    if (canBackNav) {
+      router.replace('/search');
+    }
+  }, [canBackNav, router]);
+
+  const onSearch = useCallback<SearchProps['onSearch']>(
+    (termInput: string) => {
+      setSearchOverlayOpen(false);
+      router.push(`/searchresults?search=${termInput}`);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [router],
+  );
+
+  const onClear = useCallback(() => {
+    resetSearch();
+  }, [resetSearch]);
+
+  return (
+    <>
+      <div className="flex items-center px-2 pt-2 justify-between">
+        <SearchBar
+          onFocus={onSearchInputFocus}
+          onBackButtonClick={onBack}
+          onClear={onClear}
+          placeholderText={placeholder}
+          value={searchTerm}
+          showBackArrow={canBackNav}
+          onSearch={onSearch}
+        />
+      </div>
+      {searchOverlayOpen && (
+        <Amplitude keyName={FeatureFlags.SEARCH_RECENT_SEARCHES} value={'on'}>
+          <div className="h-full w-full fixed bg-neutral-white dark:bg-neutral-black left-0 top-0 z-[5]">
+            <div className="mx-2 absolute top-24">
+              <h3 className="mx-2 mb-2 text-2xl font-bold text-neutral-grey-900 dark:text-primary-vividskyblue-700">
+                Your recent searches
+              </h3>
+              {recentSearchesData.map((term, index) => (
+                <RecentSearchButton
+                  key={index}
+                  onClick={() => {
+                    console.log(term);
+                  }}
+                  text={term}
+                />
+              ))}
+            </div>
+          </div>
+        </Amplitude>
+      )}
+    </>
+  );
 };
 
 export default SearchModule;

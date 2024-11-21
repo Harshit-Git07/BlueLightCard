@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.45.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.44.0...bluelightcard/mobile-hybrid-v1.45.0) (2024-11-21)
+
+
+### Features
+
+* conv blc 5.0 search ([#2809](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2809)) ([d91d2d4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d91d2d44b3be6ed381fd2423515f17f99a0e87be))
+
 ## [1.44.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.43.0...bluelightcard/mobile-hybrid-v1.44.0) (2024-11-21)
 
 

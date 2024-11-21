@@ -6,6 +6,7 @@ import {
   SHOWCARD,
   VAULT,
   VAULTQR,
+  VERIFY,
 } from '@blc-mono/core/constants/redemptions';
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
@@ -48,6 +49,7 @@ export class EmailService implements IEmailService {
       }
       case GIFTCARD:
       case CREDITCARD:
+      case VERIFY:
       case PREAPPLIED: {
         await this.emailRepository.sendAffiliateTransactionalEmail(
           {

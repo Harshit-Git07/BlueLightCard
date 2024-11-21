@@ -29,6 +29,7 @@ describe('EmailRepository', () => {
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID] = 'test';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID] = 'test';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_CREDIT_CARD_EMAIL_CAMPAIGN_ID] = 'creditCard_env_val';
+    process.env[RedemptionsStackEnvironmentKeys.BRAZE_VERIFY_EMAIL_CAMPAIGN_ID] = 'verify_env_val';
   });
 
   afterEach(() => {
@@ -40,6 +41,7 @@ describe('EmailRepository', () => {
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_CREDIT_CARD_EMAIL_CAMPAIGN_ID];
+    delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_VERIFY_EMAIL_CAMPAIGN_ID];
   });
 
   describe('sendVaultOrGenericTransactionalEmail', () => {
@@ -180,7 +182,7 @@ describe('EmailRepository', () => {
   });
 
   describe('sendAffiliateTransactionalEmail', () => {
-    it.each(['creditCard', 'giftCard', 'preApplied'] as const)(
+    it.each(['verify', 'creditCard', 'giftCard', 'preApplied'] as const)(
       'sends an email with the braze email client for %s redemption type',
       async (redemptionType) => {
         const logger = createTestLogger();
@@ -246,7 +248,7 @@ describe('EmailRepository', () => {
       await expect(act).rejects.toThrow();
     });
 
-    it.each(allExceptRedemptionTypes('creditCard', 'giftCard', 'preApplied'))(
+    it.each(allExceptRedemptionTypes('verify', 'creditCard', 'giftCard', 'preApplied'))(
       'throws an error for unhandled redemption type %s',
       async (redemptionType) => {
         // Arrange

@@ -34,10 +34,7 @@ const iconMapper: { [key in State]: IconDefinition | null } = {
   Error: fas.faTimesCircle,
 };
 
-export const getIconByStateOrString = (
-  state: State | undefined,
-  icon?: string,
-): IconProp | null => {
+export const getIconByStateOrString = (state: State, icon?: string): IconProp | null => {
   if (icon && fas[icon as keyof typeof fas]) {
     return fas[icon as keyof typeof fas];
   }

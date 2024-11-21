@@ -1,8 +1,10 @@
 import { FC, useState } from 'react';
-import { AlertProps } from './alertTypes';
 import { alertColorConfig, getIconByStateOrString } from './alertConfig';
 import { faXmark } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { conditionalStrings } from '../../utils/conditionalStrings';
+import { AlertProps, State } from './alertTypes';
+import { fonts } from '../../tailwind/theme';
 
 const Alert: FC<AlertProps> = ({
   variant = 'Banner',
@@ -14,13 +16,13 @@ const Alert: FC<AlertProps> = ({
   alertBackgroundColor,
   children,
   isFullWidth,
-  ...props
+  isDismissable = true,
 }) => {
   const [visible, setVisible] = useState(true);
 
   const { iconColor, backgroundColor } = alertColorConfig[state];
 
-  const resolvedIcon = getIconByStateOrString(state, icon);
+  const resolvedIcon = getIconByStateOrString(state as State, icon);
 
   const backgroundAlertColor = alertBackgroundColor ?? backgroundColor;
 
@@ -32,21 +34,17 @@ const Alert: FC<AlertProps> = ({
       fullWidth: 'w-full',
       variant: 'sticky top-0 left-0 z-50 px-[1rem] tablet:px-[3.5rem] laptop:px-[6.5rem] py-[1rem]',
       layout: 'tablet:flex tablet:mx-6',
-      title:
-        'font-typography-title-small font-typography-title-small-weight text-typography-title-small leading-typography-title-small tracking-typography-title-small tablet:font-typography-title-medium-semibold tablet:font-typography-title-medium-semibold-weight tablet:text-typography-title-medium-semibold tablet:leading-typography-title-medium-semibold tablet:tracking-typography-title-medium-semibold',
-      subtext:
-        'pt-2 font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small tracking-typography-body-small tablet:font-typography-body tablet:font-typography-body-weight tablet:text-typography-body tablet:leading-typography-body tablet:tracking-typography-body',
+      title: `${fonts.titleSmall} tablet:font-typography-title-medium-semibold tablet:font-typography-title-medium-semibold-weight tablet:text-typography-title-medium-semibold tablet:leading-typography-title-medium-semibold tablet:tracking-typography-title-medium-semibold`,
+      subtext: `pt-2 ${fonts.bodySmall} tablet:font-typography-body tablet:font-typography-body-weight tablet:text-typography-body tablet:leading-typography-body tablet:tracking-typography-body`,
       children: 'mt-[0.75rem] tablet:mt-0 tablet:justify-end',
       icon: 'tablet:items-center',
       iconSize: 'pt-1 tablet:pt-[0px] tablet:text-[24px]',
     },
     Inline: {
       fullWidth: isFullWidth ? 'w-full' : 'mx-auto',
-      variant: 'relative  px-[0.75rem] py-[0.75rem]',
-      title:
-        'font-typography-body-small-semibold font-typography-body-small-semibold-weight text-typography-body-small-semibold leading-typography-body-small-semibold tracking-typography-body-small-semibold  ',
-      subtext:
-        'pt-1 font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small tracking-typography-body-small',
+      variant: 'relative  px-3 py-2',
+      title: fonts.bodySmallSemiBold,
+      subtext: `pt-1 ${fonts.bodySmall}`,
       layout: 'flex flex-col gap-0',
       children: 'flex flex-col gap-1',
       icon: '',
@@ -59,6 +57,11 @@ const Alert: FC<AlertProps> = ({
   const hideAlert = !visible && 'hidden';
 
   if (!visible) return null;
+
+  const contentClass = conditionalStrings({
+    'flex-col content-center  max-w-[750px]': true,
+    'tablet:pr-[16px]': isDismissable,
+  });
 
   return (
     <div
@@ -83,8 +86,8 @@ const Alert: FC<AlertProps> = ({
             </div>
           </div>
         ) : null}
-        <div className={`${variantStyle.layout} mx-4 m-auto w-full`}>
-          <div className="flex-col content-center tablet:pr-[16px] max-w-[750px]">
+        <div className={`${variantStyle.layout} ml-4 m-auto w-full`}>
+          <div className={contentClass}>
             <p
               className={`w-full text-colour-onSurface-light dark:text-colour-onSurface-dark break-words ${variantStyle.title}`}
             >
@@ -107,7 +110,7 @@ const Alert: FC<AlertProps> = ({
             </div>
           )}
         </div>
-        {variant === 'Banner' && 'isDismissable' in props && props.isDismissable && (
+        {variant === 'Banner' && isDismissable && (
           <div className="flex items-start  tablet:items-center">
             <button
               onClick={() => setVisible(false)}

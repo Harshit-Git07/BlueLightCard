@@ -13,16 +13,18 @@ exports[`ListSelector component should render default list selector with hidden 
     className="flex flex-col gap-1 items-start w-full text-left"
   >
     <div
-      className="flex items-center gap-2 w-full"
+      className="tablet:flex items-center gap-2 w-full"
     >
       <h4
         className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal"
       >
         Default List Selector
       </h4>
-      <span>
+      <span
+        className="block pt-2 tablet:inline tablet:pt-0"
+      >
         <div
-          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
+          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
         >
           <span
             className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
@@ -64,7 +66,7 @@ exports[`ListSelector component should render default list selector with hidden 
     className="flex flex-col gap-1 items-start w-full text-left"
   >
     <div
-      className="flex items-center gap-2 w-full"
+      className="tablet:flex items-center gap-2 w-full"
     >
       <h4
         className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal"
@@ -111,16 +113,18 @@ exports[`ListSelector component should render default list selector with hidden 
     className="flex flex-col gap-1 items-start w-full text-left"
   >
     <div
-      className="flex items-center gap-2 w-full"
+      className="tablet:flex items-center gap-2 w-full"
     >
       <h4
         className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal"
       >
         Default List Selector
       </h4>
-      <span>
+      <span
+        className="block pt-2 tablet:inline tablet:pt-0"
+      >
         <div
-          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
+          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
         >
           <span
             className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
@@ -151,16 +155,18 @@ exports[`ListSelector component should render default list selector with in hove
     className="flex flex-col gap-1 items-start w-full text-left"
   >
     <div
-      className="flex items-center gap-2 w-full"
+      className="tablet:flex items-center gap-2 w-full"
     >
       <h4
         className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal"
       >
         Default List Selector
       </h4>
-      <span>
+      <span
+        className="block pt-2 tablet:inline tablet:pt-0"
+      >
         <div
-          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
+          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
         >
           <span
             className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
@@ -202,16 +208,18 @@ exports[`ListSelector component should render default list selector with in sele
     className="flex flex-col gap-1 items-start w-full text-left"
   >
     <div
-      className="flex items-center gap-2 w-full"
+      className="tablet:flex items-center gap-2 w-full"
     >
       <h4
         className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal"
       >
         Default List Selector
       </h4>
-      <span>
+      <span
+        className="block pt-2 tablet:inline tablet:pt-0"
+      >
         <div
-          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
+          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
         >
           <span
             className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
@@ -253,16 +261,18 @@ exports[`ListSelector component should render default list selector with title, 
     className="flex flex-col gap-1 items-start w-full text-left"
   >
     <div
-      className="flex items-center gap-2 w-full"
+      className="tablet:flex items-center gap-2 w-full"
     >
       <h4
         className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal"
       >
         Default List Selector
       </h4>
-      <span>
+      <span
+        className="block pt-2 tablet:inline tablet:pt-0"
+      >
         <div
-          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
+          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
         >
           <span
             className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"

@@ -40,7 +40,7 @@ const Tag: FC<TagProps> = ({ state = 'Default', iconLeft, iconRight, infoMessage
   const borderRadius = 'rounded';
 
   const classes = cssUtil([
-    'inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1',
+    'inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap',
     tokenClasses.bg,
     tokenClasses.text,
     tokenClasses.border,

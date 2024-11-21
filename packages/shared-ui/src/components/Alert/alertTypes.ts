@@ -1,32 +1,18 @@
-type BaseAlertProps = {
-  title: string;
-  subtext?: React.ReactNode;
+import { ReactNode } from 'react';
+
+export interface AlertProps {
+  variant: 'Banner' | 'Inline';
+  state?: 'Default' | 'Success' | 'Info' | 'Warning' | 'Error';
+  title: ReactNode;
+  subtext?: ReactNode;
+  icon?: string;
   iconAccentColor?: string;
   alertBackgroundColor?: string;
-  children?: React.ReactNode;
+  backgroundColor?: string;
   isFullWidth?: boolean;
-};
-
-type DefaultStateAlertProps = BaseAlertProps & {
-  state: 'Default';
-  icon: string;
-};
-
-type SystemStateAlertProps = BaseAlertProps & {
-  state: Exclude<State, 'Default'>;
-  icon?: string;
-};
-
-type BannerAlertProps = (DefaultStateAlertProps | SystemStateAlertProps) & {
-  variant: 'Banner';
   isDismissable?: boolean;
-};
-
-type InlineAlertProps = (DefaultStateAlertProps | SystemStateAlertProps) & {
-  variant: 'Inline';
-};
-
-export type AlertProps = BannerAlertProps | InlineAlertProps;
+  children?: ReactNode;
+}
 
 export interface ColorConfig {
   iconColor: string;

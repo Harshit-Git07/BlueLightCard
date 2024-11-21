@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, KeyboardEvent } from 'react';
+import React, { FC, KeyboardEvent, useEffect, useState } from 'react';
 import { ListSelectorProps, ListSelectorState } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/pro-regular-svg-icons';
@@ -73,12 +73,12 @@ const ListSelector: FC<ListSelectorProps> = ({
       onMouseLeave={handleMouseLeave}
     >
       <div className="flex flex-col gap-1 items-start w-full text-left">
-        <div className="flex items-center gap-2 w-full">
+        <div className="tablet:flex items-center gap-2 w-full">
           <h4 className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal">
             {title}
           </h4>
 
-          {tag && <span>{tag}</span>}
+          {tag && <span className={'block pt-2 tablet:inline tablet:pt-0'}>{tag}</span>}
         </div>
 
         {description && (

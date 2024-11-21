@@ -43,10 +43,10 @@ exports[`Alert Component renders correctly for Banner variant 1`] = `
       </div>
     </div>
     <div
-      className="tablet:flex tablet:mx-6 mx-4 m-auto w-full"
+      className="tablet:flex tablet:mx-6 ml-4 m-auto w-full"
     >
       <div
-        className="flex-col content-center tablet:pr-[16px] max-w-[750px]"
+        className="flex-col content-center  max-w-[750px] tablet:pr-[16px]"
       >
         <p
           className="w-full text-colour-onSurface-light dark:text-colour-onSurface-dark break-words font-typography-title-small font-typography-title-small-weight text-typography-title-small leading-typography-title-small tracking-typography-title-small tablet:font-typography-title-medium-semibold tablet:font-typography-title-medium-semibold-weight tablet:text-typography-title-medium-semibold tablet:leading-typography-title-medium-semibold tablet:tracking-typography-title-medium-semibold"
@@ -99,7 +99,7 @@ exports[`Alert Component renders correctly for Inline variant 1`] = `
         false 
         mx-auto
         bg-colour-info-bright-light dark:bg-colour-info-bright-dark 
-        relative  px-[0.75rem] py-[0.75rem] 
+        relative  px-3 py-2 
         flex flex-col rounded justify-between 
       "
   data-testid="alert"
@@ -136,13 +136,13 @@ exports[`Alert Component renders correctly for Inline variant 1`] = `
       </div>
     </div>
     <div
-      className="flex flex-col gap-0 mx-4 m-auto w-full"
+      className="flex flex-col gap-0 ml-4 m-auto w-full"
     >
       <div
-        className="flex-col content-center tablet:pr-[16px] max-w-[750px]"
+        className="flex-col content-center  max-w-[750px] tablet:pr-[16px]"
       >
         <p
-          className="w-full text-colour-onSurface-light dark:text-colour-onSurface-dark break-words font-typography-body-small-semibold font-typography-body-small-semibold-weight text-typography-body-small-semibold leading-typography-body-small-semibold tracking-typography-body-small-semibold  "
+          className="w-full text-colour-onSurface-light dark:text-colour-onSurface-dark break-words font-typography-body-small-semibold font-typography-body-small-semibold-weight text-typography-body-small-semibold leading-typography-body-small-semibold tracking-typography-body-small-semibold"
         >
           This is an inline alert!
         </p>

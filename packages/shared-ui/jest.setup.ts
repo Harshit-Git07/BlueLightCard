@@ -31,3 +31,13 @@ jest.mock('swiper/modules', () => ({
 jest.mock('swiper/css', () => jest.fn());
 jest.mock('swiper/css/pagination', () => jest.fn());
 jest.mock('swiper/css/navigation', () => jest.fn());
+
+const mockGetDocument = jest.fn().mockResolvedValue('Success');
+jest.mock('pdfjs-dist/webpack.mjs', () => ({
+  getDocument: () => ({ promise: mockGetDocument() }),
+}));
+
+Object.defineProperty(File.prototype, 'arrayBuffer', {
+  value: jest.fn().mockResolvedValue(new ArrayBuffer(8)),
+  writable: true,
+});

@@ -28,7 +28,7 @@ const AccountDrawer: FC<AccountDrawerProps> = ({
     <div className="h-full flex flex-col justify-between px-4" data-testid={'accountDrawer'}>
       <div className="h-full overflow-y-auto">
         {title && (
-          <Typography variant="title-large" className="mt-0 mb-0 pb-4">
+          <Typography variant="title-large" className="mt-0 mb-0 pb-[24px]">
             {title}
           </Typography>
         )}

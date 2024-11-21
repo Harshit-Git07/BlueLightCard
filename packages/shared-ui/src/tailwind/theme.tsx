@@ -16,6 +16,7 @@ export const colours = {
     'bg-colour-surface-container-light dark:bg-colour-surface-container-dark',
   backgroundPrimaryContainer:
     'bg-colour-primary-container-light dark:bg-colour-primary-container-dark',
+  backgroundOnSurfaceOutline: 'bg-colour-onSurface-outline dark:bg-colour-onSurface-outline-dark',
 
   borderPrimary: 'border-colour-primary dark:border-colour-primary-dark',
   borderPrimaryOnFocus: 'focus:border-colour-primary dark:focus:border-colour-primary-dark',

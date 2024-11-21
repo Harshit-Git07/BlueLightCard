@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.20.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.19.0...bluelightcard/discovery-v1.20.0) (2024-11-21)
+
+
+### Features
+
+* [DISCO-1023] Map trust name instead of trust code to included and excluded trusts ([#3038](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3038)) ([3d77e56](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3d77e568ce99ffc169a740ce714c89ca6bcc6211))
+
 ## [1.19.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.18.0...bluelightcard/discovery-v1.19.0) (2024-11-20)
 
 

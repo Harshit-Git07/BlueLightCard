@@ -217,6 +217,38 @@ describe('GET Redemption Config', () => {
     expect(result.status).toBe(200);
   }, 15000);
 
+  test('GET /redemptions/{offerId} should return correct redemptionConfig for redemptionType verify', async () => {
+    const { redemptionConfig, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
+      offerId: '4',
+      redemptionType: 'verify',
+      connection: 'affiliate',
+      url: faker.internet.url(),
+      affiliate: 'awin',
+    });
+
+    onTestFinished(redemptionConfigHooks.cleanup);
+    await redemptionConfigHooks.insert();
+
+    const result = await callRedemptionConfigEndpoint(redemptionConfig.offerId);
+
+    const actualResponseBody = await result.json();
+
+    const expectedResponseBody = {
+      statusCode: 200,
+      data: {
+        id: redemptionConfig.id,
+        offerId: redemptionConfig.offerId,
+        redemptionType: 'verify',
+        connection: redemptionConfig.connection,
+        companyId: redemptionConfig.companyId,
+        affiliate: redemptionConfig.affiliate,
+        url: redemptionConfig.url,
+      },
+    };
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+    expect(result.status).toBe(200);
+  }, 15000);
+
   test('GET /redemptions/{offerId} should return 200 for redemptionType CreditCard', async () => {
     const { redemptionConfig, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
       offerId: '4',

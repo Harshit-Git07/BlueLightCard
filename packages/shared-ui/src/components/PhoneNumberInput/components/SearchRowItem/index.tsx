@@ -10,7 +10,7 @@ export type Props = {
   onChange: ChangeEventHandler<HTMLInputElement>;
 };
 
-const { fontStyles, countryTextStyles, dialCodeTextStyles, bgStyles } = RowStyles;
+const { fontStyles, countryTextStyles, dialCodeTextStyles } = RowStyles;
 const placeholderStyles =
   'placeholder:text-colour-onSurface-subtle dark:placeholder:text-colour-onSurface-subtle-dark';
 

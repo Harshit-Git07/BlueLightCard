@@ -1,0 +1,43 @@
+import { fetchSanity, groq } from '@/lib/sanity/fetch';
+import { creativeModuleQuery } from '@/lib/sanity/queries';
+import Modules from '@/ui/modules';
+import processMetadata from '@/lib/processMetadata';
+
+export default async function Page() {
+  const page = await getPage();
+  return <Modules modules={page?.modules} />;
+}
+
+export async function generateMetadata() {
+  const page = await getPage();
+  return await processMetadata(page);
+}
+
+async function getPage() {
+  return await fetchSanity<Sanity.Page>(
+    groq`*[_type == 'page' && metadata.slug.current == 'index'][0]{
+			...,
+			modules[]{
+				...,
+				ctas[]{
+					...,
+					link{
+						...,
+						internal->{ title, metadata }
+					}
+				},
+				logos[]->,
+				testimonials[]->,
+				predefinedFilters[]->,
+				${creativeModuleQuery}
+			},
+			metadata {
+				...,
+				'ogimage': image.asset->url
+			}
+		}`,
+    {
+      tags: ['homepage'],
+    },
+  );
+}

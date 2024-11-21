@@ -1,0 +1,29 @@
+/* OfferCollection.module.css */
+
+.offerContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.offerCard {
+  flex: 1 1 100%; /* Default: 1 card per row */
+  max-width: 100%;
+}
+
+@media (min-width: 640px) {
+  /* Small screens and up (sm) */
+  .offerCard {
+    flex: 1 1 calc(50% - 1rem); /* 2 cards per row */
+    max-width: calc(50% - 1rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  /* Large screens and up (lg) */
+  .offerCard {
+    flex: 1 1 calc(25.33%); /* 3 cards per row */
+    max-width: calc(25.33%);
+  }
+}

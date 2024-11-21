@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.90.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.89.0...bluelightcard/web-v1.90.0) (2024-11-21)
+
+
+### Features
+
+* [MER-263 + MER-264] - Modal screens ([#3056](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3056)) ([d670cc4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d670cc4d53f0529ee0cecf5ede5e5f6c698b7923))
+* [MER-34] Update PR environment github action and add apple domain association ([#3022](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3022)) ([f0dac70](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f0dac7018ef07ceaf9100c5bc255b6c0f6b302fb))
+* MAMA-24: card screen ([#2820](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2820)) ([c79293f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c79293f5861f4284f8fc2ee112fdaccd5312243d))
+
+
+### Bug Fixes
+
+* if oid=0, we do not trigger the OfferSheet on companypage ([#3042](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3042)) ([385ce40](https://github.com/bluelightcard/BlueLightCard-2.0/commit/385ce40c8c9d020cb1a420d0301f6764b751febd))
+
 ## [1.89.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.88.1...bluelightcard/web-v1.89.0) (2024-11-21)
 
 

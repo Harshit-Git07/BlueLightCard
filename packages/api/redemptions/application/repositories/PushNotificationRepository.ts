@@ -32,7 +32,7 @@ export class PushNotificationRepository implements IPushNotificationRepository {
     ballot: '',
     giftCard: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID),
     creditCard: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_CREDIT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID),
-    verify: '##todo##TR-692##',
+    verify: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VERIFY_PUSH_NOTIFICATION_CAMPAIGN_ID),
   };
 
   constructor(

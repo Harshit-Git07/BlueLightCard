@@ -9,6 +9,7 @@ import {
   SHOWCARD,
   VAULT,
   VAULTQR,
+  VERIFY,
 } from '@blc-mono/core/constants/redemptions';
 import { as } from '@blc-mono/core/utils/testing';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
@@ -32,6 +33,7 @@ beforeEach(() => {
     'giftCard_env_val';
   process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_CREDIT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID] =
     'creditCard_env_val';
+  process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VERIFY_PUSH_NOTIFICATION_CAMPAIGN_ID] = 'verify_env_val';
 });
 
 afterEach(() => {
@@ -43,6 +45,7 @@ afterEach(() => {
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID];
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID];
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_CREDIT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID];
+  delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VERIFY_PUSH_NOTIFICATION_CAMPAIGN_ID];
 });
 
 describe('PushNotificationRepository', () => {
@@ -58,6 +61,7 @@ describe('PushNotificationRepository', () => {
       [SHOWCARD, 'showCard_env_val'],
       [GIFTCARD, 'giftCard_env_val'],
       [CREDITCARD, 'creditCard_env_val'],
+      [VERIFY, 'verify_env_val'],
     ])('should send push notification with redemptionType %s', async (redemptionType, campaignEnvVar) => {
       // Arrange
       const logger = createTestLogger();

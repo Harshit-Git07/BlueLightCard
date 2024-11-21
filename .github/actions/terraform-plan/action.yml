@@ -1,0 +1,106 @@
+name: Terraform Plan
+description: Terraform plan action
+inputs:
+  environment:
+    description: Terraform workspace environment
+    required: true
+    type: string
+  plan_only:
+    description: Set `speculative` and `plan_only` variables to true if just planning, false - if applying
+    required: true
+    type: boolean
+  relative_path:
+    description: Relative path to repo root for terraform code - including ./
+    required: true
+    type: string
+  workspace_prefix:
+    description: Terraform Workspace prefix, no trailing '-'
+    required: true
+    type: string
+  GIT_SSH_KEY:
+    description: Github SSH Key
+    required: true
+    type: string
+  TF_API_TOKEN:
+    description: HCP Terraform API token
+    required: true
+    type: string
+
+outputs:
+  add:
+    description: Planned number of resources to add
+    value: ${{ steps.plan-output.outputs.add }}
+  change:
+    description: Planned number of resources to change
+    value: ${{ steps.plan-output.outputs.change }}
+  destroy:
+    description: Planned number of resources to destroy
+    value: ${{ steps.plan-output.outputs.destroy }}
+  run_id:
+    description: HCP Terraform Run ID
+    value: ${{ steps.create-run.outputs.run_id }}
+  run_link:
+    description: HCP Terraform Run Link / URL
+    value: ${{ steps.create-run.outputs.run_link }}
+  run_payload:
+    description: HCP Terraform Run Payload
+    value: ${{ steps.create-run.outputs.payload }}
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Cache .terraform
+      id: cache-terraform
+      uses: actions/cache@v4
+      with:
+        path: ${{ inputs.relative_path }}/.terraform
+        key: ${{ inputs.workspace_prefix }}-${{ inputs.environment }}-terraform
+
+    - name: Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        cli_config_credentials_token: ${{ inputs.TF_API_TOKEN }}
+        terraform_version: "1.9.8"
+
+    - name: Setup SSH configuration
+      shell: bash
+      run: |
+        if [[ -z "$GIT_SSH_KEY" ]] ; then echo "Missing GIT_SSH_KEY" ; exit 1 ; fi
+        install -d -m 0700 ~/.ssh
+        echo $GIT_SSH_KEY | base64 -d > ~/.ssh/id_rsa
+        chmod 0400 ~/.ssh/id_rsa
+        ssh-keygen -y -f ~/.ssh/id_rsa > /dev/null || { echo "Invalid GIT_SSH_KEY" ; exit 1 ; }
+        cd ${{ inputs.relative_path}}
+      env:
+        GIT_SSH_KEY: ${{ inputs.GIT_SSH_KEY }}
+
+    - name: Terraform init
+      shell: bash
+      run: terraform -chdir=${{ inputs.relative_path}} init
+      env:
+        TF_WORKSPACE: ${{ inputs.environment }}
+
+    - name: Upload Configuration
+      uses: hashicorp/tfc-workflows-github/actions/upload-configuration@v1.3.1
+      id: upload-configuration
+      with:
+        workspace: ${{ inputs.workspace_prefix }}-${{ inputs.environment }}
+        directory: ${{ inputs.relative_path }}
+        speculative: ${{ inputs.plan_only }}
+
+    - name: Create Run
+      uses: hashicorp/tfc-workflows-github/actions/create-run@v1.3.1
+      id: create-run
+      with:
+        workspace: ${{ inputs.workspace_prefix }}-${{ inputs.environment }}
+        configuration_version: ${{ steps.upload-configuration.outputs.configuration_version_id }}
+        plan_only: ${{ inputs.plan_only }}
+
+    - name: Get Plan Output
+      uses: hashicorp/tfc-workflows-github/actions/plan-output@v1.3.1
+      id: plan-output
+      with:
+        plan: ${{ fromJSON(steps.create-run.outputs.payload).data.relationships.plan.data.id }}

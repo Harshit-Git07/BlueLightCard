@@ -1,0 +1,123 @@
+name: Terraform shared - plan
+
+on:
+  pull_request:
+    paths:
+      - terraform/**
+      - .github/workflows/terraform-*.yml
+  workflow_dispatch:
+
+env:
+  GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+  TF_CLOUD_ORGANIZATION: "bluelightcard"
+  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+
+jobs:
+  pr-cleanup:
+    name: Cleanup PR comments
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cleanup
+        if: github.event_name == 'pull_request'
+        uses: ./.github/actions/comments-clean-pr
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          searchString: "Terraform Cloud Plan Output"
+
+  terraform:
+    name: ${{ matrix.dir }}-${{ matrix.environment}}
+    runs-on: ubuntu-latest
+    needs:
+      - pr-cleanup
+    permissions:
+      contents: read
+      pull-requests: write
+    strategy:
+      matrix:
+        include:
+          ## blc
+          - dir: blc-shared
+            environment: develop
+          - dir: blc-shared
+            environment: staging
+          - dir: blc-shared
+            environment: pr
+          - dir: blc-shared
+            environment: production
+
+          ## blc-au
+          # - dir: blc-au-shared
+          #   environment: develop
+          - dir: blc-au-shared
+            environment: staging
+          - dir: blc-au-shared
+            environment: pr
+          - dir: blc-au-shared
+            environment: production
+
+          ## dds
+          - dir: dds-shared
+            environment: develop
+          - dir: dds-shared
+            environment: staging
+          - dir: dds-shared
+            environment: pr
+          - dir: dds-shared
+            environment: production
+
+          ## shared
+          - dir: shared
+            environment: develop
+          - dir: shared
+            environment: staging
+          - dir: shared
+            environment: pr
+          - dir: shared
+            environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Terraform plan
+        id: terraform-plan
+        uses: ./.github/actions/terraform-plan
+        with:
+          environment: ${{ matrix.environment }}
+          plan_only: true
+          relative_path: ./terraform/${{ matrix.dir }}
+          workspace_prefix: blc-mono-${{ matrix.dir }}
+          GIT_SSH_KEY: ${{ secrets.GIT_SSH_KEY }}
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Update PR
+        if: ${{ github.event_name == 'pull_request' && (steps.terraform-plan.outputs.add != '0' || steps.terraform-plan.outputs.change != '0' || steps.terraform-plan.outputs.destroy != '0') }}
+        uses: actions/github-script@v7
+        id: plan-comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 1. Create comment for the PR
+            const output = `### Terraform Cloud Plan Output
+               #### ${{ matrix.dir }} (${{ matrix.environment }})
+               \`\`\`
+               Plan: ${{ steps.terraform-plan.outputs.add }} to add, ${{ steps.terraform-plan.outputs.change }} to change, ${{ steps.terraform-plan.outputs.destroy }} to destroy.
+               \`\`\`
+               Click [here](${{ steps.terraform-plan.outputs.run_link }}) to view changes in Terraform Cloud.
+               #### Apply changes
+               Run the [Terraform shared - apply](${{ github.server_url }}/${{ github.repository }}/actions/workflows/terraform-shared-apply.yml) workflow with the following paramters to apply the changes:
+
+               * Terraform directory name: **${{ matrix.dir }}**
+               * Terraform workspace environment: **${{ matrix.environment }}**
+               `;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });

@@ -1,0 +1,62 @@
+name: Terraform shared - apply
+
+on:
+  workflow_dispatch:
+    inputs:
+      dir:
+        description: Terraform directory name
+        options:
+          - ---select---
+          - blc-au-shared
+          - blc-shared
+          - dds-shared
+          - shared
+        required: true
+        type: choice
+      environment:
+        description: Terraform workspaces environment
+        options:
+          - ---select---
+          - develop
+          - pr
+          - production
+          - staging
+        required: true
+        type: choice
+
+env:
+  TF_CLOUD_ORGANIZATION: "bluelightcard"
+  TF_API_TOKEN: "${{ secrets.TF_API_TOKEN }}"
+
+jobs:
+  terraform:
+    name: ${{ inputs.dir }}-${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Terraform plan
+        id: terraform-plan
+        uses: ./.github/actions/terraform-plan
+        with:
+          environment: ${{ inputs.environment }}
+          plan_only: false
+          relative_path: ./terraform/${{ inputs.dir }}
+          workspace_prefix: blc-mono-${{ inputs.dir }}
+          GIT_SSH_KEY: ${{ secrets.GIT_SSH_KEY }}
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform apply
+        if: ${{ fromJSON(steps.terraform-plan.outputs.run_payload).data.attributes.actions.IsConfirmable == 'true' }}
+        id: terraform-apply
+        uses: ./.github/actions/terraform-apply
+        with:
+          environment: ${{ inputs.environment }}
+          relative_path: ./terraform/${{ inputs.dir }}
+          run_id: ${{ steps.terraform-plan.outputs.run_id }}
+          workspace_prefix: blc-mono-${{ inputs.dir }}
+          GIT_SSH_KEY: ${{ secrets.GIT_SSH_KEY }}
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}

@@ -1,0 +1,77 @@
+name: Terraform common apply workflow
+
+on:
+  workflow_call:
+    inputs:
+      dir:
+        description: Terraform directory name
+        required: true
+        type: string
+      environment:
+        description: Terraform workspace environment
+        required: true
+        type: string
+    secrets:
+      GIT_SSH_KEY:
+        description: Github SSH Key
+        required: true
+      TF_API_TOKEN:
+        description: HCP Terraform API token
+        required: true
+
+env:
+  TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+  TF_CLOUD_ORGANIZATION: "bluelightcard"
+
+jobs:
+  plan:
+    name: Plan
+    runs-on: ubuntu-latest
+    outputs:
+      IsConfirmable: ${{ fromJSON(steps.terraform-plan.outputs.payload).data.attributes.actions.IsConfirmable }}
+      run_id: ${{ steps.terraform-plan.outputs.run_id }}
+      run_link: ${{ steps.terraform-plan.outputs.run_link }}
+      run_payload: ${{ steps.terraform-plan.outputs.payload }}
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Terraform plan
+        id: terraform-plan
+        uses: ./.github/actions/terraform-plan
+        with:
+          environment: ${{ inputs.environment  }}
+          plan_only: false
+          relative_path: ./terraform/${{ inputs.dir }}
+          workspace_prefix: blc-mono-${{ inputs.dir }}
+          GIT_SSH_KEY: ${{ secrets.GIT_SSH_KEY }}
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+
+  apply:
+    name: Apply
+    if: ${{ needs.plan.outputs.IsConfirmable == 'true' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: terraform-${{ inputs.dir }}-${{ inputs.environment  }}
+      url: ${{ needs.plan.outputs.run_link }}
+    needs:
+      - plan
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Terraform apply
+        if: ${{ needs.plan.outputs.IsConfirmable == 'true' }}
+        id: terraform-apply
+        uses: ./.github/actions/terraform-apply
+        with:
+          environment: ${{ inputs.environment }}
+          relative_path: ./terraform/${{ inputs.dir }}
+          run_id: ${{ needs.plan.outputs.run_id }}
+          workspace_prefix: blc-mono-${{ inputs.dir }}
+          GIT_SSH_KEY: ${{ secrets.GIT_SSH_KEY }}
+          TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}

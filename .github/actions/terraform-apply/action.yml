@@ -1,0 +1,48 @@
+name: Terraform Apply
+description: Terraform apply action
+inputs:
+  environment:
+    description: Terraform workspace environment
+    required: true
+    type: string
+
+  relative_path:
+    description: Relative path to repo root for terraform code - including ./
+    required: true
+    type: string
+  run_id:
+    description: HCL Terraform Run ID
+    required: true
+    type: string
+  workspace_prefix:
+    description: Terraform Workspace prefix, no trailing '-'
+    required: true
+    type: string
+  GIT_SSH_KEY:
+    description: Github SSH Key
+    required: true
+    type: string
+  TF_API_TOKEN:
+    description: HCP Terraform API token
+    required: true
+    type: string
+
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Cache .terraform
+      id: cache-terraform
+      uses: actions/cache@v4
+      with:
+        path: ${{ inputs.relative_path }}/.terraform
+        key: ${{ inputs.workspace_prefix }}-${{ inputs.environment }}-terraform
+
+    - name: Apply
+      uses: hashicorp/tfc-workflows-github/actions/apply-run@v1.3.1
+      id: apply
+      with:
+        run: ${{ inputs.run_id }}
+        comment: "Apply Run from GitHub Actions CI ${{ github.sha }}"

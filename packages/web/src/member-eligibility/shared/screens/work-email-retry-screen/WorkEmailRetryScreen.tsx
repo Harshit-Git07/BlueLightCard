@@ -10,6 +10,7 @@ import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/scree
 import { useCountDownInSeconds } from '@/root/src/member-eligibility/shared/screens/work-email-retry-screen/hooks/useCountDownInSeconds';
 import { useFuzzyFrontendButtons } from './hooks/UseFuzzyFrontEndButtons';
 import { useOnEditEmail } from '@/root/src/member-eligibility/shared/screens/work-email-retry-screen/hooks/UseOnEditEmail';
+import { defaultScreenTitle } from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
 
 export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -43,7 +44,7 @@ export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
         <EligibilityHeading
           className="gap-[24px]"
           numberOfCompletedSteps={numberOfCompletedSteps}
-          title="Verify Eligibility"
+          title={defaultScreenTitle(eligibilityDetails.flow)}
           subtitle="Enter your work email address to verify your eligibility"
         />
 

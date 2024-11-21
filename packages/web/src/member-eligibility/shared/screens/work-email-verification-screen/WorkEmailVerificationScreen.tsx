@@ -12,7 +12,7 @@ import TextInput from '@bluelightcard/shared-ui/components/TextInput';
 import { useOnWorkEmailChanged } from '@/root/src/member-eligibility/shared/screens/work-email-verification-screen/hooks/UseOnWorkEmailChanged';
 import { useOnSendVerificationLink } from '@/root/src/member-eligibility/shared/screens/work-email-verification-screen/hooks/UseOnSendVerificationLink';
 import { useOnBack } from '@/root/src/member-eligibility/shared/screens/work-email-verification-screen/hooks/UseOnReturnToVerificationScreen';
-import { employmentDetailsTitle } from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
+import { defaultScreenTitle } from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
 
 export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -41,7 +41,7 @@ export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
     <EligibilityScreen data-testid="work-email-verification-screen">
       <EligibilityBody>
         <EligibilityHeading
-          title={employmentDetailsTitle(eligibilityDetails.flow)}
+          title={defaultScreenTitle(eligibilityDetails.flow)}
           subtitle="Enter your work email address to verify your eligibility"
           numberOfCompletedSteps={numberOfCompletedSteps}
         />

@@ -11,7 +11,7 @@ import { useVerificationMethods } from '@/root/src/member-eligibility/shared/scr
 import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
 import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/hooks/FuzzyFrontendButtons';
 import {
-  employmentDetailsTitle,
+  defaultScreenTitle,
   verifyEligibilitySubTitle,
 } from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
 
@@ -43,7 +43,7 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
     <EligibilityScreen>
       <EligibilityBody>
         <EligibilityHeading
-          title={employmentDetailsTitle(eligibilityDetails.flow)}
+          title={defaultScreenTitle(eligibilityDetails.flow)}
           subtitle={verifyEligibilitySubTitle(eligibilityDetails.flow)}
           numberOfCompletedSteps={numberOfCompletedSteps}
         />

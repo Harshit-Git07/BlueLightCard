@@ -9,7 +9,7 @@ import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/
 import { EligibilityBody } from '@/root/src/member-eligibility/shared/screens/shared/components/body/EligibilityBody';
 import {
   employmentDetailsSubTitle,
-  employmentDetailsTitle,
+  defaultScreenTitle,
 } from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
 
 import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
@@ -72,7 +72,7 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
     <EligibilityScreen>
       <EligibilityBody>
         <EligibilityHeading
-          title={employmentDetailsTitle(eligibilityDetails.flow)}
+          title={defaultScreenTitle(eligibilityDetails.flow)}
           subtitle={employmentDetailsSubTitle(eligibilityDetails.flow)}
           numberOfCompletedSteps={numberOfCompletedSteps}
         />

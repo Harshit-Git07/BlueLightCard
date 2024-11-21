@@ -23,7 +23,7 @@ import { useEmployers } from './hooks/use-employers/UseEmployers';
 import { useShouldShowPromoCode } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/UseShouldShowPromoCode';
 import {
   employmentDetailsSubTitle,
-  employmentDetailsTitle,
+  defaultScreenTitle,
 } from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 
@@ -64,13 +64,13 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
     <EligibilityScreen data-testid="job-details-screen">
       <EligibilityBody>
         <EligibilityHeading
-          title={employmentDetailsTitle(eligibilityDetails.flow)}
+          title={defaultScreenTitle(eligibilityDetails.flow)}
           subtitle={employmentDetailsSubTitle(eligibilityDetails.flow)}
           numberOfCompletedSteps={numberOfCompletedSteps}
         />
 
         <div className="flex flex-col items-start w-full">
-          <p className={`mt-[24px] ${fonts.bodySemiBold} ${colours.textOnSurface}`}>
+          <p className={`mt-[8px] ${fonts.bodySemiBold} ${colours.textOnSurface}`}>
             EMPLOYMENT STATUS
           </p>
 

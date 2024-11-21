@@ -137,7 +137,7 @@ describe('given a signing up member that needs to prove their eligibility to use
 
               it('should navigate to the file upload screen', () => {
                 const subTitle = screen.getByText(
-                  'Upload the required ID to verify your eligibility'
+                  'Please check your employment information and re-verify your status using a valid ID or email.'
                 );
                 expect(subTitle).toBeInTheDocument();
               });
@@ -153,7 +153,7 @@ describe('given a signing up member that needs to prove their eligibility to use
 
               it('should navigate to the file upload screen', () => {
                 const subTitle = screen.getByText(
-                  'Upload the required ID to verify your eligibility'
+                  'Please check your employment information and re-verify your status using a valid ID or email.'
                 );
                 expect(subTitle).toBeInTheDocument();
               });
@@ -168,7 +168,9 @@ describe('given a signing up member that needs to prove their eligibility to use
               });
 
               it('should navigate to the file upload screen', () => {
-                const title = screen.getByText('Upload the required ID to verify your eligibility');
+                const title = screen.getByText(
+                  'Please check your employment information and re-verify your status using a valid ID or email.'
+                );
                 expect(title).toBeInTheDocument();
               });
 
@@ -230,7 +232,9 @@ describe('given a signing up member that needs to prove their eligibility to use
             });
 
             it('should navigate to the file upload screen', () => {
-              const title = screen.getByText('Upload the required ID to verify your eligibility');
+              const title = screen.getByText(
+                'Please check your employment information and re-verify your status using a valid ID or email.'
+              );
               expect(title).toBeInTheDocument();
             });
 

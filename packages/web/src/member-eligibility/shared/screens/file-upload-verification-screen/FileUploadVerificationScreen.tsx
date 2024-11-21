@@ -17,6 +17,10 @@ import {
   EligibilityFileUpload,
   OnFilesChanged,
 } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/components/EligibilityFileUpload';
+import {
+  defaultScreenTitle,
+  idUploadSubTitle,
+} from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
 
 export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -99,8 +103,8 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
       <EligibilityBody>
         <div className="flex flex-col gap-[24px]">
           <EligibilityHeading
-            title="Verify Eligibility"
-            subtitle="Upload the required ID to verify your eligibility"
+            title={defaultScreenTitle(eligibilityDetails.flow)}
+            subtitle={idUploadSubTitle(eligibilityDetails.flow)}
             numberOfCompletedSteps={numberOfCompletedSteps}
           />
 

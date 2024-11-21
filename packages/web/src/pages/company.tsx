@@ -255,7 +255,8 @@ const SheetHandler = ({ companyId, onSelectOffer }: SheetHandlerProps) => {
   const company = useSuspenseQuery(getCompanyQuery(companyId, cmsEnabled));
 
   useEffect(() => {
-    if (oid && oid !== 'null') {
+    // if oid=null or oid=0, we do not trigger the OfferSheet as these are not valid Id's we should handle
+    if (oid && oid !== 'null' && oid !== '0') {
       onSelectOffer(oid, company.data.id, company.data.name);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

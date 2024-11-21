@@ -51,8 +51,8 @@ const Company: NextPage<any> = () => {
   let isCmsFlagOn = amplitudeExperiments[FeatureFlags.CMS_OFFERS] === 'on';
 
   useEffect(() => {
-    // if oid=null, null would be a string in the url, so we need to handle that as string
-    if (oid && oid !== 'null' && cid && company?.companyName) {
+    // if oid=null or oid=0, we do not trigger the OfferSheet as these are not valid Id's we should handle
+    if (oid && oid !== 'null' && oid !== '0' && cid && company?.companyName) {
       viewOffer({
         offerId: oid as string,
         companyId: cid as string,

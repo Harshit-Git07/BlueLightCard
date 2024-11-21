@@ -22,7 +22,7 @@ export class FirehoseDeliveryStream {
     };
 
     try {
-      this.firehose.send(new PutRecordCommand(input));
+      await this.firehose.send(new PutRecordCommand(input));
     } catch (error) {
       this.logger.error({message: 'Error sending to firehose', body: { error }});
     }

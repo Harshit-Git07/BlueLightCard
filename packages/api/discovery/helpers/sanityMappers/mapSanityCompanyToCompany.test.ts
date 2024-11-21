@@ -13,8 +13,8 @@ describe('mapSanityCompanyToCompany', () => {
       logo: 'https://example.com/logo.jpg',
       ageRestrictions: '18+, 21+',
       alsoKnownAs: ['Alias 1', 'Alias 2'],
-      includedTrusts: ['Service Restriction Code'],
-      excludedTrusts: ['Service Restriction Code 2'],
+      includedTrusts: ['Service Restriction'],
+      excludedTrusts: ['Service Restriction 2'],
       categories: [
         {
           id: 101,
@@ -41,8 +41,8 @@ describe('mapSanityCompanyToCompany', () => {
       logo: 'https://example.com/logo.jpg',
       ageRestrictions: '18+, 21+',
       alsoKnownAs: ['Alias 1', 'Alias 2'],
-      includedTrusts: ['Service Restriction Code'],
-      excludedTrusts: ['Service Restriction Code 2'],
+      includedTrusts: ['Service Restriction'],
+      excludedTrusts: ['Service Restriction 2'],
       categories: [
         {
           id: 0,
@@ -232,7 +232,7 @@ const sanityCompany: SanityCompany = {
   excludedTrust: [
     {
       _id: 'restriction-id',
-      name: 'Service Restriction',
+      name: 'Service Restriction 2',
       _createdAt: '2023-01-01T00:00:00Z',
       _updatedAt: '2023-01-02T00:00:00Z',
       _rev: 'rev-id',

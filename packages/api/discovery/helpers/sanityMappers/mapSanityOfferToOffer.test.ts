@@ -31,7 +31,7 @@ describe('mapSanityOfferToOffer', () => {
         logo: 'logo-ref',
         ageRestrictions: 'none',
         alsoKnownAs: [],
-        includedTrusts: ['trust-service-code'],
+        includedTrusts: ['Trust Service Name'],
         excludedTrusts: [],
         categories: [],
         local: false,
@@ -181,7 +181,7 @@ it('should map boost with default values', () => {
   expect(result.boost?.boosted).toStrictEqual(false);
 });
 
-it('should skip trusts with no code value', () => {
+it('should skip trusts with no trust name', () => {
   const sanityOfferWithOtherDiscount: Partial<SanityOffer> = {
     ...validSanityOffer,
     includedTrusts: [
@@ -191,8 +191,8 @@ it('should skip trusts with no code value', () => {
         _createdAt: '2023-01-01T00:00:00Z',
         _updatedAt: '2023-01-02T00:00:00Z',
         _rev: 'rev-id',
-        name: 'Trust Service Name',
-        code: undefined,
+        name: undefined,
+        code: 'trust-service-code',
       },
     ],
   };

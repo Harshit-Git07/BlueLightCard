@@ -62,7 +62,6 @@ describe('ValidationMessage component', () => {
   it('sets aria-hidden="true" when isDisabled is true', () => {
     setup({ isDisabled: true, message: 'Hidden message' });
     const wrapper = screen.getByText('Hidden message').parentElement;
-    console.log(wrapper);
     expect(wrapper).toHaveAttribute('aria-hidden', 'true');
   });
 

@@ -20,7 +20,7 @@ describe('CompanyAbout component', () => {
     };
     render(<CompanyAbout {...props} />);
 
-    const companyAboutName = screen.findAllByText('Company Name');
-    expect(companyAboutName).toMatchSnapshot();
+    const companyAboutName = screen.queryByText('Company Name');
+    expect(companyAboutName).toBeNull();
   });
 });

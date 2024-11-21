@@ -1,12 +1,9 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faCheckCircle } from '@fortawesome/pro-solid-svg-icons';
 import { cssUtil } from '../../utils/cssUtil';
 import { usePlatformAdapter } from '../../adapters';
 import { ThemeColorTokens, ThemeVariant } from '../../types';
-
-const fontCss =
-  'font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold';
 
 const ButtonColour: ThemeColorTokens = {
   [ThemeVariant.Primary]: {
@@ -16,7 +13,6 @@ const ButtonColour: ThemeColorTokens = {
       focus: 'focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]',
       text: `text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark`,
       border: 'border-none rounded transition border-2',
-      padding: 'py-2 px-3',
       disabled: `disabled:bg-button-primary-disabled-bg-colour-light disabled:dark:bg-button-primary-disabled-bg-colour-dark disabled:text-button-primary-disabled-label-colour-light disabled:dark:text-button-primary-disabled-label-colour-dark`,
     },
   },
@@ -25,16 +21,35 @@ const ButtonColour: ThemeColorTokens = {
       hover: `hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark`,
       text: `text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark`,
       border: 'border-none',
-      padding: 'py-0',
       disabled: `disabled:text-button-tertiary-disabled-label-colour-light disabled:dark:text-button-tertiary-disabled-label-colour-dark`,
     },
   },
+};
+
+export type ButtonSize = 'Small' | 'Large';
+
+const fontStyles: Record<ButtonSize, string> = {
+  Large:
+    'text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font',
+  Small:
+    'font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold',
+};
+
+const sizeStyles: Record<ButtonSize, string> = {
+  Large: 'h-10 flex items-center justify-center gap-2',
+  Small: 'flex items-center justify-center',
+};
+
+const sizeSpecificPadding: Record<ButtonSize, string> = {
+  Large: 'py-2 px-6',
+  Small: 'py-1 px-3',
 };
 
 export interface Props {
   variant: ThemeVariant.Primary | ThemeVariant.Tertiary;
   label?: string;
   copyText: string;
+  size: ButtonSize;
   fullWidth?: boolean;
   disabled?: boolean;
   className?: string;
@@ -45,6 +60,7 @@ const CopyButton: FC<Props> = ({
   variant,
   label = 'Copy',
   copyText,
+  size,
   fullWidth = false,
   disabled,
   className,
@@ -54,19 +70,31 @@ const CopyButton: FC<Props> = ({
   const [accountNumberCopied, setAccountNumberCopied] = useState(false);
 
   const colourToken = ButtonColour[variant].base;
+
+  const sizeSpecificStyles = useMemo(() => {
+    const styles = sizeStyles[size];
+
+    // Tertiary variants - no left of right padding is needed as per designs
+    if (variant === ThemeVariant.Tertiary) {
+      return styles;
+    }
+
+    const paddingForSpecificSize = sizeSpecificPadding[size];
+    return `${paddingForSpecificSize} ${styles}`;
+  }, []);
+
   const width = fullWidth ? 'w-full' : '';
 
   const classes = cssUtil([
-    fontCss,
+    sizeSpecificStyles,
+    fontStyles[size],
     disabled ? colourToken.disabled : '',
     colourToken.text,
     colourToken.hover,
     colourToken.bg ?? '',
     colourToken.border ?? '',
-    colourToken.padding,
     defaultStateClassName ?? '',
     width,
-    'text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font',
   ]);
 
   const clickHandler = async () => {
@@ -100,10 +128,12 @@ const CopyButton: FC<Props> = ({
         </button>
       ) : (
         <div
-          className={`${colourToken.padding} ${width} flex items-center justify-center text-colour-success-light dark:text-colour-success-dark`}
+          className={`${width} ${sizeSpecificStyles} flex items-center justify-center text-colour-success-light dark:text-colour-success-dark`}
         >
-          <p className={`${fontCss} tracking-typography-label-semibold`}>Copied to clipboard</p>
-          <FontAwesomeIcon className="ml-2" icon={faCheckCircle} size="xs" />
+          <p className={`${fontStyles[size]} tracking-typography-label-semibold`}>
+            Copied to clipboard
+          </p>
+          <FontAwesomeIcon className="ml-2" icon={faCheckCircle} />
         </div>
       )}
     </div>

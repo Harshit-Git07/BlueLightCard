@@ -1,5 +1,5 @@
 export type AccountDetailsProps = {
-  accountNumber: string;
+  accountNumber?: string;
   firstName: string;
   lastName: string;
 };

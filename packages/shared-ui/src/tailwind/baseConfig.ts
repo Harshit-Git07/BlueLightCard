@@ -18,6 +18,7 @@ export default {
         mobile: '280px',
         'mobile-xl': '500px',
         tablet: '768px',
+        'tablet-xl': '800px',
         laptop: '1024px',
         desktop: '1200px',
       },

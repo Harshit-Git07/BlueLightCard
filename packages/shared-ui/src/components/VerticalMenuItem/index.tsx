@@ -19,7 +19,7 @@ const VerticalMenuItem: FC<VerticalMenuItemProps> = ({
 
   const combinedStyles = [
     'h-[50px]',
-    'pl-[18px]',
+    'pl-[18px] tablet:pl-[2px]',
     'flex',
     'items-center',
     'text-colour-onSurface',
@@ -46,13 +46,14 @@ const VerticalMenuItem: FC<VerticalMenuItemProps> = ({
           className="h-full w-full flex items-center hover:opacity-100"
           href={href}
           target={isExternalLink ? '_blank' : undefined}
+          aria-label={label}
         >
-          <p>{label}</p>
+          {label}
           {itemIcon}
         </NextLink>
       ) : (
-        <button className="h-full w-full flex items-center" onClick={onClick}>
-          <p>{label}</p>
+        <button className="h-full w-full flex items-center" onClick={onClick} aria-label={label}>
+          {label}
           {itemIcon}
         </button>
       )}

@@ -13,7 +13,7 @@ describe('CopyButton Page', () => {
   test('should render correctly', async () => {
     render(
       <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-        <CopyButton variant={ThemeVariant.Primary} copyText={accountNumber} />
+        <CopyButton variant={ThemeVariant.Primary} size="Small" copyText={accountNumber} />
       </PlatformAdapterProvider>,
     );
 
@@ -24,7 +24,7 @@ describe('CopyButton Page', () => {
   test('should copy the account number to clipboard', async () => {
     render(
       <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-        <CopyButton variant={ThemeVariant.Primary} copyText={accountNumber} />
+        <CopyButton variant={ThemeVariant.Primary} size="Small" copyText={accountNumber} />
       </PlatformAdapterProvider>,
     );
 

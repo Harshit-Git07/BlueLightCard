@@ -1,4 +1,4 @@
-import { TextDecoder } from 'node:util';
+import { TextEncoder, TextDecoder } from 'node:util';
 
 /**
  * Mocking TextDecoder for jest
@@ -9,3 +9,5 @@ Object.defineProperty(window, 'TextDecoder', {
   writable: true,
   value: TextDecoder,
 });
+
+Object.assign(global, { TextDecoder, TextEncoder });

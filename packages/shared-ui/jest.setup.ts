@@ -1,5 +1,6 @@
 import { toHaveNoViolations } from 'jest-axe';
 import '@testing-library/jest-dom';
+import { TextEncoder, TextDecoder } from 'node:util';
 
 expect.extend(toHaveNoViolations);
 
@@ -16,6 +17,8 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: jest.fn(),
   })),
 });
+
+Object.assign(global, { TextDecoder, TextEncoder });
 
 jest.mock('swiper/react', () => ({
   Swiper: () => null,

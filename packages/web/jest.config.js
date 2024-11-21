@@ -9,6 +9,7 @@ const createJestConfig = nextJest({
 });
 
 const customJestConfig = {
+  setupFiles: ['<rootDir>/test-setup.ts'],
   moduleNameMapper: {
     '^@/root/(.*)$': '<rootDir>/$1',
     '^@/global-vars': '<rootDir>/global-vars.js',

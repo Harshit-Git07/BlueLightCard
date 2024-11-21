@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -17,11 +21,24 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@/data/*": ["./data/*"],
-      "@/*": ["./src/*"],
-      "@storybook-config/*": ["./.storybook/*"],
-      "@blc/offers-cms/*": ["../api/offers-cms/src/*"],
-      "@blc/offers-legacy/*": ["../api/offers/src/*"]
+      "@/data/*": [
+        "./data/*"
+      ],
+      "@/*": [
+        "./src/*"
+      ],
+      "@storybook-config/*": [
+        "./.storybook/*"
+      ],
+      "@blc/offers-cms/*": [
+        "../api/offers-cms/src/*"
+      ],
+      "@blc/offers-legacy/*": [
+        "../api/offers/src/*"
+      ],
+      "@bluelightcard/shared-ui/*": [
+        "../shared-ui/src/*"
+      ]
     }
   },
   "include": [
@@ -32,5 +49,7 @@
     ".storybook/*.ts",
     "tailwind.config.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

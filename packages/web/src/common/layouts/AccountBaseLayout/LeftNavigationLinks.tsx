@@ -1,14 +1,14 @@
 import { useRouter } from 'next/router';
-import { faSignOut, faArrowUpRightFromSquare } from '@fortawesome/pro-regular-svg-icons';
+import { faArrowUpRightFromSquare, faSignOut } from '@fortawesome/pro-regular-svg-icons';
 import {
-  VerticalMenuItem,
-  VerticalMenuItemProps,
   ButtonV2 as Button,
   ThemeVariant,
+  VerticalMenuItem,
+  VerticalMenuItemProps,
 } from '@bluelightcard/shared-ui';
 
 const items: VerticalMenuItemProps[] = [
-  { label: 'Your card', selected: false, href: '/my-card', isExternalLink: false },
+  { label: 'Your card', selected: false, href: '/your-card', isExternalLink: false },
   {
     label: 'Personal information',
     selected: false,
@@ -41,16 +41,15 @@ const LeftNavigationLinks = ({ onSelection }: Props) => {
           const selected = pathname.startsWith(item.href!);
 
           return (
-            <div key={id} className="tablet:ml-[-16px]">
-              <VerticalMenuItem
-                label={item.label}
-                icon={item.icon}
-                href={item.isExternalLink ? item.href : undefined}
-                isExternalLink={item.isExternalLink}
-                selected={selected}
-                onClick={onSelection.bind(this, item.href!)}
-              />
-            </div>
+            <VerticalMenuItem
+              key={id}
+              label={item.label}
+              icon={item.icon}
+              href={item.isExternalLink ? item.href : undefined}
+              isExternalLink={item.isExternalLink}
+              selected={selected}
+              onClick={onSelection.bind(this, item.href!)}
+            />
           );
         })}
 

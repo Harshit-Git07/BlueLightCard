@@ -75,6 +75,47 @@ export type FlexibleOfferData = {
   offers: Offer[];
 };
 
+export type CustomerCardData = {
+  cardNumber?: string;
+  cardCreated?: string;
+  cardExpiry?: string;
+  cardStatus?: string;
+  cardPaymentStatus?: string;
+};
+
+export type CustomerApplicationData = {
+  startDate: string;
+  eligibilityStatus: string;
+  applicationReason: string;
+  verificationMethod: string;
+  address1: string;
+  address2: string;
+  city: string;
+  postcode: string;
+  country: string;
+  promoCode: string;
+  trustedDomainEmail: string;
+  trustedDomainVerified: boolean;
+  rejectionReason: string;
+};
+
+export type CustomerProfileData = {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  phoneNumber: string;
+  emailAddres: string;
+  county: string;
+  employmentType: string;
+  organisationId: string;
+  employerId: string;
+  employerName: string;
+  jobtitle: string;
+  reference: string;
+  card: CustomerCardData;
+  applications: CustomerApplicationData[];
+};
+
 export type AmplitudeEvent = (properties: AmplitudeArg) => void;
 
 export enum BRAND {

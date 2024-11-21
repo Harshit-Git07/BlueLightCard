@@ -8,35 +8,38 @@ const AccountDetails = ({ accountNumber, firstName, lastName }: AccountDetailsPr
   return (
     <div className={`flex flex-col`}>
       <Typography className="hidden tablet:block" variant="headline">
-        {greetings}
+        <span aria-label={greetings}>{greetings}</span>
       </Typography>
 
       <Typography className="block tablet:hidden" variant="title-large">
-        {greetings}
+        <span aria-label={greetings}>{greetings}</span>
       </Typography>
 
-      <div className="mt-2 flex items-center gap-2">
-        <Typography
-          className="text-colour-onSurface-light dark:text-colour-onSurface-dark"
-          variant="label-semibold"
-        >
-          Card number
-        </Typography>
+      {accountNumber ? (
+        <div className="mt-2 flex items-center gap-2">
+          <Typography
+            className="text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            variant="label-semibold"
+          >
+            Card number
+          </Typography>
 
-        <Typography
-          className="text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark"
-          variant="body-light"
-        >
-          {accountNumber}
-        </Typography>
+          <Typography
+            className="text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark"
+            variant="body-light"
+          >
+            {accountNumber}
+          </Typography>
 
-        <CopyButton
-          variant={ThemeVariant.Tertiary}
-          label="Copy"
-          copyText={accountNumber}
-          className="ml-1"
-        />
-      </div>
+          <CopyButton
+            variant={ThemeVariant.Tertiary}
+            label="Copy"
+            size="Small"
+            copyText={accountNumber}
+            className="ml-1"
+          />
+        </div>
+      ) : null}
     </div>
   );
 };

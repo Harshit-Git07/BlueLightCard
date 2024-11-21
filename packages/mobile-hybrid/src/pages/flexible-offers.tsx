@@ -7,12 +7,16 @@ import {
   useOfferDetails,
   usePlatformAdapter,
   ErrorState,
+  Offer,
+  AmplitudeEvents,
 } from '@bluelightcard/shared-ui';
 import { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { FC, Suspense } from 'react';
+import { FC, Suspense, useEffect } from 'react';
 import ContentLoader from 'react-content-loader';
+
+import { BRAND } from '@/globals';
 
 const FlexibleOffersSkeleton: FC = () => {
   return (
@@ -55,6 +59,32 @@ const FlexibleOffersContent: FC = () => {
 
   const offers = flexibleOfferData.offers;
 
+  useEffect(() => {
+    platformAdapter.logAnalyticsEvent(AmplitudeEvents.FLEXIBLE_OFFERS.PAGE_VIEWED, {
+      flexi_menu_id: flexibleOfferData.id,
+      flexi_menu_title: flexibleOfferData.title,
+      brand: BRAND,
+    });
+  }, [flexibleOfferData, platformAdapter]);
+
+  const onOfferClick = (offer: Offer) => {
+    platformAdapter.logAnalyticsEvent(AmplitudeEvents.FLEXIBLE_OFFERS.CARD_CLICKED, {
+      flexi_menu_id: flexibleOfferData.id,
+      flexi_menu_title: flexibleOfferData.title,
+      brand: BRAND,
+      company_name: offer.companyName,
+      company_id: offer.companyID,
+      offer_name: offer.offerName,
+      offer_id: offer.offerID,
+    });
+
+    viewOffer({
+      offerId: offer.offerID,
+      companyId: offer.companyID,
+      companyName: offer.companyName,
+      platform: platformAdapter.platform,
+    });
+  };
   return (
     <>
       <div className="min-w-full">
@@ -81,14 +111,7 @@ const FlexibleOffersContent: FC = () => {
         </div>
         <OfferCardList
           status="success"
-          onOfferClick={(offer) =>
-            viewOffer({
-              offerId: offer.offerID,
-              companyId: offer.companyID,
-              companyName: offer.companyName,
-              platform: platformAdapter.platform,
-            })
-          }
+          onOfferClick={onOfferClick}
           variant="horizontal"
           offers={[...offers, ...offers, ...offers]}
         />

@@ -151,7 +151,7 @@ describe('Flexible Offers page', () => {
       const mockOfferData = flexibleOfferMock.offers[0];
 
       expect(storybookPlatformAdapter.logAnalyticsEvent).toHaveBeenCalledWith(
-        AmplitudeEvents.FLEXIBLE_OFFERS.OFFER_CARD_CLICKED,
+        AmplitudeEvents.FLEXIBLE_OFFERS.CARD_CLICKED,
         {
           flexi_menu_id: flexibleOfferMock.id,
           flexi_menu_title: flexibleOfferMock.title,

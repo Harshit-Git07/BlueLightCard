@@ -75,7 +75,7 @@ const FlexibleOffersContent: FC = () => {
   }
 
   const onOfferClick = (offer: Offer) => {
-    platformAdapter.logAnalyticsEvent(AmplitudeEvents.FLEXIBLE_OFFERS.OFFER_CARD_CLICKED, {
+    platformAdapter.logAnalyticsEvent(AmplitudeEvents.FLEXIBLE_OFFERS.CARD_CLICKED, {
       flexi_menu_id: data.id,
       flexi_menu_title: data.title,
       brand: BRAND,

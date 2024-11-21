@@ -4,7 +4,7 @@ const events = {
     VIEWED: 'error_state_viewed',
   },
   FLEXIBLE_OFFERS: {
-    OFFER_CARD_CLICKED: 'flexi_menu_card_clicked',
+    CARD_CLICKED: 'flexi_menu_card_clicked',
     PAGE_VIEWED: 'flexi_menu_viewed',
   },
   OFFER_SHARE_CLICKED: 'offer_share_clicked',

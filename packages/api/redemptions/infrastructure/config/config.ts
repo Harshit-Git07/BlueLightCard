@@ -166,7 +166,7 @@ export class RedemptionsStackConfigResolver {
           brazeVaultEmailCampaignId: '23555377-445a-838a-74a0-0c274c8ae2f8',
           brazeGenericEmailCampaignId: '091d0923-b2a8-4884-9955-df72b8993e64',
           brazeGiftCardEmailCampaignId: '1c758910-08bf-6914-a854-9b79106f8761',
-          brazePreAppliedEmailCampaignId: 'da993fac-5fac-44ec-a703-c1f4c8fa8547',
+          brazePreAppliedEmailCampaignId: 'ab5691a2-0504-4099-88ef-56ac7ef5f03c',
           brazeVaultQrCodeEmailCampaignId: '31172aa1-2e31-4a77-b9ac-43896f511beb',
           brazeShowCardEmailCampaignId: 'bf54574e-f31e-418b-bd10-649762b74e6a',
           brazeCreditCardEmailCampaignId: '',

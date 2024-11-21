@@ -1,10 +1,8 @@
-import { render, screen, act, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent, { UserEvent } from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import SearchModule from '../index';
-import { SearchModuleProps } from '../types';
+import SearchModule, { Props } from '../index';
 import { useRouter } from 'next/router';
-import { backNavagationalPaths } from '../paths';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
@@ -12,34 +10,19 @@ import {
   IPlatformAdapter,
   PlatformAdapterProvider,
   useMockPlatformAdapter,
-} from '../../../../../shared-ui/src/adapters';
+} from '@bluelightcard/shared-ui';
+import { backNavagationalPaths } from '../components/use-cases/SearchWithNavContainer';
+import { act } from 'react';
 
 jest.mock('next/router', () => ({
   useRouter: jest.fn(),
 }));
 
-jest.mock('swiper/react', () => ({
-  Swiper: () => null,
-  SwiperSlide: () => null,
-}));
-
-jest.mock('swiper/modules', () => ({
-  Navigation: () => null,
-  Pagination: () => null,
-  Autoplay: () => null,
-}));
-
-jest.mock('swiper/css', () => jest.fn());
-jest.mock('swiper/css/pagination', () => jest.fn());
-jest.mock('swiper/css/navigation', () => jest.fn());
-
 describe('SearchModule', () => {
-  let props: SearchModuleProps;
   let useRouterMock: jest.Mock;
   let user: UserEvent;
 
   beforeEach(() => {
-    props = {};
     useRouterMock = useRouter as jest.Mock;
     user = userEvent.setup();
     useRouterMock.mockReturnValue({
@@ -50,8 +33,11 @@ describe('SearchModule', () => {
   describe('search overlay', () => {
     it('should display search overlay', async () => {
       const mockPlatformAdapter = useMockPlatformAdapter();
-      givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
-        [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+      givenSearchModuleIsRenderedWith({
+        mockPlatformAdapter,
+        featureFlags: {
+          [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+        },
       });
 
       await whenSearchInputIsClicked(user);
@@ -61,8 +47,11 @@ describe('SearchModule', () => {
 
     it('should not display search overlay when feature is off', async () => {
       const mockPlatformAdapter = useMockPlatformAdapter();
-      givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
-        [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'off',
+      givenSearchModuleIsRenderedWith({
+        mockPlatformAdapter,
+        featureFlags: {
+          [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'off',
+        },
       });
 
       await whenSearchInputIsClicked(user);
@@ -72,8 +61,11 @@ describe('SearchModule', () => {
 
     it('should hide search overlay', async () => {
       const mockPlatformAdapter = useMockPlatformAdapter();
-      givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
-        [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+      givenSearchModuleIsRenderedWith({
+        mockPlatformAdapter,
+        featureFlags: {
+          [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+        },
       });
 
       await whenSearchInputIsClicked(user);
@@ -85,16 +77,19 @@ describe('SearchModule', () => {
   });
 
   describe('search', () => {
-    const pushMockFn = jest.fn();
-    beforeEach(() => {
+    it('should navigate to searchresults on submit search when useDeeplinkVersion is FALSE', async () => {
+      const pushMockFn = jest.fn();
+
       useRouterMock.mockReturnValue({
         push: pushMockFn,
       });
-    });
-    it('should navigate to searchresults on submit search', async () => {
+
       const mockPlatformAdapter = useMockPlatformAdapter();
-      givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
-        [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+      givenSearchModuleIsRenderedWith({
+        mockPlatformAdapter,
+        featureFlags: {
+          [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+        },
       });
 
       const searchInput = screen.getByRole('searchbox');
@@ -105,6 +100,29 @@ describe('SearchModule', () => {
         expect(searchInput).toHaveValue('test');
         fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter', charCode: 13 });
         expect(pushMockFn).toHaveBeenCalledWith('/searchresults?search=test');
+      });
+    });
+
+    it('should navigate via deeplink to search results page on submit search when useDeeplinkVersion is TRUE', async () => {
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      givenSearchModuleIsRenderedWith({
+        mockPlatformAdapter,
+        featureFlags: {
+          [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+        },
+        useDeeplinkVersion: true,
+      });
+
+      const searchInput = screen.getByRole('searchbox');
+
+      await act(() => userEvent.type(searchInput, 'test'));
+
+      await waitFor(() => {
+        expect(searchInput).toHaveValue('test');
+        fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter', charCode: 13 });
+        expect(mockPlatformAdapter.navigate).toHaveBeenCalledWith(
+          `/offers.php?type=1&opensearch=1&search=${encodeURIComponent('test')}`,
+        );
       });
     });
   });
@@ -120,8 +138,11 @@ describe('SearchModule', () => {
         });
 
         const mockPlatformAdapter = useMockPlatformAdapter();
-        givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
-          [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+        givenSearchModuleIsRenderedWith({
+          mockPlatformAdapter,
+          featureFlags: {
+            [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+          },
         });
 
         const searchInput = screen.getByRole('searchbox');
@@ -146,8 +167,11 @@ describe('SearchModule', () => {
         });
 
         const mockPlatformAdapter = useMockPlatformAdapter();
-        givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
-          [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+        givenSearchModuleIsRenderedWith({
+          mockPlatformAdapter,
+          featureFlags: {
+            [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+          },
         });
 
         const searchInput = screen.getByRole('searchbox');
@@ -164,14 +188,15 @@ describe('SearchModule', () => {
   });
 });
 
-const givenSearchModuleIsRenderedWith = (
-  mockPlatformAdapter: IPlatformAdapter,
-  featureFlags: any,
-) => {
+const givenSearchModuleIsRenderedWith = ({
+  mockPlatformAdapter,
+  featureFlags,
+  useDeeplinkVersion,
+}: { mockPlatformAdapter: IPlatformAdapter; featureFlags: Record<string, string> } & Props) => {
   render(
     <PlatformAdapterProvider adapter={mockPlatformAdapter}>
       <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
-        <SearchModule />
+        <SearchModule useDeeplinkVersion={useDeeplinkVersion} />
       </JotaiTestProvider>
     </PlatformAdapterProvider>,
   );

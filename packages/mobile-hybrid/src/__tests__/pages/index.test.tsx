@@ -88,7 +88,7 @@ describe('Home', () => {
   });
 
   describe('Search Bar', () => {
-    const placeholderText = 'Search stores or brands';
+    const placeholderText = 'Search offers or brands';
     it('should render when home page is rendered', () => {
       const searchBar = screen.queryByPlaceholderText(placeholderText);
       expect(searchBar).toBeInTheDocument();

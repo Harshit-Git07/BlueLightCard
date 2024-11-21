@@ -5,6 +5,8 @@
 import type { V2ApisGetOfferResponse } from '@blc-mono/offers-cms/api';
 import { ChangeEventHandler } from 'react';
 
+export * from './components/SearchBar/types';
+
 export enum PlatformVariant {
   MobileHybrid = 'mobile-hybrid',
   Web = 'web',

@@ -8,17 +8,28 @@ import React, { FC } from 'react';
 import { EligibilityModalBody } from '@/root/src/member-eligibility/shared/screens/shared/components/modal/EligibilityModalBody';
 import { AppStoreQrCode } from '@/components/AppStoreQrCode/AppStoreQrCode';
 import { AppStoreLinks } from '@/root/src/member-eligibility/shared/screens/shared/components/modal/AppStoreLinks';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { getTitlesAndSubtitles } from '@/root/src/member-eligibility/shared/screens/success-screen/hooks/GetTitlesAndSubtitles';
 
-export const SuccessModalDesktop: FC = () => {
+interface Props {
+  eligibilityDetailsState: EligibilityDetailsState;
+}
+
+export const SuccessModalDesktop: FC<Props> = ({ eligibilityDetailsState }) => {
   const router = useRouter();
-  const brandName = BRAND === BRANDS.DDS_UK ? 'Defence Discount Service' : 'Blue Light Card';
+  const brandName = BRAND === BRANDS.DDS_UK ? 'Defence Discount' : 'Blue Light';
+  const { title, subtitle } = getTitlesAndSubtitles(eligibilityDetailsState);
 
   return (
     <EligibilityModalBody data-testid="sign-up-success-screen">
       <p
-        className={`${fonts.displaySmallText} ${colours.textOnSurface} mx-[50px] mb-[24px] lg:mt-[78px] md:portrait:mt-[0px] truncate`}
+        className={`${fonts.displaySmallText} ${colours.textOnSurface} mx-[50px] mb-[4px] lg:mt-[78px] md:portrait:mt-[0px] truncate`}
       >
-        Sign Up Complete!
+        {title}
+      </p>
+
+      <p className={`${fonts.body} ${colours.textOnSurface} mb-[24px] text-center leading-relaxed`}>
+        {subtitle}
       </p>
 
       <Button
@@ -28,20 +39,13 @@ export const SuccessModalDesktop: FC = () => {
         // TODO: We need to figure out if this screen routes us to members-home or should we already be there at this stage and this button just closes the modal?
         onClick={() => router.push('/members-home')}
       >
-        Start saving
+        Start browsing
       </Button>
 
       <p
-        className={`${fonts.headlineSmallBold} ${colours.textOnSurface} text-center leading-relaxed`}
+        className={`${fonts.headlineSmallBold} ${colours.textOnSurface} mb-[16px] text-center leading-relaxed`}
       >
-        Get the {brandName} App
-      </p>
-
-      <p
-        className={`${fonts.body} ${colours.textOnSurface} mt-[8px] mb-[8px] text-center leading-relaxed`}
-      >
-        Easily search for stores or brands and get discounts on <br /> the go with your virtual
-        card.
+        Get the {brandName} <br /> Card App
       </p>
 
       <AppStoreQrCode className="h-full" />

@@ -6,9 +6,16 @@ import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 import { useRouter } from 'next/router';
 import DefaultImage from '@assets/modalPlaceholder.svg';
 import { AppStoreLinks } from '@/root/src/member-eligibility/shared/screens/shared/components/modal/AppStoreLinks';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { getTitlesAndSubtitles } from '@/root/src/member-eligibility/shared/screens/success-screen/hooks/GetTitlesAndSubtitles';
 
-export const SuccessScreenMobileView: FC = () => {
+interface Props {
+  eligibilityDetailsState: EligibilityDetailsState;
+}
+
+export const SuccessScreenMobileView: FC<Props> = ({ eligibilityDetailsState }) => {
   const router = useRouter();
+  const { title, subtitle } = getTitlesAndSubtitles(eligibilityDetailsState);
 
   return (
     <EligibilityScreen data-testid="success-screen-mobile">
@@ -16,13 +23,13 @@ export const SuccessScreenMobileView: FC = () => {
         <p
           className={`${fonts.headlineBold} ${colours.textOnSurface} mt-[32px] text-center leading-relaxed`}
         >
-          Sign Up Complete! <br /> Get the App
+          {title}
         </p>
 
         <p
           className={`${fonts.body} ${colours.textOnSurface} mt-[4px] text-center leading-relaxed`}
         >
-          Easily search for stores or brands and get discounts on the go with your virtual card.
+          {subtitle}
         </p>
 
         <AppStoreLinks className="mt-[24px]" />
@@ -34,7 +41,7 @@ export const SuccessScreenMobileView: FC = () => {
           // TODO: We need to figure out if this screen routes us to members-home or should we already be there at this stage and this button just closes the modal?
           onClick={() => router.push('/members-home')}
         >
-          Start saving
+          Start browsing
         </Button>
 
         <DefaultImage className="w-full h-full mb-[24px]" />

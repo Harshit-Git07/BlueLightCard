@@ -8,14 +8,16 @@ interface Props extends VerifyEligibilityScreenProps {
   forceMobileView?: boolean;
 }
 
-export const SuccessScreen: FC<Props> = ({ forceMobileView }) => {
+export const SuccessScreen: FC<Props> = ({ forceMobileView, eligibilityDetailsState }) => {
   const isMobile = useMobileMediaQuery();
 
   const useMobileView = useMemo(() => {
     return forceMobileView ?? isMobile;
   }, [forceMobileView, isMobile]);
 
-  if (useMobileView) return <SuccessScreenMobileView />;
+  if (useMobileView) {
+    return <SuccessScreenMobileView eligibilityDetailsState={eligibilityDetailsState} />;
+  }
 
-  return <SuccessModalDesktop />;
+  return <SuccessModalDesktop eligibilityDetailsState={eligibilityDetailsState} />;
 };

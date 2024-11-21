@@ -110,10 +110,15 @@ const v5Offers = async (
 };
 
 const mapV5MenuResults = (data: any, useLegacyIds: boolean): OfferDataModel => {
+  const marketplaceMenus = data.marketplace.map((menu: any) =>
+    mapMarketplaceMenu(menu, useLegacyIds),
+  );
+  const featuredOffersMenu = mapFeaturedOffers(data.featured, useLegacyIds);
+
   return {
     deal: mapDealsOfTheWeek(data.dealsOfTheWeek, useLegacyIds),
     flexible: data.flexible.length > 0 ? mapFlexibleMenu(data.flexible[0]) : undefined,
-    groups: data.marketplace.map((menu: any) => mapMarketplaceMenu(menu, useLegacyIds)),
+    groups: [...marketplaceMenus, featuredOffersMenu],
   };
 };
 
@@ -154,6 +159,14 @@ const mapFlexibleItem = (item: any): OfferFlexibleItemModel => {
 const mapMarketplaceMenu = (menu: any, useLegacyIds: boolean): OfferSharedModel => {
   return {
     title: menu.title,
+    random: true,
+    items: menu.offers.map((offer: any) => mapV5OfferToOfferModel(offer, useLegacyIds)),
+  };
+};
+
+const mapFeaturedOffers = (menu: any, useLegacyIds: boolean): OfferSharedModel => {
+  return {
+    title: 'Featured Offers',
     random: true,
     items: menu.offers.map((offer: any) => mapV5OfferToOfferModel(offer, useLegacyIds)),
   };

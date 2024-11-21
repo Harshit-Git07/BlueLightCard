@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.36.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.35.0...bluelightcard/redemptions-v1.36.0) (2024-11-21)
+
+
+### Features
+
+* [TR-934] addeds e2e tests for verify type ([#2992](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2992)) ([4831dde](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4831ddef15628ffe2a8942e93a819ca59a3bf831))
+* add campaign ids for push ([#2980](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2980)) ([4116fc9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4116fc9095f4578a11c969330324faba4e8ee328))
+* add push notification for verify redemption type ([#3025](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3025)) ([ef223cd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ef223cd5c568d0ddef15b81ee8f349e60bcfd32a))
+* Admin create ballot ([#3031](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3031)) ([e965220](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e96522083737bc105a717714e8a14f59bd3c7147))
+* preApplied prod campaign id ([#3041](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3041)) ([441303d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/441303ddf1bd138381aadc28d18b7ee542e541f4))
+* tr 739 add push notification for credit card redemption type ([#2984](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2984)) ([c60e55f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c60e55fb3c636349d56b6fc51b5173c59a245219))
+* Tr 741 verify add braze email notification ([#3006](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3006)) ([ddb5540](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ddb55405061cdcc26ebd646a30ec409c49a86d86))
+* TR-937 - add redemptionType verify to POST redemption config endpoint ([#2997](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2997)) ([b491bb6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b491bb6f5617691f77bcf7c433240a2f98b25a3b))
+* TR-938 - improve validation of redemption config api request ([#2960](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2960)) ([df9cfb2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/df9cfb23555f5fe76da9cb9ca5ed229636ae073e))
+* tr-939 patch verify redemption type ([#3004](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3004)) ([075249b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/075249b09dca99ba257379b0937f245e49d573cc))
+* whole change redo ([#2989](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2989)) ([c5a3e48](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c5a3e4838dbffa85270c90811c7fca6316733947))
+
+
+### Bug Fixes
+
+* TR-1048 - bump drizzle version ([#2931](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2931)) ([7503fcc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7503fcca61051cd20abc1485b1926816700c22a2))
+
 ## [1.35.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.34.0...bluelightcard/redemptions-v1.35.0) (2024-11-18)
 
 

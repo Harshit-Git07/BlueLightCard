@@ -3,7 +3,7 @@
 exports[`clears the search bar 1`] = `
 <div>
   <form
-    class="px-2 z-10 w-full py-4"
+    class="p-4 z-10 w-full"
   >
     <div
       class="relative"
@@ -32,7 +32,7 @@ exports[`clears the search bar 1`] = `
       <input
         aria-label="Search bar"
         autocomplete="off"
-        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font border border-searchBar-outline-colour-light"
         enterkeyhint="search"
         id="searchInput"
         placeholder=""
@@ -44,10 +44,10 @@ exports[`clears the search bar 1`] = `
 </div>
 `;
 
-exports[`edits the search bar 1`] = `
+exports[`displays an error edits the search bar with incorrect value 1`] = `
 <div>
   <form
-    class="px-2 z-10 w-full py-4"
+    class="p-4 z-10 w-full"
   >
     <div
       class="relative"
@@ -76,7 +76,140 @@ exports[`edits the search bar 1`] = `
       <input
         aria-label="Search bar"
         autocomplete="off"
-        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font border border-searchBar-outline-colour-light"
+        enterkeyhint="search"
+        id="searchInput"
+        placeholder=""
+        type="search"
+        value="Te"
+      />
+      <button
+        aria-label="Clear button"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-circle-xmark fa-xl absolute right-2 px-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
+          data-icon="circle-xmark"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 512 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </div>
+  </form>
+</div>
+`;
+
+exports[`displays an error shows an error when submitting less than the required characters 1`] = `
+<div>
+  <form
+    class="p-4 z-10 w-full"
+  >
+    <div
+      class="relative"
+    >
+      <button
+        aria-label="Back button"
+        class="absolute left-2 px-2 top-1/2 transform -translate-y-1/2"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-arrow-left fa-xl text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
+          data-icon="arrow-left"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 448 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+      <input
+        aria-label="Search bar"
+        autocomplete="off"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font border border-searchBar-outline-colour-light"
+        enterkeyhint="search"
+        id="searchInput"
+        placeholder=""
+        type="search"
+        value="Te"
+      />
+      <button
+        aria-label="Clear button"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-circle-xmark fa-xl absolute right-2 px-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
+          data-icon="circle-xmark"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 512 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+    </div>
+    <div
+      class="error-message pt-2 px-2.5 text-colour-system-red-500"
+    >
+      Enter 3 or more characters to search.
+    </div>
+  </form>
+</div>
+`;
+
+exports[`edits the search bar 1`] = `
+<div>
+  <form
+    class="p-4 z-10 w-full"
+  >
+    <div
+      class="relative"
+    >
+      <button
+        aria-label="Back button"
+        class="absolute left-2 px-2 top-1/2 transform -translate-y-1/2"
+        type="button"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-arrow-left fa-xl text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
+          data-icon="arrow-left"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 448 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.2 288 416 288c17.7 0 32-14.3 32-32s-14.3-32-32-32l-306.7 0L214.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"
+            fill="currentColor"
+          />
+        </svg>
+      </button>
+      <input
+        aria-label="Search bar"
+        autocomplete="off"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font border border-searchBar-outline-colour-light"
         enterkeyhint="search"
         id="searchInput"
         placeholder=""
@@ -111,7 +244,7 @@ exports[`edits the search bar 1`] = `
 exports[`renders the search bar 1`] = `
 <div>
   <form
-    class="px-2 z-10 w-full py-4"
+    class="p-4 z-10 w-full"
   >
     <div
       class="relative"
@@ -134,7 +267,83 @@ exports[`renders the search bar 1`] = `
       <input
         aria-label="Search bar"
         autocomplete="off"
-        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font border border-searchBar-outline-colour-light"
+        enterkeyhint="search"
+        id="searchInput"
+        placeholder="Search for offers or companies"
+        type="search"
+        value=""
+      />
+    </div>
+  </form>
+</div>
+`;
+
+exports[`renders the search bar with active experiments \`dark\` 1`] = `
+<div>
+  <form
+    class="p-4 z-10 w-full bg-colour-primary-light shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]"
+  >
+    <div
+      class="relative"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-magnifying-glass fa-xl absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
+        data-icon="magnifying-glass"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 512 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+          fill="currentColor"
+        />
+      </svg>
+      <input
+        aria-label="Search bar"
+        autocomplete="off"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font border border-searchBar-outline-colour-light"
+        enterkeyhint="search"
+        id="searchInput"
+        placeholder="Search for offers or companies"
+        type="search"
+        value=""
+      />
+    </div>
+  </form>
+</div>
+`;
+
+exports[`renders the search bar with active experiments \`light\` 1`] = `
+<div>
+  <form
+    class="p-4 z-10 w-full bg-[#F6F9FF] shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]"
+  >
+    <div
+      class="relative"
+    >
+      <svg
+        aria-hidden="true"
+        class="svg-inline--fa fa-magnifying-glass fa-xl absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
+        data-icon="magnifying-glass"
+        data-prefix="fas"
+        focusable="false"
+        role="img"
+        viewBox="0 0 512 512"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+          fill="currentColor"
+        />
+      </svg>
+      <input
+        aria-label="Search bar"
+        autocomplete="off"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font border-2 border-colour-primary-light"
         enterkeyhint="search"
         id="searchInput"
         placeholder="Search for offers or companies"
@@ -149,7 +358,7 @@ exports[`renders the search bar 1`] = `
 exports[`resets the search bar 1`] = `
 <div>
   <form
-    class="px-2 z-10 w-full py-4"
+    class="p-4 z-10 w-full"
   >
     <div
       class="relative"
@@ -172,7 +381,7 @@ exports[`resets the search bar 1`] = `
       <input
         aria-label="Search bar"
         autocomplete="off"
-        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font border border-searchBar-outline-colour-light"
         enterkeyhint="search"
         id="searchInput"
         placeholder="Search for offers or companies"
@@ -187,7 +396,7 @@ exports[`resets the search bar 1`] = `
 exports[`submits the search bar 1`] = `
 <div>
   <form
-    class="px-2 z-10 w-full py-4"
+    class="p-4 z-10 w-full"
   >
     <div
       class="relative"
@@ -210,7 +419,7 @@ exports[`submits the search bar 1`] = `
       <input
         aria-label="Search bar"
         autocomplete="off"
-        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+        class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font border border-searchBar-outline-colour-light"
         enterkeyhint="search"
         id="searchInput"
         placeholder="Search for offers or companies"

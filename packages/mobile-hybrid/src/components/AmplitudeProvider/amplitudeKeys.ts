@@ -20,6 +20,7 @@ export enum Experiments {
   SEARCH_V5 = 'search_v5',
   USP_BANNER_HOMEPAGE = 'usp-banner-homepage',
   NEW_COMPANY_PAGE = 'app-new-company-page',
+  SEARCH_UI_CONTRAST = 'conv-blc-5-0-search-ui',
 }
 
 export const featureFlagKeys = Object.values(FeatureFlags);

@@ -35,6 +35,20 @@ Edited.play = async ({ canvasElement }) => {
   await userEvent.type(searchBar, 'Nike');
 };
 
+export const EditedError = DefaultTemplate.bind({});
+
+EditedError.args = {
+  ...Default.args,
+};
+EditedError.play = async ({ canvasElement }) => {
+  const screen = within(canvasElement);
+
+  const searchBar = screen.getByLabelText('Search bar');
+
+  fireEvent.focusIn(searchBar);
+  await userEvent.type(searchBar, 'Te');
+};
+
 export const Submitted = DefaultTemplate.bind({});
 
 Submitted.args = {
@@ -43,6 +57,24 @@ Submitted.args = {
 Submitted.play = async (props) => {
   if (Edited.play) {
     await Edited.play(props);
+  }
+
+  const { canvasElement } = props;
+  const screen = within(canvasElement);
+
+  const searchBar = screen.getByLabelText('Search bar');
+
+  fireEvent.keyDown(searchBar, { key: 'Enter' });
+};
+
+export const SubmittedError = DefaultTemplate.bind({});
+
+SubmittedError.args = {
+  ...Default.args,
+};
+SubmittedError.play = async (props) => {
+  if (EditedError.play) {
+    await EditedError.play(props);
   }
 
   const { canvasElement } = props;
@@ -87,6 +119,20 @@ Reset.play = async (props) => {
   const backButton = screen.getByLabelText('Back button');
 
   await userEvent.click(backButton.children[0]);
+};
+
+export const ExperimentalDark = DefaultTemplate.bind({});
+
+ExperimentalDark.args = {
+  ...Default.args,
+  experimentalSearchVariant: 'background-variant-dark',
+};
+
+export const ExperimentalLight = DefaultTemplate.bind({});
+
+ExperimentalLight.args = {
+  ...Default.args,
+  experimentalSearchVariant: 'background-variant-light',
 };
 
 export default componentMeta;

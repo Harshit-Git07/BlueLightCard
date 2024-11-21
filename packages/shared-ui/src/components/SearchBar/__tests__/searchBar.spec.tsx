@@ -1,12 +1,48 @@
-import { act, render } from '@testing-library/react';
+import { act, render, screen, within } from '@testing-library/react';
 import { composeStories } from '@storybook/react';
 import * as stories from '../SearchBar.stories';
 
-const { Default, Edited, Submitted, Cleared, Reset } = composeStories(stories);
+const {
+  Default,
+  Edited,
+  Submitted,
+  Cleared,
+  Reset,
+  SubmittedError,
+  EditedError,
+  ExperimentalDark,
+  ExperimentalLight,
+} = composeStories(stories);
 
 it('renders the search bar', () => {
   const { container } = render(<Default />);
 
+  expect(container).toMatchSnapshot();
+});
+
+it('renders the search bar with active experiments `dark`', async () => {
+  const { container } = render(<ExperimentalDark />);
+
+  const forms = container.getElementsByTagName('form');
+  const searchForm = forms[0];
+  const searchInput = await within(searchForm).findByLabelText('Search bar');
+
+  expect(searchForm).toHaveClass('bg-colour-primary-light');
+  expect(searchForm).toHaveClass('shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]');
+  expect(searchInput).toHaveClass('border-searchBar-outline-colour-light');
+  expect(container).toMatchSnapshot();
+});
+
+it('renders the search bar with active experiments `light`', async () => {
+  const { container } = render(<ExperimentalLight />);
+
+  const forms = container.getElementsByTagName('form');
+  const searchForm = forms[0];
+  const searchInput = await within(searchForm).findByLabelText('Search bar');
+
+  expect(searchForm).toHaveClass('bg-[#F6F9FF]');
+  expect(searchForm).toHaveClass('shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]');
+  expect(searchInput).toHaveClass('border-colour-primary-light');
   expect(container).toMatchSnapshot();
 });
 
@@ -51,4 +87,31 @@ it('resets the search bar', async () => {
 
   expect(onBackButtonClick).toHaveBeenCalled();
   expect(container).toMatchSnapshot();
+});
+
+describe('displays an error', () => {
+  jest.restoreAllMocks();
+
+  it('edits the search bar with incorrect value', async () => {
+    const onFocus = jest.fn();
+
+    const { container } = render(<EditedError onFocus={onFocus} />);
+
+    await act(() => EditedError.play({ canvasElement: container }));
+
+    expect(onFocus).toHaveBeenCalled();
+    expect(container).toMatchSnapshot();
+  });
+  it('shows an error when submitting less than the required characters', async () => {
+    const onSearch = jest.fn();
+
+    const { container } = render(<SubmittedError onSearch={onSearch} />);
+
+    await act(() => SubmittedError.play({ canvasElement: container }));
+
+    const errorMessage = screen.getByText('Enter 3 or more characters to search.');
+    expect(errorMessage).toHaveClass('error-message');
+
+    expect(container).toMatchSnapshot();
+  });
 });

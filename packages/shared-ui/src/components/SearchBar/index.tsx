@@ -20,6 +20,7 @@ const SearchBar: FC<SearchProps> = ({
   placeholderText,
   value,
   showBackArrow,
+  experimentalSearchVariant,
 }) => {
   const initialValue = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -130,8 +131,58 @@ const SearchBar: FC<SearchProps> = ({
     </button>
   );
 
+  const experimentalFormVariant = (): string => {
+    if (experimentalSearchVariant === 'background-variant-dark') {
+      return 'bg-colour-primary-light shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]';
+    } else if (experimentalSearchVariant === 'background-variant-light') {
+      return 'bg-[#F6F9FF] shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]';
+    }
+    return '';
+  };
+
+  const experimentalBorderVariant = (): string => {
+    let variant = 'border border-searchBar-outline-colour-light';
+
+    if (experimentalSearchVariant === 'border-variant') {
+      variant = 'border-2 border-colour-primary-light shadow-[0px_4px_8px_2px_rgba(0,0,0,0.16)]';
+    } else if (experimentalSearchVariant === 'background-variant-light') {
+      variant = 'border-2 border-colour-primary-light';
+    }
+
+    return variant;
+  };
+
+  const inputClasses = [
+    'search-bar',
+    'text-ellipsis',
+    'pl-14',
+    'pr-12',
+    'py-3',
+    'rounded-full',
+    'w-full',
+    'overflow-x-hidden',
+    'bg-searchBar-bg-colour-light',
+    'dark:bg-searchBar-bg-colour-dark',
+    'focus:outline-none',
+    'text-searchBar-label-colour-light',
+    'dark:text-searchBar-label-colour-dark',
+    'dark:border-searchBar-outline-colour-dark',
+    'font-searchBar-label-font',
+    'text-searchBar-label-font',
+    'font-searchBar-label-font-weight',
+    'tracking-searchBar-label-font',
+    'leading-searchBar-label-font',
+    experimentalBorderVariant(),
+  ];
+
+  const formClasses = ['p-4', 'z-10', 'w-full'];
+
+  if (experimentalFormVariant() !== '') {
+    formClasses.push(experimentalFormVariant());
+  }
+
   return (
-    <form className="px-2 z-10 w-full py-4">
+    <form className={formClasses.join(' ')}>
       <div className="relative">
         {_showBackArrow ? leftArrow : searchIcon}
         <input
@@ -147,12 +198,18 @@ const SearchBar: FC<SearchProps> = ({
           enterKeyHint="search"
           autoComplete="off"
           onKeyDown={onSubmit}
-          className="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark border-searchBar-outline-colour-light border text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark focus:outline-none font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font"
+          className={inputClasses.join(' ')}
         />
         {searchTerm && clearIcon}
       </div>
 
-      {errorMessage && <div className="text-colour-system-red-500">{errorMessage}</div>}
+      {errorMessage && (
+        <div
+          className={`error-message pt-2 px-2.5 ${experimentalSearchVariant === 'background-variant-dark' ? 'text-white' : 'text-colour-system-red-500'}`}
+        >
+          {errorMessage}
+        </div>
+      )}
     </form>
   );
 };

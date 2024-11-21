@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { FC, useState } from 'react';
 import VerticalMenuItem from './';
-import VerticalMenuItemProps from './types';
+import type VerticalMenuItemProps from './types';
 import { faArrowUpRightFromSquare, faCoffee, faHome } from '@fortawesome/pro-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import _L from 'lodash';

@@ -1,7 +1,7 @@
 import { add, set, sub } from 'date-fns';
 import { Factory } from 'fishery';
 
-import { BallotEntity } from '@blc-mono/redemptions/application/repositories/BallotsRepository';
+import { BallotEntity, NewBallotEntity } from '@blc-mono/redemptions/application/repositories/BallotsRepository';
 import { createBallotsId, createRedemptionsId } from '@blc-mono/redemptions/libs/database/schema';
 
 export const ballotActiveEntityFactory = () => {
@@ -35,3 +35,23 @@ export const ballotEndedEntityFactory = () => {
     created: eventDate,
   }));
 };
+
+export const newBallotEntityFactory = Factory.define<NewBallotEntity>(() => ({
+  id: createBallotsId(),
+  redemptionId: createRedemptionsId(),
+  totalTickets: 10,
+  offerName: 'offer one',
+  drawDate: new Date(),
+  eventDate: new Date(),
+  created: new Date(),
+}));
+
+export const singleBallotEntityFactory = Factory.define<BallotEntity>(() => ({
+  id: createBallotsId(),
+  redemptionId: createRedemptionsId(),
+  totalTickets: 10,
+  offerName: 'offer one',
+  drawDate: new Date(),
+  eventDate: new Date(),
+  created: new Date(),
+}));

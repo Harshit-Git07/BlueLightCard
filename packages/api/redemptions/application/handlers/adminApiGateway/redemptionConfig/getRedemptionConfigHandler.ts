@@ -9,10 +9,10 @@ import { RedemptionConfigRepository } from '@blc-mono/redemptions/application/re
 import { VaultBatchesRepository } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
 import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { GetRedemptionConfigService } from '@blc-mono/redemptions/application/services/redemptionConfig/GetRedemptionConfigService';
+import { RedemptionBallotConfigTransformer } from '@blc-mono/redemptions/application/transformers/RedemptionBallotConfigTransformer';
 import { RedemptionConfigTransformer } from '@blc-mono/redemptions/application/transformers/RedemptionConfigTransformer';
 import { RedemptionVaultConfigTransformer } from '@blc-mono/redemptions/application/transformers/RedemptionVaultConfigTransformer';
 import { DatabaseConnection, DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
-
 const service: string = getEnvRaw('SERVICE_NAME') ?? 'redemptions';
 const logger = new LambdaLogger({ serviceName: `${service}-get-redemption` });
 const connection = await DatabaseConnection.fromEnvironmentVariables(DatabaseConnectionType.READ_ONLY);
@@ -30,6 +30,7 @@ const controller = createInjector()
 
   // Transformers
   .provideClass(RedemptionVaultConfigTransformer.key, RedemptionVaultConfigTransformer)
+  .provideClass(RedemptionBallotConfigTransformer.key, RedemptionBallotConfigTransformer)
   .provideClass(RedemptionConfigTransformer.key, RedemptionConfigTransformer)
 
   // API Service

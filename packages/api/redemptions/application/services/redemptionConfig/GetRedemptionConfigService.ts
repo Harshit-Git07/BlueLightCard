@@ -104,6 +104,7 @@ export class GetRedemptionConfigService implements IGetRedemptionConfigService {
         genericEntity: genericEntity,
         vaultEntity: vaultEntity,
         vaultBatchEntities: vaultBatchEntities,
+        ballotEntity: null,
       }),
     });
   }

@@ -7,7 +7,9 @@ import {
   TransactionManager,
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { PostRedemptionConfigModel } from '@blc-mono/redemptions/libs/models/postRedemptionConfig';
+import { newBallotEntityFactory } from '@blc-mono/redemptions/libs/test/factories/ballotEntity.factory';
 import {
+  ballotRedemptionConfigFactory,
   genericRedemptionConfigFactory,
   redemptionConfigFactory,
   vaultRedemptionConfigFactory,
@@ -16,6 +18,7 @@ import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/f
 import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
+import { IBallotsRepository } from '../../repositories/BallotsRepository';
 import { IGenericsRepository } from '../../repositories/GenericsRepository';
 import {
   IRedemptionConfigRepository,
@@ -44,6 +47,9 @@ const mockRedemptionConfigTransformer: Partial<RedemptionConfigTransformer> = {
 const mockNewRedemptionConfigEntityTransformer: Partial<NewRedemptionConfigEntityTransformer> = {
   transformToNewRedemptionConfigEntity: jest.fn(),
 };
+
+const mockBallotsTransactionRepository: Partial<IBallotsRepository> = {};
+const mockBallotsRepository: Partial<IBallotsRepository> = {};
 
 const mockTransactionManager: Partial<TransactionManager> = {
   withTransaction: jest.fn(),
@@ -105,6 +111,7 @@ const service = new CreateRedemptionConfigService(
   as(mockVaultsRepository),
   as(mockRedemptionConfigTransformer),
   as(mockNewRedemptionConfigEntityTransformer),
+  as(mockBallotsRepository),
   as(stubTransactionManager),
 );
 
@@ -114,6 +121,7 @@ describe('CreateRedemptionConfigService', () => {
     mockRedemptionsRepository.withTransaction = jest.fn().mockReturnValue(mockRedemptionsTransactionRepository);
     mockGenericsRepository.withTransaction = jest.fn().mockReturnValue(mockGenericsTransactionRepository);
     mockVaultsRepository.withTransaction = jest.fn().mockReturnValue(mockVaultsTransactionRepository);
+    mockBallotsRepository.withTransaction = jest.fn().mockReturnValue(mockBallotsTransactionRepository);
   });
 
   it('throws an error when an unsupported redemptionType is supplied', async () => {
@@ -184,6 +192,7 @@ describe('CreateRedemptionConfigService', () => {
         genericEntity: null,
         vaultEntity: null,
         vaultBatchEntities: [],
+        ballotEntity: null,
       });
     },
   );
@@ -268,6 +277,7 @@ describe('CreateRedemptionConfigService', () => {
         genericEntity: null,
         vaultEntity: vaultEntity,
         vaultBatchEntities: [],
+        ballotEntity: null,
       });
     },
   );
@@ -343,6 +353,7 @@ describe('CreateRedemptionConfigService', () => {
       },
       vaultEntity: null,
       vaultBatchEntities: [],
+      ballotEntity: null,
     });
   });
 
@@ -428,6 +439,7 @@ describe('CreateRedemptionConfigService', () => {
       as(mockVaultsRepository),
       as(mockRedemptionConfigTransformer),
       as(mockNewRedemptionConfigEntityTransformer),
+      as(mockBallotsRepository),
       as(mockTransactionManager),
     );
 
@@ -455,6 +467,7 @@ describe('CreateRedemptionConfigService', () => {
       as(mockVaultsRepository),
       as(mockRedemptionConfigTransformer),
       as(mockNewRedemptionConfigEntityTransformer),
+      as(mockBallotsRepository),
       as(mockTransactionManager),
     );
 
@@ -463,5 +476,78 @@ describe('CreateRedemptionConfigService', () => {
     ).rejects.toThrow('RedemptionConfig already exists for this offerId');
 
     expect(mockTransactionManager.withTransaction).not.toHaveBeenCalled();
+  });
+
+  it('throws an error when createVault fails with ballot redemption type', async () => {
+    const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'ballot',
+    });
+
+    const vaultRedemptionRequestBody: PostRedemptionConfigModel = {
+      companyId: faker.string.uuid(),
+      offerId: faker.string.uuid(),
+      connection: 'none',
+      redemptionType: 'ballot',
+      url: 'example.url.com',
+      affiliate: 'awin',
+      ballot: {
+        totalTickets: 10,
+        drawDate: new Date().toISOString(),
+        eventDate: new Date().toISOString(),
+        offerName: 'offer one',
+      },
+    } as const;
+
+    mockRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(null);
+    mockRedemptionsTransactionRepository.createRedemption = jest.fn().mockResolvedValue(redemptionConfigEntity);
+
+    mockVaultsTransactionRepository.create = jest.fn().mockRejectedValue(new Error());
+
+    await expect(service.createRedemptionConfig(vaultRedemptionRequestBody)).rejects.toThrow('Failed to create ballot');
+  });
+
+  it('calls transformToRedemptionConfig with correct values for ballot redemption type', async () => {
+    const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'ballot',
+    });
+
+    const ballotRedemptionRequestBody: PostRedemptionConfigModel = {
+      companyId: faker.string.uuid(),
+      offerId: faker.string.uuid(),
+      connection: 'none',
+      redemptionType: 'ballot',
+      url: 'example.url.com',
+      affiliate: 'awin',
+      ballot: {
+        totalTickets: 10,
+        drawDate: new Date().toISOString(),
+        eventDate: new Date().toISOString(),
+        offerName: 'offer one',
+      },
+    } as const;
+
+    const ballotEntity = newBallotEntityFactory.build();
+
+    const ballotRedemptionConfigResponse = ballotRedemptionConfigFactory.build();
+
+    mockRedemptionsRepository.findOneByOfferId = jest.fn().mockResolvedValue(null);
+    mockRedemptionsTransactionRepository.createRedemption = jest.fn().mockResolvedValue(redemptionConfigEntity);
+
+    mockBallotsTransactionRepository.create = jest.fn().mockResolvedValue(ballotEntity);
+
+    mockRedemptionConfigTransformer.transformToRedemptionConfig = jest
+      .fn()
+      .mockReturnValue(ballotRedemptionConfigResponse);
+
+    await service.createRedemptionConfig(ballotRedemptionRequestBody);
+
+    expect(mockRedemptionConfigTransformer.transformToRedemptionConfig).toHaveBeenCalledTimes(1);
+    expect(mockRedemptionConfigTransformer.transformToRedemptionConfig).toHaveBeenCalledWith({
+      redemptionConfigEntity: redemptionConfigEntity,
+      genericEntity: null,
+      vaultEntity: null,
+      vaultBatchEntities: [],
+      ballotEntity: ballotEntity,
+    });
   });
 });

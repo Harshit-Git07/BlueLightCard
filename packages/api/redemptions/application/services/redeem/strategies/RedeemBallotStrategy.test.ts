@@ -45,6 +45,7 @@ describe('BallotRedemptioStrategy', () => {
       findOneByRedemptionId: jest.fn(),
       findOneById: jest.fn(),
       findBallotsForDrawDate: jest.fn(),
+      create: jest.fn(),
     };
   }
 
@@ -195,7 +196,7 @@ describe('BallotRedemptioStrategy', () => {
           offerName: defaultParams.offerName,
           affiliate: testBallotRedemption.affiliate,
           clientType: defaultParams.clientType,
-          url: null,
+          url: testBallotRedemption.url,
         },
       });
     });

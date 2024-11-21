@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
 import {
+  BALLOT,
   CREDITCARD,
   GENERIC,
   GIFTCARD,
@@ -15,7 +16,7 @@ import { affiliateEnum, createRedemptionsId } from '@blc-mono/redemptions/libs/d
 
 export const redemptionConfigEntityFactory = Factory.define<RedemptionConfigEntity>(
   ({ params: { redemptionType } }) => {
-    const onlineRedemptionType = [GENERIC, GIFTCARD, PREAPPLIED, VAULT, CREDITCARD, VERIFY];
+    const onlineRedemptionType = [GENERIC, GIFTCARD, PREAPPLIED, VAULT, CREDITCARD, VERIFY, BALLOT];
     const type = redemptionType ?? faker.helpers.arrayElement(REDEMPTION_TYPES);
 
     return {

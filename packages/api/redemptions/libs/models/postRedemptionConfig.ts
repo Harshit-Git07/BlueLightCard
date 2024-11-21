@@ -143,6 +143,29 @@ export const PostVaultQRModel = createZodNamedType(
     .strict(),
 );
 
+export const BallotModel = createZodNamedType(
+  'BallotModel',
+  z.object({
+    totalTickets: z.number().positive(),
+    drawDate: z.string(),
+    eventDate: z.string(),
+    offerName: z.string(),
+  }),
+);
+
+export type BallotModel = z.infer<typeof BallotModel>;
+
+export const PostBallotModel = createZodNamedType(
+  'PostBallotModel',
+  z
+    .object({
+      redemptionType: z.literal(REDEMPTION_TYPES[5]),
+      url: z.string().url(),
+      ballot: BallotModel,
+    })
+    .strict(),
+);
+
 export const PostRedemptionConfigShowCardModel = createZodNamedType(
   'PostRedemptionConfigShowCardModel',
   PostRedemptionConfigBaseModel.merge(PostShowCardModel),
@@ -183,6 +206,11 @@ export const PostRedemptionConfigVaultQRModel = createZodNamedType(
   PostRedemptionConfigBaseModel.merge(PostVaultQRModel),
 );
 
+export const PostRedemptionConfigBallotModel = createZodNamedType(
+  'PostRedemptionConfigBallotModel',
+  PostRedemptionConfigBaseModel.merge(PostBallotModel),
+);
+
 export const PostRedemptionConfigModel = createZodNamedType(
   'PostRedemptionConfigModel',
   z.discriminatedUnion('redemptionType', [
@@ -194,6 +222,7 @@ export const PostRedemptionConfigModel = createZodNamedType(
     PostRedemptionConfigVaultModel,
     PostRedemptionConfigVaultQRModel,
     PostRedemptionConfigVerifyModel,
+    PostRedemptionConfigBallotModel,
   ]),
 );
 

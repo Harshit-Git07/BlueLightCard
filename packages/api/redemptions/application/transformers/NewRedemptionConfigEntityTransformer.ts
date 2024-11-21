@@ -25,6 +25,7 @@ export class NewRedemptionConfigEntityTransformer {
       case REDEMPTION_TYPES[0]:
       case REDEMPTION_TYPES[1]:
       case REDEMPTION_TYPES[4]:
+      case REDEMPTION_TYPES[5]:
       case REDEMPTION_TYPES[6]:
       case REDEMPTION_TYPES[7]:
       case REDEMPTION_TYPES[8]:

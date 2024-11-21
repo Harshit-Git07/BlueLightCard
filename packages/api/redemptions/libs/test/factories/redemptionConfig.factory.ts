@@ -51,3 +51,23 @@ export const vaultRedemptionConfigFactory = Factory.define<RedemptionConfig>(() 
     batches: [],
   },
 }));
+
+export const ballotRedemptionConfigFactory = Factory.define<RedemptionConfig>(() => ({
+  id: createRedemptionsId(),
+  offerId: faker.string.uuid(),
+  companyId: faker.string.uuid(),
+  connection: 'affiliate',
+  affiliate: faker.helpers.arrayElement(affiliateEnum.enumValues),
+  offerType: 'online',
+  redemptionType: 'ballot',
+  url: faker.internet.url(),
+  ballot: {
+    id: faker.string.uuid(),
+    redemptionId: faker.string.uuid(),
+    totalTickets: faker.number.int(),
+    drawDate: faker.date.future(),
+    eventDate: faker.date.future(),
+    offerName: faker.string.alphanumeric(),
+    created: faker.date.past(),
+  },
+}));

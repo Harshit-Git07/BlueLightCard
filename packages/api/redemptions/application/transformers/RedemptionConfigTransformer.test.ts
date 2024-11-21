@@ -1,14 +1,18 @@
 import { as } from '@blc-mono/core/utils/testing';
+import { singleBallotEntityFactory } from '@blc-mono/redemptions/libs/test/factories/ballotEntity.factory';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
+import { redemptionBallotConfigFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionBallotConfig.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { redemptionVaultConfigFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionVaultConfig.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
 import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 
+import { BallotEntity } from '../repositories/BallotsRepository';
 import { GenericEntity } from '../repositories/GenericsRepository';
 import { RedemptionConfigEntity } from '../repositories/RedemptionConfigRepository';
 import { VaultEntity } from '../repositories/VaultsRepository';
 
+import { RedemptionBallotConfig, RedemptionBallotConfigTransformer } from './RedemptionBallotConfigTransformer';
 import { RedemptionConfigTransformer } from './RedemptionConfigTransformer';
 import { RedemptionVaultConfig, RedemptionVaultConfigTransformer } from './RedemptionVaultConfigTransformer';
 
@@ -16,15 +20,23 @@ const mockRedemptionVaultConfigTransformer: Partial<RedemptionVaultConfigTransfo
   transformToRedemptionVaultConfig: jest.fn(),
 };
 
+const mockRedemptionBallotConfigTransformer: Partial<RedemptionBallotConfigTransformer> = {
+  transformToRedemptionBallotConfig: jest.fn(),
+};
+
 const redemptionConfigTransformer: RedemptionConfigTransformer = new RedemptionConfigTransformer(
   as(mockRedemptionVaultConfigTransformer),
+  as(mockRedemptionBallotConfigTransformer),
 );
 
 const vaultEntity: VaultEntity = vaultEntityFactory.build();
 const vaultBatchEntities = vaultBatchEntityFactory.buildList(3);
 const genericEntity: GenericEntity = genericEntityFactory.build();
+const ballotEntity: BallotEntity = singleBallotEntityFactory.build();
 
 const redemptionVaultConfig: RedemptionVaultConfig = redemptionVaultConfigFactory.build();
+
+const redemptionBallotConfig: RedemptionBallotConfig = redemptionBallotConfigFactory.build();
 
 describe('transformToRedemptionConfig', () => {
   it.each(['vault', 'vaultQR'] as const)(
@@ -38,6 +50,7 @@ describe('transformToRedemptionConfig', () => {
         genericEntity: null,
         vaultEntity: null,
         vaultBatchEntities: [],
+        ballotEntity: null,
       });
 
       const expectedRedemptionConfig = {
@@ -72,6 +85,7 @@ describe('transformToRedemptionConfig', () => {
         genericEntity: null,
         vaultEntity,
         vaultBatchEntities,
+        ballotEntity: null,
       });
 
       const expectedRedemptionConfig = {
@@ -103,6 +117,7 @@ describe('transformToRedemptionConfig', () => {
       genericEntity: null,
       vaultEntity: null,
       vaultBatchEntities: [],
+      ballotEntity: null,
     });
 
     const expectedRedemptionConfig = {
@@ -129,6 +144,7 @@ describe('transformToRedemptionConfig', () => {
       genericEntity,
       vaultEntity: null,
       vaultBatchEntities: [],
+      ballotEntity: null,
     });
 
     const expectedRedemptionConfig = {
@@ -151,6 +167,7 @@ describe('transformToRedemptionConfig', () => {
       genericEntity,
       vaultEntity: null,
       vaultBatchEntities: [],
+      ballotEntity: null,
     });
 
     const expectedRedemptionConfig = {
@@ -182,6 +199,7 @@ describe('transformToRedemptionConfig', () => {
         genericEntity: null,
         vaultEntity: null,
         vaultBatchEntities: [],
+        ballotEntity: null,
       });
 
       const expectedRedemptionConfig = {
@@ -197,4 +215,66 @@ describe('transformToRedemptionConfig', () => {
       expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
     },
   );
+
+  it('returns formatted RedemptionConfig when redemptionType is ballot and no ballot entity', () => {
+    const ballotRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'ballot',
+    });
+    const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
+      redemptionConfigEntity: ballotRedemptionConfigEntity,
+      genericEntity: null,
+      vaultEntity: null,
+      vaultBatchEntities: [],
+      ballotEntity: null,
+    });
+
+    const expectedRedemptionConfig = {
+      id: ballotRedemptionConfigEntity.id,
+      offerId: ballotRedemptionConfigEntity.offerId.toString(),
+      redemptionType: ballotRedemptionConfigEntity.redemptionType,
+      connection: ballotRedemptionConfigEntity.connection,
+      companyId: ballotRedemptionConfigEntity.companyId.toString(),
+      affiliate: ballotRedemptionConfigEntity.affiliate,
+      url: ballotRedemptionConfigEntity.url,
+      ballot: null,
+    };
+
+    expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
+
+    expect(mockRedemptionBallotConfigTransformer.transformToRedemptionBallotConfig).not.toHaveBeenCalled();
+  });
+
+  it('returns formatted RedemptionConfig when redemptionType is ballot', () => {
+    const ballotRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'ballot',
+    });
+    mockRedemptionBallotConfigTransformer.transformToRedemptionBallotConfig = jest
+      .fn()
+      .mockReturnValue(redemptionBallotConfig);
+
+    const actualRedemptionConfig = redemptionConfigTransformer.transformToRedemptionConfig({
+      redemptionConfigEntity: ballotRedemptionConfigEntity,
+      genericEntity: null,
+      vaultEntity: null,
+      vaultBatchEntities: [],
+      ballotEntity,
+    });
+
+    const expectedRedemptionConfig = {
+      id: ballotRedemptionConfigEntity.id,
+      offerId: ballotRedemptionConfigEntity.offerId.toString(),
+      redemptionType: ballotRedemptionConfigEntity.redemptionType,
+      connection: ballotRedemptionConfigEntity.connection,
+      companyId: ballotRedemptionConfigEntity.companyId.toString(),
+      affiliate: ballotRedemptionConfigEntity.affiliate,
+      url: ballotRedemptionConfigEntity.url,
+      ballot: redemptionBallotConfig,
+    };
+
+    // console.log({ expectedRedemptionConfig })
+    // console.log({ actualRedemptionConfig })
+
+    expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
+    expect(mockRedemptionBallotConfigTransformer.transformToRedemptionBallotConfig).toHaveBeenCalledWith(ballotEntity);
+  });
 });

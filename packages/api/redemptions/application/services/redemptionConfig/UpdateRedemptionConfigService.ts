@@ -366,6 +366,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
         genericEntity: genericEntity,
         vaultEntity: vaultEntity,
         vaultBatchEntities: vaultBatchEntities,
+        ballotEntity: null,
       }),
     };
   }

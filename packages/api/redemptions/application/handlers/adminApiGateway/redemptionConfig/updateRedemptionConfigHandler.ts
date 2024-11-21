@@ -9,6 +9,7 @@ import { RedemptionConfigRepository } from '@blc-mono/redemptions/application/re
 import { VaultBatchesRepository } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
 import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import { UpdateRedemptionConfigService } from '@blc-mono/redemptions/application/services/redemptionConfig/UpdateRedemptionConfigService';
+import { RedemptionBallotConfigTransformer } from '@blc-mono/redemptions/application/transformers/RedemptionBallotConfigTransformer';
 import { RedemptionConfigTransformer } from '@blc-mono/redemptions/application/transformers/RedemptionConfigTransformer';
 import { RedemptionVaultConfigTransformer } from '@blc-mono/redemptions/application/transformers/RedemptionVaultConfigTransformer';
 import { TransactionManager } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
@@ -27,6 +28,7 @@ const controller = createInjector()
   .provideClass(VaultsRepository.key, VaultsRepository)
   .provideClass(VaultBatchesRepository.key, VaultBatchesRepository)
   .provideClass(RedemptionVaultConfigTransformer.key, RedemptionVaultConfigTransformer)
+  .provideClass(RedemptionBallotConfigTransformer.key, RedemptionBallotConfigTransformer)
   .provideClass(RedemptionConfigTransformer.key, RedemptionConfigTransformer)
   .provideClass(UpdateRedemptionConfigService.key, UpdateRedemptionConfigService)
   .injectClass(UpdateRedemptionConfigController);

@@ -6,8 +6,13 @@ import {
   ITransactionManager,
   TransactionManager,
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
-import { PostRedemptionConfigModel, VaultModel } from '@blc-mono/redemptions/libs/models/postRedemptionConfig';
+import {
+  BallotModel,
+  PostRedemptionConfigModel,
+  VaultModel,
+} from '@blc-mono/redemptions/libs/models/postRedemptionConfig';
 
+import { BallotEntity, BallotsRepository, NewBallotEntity } from '../../repositories/BallotsRepository';
 import { GenericEntity, GenericsRepository, NewGenericEntity } from '../../repositories/GenericsRepository';
 import {
   NewRedemptionConfigEntity,
@@ -57,6 +62,7 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
     VaultsRepository.key,
     RedemptionConfigTransformer.key,
     NewRedemptionConfigEntityTransformer.key,
+    BallotsRepository.key,
     TransactionManager.key,
   ] as const;
 
@@ -67,6 +73,7 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
     private readonly vaultsRepository: VaultsRepository,
     private readonly redemptionConfigTransformer: RedemptionConfigTransformer,
     private readonly newRedemptionConfigEntityTransformer: NewRedemptionConfigEntityTransformer,
+    private readonly ballotsRepository: BallotsRepository,
     private readonly transactionManager: ITransactionManager,
   ) {}
 
@@ -76,6 +83,7 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
     const { redemptionType } = postRedemptionConfigModel;
     let genericEntity: GenericEntity | null = null;
     let vaultEntity: VaultEntity | null = null;
+    let ballotEntity: BallotEntity | null = null;
 
     if (await this.redemptionConfigRepository.findOneByOfferId(postRedemptionConfigModel.offerId))
       throw new DuplicateError(
@@ -89,7 +97,7 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
         this.redemptionConfigRepository.withTransaction(transactionConnection);
       const transactionalGenericsRepository = this.genericsRepository.withTransaction(transactionConnection);
       const transactionalVaultsRepository = this.vaultsRepository.withTransaction(transactionConnection);
-
+      const transactionalBallotsRepository = this.ballotsRepository.withTransaction(transactionConnection);
       const redemptionConfigEntity: RedemptionConfigEntity = await this.createRedemptionConfigEntity(
         postRedemptionConfigModel,
         postRedemptionConfigModel.offerId,
@@ -119,6 +127,13 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
             transactionalVaultsRepository,
           );
           break;
+        case REDEMPTION_TYPES[5]: //ballot
+          ballotEntity = await this.createBallotEntity(
+            postRedemptionConfigModel.ballot,
+            redemptionConfigEntity.id,
+            transactionalBallotsRepository,
+          );
+          break;
         default:
           exhaustiveCheck(redemptionType, 'Unsupported redemption type');
       }
@@ -130,6 +145,7 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
           genericEntity: genericEntity,
           vaultEntity: vaultEntity,
           vaultBatchEntities: [],
+          ballotEntity: ballotEntity,
         }),
       };
     });
@@ -194,6 +210,26 @@ export class CreateRedemptionConfigService implements ICreateRedemptionConfigSer
       return await transactionalVaultsRepository.create(vaultEntity);
     } catch (e) {
       throw new FailedToCreateError('createVaultEntity', 'Failed to create vault');
+    }
+  }
+
+  public async createBallotEntity(
+    ballot: BallotModel,
+    redemptionId: string,
+    transactionalBallotsRepository: BallotsRepository,
+  ) {
+    const ballotEntity: NewBallotEntity = {
+      redemptionId: redemptionId,
+      drawDate: new Date(ballot.drawDate),
+      eventDate: new Date(ballot.eventDate),
+      offerName: ballot.offerName,
+      totalTickets: ballot.totalTickets,
+    };
+
+    try {
+      return await transactionalBallotsRepository.create(ballotEntity);
+    } catch (e) {
+      throw new FailedToCreateError('createBallotEntity', 'Failed to create ballot');
     }
   }
 }

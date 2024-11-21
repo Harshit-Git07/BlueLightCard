@@ -1,11 +1,17 @@
+import { eq } from 'drizzle-orm';
+
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import { ballotsTable, redemptionsTable } from '@blc-mono/redemptions/libs/database/schema';
-import { ballotActiveEntityFactory } from '@blc-mono/redemptions/libs/test/factories/ballotEntity.factory';
+import {
+  ballotActiveEntityFactory,
+  newBallotEntityFactory,
+} from '@blc-mono/redemptions/libs/test/factories/ballotEntity.factory';
 
 import { redemptionConfigEntityFactory } from '../../libs/test/factories/redemptionConfigEntity.factory';
 import { RedemptionsTestDatabase } from '../../libs/test/helpers/database';
 
-import { BallotsRepository } from './BallotsRepository';
+import { BallotsRepository, NewBallotEntity } from './BallotsRepository';
+import { RedemptionConfigEntity } from './RedemptionConfigRepository';
 
 describe('BallotsRepository', () => {
   let database: RedemptionsTestDatabase;
@@ -88,6 +94,31 @@ describe('BallotsRepository', () => {
       const result = await repository.findOneById('no-exist-ballot-id');
 
       expect(result).toEqual(null);
+    });
+  });
+
+  describe('create', () => {
+    it('creates a new ballot', async () => {
+      const repository = new BallotsRepository(connection);
+      const redemption: RedemptionConfigEntity = redemptionConfigEntityFactory.build();
+      const ballot: NewBallotEntity = newBallotEntityFactory.build({
+        redemptionId: redemption.id,
+        totalTickets: 10,
+        offerName: 'offer one',
+        drawDate: new Date(),
+        eventDate: new Date(),
+      });
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+
+      const result = await repository.create(ballot);
+
+      const createdBallot = await connection.db
+        .select()
+        .from(ballotsTable)
+        .where(eq(ballotsTable.redemptionId, redemption.id))
+        .execute();
+
+      expect(result).toEqual(createdBallot[0]);
     });
   });
 });

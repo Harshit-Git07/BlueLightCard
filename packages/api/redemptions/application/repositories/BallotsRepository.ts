@@ -11,11 +11,14 @@ export type BallotEntity = typeof ballotsTable.$inferSelect;
 
 export type BallotEntityWithId = { ballotId: (typeof ballotsTable.$inferSelect)['id'] };
 
+export type NewBallotEntity = Omit<typeof ballotsTable.$inferInsert, 'created'>;
+
 export interface IBallotsRepository {
   findBallotsForDrawDate(startDrawDate: Date, endDrawDate: Date): Promise<BallotEntityWithId[]>;
   findOneById(id: string): Promise<BallotEntity | null>;
   findOneByRedemptionId(redemptionId: string): Promise<BallotEntity | null>;
   withTransaction(transaction: DatabaseTransactionConnection): BallotsRepository;
+  create(newBallotEntity: NewBallotEntity): Promise<BallotEntity>;
 }
 
 export class BallotsRepository extends Repository implements IBallotsRepository {
@@ -48,5 +51,16 @@ export class BallotsRepository extends Repository implements IBallotsRepository 
 
   public withTransaction(transaction: DatabaseTransactionConnection): BallotsRepository {
     return new BallotsRepository(transaction);
+  }
+
+  public async create(newBallotEntity: NewBallotEntity): Promise<BallotEntity> {
+    const date = new Date();
+    return this.exactlyOne(
+      await this.connection.db
+        .insert(ballotsTable)
+        .values({ ...newBallotEntity, created: date })
+        .returning()
+        .execute(),
+    );
   }
 }

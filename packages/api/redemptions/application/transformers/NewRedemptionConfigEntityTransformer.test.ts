@@ -96,6 +96,21 @@ const verifyRequestBody: PostRedemptionConfigModel = {
   url: 'www.url.com',
 };
 
+const ballotRequestBody: PostRedemptionConfigModel = {
+  companyId: faker.string.uuid(),
+  offerId: faker.string.uuid(),
+  connection: 'affiliate',
+  redemptionType: 'ballot',
+  affiliate: 'affiliateFuture',
+  url: faker.internet.url(),
+  ballot: {
+    totalTickets: faker.number.int(),
+    drawDate: faker.date.future().toISOString(),
+    eventDate: faker.date.future().toISOString(),
+    offerName: faker.lorem.word(),
+  },
+};
+
 describe('transformToNewRedemptionConfigEntity', () => {
   it.each([
     ['showCard' as const, showCardRequestBody],
@@ -123,6 +138,7 @@ describe('transformToNewRedemptionConfigEntity', () => {
     ['giftCard' as const, giftCardRequestBody],
     ['creditCard' as const, creditCardRequestBody],
     ['verify' as const, verifyRequestBody],
+    ['ballot' as const, ballotRequestBody],
   ])('maps %s to "online" offerType', (redemptionType, redemptionConfigRequestBody) => {
     const expectedNewRedemptionConfigEntity: NewRedemptionConfigEntity = {
       companyId: redemptionConfigRequestBody.companyId,

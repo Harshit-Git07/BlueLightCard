@@ -144,6 +144,7 @@ describe('GetRedemptionConfigService', () => {
       genericEntity: genericEntity,
       vaultEntity: null,
       vaultBatchEntities: [],
+      ballotEntity: null,
     });
   });
 
@@ -165,6 +166,7 @@ describe('GetRedemptionConfigService', () => {
       genericEntity: null,
       vaultEntity: null,
       vaultBatchEntities: [],
+      ballotEntity: null,
     });
   });
 
@@ -191,6 +193,7 @@ describe('GetRedemptionConfigService', () => {
       genericEntity: null,
       vaultEntity: vaultEntity,
       vaultBatchEntities: vaultBatchEntities,
+      ballotEntity: null,
     });
   });
 
@@ -228,6 +231,7 @@ describe('GetRedemptionConfigService', () => {
       genericEntity: null,
       vaultEntity: null,
       vaultBatchEntities: [],
+      ballotEntity: null,
     });
   });
 });

@@ -16,7 +16,12 @@ const items: VerticalMenuItemProps[] = [
     isExternalLink: false,
   },
   { label: 'Privacy', selected: false, href: '/privacy-settings', isExternalLink: false },
-  { label: 'Contact preferences', selected: false, href: '/preferences', isExternalLink: false },
+  {
+    label: 'Marketing preferences',
+    selected: false,
+    href: '/marketing-preferences',
+    isExternalLink: false,
+  },
   {
     label: 'Help',
     selected: false,

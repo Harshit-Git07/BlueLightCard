@@ -1,19 +1,20 @@
-import { ChangeEvent, FC, useId, useRef } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/pro-solid-svg-icons';
-import { useCSSConditional } from 'src/hooks/useCSS';
+import { ChangeEvent, FC, useId } from 'react';
+import { conditionalStrings } from '../../utils/conditionalStrings';
+import CheckBoxInput from './CheckBoxInput';
 
 export type Props = {
+  id?: string;
   name?: string;
   value?: string;
   variant?: 'Default' | 'withBorder';
   isDisabled: boolean;
-  checkboxText: string;
+  checkboxText?: string;
   isChecked?: boolean;
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 const Checkbox: FC<Props> = ({
+  id,
   name,
   value,
   variant = 'Default',
@@ -22,15 +23,13 @@ const Checkbox: FC<Props> = ({
   isChecked = false,
   onChange,
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const hasBorder = variant === 'withBorder';
 
-  const borderCss = useCSSConditional({
+  const borderCss = conditionalStrings({
     'px-4 py-2 rounded border border-1': hasBorder,
   });
 
-  const variantCss = useCSSConditional({
+  const variantCss = conditionalStrings({
     'border-colour-onSurface-disabled dark:border-colour-onSurface-disabled-dark':
       hasBorder && isDisabled && !isChecked,
     'border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark':
@@ -40,60 +39,45 @@ const Checkbox: FC<Props> = ({
     'border-colour-primary dark:border-colour-primary-dark': hasBorder && !isDisabled && isChecked,
   });
 
-  const labelCss = useCSSConditional({
+  const labelCss = conditionalStrings({
     'text-colour-primary dark:text-colour-primary-dark': !isDisabled && isChecked,
     'text-colour-onSurface dark:text-colour-onSurface-dark': !isDisabled,
     'text-colour-primary-disabled dark:text-colour-primary-disabled-dark': isDisabled && isChecked,
     'text-colour-onSurface-disabled dark:text-colour-onSurface-disabled-dark': isDisabled,
   });
 
-  const inputCss = useCSSConditional({
-    'mt-1 ml-[-2px] appearance-none min-w-4 min-h-4 rounded without-ring': true,
-    'border border-colour-onSurface dark:border-colour-onSurface-dark': !isDisabled && !isChecked,
-    'border border-colour-onSurface-disabled dark:border-colour-onSurface-disabled-dark':
-      isDisabled && !isChecked,
-    'bg-colour-primary-disabled dark:bg-colour-primary-disabled-dark': isDisabled && isChecked,
-    'bg-colour-primary dark:bg-colour-primary-dark': !isDisabled && isChecked,
-  });
-
-  const id = useId();
+  const randomId = useId();
+  const htmlFor = id ?? randomId;
 
   return (
     <div
       className={`
-        flex items-start relative
+        flex items-center relative
           ${borderCss}
           ${variantCss}
       `}
-      aria-describedby={id}
+      aria-describedby={htmlFor}
     >
-      <input
-        ref={inputRef}
-        id={id}
+      <CheckBoxInput
+        id={htmlFor}
         name={name}
         value={value}
-        type="checkbox"
-        checked={isChecked}
-        disabled={isDisabled}
+        isChecked={isChecked}
+        isDisabled={isDisabled}
         onChange={onChange}
-        className={inputCss}
       />
 
-      {isChecked ? (
-        <div className="absolute text-colour-onPrimary dark:text-colour-onPrimary-dark pointer-events-none">
-          <FontAwesomeIcon size="sm" icon={faCheck} />
-        </div>
-      ) : null}
-
-      <label
-        htmlFor={id}
-        className={`
+      {checkboxText ? (
+        <label
+          htmlFor={htmlFor}
+          className={`
             ${labelCss}
             ms-2 font-typography-body font-typography-body-weight text-typography-body leading-typography-body
         `}
-      >
-        {checkboxText}
-      </label>
+        >
+          {checkboxText}
+        </label>
+      ) : null}
     </div>
   );
 };

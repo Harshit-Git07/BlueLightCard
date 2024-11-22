@@ -1,0 +1,29 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as MarketingPreferences from "./MarketingPreferences.stories";
+
+<Meta of={MarketingPreferences} />
+
+# MarketingPreferences
+
+- [Overview](#overview)
+- [Props](#props)
+- [Usage](#usage)
+
+## Overview
+MarketingPreferences is the component which loads the member's marketing preferences, displays them as checkboxes and provides a method to save them.
+
+This component is intended to be shared on pages in the web and hybrid mobile environments.
+
+## Props
+<Controls />
+
+## Usage
+Simply include the component on the relevant page and provide the memberUuid
+
+For demo purposes in the below example...
+
+- the users saved preferences are only that feedback is opted in.
+- selecting analytics and saving will show the error message.
+
+
+<Canvas of={MarketingPreferences.Example} />

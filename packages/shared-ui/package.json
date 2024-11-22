@@ -58,7 +58,7 @@
     "test:coverage": "jest --coverage",
     "test:update": "jest -u",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint --ext .ts,.tsx",
+    "lint": "eslint --ext .ts,.tsx .",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test:watch": "jest --watch",

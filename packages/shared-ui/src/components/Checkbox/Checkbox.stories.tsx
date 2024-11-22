@@ -3,15 +3,17 @@ import Checkbox, { Props } from '../Checkbox';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 type CheckboxWrapperProp = {
+  id?: string;
   name?: string;
   value?: string;
   variant?: 'Default' | 'withBorder';
   isDisabled: boolean;
-  checkboxText: string;
+  checkboxText?: string;
   isChecked?: boolean;
 };
 
 const CheckboxWrapper = ({
+  id,
   name,
   value,
   variant,
@@ -31,6 +33,7 @@ const CheckboxWrapper = ({
 
   return (
     <Checkbox
+      id={id}
       name={name}
       value={value}
       variant={variant}

@@ -10,7 +10,9 @@ export function useAccountDetailsValid(eligibilityDetailsState: EligibilityDetai
     const member = eligibilityDetails.member;
     if (!member) return false;
 
-    const memberFieldsValid = Boolean(member.firstName?.trim() && member.surname?.trim());
+    const memberFieldsValid = Boolean(
+      member.firstName?.trim() && member.surname?.trim() && member.dob
+    );
 
     return addressIsValid && memberFieldsValid;
   }, [eligibilityDetails.member, addressIsValid]);

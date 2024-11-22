@@ -15,6 +15,7 @@ export function useOnSurnameChange(eligibilityDetailsState: EligibilityDetailsSt
           ...eligibilityDetails.member,
           firstName: eligibilityDetails.member?.firstName ?? '',
           surname,
+          dob: eligibilityDetails.member?.dob ?? new Date(),
         },
       });
     },

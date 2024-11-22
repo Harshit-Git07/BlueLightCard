@@ -13,6 +13,8 @@ import { ManualAddressForm } from '@/root/src/member-eligibility/shared/screens/
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 import { useAccountDetailsValid } from '@/root/src/member-eligibility/renewal/screens/renewal-account-details-screen/hooks/UseAccountDetailsIsValid';
 import { EligibilityHeading } from '../../../shared/screens/shared/components/heading/EligibilityHeading';
+import DatePicker from '@bluelightcard/shared-ui/components/DatePicker';
+import { useOnDobChange } from '@/root/src/member-eligibility/renewal/screens/renewal-account-details-screen/hooks/UseOnDobChange';
 
 export const RenewalAccountDetailsScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -22,6 +24,7 @@ export const RenewalAccountDetailsScreen: FC<VerifyEligibilityScreenProps> = ({
   const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
   const onFirstNameChange = useOnFirstNameChange(eligibilityDetailsState);
   const onSurnameChange = useOnSurnameChange(eligibilityDetailsState);
+  const onDobChange = useOnDobChange(eligibilityDetailsState);
   const isAccountDetailsValid = useAccountDetailsValid(eligibilityDetailsState);
 
   const handleBack = useCallback(() => {
@@ -67,11 +70,7 @@ export const RenewalAccountDetailsScreen: FC<VerifyEligibilityScreenProps> = ({
               required={true}
             />
 
-            {/* TODO add date picker component */}
-            <TextInput
-              placeholder={'PLACEHOLDER FOR DOB COMPONENT'}
-              value={eligibilityDetails.member?.dob}
-            />
+            <DatePicker onChange={onDobChange} value={eligibilityDetails.member?.dob} />
           </div>
         </div>
 

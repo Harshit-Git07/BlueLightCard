@@ -1,21 +1,20 @@
-import { ChangeEventHandler, useCallback } from 'react';
+import { useCallback } from 'react';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 
-type Callback = ChangeEventHandler<HTMLInputElement>;
+type Callback = (date: Date | undefined) => void;
 
-export function useOnFirstNameChange(eligibilityDetailsState: EligibilityDetailsState): Callback {
+export function useOnDobChange(eligibilityDetailsState: EligibilityDetailsState): Callback {
   const [eligibilityDetails, setEligibilityDetailsState] = eligibilityDetailsState;
 
   return useCallback(
-    (event) => {
-      const firstName = event.target.value;
+    (date) => {
       setEligibilityDetailsState({
         ...eligibilityDetails,
         member: {
           ...eligibilityDetails.member,
-          firstName,
+          firstName: eligibilityDetails.member?.firstName ?? '',
           surname: eligibilityDetails.member?.surname ?? '',
-          dob: eligibilityDetails.member?.dob ?? new Date(),
+          dob: date,
         },
       });
     },

@@ -83,6 +83,7 @@ describe('given member details are entered', () => {
       member: {
         firstName: 'John',
         surname: 'Doe',
+        dob: new Date('1980-01-01'),
       },
     };
 

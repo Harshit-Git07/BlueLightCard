@@ -18,7 +18,7 @@ const renderRenewalAccountDetailsScreen = (customEligibilityDetails = {}) => {
       member: {
         firstName: 'John',
         surname: 'Doe',
-        dob: '1990-01-01',
+        dob: new Date('1980-01-01'),
       },
       ...customEligibilityDetails,
     },

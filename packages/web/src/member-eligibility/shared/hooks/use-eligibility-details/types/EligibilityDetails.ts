@@ -63,7 +63,7 @@ export interface EligibilityEmployer {
 export interface EligibilityDetailsMember {
   firstName: string;
   surname: string;
-  dob?: string;
+  dob?: Date;
 }
 
 export type EligibilityDetailsWithoutFlow = Omit<EligibilityDetails, 'flow'>;

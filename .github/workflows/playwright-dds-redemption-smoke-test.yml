@@ -1,0 +1,99 @@
+name: Playwright DDS Redemption Journey Test - Firefox Only
+
+on:
+  schedule:
+    - cron: '0 3 * * *' # Run every day at 3 AM
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ui-automation
+    environment: Production
+    steps:
+      # Checkout repo and install dependencies
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
+        working-directory: packages/web-playwright-tests
+        run: npm install
+
+      # Install Playwright
+      - name: Install Playwright
+        working-directory: packages/web-playwright-tests
+        run: npx playwright install
+
+      # Check if secrets exist and throw error if any are missing
+      - name: Check Secrets Existence
+        env:
+          BASE_URL_UK: ${{ secrets.BASE_URL_DDS }}
+          EMAIL_UK: ${{ secrets.EMAIL_DDS }}
+          PASSWORD_UK: ${{ secrets.PASSWORD_DDS }}
+        run: |
+          echo "Checking secrets existence..."
+
+          if [ -z "$BASE_URL_DDS" ]; then
+            echo "Error: BASE_URL_DDS secret is not set."
+            exit 1
+          else
+            echo "BASE_URL_DDS secret is set."
+          fi
+
+          if [ -z "$EMAIL_DDS" ]; then
+            echo "Error: EMAIL_DDS secret is not set."
+            exit 1
+          else
+            echo "EMAIL_DDS secret is set."
+          fi
+
+          if [ -z "$PASSWORD_DDS" ]; then
+            echo "Error: PASSWORD_DDS secret is not set."
+            exit 1
+          else
+            echo "PASSWORD_DDS secret is set."
+          fi
+
+      # Run specified Playwright test with retry logic, using Firefox only
+      - name: Run Playwright test - Redeem Offer for Existing User - DDS (Firefox)
+        working-directory: packages/web-playwright-tests
+        id: playwright
+        env:
+          BASE_URL_UK: ${{ secrets.BASE_URL_DDS }}
+          EMAIL_UK: ${{ secrets.EMAIL_DDS }}
+          PASSWORD_UK: ${{ secrets.PASSWORD_DDS }}
+        run: |
+          for i in {1..2}; do
+            if npx playwright test -g "@Dds @SmokeTest @Web - DDS Existing User - Redeem offer" --project=Firefox; then
+              echo "Test passed on attempt $i."
+              break
+            fi
+            if [ $i -lt 2 ]; then
+              echo "Test failed, retrying... ($i/2)"
+            else
+              echo "Test failed after 2 re-run attempts."
+              exit 1
+            fi
+          done
+
+      # Upload Playwright report if the test fails
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: packages/web-playwright-tests/html-report
+
+      # Send Slack message if all retries fail
+      - name: Send Slack message on fail
+        if: failure()
+        run: |
+          WORKFLOW_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          curl -X POST -H 'Content-type: application/json' --data '{
+            "text": "*Playwright Web test `Redeem Offer for Existing User DDS` has failed after 2 attempts on Firefox against production. Check the workflow run report ('"$WORKFLOW_URL"') for further details.*",
+            "mrkdwn": true
+          }' ${{ vars.CI_WEB_AUTOMATION_WEBHOOK }}

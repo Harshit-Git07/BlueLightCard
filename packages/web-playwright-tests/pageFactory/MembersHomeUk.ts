@@ -105,32 +105,29 @@ export class MembersHomeUk {
     this.DISCOVERMORE_NAVBAR_UK = page.locator('[data-testid="navigation-dropdown-discover-more"]');
     this.LOGOUT_NAVBAR_UK = page.getByRole('link', { name: 'Logout' });
 
-        //Footer Locators
-
-        this.ONLINE_DISCOUNTS = page.locator('[data-testid="Online Discounts-link"]');
-        this.GIFTCARD_DISCOUNTS = page.locator('[data-testid="Giftcard Discounts-link"]');
-        this.HIGH_STREET_OFFERS = page.locator('[data-testid="High Street Offers-link"]');
-        this.POPULAR_DISCOUNTS = page.locator('[data-testid="Popular Discounts-link"]');
-        this.OFFERS_NEAR_YOU = page.locator('[data-testid="Offers Near You-link"]');
-        this.DEALS_OF_THE_WEEK = page.locator('[data-testid="Deals of the Week-link"]');
-        this.BLUE_LIGHT_CARD_FOUNDATION = page.locator('[data-testid="Blue Light Card Foundation-link"]');
-        this.LATEST_NEWS_AND_BLOGS = page.locator('[data-testid="Latest News & Blogs-link"]');
-        this.ABOUT_US = page.locator('[data-testid="About Us-link"]');
-        this.FREE_TICKETS = page.locator('[data-testid="Free Tickets-link"]');
-        this.COMPLIANCE = page.locator('[data-testid="Compliance-link"]');
-        this.ADD_A_DISCOUNT = page.locator('[data-testid="Add a discount-link"]');
-        this.MOBILE_APP = page.locator('[data-testid="Mobile App-link"]');
-        this.COMPETITIONS = page.locator('[data-testid="Competitions-link"]');
-        this.SITEMAP = page.locator('[data-testid="Sitemap-link"]');
-        this.CONTACT_US = page.locator('[data-testid="Contact Us-link"]');
-        this.CAREERS_AT_BLUE_LIGHT_CARD = page.locator('[data-testid="Careers at Blue Light Card-link"]');
-        this.LEGAL_AND_REGULATORY = page.locator('[data-testid="Legal and Regulatory-link"]');
-        this.TERMS_AND_CONDITIONS = page.locator('[data-testid="Terms and Conditions-link"]');
-        this.PRIVACY_NOTICE = page.locator('[data-testid="Privacy Notice-link"]');
-        this.CANDIDATE_PRIVACY_NOTICE = page.locator('[data-testid="Candidate Privacy Notice-link"]');
-        this.COOKIES_POLICY = page.locator('[data-testid="Cookies Policy-link"]');
-        this.MANAGE_COOKIES = page.locator('[data-testid="Manage Cookies-link"]');
-        this.MODERN_SLAVERY_ACT_STATEMENT = page.locator('[data-testid="Modern Slavery Act Statement-link"]');
+    this.ONLINE_DISCOUNTS = page.locator('a[href="/offers.php?type=0"]');
+    this.GIFTCARD_DISCOUNTS = page.locator('a[href="/offers.php?type=2"]');
+    this.HIGH_STREET_OFFERS = page.locator('a[href="/offers.php?type=5"]');
+    this.POPULAR_DISCOUNTS = page.locator('a[href="/offers.php?type=3"]');
+    this.DEALS_OF_THE_WEEK = page.locator('a[href="/members-home"]');
+    this.BLUE_LIGHT_CARD_FOUNDATION = page.locator('a[href="/foundation.php"]');
+    this.LATEST_NEWS_AND_BLOGS = page.locator('a[href="/bluelightcardnews.php"]');
+    this.ABOUT_US = page.locator('a[href="/about_blue_light_card.php"]');
+    this.FREE_TICKETS = page.locator('a[href="/freenhsandbluelightcardtickets.php"]');
+    this.COMPLIANCE = page.locator('a[href="/compliance.php"]');
+    this.ADD_A_DISCOUNT = page.locator('a[href="/addaforcesdiscount.php"]');
+    this.MOBILE_APP = page.locator('a[href="/bluelightcardmobileapp.php"]');
+    this.COMPETITIONS = page.locator('a[href="https://prizedraw-terms-conditions.bluelightcard.co.uk/"]');
+    this.SITEMAP = page.locator('a[href="/sitemap.php"]');
+    this.CONTACT_US = page.locator('a[href="https://bluelightcard.zendesk.com/hc/en-gb/signin"]');
+    this.CAREERS_AT_BLUE_LIGHT_CARD = page.locator('a[href="https://careers.bluelightcard.co.uk"]');
+    this.LEGAL_AND_REGULATORY = page.locator('a[href="/legal-and-regulatory.php"]');
+    this.TERMS_AND_CONDITIONS = page.locator('a[href="/terms_and_conditions.php"]');
+    this.PRIVACY_NOTICE = page.locator('a[href="/privacy-notice.php"]');
+    this.CANDIDATE_PRIVACY_NOTICE = page.locator('a[href="/candidate-privacy-notice.php"]');
+    this.COOKIES_POLICY = page.locator('a[href="/cookies_policy.php"]');
+    this.MANAGE_COOKIES = page.locator('a[href="/managecookies.php"]');
+    this.MODERN_SLAVERY_ACT_STATEMENT = page.locator('a[href="/modern-slavery-act.php"]');
 
     // Search options
     this.SEARCH_BUTTON_UK = page.locator("//input[@placeholder='Search for offers or companies']").first();
@@ -302,13 +299,16 @@ async clickModernSlaveryActStatement(): Promise<void> {
     await this.SEARCH_BUTTON_UK.click();
     switch (searchOption.toLowerCase()) {
       case 'company':
+        await this.page.waitForLoadState('networkidle');
         await this.SEARCH_OPTION_COMPANY_UK.click();
        // await this.page.selectOption('select[aria-label="drop-down selector"]', {
         //  label: searchTerm,
+        await this.page.waitForLoadState('networkidle');
         await this.SEARCH_OPTION_COMPANY_UK.fill(searchTerm);
         await this.page.locator(`text=${searchTerm}`).click();
         
 
+      
         break;
 
       case 'category':

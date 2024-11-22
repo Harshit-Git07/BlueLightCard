@@ -11,7 +11,7 @@ import { checkIfEnvironmentVariablesExist } from '../../utils/validation';
 import { Logger } from '../../../../core/src/utils/logger/logger';
 import { DI_KEYS } from '../../utils/diTokens';
 import { decodeJWT } from '../../utils/decodeJWT';
-import { getServiceParams } from '../../utils/serviceParams';
+import { UserProfile } from '../../services/UserProfile';
 
 let isEnvironmentVariableExist = false;
 const service = getEnvRaw('SERVICE');
@@ -63,9 +63,16 @@ export const handler = async (event: APIGatewayEvent) => {
   let serviceParams = '';
 
   try {
-    serviceParams = await getServiceParams(authToken);
+    const userProfile = new UserProfile(authToken);
+    const userProfileData = await userProfile.getUserProfileRequest();
+    if(userProfileData?.data?.data?.profile?.organisation) {
+      serviceParams = `&service=${userProfileData.data.data.profile.organisation}`; 
+    } else {
+      serviceParams = `&service=`;
+    }
   } catch (error: any) {
     logger.error({ message: 'Error fetching user profile', body: error });
+    logger.error({ message: 'Error fetching company details', body: error });
     return Response.Error(error as Error, HttpStatusCode.INTERNAL_SERVER_ERROR);
   }
 

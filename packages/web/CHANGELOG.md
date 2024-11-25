@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.91.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.90.0...bluelightcard/web-v1.91.0) (2024-11-22)
+
+
+### Features
+
+* [MAMA-28] privacy settings page for web and mobile hybrid  ([#2844](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2844)) ([d4cf139](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d4cf139ddeedd84dd76cece2359ce0af96d9361f))
+* [MER-383] Added datepicker to replace placeholder ([#3065](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3065)) ([3721b36](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3721b366cabc415becfeee329bfc6c8cc8f91ff9))
+* conv blc 5.0 search ([#2809](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2809)) ([d91d2d4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d91d2d44b3be6ed381fd2423515f17f99a0e87be))
+* Mama 29 marketing preferences screen ([#2721](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2721)) ([a445577](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a44557776c9b230ab47b81eefed60a62f609c543))
+
 ## [1.90.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.89.0...bluelightcard/web-v1.90.0) (2024-11-21)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.46.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.45.0...bluelightcard/mobile-hybrid-v1.46.0) (2024-11-22)
+
+
+### Features
+
+* [MAMA-28] privacy settings page for web and mobile hybrid  ([#2844](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2844)) ([d4cf139](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d4cf139ddeedd84dd76cece2359ce0af96d9361f))
+
 ## [1.45.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.44.0...bluelightcard/mobile-hybrid-v1.45.0) (2024-11-21)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.46.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.46.0...bluelightcard/mobile-hybrid-v1.46.1) (2024-11-26)
+
+
+### Bug Fixes
+
+* DISCO-1269 Fixed Hybrid offer carousels to open direct to clicked offer ([#3121](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3121)) ([3285143](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3285143b63b507ad1bea6b0ea4bebaf096db0da1))
+
 ## [1.46.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.45.0...bluelightcard/mobile-hybrid-v1.46.0) (2024-11-22)
 
 

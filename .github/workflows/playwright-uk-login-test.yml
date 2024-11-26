@@ -85,7 +85,7 @@ jobs:
           name: playwright-report
           path: packages/web-playwright-tests/html-report
 
-      # Send Slack message if all retries fail
+      # Send Slack message if all retries fail to automation channel
       - name: Send Slack message on fail
         if: failure()
         run: |

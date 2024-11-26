@@ -80,7 +80,7 @@ jobs:
               exit 1
             fi
           done
-      # Send Slack message if all retries fail
+      # Send Slack message to automation web channel if all retries fail
       - name: Send Slack message on fail
         if: failure()
         run: |

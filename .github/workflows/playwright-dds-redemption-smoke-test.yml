@@ -31,9 +31,9 @@ jobs:
       # Check if secrets exist and throw error if any are missing
       - name: Check Secrets Existence
         env:
-          BASE_URL_UK: ${{ secrets.BASE_URL_DDS }}
-          EMAIL_UK: ${{ secrets.EMAIL_DDS }}
-          PASSWORD_UK: ${{ secrets.PASSWORD_DDS }}
+          BASE_URL_DDS: ${{ secrets.BASE_URL_DDS }}
+          EMAIL_DDS: ${{ secrets.EMAIL_DDS }}
+          PASSWORD_DDS: ${{ secrets.PASSWORD_DDS }}
         run: |
           echo "Checking secrets existence..."
 
@@ -63,9 +63,9 @@ jobs:
         working-directory: packages/web-playwright-tests
         id: playwright
         env:
-          BASE_URL_UK: ${{ secrets.BASE_URL_DDS }}
-          EMAIL_UK: ${{ secrets.EMAIL_DDS }}
-          PASSWORD_UK: ${{ secrets.PASSWORD_DDS }}
+          BASE_URL_DDS: ${{ secrets.BASE_URL_DDS }}
+          EMAIL_DDS: ${{ secrets.EMAIL_DDS }}
+          PASSWORD_DDS: ${{ secrets.PASSWORD_DDS }}
         run: |
           for i in {1..2}; do
             if npx playwright test -g "@Dds @SmokeTest @Web - DDS Existing User - Redeem offer" --project=Firefox; then

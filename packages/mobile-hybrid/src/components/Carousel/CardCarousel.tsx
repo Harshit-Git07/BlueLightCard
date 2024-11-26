@@ -1,11 +1,15 @@
-import { FC, SetStateAction, useState } from 'react';
+import { SetStateAction, useState } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { CardCarouselProps } from '@/components/Carousel/types';
 import Card from '../Card/Card';
 import { cssUtil } from '@/utils/cssUtil';
 
-const CardCarousel: FC<CardCarouselProps> = ({ slides, onSlideItemClick, onSlideChanged }) => {
+function CardCarousel<T>({
+  slides,
+  onSlideItemClick,
+  onSlideChanged,
+}: Readonly<CardCarouselProps<T>>) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const handleSlideChange = (index: SetStateAction<number>) => {
@@ -38,13 +42,13 @@ const CardCarousel: FC<CardCarouselProps> = ({ slides, onSlideItemClick, onSlide
               text={slide.title}
               title={slide.text}
               imageSrc={slide.imageSrc}
-              onClick={() => onSlideItemClick && onSlideItemClick(slide.id)}
+              onClick={() => onSlideItemClick && onSlideItemClick(slide)}
             />
           </div>
         );
       })}
     </Carousel>
   );
-};
+}
 
 export default CardCarousel;

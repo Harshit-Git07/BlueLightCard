@@ -17,12 +17,14 @@ Default.args = {
       title: 'Card One',
       text: 'Card sub text',
       imageSrc: 'card_test_img.jpg',
+      meta: { id: 1 },
     },
     {
       id: 2,
       title: 'Card Two',
       text: 'Card sub text',
       imageSrc: 'card_test_img.jpg',
+      meta: { id: 2 },
     },
   ],
 };

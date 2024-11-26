@@ -104,11 +104,12 @@ const Offers: FC = () => {
               .map((offer) => ({
                 id: offer.id,
                 imageSrc: offer.imagedetail,
+                meta: offer,
               }))}
-            onSlideItemClick={(id) =>
+            onSlideItemClick={(slide) =>
               onFlexOfferClick(
                 flexible.title,
-                flexible.items.find((flex) => flex.id === id) as OfferFlexibleItemModel,
+                flexible.items.find((flex) => flex.id === slide.id) as OfferFlexibleItemModel,
               )
             }
             onSlideChanged={() => onSlideChange(flexible.title)}
@@ -124,14 +125,10 @@ const Offers: FC = () => {
               title: offer.companyname,
               text: offer.offername,
               imageSrc: offer.image?.length ? offer.image : offer.s3logos,
+              meta: offer,
             }))}
-            onSlideItemClick={(id) =>
-              onCompanyOfferClick(
-                homepagePositionOffersExpr.title,
-                homepagePositionOffersExpr.items.find(
-                  (offer) => offer.compid === id,
-                ) as OfferPromosModel,
-              )
+            onSlideItemClick={(slide) =>
+              onCompanyOfferClick(homepagePositionOffersExpr.title, slide.meta)
             }
             onSlideChanged={() => onSlideChange(homepagePositionOffersExpr.title)}
           />
@@ -147,13 +144,9 @@ const Offers: FC = () => {
                 title: offer.companyname,
                 text: offer.offername,
                 imageSrc: offer.image?.length ? offer.image : offer.s3logos,
+                meta: offer,
               }))}
-              onSlideItemClick={(id) =>
-                onCompanyOfferClick(
-                  group.title,
-                  group.items.find((offer) => offer.compid === id) as OfferPromosModel,
-                )
-              }
+              onSlideItemClick={(slide) => onCompanyOfferClick(group.title, slide.meta)}
               onSlideChanged={() => onSlideChange(group.title)}
             />
           </section>

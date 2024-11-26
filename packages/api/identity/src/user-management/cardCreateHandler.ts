@@ -44,7 +44,7 @@ export const handler = async (event: EventBridgeEvent<any, any>) => {
   const uuid = inputData.uuid;
   const legacyCardId = inputData.cardNumber;
   const expires = inputData.expires;
-  const status = inputData.status;
+  const status = inputData.cardStatus;
 
   const cardRepository = new CardRepository(identityTableName, region);
   try {
@@ -52,7 +52,7 @@ export const handler = async (event: EventBridgeEvent<any, any>) => {
     logger.debug('results', { results });
     return Response.OK({ message: 'success' });
   } catch (err: any) {
-    logger.error('error deleting company follows', { err });
+    logger.error('error inserting card', { err });
     await sendToDLQ(event);
   }
 };
@@ -61,5 +61,5 @@ type Input = {
   cardNumber: string;
   uuid: string;
   expires: string;
-  status: string;
+  cardStatus: string;
 };

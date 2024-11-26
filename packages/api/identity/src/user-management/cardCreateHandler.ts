@@ -5,6 +5,7 @@ import { CardRepository } from '../repositories/cardRepository';
 import { Response } from '../../../core/src/utils/restResponse/response';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
+import { getCardStatus } from '@blc-mono/core/utils/getCardStatus'
 
 const service: string = getEnv(IdentityStackEnvironmentKeys.SERVICE);
 const identityTableName = getEnv(IdentityStackEnvironmentKeys.IDENTITY_TABLE_NAME);
@@ -45,10 +46,11 @@ export const handler = async (event: EventBridgeEvent<any, any>) => {
   const legacyCardId = inputData.cardNumber;
   const expires = inputData.expires;
   const status = inputData.cardStatus;
+  const convertedStatus = getCardStatus(Number(status));
 
   const cardRepository = new CardRepository(identityTableName, region);
   try {
-    const results = await cardRepository.createCard(uuid, legacyCardId, expires, status);
+    const results = await cardRepository.createCard(uuid, legacyCardId, expires, convertedStatus);
     logger.debug('results', { results });
     return Response.OK({ message: 'success' });
   } catch (err: any) {

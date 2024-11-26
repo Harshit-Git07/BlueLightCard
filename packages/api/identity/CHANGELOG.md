@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.113.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.112.0...bluelightcard/identity-v1.113.0) (2024-11-26)
+
+
+### Features
+
+* convert status before storing it in DB ([#3119](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3119)) ([a9d95ef](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a9d95ef80ebdda43f5062913778528a15400e696))
+* fix issue on card create/update handler ([#3107](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3107)) ([1121ea7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1121ea749ebb82d360dfee6ca7732448c8a914d8))
+
 ## [1.112.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.111.0...bluelightcard/identity-v1.112.0) (2024-11-21)
 
 

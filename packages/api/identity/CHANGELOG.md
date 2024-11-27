@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.114.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.113.0...bluelightcard/identity-v1.114.0) (2024-11-27)
+
+
+### Features
+
+* added zendesk app client for dds & AU ([#3143](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3143)) ([2a07f80](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2a07f80d975ca86d84d40733cd275e4c762ab8bb))
+
 ## [1.113.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.112.0...bluelightcard/identity-v1.113.0) (2024-11-26)
 
 

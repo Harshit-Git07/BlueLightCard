@@ -11,6 +11,7 @@ import { MemberServicesHub } from 'member-services-hub/stack';
 import { Discovery } from '@blc-mono/discovery/infrastructure/stack';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { Members, MembersAdminApi, MembersApi } from '@blc-mono/members/infrastructure/stack';
+import { Zendesk } from '@blc-mono/zendesk/infrastructure/stack';
 
 export default {
   config(_input) {
@@ -45,6 +46,7 @@ export default {
       app.stack(OffersCMS, { id: 'offers-cms' }),
       app.stack(Payments, { id: 'payments' }),
       app.stack(Orders, { id: 'orders' }),
+      app.stack(Zendesk, { id: 'zendesk' }),
     ]);
 
     app.stack(Web, { id: 'web' }).stack(MemberServicesHub, { id: 'member-services-hub' });

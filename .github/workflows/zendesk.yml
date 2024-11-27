@@ -1,0 +1,299 @@
+name: Zendesk
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - packages/api/zendesk/**
+      - packages/api/zendesk/CHANGELOG.md
+      - packages/api/core/**
+      - stacks/**
+      - .github/workflows/zendesk.yml
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+  pull_request:
+    paths:
+      - packages/api/zendesk/**
+      - packages/api/zendesk/CHANGELOG.md
+      - packages/api/core/**
+      - stacks/**
+      - .github/workflows/zendesk.yml
+      - package-lock.json
+      - sst.config.ts
+      - package.json
+
+permissions: write-all
+
+jobs:
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+        with:
+          restore_cache: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Test
+        run: npm run test -w packages/api/zendesk
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        if: github.actor != 'dependabot[bot]'
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectBaseDir: packages/api/zendesk
+
+  typecheck:
+    name: Check Types
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Generate SST Types
+        env:
+          BRAND: BLC_UK
+        run: npx sst types --stage staging
+      - name: Check Types
+        run: npm run typecheck -w packages/api/zendesk
+
+  changelog:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    name: Changelog
+    runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.tag-release.outputs.releases_created }}
+    steps:
+      - uses: googleapis/release-please-action@v3
+        id: tag-release
+        with:
+          path: packages/api/zendesk
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          monorepo-tags: true
+          package-name: bluelightcard/zendesk
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs:
+      - install
+      - test
+      - changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Build
+        run: npm run build
+
+  staging:
+    name: Staging Deployment
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        deployment:
+          - brand: BLC_UK
+            region: eu-west-2
+            stage: staging
+          - brand: BLC_AU
+            region: ap-southeast-2
+            stage: staging
+          - brand: DDS_UK
+            region: eu-west-2
+            stage: staging-dds
+            blcUkCognitoUserPoolId: 'eu-west-2_Ow2L8azIb'
+    needs:
+      - install
+      - test
+      - build
+      - changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: ${{ matrix.deployment.region }}
+      - name: Build
+        run: npm run build
+      - name: Get Service Tags
+        run: |
+          echo "DD_VERSION=$(date +%m-%d-%Y)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "DD_ENV=staging" >> $GITHUB_ENV
+          echo "DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          echo "DD_GIT_REPOSITORY_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
+      - name: Deploy
+        env:
+          BRAND: ${{ matrix.deployment.brand }}
+          DD_VERSION: '${{ env.DD_VERSION }}'
+          DD_ENV: '${{ env.DD_ENV }}'
+          DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
+          DD_GIT_REPOSITORY_URL: '${{ env.DD_GIT_REPOSITORY_URL }}'
+          DD_API_KEY: '${{ secrets.DATADOG_AWS_INSTRUMENTATION_TOKEN }}'
+          USE_DATADOG_AGENT: 'true'
+        run: npx sst deploy global --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}} && npx sst deploy zendesk --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}}
+      - name: Datadog deployment metrics
+        uses: ./.github/actions/datadog
+        with:
+          environment: 'staging'
+          service_name: 'zendesk'
+          workflow_run_id: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATADOG_DORA_METRICS_CLIENT_TOKEN: ${{ secrets.DATADOG_DORA_METRICS_CLIENT_TOKEN }}
+      - name: Send Slack message on failure
+        if: ${{ failure() }}
+        uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
+          title: ":x: :test_tube: Staging deployment failed for Zendesk (${{matrix.deployment.brand}})!"
+      - name: Send Slack message on success
+        if: ${{ success() }}
+        uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
+          title: ":test_tube: Staging deployment for Zendesk (${{matrix.deployment.brand}}) was successful!"
+
+  e2e-test:
+    name: End to End Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        deployment:
+          - brand: BLC_UK
+            region: eu-west-2
+            stage: staging
+    #          - brand: BLC_AU
+    #            region: ap-southeast-2
+    #            stage: staging
+    #          - brand: DDS_UK
+    #            region: eu-west-2
+    #            stage: staging-dds
+    needs:
+      - install
+      - test
+      - build
+      - changelog
+      - staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: ${{ matrix.deployment.region }}
+      - name: Run E2E Tests
+        working-directory: packages/api/zendesk
+        env:
+          BRAND: ${{ matrix.deployment.brand }}
+        run: npx sst bind --stage ${{ matrix.deployment.stage }} --region ${{ matrix.deployment.region }} vitest e2e
+
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
+    name: Release
+    environment: Production
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        deployment:
+          - brand: BLC_UK
+            region: eu-west-2
+            stage: production
+          - brand: BLC_AU
+            region: ap-southeast-2
+            stage: production
+          - brand: DDS_UK
+            region: eu-west-2
+            stage: production-dds
+            blcUkCognitoUserPoolId: 'eu-west-2_D3aAVuWHo'
+    needs:
+      - install
+      - test
+      - staging
+      - e2e-test
+      - changelog
+      - build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::676719682338:role/github-action-role
+          aws-region: ${{ matrix.deployment.region }}
+      - name: Build
+        run: npm run build
+      - name: Get Service Tags
+        run: |
+          echo "DD_VERSION=$(date +%m-%d-%Y)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "DD_ENV=production" >> $GITHUB_ENV
+          echo "DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          echo "DD_GIT_REPOSITORY_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
+      - name: Deploy
+        env:
+          BRAND: ${{ matrix.deployment.brand }}
+          DD_VERSION: '${{ env.DD_VERSION }}'
+          DD_ENV: '${{ env.DD_ENV }}'
+          DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
+          DD_GIT_REPOSITORY_URL: '${{ env.DD_GIT_REPOSITORY_URL }}'
+          DD_API_KEY: '${{ secrets.DATADOG_AWS_INSTRUMENTATION_TOKEN }}'
+          USE_DATADOG_AGENT: 'true'
+          ZENDESK_URL_UK: 'bluelightcard.zendesk.com'
+          ZENDESK_URL_AUS: 'bluelightcardau.zendesk.com'
+          ZENDESK_URL_DDS: 'defencediscountservice.zendesk.com'
+          ZENDESK_SUPPORT_URL_UK: 'support.bluelightcard.co.uk'
+          ZENDESK_SUPPORT_URL_AUS: 'support-zendesk.bluelightcard.com.au'
+          ZENDESK_SUPPORT_URL_DDS: 'support.defencediscountservice.co.uk'
+          ZENDESK_API_BASE_URL_UK: 'https://zendesk-blc-uk.blcshine.io'
+          ZENDESK_API_BASE_URL_AUS: 'https://zendesk-blc-au.blcshine.io'
+          ZENDESK_API_BASE_URL_DDS: 'https://zendesk-dds-uk.blcshine.io'
+        run: npx sst deploy global --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}} && npx sst deploy zendesk --stage ${{matrix.deployment.stage}} --region ${{matrix.deployment.region}}
+      - name: Datadog deployment metrics
+        uses: ./.github/actions/datadog
+        with:
+          environment: 'production'
+          service_name: 'zendesk'
+          workflow_run_id: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATADOG_DORA_METRICS_CLIENT_TOKEN: ${{ secrets.DATADOG_DORA_METRICS_CLIENT_TOKEN }}
+      - name: Send Slack message on failure
+        if: ${{ failure() }}
+        uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
+          title: "@here :x: Production deployment failed for Zendesk (${{matrix.deployment.brand}})!"
+      - name: Send Slack message on success
+        if: ${{ success() }}
+        uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
+          title: ":rocket: Production deployment for Zendesk was successful (${{matrix.deployment.brand}}})!"

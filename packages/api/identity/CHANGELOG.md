@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.115.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.114.0...bluelightcard/identity-v1.115.0) (2024-11-27)
+
+
+### Features
+
+* reverted the app client for zendesk ([#3152](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3152)) ([d9887f5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d9887f519bbe7bd05e099d09cff43bbac64b6a2a))
+
 ## [1.114.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.113.0...bluelightcard/identity-v1.114.0) (2024-11-27)
 
 

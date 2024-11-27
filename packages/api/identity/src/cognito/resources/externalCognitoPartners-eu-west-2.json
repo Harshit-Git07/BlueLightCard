@@ -38,13 +38,6 @@
         "callBackUrl": "https://secure.yalsoncc.co.uk/dds_callback",
         "signoutUrl": "https://secure.yalsoncc.co.uk/dds_signout",
         "partnerUniqueId": "YALSON"
-      },
-      {
-        "partnersName": "UK Zendesk",
-        "callBackUrl": "https://zendesk-dds-uk.blcshine.io/callback",
-        "signoutUrl": "https://defencediscountservice.zendesk.com/",
-        "generateSecret": false,
-        "partnerUniqueId": "ZENDESK"
       }
     ]
 }

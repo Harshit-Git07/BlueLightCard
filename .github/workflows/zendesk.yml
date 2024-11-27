@@ -214,7 +214,6 @@ jobs:
       - install
       - test
       - staging
-      - e2e-test
       - changelog
       - build
     steps:

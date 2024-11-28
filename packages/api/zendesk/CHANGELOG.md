@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/zendesk-v1.0.0...bluelightcard/zendesk-v1.1.0) (2024-11-28)
+
+
+### Features
+
+* COT-1053 stage var name fixed and endpoint for dds ([#3166](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3166)) ([08e6d60](https://github.com/bluelightcard/BlueLightCard-2.0/commit/08e6d6045b06c37a1e662cb466ecabdbb5f29b12))
+
 ## 1.0.0 (2024-11-27)
 
 

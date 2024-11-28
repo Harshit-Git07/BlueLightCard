@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.117.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.116.0...bluelightcard/identity-v1.117.0) (2024-11-28)
+
+
+### Features
+
+* COT-1042 reverted the AU zendesk app client config ([#3167](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3167)) ([e9b04f3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e9b04f3e6bb06b8e0ac343a8fdd1d0a26c9f81d3))
+
 ## [1.116.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.115.0...bluelightcard/identity-v1.116.0) (2024-11-28)
 
 

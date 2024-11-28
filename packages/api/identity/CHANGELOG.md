@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.116.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.115.0...bluelightcard/identity-v1.116.0) (2024-11-28)
+
+
+### Features
+
+* added zendesk app client for cognito in AU region ([#3161](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3161)) ([f8b72a7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f8b72a77ccbebd03939fa9b6f481648f576707f0))
+
 ## [1.115.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.114.0...bluelightcard/identity-v1.115.0) (2024-11-27)
 
 

@@ -165,6 +165,7 @@ const authenticateUserOldPool = async (username: string, password: string) => {
               {},
             );
             attributesObject['custom:migrated_old_pool'] = true;
+            attributesObject['email'] = username;
             logger.info('Successfully migrated user from old user pool', {
               username: maskedUsername,
             });

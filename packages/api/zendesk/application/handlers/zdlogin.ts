@@ -27,18 +27,19 @@ const ZENDESK_API_BASE_URL_AUS = getEnv(ZendeskStackEnvironmentKeys.ZENDESK_API_
 const ZENDESK_API_BASE_URL_DDS = getEnv(ZendeskStackEnvironmentKeys.ZENDESK_API_BASE_URL_DDS);
 
 const brandURLs: { [key: string]: string } = {
-  ZENDESK_URL_UK: ZENDESK_API_BASE_URL_UK,
-  ZENDESK_SUPPORT_URL_UK: ZENDESK_API_BASE_URL_UK,
-  ZENDESK_URL_DDS: ZENDESK_API_BASE_URL_DDS,
-  ZENDESK_SUPPORT_URL_DDS: ZENDESK_API_BASE_URL_DDS,
-  ZENDESK_URL_AUS: ZENDESK_API_BASE_URL_AUS,
-  ZENDESK_SUPPORT_URL_AUS: ZENDESK_API_BASE_URL_AUS,
+  'bluelightcard.zendesk.com': ZENDESK_API_BASE_URL_UK,
+  'support.bluelightcard.co.uk': ZENDESK_API_BASE_URL_UK,
+  'defencediscountservice.zendesk.com': ZENDESK_API_BASE_URL_DDS,
+  'support.defencediscountservice.co.uk': ZENDESK_API_BASE_URL_DDS,
+  'bluelightcardau.zendesk.com': ZENDESK_API_BASE_URL_AUS,
+  'support-zendesk.bluelightcard.com.au': ZENDESK_API_BASE_URL_AUS,
 };
+
 export const handler = async (event: APIGatewayEvent, context: Context): Promise<object> => {
   logger.info('input', { event });
   const returnTo = event.queryStringParameters?.return_to;
   const requestType = event.queryStringParameters?.request_type ? event.queryStringParameters?.request_type : 'login';
-  const defaultRedirectUrl = ZENDESK_URL_UK; // redirect back to zendesk UK by default
+  const defaultRedirectUrl = `https://${ZENDESK_URL_UK}`; // redirect back to zendesk UK by default
   if (!returnTo) {
     logger.error('Missing return_to parameter');
     return {
@@ -49,7 +50,7 @@ export const handler = async (event: APIGatewayEvent, context: Context): Promise
     }
   }
   for (const [key, url] of Object.entries(brandURLs)) {
-    if (key.includes(returnTo)) {
+    if (returnTo.includes(key)) {
       const redirectUrl = `${url}/${requestType}`;
       return {
         statusCode: 302,

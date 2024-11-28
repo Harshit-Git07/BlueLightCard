@@ -2,7 +2,7 @@ import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { ApiGatewayV1Api, StackContext, use } from 'sst/constructs';
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { getBrandFromEnv, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
-import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnvOrDefault, getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { Shared } from '@blc-mono/shared/stack';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
@@ -16,10 +16,9 @@ function ZendeskStack({ stack }: StackContext) {
   const SERVICE_NAME = 'zendesk';
   const brand = getBrandFromEnv();
 
-  const stageSecret =
-      stack.stage === STAGES.PRODUCTION || stack.stage === STAGES.STAGING
-        ? stack.stage
-        : STAGES.STAGING;
+  const stageSecret = (isProduction(stack.stage) || isStaging(stack.stage))
+      ? stack.stage
+      : STAGES.STAGING;
 
   let secretName = `blc-mono-zendesk/${stageSecret}/secrets`;
   if (isDdsUkBrand()) {
@@ -83,15 +82,11 @@ function ZendeskStack({ stack }: StackContext) {
     cdk: {
       restApi: {
         endpointTypes: globalConfig.apiGatewayEndpointTypes,
-        ...([STAGES.PRODUCTION, STAGES.STAGING].includes(stack.stage as STAGES) &&
+        ...((isProduction(stack.stage) || isStaging(stack.stage)) &&
           certificateArn && {
             domainName: {
               domainName: isProduction(stack.stage) ? productionDomainNames[brand] : stagingDomainNames[brand],
-              certificate: Certificate.fromCertificateArn(
-                stack,
-                'DomainCertificate',
-                certificateArn,
-              ),
+              certificate: Certificate.fromCertificateArn(stack, 'DomainCertificate', certificateArn),
             },
           }),
       },

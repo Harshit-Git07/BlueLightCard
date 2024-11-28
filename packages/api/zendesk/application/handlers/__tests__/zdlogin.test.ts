@@ -42,7 +42,7 @@ jest.mock('@blc-mono/core/utils/getEnv', () => ({
       case 'ZENDESK_SUPPORT_URL_UK':
         return 'ZENDESK_SUPPORT_URL_UK';
       case 'ZENDESK_SUPPORT_URL_AUS':
-        return 'ZENDESK_SUPPORT_URL_AUS';
+        return 'support-zendesk.bluelightcard.com.au';
       case 'ZENDESK_SUPPORT_URL_DDS':
         return 'ZENDESK_SUPPORT_URL_DDS';
       case 'ZENDESK_API_BASE_URL_UK':
@@ -78,7 +78,7 @@ describe('Zendesk Login Handler', () => {
     expect(response).toEqual({
       statusCode: 302,
       headers: {
-        Location: 'ZENDESK_URL_UK',
+        Location: 'https://ZENDESK_URL_UK',
       },
     });
   });
@@ -87,7 +87,7 @@ describe('Zendesk Login Handler', () => {
     const event = {
       headers: {},
       queryStringParameters: {
-        return_to: 'ZENDESK_SUPPORT_URL_AUS',
+        return_to: 'support-zendesk.bluelightcard.com.au',
       }
     } as any;
     const context = {} as any;

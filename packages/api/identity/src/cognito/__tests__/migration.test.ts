@@ -106,7 +106,7 @@ describe('migration trigger', () => {
       promise: jest.fn().mockResolvedValue({
         UserAttributes: [
           { Name: 'sub', Value: 'test-sub' },
-          { Name: 'email', Value: 'test-email' },
+          { Name: 'email', Value: 'user@example.com' },
         ],
       }),
     });
@@ -135,7 +135,7 @@ describe('migration trigger', () => {
         finalUserStatus: 'CONFIRMED',
         messageAction: 'SUPPRESS',
         userAttributes: {
-          email: 'test-email',
+          email: 'user@example.com',
           'custom:migrated_old_pool': true,
         },
       },

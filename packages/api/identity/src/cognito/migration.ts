@@ -79,6 +79,7 @@ export const handler = async (event: UserMigrationTriggerEvent) => {
       }
       if (user) {
         event.response.userAttributes = user;
+        event.userName = user.email;
         event.response.finalUserStatus = 'CONFIRMED';
         event.response.messageAction = 'SUPPRESS';
       }

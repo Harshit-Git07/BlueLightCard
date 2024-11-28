@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.118.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.117.0...bluelightcard/identity-v1.118.0) (2024-11-28)
+
+
+### Features
+
+* Feat/fix cognito ([#3179](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3179)) ([d7ad911](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d7ad91122db1573b608f4011359bc8ee45f2dfb1))
+* userName equivalent to user email returned from old pool ([#3174](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3174)) ([d649c9c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d649c9ccfab92e731a1dc3e6236ea3e41c3652d2))
+
 ## [1.117.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.116.0...bluelightcard/identity-v1.117.0) (2024-11-28)
 
 

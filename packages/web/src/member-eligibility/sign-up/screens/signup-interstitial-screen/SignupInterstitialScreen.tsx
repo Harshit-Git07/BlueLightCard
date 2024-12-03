@@ -3,17 +3,23 @@ import Card from '@bluelightcard/shared-ui/components/Card';
 import { BRAND } from '@/global-vars';
 import { BRANDS } from '@/types/brands.enum';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
-import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
 import { buildSignupTitle } from '@/root/src/member-eligibility/sign-up/screens/signup-interstitial-screen/hooks/SignupTitleBuilder';
-import { InterstitialSubTitle } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-sub-title/InterstitialSubTitle';
-import { InterstitialScreenTitle } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-screen-title/InterstitialScreenTitle';
-import { InterstitialScreenCardContainer } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-screen-card-container/InterstitialScreenCardContainer';
-import { InterstitialScreenBody } from '@/root/src/member-eligibility/shared/screens/shared/interstitial/interstitial-screen-body/InterstitialScreenBody';
+import { InterstitialScreen } from '@/root/src/member-eligibility/shared/screens/interstitial-screen/InterstitialScreen';
+import {
+  interstitialCardWithButton,
+  interstitialCardWithoutButton,
+} from '@/root/src/member-eligibility/shared/screens/interstitial-screen/constants/CardProps';
+import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
+import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
+import { interstitialEvents } from '@/root/src/member-eligibility/sign-up/screens/signup-interstitial-screen/amplitude-events/InterstitialEvents';
 
 export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
+
+  const logAnalyticsEvent = useLogAmplitudeEvent();
+  useLogAnalyticsPageView(eligibilityDetails);
 
   const title = buildSignupTitle();
 
@@ -23,38 +29,52 @@ export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
     return `Enter your delivery address and unlock two years of exclusive access for just ${cost}.`;
   }, []);
 
+  const makeAPaymentCardHasButton = useMemo(() => {
+    if (eligibilityDetails.emailVerification) return true;
+
+    return eligibilityDetails.fileVerification && eligibilityDetails.fileVerification.length > 0;
+  }, [eligibilityDetails.emailVerification, eligibilityDetails.fileVerification]);
+
+  const showVerifyEligibilityCard = useMemo(() => {
+    return !makeAPaymentCardHasButton;
+  }, [makeAPaymentCardHasButton]);
+
+  const skipToPaymentCardProps = useMemo(() => {
+    return makeAPaymentCardHasButton ? interstitialCardWithButton : interstitialCardWithoutButton;
+  }, [makeAPaymentCardHasButton]);
+
   return (
-    <EligibilityScreen data-testid="SignupInterstitialScreen">
-      <InterstitialScreenBody>
-        <InterstitialScreenTitle title={title} />
+    <InterstitialScreen title={title} data-testid="SignupInterstitialScreen">
+      {showVerifyEligibilityCard && (
+        <Card
+          data-testid="verify-eligibility-card"
+          cardTitle="Verify Eligibility"
+          description="Provide your job details and work email for quick verification or upload an eligible form of ID"
+          onClick={() => {
+            logAnalyticsEvent(interstitialEvents.onFlowStarted(eligibilityDetails));
 
-        <InterstitialSubTitle numberOfStepsAsWord="two" status="start" />
+            setEligibilityDetails({
+              ...eligibilityDetails,
+              currentScreen: 'Employment Status Screen',
+            });
+          }}
+          {...interstitialCardWithButton}
+        />
+      )}
 
-        <InterstitialScreenCardContainer>
-          <Card
-            data-testid="verify-eligibility-card"
-            cardTitle="Verify Eligibility"
-            description="Provide your job details and work email for quick verification or upload an eligible form of ID"
-            truncateDescription={false}
-            buttonTitle="Start"
-            initialCardState="selected"
-            showButton
-            onClick={() => {
-              setEligibilityDetails({
-                ...eligibilityDetails,
-                currentScreen: 'Employment Status Screen',
-              });
-            }}
-          />
+      <Card
+        cardTitle="Make a payment"
+        description={paymentCardDescription}
+        onClick={() => {
+          logAnalyticsEvent(interstitialEvents.onSkipToPayment(eligibilityDetails));
 
-          <Card
-            cardTitle="Make a payment"
-            description={paymentCardDescription}
-            initialCardState="default"
-            canHover={false}
-          />
-        </InterstitialScreenCardContainer>
-      </InterstitialScreenBody>
-    </EligibilityScreen>
+          setEligibilityDetails({
+            ...eligibilityDetails,
+            currentScreen: 'Payment Screen',
+          });
+        }}
+        {...skipToPaymentCardProps}
+      />
+    </InterstitialScreen>
   );
 };

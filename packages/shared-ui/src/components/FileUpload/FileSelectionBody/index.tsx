@@ -11,6 +11,7 @@ const FileSelectionBody: FC<FileSelectionProps> = ({
   disabled = false,
   allowedFileTypes = defaultFileTypes,
   maxFileSize = defaultMaxFileSize,
+  isError,
 }) => {
   const onFileDrop = (event: DragEvent<HTMLElement>) => {
     event.preventDefault();
@@ -42,6 +43,7 @@ const FileSelectionBody: FC<FileSelectionProps> = ({
       disabled={disabled}
       allowedFileTypes={allowedFileTypes}
       maxFileSize={maxFileSize}
+      isError={isError}
     />
   );
 };

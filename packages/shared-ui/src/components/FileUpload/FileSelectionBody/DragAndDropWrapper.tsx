@@ -6,13 +6,14 @@ import { formatFileTypes } from '../utils/formatFileTypes';
 import { useDragging } from '../useDragging';
 import { conditionalStrings } from '../../../utils/conditionalStrings';
 
-type Props = {
+interface Props {
   handleDrop: (event: DragEvent<HTMLElement>) => void;
   handleButtonClick: (event: ChangeEvent<HTMLInputElement>) => void;
   disabled: boolean;
   allowedFileTypes: string[];
   maxFileSize: number;
-};
+  isError?: boolean;
+}
 
 const FileSelectionDragAndDropWrapper: FC<Props> = ({
   handleDrop,
@@ -20,6 +21,7 @@ const FileSelectionDragAndDropWrapper: FC<Props> = ({
   disabled,
   allowedFileTypes,
   maxFileSize,
+  isError,
 }) => {
   const { dragging, ...draggingProps } = useDragging(handleDrop);
 
@@ -30,36 +32,40 @@ const FileSelectionDragAndDropWrapper: FC<Props> = ({
       [defaultColours]: !disabled && !dragging,
     });
 
-  const sectionStyles = conditionalStrings({
-    'p-6 flex flex-col items-center gap-3 border border-dashed rounded': true,
+  const containerStyles = conditionalStrings({
+    [`p-[24px] flex flex-col items-center gap-[12px] border border-dashed rounded`]: true,
     [colours.backgroundPrimaryContainer]: dragging,
     [colours.backgroundSurfaceContainer]: !dragging,
-    [colours.borderPrimaryHover]: dragging,
-    [colours.borderOnSurfaceOutline]: !dragging,
+    [colours.borderPrimaryHover]: dragging && !isError,
+    [colours.borderOnSurfaceOutline]: !dragging && !isError,
+    [colours.borderError]: isError === true,
   });
 
   return (
     <section
-      className={sectionStyles}
+      className={containerStyles}
       {...(disabled ? {} : draggingProps)}
       aria-label="Dropzone to Upload Files"
     >
-      <div className="w-full flex flex-col items-center gap-6">
-        <div className="w-full flex flex-col items-center gap-3">
+      <div className="w-full flex flex-col items-center gap-[24px]">
+        <div className={`w-full flex flex-col items-center gap-[12px]`}>
           <FileSelectionInputButton
             handleButtonClick={handleButtonClick}
             allowedFileTypes={allowedFileTypes}
             disabled={disabled}
           />
-          <p className={`hidden laptop:block ${getTextColourStyles(colours.textOnSurface)}`}>or</p>
+
+          <p className={`${getTextColourStyles(colours.textOnSurface)} hidden laptop:block`}>or</p>
+
           <p
-            className={`hidden laptop:block ${fonts.bodySemiBold} ${getTextColourStyles(colours.textOnSurface)}`}
+            className={`${fonts.bodySemiBold} ${getTextColourStyles(colours.textOnSurface)} hidden laptop:block`}
           >
             Drag and drop in here
           </p>
         </div>
+
         <p
-          className={`text-center ${fonts.bodySmall} ${getTextColourStyles(colours.textOnSurfaceSubtle)}`}
+          className={`${fonts.bodySmall} ${getTextColourStyles(colours.textOnSurfaceSubtle)} text-center`}
         >
           Max file size is {formatBytes(maxFileSize)}. Supported file types are{' '}
           {formatFileTypes(allowedFileTypes)}

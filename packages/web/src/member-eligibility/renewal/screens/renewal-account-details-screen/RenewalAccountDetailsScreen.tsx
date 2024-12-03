@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { EligibilityBody } from '@/root/src/member-eligibility/shared/screens/shared/components/body/EligibilityBody';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
@@ -15,31 +15,24 @@ import { useAccountDetailsValid } from '@/root/src/member-eligibility/renewal/sc
 import { EligibilityHeading } from '../../../shared/screens/shared/components/heading/EligibilityHeading';
 import DatePicker from '@bluelightcard/shared-ui/components/DatePicker';
 import { useOnDobChange } from '@/root/src/member-eligibility/renewal/screens/renewal-account-details-screen/hooks/UseOnDobChange';
+import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
+import { useHandleNext } from '@/root/src/member-eligibility/renewal/screens/renewal-account-details-screen/hooks/UseHandleNext';
+import { useHandleBack } from './hooks/useHandleBack';
 
 export const RenewalAccountDetailsScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
-  const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
+  const [eligibilityDetails] = eligibilityDetailsState;
+
+  useLogAnalyticsPageView(eligibilityDetails);
 
   const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
   const onFirstNameChange = useOnFirstNameChange(eligibilityDetailsState);
   const onSurnameChange = useOnSurnameChange(eligibilityDetailsState);
   const onDobChange = useOnDobChange(eligibilityDetailsState);
   const isAccountDetailsValid = useAccountDetailsValid(eligibilityDetailsState);
-
-  const handleBack = useCallback(() => {
-    setEligibilityDetails({
-      ...eligibilityDetails,
-      currentScreen: 'Interstitial Screen',
-    });
-  }, [eligibilityDetails, setEligibilityDetails]);
-
-  const handleNext = useCallback(() => {
-    setEligibilityDetails({
-      ...eligibilityDetails,
-      currentScreen: 'Job Details Screen',
-    });
-  }, [eligibilityDetails, setEligibilityDetails]);
+  const handleNext = useHandleNext(eligibilityDetailsState);
+  const handleBack = useHandleBack(eligibilityDetailsState);
 
   return (
     <EligibilityScreen>
@@ -70,7 +63,11 @@ export const RenewalAccountDetailsScreen: FC<VerifyEligibilityScreenProps> = ({
               required={true}
             />
 
-            <DatePicker onChange={onDobChange} value={eligibilityDetails.member?.dob} />
+            <DatePicker
+              onChange={onDobChange}
+              value={eligibilityDetails.member?.dob}
+              minAgeConstraint={16}
+            />
           </div>
         </div>
 

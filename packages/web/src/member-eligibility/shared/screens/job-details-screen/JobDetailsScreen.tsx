@@ -26,23 +26,35 @@ import {
   defaultScreenTitle,
 } from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
+import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
+import { jobDetailsEvents } from '@/root/src/member-eligibility/shared/screens/job-details-screen/amplitude-events/JobDetailsEvents';
+import { useOnNext } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/UseOnNext';
+import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
 
 export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDetailsState }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
 
-  const isNextButtonDisabled = useIsNextButtonDisabled(eligibilityDetails);
-  const organisations = useOrganisations();
-  const employers = useEmployers(eligibilityDetails.organisation);
-  const isRenewalFlow = eligibilityDetails.flow === 'Renewal';
-  const onOrganisationSelected = useOnOrganisationChanged(eligibilityDetailsState);
-  const onEmployerSelected = useEmployerChanged(eligibilityDetailsState);
-  const onJobTitleChange = useOnJobTitleChange(eligibilityDetailsState);
-  const { promoCode, onPromoCodeChanged } = useOnPromoCodeChange(eligibilityDetailsState);
+  const logAnalyticsEvent = useLogAmplitudeEvent();
+  useLogAnalyticsPageView(eligibilityDetails);
 
+  const isNextButtonDisabled = useIsNextButtonDisabled(eligibilityDetails);
+  const isRenewalFlow = eligibilityDetails.flow === 'Renewal';
+
+  const organisations = useOrganisations(eligibilityDetails);
+  const onOrganisationSelected = useOnOrganisationChanged(eligibilityDetailsState);
+
+  const employers = useEmployers(eligibilityDetails);
+  const onEmployerSelected = useEmployerChanged(eligibilityDetailsState);
+
+  const onJobTitleChange = useOnJobTitleChange(eligibilityDetailsState);
+
+  const { promoCode, onPromoCodeChanged } = useOnPromoCodeChange(eligibilityDetailsState);
   const shouldShowPromoCode = useShouldShowPromoCode(eligibilityDetails);
-  const onPromoCodeApplied = useOnPromoCodeApplied(eligibilityDetailsState);
+  const { promoCodeStatus, onPromoCodeApplied, onPromoCodeCleared } =
+    useOnPromoCodeApplied(promoCode);
 
   const fuzzyFrontEndButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
+  const onNext = useOnNext(eligibilityDetailsState);
 
   const numberOfCompletedSteps = useMemo(() => {
     switch (eligibilityDetails.flow) {
@@ -54,11 +66,12 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
   }, [eligibilityDetails.flow]);
 
   const onBack = useCallback(() => {
+    logAnalyticsEvent(jobDetailsEvents.onBackClicked(eligibilityDetails));
     setEligibilityDetails({
       ...eligibilityDetails,
       currentScreen: 'Employment Status Screen',
     });
-  }, [setEligibilityDetails, eligibilityDetails]);
+  }, [logAnalyticsEvent, eligibilityDetails, setEligibilityDetails]);
 
   return (
     <EligibilityScreen data-testid="job-details-screen">
@@ -87,12 +100,11 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
             className="mt-[12px]"
             placeholder="Select your organisation"
             options={organisations}
-            maxItemsShown={5}
+            maxItemsShown={4}
             selectedValue={eligibilityDetails.organisation?.id}
+            searchable
             showTooltipIcon
-            onSelect={(option) => {
-              onOrganisationSelected(option);
-            }}
+            onSelect={onOrganisationSelected}
           />
 
           {employers !== undefined && employers.length !== 0 && (
@@ -100,10 +112,10 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
               className="mt-[16px] mt-4"
               placeholder="Select your employer"
               options={employers}
+              maxItemsShown={4}
               selectedValue={eligibilityDetails.employer?.id}
-              onSelect={(option) => {
-                onEmployerSelected(option);
-              }}
+              searchable
+              onSelect={onEmployerSelected}
             />
           )}
 
@@ -122,6 +134,8 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
                   value={promoCode}
                   onApply={onPromoCodeApplied}
                   onChange={onPromoCodeChanged}
+                  onRemove={onPromoCodeCleared}
+                  variant={promoCodeStatus}
                   icon
                 />
               )}
@@ -131,10 +145,11 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
           <div className="flex w-full mt-[24px] gap-[8px]">
             {isRenewalFlow && (
               <Button
-                variant={ThemeVariant.Secondary}
                 className="w-1/5"
                 size="Large"
+                variant={ThemeVariant.Secondary}
                 onClick={() => {
+                  logAnalyticsEvent(jobDetailsEvents.onBackClicked(eligibilityDetails));
                   setEligibilityDetails({
                     ...eligibilityDetails,
                     currentScreen: 'Renewal Account Details Screen',
@@ -144,16 +159,12 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
                 Back
               </Button>
             )}
+
             <Button
               className={isRenewalFlow ? 'w-4/5 ml-auto' : 'w-full'}
               size="Large"
               disabled={!isNextButtonDisabled}
-              onClick={() => {
-                setEligibilityDetails({
-                  ...eligibilityDetails,
-                  currentScreen: 'Verification Method Screen',
-                });
-              }}
+              onClick={onNext}
             >
               Next
             </Button>

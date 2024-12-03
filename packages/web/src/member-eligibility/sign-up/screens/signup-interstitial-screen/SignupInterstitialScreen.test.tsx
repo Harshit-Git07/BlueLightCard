@@ -1,7 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { SignupInterstitialScreen } from './SignupInterstitialScreen';
 import { useMedia } from 'react-use';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { renderWithMockedPlatformAdapter } from '../../../shared/testing/MockedPlatformAdaptor';
 
 jest.mock('react-use');
 
@@ -18,7 +19,9 @@ const eligibilityDetailsState: EligibilityDetailsState = [
 describe('given the layout is rendered on a desktop or tablet', () => {
   beforeEach(() => {
     useMediaMock.mockReturnValue(false);
-    render(<SignupInterstitialScreen eligibilityDetailsState={eligibilityDetailsState} />);
+    renderWithMockedPlatformAdapter(
+      <SignupInterstitialScreen eligibilityDetailsState={eligibilityDetailsState} />
+    );
   });
 
   it('then it renders successfully', () => {
@@ -30,7 +33,9 @@ describe('given the layout is rendered on a desktop or tablet', () => {
 describe('given the layout is rendered on mobile', () => {
   beforeEach(() => {
     useMediaMock.mockReturnValue(true);
-    render(<SignupInterstitialScreen eligibilityDetailsState={eligibilityDetailsState} />);
+    renderWithMockedPlatformAdapter(
+      <SignupInterstitialScreen eligibilityDetailsState={eligibilityDetailsState} />
+    );
   });
 
   it('then it renders successfully', () => {

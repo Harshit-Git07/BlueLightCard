@@ -37,14 +37,14 @@ export const SearchDropDownPresenter = ({
     };
   }, [isOpen]);
 
-  if (!isOpen) return <></>;
-
   const onCompanyDropdownOpen = () => {
     if (!dialogRef.current) return;
 
     // Ensure that dropdown listbox is scrolled into view when opened
     dialogRef.current.scrollTop = dialogRef.current.scrollHeight;
   };
+
+  if (!isOpen) return <></>;
 
   return (
     <div className="w-full">
@@ -81,19 +81,19 @@ export const SearchDropDownPresenter = ({
             </p>
 
             <Dropdown
-              customClass="max-h-[240px]"
-              options={companies.map((cat) => ({
-                id: cat.id,
-                label: cat.name,
-              }))}
               placeholder="Search for a company"
+              maxItemsShown={5}
               searchable
+              options={companies.map((company) => ({
+                id: company.id,
+                label: company.name,
+              }))}
+              onOpen={onCompanyDropdownOpen}
               onSelect={(option) => {
                 if (option) {
                   onSearchCompanyChange(option.id, option.label);
                 }
               }}
-              onOpen={onCompanyDropdownOpen}
             />
           </div>
         </div>

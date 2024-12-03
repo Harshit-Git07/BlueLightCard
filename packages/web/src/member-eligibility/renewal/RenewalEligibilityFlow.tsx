@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { useRenewalEligibilityDetails } from '@/root/src/member-eligibility/renewal/hooks/use-renewal-eligibility-details/UseRenewalEligibilityDetails';
 import { RenewalInterstitialScreen } from '@/root/src/member-eligibility/renewal/screens/renewal-interstitial-screen/RenewalInterstitialScreen';

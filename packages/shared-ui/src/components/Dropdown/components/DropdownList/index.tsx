@@ -2,7 +2,7 @@ import { DropdownItemComponentProps, DropdownListProps } from './types';
 import { CSSProperties, FC, useMemo } from 'react';
 
 const DropdownList: FC<DropdownListProps> = ({
-  className,
+  className = '',
   listboxRef,
   dropdownId,
   maxItemsShown,
@@ -12,10 +12,16 @@ const DropdownList: FC<DropdownListProps> = ({
   onSelected,
   onOptionKeyDown,
 }) => {
-  const listboxStyles: CSSProperties = useMemo(() => {
-    const height = !maxItemsShown ? 'auto' : `calc(${40 * maxItemsShown}px)`;
+  const listboxHeightStyles = useMemo(() => {
+    if (!maxItemsShown) return 'auto';
 
-    return { height };
+    // We add a bit extra onto the end of the list to prevent scroll bars when all options fit
+    const height = 48 * maxItemsShown;
+    return `${height}px`;
+  }, [maxItemsShown, options.length]);
+
+  const listboxStyles: CSSProperties = useMemo(() => {
+    return { height: listboxHeightStyles };
   }, [maxItemsShown]);
 
   return (
@@ -69,7 +75,7 @@ const DropdownItemComponent: FC<DropdownItemComponentProps> = ({
   }, [isSelected]);
 
   const className = useMemo(() => {
-    return `flex h-7 items-center cursor-pointer p-5 focus:text-dropDownItem-text-active-colour focus:border-b-dropDownItem-border-active-colour focus:border-b hover:border-b hover:bg-dropDownItem-bg-hover-colour hover:text-dropDownItem-text-hover-colour hover:border-b-dropDownItem-divider-hover-colour dark:focus:text-dropDownItem-text-active-colour-dark dark:focus:border-b-dropDownItem-border-active-colour-dark dark:hover:bg-dropDownItem-bg-hover-colour-dark dark:hover:text-dropDownItem-text-hover-colour-dark  dark:hover:border-b-dropDownItem-divider-hover-colour-dark font-dropDownItem-label-font font-dropDownItem-label-font-weight text-dropDownItem-label-font tracking-dropDownItem-label-font leading-dropDownItem-label-font text-dropDownItem-text-colour dark:text-dropDownItem-text-colour-dark ${selectedStyles}`;
+    return `${selectedStyles} flex h-7 items-center cursor-pointer p-5 focus:text-dropDownItem-text-active-colour focus:border-b-dropDownItem-border-active-colour focus:border-b hover:border-b hover:bg-dropDownItem-bg-hover-colour hover:text-dropDownItem-text-hover-colour hover:border-b-dropDownItem-divider-hover-colour dark:focus:text-dropDownItem-text-active-colour-dark dark:focus:border-b-dropDownItem-border-active-colour-dark dark:hover:bg-dropDownItem-bg-hover-colour-dark dark:hover:text-dropDownItem-text-hover-colour-dark  dark:hover:border-b-dropDownItem-divider-hover-colour-dark font-dropDownItem-label-font font-dropDownItem-label-font-weight text-dropDownItem-label-font tracking-dropDownItem-label-font leading-dropDownItem-label-font text-dropDownItem-text-colour dark:text-dropDownItem-text-colour-dark`;
   }, [selectedStyles]);
 
   return (

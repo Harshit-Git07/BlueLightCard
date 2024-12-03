@@ -2,7 +2,7 @@
 
 exports[`Tag snapshot Test renders a tag With 1 Icon 1`] = `
 <div
-  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-warning-bright-light dark:bg-colour-warning-bright-dark text-colour-onWarning-bright-light dark:text-colour-onWarning-bright-dark border-[0.5px] border-colour-onWarning-bright-light dark:border-colour-onWarning-bright-dark rounded"
+  className="inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap bg-colour-warning-bright-light dark:bg-colour-warning-bright-dark text-colour-onWarning-bright-light dark:text-colour-onWarning-bright-dark border-[0.5px] border-colour-onWarning-bright-light dark:border-colour-onWarning-bright-dark rounded"
 >
   <span
     className="flex items-center"
@@ -35,7 +35,7 @@ exports[`Tag snapshot Test renders a tag With 1 Icon 1`] = `
 
 exports[`Tag snapshot Test renders a tag Without an Icon 1`] = `
 <div
-  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-warning-bright-light dark:bg-colour-warning-bright-dark text-colour-onWarning-bright-light dark:text-colour-onWarning-bright-dark border-[0.5px] border-colour-onWarning-bright-light dark:border-colour-onWarning-bright-dark rounded"
+  className="inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap bg-colour-warning-bright-light dark:bg-colour-warning-bright-dark text-colour-onWarning-bright-light dark:text-colour-onWarning-bright-dark border-[0.5px] border-colour-onWarning-bright-light dark:border-colour-onWarning-bright-dark rounded"
 >
   <span
     className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
@@ -47,7 +47,7 @@ exports[`Tag snapshot Test renders a tag Without an Icon 1`] = `
 
 exports[`Tag snapshot Test renders a tag in Error state 1`] = `
 <div
-  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-error-bright-light dark:bg-colour-error-bright-dark text-colour-onError-bright-light dark:text-colour-onError-bright-dark border-[0.5px] border-colour-onError-bright-light dark:border-color-onError-bright-dark rounded"
+  className="inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap bg-colour-error-bright-light dark:bg-colour-error-bright-dark text-colour-onError-bright-light dark:text-colour-onError-bright-dark border-[0.5px] border-colour-onError-bright-light dark:border-color-onError-bright-dark rounded"
 >
   <span
     className="flex items-center"
@@ -101,7 +101,7 @@ exports[`Tag snapshot Test renders a tag in Error state 1`] = `
 
 exports[`Tag snapshot Test renders a tag in Info state 1`] = `
 <div
-  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-info-bright-light dark:bg-colour-info-bright-dark text-colour-onInfo-bright-light dark:text-colour-onInfo-bright-dark border-[0.5px] border-colour-onInfo-bright-light dark:border-colour-onInfo-bright-dark rounded"
+  className="inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap bg-colour-info-bright-light dark:bg-colour-info-bright-dark text-colour-onInfo-bright-light dark:text-colour-onInfo-bright-dark border-[0.5px] border-colour-onInfo-bright-light dark:border-colour-onInfo-bright-dark rounded"
 >
   <span
     className="flex items-center"
@@ -155,7 +155,7 @@ exports[`Tag snapshot Test renders a tag in Info state 1`] = `
 
 exports[`Tag snapshot Test renders a tag in Success state 1`] = `
 <div
-  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
+  className="inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
 >
   <span
     className="flex items-center"
@@ -209,7 +209,7 @@ exports[`Tag snapshot Test renders a tag in Success state 1`] = `
 
 exports[`Tag snapshot Test renders a tag in Warning state 1`] = `
 <div
-  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-warning-bright-light dark:bg-colour-warning-bright-dark text-colour-onWarning-bright-light dark:text-colour-onWarning-bright-dark border-[0.5px] border-colour-onWarning-bright-light dark:border-colour-onWarning-bright-dark rounded"
+  className="inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap bg-colour-warning-bright-light dark:bg-colour-warning-bright-dark text-colour-onWarning-bright-light dark:text-colour-onWarning-bright-dark border-[0.5px] border-colour-onWarning-bright-light dark:border-colour-onWarning-bright-dark rounded"
 >
   <span
     className="flex items-center"
@@ -263,7 +263,7 @@ exports[`Tag snapshot Test renders a tag in Warning state 1`] = `
 
 exports[`Tag snapshot Test renders a tag in default state 1`] = `
 <div
-  className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-surface-container-light dark:bg-colour-surface-container-dark text-colour-onSurface-light dark:text-colour-onSurface-dark border-[0.5px] border-colour-onSurface-light dark:border-colour-onSurface-dark rounded"
+  className="inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap bg-colour-surface-container-light dark:bg-colour-surface-container-dark text-colour-onSurface-light dark:text-colour-onSurface-dark border-[0.5px] border-colour-onSurface-light dark:border-colour-onSurface-dark rounded"
 >
   <span
     className="flex items-center"

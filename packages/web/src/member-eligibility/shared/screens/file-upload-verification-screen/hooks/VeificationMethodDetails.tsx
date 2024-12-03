@@ -1,5 +1,5 @@
 import { FC, useMemo } from 'react';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import Tag from '@bluelightcard/shared-ui/components/Tag';
 import { ListSelectorProps } from '@bluelightcard/shared-ui/components/ListSelector/types';
 import { TagProps } from '@bluelightcard/shared-ui/components/Tag/types';
@@ -32,7 +32,7 @@ function useFirstVerificationMethodDetails(eligibilityDetails: EligibilityDetail
   }, [eligibilityDetails.fileVerificationType]);
 
   const description = useMemo(() => {
-    if (title === 'Work Contract') {
+    if (title === 'NHS Smart Card') {
       return (
         <>
           Must show NHS/HSC
@@ -80,7 +80,7 @@ function useSecondVerificationMethodDetails(
   }, [eligibilityDetails.fileVerificationType]);
 
   const description = useMemo(() => {
-    if (title === 'Bank Statement') {
+    if (title === 'Payslip') {
       return 'Must show the social care department within the council\nMust show your full name';
     }
 

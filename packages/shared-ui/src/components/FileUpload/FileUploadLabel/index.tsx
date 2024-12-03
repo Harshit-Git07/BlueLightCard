@@ -6,9 +6,10 @@ export type Props = {
 };
 
 const FileUploadLabel: FC<Props> = ({ labelText }) => (
-  <span className="flex flex-col gap-2">
-    <p className={`w-full ${colours.textOnSurface} ${fonts.bodySmallSemiBold}`}>{labelText}</p>
-    <p className={`w-full ${colours.textOnSurfaceSubtle}`}>
+  <span className="flex flex-col gap-[8px]">
+    <p className={`${colours.textOnSurface} ${fonts.bodySmallSemiBold} w-full`}>{labelText}</p>
+
+    <p className={`${colours.textOnSurfaceSubtle} w-full`}>
       Remember to place on plain, well lit surface with no obstructions, blur or glare
     </p>
   </span>

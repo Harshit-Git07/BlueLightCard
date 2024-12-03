@@ -7,18 +7,24 @@ import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import ListSelector from '@bluelightcard/shared-ui/components/ListSelector';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
-import { useVerificationMethods } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/hooks/useVerificationMethods';
 import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
 import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/hooks/FuzzyFrontendButtons';
 import {
   defaultScreenTitle,
   verifyEligibilitySubTitle,
 } from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
+import { useVerificationMethods } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/hooks/use-verification-methods/UseVerificationMethods';
+import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
+import { verificationMethodEvents } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/amplitude-events/VerificationMethodEvents';
+import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 
 export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
+
+  const logAnalyticsEvent = useLogAmplitudeEvent();
+  useLogAnalyticsPageView(eligibilityDetails);
 
   const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
   const verificationMethods = useVerificationMethods(eligibilityDetailsState);
@@ -33,11 +39,12 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails.flow]);
 
   const onBack = useCallback(() => {
+    logAnalyticsEvent(verificationMethodEvents.onClickedBack(eligibilityDetails));
     setEligibilityDetails({
       ...eligibilityDetails,
       currentScreen: 'Job Details Screen',
     });
-  }, [eligibilityDetails, setEligibilityDetails]);
+  }, [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails]);
 
   return (
     <EligibilityScreen>
@@ -48,14 +55,16 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
           numberOfCompletedSteps={numberOfCompletedSteps}
         />
 
-        <div className="flex flex-col gap-[8px]">
+        <div className="flex flex-col gap-[12px]">
           <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>
             CHOOSE VERIFICATION METHOD
           </p>
 
-          {verificationMethods.map((method) => (
-            <ListSelector key={method.title} {...method} />
-          ))}
+          <div className="flex flex-col gap-[16px]">
+            {verificationMethods.map((method) => (
+              <ListSelector key={method.title} {...method} />
+            ))}
+          </div>
         </div>
 
         <Button

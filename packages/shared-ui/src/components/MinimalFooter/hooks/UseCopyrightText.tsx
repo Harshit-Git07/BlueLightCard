@@ -6,10 +6,10 @@ export function useCopyrightText(): ReactNode {
 
   if (env.APP_BRAND === 'dds-uk') {
     return (
-      <>
-        <span className="block">{`© Defence Discount Service 2012 - ${currentYear}`}</span>
-        <span className="block">Operated by Blue Light Card Ltd</span>
-      </>
+      <div className="flex flex-col md:flex-row md:gap-[4px] lg:flex-col">
+        <span>{`© Defence Discount Service 2012 - ${currentYear}`}</span>
+        <span>Operated by Blue Light Card Ltd</span>
+      </div>
     );
   }
 

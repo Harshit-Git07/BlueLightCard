@@ -1,10 +1,12 @@
-import React, { FC, KeyboardEvent, useEffect, useState } from 'react';
+import React, { FC, KeyboardEvent, useEffect, useMemo, useState } from 'react';
 import { ListSelectorProps, ListSelectorState } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/pro-regular-svg-icons';
 import { faPen } from '@fortawesome/pro-solid-svg-icons';
+import { colours, fonts } from '../../tailwind/theme';
 
 const ListSelector: FC<ListSelectorProps> = ({
+  className = '',
   ariaLabel,
   title,
   state = ListSelectorState.Default,
@@ -12,7 +14,6 @@ const ListSelector: FC<ListSelectorProps> = ({
   tag,
   description,
   showTrailingIcon = true,
-  className = '',
 }) => {
   const [currentState, setCurrentState] = useState(state);
 
@@ -46,7 +47,7 @@ const ListSelector: FC<ListSelectorProps> = ({
     setCurrentState(state);
   };
 
-  const getStyles = () => {
+  const containerStyles = useMemo(() => {
     switch (currentState) {
       case ListSelectorState.Selected:
         return 'border border-colour-primary dark:border-colour-primary-dark bg-colour-surface-container-light dark:bg-colour-surface-container-dark';
@@ -55,7 +56,7 @@ const ListSelector: FC<ListSelectorProps> = ({
       default:
         return 'border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark';
     }
-  };
+  }, [currentState]);
 
   const iconColour =
     currentState === ListSelectorState.Selected
@@ -64,25 +65,29 @@ const ListSelector: FC<ListSelectorProps> = ({
 
   return (
     <button
+      className={`${className} ${containerStyles} w-full min-w-full sm:min-w-[500px] rounded-[4px] px-[16px] py-[12px] flex items-center justify-between transition-colors border`}
       aria-label={ariaLabel ?? `Button for ${title}`}
-      className={`${className} w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border ${getStyles()} min-w-full sm:min-w-[500px]`}
       role={onClick ? 'button' : undefined}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="flex flex-col gap-1 items-start w-full text-left">
-        <div className="tablet:flex items-center gap-2 w-full">
-          <h4 className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal">
+      <div className="flex flex-col gap-[4px] items-start w-full text-left">
+        <div className="flex flex-row items-center flex-wrap gap-[8px] w-full">
+          <h4
+            className={`${colours.textOnSurface} ${fonts.bodySemiBold} break-words whitespace-normal`}
+          >
             {title}
           </h4>
 
-          {tag && <span className={'block pt-2 tablet:inline tablet:pt-0'}>{tag}</span>}
+          {tag}
         </div>
 
         {description && (
-          <p className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body break-words whitespace-normal text-left">
+          <p
+            className={`${colours.textOnSurfaceSubtle} ${fonts.body} break-words whitespace-normal text-left`}
+          >
             {description}
           </p>
         )}
@@ -90,8 +95,8 @@ const ListSelector: FC<ListSelectorProps> = ({
 
       {showTrailingIcon && (
         <FontAwesomeIcon
+          className={`${iconColour} h-[20px]`}
           icon={currentState === ListSelectorState.Selected ? faPen : faArrowRight}
-          className={`h-5 ${iconColour}`}
         />
       )}
     </button>

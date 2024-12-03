@@ -13,11 +13,14 @@ import { useOnWorkEmailChanged } from '@/root/src/member-eligibility/shared/scre
 import { useOnSendVerificationLink } from '@/root/src/member-eligibility/shared/screens/work-email-verification-screen/hooks/UseOnSendVerificationLink';
 import { useOnBack } from '@/root/src/member-eligibility/shared/screens/work-email-verification-screen/hooks/UseOnReturnToVerificationScreen';
 import { defaultScreenTitle } from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
+import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
 
 export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
   const [eligibilityDetails] = eligibilityDetailsState;
+
+  useLogAnalyticsPageView(eligibilityDetails);
 
   const onBack = useOnBack(eligibilityDetailsState);
   const onWorkEmailChanged = useOnWorkEmailChanged(eligibilityDetailsState);
@@ -33,8 +36,12 @@ export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails.flow]);
 
   //TODO: This value of this boolean needs to be set by the logic of the API when verifying the email address - functionality/usage will remain the same
-  const emailHasBeenVerified = useMemo(() => {
-    return eligibilityDetails?.emailVerification !== undefined;
+  const canSendVerificationEmail = useMemo(() => {
+    const emailVerification = eligibilityDetails.emailVerification;
+    if (!emailVerification) return false;
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(emailVerification);
   }, [eligibilityDetails]);
 
   return (
@@ -65,7 +72,7 @@ export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
           className="w-full"
           size="Large"
           variant={ThemeVariant.Primary}
-          disabled={!emailHasBeenVerified}
+          disabled={!canSendVerificationEmail}
           onClick={sendVerificationLink}
           data-testid="send-verification-link-button"
         >

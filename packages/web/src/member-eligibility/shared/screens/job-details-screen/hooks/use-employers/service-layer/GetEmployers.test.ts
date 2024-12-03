@@ -1,5 +1,5 @@
 import * as target from './GetEmployers';
-import { ServiceLayerEmployer } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/types/ServiceLayerEmployer';
+import { ServiceLayerEmployer } from '@/root/src/member-eligibility/shared/types/ServiceLayerEmployer';
 
 window.fetch = jest.fn();
 
@@ -25,7 +25,7 @@ describe('given service layer responses successfully', () => {
     const result = await target.getEmployers('1');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      'https://qqbvufuinh.execute-api.eu-west-2.amazonaws.com/v1/members/orgs/1/employers'
+      'https://kbb684h8h8.execute-api.eu-west-2.amazonaws.com/v1/orgs/1/employers'
     );
     expect(result).toEqual(serviceLayerEmployers);
   });
@@ -40,7 +40,7 @@ describe('given service layer fails to respond', () => {
     const result = await target.getEmployers('1');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      'https://qqbvufuinh.execute-api.eu-west-2.amazonaws.com/v1/members/orgs/1/employers'
+      'https://kbb684h8h8.execute-api.eu-west-2.amazonaws.com/v1/orgs/1/employers'
     );
     expect(result).toEqual(undefined);
   });

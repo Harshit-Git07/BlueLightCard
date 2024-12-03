@@ -4,7 +4,7 @@ import {
   ukAddressStub,
 } from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/hooks/utils/AddressTestUtils';
 import { renderHook } from '@testing-library/react';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 
 type Result = ReturnType<typeof target.useAddressFieldUpdater>;
 

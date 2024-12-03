@@ -13,9 +13,15 @@ import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/payment-screen/hooks/UseFuzzyFrontendButtons';
 import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
+import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
+import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
+import { paymentEvents } from '@/root/src/member-eligibility/shared/screens/payment-screen/ampltitude-events/PaymentEvents';
 
 export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDetailsState }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
+
+  const logAnalyticsEvent = useLogAmplitudeEvent();
+  useLogAnalyticsPageView(eligibilityDetails);
 
   const getClientSecretResult = useClientSecret();
 
@@ -45,6 +51,7 @@ export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDet
   }, []);
 
   const onBack = useMemo(() => {
+    logAnalyticsEvent(paymentEvents.onBackCLicked(eligibilityDetails));
     if (eligibilityDetails.flow === 'Sign Up') {
       return () => {
         setEligibilityDetails({
@@ -62,7 +69,7 @@ export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDet
         currentScreen: 'File Upload Verification Screen',
       });
     };
-  }, [eligibilityDetails, setEligibilityDetails]);
+  }, [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails]);
 
   const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 

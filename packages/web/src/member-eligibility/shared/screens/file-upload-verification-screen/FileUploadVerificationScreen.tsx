@@ -21,16 +21,23 @@ import {
   defaultScreenTitle,
   idUploadSubTitle,
 } from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
+import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
+import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
+import { fileUploadVerificationEvents } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/amplitude-events/FileUploadVerificationEvents';
 
 export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
 
-  const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
+  const logAnalyticsEvent = useLogAmplitudeEvent();
+  useLogAnalyticsPageView(eligibilityDetails);
+
   const { firstVerificationMethod, secondVerificationMethod } =
     useVerificationMethodDetails(eligibilityDetails);
   const privacyPolicyUrl = usePrivacyPolicyUrl();
+
+  const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 
   const numberOfCompletedSteps = useMemo(() => {
     switch (eligibilityDetails.flow) {
@@ -60,7 +67,7 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   const verificationMethodsHeader = useMemo(() => {
     const optionalPlural = eligibilityDetails.requireMultipleIds ? 'S' : '';
 
-    return `VERIFICATION METHOD${optionalPlural}`;
+    return `UPLOAD THE FOLLOWING DOCUMENT${optionalPlural}`;
   }, [eligibilityDetails.requireMultipleIds]);
 
   const onFilesChanged: OnFilesChanged = useCallback(
@@ -77,6 +84,8 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   );
 
   const onNext = useCallback(() => {
+    logAnalyticsEvent(fileUploadVerificationEvents.onSubmitClicked(eligibilityDetails));
+
     if (eligibilityDetails.flow === 'Sign Up') {
       setEligibilityDetails({
         ...eligibilityDetails,
@@ -89,14 +98,16 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
       ...eligibilityDetails,
       currentScreen: 'Payment Screen',
     });
-  }, [eligibilityDetails, setEligibilityDetails]);
+  }, [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails]);
 
   const onBack = useCallback(() => {
+    logAnalyticsEvent(fileUploadVerificationEvents.onEditClicked(eligibilityDetails));
+
     setEligibilityDetails({
       ...eligibilityDetails,
       currentScreen: 'Verification Method Screen',
     });
-  }, [eligibilityDetails, setEligibilityDetails]);
+  }, [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails]);
 
   return (
     <EligibilityScreen>
@@ -115,7 +126,9 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
             <ListSelector
               {...firstVerificationMethod}
-              state={ListSelectorState.Selected}
+              state={
+                secondVerificationMethod ? ListSelectorState.Default : ListSelectorState.Selected
+              }
               onClick={onBack}
             />
 
@@ -138,16 +151,13 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
         <div className="flex flex-col gap-[24px]">
           <div className="flex flex-col gap-[12px]">
             <div className="flex flex-col gap-[8px]">
-              <div className={`${fonts.bodySmallSemiBold} ${colours.textOnSurface}`}>
-                Upload from your device or camera
-              </div>
-
               <div className={`${fonts.body} ${colours.textOnSurfaceSubtle}`}>
                 Remember to place on plain, well lit surface with no obstructions, blur or glare
               </div>
             </div>
 
             <EligibilityFileUpload
+              eligibilityDetailsState={eligibilityDetailsState}
               onFilesChanged={onFilesChanged}
               maxNumberOfFilesToUpload={maxNumberOfFilesToUpload}
             />
@@ -161,12 +171,7 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
               icon="fa-solid fa-circle-info"
               isFullWidth
             >
-              <Button
-                className="!px-0"
-                variant={ThemeVariant.Tertiary}
-                size="XSmall"
-                href={privacyPolicyUrl}
-              >
+              <Button variant={ThemeVariant.Tertiary} size="XSmall" href={privacyPolicyUrl}>
                 Read candidate privacy policy
               </Button>
             </Alert>

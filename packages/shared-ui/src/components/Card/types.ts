@@ -7,7 +7,7 @@ export interface CardProps {
   initialCardState?: CardState;
   cardTitle?: string;
   description?: string;
-  truncateDescription?: boolean
+  truncateDescription?: boolean;
   buttonTitle?: string;
   imageAlt?: string;
   imageSrc?: string;

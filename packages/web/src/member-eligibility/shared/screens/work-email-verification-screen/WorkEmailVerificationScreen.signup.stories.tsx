@@ -1,10 +1,12 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { WorkEmailVerificationScreen } from './WorkEmailVerificationScreen';
 import { useSignupEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-signup-eligibility-details/UseSignupEligibilityDetails';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/adapters';
 
 const componentMeta: Meta<typeof WorkEmailVerificationScreen> = {
   title: 'Pages/Signup Eligibility Flow/Work Email Verification Screen',
   component: WorkEmailVerificationScreen,
+  decorators: [StorybookPlatformAdapterDecorator],
   parameters: {
     layout: 'fullscreen',
   },

@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import * as target from './UseAccountDetailsIsValid';
 
 jest.mock(

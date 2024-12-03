@@ -3,4 +3,5 @@ export interface FileSelectionProps {
   disabled?: boolean;
   allowedFileTypes?: string[]; // e.g. ['image/png', 'image/jpeg']
   maxFileSize?: number;
+  isError?: boolean;
 }

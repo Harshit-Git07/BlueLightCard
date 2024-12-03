@@ -4,10 +4,12 @@ import {
   renewalEligibilityDetailsStub,
   useRenewalEligibilityDetails,
 } from '@/root/src/member-eligibility/renewal/hooks/use-renewal-eligibility-details/UseRenewalEligibilityDetails';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/adapters';
 
 const componentMeta: Meta<typeof RenewalInterstitialScreen> = {
-  title: 'Pages/Renewal Eligibility Flow/Renewal Interstitial Screen',
+  title: 'Pages/Renewal Eligibility Flow/Interstitial Screen',
   component: RenewalInterstitialScreen,
+  decorators: [StorybookPlatformAdapterDecorator],
   parameters: {
     layout: 'fullscreen',
   },

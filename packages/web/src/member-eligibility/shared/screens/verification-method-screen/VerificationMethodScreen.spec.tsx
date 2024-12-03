@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom';
-import { act, render, screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import { VerificationMethodScreen } from './VerificationMethodScreen';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { renderWithMockedPlatformAdapter } from '../../testing/MockedPlatformAdaptor';
 
 const mockSetEligibilityDetails = jest.fn();
 const eligibilityDetailsState: EligibilityDetailsState = [
@@ -12,15 +13,16 @@ const eligibilityDetailsState: EligibilityDetailsState = [
   mockSetEligibilityDetails,
 ];
 
-const renderVerificationMethodScreen = () => {
-  jest.clearAllMocks();
-  return render(<VerificationMethodScreen eligibilityDetailsState={eligibilityDetailsState} />);
-};
-
 describe('VerificationMethodScreen', () => {
-  it('should render all headings correctly', () => {
-    renderVerificationMethodScreen();
+  beforeEach(() => {
+    jest.clearAllMocks();
 
+    renderWithMockedPlatformAdapter(
+      <VerificationMethodScreen eligibilityDetailsState={eligibilityDetailsState} />
+    );
+  });
+
+  it('should render all headings correctly', () => {
     const headings = [
       'Verify Eligibility',
       'Verify your eligibility by providing a valid ID',
@@ -33,8 +35,6 @@ describe('VerificationMethodScreen', () => {
   });
 
   it('should render all verification options correctly', () => {
-    renderVerificationMethodScreen();
-
     const options = ['Work Email', 'NHS Smart Card', 'Payslip', 'Work ID Card'];
 
     options.forEach((option) => {
@@ -43,8 +43,6 @@ describe('VerificationMethodScreen', () => {
   });
 
   it('should render all verification descriptions correctly', () => {
-    renderVerificationMethodScreen();
-
     const descriptions = [
       'We will send you a verification email in the next step',
       'Upload a picture of your NHS Smart Card',
@@ -58,12 +56,10 @@ describe('VerificationMethodScreen', () => {
   });
 
   it('should render the Fast tag for work email option', () => {
-    renderVerificationMethodScreen();
     expect(screen.getByText('Fast')).toBeInTheDocument();
   });
 
   it('should handle work email verification method selection', () => {
-    renderVerificationMethodScreen();
     const workEmailOption = screen.getByText('Work Email');
 
     act(() => workEmailOption.click());
@@ -75,8 +71,6 @@ describe('VerificationMethodScreen', () => {
   });
 
   it('should handle file upload verification method selections', () => {
-    renderVerificationMethodScreen();
-
     const fileUploadOptions = ['NHS Smart Card', 'Payslip', 'Work ID Card'];
 
     fileUploadOptions.forEach((option) => {
@@ -94,7 +88,6 @@ describe('VerificationMethodScreen', () => {
   });
 
   it('should handle back navigation correctly', () => {
-    renderVerificationMethodScreen();
     const backButton = screen.getByText('Back');
 
     act(() => backButton.click());
@@ -104,7 +97,9 @@ describe('VerificationMethodScreen', () => {
       currentScreen: 'Job Details Screen',
     });
   });
+});
 
+describe('VerificationMethodScreen eligibility details object', () => {
   it('should preserve existing eligibility details when navigating', () => {
     const detailedState: EligibilityDetailsState = [
       {
@@ -116,7 +111,10 @@ describe('VerificationMethodScreen', () => {
       mockSetEligibilityDetails,
     ];
 
-    render(<VerificationMethodScreen eligibilityDetailsState={detailedState} />);
+    renderWithMockedPlatformAdapter(
+      <VerificationMethodScreen eligibilityDetailsState={detailedState} />
+    );
+
     const workEmailOption = screen.getByText('Work Email');
 
     act(() => workEmailOption.click());

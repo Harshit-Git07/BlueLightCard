@@ -11,11 +11,17 @@ import { useCountDownInSeconds } from '@/root/src/member-eligibility/shared/scre
 import { useFuzzyFrontendButtons } from './hooks/UseFuzzyFrontEndButtons';
 import { useOnEditEmail } from '@/root/src/member-eligibility/shared/screens/work-email-retry-screen/hooks/UseOnEditEmail';
 import { defaultScreenTitle } from '@/root/src/member-eligibility/shared/constants/TitlesAndSubtitles';
+import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
+import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
+import { workEmailRetryEvents } from '@/root/src/member-eligibility/shared/screens/work-email-retry-screen/amplitude-events/WorkEmailRetryEvents';
 
 export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
   const [eligibilityDetails] = eligibilityDetailsState;
+
+  const logAnalyticsEvent = useLogAmplitudeEvent();
+  useLogAnalyticsPageView(eligibilityDetails);
 
   const { formattedTime, countDownFinished, restartTimer } = useCountDownInSeconds(30);
   const editEmail = useOnEditEmail(eligibilityDetailsState);
@@ -31,8 +37,9 @@ export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
 
   // TODO: This will need to be updated to add with the logic to resend the email via API
   const resendVerificationEmail = useCallback(() => {
+    logAnalyticsEvent(workEmailRetryEvents.onResendClicked(eligibilityDetails));
     restartTimer();
-  }, [restartTimer]);
+  }, [eligibilityDetails, logAnalyticsEvent, restartTimer]);
 
   const fuzzyFrontEndButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 

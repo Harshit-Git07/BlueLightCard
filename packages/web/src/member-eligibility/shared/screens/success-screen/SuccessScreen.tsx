@@ -3,12 +3,17 @@ import { useMobileMediaQuery } from '@bluelightcard/shared-ui/hooks/useMediaQuer
 import { SuccessScreenMobileView } from '@/root/src/member-eligibility/shared/screens/success-screen/components/SuccessScreenMobile';
 import { SuccessModalDesktop } from '@/root/src/member-eligibility/shared/screens/success-screen/components/SuccessModalDesktop';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
 
 interface Props extends VerifyEligibilityScreenProps {
   forceMobileView?: boolean;
 }
 
 export const SuccessScreen: FC<Props> = ({ forceMobileView, eligibilityDetailsState }) => {
+  const [eligibilityDetails] = eligibilityDetailsState;
+
+  useLogAnalyticsPageView(eligibilityDetails);
+
   const isMobile = useMobileMediaQuery();
 
   const useMobileView = useMemo(() => {

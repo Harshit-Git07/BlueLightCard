@@ -1,26 +1,47 @@
 import * as target from './UseOnPromoCodeApplied';
-import { useCallback } from 'react';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import { act, renderHook, RenderHookResult } from '@testing-library/react';
 
-jest.mock('react');
+type Result = ReturnType<typeof target.useOnPromoCodeApplied>;
+let result: RenderHookResult<Result, unknown>['result'];
 
-const useCallbackMock = jest.mocked(useCallback);
-const setEligibilityDetailsStateMock = jest.fn();
+describe('given the hook is rendered', () => {
+  beforeEach(() => {
+    const renderResult = renderHook(() => {
+      return target.useOnPromoCodeApplied('promo-code-stub');
+    });
+    result = renderResult.result;
+  });
 
-const eligibilityDetails: EligibilityDetails = {
-  flow: 'Sign Up',
-  currentScreen: 'Job Details Screen',
-};
+  it('should return initial state', () => {
+    expect(result.current).toEqual(<Result>{
+      promoCodeStatus: 'default',
+      onPromoCodeApplied: expect.any(Function),
+      onPromoCodeCleared: expect.any(Function),
+    });
+  });
 
-beforeEach(() => {
-  useCallbackMock.mockImplementation((callback) => callback);
-});
+  describe('when a promocode is applied', () => {
+    beforeEach(() => {
+      act(() => {
+        result.current.onPromoCodeApplied();
+      });
+    });
 
-it('should just return success', () => {
-  const result = target.useOnPromoCodeApplied([
-    eligibilityDetails,
-    setEligibilityDetailsStateMock,
-  ])();
+    // TODO: Test other flows here too
+    it('should return success', () => {
+      expect(result.current.promoCodeStatus).toBe('success');
+    });
 
-  expect(result).toBe('Success');
+    describe('when the promocode is cleared', () => {
+      beforeEach(() => {
+        act(() => {
+          result.current.onPromoCodeCleared();
+        });
+      });
+
+      it('should return undefined', () => {
+        expect(result.current.promoCodeStatus).toBe('default');
+      });
+    });
+  });
 });

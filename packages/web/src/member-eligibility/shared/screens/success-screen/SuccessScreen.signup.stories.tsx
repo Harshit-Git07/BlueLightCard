@@ -1,11 +1,13 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { SuccessScreen } from './SuccessScreen';
 import { useSignupEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-signup-eligibility-details/UseSignupEligibilityDetails';
-import { EligibilityDetailsWithoutFlow } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import { EligibilityDetailsWithoutFlow } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/adapters';
 
 const componentMeta: Meta<typeof SuccessScreen> = {
   title: 'Pages/Signup Eligibility Flow/Success Screen',
   component: SuccessScreen,
+  decorators: [StorybookPlatformAdapterDecorator],
   parameters: {
     layout: 'fullscreen',
   },

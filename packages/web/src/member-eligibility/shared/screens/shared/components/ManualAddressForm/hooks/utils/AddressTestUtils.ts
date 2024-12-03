@@ -1,7 +1,7 @@
 import {
   AusAddress,
   UkAddress,
-} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 
 export const ukAddressStub: UkAddress = {
   line1: '123 Baker St',

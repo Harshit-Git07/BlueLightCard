@@ -3,12 +3,13 @@ import { CardProps, CardState } from './types';
 import Button from '../Button-V2';
 import { debounce } from 'lodash';
 import Index from './components/CardContent';
+import { useMobileMediaQuery } from '../../hooks/useMediaQuery';
 
 const Card: FC<CardProps> = ({
   initialCardState = 'default',
   cardTitle,
   description,
-  truncateDescription = true,
+  truncateDescription = false,
   buttonTitle,
   imageAlt,
   imageSrc,
@@ -19,7 +20,7 @@ const Card: FC<CardProps> = ({
   showButton,
   onClick,
   ariaLabel,
-  className,
+  className = '',
   canHover = true,
   ...props
 }) => {
@@ -27,6 +28,8 @@ const Card: FC<CardProps> = ({
   const [isHovered, setIsHovered] = useState(false);
   const [isSingleLine, setIsSingleLine] = useState(false);
   const descriptionRef = useRef<HTMLParagraphElement>(null);
+
+  const isMobile = useMobileMediaQuery();
 
   const debouncedCheckLineCount = useCallback(
     debounce(
@@ -98,31 +101,48 @@ const Card: FC<CardProps> = ({
   const styles = getStateStyles(cardState);
 
   const buttonClassName = useMemo(() => {
-    return `w-full rounded-b-none ${
-      isHovered
-        ? 'bg-button-primary-hover-bg-colour-light dark:bg-button-primary-hover-bg-colour-dark text-button-primary-hover-label-colour-light dark:text-button-primary-hover-label-colour-dark'
-        : ''
-    }`;
+    const colorStyles = isHovered
+      ? 'bg-button-primary-hover-bg-colour-light dark:bg-button-primary-hover-bg-colour-dark text-button-primary-hover-label-colour-light dark:text-button-primary-hover-label-colour-dark'
+      : '';
+
+    return `${colorStyles} w-full rounded-none`;
   }, [isHovered]);
+
+  const cardTextHeightStyles = useMemo(() => {
+    if (showDescription !== undefined && !showDescription) {
+      return 'h-auto';
+    }
+
+    if (isMobile) {
+      return `min-h-[100px] h-auto`;
+    }
+
+    return !showButton || !buttonTitle ? 'h-[100px]' : 'h-[80px]';
+  }, [isMobile, showButton, buttonTitle]);
+
+  const cardTextStyles = useMemo(() => {
+    return `${cardTextHeightStyles} flex flex-row`;
+  }, [cardTextHeightStyles]);
 
   const centerContent = !showImage || !showDescription || (showDescription && isSingleLine);
 
   return (
     <div
-      className={`w-full min-w-[275px] group ${className ?? ''}`}
+      className={`${className} w-full min-w-[275px] group`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       data-testid={props['data-testid']}
     >
       <div
-        className={`flex flex-col border rounded overflow-hidden ${styles.border} w-full transition-colors duration-200`}
+        className={`${styles.border} flex flex-col border rounded overflow-hidden w-full transition-colors duration-200`}
       >
-        <div className="flex flex-row min-h-[100px]">
+        <div className={cardTextStyles}>
           {showImage && imageSrc && (
             <div className="w-[84px] min-h-[100px] flex-shrink-0">
               <img src={imageSrc} alt={imageAlt} className="w-full h-full object-cover" />
             </div>
           )}
+
           {cardTitle && (
             <Index
               title={cardTitle}
@@ -135,14 +155,15 @@ const Card: FC<CardProps> = ({
             />
           )}
         </div>
+
         {showButton && buttonTitle && (
           <div className="mt-auto">
             <Button
+              className={buttonClassName}
               onClick={handleClick}
               iconRight={iconRight}
               iconLeft={iconLeft}
-              className={buttonClassName}
-              size={'Large'}
+              size="Large"
               withoutHover={true}
             >
               {buttonTitle}

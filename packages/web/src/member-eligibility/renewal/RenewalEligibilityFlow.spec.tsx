@@ -1,27 +1,33 @@
 import '@testing-library/jest-dom';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { RenewalEligibilityFlow } from './RenewalEligibilityFlow';
-import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui/adapters';
+import { renderWithMockedPlatformAdapter } from '../shared/testing/MockedPlatformAdaptor';
+import { uploadFileToServiceLayer } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/components/hooks/use-file-upload-state/service-layer/UploadFile';
 
 jest.mock('react-use');
 jest.mock('next/router', () => ({
   useRouter: jest.fn(),
 }));
+jest.mock(
+  '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/components/hooks/use-file-upload-state/service-layer/UploadFile'
+);
 
 const pngFile = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
 const pdfFile = new File(['(⌐□_□)'], 'test.pdf', { type: 'application/pdf' });
+
+const uploadFileToServiceLayerMock = jest.mocked(uploadFileToServiceLayer);
+
+beforeEach(() => {
+  uploadFileToServiceLayerMock.mockResolvedValue(Promise.resolve());
+});
 
 // TODO: Test back button behaviour too
 describe('given a signing up member that needs to prove their eligibility to use the service', () => {
   // TODO: Will need another flow here for providing the "skip to address / payment flow"
   describe("given they haven't submitted enough details to skip straight to delivery address", () => {
     beforeEach(() => {
-      render(
-        <PlatformAdapterProvider adapter={useMockPlatformAdapter()}>
-          <RenewalEligibilityFlow />
-        </PlatformAdapterProvider>
-      );
+      renderWithMockedPlatformAdapter(<RenewalEligibilityFlow />);
     });
 
     it('should start with the interstitial page with the review account details card', () => {

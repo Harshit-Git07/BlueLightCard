@@ -1,12 +1,12 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import FileUploadStatusCard, { Props } from '.';
+import FileUploadStatusCard, { FileUploadStatusCardProps } from '.';
 import { UploadStatus } from '../types';
 import { userEvent } from '@storybook/testing-library';
 
 const mockRemoveFile = jest.fn();
 describe('FileUploadCounter component', () => {
-  const defaultProps: Props = {
+  const defaultProps: FileUploadStatusCardProps = {
     fileName: 'testFile.name',
     uploadStatus: UploadStatus.Ready,
     removeFile: mockRemoveFile,

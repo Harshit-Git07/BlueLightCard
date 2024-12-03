@@ -173,4 +173,20 @@ describe('DatePicker component', () => {
     expect(getByText('Date of Birth')).toBeInTheDocument();
     expect(getByText('Please enter your date of birth')).toBeInTheDocument();
   });
+
+  it('should only show years that satisfy minimum age constraint', async () => {
+    const currentYear = new Date().getFullYear();
+    const minYear = currentYear - 100;
+    const maxYear = currentYear - 18;
+
+    const { getByLabelText, queryByText } = render(<DatePicker {...props} minAgeConstraint={18} />);
+
+    const yearDropdown = getByLabelText('Year');
+    await userEvent.click(yearDropdown);
+
+    expect(queryByText((maxYear + 1).toString())).not.toBeInTheDocument();
+
+    expect(queryByText(maxYear.toString())).toBeInTheDocument();
+    expect(queryByText(minYear.toString())).toBeInTheDocument();
+  });
 });

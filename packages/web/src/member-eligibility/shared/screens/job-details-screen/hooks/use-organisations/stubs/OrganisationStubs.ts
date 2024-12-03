@@ -1,4 +1,4 @@
-import { EligibilityOrganisation } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import { EligibilityOrganisation } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 
 // TODO: Remove this later, but for fuzzy frontend purposes it allows us to test multi-id easily on mobile
 export const organisationNoEmployersStub: EligibilityOrganisation = {

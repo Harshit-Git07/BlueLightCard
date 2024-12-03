@@ -1,10 +1,12 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { VerificationMethodScreen } from './VerificationMethodScreen';
 import { useSignupEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-signup-eligibility-details/UseSignupEligibilityDetails';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/adapters';
 
 const componentMeta: Meta<typeof VerificationMethodScreen> = {
   title: 'Pages/Signup Eligibility Flow/Verification Method Screen',
   component: VerificationMethodScreen,
+  decorators: [StorybookPlatformAdapterDecorator],
   parameters: {
     layout: 'fullscreen',
   },

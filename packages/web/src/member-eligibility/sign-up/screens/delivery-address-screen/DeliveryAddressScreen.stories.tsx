@@ -1,10 +1,12 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { DeliveryAddressScreen } from './DeliveryAddressScreen';
 import { useSignupEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-signup-eligibility-details/UseSignupEligibilityDetails';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/adapters';
 
 const componentMeta: Meta<typeof DeliveryAddressScreen> = {
   title: 'Pages/Signup Eligibility Flow/Delivery Address Screen',
   component: DeliveryAddressScreen,
+  decorators: [StorybookPlatformAdapterDecorator],
   parameters: {
     layout: 'fullscreen',
   },

@@ -4,9 +4,11 @@ import {
   renewalEligibilityDetailsStub,
   useRenewalEligibilityDetails,
 } from '@/root/src/member-eligibility/renewal/hooks/use-renewal-eligibility-details/UseRenewalEligibilityDetails';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/adapters';
 
 const componentMeta: Meta<typeof FileUploadVerificationScreen> = {
   title: 'Pages/Renewal Eligibility Flow/File Upload Verification Screen',
+  decorators: [StorybookPlatformAdapterDecorator],
   component: FileUploadVerificationScreen,
   parameters: {
     layout: 'fullscreen',

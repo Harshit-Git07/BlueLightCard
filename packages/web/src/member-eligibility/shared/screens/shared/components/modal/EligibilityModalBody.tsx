@@ -1,23 +1,26 @@
 import '@/root/public/modalPlaceholder.png';
-import React, { FC, PropsWithChildren, useMemo } from 'react';
-import DefaultImage from '@assets/modalPlaceholder.svg';
+import React, { FC, PropsWithChildren, SVGProps, useMemo } from 'react';
+
 import { useMedia } from 'react-use';
+import { useMediaQuery } from '@bluelightcard/shared-ui';
+import { getModalImage } from '@/root/src/member-eligibility/shared/screens/success-screen/utils/GetModalImage';
 
 export interface Props extends PropsWithChildren {
   className?: string;
-  image?: string;
   'data-testid'?: string;
 }
 
-export const EligibilityModalBody: FC<Props> = ({ className = '', image, children, ...props }) => {
-  const Image = useMemo(() => {
-    // This could be either a remote https image, or from a local image stored in the web/public folder
-    return image ?? DefaultImage;
-  }, [image]);
+export const EligibilityModalBody: FC<Props> = ({ className = '', children, ...props }) => {
+  const Image = getModalImage();
 
   const isPadPro = useMedia(
     '(min-width: 1024px) and (max-width: 1024px) and (orientation: portrait)'
   );
+
+  //Changing the dimensions of the image based on the screen size
+  const imageProps: SVGProps<SVGSVGElement> = {
+    viewBox: useMediaQuery('(max-width: 850px)') || isPadPro ? '50 350 900 500' : '60 500 900 500',
+  };
 
   const ipadProStyles = useMemo(() => {
     if (!isPadPro) return 'lg:flex-row';
@@ -33,8 +36,12 @@ export const EligibilityModalBody: FC<Props> = ({ className = '', image, childre
       <div
         className={`${ipadProStyles} bg-white md:portrait:w-[616px] md:portrait:h-[992px] mx-[48px] flex md:flex-col sm:flex-col-reverse rounded-lg`}
       >
-        <div className="ml-[48px] mt-[48px] mb-[48px] md:portrait:mb-[0px] md:portrait:w-[520px] md:portrait:h-[324px] md:landscape:w-[434px] md:landscape:h-[700px] md:portrait:mr-[0px] md:landscape:mr-[-50px] ">
-          <Image className="w-full h-full" alt="Hero image" />
+        <div className="ml-[48px] mt-[48px] mb-[48px] md:portrait:mb-[0px] md:portrait:w-[520px] md:portrait:h-[324px] md:landscape:w-[434px] md:landscape:h-[700px] md:portrait:mr-[0px] md:landscape:mr-[-50px]">
+          <Image
+            className="w-full h-full rounded-3xl"
+            alt="Example of physical card"
+            {...imageProps}
+          />
         </div>
 
         <div className="m-[48px]">

@@ -2,9 +2,9 @@ import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/sc
 
 export function getTitlesAndSubtitles(eligibilityDetailsState: EligibilityDetailsState) {
   const [eligibilityDetails] = eligibilityDetailsState;
-  const isVerifyIdFlow = eligibilityDetails.fileVerification;
+  const fileVerificationIsInProgress = eligibilityDetails.fileVerification;
 
-  if (isVerifyIdFlow) {
+  if (fileVerificationIsInProgress) {
     return {
       title: 'Verifying Your ID',
       subtitle: (

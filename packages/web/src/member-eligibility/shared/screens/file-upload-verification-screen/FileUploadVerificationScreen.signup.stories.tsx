@@ -1,10 +1,12 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { FileUploadVerificationScreen } from './FileUploadVerificationScreen';
 import { useSignupEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-signup-eligibility-details/UseSignupEligibilityDetails';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/adapters';
 
 const componentMeta: Meta<typeof FileUploadVerificationScreen> = {
   title: 'Pages/Signup Eligibility Flow/File Upload Verification Screen',
   component: FileUploadVerificationScreen,
+  decorators: [StorybookPlatformAdapterDecorator],
   parameters: {
     layout: 'fullscreen',
   },

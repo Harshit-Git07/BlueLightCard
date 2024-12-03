@@ -1,10 +1,12 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { WorkEmailRetryScreen } from './WorkEmailRetryScreen';
 import { useSignupEligibilityDetails } from '@/root/src/member-eligibility/sign-up/hooks/use-signup-eligibility-details/UseSignupEligibilityDetails';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/adapters';
 
 const componentMeta: Meta<typeof WorkEmailRetryScreen> = {
   title: 'Pages/Signup Eligibility Flow/Work Email Retry Screen',
   component: WorkEmailRetryScreen,
+  decorators: [StorybookPlatformAdapterDecorator],
   parameters: {
     layout: 'fullscreen',
   },

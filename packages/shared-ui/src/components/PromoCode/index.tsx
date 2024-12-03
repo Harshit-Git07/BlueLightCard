@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { PromoCodeProps, PromoCodeVariant } from './types';
 import PromoCodeSuccess from './components/PromoCodeSuccess';
 import PromoCodeEntry from './components/PromoCodeEntry';
 
-const PromoCode: React.FC<PromoCodeProps> = ({
+const PromoCode: FC<PromoCodeProps> = ({
   name,
   variant = 'default',
   value = '',

@@ -5,7 +5,7 @@ import {
   AusAddress,
   EligibilityDetailsAddress,
   UkAddress,
-} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 
 type UkOrAusAddress = UkAddress & AusAddress;
 

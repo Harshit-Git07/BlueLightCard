@@ -4,15 +4,23 @@ import {
   ukAddressStub,
 } from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/hooks/utils/AddressTestUtils';
 import { renderHook } from '@testing-library/react';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
+
+jest.mock('@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent');
+
+const useLogAmplitudeEventMock = jest.mocked(useLogAmplitudeEvent);
+
+const logAmplitudeEventMock = jest.fn();
+const setEligibilityDetailsMock = jest.fn();
 
 type Result = ReturnType<typeof target.useOnAddressSubmitted>;
-
-const setEligibilityDetailsMock = jest.fn();
 let onAddressSubmitted: Result;
 
 beforeEach(() => {
   jest.clearAllMocks();
+
+  useLogAmplitudeEventMock.mockReturnValue(logAmplitudeEventMock);
 });
 
 describe('given no address exists', () => {

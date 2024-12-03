@@ -2,8 +2,9 @@ import * as target from './UseEmployers';
 import { organisationNoEmployersStub } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-organisations/stubs/OrganisationStubs';
 import { renderHook, RenderHookResult, waitFor } from '@testing-library/react';
 import { getEmployers } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/service-layer/GetEmployers';
-import { EligibilityEmployer } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
 import { v4 as createUuid } from 'uuid';
+import { buildTestEligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/testing/BuildTestEligibilityDetails';
+import { EligibilityEmployer } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 
 jest.mock(
   '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/service-layer/GetEmployers'
@@ -21,7 +22,7 @@ beforeEach(() => {
 
 describe('given the organisation is undefined', () => {
   beforeEach(() => {
-    const renderResult = renderHook(() => target.useEmployers(undefined));
+    const renderResult = renderHook(() => target.useEmployers(buildTestEligibilityDetails()));
     result = renderResult.result;
   });
 
@@ -37,7 +38,11 @@ describe('given a list of employers are returned from the service layer', () => 
     ]);
 
     const renderResult = renderHook(() => {
-      return target.useEmployers({ id: createUuid(), label: 'From Service Layer' });
+      return target.useEmployers(
+        buildTestEligibilityDetails({
+          organisation: { id: createUuid(), label: 'From Service Layer' },
+        })
+      );
     });
     result = renderResult.result;
   });
@@ -53,7 +58,13 @@ describe('given a list of employers are returned from the service layer', () => 
 // TODO: This should be removed later and instead use some kind of service layer info to decide
 describe('given the organisation is the empty employers stub', () => {
   beforeEach(() => {
-    const renderResult = renderHook(() => target.useEmployers(organisationNoEmployersStub));
+    const renderResult = renderHook(() => {
+      return target.useEmployers(
+        buildTestEligibilityDetails({
+          organisation: organisationNoEmployersStub,
+        })
+      );
+    });
     result = renderResult.result;
   });
 
@@ -65,9 +76,11 @@ describe('given the organisation is the empty employers stub', () => {
 // TODO: This can be removed once service layer is fully integrated
 describe('given the organisation id is not a uuid', () => {
   beforeEach(() => {
-    const renderResult = renderHook(() =>
-      target.useEmployers({ id: '1', label: 'Organisation 1' })
-    );
+    const renderResult = renderHook(() => {
+      return target.useEmployers(
+        buildTestEligibilityDetails({ organisation: { id: '1', label: 'Organisation 1' } })
+      );
+    });
     result = renderResult.result;
   });
 

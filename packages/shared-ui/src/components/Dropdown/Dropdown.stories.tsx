@@ -28,7 +28,7 @@ const defaultArgs: DropdownProps = {
   searchable: false,
   error: false,
   selectedValue: '',
-  customClass: '',
+  dropdownItemsClassName: '',
   onSelect: noop,
   options: [
     {

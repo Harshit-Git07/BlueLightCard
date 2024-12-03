@@ -1,171 +1,174 @@
-import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import React, { FC, useState } from 'react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import PromoCode from './index';
+import { PromoCodeProps } from './types';
+import { userEvent } from '@storybook/testing-library';
 
-describe('PromoCode component', () => {
-  const defaultProps = {
-    onApply: jest.fn(),
-  };
+const onApplyMock = jest.fn();
+const onStateChangeMock = jest.fn();
+const onRemoveMock = jest.fn();
 
-  describe('smoke test', () => {
-    it('should render component without error', () => {
-      render(<PromoCode {...defaultProps} />);
+const defaultProps: Omit<PromoCodeProps, 'onChange'> = {
+  onApply: onApplyMock,
+  onStateChange: onStateChangeMock,
+  onRemove: onRemoveMock,
+};
 
-      expect(screen.getByText('Add your promo code', {})).toBeInTheDocument();
-    });
+describe('given is rendered in default state', () => {
+  beforeEach(() => {
+    render(<WithPromoCodeState {...defaultProps} />);
   });
 
-  describe('functionality tests', () => {
-    it('should toggle open state when clicked', () => {
-      const onStateChange = jest.fn();
-      render(<PromoCode {...defaultProps} onStateChange={onStateChange} />);
-      const toggleButton = screen.getByText('Add your promo code', {});
+  it('should render component without error', () => {
+    expect(screen.getByText('Add your promo code')).toBeInTheDocument();
+  });
 
+  it('should not show promo code icon by default', () => {
+    // The image is aria-hidden so need to hidden flag to find it
+    const icons = screen.queryAllByRole('img', { hidden: true });
+    expect(icons.length).toBe(1);
+  });
+
+  it('should have accessible button for toggling the promocode', () => {
+    const toggleButton = screen.getByRole('button', { name: /Add your promo code/i });
+    expect(toggleButton).toBeInTheDocument();
+  });
+
+  describe('when toggle button is clicked', () => {
+    beforeEach(() => {
+      const toggleButton = screen.getByText('Add your promo code');
       fireEvent.click(toggleButton);
-
-      expect(onStateChange).toHaveBeenCalledWith('open');
     });
 
-    it('should call onApply when Apply button is clicked', () => {
-      render(<PromoCode {...defaultProps} variant="open" />);
-      const applyButton = screen.getByText('Apply', {});
-
-      fireEvent.click(applyButton);
-
-      expect(defaultProps.onApply).toHaveBeenCalled();
+    it('should return the open state on the state change callback', () => {
+      expect(onStateChangeMock).toHaveBeenCalledWith('open');
     });
 
-    it('should call onChange when input value changes', async () => {
-      const onChange = jest.fn();
-      render(<PromoCode {...defaultProps} variant="open" onChange={onChange} />);
-      const input = screen.getByLabelText('Add your promo code', {});
-
-      fireEvent.change(input, { target: { value: 'TEST123' } });
-
-      expect(onChange).toHaveBeenCalled();
-    });
-
-    it('should call onRemove when Remove button is clicked in success state', () => {
-      const onRemoveMock = jest.fn();
-      const onStateChangeMock = jest.fn();
-      render(
-        <PromoCode
-          {...defaultProps}
-          variant="success"
-          value="TEST123"
-          onRemove={onRemoveMock}
-          onStateChange={onStateChangeMock}
-        />,
-      );
-      const removeButton = screen.getByText('Remove', {});
-
-      fireEvent.click(removeButton);
-
-      expect(onRemoveMock).toHaveBeenCalled();
-      expect(onStateChangeMock).toHaveBeenCalledWith('default');
-    });
-  });
-
-  describe('visual tests', () => {
-    it('should show info message when provided', () => {
-      const infoMessage = 'Special offer applied';
-
-      render(<PromoCode {...defaultProps} infoMessage={infoMessage} />);
-
-      expect(screen.getByText(infoMessage, {})).toBeInTheDocument();
-    });
-
-    it('should show error message when in error state', () => {
-      const errorMessage = 'Invalid code';
-
-      render(<PromoCode {...defaultProps} variant="error" errorMessage={errorMessage} />);
-
-      expect(screen.getByText(errorMessage, {})).toBeInTheDocument();
-    });
-
-    it('should show success message in success state', () => {
-      const value = 'TEST123';
-
-      render(<PromoCode {...defaultProps} variant="success" value={value} />);
-
-      expect(screen.getByText('ID Upload Skipped!', {})).toBeInTheDocument();
-    });
-
-    it('should show icon when icon prop is true', () => {
-      render(<PromoCode {...defaultProps} icon={true} />);
-
-      const icons = screen.getAllByRole('img', { hidden: true });
-      expect(icons.length).toBeGreaterThan(1);
-    });
-
-    it('should not show promo code icon by default', () => {
-      render(<PromoCode {...defaultProps} />);
-
-      const icons = screen.getAllByRole('img', { hidden: true });
-      expect(icons.length).toBe(1);
-    });
-  });
-
-  describe('state changes', () => {
-    it('should be open when variant is "open"', () => {
-      render(<PromoCode {...defaultProps} variant="open" />);
-
-      expect(screen.getByLabelText('Add your promo code', {})).toBeInTheDocument();
-    });
-
-    it('should be open when variant is "error"', () => {
-      render(<PromoCode {...defaultProps} variant="error" />);
-
-      expect(screen.getByLabelText('Add your promo code', {})).toBeInTheDocument();
-    });
-
-    it('should show success state when variant is "success"', () => {
-      const value = 'TEST123';
-
-      render(<PromoCode {...defaultProps} variant="success" value={value} />);
-
-      expect(screen.getByText(value, {})).toBeInTheDocument();
-      expect(screen.getByText('Remove', {})).toBeInTheDocument();
-    });
-  });
-
-  describe('accessibility tests', () => {
-    it('should have accessible button for toggling', () => {
-      render(<PromoCode {...defaultProps} />);
-
-      const toggleButton = screen.getByRole('button', { name: /Add your promo code/i });
-      expect(toggleButton).toBeInTheDocument();
-    });
-
-    it('should have accessible input when open', () => {
-      render(<PromoCode {...defaultProps} variant="open" />);
-
-      const input = screen.getByLabelText('Add your promo code', {});
+    it('should show the add your promo code copy', () => {
+      const input = screen.getByLabelText('Add your promo code');
       expect(input).toBeInTheDocument();
       expect(input).toBeVisible();
     });
 
     it('should have accessible apply button when open', () => {
-      render(<PromoCode {...defaultProps} variant="open" />);
-
       const applyButton = screen.getByRole('button', { name: /Apply/i });
       expect(applyButton).toBeInTheDocument();
     });
-  });
 
-  describe('default props', () => {
-    it('should use default label when not provided', () => {
-      render(<PromoCode {...defaultProps} />);
-
-      expect(screen.getByText('Add your promo code', {})).toBeInTheDocument();
+    it('should show the apply button in a disabled state', () => {
+      const applyButton = screen.getByText('Apply');
+      expect(applyButton).toBeDisabled();
     });
 
-    it('should not show promo code icon by default', () => {
-      render(<PromoCode {...defaultProps} />);
+    describe('when a promocode is entered', () => {
+      beforeEach(async () => {
+        await act(async () => {
+          const input = screen.getByLabelText('Add your promo code');
+          await userEvent.type(input, 'TEST123');
+        });
+      });
 
-      const icons = screen.getAllByRole('img', { hidden: true });
-      expect(icons.length).toBe(1);
+      it('should enable the apply button', () => {
+        const applyButton = screen.getByText('Apply');
+        expect(applyButton).toBeEnabled();
+      });
+
+      describe('when the apply button is clicked', () => {
+        beforeEach(() => {
+          const applyButton = screen.getByText('Apply');
+          fireEvent.click(applyButton);
+        });
+
+        it('should call onApply when Apply button is clicked', () => {
+          expect(onApplyMock).toHaveBeenCalled();
+        });
+      });
     });
   });
 });
+
+describe('given is rendered in the success state and has a value', () => {
+  beforeEach(() => {
+    render(<WithPromoCodeState {...defaultProps} variant="success" value="TEST123" />);
+  });
+
+  it('should show id upload skipped message', () => {
+    expect(screen.getByText('ID Upload Skipped!')).toBeInTheDocument();
+  });
+
+  it('should show the value of the promo code', () => {
+    expect(screen.getByText('TEST123')).toBeInTheDocument();
+  });
+
+  it('should show the remove button', () => {
+    expect(screen.getByText('Remove')).toBeInTheDocument();
+  });
+
+  describe('when the remove button is clicked', () => {
+    beforeEach(() => {
+      const removeButton = screen.getByText('Remove');
+      fireEvent.click(removeButton);
+    });
+
+    it('should call on remove callback and reset the state of the promocode component', () => {
+      expect(onRemoveMock).toHaveBeenCalled();
+      expect(onStateChangeMock).toHaveBeenCalledWith('default');
+    });
+  });
+});
+
+describe('given is rendered with an error message', () => {
+  beforeEach(() => {
+    render(<WithPromoCodeState {...defaultProps} errorMessage="Invalid code" />);
+  });
+
+  it('should show error message', () => {
+    expect(screen.getByText('Invalid code')).toBeInTheDocument();
+  });
+
+  describe('when toggle button is clicked', () => {
+    beforeEach(() => {
+      const toggleButton = screen.getByText('Add your promo code');
+      fireEvent.click(toggleButton);
+    });
+
+    it('should show the add your promo code copy', () => {
+      expect(screen.getByLabelText('Add your promo code')).toBeInTheDocument();
+    });
+  });
+});
+
+describe('given is rendered with an info message', () => {
+  beforeEach(() => {
+    render(<WithPromoCodeState {...defaultProps} infoMessage="Special offer applied" />);
+  });
+
+  it('should show info message', () => {
+    expect(screen.getByText('Special offer applied')).toBeInTheDocument();
+  });
+});
+
+describe('given is rendered with an icon flag set to true', () => {
+  beforeEach(() => {
+    render(<WithPromoCodeState {...defaultProps} icon />);
+  });
+
+  it('should show icon on the component', () => {
+    // The image is aria-hidden so need to hidden flag to find it
+    const icons = screen.getAllByRole('img', { hidden: true });
+    expect(icons.length).toEqual(2);
+  });
+});
+
+const WithPromoCodeState: FC<Omit<PromoCodeProps, 'onChange'>> = (props) => {
+  const [promoCode, setPromoCode] = useState(props.value ?? '');
+
+  return (
+    <PromoCode
+      {...props}
+      value={promoCode}
+      onChange={(event) => setPromoCode(event.target.value)}
+    />
+  );
+};

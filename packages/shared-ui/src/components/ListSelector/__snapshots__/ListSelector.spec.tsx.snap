@@ -3,39 +3,35 @@
 exports[`ListSelector component should render default list selector with hidden description 1`] = `
 <button
   aria-label="Button for Default List Selector"
-  className=" w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark min-w-full sm:min-w-[500px]"
+  className=" border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark w-full min-w-full sm:min-w-[500px] rounded-[4px] px-[16px] py-[12px] flex items-center justify-between transition-colors border"
   onClick={[Function]}
   onKeyDown={[Function]}
   onMouseEnter={[Function]}
   onMouseLeave={[Function]}
 >
   <div
-    className="flex flex-col gap-1 items-start w-full text-left"
+    className="flex flex-col gap-[4px] items-start w-full text-left"
   >
     <div
-      className="tablet:flex items-center gap-2 w-full"
+      className="flex flex-row items-center flex-wrap gap-[8px] w-full"
     >
       <h4
-        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal"
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold break-words whitespace-normal"
       >
         Default List Selector
       </h4>
-      <span
-        className="block pt-2 tablet:inline tablet:pt-0"
+      <div
+        className="inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
       >
-        <div
-          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
-        >
-          <span
-            className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
-          />
-        </div>
-      </span>
+        <span
+          className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+        />
+      </div>
     </div>
   </div>
   <svg
     aria-hidden="true"
-    className="svg-inline--fa fa-arrow-right h-5 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+    className="svg-inline--fa fa-arrow-right text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark h-[20px]"
     data-icon="arrow-right"
     data-prefix="far"
     focusable="false"
@@ -56,33 +52,33 @@ exports[`ListSelector component should render default list selector with hidden 
 exports[`ListSelector component should render default list selector with hidden tag 1`] = `
 <button
   aria-label="Button for Default List Selector"
-  className=" w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark min-w-full sm:min-w-[500px]"
+  className=" border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark w-full min-w-full sm:min-w-[500px] rounded-[4px] px-[16px] py-[12px] flex items-center justify-between transition-colors border"
   onClick={[Function]}
   onKeyDown={[Function]}
   onMouseEnter={[Function]}
   onMouseLeave={[Function]}
 >
   <div
-    className="flex flex-col gap-1 items-start w-full text-left"
+    className="flex flex-col gap-[4px] items-start w-full text-left"
   >
     <div
-      className="tablet:flex items-center gap-2 w-full"
+      className="flex flex-row items-center flex-wrap gap-[8px] w-full"
     >
       <h4
-        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal"
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold break-words whitespace-normal"
       >
         Default List Selector
       </h4>
     </div>
     <p
-      className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body break-words whitespace-normal text-left"
+      className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body break-words whitespace-normal text-left"
     >
       This is a default list selector
     </p>
   </div>
   <svg
     aria-hidden="true"
-    className="svg-inline--fa fa-arrow-right h-5 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+    className="svg-inline--fa fa-arrow-right text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark h-[20px]"
     data-icon="arrow-right"
     data-prefix="far"
     focusable="false"
@@ -103,37 +99,33 @@ exports[`ListSelector component should render default list selector with hidden 
 exports[`ListSelector component should render default list selector with hidden trailing icon 1`] = `
 <button
   aria-label="Button for Default List Selector"
-  className=" w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark min-w-full sm:min-w-[500px]"
+  className=" border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark w-full min-w-full sm:min-w-[500px] rounded-[4px] px-[16px] py-[12px] flex items-center justify-between transition-colors border"
   onClick={[Function]}
   onKeyDown={[Function]}
   onMouseEnter={[Function]}
   onMouseLeave={[Function]}
 >
   <div
-    className="flex flex-col gap-1 items-start w-full text-left"
+    className="flex flex-col gap-[4px] items-start w-full text-left"
   >
     <div
-      className="tablet:flex items-center gap-2 w-full"
+      className="flex flex-row items-center flex-wrap gap-[8px] w-full"
     >
       <h4
-        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal"
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold break-words whitespace-normal"
       >
         Default List Selector
       </h4>
-      <span
-        className="block pt-2 tablet:inline tablet:pt-0"
+      <div
+        className="inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
       >
-        <div
-          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
-        >
-          <span
-            className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
-          />
-        </div>
-      </span>
+        <span
+          className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+        />
+      </div>
     </div>
     <p
-      className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body break-words whitespace-normal text-left"
+      className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body break-words whitespace-normal text-left"
     >
       This is a default list selector
     </p>
@@ -144,7 +136,7 @@ exports[`ListSelector component should render default list selector with hidden 
 exports[`ListSelector component should render default list selector with in hover state 1`] = `
 <button
   aria-label="List Selector"
-  className=" w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border border border-colour-primary-hover dark:border-colour-primary-dark min-w-full sm:min-w-[500px]"
+  className=" border border-colour-primary-hover dark:border-colour-primary-dark w-full min-w-full sm:min-w-[500px] rounded-[4px] px-[16px] py-[12px] flex items-center justify-between transition-colors border"
   onClick={[Function]}
   onKeyDown={[Function]}
   onMouseEnter={[Function]}
@@ -152,32 +144,28 @@ exports[`ListSelector component should render default list selector with in hove
   role="button"
 >
   <div
-    className="flex flex-col gap-1 items-start w-full text-left"
+    className="flex flex-col gap-[4px] items-start w-full text-left"
   >
     <div
-      className="tablet:flex items-center gap-2 w-full"
+      className="flex flex-row items-center flex-wrap gap-[8px] w-full"
     >
       <h4
-        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal"
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold break-words whitespace-normal"
       >
         Default List Selector
       </h4>
-      <span
-        className="block pt-2 tablet:inline tablet:pt-0"
+      <div
+        className="inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
       >
-        <div
-          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
-        >
-          <span
-            className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
-          />
-        </div>
-      </span>
+        <span
+          className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+        />
+      </div>
     </div>
   </div>
   <svg
     aria-hidden="true"
-    className="svg-inline--fa fa-arrow-right h-5 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+    className="svg-inline--fa fa-arrow-right text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark h-[20px]"
     data-icon="arrow-right"
     data-prefix="far"
     focusable="false"
@@ -198,39 +186,35 @@ exports[`ListSelector component should render default list selector with in hove
 exports[`ListSelector component should render default list selector with in selected state 1`] = `
 <button
   aria-label="Button for Default List Selector"
-  className=" w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border border border-colour-primary dark:border-colour-primary-dark bg-colour-surface-container-light dark:bg-colour-surface-container-dark min-w-full sm:min-w-[500px]"
+  className=" border border-colour-primary dark:border-colour-primary-dark bg-colour-surface-container-light dark:bg-colour-surface-container-dark w-full min-w-full sm:min-w-[500px] rounded-[4px] px-[16px] py-[12px] flex items-center justify-between transition-colors border"
   onClick={[Function]}
   onKeyDown={[Function]}
   onMouseEnter={[Function]}
   onMouseLeave={[Function]}
 >
   <div
-    className="flex flex-col gap-1 items-start w-full text-left"
+    className="flex flex-col gap-[4px] items-start w-full text-left"
   >
     <div
-      className="tablet:flex items-center gap-2 w-full"
+      className="flex flex-row items-center flex-wrap gap-[8px] w-full"
     >
       <h4
-        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal"
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold break-words whitespace-normal"
       >
         Default List Selector
       </h4>
-      <span
-        className="block pt-2 tablet:inline tablet:pt-0"
+      <div
+        className="inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
       >
-        <div
-          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
-        >
-          <span
-            className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
-          />
-        </div>
-      </span>
+        <span
+          className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+        />
+      </div>
     </div>
   </div>
   <svg
     aria-hidden="true"
-    className="svg-inline--fa fa-pen h-5 text-colour-primary dark:text-colour-primary-dark"
+    className="svg-inline--fa fa-pen text-colour-primary dark:text-colour-primary-dark h-[20px]"
     data-icon="pen"
     data-prefix="fas"
     focusable="false"
@@ -251,44 +235,40 @@ exports[`ListSelector component should render default list selector with in sele
 exports[`ListSelector component should render default list selector with title, description, tag and trailing icon   1`] = `
 <button
   aria-label="Button for Default List Selector"
-  className=" w-full rounded-lg px-4 py-3 flex items-center justify-between transition-colors border border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark min-w-full sm:min-w-[500px]"
+  className=" border border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark w-full min-w-full sm:min-w-[500px] rounded-[4px] px-[16px] py-[12px] flex items-center justify-between transition-colors border"
   onClick={[Function]}
   onKeyDown={[Function]}
   onMouseEnter={[Function]}
   onMouseLeave={[Function]}
 >
   <div
-    className="flex flex-col gap-1 items-start w-full text-left"
+    className="flex flex-col gap-[4px] items-start w-full text-left"
   >
     <div
-      className="tablet:flex items-center gap-2 w-full"
+      className="flex flex-row items-center flex-wrap gap-[8px] w-full"
     >
       <h4
-        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold break-words whitespace-normal"
+        className="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold break-words whitespace-normal"
       >
         Default List Selector
       </h4>
-      <span
-        className="block pt-2 tablet:inline tablet:pt-0"
+      <div
+        className="inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
       >
-        <div
-          className="inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap bg-colour-success-bright-light dark:bg-colour-success-bright-dark text-colour-onSuccess-bright-light dark:text-colour-onSuccess-bright-dark border-[0.5px] border-colour-onSuccess-bright-light dark:border-colour-onSuccess-bright-dark rounded"
-        >
-          <span
-            className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
-          />
-        </div>
-      </span>
+        <span
+          className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold"
+        />
+      </div>
     </div>
     <p
-      className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body break-words whitespace-normal text-left"
+      className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body break-words whitespace-normal text-left"
     >
       This is a default list selector
     </p>
   </div>
   <svg
     aria-hidden="true"
-    className="svg-inline--fa fa-arrow-right h-5 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+    className="svg-inline--fa fa-arrow-right text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark h-[20px]"
     data-icon="arrow-right"
     data-prefix="far"
     focusable="false"

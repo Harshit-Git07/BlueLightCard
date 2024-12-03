@@ -1,17 +1,29 @@
-import { useCallback } from 'react';
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { useCallback, useState } from 'react';
+import { PromoCodeVariant } from '@bluelightcard/shared-ui/components/PromoCode/types';
 
-type Callback = () => PromoCodeStatus;
+interface Result {
+  promoCodeStatus: PromoCodeVariant | undefined;
+  onPromoCodeApplied: () => void;
+  onPromoCodeCleared: () => void;
+}
 
-type PromoCodeStatus = 'Loading' | 'Success' | 'Rejected';
+export function useOnPromoCodeApplied(promoCode: string | undefined): Result {
+  const [promoCodeStatus, setPromoCodeStatus] = useState<PromoCodeVariant>('default');
 
-export function useOnPromoCodeApplied(eligibilityDetailsState: EligibilityDetailsState): Callback {
-  const [eligibilityDetails] = eligibilityDetailsState;
-
-  return useCallback(() => {
+  const onPromoCodeApplied = useCallback(() => {
     // TODO: Will make a service layer call to verify the promocode
-    console.log(`Applying promo code '${eligibilityDetails}'`);
+    console.log(`Applying promo code '${promoCode}'`);
 
-    return 'Success';
-  }, [eligibilityDetails]);
+    return setPromoCodeStatus('success');
+  }, [promoCode]);
+
+  const onPromoCodeCleared = useCallback(() => {
+    setPromoCodeStatus('default');
+  }, []);
+
+  return {
+    promoCodeStatus,
+    onPromoCodeApplied,
+    onPromoCodeCleared,
+  };
 }

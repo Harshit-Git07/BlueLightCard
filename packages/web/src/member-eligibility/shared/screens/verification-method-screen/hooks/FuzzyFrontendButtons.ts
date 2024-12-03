@@ -11,14 +11,6 @@ export function useFuzzyFrontendButtons(
     return [
       {
         onClick: () => {
-          if (eligibilityDetails.flow === 'Renewal' && !eligibilityDetails.accountDetailsChanged) {
-            setEligibilityDetails({
-              ...eligibilityDetails,
-              currentScreen: 'Renewal Account Details Screen',
-            });
-            return;
-          }
-
           setEligibilityDetails({
             ...eligibilityDetails,
             currentScreen: 'Job Details Screen',

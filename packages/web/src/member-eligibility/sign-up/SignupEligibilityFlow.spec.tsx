@@ -1,27 +1,33 @@
 import '@testing-library/jest-dom';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { SignupEligibilityFlow } from './SignupEligibilityFlow';
-import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
+import { renderWithMockedPlatformAdapter } from '../shared/testing/MockedPlatformAdaptor';
+import { uploadFileToServiceLayer } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/components/hooks/use-file-upload-state/service-layer/UploadFile';
 
 jest.mock('react-use');
 jest.mock('next/router', () => ({
   useRouter: jest.fn(),
 }));
+jest.mock(
+  '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/components/hooks/use-file-upload-state/service-layer/UploadFile'
+);
 
 const pngFile = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
 const pdfFile = new File(['(⌐□_□)'], 'test.pdf', { type: 'application/pdf' });
+
+const uploadFileToServiceLayerMock = jest.mocked(uploadFileToServiceLayer);
+
+beforeEach(() => {
+  uploadFileToServiceLayerMock.mockResolvedValue(Promise.resolve());
+});
 
 // TODO: Test back button behaviour too
 describe('given a signing up member that needs to prove their eligibility to use the service', () => {
   // TODO: Will need another flow here for providing the "skip to address / payment flow"
   describe("given they haven't submitted enough details to skip straight to delivery address", () => {
     beforeEach(() => {
-      render(
-        <PlatformAdapterProvider adapter={useMockPlatformAdapter()}>
-          <SignupEligibilityFlow />
-        </PlatformAdapterProvider>
-      );
+      renderWithMockedPlatformAdapter(<SignupEligibilityFlow />);
     });
 
     it('should start with the interstitial page with the verify eligibility card', () => {
@@ -54,7 +60,7 @@ describe('given a signing up member that needs to prove their eligibility to use
 
       describe('when selecting Retired as employment status', () => {
         beforeEach(async () => {
-          const retiredButton = screen.getByText('Retired');
+          const retiredButton = screen.getByText('Retired or Bereaved');
           act(() => retiredButton.click());
         });
 
@@ -137,7 +143,7 @@ describe('given a signing up member that needs to prove their eligibility to use
                       fireEvent.change(screen.getByLabelText('Address line 1'), {
                         target: { value: '123 Test Street' },
                       });
-                      fireEvent.change(screen.getByLabelText('City'), {
+                      fireEvent.change(screen.getByLabelText('Town/City'), {
                         target: { value: 'Test City' },
                       });
                       fireEvent.change(screen.getByLabelText('Postcode'), {
@@ -236,7 +242,7 @@ describe('given a signing up member that needs to prove their eligibility to use
                     fireEvent.change(screen.getByLabelText('Address line 1'), {
                       target: { value: '123 Test Street' },
                     });
-                    fireEvent.change(screen.getByLabelText('City'), {
+                    fireEvent.change(screen.getByLabelText('Town/City'), {
                       target: { value: 'Test City' },
                     });
                     fireEvent.change(screen.getByLabelText('Postcode'), {
@@ -319,7 +325,7 @@ describe('given a signing up member that needs to prove their eligibility to use
                   fireEvent.change(screen.getByLabelText('Address line 1'), {
                     target: { value: '123 Test Street' },
                   });
-                  fireEvent.change(screen.getByLabelText('City'), {
+                  fireEvent.change(screen.getByLabelText('Town/City'), {
                     target: { value: 'Test City' },
                   });
                   fireEvent.change(screen.getByLabelText('Postcode'), {
@@ -375,7 +381,7 @@ describe('given a signing up member that needs to prove their eligibility to use
               fireEvent.change(screen.getByLabelText('Address line 1'), {
                 target: { value: '123 Test Street' },
               });
-              fireEvent.change(screen.getByLabelText('City'), {
+              fireEvent.change(screen.getByLabelText('Town/City'), {
                 target: { value: 'Test City' },
               });
               fireEvent.change(screen.getByLabelText('Postcode'), {

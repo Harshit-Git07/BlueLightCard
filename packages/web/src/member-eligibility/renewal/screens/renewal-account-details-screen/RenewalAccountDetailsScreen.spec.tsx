@@ -1,35 +1,38 @@
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { RenewalAccountDetailsScreen } from './RenewalAccountDetailsScreen';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { useAccountDetailsValid } from '@/root/src/member-eligibility/renewal/screens/renewal-account-details-screen/hooks/UseAccountDetailsIsValid';
+import { renderWithMockedPlatformAdapter } from '@/root/src/member-eligibility/shared/testing/MockedPlatformAdaptor';
 
-jest.mock('./hooks/UseAccountDetailsIsValid', () => ({
-  useAccountDetailsValid: () => true,
-}));
+jest.mock('./hooks/UseAccountDetailsIsValid');
 
 const mockSetEligibilityDetails = jest.fn();
 
-const renderRenewalAccountDetailsScreen = (customEligibilityDetails = {}) => {
-  jest.clearAllMocks();
-  const defaultState: EligibilityDetailsState = [
-    {
-      currentScreen: 'Renewal Account Details Screen',
-      flow: 'Renewal',
-      member: {
-        firstName: 'John',
-        surname: 'Doe',
-        dob: new Date('1980-01-01'),
-      },
-      ...customEligibilityDetails,
-    },
-    mockSetEligibilityDetails,
-  ];
-  return render(<RenewalAccountDetailsScreen eligibilityDetailsState={defaultState} />);
-};
+const useAccountDetailsValidMock = jest.mocked(useAccountDetailsValid);
+
+beforeEach(() => {
+  useAccountDetailsValidMock.mockReturnValue(true);
+});
 
 describe('given initial render', () => {
   beforeEach(() => {
-    renderRenewalAccountDetailsScreen();
+    jest.clearAllMocks();
+    const defaultState: EligibilityDetailsState = [
+      {
+        currentScreen: 'Renewal Account Details Screen',
+        flow: 'Renewal',
+        member: {
+          firstName: 'John',
+          surname: 'Doe',
+          dob: new Date('1980-01-01'),
+        },
+      },
+      mockSetEligibilityDetails,
+    ];
+    renderWithMockedPlatformAdapter(
+      <RenewalAccountDetailsScreen eligibilityDetailsState={defaultState} />
+    );
   });
 
   it('should render main heading and subtitle', () => {
@@ -52,7 +55,6 @@ describe('given initial render', () => {
         "If you've changed your name since your last membership, make sure it matches the ID you'll provide in the next step."
       )
     ).toBeInTheDocument();
-
     expect(
       screen.getByText('Tell us where you would like your card delivered.')
     ).toBeInTheDocument();
@@ -63,7 +65,7 @@ describe('given initial render', () => {
     expect(screen.getByText('Continue')).toBeInTheDocument();
   });
 
-  describe('when back button was clicked', () => {
+  describe('when back button is clicked', () => {
     beforeEach(() => {
       fireEvent.click(screen.getByText('Back'));
     });
@@ -77,7 +79,7 @@ describe('given initial render', () => {
     });
   });
 
-  describe('when continue button was clicked', () => {
+  describe('when continue button is clicked', () => {
     beforeEach(() => {
       fireEvent.click(screen.getByText('Continue'));
     });

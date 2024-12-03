@@ -4,11 +4,11 @@ exports[`FileUploadCounter component matches snapshot for uploadStatus error 1`]
 <div>
   <div>
     <div
-      class="p-6 flex gap-2 items-center justify-center border rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-error dark:border-colour-error-dark"
+      class="bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-error dark:border-colour-error-dark p-[16px] flex gap-[8px] items-center justify-center border rounded"
     >
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-circle-xmark h-6 w-6 text-colour-error dark:text-colour-error-dark"
+        class="svg-inline--fa fa-circle-xmark text-colour-error dark:text-colour-error-dark h-[24px] w-[24px]"
         data-icon="circle-xmark"
         data-prefix="fas"
         focusable="false"
@@ -22,7 +22,7 @@ exports[`FileUploadCounter component matches snapshot for uploadStatus error 1`]
         />
       </svg>
       <p
-        class="truncate text-colour-onSurface dark:text-colour-onSurface-dark"
+        class="text-colour-onSurface dark:text-colour-onSurface-dark truncate"
       >
         testFile.name
       </p>
@@ -31,7 +31,7 @@ exports[`FileUploadCounter component matches snapshot for uploadStatus error 1`]
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-xmark h-6 w-6 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+          class="svg-inline--fa fa-xmark text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark h-[20px] w-[20px]"
           data-icon="xmark"
           data-prefix="fas"
           focusable="false"
@@ -54,11 +54,11 @@ exports[`FileUploadCounter component matches snapshot for uploadStatus loading 1
 <div>
   <div>
     <div
-      class="p-6 flex gap-2 items-center justify-center border rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark"
+      class="bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark p-[16px] flex gap-[8px] items-center justify-center border rounded"
     >
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-spinner fa-spin h-6 w-6 text-colour-primary dark:text-colour-primary-dark"
+        class="svg-inline--fa fa-spinner fa-spin text-colour-primary dark:text-colour-primary-dark h-[24px] w-[24px]"
         data-icon="spinner"
         data-prefix="far"
         focusable="false"
@@ -72,7 +72,7 @@ exports[`FileUploadCounter component matches snapshot for uploadStatus loading 1
         />
       </svg>
       <p
-        class="truncate text-colour-onSurface dark:text-colour-onSurface-dark"
+        class="text-colour-onSurface dark:text-colour-onSurface-dark truncate"
       >
         testFile.name
       </p>
@@ -81,7 +81,7 @@ exports[`FileUploadCounter component matches snapshot for uploadStatus loading 1
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-xmark h-6 w-6 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+          class="svg-inline--fa fa-xmark text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark h-[20px] w-[20px]"
           data-icon="xmark"
           data-prefix="fas"
           focusable="false"
@@ -104,11 +104,11 @@ exports[`FileUploadCounter component matches snapshot for uploadStatus ready 1`]
 <div>
   <div>
     <div
-      class="p-6 flex gap-2 items-center justify-center border rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark"
+      class="bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark p-[16px] flex gap-[8px] items-center justify-center border rounded"
     >
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-spinner fa-spin h-6 w-6 text-colour-primary dark:text-colour-primary-dark"
+        class="svg-inline--fa fa-spinner fa-spin text-colour-primary dark:text-colour-primary-dark h-[24px] w-[24px]"
         data-icon="spinner"
         data-prefix="far"
         focusable="false"
@@ -122,7 +122,7 @@ exports[`FileUploadCounter component matches snapshot for uploadStatus ready 1`]
         />
       </svg>
       <p
-        class="truncate text-colour-onSurface dark:text-colour-onSurface-dark"
+        class="text-colour-onSurface dark:text-colour-onSurface-dark truncate"
       >
         testFile.name
       </p>
@@ -131,7 +131,7 @@ exports[`FileUploadCounter component matches snapshot for uploadStatus ready 1`]
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-xmark h-6 w-6 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+          class="svg-inline--fa fa-xmark text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark h-[20px] w-[20px]"
           data-icon="xmark"
           data-prefix="fas"
           focusable="false"
@@ -154,11 +154,11 @@ exports[`FileUploadCounter component matches snapshot for uploadStatus success 1
 <div>
   <div>
     <div
-      class="p-6 flex gap-2 items-center justify-center border rounded bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-success dark:border-colour-success-dark"
+      class="bg-colour-surface-container-light dark:bg-colour-surface-container-dark border-colour-success dark:border-colour-success-dark p-[16px] flex gap-[8px] items-center justify-center border rounded"
     >
       <svg
         aria-hidden="true"
-        class="svg-inline--fa fa-circle-check h-6 w-6 text-colour-success dark:text-colour-success-dark"
+        class="svg-inline--fa fa-circle-check text-colour-success dark:text-colour-success-dark h-[24px] w-[24px]"
         data-icon="circle-check"
         data-prefix="fas"
         focusable="false"
@@ -172,7 +172,7 @@ exports[`FileUploadCounter component matches snapshot for uploadStatus success 1
         />
       </svg>
       <p
-        class="truncate text-colour-onSurface dark:text-colour-onSurface-dark"
+        class="text-colour-onSurface dark:text-colour-onSurface-dark truncate"
       >
         testFile.name
       </p>
@@ -181,7 +181,7 @@ exports[`FileUploadCounter component matches snapshot for uploadStatus success 1
       >
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-xmark h-6 w-6 text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+          class="svg-inline--fa fa-xmark text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark h-[20px] w-[20px]"
           data-icon="xmark"
           data-prefix="fas"
           focusable="false"

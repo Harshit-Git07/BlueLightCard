@@ -4,10 +4,12 @@ import {
   renewalEligibilityDetailsStub,
   useRenewalEligibilityDetails,
 } from '@/root/src/member-eligibility/renewal/hooks/use-renewal-eligibility-details/UseRenewalEligibilityDetails';
+import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui/adapters';
 
 const componentMeta: Meta<typeof WorkEmailVerificationScreen> = {
   title: 'Pages/Renewal Eligibility Flow/Work Email Verification Screen',
   component: WorkEmailVerificationScreen,
+  decorators: [StorybookPlatformAdapterDecorator],
   parameters: {
     layout: 'fullscreen',
   },

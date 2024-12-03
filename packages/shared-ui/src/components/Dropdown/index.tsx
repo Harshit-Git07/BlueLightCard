@@ -20,11 +20,11 @@ import { colours, fonts } from '../../tailwind/theme';
 
 const Dropdown: FC<DropdownProps> = ({
   className = '',
+  dropdownItemsClassName = '',
   options,
   placeholder,
   disabled,
   searchable,
-  customClass,
   onSelect,
   onOpen,
   label,
@@ -37,9 +37,7 @@ const Dropdown: FC<DropdownProps> = ({
   selectedValue,
   maxItemsShown,
 }) => {
-  const [selectedOption, setSelectedOption] = useState(
-    getSelectedOption(options, placeholder, selectedValue),
-  );
+  const [selectedOption, setSelectedOption] = useState(getSelectedOption(options, selectedValue));
   const [isListboxOpen, setIsListboxOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [tooltipOpen, setTooltipOpen] = useState(false);
@@ -52,6 +50,12 @@ const Dropdown: FC<DropdownProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const comboboxRef = useRef<HTMLInputElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
+
+  const numberOfItemsToShow = useMemo(() => {
+    if (!maxItemsShown) return undefined;
+
+    return Math.min(filteredOptions.length, maxItemsShown);
+  }, [maxItemsShown, filteredOptions]);
 
   const selectedOptionOrPlaceholder = useMemo(() => {
     if (selectedOption) return selectedOption;
@@ -148,6 +152,11 @@ const Dropdown: FC<DropdownProps> = ({
     (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsListboxOpen(false);
+
+        // This ensures that the placeholder label returns to it's default state when there is no value
+        if (searchable && searchTerm === '') {
+          setSelectedOption(undefined);
+        }
       }
     },
     [dropdownRef.current],
@@ -155,7 +164,7 @@ const Dropdown: FC<DropdownProps> = ({
 
   useEffect(() => {
     setFilteredOptions(options);
-    setSelectedOption(getSelectedOption(options, placeholder, selectedValue));
+    setSelectedOption(getSelectedOption(options, selectedValue));
   }, [options]);
 
   useEffect(() => {
@@ -186,6 +195,13 @@ const Dropdown: FC<DropdownProps> = ({
     onOpen(listboxRef.current);
   }, [onOpen, isListboxOpen]);
 
+  const dropdownContainerStyles = useMemo(() => {
+    const colourStyles = disabled ? colours.backgroundSurfaceContainer : colours.backgroundSurface;
+    const borderStyles = error ? colours.borderError : colours.borderOnSurfaceOutline;
+
+    return `${colourStyles} ${borderStyles} flex justify-between items-center relative w-full rounded-[4px] border cursor-pointer`;
+  }, [disabled]);
+
   const inputClassName = useMemo(() => {
     const opacityStyles =
       selectedOptionOrPlaceholder?.label === placeholder && !searchable
@@ -198,7 +214,7 @@ const Dropdown: FC<DropdownProps> = ({
 
     const outlineClasses = searchable ? '' : 'outline-none';
 
-    return `${opacityStyles} ${colourStyles} ${outlineClasses} ${fonts.body} w-full h-12 px-4 pt-3 rounded-[4px] text-left group-focus-within:border-colour-primary dark:group-focus-within:border-colour-dds-denim-400 ${colours.borderOnSurfaceOutline} bg-transparent dark:placeholder-colour-onSurface-dark`;
+    return `${opacityStyles} ${colourStyles} ${outlineClasses} ${fonts.body} ${colours.borderOnSurfaceOutline} w-full h-12 px-4 pt-3 rounded-[4px] text-left group-focus-within:border-colour-primary dark:group-focus-within:border-colour-dds-denim-400 bg-transparent dark:placeholder-colour-onSurface-dark`;
   }, [selectedOptionOrPlaceholder, placeholder, searchable, disabled]);
 
   const placeholderClassName = useMemo(() => {
@@ -213,9 +229,11 @@ const Dropdown: FC<DropdownProps> = ({
   }, [selectedOptionOrPlaceholder?.label, placeholder, searchTerm, disabled]);
 
   const messageClassName = useMemo(() => {
-    const errorStyles = error ? colours.textError : colours.textOnSurfaceSubtle;
+    const colourStyles = error
+      ? colours.textError
+      : `${colours.textOnSurfaceSubtle} group-focus-within:text-colour-primary dark:group-focus-within:text-colour-dds-denim-400`;
 
-    return `${errorStyles} ${fonts.body} flex group-focus-within:text-colour-primary dark:group-focus-within:text-colour-dds-denim-400 my-[8px]`;
+    return `${colourStyles} ${fonts.body} flex my-[8px]`;
   }, [error]);
 
   return (
@@ -239,9 +257,7 @@ const Dropdown: FC<DropdownProps> = ({
         </div>
       )}
 
-      <div
-        className={`relative w-full rounded-[4px] ${disabled ? colours.backgroundSurfaceContainer : colours.backgroundSurface} ${error ? colours.borderError : colours.borderOnSurfaceOutlineSubtle} border cursor-pointer flex justify-between items-center`}
-      >
+      <div className={dropdownContainerStyles}>
         <input
           id={dropdownId}
           ref={comboboxRef}
@@ -287,10 +303,10 @@ const Dropdown: FC<DropdownProps> = ({
 
       {isListboxOpen && (
         <DropdownList
-          className={customClass}
           listboxRef={listboxRef}
+          className={dropdownItemsClassName}
           dropdownId={dropdownId}
-          maxItemsShown={maxItemsShown}
+          maxItemsShown={numberOfItemsToShow}
           options={filteredOptions}
           disabled={disabled}
           selectedOption={selectedOptionOrPlaceholder}
@@ -299,7 +315,7 @@ const Dropdown: FC<DropdownProps> = ({
         />
       )}
 
-      {message && <div className={messageClassName}>{message}</div>}
+      {message && !isListboxOpen && <div className={messageClassName}>{message}</div>}
     </div>
   );
 };

@@ -40,7 +40,7 @@ const Tag: FC<TagProps> = ({ state = 'Default', iconLeft, iconRight, infoMessage
   const borderRadius = 'rounded';
 
   const classes = cssUtil([
-    'inline-flex h-6 min-h-6 py-1 px-2 justify-center items-center gap-1 whitespace-nowrap',
+    'inline-flex h-[24px] min-h-[24px] py-[4px] px-[8px] justify-center items-center gap-[4px] whitespace-nowrap',
     tokenClasses.bg,
     tokenClasses.text,
     tokenClasses.border,
@@ -54,9 +54,11 @@ const Tag: FC<TagProps> = ({ state = 'Default', iconLeft, iconRight, infoMessage
           <FontAwesomeIcon className="mr-1 text-current" icon={iconLeft} size="sm" />
         </span>
       )}
+
       <span className="font-typography-label-semibold font-typography-label-semibold-weight text-typography-label-semibold leading-typography-label-semibold">
         {infoMessage}
       </span>
+
       {iconRight && (
         <span className="flex items-center">
           <FontAwesomeIcon className="ml-1 text-current" icon={iconRight} size="sm" />

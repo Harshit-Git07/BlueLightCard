@@ -3,15 +3,15 @@
 exports[`FileUploadLabel matches snapshot 1`] = `
 <div>
   <span
-    class="flex flex-col gap-2"
+    class="flex flex-col gap-[8px]"
   >
     <p
-      class="w-full text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-small-semibold font-typography-body-small-semibold-weight text-typography-body-small-semibold leading-typography-body-small-semibold tracking-typography-body-small-semibold"
+      class="text-colour-onSurface dark:text-colour-onSurface-dark font-typography-body-small-semibold font-typography-body-small-semibold-weight text-typography-body-small-semibold leading-typography-body-small-semibold tracking-typography-body-small-semibold w-full"
     >
       LABEL
     </p>
     <p
-      class="w-full text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark"
+      class="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark w-full"
     >
       Remember to place on plain, well lit surface with no obstructions, blur or glare
     </p>

@@ -124,7 +124,7 @@ exports[`SearchDropDown renders the dropdown 1`] = `
             class=" group relative inline-block w-full"
           >
             <div
-              class="relative w-full rounded-[4px] bg-colour-surface-light dark:bg-colour-surface-dark border-colour-onSurface-outline-subtle dark:border-colour-onSurface-outline-subtle-dark border cursor-pointer flex justify-between items-center"
+              class="bg-colour-surface-light dark:bg-colour-surface-dark border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark flex justify-between items-center relative w-full rounded-[4px] border cursor-pointer"
             >
               <input
                 aria-controls=""
@@ -132,7 +132,7 @@ exports[`SearchDropDown renders the dropdown 1`] = `
                 aria-expanded="false"
                 aria-label="Search for a company"
                 autocomplete="off"
-                class=" bg-colour-surface-light dark:bg-colour-surface-dark text-colour-onSurface dark:text-colour-onSurface-dark  font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body w-full h-12 px-4 pt-3 rounded-[4px] text-left group-focus-within:border-colour-primary dark:group-focus-within:border-colour-dds-denim-400 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark bg-transparent dark:placeholder-colour-onSurface-dark"
+                class=" bg-colour-surface-light dark:bg-colour-surface-dark text-colour-onSurface dark:text-colour-onSurface-dark  font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark w-full h-12 px-4 pt-3 rounded-[4px] text-left group-focus-within:border-colour-primary dark:group-focus-within:border-colour-dds-denim-400 bg-transparent dark:placeholder-colour-onSurface-dark"
                 data-testid="combobox"
                 id=":r0:"
                 role="combobox"

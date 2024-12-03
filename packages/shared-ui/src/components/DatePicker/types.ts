@@ -11,4 +11,5 @@ export type DatePickerProps = {
   disabled?: boolean;
   errorMessage?: string;
   onChange: (date?: Date) => void;
+  minAgeConstraint?: number;
 } & InfoWrapperProps;

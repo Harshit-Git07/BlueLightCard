@@ -1,7 +1,7 @@
 import {
   AusAddress,
   EligibilityDetailsAddress,
-} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 
 export function isAusAddress(
   address: EligibilityDetailsAddress | undefined

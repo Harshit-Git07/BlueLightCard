@@ -6,7 +6,7 @@ import {
   AusAddress,
   EligibilityDetailsAddress,
   UkAddress,
-} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { australianStates } from '@/root/src/member-eligibility/shared/constants/AusStates';
 import { useIsAusBrand } from '@/root/src/member-eligibility/shared/hooks/use-is-aus-brand/UseIsAusBrand';
 
@@ -39,7 +39,7 @@ export const RegionAddressFields: FC<RegionAddressFieldsProps> = ({
           options={australianStates}
           selectedValue={(address as AusAddress)?.state ?? ''}
           placeholder="State"
-          maxItemsShown={5}
+          maxItemsShown={4}
           searchable={true}
         />
       </>
@@ -48,7 +48,7 @@ export const RegionAddressFields: FC<RegionAddressFieldsProps> = ({
 
   return (
     <TextInput
-      placeholder="City"
+      placeholder="Town/City"
       name="address-level3"
       value={address?.city ?? ''}
       onChange={(error) => handleFieldChange('city', error.target.value)}

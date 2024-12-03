@@ -1,8 +1,13 @@
 import { NextPage, Viewport } from 'next';
 import { RenewalEligibilityFlow } from '@/root/src/member-eligibility/renewal/RenewalEligibilityFlow';
+import AuthProvider from '@/context/Auth/AuthProvider';
 
 const Renewal: NextPage = () => {
-  return <RenewalEligibilityFlow />;
+  return (
+    <AuthProvider>
+      <RenewalEligibilityFlow />
+    </AuthProvider>
+  );
 };
 
 export const viewport: Viewport = {

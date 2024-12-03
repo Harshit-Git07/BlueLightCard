@@ -30,7 +30,7 @@ export const ButtonColour: ThemeColorTokens = {
   [ThemeVariant.Secondary]: {
     base: {
       bg: '',
-      hover: `hover:bg-${BUTTON_SECONDARY}-hover-bg-colour-light dark:hover:bg-${BUTTON_SECONDARY}-hover-bg-colour-dark hover:text-${BUTTON_SECONDARY}-hover-label-colour-light dark:hover:text-${BUTTON_SECONDARY}-hover-label-colour-dark`,
+      hover: `hover:bg-${BUTTON_SECONDARY}-hover-bg-colour-light dark:hover:bg-${BUTTON_SECONDARY}-hover-bg-colour-dark hover:text-${BUTTON_SECONDARY}-hover-label-colour-light dark:hover:text-${BUTTON_SECONDARY}-hover-label-colour-dark hover:border-transparent`,
       focus: 'focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]',
       text: `text-${BUTTON_SECONDARY}-default-label-colour-light dark:text-${BUTTON_SECONDARY}-default-label-colour-dark`,
       border: `border-${BUTTON_SECONDARY}-default-border-colour-light dark:border-${BUTTON_SECONDARY}-default-border-colour-dark`,
@@ -79,15 +79,15 @@ export const ButtonColour: ThemeColorTokens = {
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  Large: 'h-10 flex items-center justify-center gap-2',
-  XSmall: `h-7 flex items-center justify-center gap-2 ${fonts.labelSemiBold}`,
-  Small: 'h-8 flex items-center justify-center gap-2',
+  Large: 'h-[40px] flex items-center justify-center gap-[8px]',
+  XSmall: `h-[28px] flex items-center justify-center gap-[8px] ${fonts.labelSemiBold}`,
+  Small: 'h-[32px] flex items-center justify-center gap-[8px]',
 };
 
 const sizeSpecificPadding: Record<ButtonSize, string> = {
-  Large: 'py-2 px-6',
-  XSmall: 'py-2 px-2',
-  Small: 'py-1 px-3',
+  Large: 'py-[8px] px-[24px]',
+  XSmall: 'py-[8px] px-[8px]',
+  Small: 'py-[4px] px-[12px]',
 };
 
 const Button: FC<ButtonProps> = ({
@@ -120,7 +120,7 @@ const Button: FC<ButtonProps> = ({
   }, []);
 
   const classes = cssUtil([
-    'px-5 rounded transition border-2',
+    'rounded transition border-1',
     sizeSpecificStyles,
     disabled ? colourToken.disabled : '',
     colourToken.text,
@@ -142,9 +142,9 @@ const Button: FC<ButtonProps> = ({
       disabled={ButtonTag === 'button' ? disabled : undefined} // Apply disabled only for buttons
       onClick={ButtonTag === 'button' ? onClick : undefined} // Apply onClick only for buttons
     >
-      {iconLeft && <FontAwesomeIcon className="mr-2" icon={iconLeft} />}
+      {iconLeft && <FontAwesomeIcon className="mr-[4px]" icon={iconLeft} />}
       {children}
-      {iconRight && <FontAwesomeIcon className="ml-2" icon={iconRight} />}
+      {iconRight && <FontAwesomeIcon className="ml-[4px]" icon={iconRight} />}
     </ButtonTag>
   );
 };

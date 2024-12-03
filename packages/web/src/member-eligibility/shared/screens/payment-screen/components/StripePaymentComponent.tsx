@@ -5,6 +5,8 @@ import PaymentForm, {
 import React, { FC, useCallback } from 'react';
 import { useStripeClient } from '@/root/src/member-eligibility/shared/screens/payment-screen/providers/Stripe';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
+import { paymentEvents } from '@/root/src/member-eligibility/shared/screens/payment-screen/ampltitude-events/PaymentEvents';
 
 interface Props {
   eligibilityDetailsState: EligibilityDetailsState;
@@ -18,7 +20,7 @@ export const StripePaymentComponent: FC<Props> = ({
   onBack,
 }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
-
+  const logAnalyticsEvent = useLogAmplitudeEvent();
   const stripeClient = useStripeClient();
 
   const onPaymentResult = useCallback(
@@ -27,13 +29,13 @@ export const StripePaymentComponent: FC<Props> = ({
         // TODO: Should we handle this? The payment component already shows an error
         return;
       }
-
+      logAnalyticsEvent(paymentEvents.onPayClicked(eligibilityDetails));
       setEligibilityDetails({
         ...eligibilityDetails,
         currentScreen: 'Success Screen',
       });
     },
-    [eligibilityDetails, setEligibilityDetails]
+    [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails]
   );
 
   if (!stripeClient) return null;

@@ -1,14 +1,22 @@
 import { act, renderHook } from '@testing-library/react';
 import * as target from './UseOnBack';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/EligibilityDetails';
+import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
+
+jest.mock('@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent');
+
+const useLogAmplitudeEventMock = jest.mocked(useLogAmplitudeEvent);
+
+const logAmplitudeEventMock = jest.fn();
+const setEligibilityDetailsMock = jest.fn();
 
 type OnBackHookResult = ReturnType<typeof target.useOnBack>;
-
-const setEligibilityDetailsMock = jest.fn();
 let onBack: OnBackHookResult;
 
 beforeEach(() => {
   jest.clearAllMocks();
+
+  useLogAmplitudeEventMock.mockReturnValue(logAmplitudeEventMock);
 });
 
 describe('given user can skip ID verification', () => {

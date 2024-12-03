@@ -1,5 +1,5 @@
 import * as target from './GetOrganisations';
-import { ServiceLayerOrganisation } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-organisations/types/ServiceLayerOrganisation';
+import { ServiceLayerOrganisation } from '@/root/src/member-eligibility/shared/types/ServiceLayerOrganisation';
 
 window.fetch = jest.fn();
 
@@ -25,7 +25,7 @@ describe('given service layer responses successfully', () => {
     const result = await target.getOrganisations();
 
     expect(fetchMock).toHaveBeenCalledWith(
-      'https://qqbvufuinh.execute-api.eu-west-2.amazonaws.com/v1/members/orgs'
+      'https://kbb684h8h8.execute-api.eu-west-2.amazonaws.com/v1/orgs'
     );
     expect(result).toEqual(serviceLayerEmployers);
   });
@@ -40,7 +40,7 @@ describe('given service layer fails to respond', () => {
     const result = await target.getOrganisations();
 
     expect(fetchMock).toHaveBeenCalledWith(
-      'https://qqbvufuinh.execute-api.eu-west-2.amazonaws.com/v1/members/orgs'
+      'https://kbb684h8h8.execute-api.eu-west-2.amazonaws.com/v1/orgs'
     );
     expect(result).toEqual(undefined);
   });

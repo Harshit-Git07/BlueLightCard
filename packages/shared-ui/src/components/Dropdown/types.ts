@@ -5,7 +5,7 @@ export type DropdownProps = {
   placeholder: string;
   disabled?: boolean;
   searchable?: boolean;
-  customClass?: string;
+  dropdownItemsClassName?: string;
   onSelect: (option: DropdownOption) => void;
   onOpen?: (listbox: HTMLElement) => void;
   label?: string;

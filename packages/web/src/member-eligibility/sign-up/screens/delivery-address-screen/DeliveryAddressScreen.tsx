@@ -11,12 +11,18 @@ import { useAddressIsValid } from '@/root/src/member-eligibility/sign-up/screens
 import { useOnAddressSubmitted } from '@/root/src/member-eligibility/sign-up/screens/delivery-address-screen/hooks/UseOnAddressSubmitted';
 import { useOnBack } from '@/root/src/member-eligibility/sign-up/screens/delivery-address-screen/hooks/UseOnBack';
 import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
+import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
 
 export const DeliveryAddressScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
+  const [eligibilityDetails] = eligibilityDetailsState;
+
+  useLogAnalyticsPageView(eligibilityDetails);
+
   const fuzzyFrontEndButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
   const isValid = useAddressIsValid(eligibilityDetailsState);
+
   const handleNext = useOnAddressSubmitted(eligibilityDetailsState);
   const handleBack = useOnBack(eligibilityDetailsState);
 

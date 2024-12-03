@@ -18,6 +18,9 @@ export const colours = {
     'bg-colour-primary-container-light dark:bg-colour-primary-container-dark',
   backgroundOnSurfaceOutline: 'bg-colour-onSurface-outline dark:bg-colour-onSurface-outline-dark',
 
+  // These colours relate to elements that sit on the success background so they "pop" out
+  onSuccessBright: 'text-colour-onSuccess-bright dark:text-colour-onSuccess-bright-dark',
+
   borderPrimary: 'border-colour-primary dark:border-colour-primary-dark',
   borderPrimaryOnFocus: 'focus:border-colour-primary dark:focus:border-colour-primary-dark',
   borderPrimaryHover: 'border-colour-primary-hover dark:border-colour-primary-hover-dark',

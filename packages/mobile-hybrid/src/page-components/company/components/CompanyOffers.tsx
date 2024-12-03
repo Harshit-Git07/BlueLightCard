@@ -1,36 +1,32 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { useAtom } from 'jotai';
+import { useMedia } from 'react-use';
 import {
   ResponsiveOfferCard,
   PlatformVariant,
   useOfferDetails,
   Heading,
+  getCompanyQuery,
+  getCompanyOffersQuery,
 } from '@bluelightcard/shared-ui';
-import { useAtom } from 'jotai';
-import { FC } from 'react';
-import { companyDataAtom, selectedFilter } from '../atoms';
-import { OfferModel, CMSOfferModel } from '../types';
-import { useMedia } from 'react-use';
+import { selectedFilter } from '../atoms';
+import { useCmsEnabled } from '@/hooks/useCmsEnabled';
+import { V2CompaniesGetCompanyOffersResponse } from '@blc/offers-cms/api';
 
-const getFilteredOffers = (
-  offers: (OfferModel | CMSOfferModel)[] | undefined,
-  selectedType: string,
-) => {
-  if (!offers) {
-    return [];
-  }
+const getFilteredOffers = (offers: V2CompaniesGetCompanyOffersResponse, selectedType: string) => {
   if (selectedType === 'All') {
     return offers;
   }
-  return offers.filter((offer: OfferModel | CMSOfferModel) => offer.type === selectedType);
+  return offers.filter((offer) => offer.type === selectedType);
 };
 
-const CompanyOffers: FC = () => {
+const CompanyOffers = ({ companyId }: { companyId: string }) => {
   const { viewOffer } = useOfferDetails();
   const isMobile = useMedia('(max-width: 500px)');
 
-  const companyData = useAtom(companyDataAtom)[0];
-  const offers = companyData?.offers;
-  const companyId = companyData?.companyId;
-  const companyName = companyData?.companyName;
+  const cmsEnabled = useCmsEnabled();
+  const companyName = useSuspenseQuery(getCompanyQuery(companyId, cmsEnabled)).data.name;
+  const offers = useSuspenseQuery(getCompanyOffersQuery(companyId, cmsEnabled)).data;
 
   const [selectedType] = useAtom(selectedFilter);
 
@@ -61,7 +57,7 @@ const CompanyOffers: FC = () => {
 
   return (
     <>
-      {filteredOffers.map((offer: OfferModel | CMSOfferModel) => {
+      {filteredOffers.map((offer) => {
         return (
           <div key={offer.id} className="pb-2">
             <ResponsiveOfferCard

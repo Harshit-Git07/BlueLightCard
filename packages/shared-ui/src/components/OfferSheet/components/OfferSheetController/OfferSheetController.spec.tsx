@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../../../adapters';
-import OfferSheetControler from '.';
+import OfferSheetController from '.';
 import { render, waitFor } from '@testing-library/react';
 import { QueryClientProvider, QueryClient, useQuery } from '@tanstack/react-query';
 import { SharedUIConfigProvider } from 'src/providers';
@@ -34,7 +34,7 @@ function renderComponent() {
     <SharedUIConfigProvider value={MockSharedUiConfig}>
       <QueryClientProvider client={mockQueryClient}>
         <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <OfferSheetControler />
+          <OfferSheetController />
         </PlatformAdapterProvider>
       </QueryClientProvider>
     </SharedUIConfigProvider>,

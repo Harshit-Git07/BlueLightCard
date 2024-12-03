@@ -1,13 +1,12 @@
-import { useState, useContext, useEffect, Suspense } from 'react';
-import Head from 'next/head';
-import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
-import { useMedia } from 'react-use';
 import type { PortableTextBlock } from '@portabletext/react';
-import { advertQuery } from 'src/graphql/advertQuery';
-import { makeQuery } from 'src/graphql/makeQuery';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { shuffle } from 'lodash';
-import { BRAND } from '@/global-vars';
-import UserContext from '@/context/User/UserContext';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useState, useContext, useEffect, Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { useMedia } from 'react-use';
+
 import {
   Container,
   CompanyAbout,
@@ -15,22 +14,26 @@ import {
   CampaignCard,
   useOfferDetails,
   getCompanyQuery,
+  LoadingSpinner,
 } from '@bluelightcard/shared-ui';
-import getI18nStaticProps from '@/utils/i18nStaticProps';
+
 import AmplitudeContext from '@/context/AmplitudeContext';
+import UserContext from '@/context/User/UserContext';
+import { BRAND } from '@/global-vars';
+import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 import amplitudeEvents from '@/utils/amplitude/events';
 import { logCompanyView } from '@/utils/amplitude/logCompanyView';
-import { BRANDS } from '../common/types/brands.enum';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import getI18nStaticProps from '@/utils/i18nStaticProps';
+
+import { advertQuery } from 'src/graphql/advertQuery';
+import { makeQuery } from 'src/graphql/makeQuery';
 import { useCmsEnabled } from '../common/hooks/useCmsEnabled';
-import CompanyPageOffers from '../page-components/Company/CompanyPageOffers';
+import { BRANDS } from '../common/types/brands.enum';
+import CompanyPageError from '../page-components/Company/CompanyPageError';
 import CompanyPageFilters from '../page-components/Company/CompanyPageFilters';
-import { ErrorBoundary } from 'react-error-boundary';
-import LoadingSpinner from '@bluelightcard/shared-ui/components/LoadingSpinner';
-import { useRouter } from 'next/router';
+import CompanyPageOffers from '../page-components/Company/CompanyPageOffers';
 import CompanyPageWebHeader from '../page-components/Company/CompanyPageWebHeader';
 import { BannerDataType } from '../page-components/Company/types';
-import CompanyPageError from '../page-components/Company/CompanyPageError';
 
 const getBrand = () => {
   switch (BRAND) {

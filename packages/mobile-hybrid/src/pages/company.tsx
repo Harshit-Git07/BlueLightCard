@@ -1,197 +1,113 @@
-import { spinner } from '@/modules/Spinner/store';
-import { useAtom, useSetAtom } from 'jotai';
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 import { PortableTextBlock, toPlainText } from '@portabletext/react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { useSetAtom } from 'jotai';
+import { type NextPage } from 'next';
+import { useRouter } from 'next/router';
+import { useEffect, Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ToastContainer } from 'react-toastify';
+
 import {
-  CMS_SERVICES,
   CompanyAbout,
   PlatformVariant,
-  apiDynamicPath,
   useOfferDetails,
+  getCompanyQuery,
 } from '@bluelightcard/shared-ui';
-import { companyDataAtom } from '@/page-components/company/atoms';
+
+import { FeatureFlags, AmplitudeFeatureFlagState } from '@/components/AmplitudeProvider';
+import { useAmplitude } from '@/hooks/useAmplitude';
+import { useCmsEnabled } from '@/hooks/useCmsEnabled';
+import InvokeNativeAnalytics from '@/invoke/analytics';
+import { spinner } from '@/modules/Spinner/store';
 import CompanyPageHeader from '@/page-components/company/components/CompanyPageHeader';
 import PillsController from '@/page-components/company/components/PillsController';
 import CompanyOffers from '@/page-components/company/components/CompanyOffers';
-import { MobilePlatformAdapter } from '@/utils/platformAdapter';
-import {
-  CMSOfferModel,
-  CMSZodOfferResponseModel,
-  OfferModel,
-  ZodCompanyModel,
-  ZodCompanyResponseModel,
-  ZodOfferResponseModel,
-} from '@/page-components/company/types';
-import { amplitudeStore } from '@/components/AmplitudeProvider/AmplitudeProvider';
-import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
-import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import CompanyPageError from '@/page-components/company/components/CompanyPageError';
-import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
-import { ToastContainer } from 'react-toastify';
 
 const analytics = new InvokeNativeAnalytics();
 
-const Company: NextPage<any> = () => {
+const Company: NextPage = () => {
   const router = useRouter();
-  const { cid, oid } = router.query;
-  const { viewOffer } = useOfferDetails();
-
-  const setSpinner = useSetAtom(spinner);
-  const [company, setCompany] = useAtom(companyDataAtom);
-  const [hasError, setHasError] = useState<boolean>(false);
-
-  const [retries, setRetries] = useState<number>(0);
-  const maxRetries = 150; // maxRetries * 100ms is the timeout for the page load
-
-  const amplitudeExperiments = amplitudeStore.get(experimentsAndFeatureFlags);
-  let v5FlagOn = amplitudeExperiments[FeatureFlags.V5_API_INTEGRATION] === 'on';
-  let isCmsFlagOn = amplitudeExperiments[FeatureFlags.CMS_OFFERS] === 'on';
-
-  useEffect(() => {
-    // if oid=null or oid=0, we do not trigger the OfferSheet as these are not valid Id's we should handle
-    if (oid && oid !== 'null' && oid !== '0' && cid && company?.companyName) {
-      viewOffer({
-        offerId: oid as string,
-        companyId: cid as string,
-        companyName: company?.companyName || '',
-        platform: PlatformVariant.MobileHybrid,
-      });
-    }
-    // viewOffer is a dependency of this useEffect, but we only want to run it once
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [oid, cid, company?.companyName]);
-
-  useEffect(() => {
-    const getOffers = async () => {
-      const platformAdapter = new MobilePlatformAdapter();
-      const companyRetrieve = platformAdapter.invokeV5Api(
-        apiDynamicPath({
-          service: CMS_SERVICES.COMPANY_DATA,
-          isCmsFlagOn,
-          companyId: cid as string,
-        }),
-        {
-          method: 'GET',
-        },
-      );
-      const offersRetrieve = platformAdapter.invokeV5Api(
-        apiDynamicPath({
-          service: CMS_SERVICES.OFFERS_BY_COMPANY_DATA,
-          isCmsFlagOn,
-          companyId: cid as string,
-        }),
-        {
-          method: 'GET',
-        },
-      );
-
-      const [companyResponse, offersResponse] = await Promise.all([
-        companyRetrieve,
-        offersRetrieve,
-      ]);
-
-      // Offer probably doesnt exist or at least somethings gone wrong with the data
-      if (!companyResponse.data || !offersResponse.data) {
-        if (!companyResponse.data) {
-          setHasError(true);
-        }
-        setSpinner(false);
-        return;
-      }
-
-      if (isCmsFlagOn) {
-        const company = ZodCompanyModel.parse(JSON.parse(companyResponse.data));
-        const offers = CMSZodOfferResponseModel.parse(JSON.parse(offersResponse.data));
-        console.log('company', company);
-        setCompany({
-          companyId: company.id,
-          companyName: company.name,
-          companyDescription: company.description,
-          offers: offers as CMSOfferModel[],
-        });
-
-        analytics.logAnalyticsEvent({
-          event: AmplitudeEvents.COMPANYPAGE_VIEWED,
-          parameters: {
-            company_id: cid,
-            company_name: company.name,
-            origin: 'mobile-hybrid',
-          },
-        });
-      } else {
-        const company = ZodCompanyResponseModel.parse(JSON.parse(companyResponse.data));
-        const offers = ZodOfferResponseModel.parse(JSON.parse(offersResponse.data));
-        setCompany({
-          companyId: company.data.id,
-          companyName: company.data.name,
-          companyDescription: company.data.description,
-          offers: offers.data.offers as OfferModel[],
-        });
-
-        analytics.logAnalyticsEvent({
-          event: AmplitudeEvents.COMPANYPAGE_VIEWED,
-          parameters: {
-            company_id: cid,
-            company_name: company.data.name,
-            origin: 'mobile-hybrid',
-          },
-        });
-      }
-
-      setSpinner(false);
-    };
-
-    // Give up trying to refetch the data from the hybrid event-bus after maxRetry count
-    if (retries > maxRetries) {
-      setSpinner(false);
-      return;
-    }
-
-    if (!cid) {
-      return;
-    }
-
-    // Waiting for the flag data to be pulled from mobile, it's a dependency of the offer sheet
-    if (!v5FlagOn) {
-      setTimeout(() => {
-        // Update retry after timeout to retrigger the useEffect
-        setRetries(retries + 1);
-      }, 100);
-      return;
-    } else {
-      getOffers();
-    }
-  }, [cid, retries, setCompany, setSpinner, v5FlagOn, isCmsFlagOn]);
+  const cid = Array.isArray(router.query.cid) ? router.query.cid[0] : router.query.cid;
 
   return (
     <div className="px-4">
-      {hasError ? (
-        <CompanyPageError message="Failed to load company" />
-      ) : (
-        <>
-          <CompanyPageHeader />
-          <PillsController />
-          <CompanyOffers />
+      {cid && (
+        <ErrorBoundary fallback={<CompanyPageError message="Failed to load company" />}>
+          <Suspense>
+            <CompanyPageHeader companyId={cid} />
+            <PillsController companyId={cid} />
+            <CompanyOffers companyId={cid} />
+            <CompanyAboutWrapper companyId={cid} />
 
-          <div className="mt-4">
-            <CompanyAbout
-              CompanyName={`About ${company?.companyName ?? ''}`}
-              CompanyDescription={
-                isCmsFlagOn && company?.companyDescription
-                  ? toPlainText(company.companyDescription as PortableTextBlock)
-                  : company?.companyDescription ?? ''
-              }
-              platform={PlatformVariant.MobileHybrid}
-            />
-          </div>
-          <ToastContainer hideProgressBar />
-        </>
+            <ToastContainer hideProgressBar />
+            <SheetHandler companyId={cid} />
+          </Suspense>
+        </ErrorBoundary>
       )}
     </div>
   );
+};
+
+function CompanyAboutWrapper({ companyId }: Readonly<{ companyId: string }>) {
+  const cmsEnabled = useCmsEnabled();
+  const { name, description } = useSuspenseQuery(getCompanyQuery(companyId, cmsEnabled)).data;
+
+  return (
+    <div className="mt-4">
+      <CompanyAbout
+        CompanyName={`About ${name}`}
+        CompanyDescription={
+          cmsEnabled && description
+            ? toPlainText(description as PortableTextBlock)
+            : description ?? ''
+        }
+        platform={PlatformVariant.MobileHybrid}
+      />
+    </div>
+  );
+}
+
+const SheetHandler = ({ companyId }: { companyId: string }) => {
+  const setSpinner = useSetAtom(spinner);
+  const { is } = useAmplitude();
+  const cmsEnabled = is(FeatureFlags.CMS_OFFERS, AmplitudeFeatureFlagState.On);
+
+  const { viewOffer } = useOfferDetails();
+  const router = useRouter();
+  const offerId = router.query.oid as string | undefined;
+
+  const companyName = useSuspenseQuery(getCompanyQuery(companyId, cmsEnabled)).data.name;
+
+  useEffect(() => {
+    analytics.logAnalyticsEvent({
+      event: AmplitudeEvents.COMPANYPAGE_VIEWED,
+      parameters: {
+        company_id: companyId,
+        company_name: companyName,
+        origin: 'mobile-hybrid',
+      },
+    });
+
+    if (companyName) {
+      setSpinner(false);
+    }
+  }, [companyId, companyName, setSpinner]);
+
+  useEffect(() => {
+    if (offerId && offerId !== 'null') {
+      viewOffer({
+        offerId,
+        companyId,
+        companyName,
+        platform: PlatformVariant.MobileHybrid,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offerId, companyId]);
+
+  return null;
 };
 
 export default Company;

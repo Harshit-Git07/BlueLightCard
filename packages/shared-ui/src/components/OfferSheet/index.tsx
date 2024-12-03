@@ -2,7 +2,7 @@ import { SharedProps } from '../../types';
 import { FC, useEffect, useState } from 'react';
 import DynamicSheet from '../DynamicSheet';
 import { offerSheetAtom } from './store';
-import OfferSheetControler from './components/OfferSheetControler';
+import OfferSheetController from './components/OfferSheetController';
 import events from '../../utils/amplitude/events';
 import { useAtomValue } from 'jotai';
 import { usePlatformAdapter } from '../../adapters';
@@ -58,11 +58,9 @@ const OfferSheet: FC<Props> = () => {
   }, [isOpen]);
 
   return (
-    <>
-      <DynamicSheet showCloseButton containerClassName="flex flex-col justify-between">
-        <OfferSheetControler />
-      </DynamicSheet>
-    </>
+    <DynamicSheet showCloseButton containerClassName="flex flex-col justify-between">
+      <OfferSheetController />
+    </DynamicSheet>
   );
 };
 

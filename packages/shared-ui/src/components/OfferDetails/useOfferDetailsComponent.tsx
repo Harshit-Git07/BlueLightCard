@@ -32,9 +32,8 @@ export const OfferDetailsLink: FC<OfferDetailsComponentProps> = () => {
   });
 
   const onOpen = () => {
-    platformAdapter.navigate(
-      `/offerdetails.php?cid=${offerMeta?.companyId}${offerQuery?.data ? `&oid=${offerMeta.offerId}` : ''}`,
-    );
+    const offerIdParam = offerQuery?.data ? `&oid=${offerMeta.offerId}` : '';
+    platformAdapter.navigate(`/offerdetails.php?cid=${offerMeta?.companyId}${offerIdParam}`);
     onClose();
   };
 
@@ -86,8 +85,8 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
     companyId: number | string;
     companyName: string;
     platform: PlatformVariant;
-    amplitudeCtx?: Amplitude | null | undefined;
-    responsiveWeb?: boolean | undefined;
+    amplitudeCtx?: Amplitude | null;
+    responsiveWeb?: boolean;
   }): Promise<void> {
     const redemptionType = await setRedemptionsDetails(offerData.offerId);
     const experiment = getPlatformExperimentForRedemptionType(platformAdapter, redemptionType);

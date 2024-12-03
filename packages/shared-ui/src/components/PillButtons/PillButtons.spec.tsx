@@ -1,8 +1,7 @@
 import PillButtons, { Props } from './';
 import { act, render, screen, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import userEvent, { type UserEvent } from '@testing-library/user-event';
 import '@testing-library/jest-dom';
-import { UserEvent } from '@testing-library/user-event';
 
 describe('PillButtons component', () => {
   let props: Props;

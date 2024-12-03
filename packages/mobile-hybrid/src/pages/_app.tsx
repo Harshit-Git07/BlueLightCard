@@ -11,12 +11,14 @@ import { museoFont, sourceSansPro } from '@/font';
 import Spinner from '@/modules/Spinner';
 import AmplitudeProvider from '@/components/AmplitudeProvider/AmplitudeProvider';
 import { BRAND, CDN_URL, USE_DEV_TOOLS } from '@/globals';
-import { SharedUIConfigProvider, ViewOfferProvider } from '@bluelightcard/shared-ui';
+import {
+  SharedUIConfigProvider,
+  ViewOfferProvider,
+  PlatformAdapterProvider,
+} from '@bluelightcard/shared-ui';
 import { experimentKeys, featureFlagKeys } from '@/components/AmplitudeProvider/amplitudeKeys';
-import { PlatformAdapterProvider } from '@bluelightcard/shared-ui';
 import { MobilePlatformAdapter } from '@/utils/platformAdapter';
-import { QueryClient } from '@tanstack/react-query';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import UserProfileProvider from '@/components/UserProfileProvider/UserProfileProvider';
 import DeeplinkOverrideRouter from '@/components/DeeplinkOverrideRouter/DeeplinkOverrideRouter';
 import DevToolsDrawer from '@/components/DevToolsDrawer';

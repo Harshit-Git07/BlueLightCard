@@ -31,6 +31,7 @@ export { default as PillGroup } from './components/PillGroup';
 export { default as Typography } from './components/Typography';
 export { default as PaginationControls } from './components/PaginationControls';
 export { default as EventBus } from './lib/eventBus';
+export { default as LoadingSpinner } from './components/LoadingSpinner';
 export { default as useDrawer } from './components/Drawer/useDrawer';
 
 export { default as NoCardImage } from './components/svgs/NoCardImage';

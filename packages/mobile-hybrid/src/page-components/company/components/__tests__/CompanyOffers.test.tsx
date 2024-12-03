@@ -1,123 +1,113 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { render, RenderOptions, waitFor, screen } from '@testing-library/react';
+import { Suspense } from 'react';
 import { useMedia } from 'react-use';
-import { useAtom } from 'jotai';
-import CompanyOffers from '../CompanyOffers';
-import { companyDataAtom, selectedFilter } from '../../atoms';
 
-// Mock the useMedia hook
+import { useCmsEnabled } from '@/hooks/useCmsEnabled';
+
+import { selectedFilter } from '../../atoms';
+import CompanyOffers from '../CompanyOffers';
+import { FiltersType } from '../../types';
+import {
+  OfferDetailsContext,
+  PlatformAdapterProvider,
+  useMockPlatformAdapter,
+} from '@bluelightcard/shared-ui';
+import { createFactoryMethod } from '@/utils/createFactoryMethod';
+import { Offer } from '@blc/offers-cms/api/schema';
+import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
+
+jest.mock('@/hooks/useCmsEnabled');
 jest.mock('react-use', () => ({
   useMedia: jest.fn(),
 }));
 
-// Mock the useAtom hook
-jest.mock('jotai', () => ({
-  useAtom: jest.fn(),
-  atom: jest.requireActual('jotai').atom,
-}));
+const mockUseMedia = jest.mocked(useMedia);
+const mockUseCmsEnabled = jest.mocked(useCmsEnabled);
+mockUseCmsEnabled.mockReturnValue(true);
+const viewOfferMock = jest.fn();
 
-const mockUseMedia = useMedia as jest.Mock;
-const mockUseAtom = useAtom as jest.Mock;
+const companyId = '123';
+
+const createOffer = createFactoryMethod<Offer>({
+  companyId,
+  description: null,
+  expires: '2022-01-01T00:00:00',
+  id: '1',
+  image: 'offer1.jpg',
+  name: 'Offer 1',
+  type: 'online',
+  termsAndConditions: null,
+});
 
 describe('Company Offers Component', () => {
+  const mockPlatformAdapter = useMockPlatformAdapter();
+  const createWrapper = (initialFilter: FiltersType): RenderOptions['wrapper'] =>
+    function Wrapper({ children }) {
+      return (
+        <QueryClientProvider client={new QueryClient()}>
+          <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+            <JotaiTestProvider initialValues={[[selectedFilter, initialFilter]]}>
+              <OfferDetailsContext.Provider value={{ viewOffer: viewOfferMock }}>
+                <Suspense fallback="loading">{children}</Suspense>
+              </OfferDetailsContext.Provider>
+            </JotaiTestProvider>
+          </PlatformAdapterProvider>
+        </QueryClientProvider>
+      );
+    };
+
+  const renderComponent = (companyId: string, initialFilter: FiltersType) =>
+    render(<CompanyOffers companyId={companyId} />, { wrapper: createWrapper(initialFilter) });
+
   beforeEach(() => {
-    // Clear all mocks before each test
     jest.clearAllMocks();
   });
 
-  it('should render No offers have been found on desktop', () => {
-    // Mock useMedia to return false (desktop)
-    mockUseMedia.mockReturnValue(false);
+  it.each([[true], [false]])(
+    'should render No offers have been found when isMobile is %s',
+    async (isMobile) => {
+      mockUseMedia.mockReturnValue(isMobile);
 
-    // Mock useAtom to return empty offers
-    mockUseAtom.mockImplementation((atom) => {
-      if (atom === companyDataAtom) {
-        return [{ offers: [] }];
-      }
-      if (atom === selectedFilter) {
-        return ['All'];
-      }
-      return [];
+      mockPlatformAdapter.invokeV5Api.mockResolvedValueOnce({
+        status: 200,
+        data: JSON.stringify({ name: 'Company Name', id: companyId }),
+      });
+      mockPlatformAdapter.invokeV5Api.mockResolvedValueOnce({
+        status: 200,
+        data: JSON.stringify([]),
+      });
+
+      renderComponent(companyId, 'All');
+      await waitFor(() => {
+        expect(screen.getByRole('heading', { name: /no offers have been found\./i })).toBeTruthy();
+      });
+    },
+  );
+
+  it.each([[true], [false]])('should render offers when isMobile is %s', async (isMobile) => {
+    mockUseMedia.mockReturnValue(isMobile);
+
+    const offers = [
+      createOffer({ id: '1', name: 'Offer 1', image: 'offer1.jpg', type: 'in-store' }),
+      createOffer({ id: '2', name: 'Offer 2', image: 'offer2.jpg', type: 'local' }),
+    ];
+
+    mockPlatformAdapter.invokeV5Api.mockResolvedValueOnce({
+      status: 200,
+      data: JSON.stringify({ name: 'Company Name', id: companyId }),
+    });
+    mockPlatformAdapter.invokeV5Api.mockResolvedValueOnce({
+      status: 200,
+      data: JSON.stringify(offers),
     });
 
-    const { getByRole } = render(<CompanyOffers />);
-    expect(getByRole('heading', { name: /no offers have been found\./i })).toBeTruthy();
-  });
-
-  it('should render No offers have been found on mobile', () => {
-    // Mock useMedia to return true (mobile)
-    mockUseMedia.mockReturnValue(true);
-
-    // Mock useAtom to return empty offers
-    mockUseAtom.mockImplementation((atom) => {
-      if (atom === companyDataAtom) {
-        return [{ offers: [] }];
-      }
-      if (atom === selectedFilter) {
-        return ['All'];
-      }
-      return [];
+    const { queryByText, getByRole, container } = renderComponent(companyId, 'All');
+    await waitFor(() => {
+      expect(queryByText(/no offers have been found\./i)).toBeFalsy();
+      expect(getByRole('img', { name: /offer 1 offer/i })).toBeTruthy();
+      expect(getByRole('img', { name: /offer 2 offer/i })).toBeTruthy();
+      expect(container).toMatchSnapshot();
     });
-
-    const { getByRole } = render(<CompanyOffers />);
-    expect(getByRole('heading', { name: /no offers have been found\./i })).toBeTruthy();
-  });
-
-  it('should render offers when available on desktop', () => {
-    // Mock useMedia to return false (desktop)
-    mockUseMedia.mockReturnValue(false);
-
-    // Mock useAtom to return empty offers
-    mockUseAtom.mockImplementation((atom) => {
-      if (atom === companyDataAtom) {
-        return [
-          {
-            offers: [
-              { id: 1, name: 'Offer 1', image: 'image1.jpg', type: 'Type1' },
-              { id: 2, name: 'Offer 2', image: 'image2.jpg', type: 'Type2' },
-            ],
-          },
-        ];
-      }
-      if (atom === selectedFilter) {
-        return ['All'];
-      }
-      return [];
-    });
-
-    const { queryByText, getByRole, container } = render(<CompanyOffers />);
-    expect(queryByText(/no offers have been found\./i)).toBeFalsy();
-    expect(getByRole('img', { name: /offer 1 offer/i })).toBeTruthy();
-    expect(getByRole('img', { name: /offer 2 offer/i })).toBeTruthy();
-    expect(container).toMatchSnapshot();
-  });
-
-  it('should render offers when available on mobile', () => {
-    // Mock useMedia to return false (desktop)
-    mockUseMedia.mockReturnValue(true);
-
-    // Mock useAtom to return empty offers
-    mockUseAtom.mockImplementation((atom) => {
-      if (atom === companyDataAtom) {
-        return [
-          {
-            offers: [
-              { id: 1, name: 'Offer 1', image: 'image1.jpg', type: 'Type1' },
-              { id: 2, name: 'Offer 2', image: 'image2.jpg', type: 'Type2' },
-            ],
-          },
-        ];
-      }
-      if (atom === selectedFilter) {
-        return ['All'];
-      }
-      return [];
-    });
-
-    const { queryByText, getByRole, container } = render(<CompanyOffers />);
-    expect(queryByText(/no offers have been found\./i)).toBeFalsy();
-    expect(getByRole('img', { name: /offer 1 offer/i })).toBeTruthy();
-    expect(getByRole('img', { name: /offer 2 offer/i })).toBeTruthy();
-    expect(container).toMatchSnapshot();
   });
 });

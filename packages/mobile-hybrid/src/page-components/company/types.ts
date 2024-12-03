@@ -40,7 +40,7 @@ export const ZodOfferModel = z.object({
   description: z.string(),
   name: z.string(),
   type: z.string(),
-  expiry: z.string(),
+  expiry: z.string().nullable(),
   terms: z.string(),
   image: z.string(),
 });
@@ -69,5 +69,4 @@ export const ZodCompanyResponseModel = z.object({
   data: ZodCompanyModel,
 });
 
-// Pill/Filter types
-export type filtersType = 'All' | keyof typeof offerTypeLabelMap;
+export type FiltersType = 'All' | keyof typeof offerTypeLabelMap;

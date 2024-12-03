@@ -1,14 +1,24 @@
 import { useHydrateAtoms } from 'jotai/utils';
 import { Provider } from 'jotai';
 
-// @ts-ignore
-const HydrateAtoms = ({ initialValues, children }) => {
+const HydrateAtoms = ({
+  initialValues,
+  children,
+}: {
+  initialValues: any;
+  children: React.ReactNode;
+}) => {
   useHydrateAtoms(initialValues);
   return children;
 };
 
-// @ts-ignore
-export const JotaiTestProvider = ({ initialValues, children }) => (
+export const JotaiTestProvider = ({
+  initialValues,
+  children,
+}: {
+  initialValues: any;
+  children: React.ReactNode;
+}) => (
   <Provider>
     <HydrateAtoms initialValues={initialValues}>{children}</HydrateAtoms>
   </Provider>

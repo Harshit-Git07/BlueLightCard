@@ -6,10 +6,7 @@ import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
 import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { useAmplitude } from '@/hooks/useAmplitude';
-import {
-  AmplitudeExperimentState,
-  AmplitudeFeatureFlagState,
-} from '@/components/AmplitudeProvider/types';
+import { AmplitudeExperimentState } from '@/components/AmplitudeProvider/types';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();

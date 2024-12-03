@@ -1,14 +1,13 @@
 import { FC, useEffect, useState } from 'react';
-import { Amplitude, IPlatformAdapter, usePlatformAdapter } from '../../adapters';
-import { getRedemptionDetails } from '../../api';
-import OfferSheet from '../OfferSheet';
+import { useQuery } from '@tanstack/react-query';
 import { useAtomValue, useSetAtom } from 'jotai';
+import OfferSheet from '../OfferSheet';
+import { getPlatformExperimentForRedemptionType } from './offerDetailsExperiments';
 import { offerSheetAtom } from '../OfferSheet/store';
 import { RedemptionType } from '../OfferSheet/types';
+import { Amplitude, IPlatformAdapter, usePlatformAdapter } from '../../adapters';
+import { getRedemptionDetails, getOfferQuery } from '../../api';
 import { PlatformVariant } from '../../types';
-import { getPlatformExperimentForRedemptionType } from './offerDetailsExperiments';
-import { useQueryCustomHook } from '../../hooks/useQueryCustomHook';
-import { apiRequest, CMS_SERVICES } from '../../services/apiRequestService';
 
 type OfferDetailsComponentProps = React.ComponentProps<typeof OfferSheet>;
 
@@ -19,17 +18,9 @@ export const OfferDetailsLink: FC<OfferDetailsComponentProps> = () => {
   const { isOpen, onClose, offerMeta } = useAtomValue(offerSheetAtom);
   const cmsFlagResult = platformAdapter.getAmplitudeFeatureFlag('cms-offers');
 
-  const offerQuery = useQueryCustomHook({
-    enabled: !!offerMeta.offerId,
-    queryKeyArr: ['offerDetails', offerMeta.offerId?.toString() as string],
-    queryFnCall: async () =>
-      apiRequest({
-        service: CMS_SERVICES.OFFER_DETAILS_DATA,
-        adapter: platformAdapter,
-        offerId: offerMeta.offerId?.toString() as string,
-        isCmsFlagOn: cmsFlagResult === 'on',
-      }),
-  });
+  const offerQuery = useQuery(
+    getOfferQuery(offerMeta.offerId?.toString(), cmsFlagResult === 'on', isOpen),
+  );
 
   const onOpen = () => {
     const offerIdParam = offerQuery?.data ? `&oid=${offerMeta.offerId}` : '';

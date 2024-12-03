@@ -3,8 +3,7 @@ import { container } from 'tsyringe';
 import { APIGatewayEvent, APIGatewayProxyEventPathParameters } from 'aws-lambda';
 import { Response } from '../../../../core/src/utils/restResponse/response';
 import { HttpStatusCode } from '../../../../core/src/types/http-status-code.enum';
-import { LegacyCompanyOffersResponse } from '../../models/legacy/legacyCompanyOffers';
-import { CompanyOffersService, ICompanyOffersService } from '../../services/CompanyOffersService';
+import { CompanyOffersService } from '../../services/CompanyOffersService';
 import { LambdaLogger } from '../../../../core/src/utils/logger/lambdaLogger';
 import { getEnvRaw } from '../../../../core/src/utils/getEnv';
 import { checkIfEnvironmentVariablesExist } from '../../utils/validation';
@@ -18,7 +17,7 @@ const service = getEnvRaw('SERVICE');
 const blcBaseUrl = getEnvRaw('BASE_URL');
 const offersLegacyApiEndpoint = getEnvRaw('LEGACY_OFFERS_API_ENDPOINT');
 const logger = new LambdaLogger({ serviceName: `${service}-get-offer-detail` });
-let companyOffersService: ICompanyOffersService;
+let companyOffersService: CompanyOffersService;
 const stage = getEnvRaw('STAGE') as string;
 
 if (
@@ -54,10 +53,10 @@ export const handler = async (event: APIGatewayEvent) => {
     return Response.Unauthorized({ message: error.message });
   }
 
-  const { "custom:blc_old_id": uid} = decodedToken;
-  if(!uid) {
-    logger.error({message: 'UID missing from JWT when required.'});
-    return Response.Unauthorized({ message: "Missing required information" });
+  const { 'custom:blc_old_id': uid } = decodedToken;
+  if (!uid) {
+    logger.error({ message: 'UID missing from JWT when required.' });
+    return Response.Unauthorized({ message: 'Missing required information' });
   }
 
   let serviceParams = '';
@@ -79,7 +78,7 @@ export const handler = async (event: APIGatewayEvent) => {
   const queryParams = `id=${offerId}&uid=${uid}${serviceParams}`;
 
   try {
-    const data = await companyOffersService.getOfferById<LegacyCompanyOffersResponse>(
+    const data = await companyOffersService.getOfferById(
       authToken as string,
       offersLegacyApiEndpoint as string,
       queryParams,

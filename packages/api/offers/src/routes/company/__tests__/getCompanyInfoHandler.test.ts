@@ -62,7 +62,9 @@ describe('handler', () => {
   });
 
   it('should return a successful response when the legacy API returns summary as null', async () => {
-    const legacyAPIMockResponse = mockLegacyOfferRetrieveAPI(2, { data: { data: { summary: null } } });
+    const legacyAPIMockResponse = mockLegacyOfferRetrieveAPI(2, {
+      data: { data: { summary: null } },
+    });
     axios.get = jest.fn().mockResolvedValue(legacyAPIMockResponse);
     const companyId = legacyAPIMockResponse.data.data.id.toString();
     const event: APIGatewayEvent = {
@@ -88,8 +90,8 @@ describe('handler', () => {
 
     const result = await handler(event);
 
-    expect(result.statusCode).toEqual(HttpStatusCode.NO_CONTENT);
-    expect(result.body).toEqual(JSON.stringify({ message: 'No Content' }));
+    expect(result.statusCode).toEqual(HttpStatusCode.NOT_FOUND);
+    expect(result.body).toEqual(JSON.stringify({ message: 'Company not found' }));
   });
 
   it('should return an error response when the legacy api returns an error', async () => {
@@ -124,10 +126,11 @@ describe('handler', () => {
     };
 
     const error = await handler(event);
-    expect(error.statusCode).toEqual(HttpStatusCode.NO_CONTENT);
+    expect(error.statusCode).toEqual(HttpStatusCode.INTERNAL_SERVER_ERROR);
     expect(error.body).toEqual(
       JSON.stringify({
-        message: 'No Content',
+        message: 'Error',
+        error: 'Error validating data info output',
       }),
     );
   });

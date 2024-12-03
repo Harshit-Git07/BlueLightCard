@@ -2,7 +2,6 @@ import 'reflect-metadata';
 import { container } from 'tsyringe';
 import { APIGatewayEvent, APIGatewayProxyEventPathParameters } from 'aws-lambda';
 import { Response } from '@blc-mono/core/src/utils/restResponse/response';
-import { LegacyCompanyOffersResponse } from '../../models/legacy/legacyCompanyOffers';
 import { getEnvRaw } from '../../../../core/src/utils/getEnv';
 import { CompanyOffersService } from '../../../src/services/CompanyOffersService';
 import { LambdaLogger } from '../../../../core/src/utils/logger/lambdaLogger';
@@ -31,7 +30,7 @@ export const handler = async (event: APIGatewayEvent) => {
   if (!isEnvironmentVariableExist) {
     return Response.Error(Error('Environment variables not set'));
   }
-  
+
   // Validate Authentication
   const authToken = event.headers.Authorization as string;
   let decodedToken;
@@ -42,10 +41,10 @@ export const handler = async (event: APIGatewayEvent) => {
     return Response.Unauthorized({ message: error.message });
   }
 
-  const { "custom:blc_old_id": uid} = decodedToken;
-  if(!uid) {
-    logger.error({message: 'UID missing from JWT when required.'});
-    return Response.Unauthorized({ message: "Missing required information" });
+  const { 'custom:blc_old_id': uid } = decodedToken;
+  if (!uid) {
+    logger.error({ message: 'UID missing from JWT when required.' });
+    return Response.Unauthorized({ message: 'Missing required information' });
   }
 
   const companyId = (event.pathParameters as APIGatewayProxyEventPathParameters)?.id;
@@ -53,7 +52,7 @@ export const handler = async (event: APIGatewayEvent) => {
   const queryParams = `cid=${companyId}&uid=${uid}`;
 
   try {
-    const data = await companyOffersService.getCompanyInfo<LegacyCompanyOffersResponse>(
+    const data = await companyOffersService.getCompanyInfo(
       authToken as string,
       offersLegacyApiEndpoint as string,
       queryParams,
@@ -61,10 +60,12 @@ export const handler = async (event: APIGatewayEvent) => {
     );
 
     if (!data) {
-      return Response.NoContent();
-    } else {
-      return Response.OK({ message: 'Success', data });
+      return Response.NotFound({
+        message: 'Company not found',
+      });
     }
+
+    return Response.OK({ message: 'Success', data });
   } catch (error: any) {
     logger.error({ message: 'Error fetching company details', body: error });
     return Response.Error(error as Error);

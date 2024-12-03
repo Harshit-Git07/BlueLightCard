@@ -1,12 +1,8 @@
 import 'reflect-metadata';
 import { APIGatewayEvent, APIGatewayProxyEventPathParameters } from 'aws-lambda';
 import { Response } from '@blc-mono/core/src/utils/restResponse/response';
-import { LegacyCompanyOffersResponse } from '../../../models/legacy/legacyCompanyOffers';
 import { getEnvRaw } from '../../../../../core/src/utils/getEnv';
-import {
-  CompanyOffersService,
-  ICompanyOffersService,
-} from '../../../services/CompanyOffersService';
+import { CompanyOffersService } from '../../../services/CompanyOffersService';
 import { LambdaLogger } from '../../../../../core/src/utils/logger/lambdaLogger';
 import { checkIfEnvironmentVariablesExist } from '../../../utils/validation';
 import { DI_KEYS } from '../../../utils/diTokens';
@@ -21,7 +17,7 @@ const service = getEnvRaw('SERVICE');
 const blcBaseUrl = getEnvRaw('BASE_URL');
 const offersLegacyApiEndpoint = getEnvRaw('LEGACY_OFFERS_API_ENDPOINT');
 const logger = new LambdaLogger({ serviceName: `${service}-get-company-offers-details` });
-let companyOffersService: ICompanyOffersService;
+let companyOffersService: CompanyOffersService;
 
 if (checkIfEnvironmentVariablesExist({ service, blcBaseUrl, offersLegacyApiEndpoint }, logger)) {
   isEnvironmentVariableExist = true;
@@ -47,16 +43,16 @@ export const handler = async (event: APIGatewayEvent) => {
   } catch (error: any) {
     return Response.Unauthorized({ message: error.message });
   }
-  const { "custom:blc_old_id": uid} = decodedToken;
+  const { 'custom:blc_old_id': uid } = decodedToken;
 
-  if(!uid) {
-    logger.error({message: 'UID missing from JWT when required.'});
-    return Response.Unauthorized({ message: "Missing required information" });
+  if (!uid) {
+    logger.error({ message: 'UID missing from JWT when required.' });
+    return Response.Unauthorized({ message: 'Missing required information' });
   }
-  
+
   // Get company id
   const companyId = (event.pathParameters as APIGatewayProxyEventPathParameters)?.id;
-  
+
   if (!companyId) {
     logger.error({ message: 'companyId not set' });
     return Response.BadRequest({ message: 'companyId not set' });
@@ -81,14 +77,14 @@ export const handler = async (event: APIGatewayEvent) => {
   const queryParams = `cid=${companyId}&uid=${uid}${serviceParams}`;
 
   try {
-    const data = await companyOffersService.getCompanyOffers<LegacyCompanyOffersResponse>(
+    const data = await companyOffersService.getCompanyOffers(
       authToken as string,
       offersLegacyApiEndpoint as string,
       queryParams,
       companyId as string,
     );
 
-    if (!data) {
+    if (!data || data.offers.length === 0) {
       return Response.NotFound({ message: 'No offers found' });
     }
 

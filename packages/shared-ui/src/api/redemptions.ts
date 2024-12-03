@@ -1,17 +1,21 @@
 import { z } from 'zod';
 import { IPlatformAdapter } from '../adapters';
 import { RedemptionTypeSchema } from '../components/OfferSheet/types';
+import { getBrandedRedemptionsPath } from '../utils/pathUtils';
 
 export async function getRedemptionDetails(
   platformAdapter: IPlatformAdapter,
   offerId: number | string,
 ) {
-  const result = await platformAdapter.invokeV5Api('/eu/redemptions/member/redemptionDetails', {
-    method: 'GET',
-    queryParameters: {
-      offerId: offerId.toString(),
+  const result = await platformAdapter.invokeV5Api(
+    `${getBrandedRedemptionsPath()}/member/redemptionDetails`,
+    {
+      method: 'GET',
+      queryParameters: {
+        offerId: offerId.toString(),
+      },
     },
-  });
+  );
 
   if (result.status !== 200) {
     throw new Error('Unable to retrieve redemption details');
@@ -69,7 +73,7 @@ export async function redeemOffer(
   offerName: string,
   companyName: string,
 ): Promise<RedeemDataStateData | Error> {
-  const result = await platformAdapter.invokeV5Api('/eu/redemptions/member/redeem', {
+  const result = await platformAdapter.invokeV5Api(`${getBrandedRedemptionsPath()}/member/redeem`, {
     method: 'POST',
     body: JSON.stringify({
       offerId,

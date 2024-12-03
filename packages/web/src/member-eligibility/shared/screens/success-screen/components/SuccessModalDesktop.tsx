@@ -1,72 +1,80 @@
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
-import { useRouter } from 'next/router';
 import { BRAND } from '@/global-vars';
 import { BRANDS } from '@/types/brands.enum';
-import React, { FC, useMemo } from 'react';
-import { EligibilityModalBody } from '@/root/src/member-eligibility/shared/screens/shared/components/modal/EligibilityModalBody';
+import React, { FC } from 'react';
+import { EligibilityDesktopModal } from '@/root/src/member-eligibility/shared/screens/shared/components/modal/EligibilityDesktopModal';
 import { AppStoreQrCode } from '@/components/AppStoreQrCode/AppStoreQrCode';
 import { AppStoreLinks } from '@/root/src/member-eligibility/shared/screens/shared/components/modal/AppStoreLinks';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { getTitlesAndSubtitles } from '@/root/src/member-eligibility/shared/screens/success-screen/hooks/GetTitlesAndSubtitles';
-import { useMediaQuery } from '@bluelightcard/shared-ui/hooks/useMediaQuery';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import { successEvents } from '@/root/src/member-eligibility/shared/screens/success-screen/amplitude-events/SuccessEvents';
+import { getModalImage } from '@/root/src/member-eligibility/shared/screens/success-screen/components/utils/GetModalImage';
+import { computeValue } from '@/root/src/member-eligibility/shared/utils/ComputeValue';
+import { OnClose } from '@/root/src/member-eligibility/shared/screens/success-screen/types/OnClose';
 
 interface Props {
   eligibilityDetailsState: EligibilityDetailsState;
+  onClose?: OnClose;
 }
 
-export const SuccessModalDesktop: FC<Props> = ({ eligibilityDetailsState }) => {
-  const router = useRouter();
-  const brandName = BRAND === BRANDS.DDS_UK ? 'Defence Discount' : 'Blue Light';
-  const { title, subtitle } = getTitlesAndSubtitles(eligibilityDetailsState);
+export const SuccessModalDesktop: FC<Props> = ({ eligibilityDetailsState, onClose }) => {
   const [eligibilityDetails] = eligibilityDetailsState;
-  const isPadPro = useMediaQuery(
-    '(min-width: 1024px) and (max-width: 1024px) and (orientation: portrait)'
-  );
-  const logAnalyticsEvent = useLogAmplitudeEvent();
-  const ipadProStyles = useMemo(() => {
-    if (!isPadPro) return 'md:mb-[30px] lg:mb-[60px]';
 
-    return 'mb-[30px]';
-  }, [isPadPro]);
+  const logAnalyticsEvent = useLogAmplitudeEvent();
+
+  const { title, subtitle } = getTitlesAndSubtitles(eligibilityDetailsState);
+  const imagePath = getModalImage();
+
+  const brandName = computeValue(() => {
+    return BRAND === BRANDS.DDS_UK ? 'Defence Discount' : 'Blue Light';
+  });
+
+  const titleStyles = computeValue(() => {
+    return `${fonts.displaySmallText} ${colours.textOnSurface} truncate text-center leading-relaxed`;
+  });
+
+  const subTitleStyles = computeValue(() => {
+    return `${fonts.body} ${colours.textOnSurface} text-center leading-relaxed`;
+  });
 
   return (
-    <EligibilityModalBody data-testid="sign-up-success-screen">
-      <p
-        className={`${fonts.displaySmallText} ${colours.textOnSurface} mx-[50px] mb-[4px] lg:mt-[78px] md:portrait:mt-[0px] truncate`}
-      >
-        {title}
-      </p>
+    <EligibilityDesktopModal imagePath={imagePath} data-testid="sign-up-success-screen">
+      <div className="flex flex-col justify-center align-center gap-[24px]">
+        <div className="flex flex-col justify-center align-center gap-[4px]">
+          <p className={titleStyles}>{title}</p>
 
-      <p className={`${fonts.body} ${colours.textOnSurface} mb-[24px] text-center leading-relaxed`}>
-        {subtitle}
-      </p>
+          <p className={subTitleStyles}>{subtitle}</p>
+        </div>
 
-      <Button
-        className={`${ipadProStyles} w-4/5`}
-        variant={ThemeVariant.Primary}
-        size="Large"
-        // TODO: We need to figure out if this screen routes us to members-home or should we already be there at this stage and this button just closes the modal?
-        onClick={() => {
-          logAnalyticsEvent(successEvents.onStartBrowsingClicked(eligibilityDetails));
-          router.push('/members-home');
-        }}
-      >
-        Start browsing
-      </Button>
+        <Button
+          className="w-full"
+          variant={ThemeVariant.Primary}
+          size="Large"
+          onClick={() => {
+            logAnalyticsEvent(successEvents.onStartBrowsingClicked(eligibilityDetails));
+            onClose?.();
+          }}
+        >
+          Start browsing
+        </Button>
+      </div>
 
-      <p
-        className={`${fonts.headlineSmallBold} ${colours.textOnSurface} mb-[16px] text-center leading-relaxed`}
-      >
-        Get the {brandName} <br /> Card App
-      </p>
+      <div className="flex flex-col justify-center align-center gap-[40px]">
+        <div className="flex flex-col justify-center align-center gap-[16px]">
+          <p
+            className={`${fonts.headlineSmallBold} ${colours.textOnSurface} text-center leading-relaxed`}
+          >
+            Get the {brandName} <br /> Card App
+          </p>
 
-      <AppStoreQrCode className="h-full" />
+          <AppStoreQrCode className="self-center" />
+        </div>
 
-      <AppStoreLinks eligibilityDetails={eligibilityDetails} className="mt-[44px] mb-[78px]" />
-    </EligibilityModalBody>
+        <AppStoreLinks eligibilityDetails={eligibilityDetails} />
+      </div>
+    </EligibilityDesktopModal>
   );
 };

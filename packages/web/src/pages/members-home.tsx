@@ -260,6 +260,7 @@ const HomePage: NextPage<any> = () => {
       {marketplaceMenus.length > 0 &&
         marketplaceMenus.map((menu: MarketPlaceMenuType, index: number) => {
           if (menu.items.length === 0 || menu.hidden) return <></>;
+
           return (
             <Container
               className="py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"

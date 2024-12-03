@@ -29,16 +29,16 @@ const initialState: EligibilityDetailsWithoutFlow = {
 };
 
 const DesktopTemplate: StoryFn<typeof SuccessScreen> = () => {
-  const eligibilityDetailsState = useSignupEligibilityDetails(initialState);
+  const [eligibilityDetails] = useSignupEligibilityDetails(initialState);
 
-  return <SuccessScreen eligibilityDetailsState={eligibilityDetailsState} />;
+  return <SuccessScreen initialState={eligibilityDetails} />;
 };
 export const Desktop = DesktopTemplate.bind({});
 
 const MobileTemplate: StoryFn<typeof SuccessScreen> = () => {
-  const eligibilityDetailsState = useSignupEligibilityDetails(initialState);
+  const [eligibilityDetails] = useSignupEligibilityDetails(initialState);
 
-  return <SuccessScreen eligibilityDetailsState={eligibilityDetailsState} forceMobileView />;
+  return <SuccessScreen initialState={eligibilityDetails} forceMobileView />;
 };
 export const Mobile = MobileTemplate.bind({});
 

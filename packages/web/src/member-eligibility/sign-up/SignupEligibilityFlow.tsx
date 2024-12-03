@@ -52,7 +52,7 @@ export const SignupEligibilityFlow: FC<Props> = ({ initialState }) => {
     case 'Payment Screen':
       return <PaymentScreen {...props} />;
     case 'Success Screen':
-      return <SuccessScreen {...props} />;
+      return <SuccessScreen initialState={eligibilityDetailsState[0]} />;
     default:
       throw Error(`Unimplemented step ${currentScreen}`);
   }

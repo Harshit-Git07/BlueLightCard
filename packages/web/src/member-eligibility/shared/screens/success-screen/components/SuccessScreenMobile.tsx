@@ -1,68 +1,61 @@
-import React, { FC, SVGProps } from 'react';
-import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
-import { useRouter } from 'next/router';
+import React, { FC } from 'react';
 import { AppStoreLinks } from '@/root/src/member-eligibility/shared/screens/shared/components/modal/AppStoreLinks';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { getTitlesAndSubtitles } from '@/root/src/member-eligibility/shared/screens/success-screen/hooks/GetTitlesAndSubtitles';
-import { getModalImage } from '@/root/src/member-eligibility/shared/screens/success-screen/utils/GetModalImage';
-import { successEvents } from '@/root/src/member-eligibility/shared/screens/success-screen/amplitude-events/SuccessEvents';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
+import { successEvents } from '@/root/src/member-eligibility/shared/screens/success-screen/amplitude-events/SuccessEvents';
+import { getModalImage } from '@/root/src/member-eligibility/shared/screens/success-screen/components/utils/GetModalImage';
+import { computeValue } from '@/root/src/member-eligibility/shared/utils/ComputeValue';
+import { EligibilityMobileModal } from '@/root/src/member-eligibility/shared/screens/shared/components/modal/EligibilityMobileModal';
+import { OnClose } from '@/root/src/member-eligibility/shared/screens/success-screen/types/OnClose';
 
 interface Props {
   eligibilityDetailsState: EligibilityDetailsState;
+  onClose?: OnClose;
 }
 
-export const SuccessScreenMobileView: FC<Props> = ({ eligibilityDetailsState }) => {
+export const SuccessModelMobile: FC<Props> = ({ eligibilityDetailsState, onClose }) => {
   const [eligibilityDetails] = eligibilityDetailsState;
-  const router = useRouter();
-  const { title, subtitle } = getTitlesAndSubtitles(eligibilityDetailsState);
-  const Image = getModalImage();
+
   const logAnalyticsEvent = useLogAmplitudeEvent();
 
-  //Changing the dimensions of the image based on the screen size
-  const imageProps: SVGProps<SVGSVGElement> = {
-    viewBox: '50 600 900 500',
-  };
+  const { title, subtitle } = getTitlesAndSubtitles(eligibilityDetailsState);
+  const imagePath = getModalImage();
+
+  const titleStyles = computeValue(() => {
+    return `${fonts.headlineBold} ${colours.textOnSurface} text-center leading-relaxed`;
+  });
+
+  const subTitleStyles = computeValue(() => {
+    return `${fonts.body} ${colours.textOnSurface} text-center leading-relaxed`;
+  });
 
   return (
-    <EligibilityScreen data-testid="success-screen-mobile">
-      <div className="mx-[18px]">
-        <p
-          className={`${fonts.headlineBold} ${colours.textOnSurface} mt-[32px] text-center leading-relaxed`}
-        >
-          {title}
-        </p>
+    <EligibilityMobileModal imagePath={imagePath} data-testid="sign-up-success-screen">
+      <div className="flex flex-col justify-center align-center gap-[4px]">
+        <p className={titleStyles}>{title}</p>
 
-        <p
-          className={`${fonts.body} ${colours.textOnSurface} mt-[4px] text-center leading-relaxed`}
-        >
-          {subtitle}
-        </p>
+        <p className={subTitleStyles}>{subtitle}</p>
+      </div>
 
-        <AppStoreLinks eligibilityDetails={eligibilityDetails} className="mt-[24px]" />
+      <div className="flex flex-col justify-center align-center gap-[24px]">
+        <AppStoreLinks eligibilityDetails={eligibilityDetails} />
 
         <Button
-          className="mt-[24px] mb-[24px] w-full"
+          className="w-full"
           variant={ThemeVariant.Primary}
           size="Large"
-          // TODO: We need to figure out if this screen routes us to members-home or should we already be there at this stage and this button just closes the modal?
           onClick={() => {
             logAnalyticsEvent(successEvents.onStartBrowsingClicked(eligibilityDetails));
-            router.push('/members-home');
+            onClose?.();
           }}
         >
           Start browsing
         </Button>
-
-        <Image
-          alt="Example of physical card"
-          className="w-full h-full object-center object-cover mb-[24px] rounded-3xl"
-          {...imageProps}
-        />
       </div>
-    </EligibilityScreen>
+    </EligibilityMobileModal>
   );
 };

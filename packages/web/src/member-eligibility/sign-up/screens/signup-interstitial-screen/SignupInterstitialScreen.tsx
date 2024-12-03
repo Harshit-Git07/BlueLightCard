@@ -44,7 +44,11 @@ export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [makeAPaymentCardHasButton]);
 
   return (
-    <InterstitialScreen title={title} data-testid="SignupInterstitialScreen">
+    <InterstitialScreen
+      title={title}
+      eligibilityDetails={eligibilityDetails}
+      data-testid="SignupInterstitialScreen"
+    >
       {showVerifyEligibilityCard && (
         <Card
           data-testid="verify-eligibility-card"

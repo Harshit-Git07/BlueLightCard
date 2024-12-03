@@ -65,6 +65,7 @@ export const RenewalInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
   return (
     <InterstitialScreen
       title={title}
+      eligibilityDetails={eligibilityDetails}
       fuzzyFrontEndButtons={fuzzyFrontEndButtons}
       data-testid="Renewal Intersititial Screen"
     >

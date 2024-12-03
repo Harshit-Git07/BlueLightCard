@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.40.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.40.1...bluelightcard/offers-v1.40.2) (2024-12-03)
+
+
+### Bug Fixes
+
+* streamline CompanyOffersService and improve response handling in API routes ([#3067](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3067)) ([99abeaa](https://github.com/bluelightcard/BlueLightCard-2.0/commit/99abeaa1f4a1c1b62f48cd89fa2a1f3e4d1ed252))
+* tech debt - code duplication reduction ([#2903](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2903)) ([2da176b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2da176be4016869cd8ceb18dd8ea20ec970c815e))
+
 ## [1.40.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.40.0...bluelightcard/offers-v1.40.1) (2024-11-08)
 
 

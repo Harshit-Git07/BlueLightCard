@@ -100,25 +100,22 @@ export async function legacy_GetCompany(adapter: IPlatformAdapter, companyId: st
     id: data.id!,
     name: data.name,
     description: data.description
-      ? {
-          _type: 'richtext-module',
-          content: [
-            {
-              _type: 'block',
-              style: 'normal',
-              markDefs: [],
-              _key: 'df610d808744',
-              children: [
-                {
-                  _type: 'span',
-                  text: data.description,
-                  marks: [],
-                  _key: 'df610d8087440',
-                },
-              ],
-            },
-          ],
-        }
+      ? [
+          {
+            _type: 'block',
+            style: 'normal',
+            markDefs: [],
+            _key: 'df610d808744',
+            children: [
+              {
+                _type: 'span',
+                text: data.description,
+                marks: [],
+                _key: 'df610d8087440',
+              },
+            ],
+          },
+        ]
       : null,
   } satisfies V2CompaniesGetCompanyResponse;
 }

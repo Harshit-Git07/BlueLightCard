@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.46.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.46.1...bluelightcard/mobile-hybrid-v1.46.2) (2024-12-03)
+
+
+### Bug Fixes
+
+* TO-1415 company page in mobile hybrid uses legacy API service ([#3012](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3012)) ([d73e6ed](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d73e6edd9df16de60ceab9adfaff04f505422c1c))
+
 ## [1.46.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.46.0...bluelightcard/mobile-hybrid-v1.46.1) (2024-11-26)
 
 

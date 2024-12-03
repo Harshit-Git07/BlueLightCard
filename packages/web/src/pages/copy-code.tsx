@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import AmplitudeContext from '@/context/AmplitudeContext';
 import { redirectAndDecodeURL } from '@/utils/redirectAndDecode';
 import { useRouter } from 'next/router';
-
+import BlcLogo from '../../assets/BLC-landscape.svg';
 export default function CopyCodePage() {
   const [copied, setCopied] = useState(false);
   const [buttonText, setButtonText] = useState('Copy and continue to website');
@@ -60,7 +60,8 @@ export default function CopyCodePage() {
   };
 
   return (
-    <section className="flex items-center justify-center h-screen">
+    <section className="flex flex-col items-center justify-center h-screen">
+      <BlcLogo></BlcLogo>
       <ClipboardCard
         handleCopy={handleCopy}
         copied={copied}

@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.92.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.91.0...bluelightcard/web-v1.92.0) (2024-12-03)
+
+
+### Features
+
+* merge redemption dev  ([#3090](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3090)) ([05774e7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/05774e78bd66b0c899f24fabecc68a54ffcfc9dc))
+
+
+### Bug Fixes
+
+* TO-1415 company page in mobile hybrid uses legacy API service ([#3012](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3012)) ([d73e6ed](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d73e6edd9df16de60ceab9adfaff04f505422c1c))
+
+
+### Other Changes
+
+* Eligbility staging environment ([#3164](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3164)) ([37cc8ae](https://github.com/bluelightcard/BlueLightCard-2.0/commit/37cc8ae94345b132a44cbda4db36d65f2af8f7db))
+
 ## [1.91.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.90.0...bluelightcard/web-v1.91.0) (2024-11-22)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.37.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.36.0...bluelightcard/redemptions-v1.37.0) (2024-12-03)
+
+
+### Features
+
+* merge redemption dev  ([#3090](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3090)) ([05774e7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/05774e78bd66b0c899f24fabecc68a54ffcfc9dc))
+
 ## [1.36.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.35.0...bluelightcard/redemptions-v1.36.0) (2024-11-21)
 
 

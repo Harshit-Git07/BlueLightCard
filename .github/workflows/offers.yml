@@ -135,7 +135,7 @@ jobs:
             brand: BLC_AU
             stage: staging
             discoveryEventBusName: 'staging-blc-mono-eventBus'
-            userProfileEndpoint: https://staging-identity.blcshine.io/user
+            userProfileEndpoint: https://staging-identity-au.blcshine.io/user
     needs:
       - install
       - test
@@ -242,7 +242,7 @@ jobs:
             cdnUrl: 'https://cdn.bluelightcard.com.au'
             brand: BLC_AU
             stage: production
-            userProfileEndpoint: https://identity.blcshine.io/user
+            userProfileEndpoint: https://identity-au.blcshine.io/user
     needs:
       - install
       - test

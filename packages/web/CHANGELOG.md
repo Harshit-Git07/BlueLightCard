@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.93.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.92.0...bluelightcard/web-v1.93.0) (2024-12-04)
+
+
+### Features
+
+* [MER-442] Job Details - AUS ([#3200](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3200)) ([964ebee](https://github.com/bluelightcard/BlueLightCard-2.0/commit/964ebee8d7da97caa4d6820909def40408b78c13))
+* DISCO-300 Added Braze bottom tenancy banners ([#3186](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3186)) ([c700cb9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c700cb953bbd2bf92a66b71201e15ec0e4cfdbd8))
+* DISCO-508 Added Web Category page ([#3081](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3081)) ([e4768da](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e4768da23f86118a45d417004ee0bac7df1c6dc9))
+* DISCO-514 Integrated modern Web Flexible Offers page ([#3047](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3047)) ([b580715](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b580715a0aba92070703010f8b0e4bf23ca617fd))
+
+
+### Bug Fixes
+
+* More modal design snags ([#3223](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3223)) ([3f5062b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3f5062b343613f4f755117c2f2d5f9dfcc1c1b8c))
+
 ## [1.92.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.91.0...bluelightcard/web-v1.92.0) (2024-12-03)
 
 

@@ -1,7 +1,14 @@
 const events = {
+  CATEGORY: {
+    CARD_CLICKED: 'category_card_clicked',
+    PAGE_VIEWED: 'category_viewed',
+  },
   ERROR_STATE: {
     CTA_CLICKED: 'error_state_cta_clicked',
     VIEWED: 'error_state_viewed',
+  },
+  FEATURED_OFFERS: {
+    CARD_CLICKED: 'featured_offers_card_clicked',
   },
   FLEXIBLE_OFFERS: {
     CARD_CLICKED: 'flexi_menu_card_clicked',

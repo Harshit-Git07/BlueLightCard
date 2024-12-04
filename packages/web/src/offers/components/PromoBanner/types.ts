@@ -4,3 +4,7 @@ export interface PromoBannerProps {
   id: string;
   onClick?: (event: React.MouseEvent | React.KeyboardEvent) => void;
 }
+
+export interface PromoBannerPlaceholderProps {
+  variant?: 'large' | 'small';
+}

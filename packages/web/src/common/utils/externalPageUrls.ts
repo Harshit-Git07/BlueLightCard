@@ -9,7 +9,13 @@ export const getCompanyOfferDetailsUrl = (companyId: string) => {
 };
 
 export const getOffersByCategoryUrl = (categoryId: string) => {
-  return `/offers.php?cat=true&type=${categoryId}`;
+  const amplitudeFlags = amplitudeStore.get(experimentsAndFeatureFlags);
+  const modernCategoriesEnabled =
+    amplitudeFlags[AmplitudeExperimentFlags.MODERN_CATEGORIES] === 'on';
+
+  return modernCategoriesEnabled
+    ? `/category?id=${categoryId}`
+    : `/offers.php?cat=true&type=${categoryId}`;
 };
 
 export const getOffersBySearchTermUrl = (searchTerm: string, issuer: string = '') => {

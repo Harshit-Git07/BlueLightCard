@@ -18,6 +18,7 @@ module.exports = {
     '@storybook/addon-a11y',
     '@storybook/addon-mdx-gfm',
     '@storybook/addon-designs',
+    'storybook-addon-fetch-mock',
   ],
   staticDirs: [
     {

@@ -1,12 +1,18 @@
-import React from 'react';
+import { FC } from 'react';
 import ContentLoader from 'react-content-loader';
+import { PromoBannerPlaceholderProps } from './types';
 
-function PromoBannerPlaceholder() {
+const PromoBannerPlaceholder: FC<PromoBannerPlaceholderProps> = ({ variant = 'large' }) => {
+  let viewBox = '';
+
+  if (variant === 'large') viewBox = '0 0 600 200';
+  if (variant === 'small') viewBox = '0 0 600 100';
+
   return (
     <div className="w-full relative mb-2">
       <ContentLoader
         speed={3}
-        viewBox="0 0 600 200"
+        viewBox={viewBox}
         backgroundColor="#f3f3f3"
         foregroundColor="#d1d1d1"
       >
@@ -14,6 +20,6 @@ function PromoBannerPlaceholder() {
       </ContentLoader>
     </div>
   );
-}
+};
 
 export default PromoBannerPlaceholder;

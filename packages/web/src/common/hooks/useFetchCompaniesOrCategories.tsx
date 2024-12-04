@@ -7,6 +7,7 @@ import { redirectToLogin } from '@/hoc/requireAuth';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 import { V5_API_URL } from '@/globals/apiUrl';
 import { usePlatformAdapter } from '@bluelightcard/shared-ui/adapters';
+import { AmplitudeExperimentFlags } from '../utils/amplitude/AmplitudeExperimentFlags';
 import { User, UserContextType } from '@/context/User/UserContext';
 import { WebPlatformAdapter } from '@/utils/WebPlatformAdapter';
 
@@ -33,14 +34,18 @@ const useFetchCompaniesOrCategories = (userCtx: UserContextType) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const searchV5Experiment = useAmplitudeExperiment('search_v5', 'control');
+  const modernCategoriesEnabled = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.MODERN_CATEGORIES,
+    'off'
+  );
   const offersCmsExperiment = useAmplitudeExperiment('cms-offers', 'off');
   const useLegacyIds = offersCmsExperiment.data?.variantName !== 'on';
 
   const platformAdapter = usePlatformAdapter();
 
   useEffect(() => {
-    if (searchV5Experiment.status === 'pending' || offersCmsExperiment.status === 'pending') return;
+    if (modernCategoriesEnabled.status === 'pending' || offersCmsExperiment.status === 'pending')
+      return;
     const currentFetchCompaniesAndCategories = async () => {
       if (!userCtx.user || userCtx.error) return;
 
@@ -90,7 +95,7 @@ const useFetchCompaniesOrCategories = (userCtx: UserContextType) => {
       }
     };
 
-    if (searchV5Experiment.data?.variantName === 'treatment') {
+    if (modernCategoriesEnabled.data?.variantName === 'on') {
       experimentFetchCompaniesAndCategories();
     } else {
       currentFetchCompaniesAndCategories();
@@ -103,9 +108,9 @@ const useFetchCompaniesOrCategories = (userCtx: UserContextType) => {
     userCtx.user,
     userCtx.user?.profile.dob,
     userCtx.user?.profile.organisation,
-    searchV5Experiment.data?.variantName,
+    modernCategoriesEnabled.data?.variantName,
     offersCmsExperiment.status,
-    searchV5Experiment.status,
+    modernCategoriesEnabled.status,
     useLegacyIds,
     platformAdapter,
   ]);

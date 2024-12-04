@@ -1,0 +1,92 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import { V5_API_URL } from '../../constants';
+import AmplitudeEvents from '../../utils/amplitude/events';
+import ComponentStatus from '../../../.storybook/blocks/ComponentStatus';
+import FigmaEmbed from '../../../.storybook/blocks/FigmaEmbed';
+import * as MenuCarousels from './MenuCarousels.stories';
+
+<Meta of={MenuCarousels} />
+
+# Menu Carousels
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Usage Guidelines](#usage-guidelines)
+
+## Status
+
+<ComponentStatus />
+
+## Overview
+
+- This component retrieves and renders configurable menus from the <code>{V5_API_URL.Menus}</code> V5 API endpoint.
+- The top level component renders the given children using Suspense.
+- The child components can be composed as needed to render the different menus that will be returned in the menus response, see the [Variants and States](#variants-and-states) section for available variants.
+  - Each child will try and call the menus endpoint using a Suspensed React Query.
+  - React Query will only make one API call between them all and share the response. This provides full flexibility so each carousel can be used entirely indepdently but also together with no tradeoffs in efficiency.
+
+## Props
+
+<Controls />
+
+## State
+
+This component uses React Query for retrieving and managing menu state.
+
+## Variants and States
+
+### Deals Of The Week
+
+Renders the `Deals Of The Week` menu, a fixed menu containing offers:
+
+<Canvas of={MenuCarousels.DealsOfTheWeek} />
+
+### Marketplace
+
+Renders the `Marketplace` menus, an array of dynamic menus containing offers:
+
+<Canvas of={MenuCarousels.Marketplace} />
+
+### Featured Offers
+
+Renders the `Featured Offers` menu, a fixed menu containing offers:
+
+<Canvas of={MenuCarousels.FeaturedOffers} />
+
+### Flexible
+
+Flexible carousels are not supported yet as these will require a new type of carousel being implemented in Shared UI since they are not actually offers like the existing carousels are.
+
+## Implementation
+
+```jsx
+import { MenuCarousels } from '@bluelightcard/shared-ui';
+
+const Page: FC = () => {
+  return (
+    {/* All menus */}
+    <MenuCarousels>
+      {/* Whatever configuration of menus you want to render */}
+      <MenuCarousels.DealsOfTheWeek />
+      <MenuCarousels.Marketplace />
+      <MenuCarousels.FeaturedOffers />
+    </MenuCarousels>
+
+    {/* Specific menus */}
+    <MenuCarousels menus={['dealsOfTheWeek', 'featured']}>
+      {/* Whatever configuration of menus you want to render */}
+      <MenuCarousels.DealsOfTheWeek />
+      <MenuCarousels.FeaturedOffers />
+    </MenuCarousels>
+
+    {/* Single menu rendered independently if you want to use it in a custom way */}
+    <Suspense fallback={<SomeCustomSkeleton />}>
+      <MenuCarousels.FeaturedOffers menus={['featured']} />
+    </Suspense>
+  );
+};
+```

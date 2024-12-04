@@ -13,7 +13,7 @@ const TenancyBannerContainer: FC<TenancyBannerProps> = (props) => {
   return loaded && hasBanners ? (
     <TenancyBannerPresenter bannersData={banners} {...props} />
   ) : (
-    <PromoBannerPlaceholder />
+    <PromoBannerPlaceholder variant={variant} />
   );
 };
 

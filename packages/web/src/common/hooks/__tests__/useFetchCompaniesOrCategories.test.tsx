@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
 import { renderHook, RenderOptions, waitFor } from '@testing-library/react';
+import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
 import useFetchCompaniesOrCategories from '@/hooks/useFetchCompaniesOrCategories';
@@ -103,7 +104,7 @@ describe('useFetchCompaniesOrCategories', () => {
     });
 
     it('should return results with company IDs not set as legacy IDs when "cms-offers" experiment on', async () => {
-      givenExperimentsReturn('treatment', 'on');
+      givenExperimentsReturn('on', 'on');
 
       const { result } = renderHook(() => useFetchCompaniesOrCategories(mockUserContext), {
         wrapper,
@@ -122,7 +123,7 @@ describe('useFetchCompaniesOrCategories', () => {
     });
 
     it('should return results with company IDs set as legacy IDs when "cms-offers" experiment off', async () => {
-      givenExperimentsReturn('treatment', 'off');
+      givenExperimentsReturn('on', 'off');
 
       const { result } = renderHook(() => useFetchCompaniesOrCategories(mockUserContext), {
         wrapper,
@@ -137,7 +138,7 @@ describe('useFetchCompaniesOrCategories', () => {
     });
 
     it('should return categories', async () => {
-      givenExperimentsReturn('treatment', 'on');
+      givenExperimentsReturn('on', 'on');
 
       const { result } = renderHook(() => useFetchCompaniesOrCategories(mockUserContext), {
         wrapper,
@@ -155,7 +156,7 @@ describe('useFetchCompaniesOrCategories', () => {
       mockPlatformAdapter.invokeV5Api.mockImplementation(() => {
         throw new Error('Error');
       });
-      givenExperimentsReturn('treatment', 'on');
+      givenExperimentsReturn('on', 'on');
 
       renderHook(() => useFetchCompaniesOrCategories(mockUserContext), {
         wrapper,
@@ -236,7 +237,7 @@ describe('useFetchCompaniesOrCategories', () => {
     });
 
     it('should return results', async () => {
-      givenExperimentsReturn('control', 'off');
+      givenExperimentsReturn('off', 'off');
 
       const { result } = renderHook(() => useFetchCompaniesOrCategories(mockUserContext), {
         wrapper,
@@ -256,7 +257,7 @@ describe('useFetchCompaniesOrCategories', () => {
 
     it('should redirect to login on error', async () => {
       makeNavbarQueryMock.mockRejectedValue(new Error('Error'));
-      givenExperimentsReturn('control', 'off');
+      givenExperimentsReturn('off', 'off');
 
       renderHook(() => useFetchCompaniesOrCategories(mockUserContext), {
         wrapper,
@@ -269,10 +270,10 @@ describe('useFetchCompaniesOrCategories', () => {
   });
 });
 
-const givenExperimentsReturn = (v5Search = 'control', cmsOffers = 'off') => {
+const givenExperimentsReturn = (modernCategories = 'control', cmsOffers = 'off') => {
   (useAmplitudeExperiment as jest.Mock).mockImplementation((experimentFlag, defaultVariant) => {
-    if (experimentFlag === 'search_v5') {
-      return { data: { variantName: v5Search } };
+    if (experimentFlag === AmplitudeExperimentFlags.MODERN_CATEGORIES) {
+      return { data: { variantName: modernCategories } };
     }
 
     if (experimentFlag === 'cms-offers') {
@@ -283,10 +284,10 @@ const givenExperimentsReturn = (v5Search = 'control', cmsOffers = 'off') => {
   });
 };
 
-const givenExperimentsStatusIs = (v5Search = 'pending', cmsOffers = 'pending') => {
+const givenExperimentsStatusIs = (modernCategories = 'pending', cmsOffers = 'pending') => {
   (useAmplitudeExperiment as jest.Mock).mockImplementation((experimentFlag, defaultVariant) => {
-    if (experimentFlag === 'search_v5') {
-      return { status: v5Search };
+    if (experimentFlag === AmplitudeExperimentFlags.MODERN_CATEGORIES) {
+      return { status: modernCategories };
     }
 
     if (experimentFlag === 'cms-offers') {

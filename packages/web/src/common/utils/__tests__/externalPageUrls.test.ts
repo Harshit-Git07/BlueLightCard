@@ -1,4 +1,8 @@
-import { getCompanyOfferDetailsUrl, getOffersBySearchTermUrl } from '../externalPageUrls';
+import {
+  getCompanyOfferDetailsUrl,
+  getOffersByCategoryUrl,
+  getOffersBySearchTermUrl,
+} from '../externalPageUrls';
 import { amplitudeStore } from '../../context/AmplitudeExperiment';
 import { experimentsAndFeatureFlags } from '../../utils/amplitude/store';
 import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
@@ -56,5 +60,31 @@ describe('getCompanyOfferDetailsUrl', () => {
 
     const url = getCompanyOfferDetailsUrl('1234');
     expect(url).toEqual('/offerdetails.php?cid=1234');
+  });
+});
+
+describe('getOffersByCategoryUrl', () => {
+  afterAll(() => {
+    jest.resetAllMocks();
+  });
+
+  test('it returns the modern category path for when feature flag is ON', () => {
+    amplitudeStore.set(experimentsAndFeatureFlags, {
+      [AmplitudeExperimentFlags.MODERN_CATEGORIES]: 'on',
+    });
+
+    const categoryPath = getOffersByCategoryUrl('test-category-id');
+
+    expect(categoryPath).toEqual('/category?id=test-category-id');
+  });
+
+  test('it returns the legacy category path for feature flag is OFF', () => {
+    amplitudeStore.set(experimentsAndFeatureFlags, {
+      [AmplitudeExperimentFlags.MODERN_CATEGORIES]: 'off',
+    });
+
+    const categoryPath = getOffersByCategoryUrl('test-category-id');
+
+    expect(categoryPath).toEqual('/offers.php?cat=true&type=test-category-id');
   });
 });

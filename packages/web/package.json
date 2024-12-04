@@ -122,6 +122,7 @@
     "prettier": "^2.8.0",
     "react-test-renderer": "^18.2.0",
     "storybook": "7.1.0",
+    "storybook-addon-fetch-mock": "2.0.0",
     "style-dictionary": "^3.8.0",
     "style-loader": "^3.3.1",
     "tailwindcss": "^3.3.1",

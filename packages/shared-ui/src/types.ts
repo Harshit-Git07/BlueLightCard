@@ -53,13 +53,19 @@ export type AmplitudeArg = {
 
 export type ComponentStatus = 'loading' | 'error' | 'success';
 
+export type PaginatedData = {
+  meta: {
+    totalPages: number;
+  };
+};
+
 export type OfferTypeStrLiterals = V2ApisGetOfferResponse['type'];
 
 /**
  * New offer type from CMS data sources to use going forward
  */
 export type Offer = {
-  offerID: number;
+  offerID: number | string;
   companyID: string;
   companyName: string;
   offerType: OfferTypeStrLiterals;
@@ -67,7 +73,10 @@ export type Offer = {
   imageURL: string;
   legacyCompanyID?: number;
   legacyOfferID?: number;
+  offerDescription?: string;
 };
+
+export type OfferEventHandler = (offer: Offer) => void;
 
 export type FlexibleOfferData = {
   id: string;
@@ -76,6 +85,14 @@ export type FlexibleOfferData = {
   imageURL: string;
   offers: Offer[];
 };
+
+export type CategoryData = {
+  id: string;
+  name: string;
+  data: Offer[];
+};
+
+export type PaginatedCategoryData = CategoryData & PaginatedData;
 
 export type CustomerCardData = {
   cardNumber?: string;
@@ -116,6 +133,41 @@ export type CustomerProfileData = {
   reference: string;
   card: CustomerCardData;
   applications: CustomerApplicationData[];
+};
+
+export type DealsOfTheWeekData = {
+  id: string;
+  offers: Offer[];
+};
+
+export type FeaturedOffersData = {
+  id: string;
+  offers: Offer[];
+};
+
+export type MarketplaceData = {
+  id: string;
+  title: string;
+  offers: Offer[];
+};
+
+export type FlexibleMenuData = {
+  id: string;
+  title: string;
+  imageURL: string;
+};
+
+export type FlexibleMenusData = {
+  id: string;
+  title: string;
+  menus: FlexibleMenuData[];
+};
+
+export type MenusData = {
+  dealsOfTheWeek?: DealsOfTheWeekData;
+  featured?: FeaturedOffersData;
+  marketplace?: MarketplaceData[];
+  flexible?: FlexibleMenusData[];
 };
 
 export type AmplitudeEvent = (properties: AmplitudeArg) => void;

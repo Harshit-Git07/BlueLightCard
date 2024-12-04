@@ -1,6 +1,7 @@
-import { Props as ResponsiveOfferCardProps } from '../ResponsiveOfferCard';
+import type { Offer } from '../../types';
 
 export type OfferCardCarouselProps = {
-  offers: ResponsiveOfferCardProps[];
+  offers: Offer[];
   dealsOfTheWeek?: boolean;
+  onOfferClick(offer: Offer): void;
 };

@@ -32,7 +32,7 @@ describe('deleteOldSearchIndices Handler', () => {
       .mockResolvedValue(['pr-index3', 'pr-index4']);
   });
 
-  it('should not call "getPrEnvironmentIndicesForDeletion" when not staging environment', async () => {
+  it('should not call "getPrEnvironmentIndicesForDeletion" when not "staging" or "pr" environment', async () => {
     await handler();
 
     expect(getPrEnvironmentIndicesForDeletionMock).not.toHaveBeenCalled();
@@ -67,6 +67,22 @@ describe('deleteOldSearchIndices Handler', () => {
     expect(getPublishedIndicesForDeletionMock).toHaveBeenCalled();
     expect(getDraftIndicesForDeletionMock).toHaveBeenCalled();
     expect(deleteIndexMock).not.toHaveBeenCalled();
+  });
+
+  describe('and is "pr" environment', () => {
+    beforeEach(() => {
+      givenEnvironmentIs('pr');
+    });
+
+    it('should delete pr indices when pr indices available for deletion', async () => {
+      await handler();
+
+      expect(getPrEnvironmentIndicesForDeletionMock).toHaveBeenCalled();
+      expect(deleteIndexMock).toHaveBeenCalledWith('index1');
+      expect(deleteIndexMock).toHaveBeenCalledWith('index2');
+      expect(deleteIndexMock).toHaveBeenCalledWith('pr-index3');
+      expect(deleteIndexMock).toHaveBeenCalledWith('pr-index4');
+    });
   });
 
   describe('and is "staging" environment', () => {

@@ -1,7 +1,7 @@
 import { Logger } from '@aws-lambda-powertools/logger';
 import { datadog } from 'datadog-lambda-js';
 
-import { isStaging } from '@blc-mono/core/utils/checkEnvironment';
+import { isPr, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
@@ -16,7 +16,9 @@ export const handlerUnwrapped = async () => {
   indicesToDelete.push(...(await openSearchService.getPublishedIndicesForDeletion()));
   indicesToDelete.push(...(await openSearchService.getDraftIndicesForDeletion()));
 
-  if (isStaging(getEnv(DiscoveryStackEnvironmentKeys.STAGE))) {
+  const stage = getEnv(DiscoveryStackEnvironmentKeys.STAGE);
+
+  if (isPr(stage) || isStaging(stage)) {
     indicesToDelete.push(...(await openSearchService.getPrEnvironmentIndicesForDeletion()));
   }
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.47.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.46.2...bluelightcard/mobile-hybrid-v1.47.0) (2024-12-04)
+
+
+### Features
+
+* [DISCO-1125] hybrid flexi menu integration ([#3220](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3220)) ([1a56d91](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1a56d910652af6a8e3fbe16a4d66ed341e3118b4))
+
 ## [1.46.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.46.1...bluelightcard/mobile-hybrid-v1.46.2) (2024-12-03)
 
 

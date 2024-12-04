@@ -7,7 +7,7 @@ import InvokeNativeNavigation from '@/invoke/navigation';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { OfferFlexibleItemModel, OfferPromosModel } from '@/models/offer';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
-import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { Experiments, FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { useAmplitude } from '@/hooks/useAmplitude';
 import { AmplitudeFeatureFlagState } from '@/components/AmplitudeProvider/types';
 
@@ -49,13 +49,14 @@ const Offers: FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groups]);
 
-  /**
-   * @featureFlag bf-flexi
-   * @description Conditionally render different headings depending on the feature flag
-   * */
+  const modernFlexiMenu = is(FeatureFlags.MODERN_FLEXI_MENU_HYBRID, AmplitudeFeatureFlagState.On);
   const headingFeatureFlag = is(Experiments.BF_FLEXI, AmplitudeFeatureFlagState.On);
+
   const onFlexOfferClick = (flexiTitle: string, { id, title }: OfferFlexibleItemModel) => {
-    navigation.navigate(`/flexibleOffers.php?id=${id}`);
+    const path = modernFlexiMenu ? `/flexible-offers?id=${id}` : `/flexibleOffers.php?id=${id}`;
+
+    navigation.navigate(path);
+
     analytics.logAnalyticsEvent({
       event: AmplitudeEvents.HOMEPAGE_CAROUSEL_CARD_CLICKED,
       parameters: {
@@ -64,6 +65,7 @@ const Offers: FC = () => {
       },
     });
   };
+
   const onCompanyOfferClick = async (
     categoryTitle: string,
     { offername, companyname, id, compid }: OfferPromosModel,

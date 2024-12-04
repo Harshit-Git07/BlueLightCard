@@ -7,6 +7,7 @@ export enum FeatureFlags {
   V5_API_INTEGRATION = 'v5-api-integration',
   CMS_OFFERS = 'cms-offers',
   SEARCH_V5_ENABLED = 'search_v5',
+  MODERN_FLEXI_MENU_HYBRID = 'modern-flexi-menu-hybrid',
 }
 
 export enum Experiments {

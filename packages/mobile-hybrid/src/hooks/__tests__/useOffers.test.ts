@@ -4,7 +4,7 @@ import { useHydrateAtoms } from 'jotai/utils';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { IPlatformAdapter, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
 import { userProfile } from '@/components/UserProfileProvider/store';
-import { Experiments, FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import useOffers from '@/hooks/useOffers';
 
 const renderWithHydratedAtoms = (mockPlatformAdapter: IPlatformAdapter, atomValues: any[] = []) => {
@@ -72,8 +72,8 @@ describe('useOffers', () => {
 
     it('executes V5 menu data request with legacy IDs', async () => {
       mockPlatformAdapter.getAmplitudeFeatureFlag.mockImplementation((flag: string) => {
-        if (flag === Experiments.SEARCH_V5) {
-          return 'treatment';
+        if (flag === FeatureFlags.MODERN_FLEXI_MENU_HYBRID) {
+          return 'on';
         } else if (flag === FeatureFlags.CMS_OFFERS) {
           return 'off';
         }
@@ -209,8 +209,8 @@ describe('useOffers', () => {
 
     it('executes V5 menu data request with modern IDs', async () => {
       mockPlatformAdapter.getAmplitudeFeatureFlag.mockImplementation((flag: string) => {
-        if (flag === Experiments.SEARCH_V5) {
-          return 'treatment';
+        if (flag === FeatureFlags.MODERN_FLEXI_MENU_HYBRID) {
+          return 'on';
         } else if (flag === FeatureFlags.CMS_OFFERS) {
           return 'on';
         }

@@ -11,12 +11,17 @@ import {
   AmplitudeEvents,
 } from '@bluelightcard/shared-ui';
 import { NextPage } from 'next';
+import { useSetAtom } from 'jotai';
+import { spinner } from '@/modules/Spinner/store';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { FC, Suspense, useEffect } from 'react';
 import ContentLoader from 'react-content-loader';
 
 import { BRAND } from '@/globals';
+import { AmplitudeFeatureFlagState } from '@/components/AmplitudeProvider/types';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { useAmplitude } from '@/hooks/useAmplitude';
 
 const FlexibleOffersSkeleton: FC = () => {
   return (
@@ -51,13 +56,15 @@ const FlexibleOffersSkeleton: FC = () => {
 };
 
 const FlexibleOffersContent: FC = () => {
+  const { is } = useAmplitude();
   const router = useRouter();
   const platformAdapter = usePlatformAdapter();
   const { viewOffer } = useOfferDetails();
   const flexibleMenuId = String(router.query.id);
   const { data: flexibleOfferData } = useFlexibleOffersData(flexibleMenuId);
-
   const offers = flexibleOfferData.offers;
+
+  const cmsOffersFlag = !is(FeatureFlags.CMS_OFFERS, AmplitudeFeatureFlagState.On);
 
   useEffect(() => {
     platformAdapter.logAnalyticsEvent(AmplitudeEvents.FLEXIBLE_OFFERS.PAGE_VIEWED, {
@@ -68,23 +75,28 @@ const FlexibleOffersContent: FC = () => {
   }, [flexibleOfferData, platformAdapter]);
 
   const onOfferClick = (offer: Offer) => {
+    const offerId = cmsOffersFlag && offer.legacyOfferID ? offer.legacyOfferID : offer.offerID;
+    const companyId =
+      cmsOffersFlag && offer.legacyCompanyID ? offer.legacyCompanyID : offer.companyID;
+
     platformAdapter.logAnalyticsEvent(AmplitudeEvents.FLEXIBLE_OFFERS.CARD_CLICKED, {
       flexi_menu_id: flexibleOfferData.id,
       flexi_menu_title: flexibleOfferData.title,
       brand: BRAND,
       company_name: offer.companyName,
-      company_id: offer.companyID,
+      company_id: companyId,
       offer_name: offer.offerName,
-      offer_id: offer.offerID,
+      offer_id: offerId,
     });
 
     viewOffer({
-      offerId: offer.offerID,
-      companyId: offer.companyID,
+      offerId,
+      companyId,
       companyName: offer.companyName,
       platform: platformAdapter.platform,
     });
   };
+
   return (
     <>
       <div className="min-w-full">
@@ -121,6 +133,9 @@ const FlexibleOffersContent: FC = () => {
 };
 
 const FlexibleOffersPage: NextPage = () => {
+  const setSpinner = useSetAtom(spinner);
+  setSpinner(false);
+
   return (
     <ErrorBoundary fallback={<ErrorState page="flexi_menu" />}>
       <Suspense fallback={<FlexibleOffersSkeleton />}>

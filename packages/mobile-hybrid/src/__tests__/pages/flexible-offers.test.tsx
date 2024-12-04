@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom';
 import { render, RenderOptions, screen, waitFor } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
 import { NextRouter, useRouter } from 'next/router';
 import {
   OfferDetailsContext,
@@ -10,12 +9,14 @@ import {
   SharedUIConfig,
   flexibleOfferMock,
   AmplitudeEvents,
+  PlatformVariant,
 } from '@bluelightcard/shared-ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import FlexibleOffersPage from '@/pages/flexible-offers';
 import { BRAND, CDN_URL } from '@/globals';
 import useFlexibleOffersData from '@/hooks/useFlexibleOffersData';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
+import userEvent from '@testing-library/user-event';
 
 jest.mock('@/hooks/useFlexibleOffersData');
 jest.mock('next/router', () => ({
@@ -71,22 +72,19 @@ describe('Flexible Offers Page', () => {
   const renderComponent = () => render(<FlexibleOffersPage />, { wrapper });
 
   it('does not render flexible offers content initially', () => {
-    expect(screen.queryByText('Offer Boosts for you')).not.toBeInTheDocument();
+    expect(screen.queryByText(flexibleOfferMock.title)).not.toBeInTheDocument();
+    expect(screen.queryByText(flexibleOfferMock.description)).not.toBeInTheDocument();
   });
 
   it('renders flexible offers content once data is loaded', async () => {
     renderComponent();
 
     await waitFor(() => {
-      expect(screen.getByText('Offer Boosts for you')).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          'This week, we have partnered with some of our partners to reward you with even bigger discounts. Why not take a look at these Offer Boosts…',
-        ),
-      ).toBeInTheDocument();
+      expect(screen.getByText(flexibleOfferMock.title)).toBeInTheDocument();
+      expect(screen.getByText(flexibleOfferMock.description)).toBeInTheDocument();
       expect(screen.getByAltText('Banner image for Offer Boosts for you')).toHaveAttribute(
         'src',
-        'https://cdn.bluelightcard.co.uk/flexible/home/bbr-offer-boosts-week6-flexi.jpg',
+        flexibleOfferMock.imageURL,
       );
     });
   });
@@ -106,10 +104,13 @@ describe('Flexible Offers Page', () => {
     expect(errorMessage).toBeInTheDocument();
   });
 
-  describe('Amplitude events', () => {
-    renderComponent();
+  describe('Events', () => {
+    beforeEach(() => {
+      (useRouter as jest.Mock).mockReturnValue(mockRouter);
+      (useFlexibleOffersData as jest.Mock).mockReturnValue({ data: flexibleOfferMock });
+    });
 
-    it('logs an analytics event when an offer is viewed', async () => {
+    it('logs an analytics event when the page is viewed', async () => {
       expect(mockPlatformAdapter.logAnalyticsEvent).toHaveBeenCalledWith(
         AmplitudeEvents.FLEXIBLE_OFFERS.PAGE_VIEWED,
         {
@@ -120,26 +121,32 @@ describe('Flexible Offers Page', () => {
       );
     });
 
-    it('logs an analytics event when an offer is clicked', async () => {
+    it('logs analytics and calls viewOffer when an offer is clicked', async () => {
       renderComponent();
 
-      const mockOfferData = flexibleOfferMock.offers[0];
-      const offers = screen.getAllByText('Deal of the Week 1');
-      const targetOffer = offers[0];
+      await waitFor(() => expect(screen.getByText('Offer Boosts for you')).toBeInTheDocument());
 
-      await userEvent.click(targetOffer);
+      const offerCard = await screen.findAllByText('Deal of the Week 1');
+
+      await userEvent.click(offerCard[0]);
+
       expect(mockPlatformAdapter.logAnalyticsEvent).toHaveBeenCalledWith(
         AmplitudeEvents.FLEXIBLE_OFFERS.CARD_CLICKED,
-        {
+        expect.objectContaining({
           flexi_menu_id: flexibleOfferMock.id,
           flexi_menu_title: flexibleOfferMock.title,
           brand: BRAND,
-          company_name: mockOfferData.companyName,
-          company_id: mockOfferData.companyID,
-          offer_name: mockOfferData.offerName,
-          offer_id: mockOfferData.offerID,
-        },
+          company_name: flexibleOfferMock.offers[0].companyName,
+          offer_name: flexibleOfferMock.offers[0].offerName,
+        }),
       );
+
+      expect(viewOfferMock).toHaveBeenCalledWith({
+        offerId: flexibleOfferMock.offers[0].legacyOfferID,
+        companyId: flexibleOfferMock.offers[0].legacyCompanyID,
+        companyName: flexibleOfferMock.offers[0].companyName,
+        platform: PlatformVariant.MobileHybrid,
+      });
     });
   });
 });

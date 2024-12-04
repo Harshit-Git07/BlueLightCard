@@ -10,12 +10,12 @@ import { useAtom, useAtomValue } from 'jotai';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { darkRead, IPlatformAdapter } from '@bluelightcard/shared-ui';
 import { atom, useSetAtom } from 'jotai/index';
-import { Experiments, FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
-import { AmplitudeExperimentState } from '@/components/AmplitudeProvider/types';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { spinner } from '@/modules/Spinner/store';
 import { useCallback } from 'react';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { userProfile } from '@/components/UserProfileProvider/store';
+import { AmplitudeFeatureFlagState } from '@/components/AmplitudeProvider/types';
 
 export interface OffersResultResponse {
   success: boolean;
@@ -40,11 +40,9 @@ const useOffers = (platformAdapter: IPlatformAdapter) => {
       const results: OffersResultResponse = await darkRead(
         {
           experimentEnabled:
-            platformAdapter.getAmplitudeFeatureFlag(Experiments.SEARCH_V5) ===
-            AmplitudeExperimentState.Treatment,
-          darkReadEnabled:
-            platformAdapter.getAmplitudeFeatureFlag(Experiments.SEARCH_V5) ===
-            AmplitudeExperimentState.DarkRead,
+            platformAdapter.getAmplitudeFeatureFlag(FeatureFlags.MODERN_FLEXI_MENU_HYBRID) ===
+            AmplitudeFeatureFlagState.On,
+          darkReadEnabled: false,
         },
         async () => v4Offers(),
         async () =>

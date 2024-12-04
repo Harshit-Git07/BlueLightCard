@@ -4,10 +4,11 @@ import { v4 } from 'uuid';
 export function buildTestSanityCompany(overrides?: Partial<SanityCompany>): SanityCompany {
   return {
     _type: 'company',
-    _createdAt: overrides?._createdAt ?? '',
-    _updatedAt: overrides?._updatedAt ?? '2024-08-05T16:50:14Z',
+    _createdAt: '',
+    _updatedAt: '2024-08-05T16:50:14Z',
     _rev: '',
-    _id: overrides?._id ?? v4().toString(),
+    _id: v4().toString(),
+    companyId: 1,
     brandCompanyDetails: [
       {
         _key: '',
@@ -28,5 +29,6 @@ export function buildTestSanityCompany(overrides?: Partial<SanityCompany>): Sani
         ageRestrictions: [],
       },
     ],
+    ...overrides,
   };
 }

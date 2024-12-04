@@ -8,6 +8,8 @@ import { mapOfferEntityToOffer, mapOfferToOfferEntity } from './mapper/OfferMapp
 
 const logger = new LambdaLogger({ serviceName: 'offer-service' });
 
+type OfferReference = { id: string; companyId: string };
+
 export async function insertOffer(offer: Offer): Promise<void> {
   try {
     const offerEntity = mapOfferToOfferEntity(offer);
@@ -75,12 +77,20 @@ export async function getOffersByCompany(companyId: string): Promise<Offer[]> {
   }
 }
 
-export async function getOffersByIds(ids: { id: string; companyId: string }[]): Promise<Offer[]> {
+export async function getOffersByIds(ids: OfferReference[]): Promise<Offer[]> {
   try {
-    const result = await new OfferRepository().retrieveByIds(ids);
+    const result = await new OfferRepository().retrieveByIds(removeDuplicateOffers(ids));
     logger.info({ message: `Retrieved Offers by ids. Size [${result.length}]` });
     return result.map(mapOfferEntityToOffer);
   } catch (error) {
     throw new Error(buildErrorMessage(logger, error, `Error occurred retrieving Offers by ids`));
   }
 }
+
+const removeDuplicateOffers = (offers: OfferReference[]): OfferReference[] => {
+  const uniqueOffers = new Map<string, OfferReference>();
+  offers.forEach((offer) => {
+    uniqueOffers.set(offer.id, offer);
+  });
+  return Array.from(uniqueOffers.values());
+};

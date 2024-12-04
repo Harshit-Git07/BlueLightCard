@@ -215,10 +215,22 @@ describe('Offer Service', () => {
   });
 
   describe('getOffersByIds', () => {
+    const retrieveByIdsSpy = jest.spyOn(OfferRepository.prototype, 'retrieveByIds');
+
     it('should getOffersByIds successfully', async () => {
       givenOfferRepositoryRetrieveByIdsReturns(offers);
       const result = await target.getOffersByIds([{ id: 'offerId', companyId: 'companyId' }]);
       expect(result).toEqual(expectedOffers);
+    });
+
+    it('should remove duplicates', async () => {
+      givenOfferRepositoryRetrieveByIdsReturns(offers);
+      await target.getOffersByIds([
+        { id: 'offerId', companyId: 'companyId' },
+        { id: 'offerId', companyId: 'companyId' },
+        { id: 'offerId', companyId: 'companyId' },
+      ]);
+      expect(retrieveByIdsSpy).toHaveBeenCalledWith([{ id: 'offerId', companyId: 'companyId' }]);
     });
 
     it('should throw error when failure in retrieving offer by ids', async () => {
@@ -232,10 +244,10 @@ describe('Offer Service', () => {
     const givenOfferRepositoryRetrieveByIdsReturns = (offers: Offer[]) => {
       const offerEntities = offers.map(mapOfferToOfferEntity);
 
-      jest.spyOn(OfferRepository.prototype, 'retrieveByIds').mockResolvedValue(offerEntities);
+      retrieveByIdsSpy.mockResolvedValue(offerEntities);
     };
     const givenOfferRepositoryRetrieveByIdsReturnsThrowsAnError = () => {
-      jest.spyOn(OfferRepository.prototype, 'retrieveByIds').mockRejectedValue(new Error('DynamoDB error'));
+      retrieveByIdsSpy.mockRejectedValue(new Error('DynamoDB error'));
     };
   });
 });

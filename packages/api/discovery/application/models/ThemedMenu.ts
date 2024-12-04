@@ -37,7 +37,3 @@ type ThemedMenu = {
 export type ThemedMenuOffer = ThemedMenu & {
   themedMenusOffers: ThemedSubMenuOffer[];
 };
-
-export type ThemedMenuWithOffers = ThemedMenu & {
-  themedMenusOffers: ThemedSubMenuWithOffers[];
-};

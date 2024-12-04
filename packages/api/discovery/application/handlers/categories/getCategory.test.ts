@@ -48,7 +48,7 @@ describe('getCategory Handler', () => {
         message: 'Success',
         data: {
           id: '1',
-          name: 'Electrical and phones',
+          name: 'Home',
           data: expectedOffers,
         },
       }),

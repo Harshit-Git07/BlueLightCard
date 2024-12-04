@@ -17,24 +17,26 @@ const handlerUnwrapped = async () => {
 };
 
 function getCategories(): SimpleCategory[] {
+  /* This is a hardcoded list of categories! Do not change anything here unless the corresponding
+   * list in CMS has also been updated, or they will be out of sync and this could potentially
+   * cause an incident.
+   */
   return [
-    buildSimpleCategory('11', 'Children and toys'),
-    buildSimpleCategory('3', 'Days out'),
-    buildSimpleCategory('1', 'Electrical and phones'),
-    buildSimpleCategory('6', 'Entertainment'),
-    buildSimpleCategory('8', 'Fashion'),
-    buildSimpleCategory('16', 'Featured'),
-    buildSimpleCategory('9', 'Financial and insurance'),
-    buildSimpleCategory('15', 'Food and drink'),
-    buildSimpleCategory('5', 'Gifts'),
-    buildSimpleCategory('4', 'Health and beauty'),
-    buildSimpleCategory('2', 'Holiday and travel'),
-    buildSimpleCategory('10', 'Home and garden'),
-    buildSimpleCategory('7', 'Motoring'),
-    buildSimpleCategory('17', 'Popular'),
-    buildSimpleCategory('14', 'Seasonal'),
-    buildSimpleCategory('13', 'Shoes and accessories'),
-    buildSimpleCategory('12', 'Sport and leisure'),
+    buildSimpleCategory('13', 'Health and Beauty'),
+    buildSimpleCategory('16', 'Children and Toys'),
+    buildSimpleCategory('8', 'Electrical'),
+    buildSimpleCategory('4', 'Fashion'),
+    buildSimpleCategory('7', 'Financial and Insurance'),
+    buildSimpleCategory('12', 'Food and Drink'),
+    buildSimpleCategory('17', 'Gifts and Flowers'),
+    buildSimpleCategory('15', 'Holiday and Travel'),
+    buildSimpleCategory('1', 'Home'),
+    buildSimpleCategory('6', 'Jewellery and Watches'),
+    buildSimpleCategory('11', 'Leisure and Entertainment'),
+    buildSimpleCategory('18', 'Motor'),
+    buildSimpleCategory('3', 'Pets'),
+    buildSimpleCategory('9', 'Phones'),
+    buildSimpleCategory('14', 'Sports and Fitness'),
   ];
 }
 

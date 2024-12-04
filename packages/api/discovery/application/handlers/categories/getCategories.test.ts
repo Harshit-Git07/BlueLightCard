@@ -4,72 +4,64 @@ describe('getCategories Handler', () => {
   it('should return a list of categories', async () => {
     const expectedCategories = [
       {
-        id: '11',
-        name: 'Children and toys',
-      },
-      {
-        id: '3',
-        name: 'Days out',
-      },
-      {
-        id: '1',
-        name: 'Electrical and phones',
-      },
-      {
-        id: '6',
-        name: 'Entertainment',
-      },
-      {
-        id: '8',
-        name: 'Fashion',
+        id: '13',
+        name: 'Health and Beauty',
       },
       {
         id: '16',
-        name: 'Featured',
+        name: 'Children and Toys',
       },
       {
-        id: '9',
-        name: 'Financial and insurance',
-      },
-      {
-        id: '15',
-        name: 'Food and drink',
-      },
-      {
-        id: '5',
-        name: 'Gifts',
+        id: '8',
+        name: 'Electrical',
       },
       {
         id: '4',
-        name: 'Health and beauty',
-      },
-      {
-        id: '2',
-        name: 'Holiday and travel',
-      },
-      {
-        id: '10',
-        name: 'Home and garden',
+        name: 'Fashion',
       },
       {
         id: '7',
-        name: 'Motoring',
-      },
-      {
-        id: '17',
-        name: 'Popular',
-      },
-      {
-        id: '14',
-        name: 'Seasonal',
-      },
-      {
-        id: '13',
-        name: 'Shoes and accessories',
+        name: 'Financial and Insurance',
       },
       {
         id: '12',
-        name: 'Sport and leisure',
+        name: 'Food and Drink',
+      },
+      {
+        id: '17',
+        name: 'Gifts and Flowers',
+      },
+      {
+        id: '15',
+        name: 'Holiday and Travel',
+      },
+      {
+        id: '1',
+        name: 'Home',
+      },
+      {
+        id: '6',
+        name: 'Jewellery and Watches',
+      },
+      {
+        id: '11',
+        name: 'Leisure and Entertainment',
+      },
+      {
+        id: '18',
+        name: 'Motor',
+      },
+      {
+        id: '3',
+        name: 'Pets',
+      },
+      {
+        id: '9',
+        name: 'Phones',
+      },
+      {
+        id: '14',
+        name: 'Sports and Fitness',
       },
     ];
     const expectedResponse = {

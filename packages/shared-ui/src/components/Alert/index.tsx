@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { alertColorConfig, getIconByStateOrString } from './alertConfig';
 import { faXmark } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -54,7 +54,16 @@ const Alert: FC<AlertProps> = ({
 
   const variantStyle = styleVariant[variant];
 
-  const hideAlert = !visible && 'hidden';
+  const hideAlert = !visible ? 'hidden' : '';
+
+  const childContainer = useMemo(() => {
+    if (!children) return null;
+
+    const flexDirectionStyles = variant === 'Inline' ? 'flex-col' : 'flex-row';
+    const bannerStyles = variant === 'Banner' ? 'ml-auto mr-4 items-center' : '';
+    const childContainerStyles = `${variantStyle.children} ${flexDirectionStyles} ${bannerStyles} flex justify-start items-start max-w-[250px] text-base w-full`;
+    return <div className={childContainerStyles}>{children}</div>;
+  }, [variantStyle.children, variant]);
 
   if (!visible) return null;
 
@@ -102,13 +111,7 @@ const Alert: FC<AlertProps> = ({
               </div>
             )}
           </div>
-          {children && (
-            <div
-              className={`flex flex-col justify-start items-start max-w-[250px] text-base w-full ${variantStyle.children}`}
-            >
-              {children}
-            </div>
-          )}
+          {childContainer}
         </div>
         {variant === 'Banner' && isDismissable && (
           <div className="flex items-start  tablet:items-center">

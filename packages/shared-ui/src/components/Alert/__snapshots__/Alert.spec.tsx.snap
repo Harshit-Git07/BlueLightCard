@@ -3,7 +3,7 @@
 exports[`Alert Component renders correctly for Banner variant 1`] = `
 <div
   className="
-        false 
+         
         w-full
         bg-colour-success-bright-light dark:bg-colour-success-container-dark 
         sticky top-0 left-0 z-50 px-[1rem] tablet:px-[3.5rem] laptop:px-[6.5rem] py-[1rem] 
@@ -96,7 +96,7 @@ exports[`Alert Component renders correctly for Banner variant 1`] = `
 exports[`Alert Component renders correctly for Inline variant 1`] = `
 <div
   className="
-        false 
+         
         mx-auto
         bg-colour-info-bright-light dark:bg-colour-info-bright-dark 
         relative  px-3 py-2 

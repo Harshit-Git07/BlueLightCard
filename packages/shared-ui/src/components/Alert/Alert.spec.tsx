@@ -76,7 +76,7 @@ describe('Alert Component', () => {
       />,
     );
 
-    const bannerElement = screen.getByTestId('alertBanner');
+    const bannerElement = screen.getByTestId('alert');
     expect(bannerElement).toBeInTheDocument();
 
     expect(screen.getByText('Error!')).toBeInTheDocument();

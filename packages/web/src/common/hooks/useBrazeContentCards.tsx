@@ -42,7 +42,7 @@ export const useBrazeContentCards = (): BrazeContentCard[] => {
       requestContentCardsRefresh();
 
       const cachedCards = getCachedContentCards();
-      if (cachedCards.cards.length > 0) {
+      if (cachedCards?.cards.length > 0) {
         setContentCards(mapContentCards(cachedCards.cards, logContentCardClick));
       }
 

@@ -15,6 +15,7 @@ import {
   AuthedAmplitudeExperimentProvider,
   useAmplitudeExperiment,
 } from '@/context/AmplitudeExperiment';
+import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 import { as } from '@core/utils/testing';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Factory } from 'fishery';
@@ -54,6 +55,20 @@ jest.mock('@/context/AmplitudeExperiment', () => ({
   useAmplitudeExperiment: jest.fn(),
 }));
 jest.mock('../../common/hooks/useFetchCompaniesOrCategories');
+
+jest.mock('swiper/modules', () => ({
+  Navigation: () => null,
+  Pagination: () => null,
+  Autoplay: () => null,
+}));
+
+jest.mock('swiper/css', () => jest.fn());
+
+const tenancyBannersMock = jest.fn();
+jest.mock('../../common/components/TenancyBanner/useTenancyBanners', () => ({
+  __esModule: true,
+  default: () => tenancyBannersMock(),
+}));
 
 const makeSearchMock = jest.mocked(makeSearch);
 const experimentMakeSearchMock = jest.mocked(experimentMakeSearch);
@@ -102,6 +117,19 @@ describe('SearchPage', () => {
       categories: [],
       companies: [],
       isLoading: false,
+    });
+
+    tenancyBannersMock.mockReturnValue({
+      loaded: true,
+      banners: [
+        {
+          imageUrl: 'test-image.jpg',
+          url: 'test-link',
+          title: 'Test Braze Card',
+          isControl: false,
+          extras: { destination: 'bottom-banner' },
+        },
+      ],
     });
   });
 
@@ -302,26 +330,46 @@ describe('SearchPage', () => {
       expect(window.location.href).toEqual('/offers.php?cat=true&type=1');
     });
 
-    it('Renders tenancy adverts', async () => {
-      givenResultsAreReturned();
-      makeQueryMock.mockResolvedValue({
-        data: {
-          banners: [
-            {
-              imageSource: 'https://test1.image',
-              link: 'https://test1.link',
-            },
-          ],
-        },
-        loading: false,
-        networkStatus: NetworkStatus.ready,
+    describe('Renders tenancy banners', () => {
+      test('Using GraphQL query if Braze Content Cards are disabled', async () => {
+        givenResultsAreReturned();
+        makeQueryMock.mockResolvedValue({
+          data: {
+            banners: [
+              {
+                imageSource: 'https://test1.image',
+                link: 'https://test1.link',
+              },
+            ],
+          },
+          loading: false,
+          networkStatus: NetworkStatus.ready,
+        });
+
+        givenExperimentsReturn('control', 'control', 'off', 'control');
+        whenSearchPageIsRendered();
+
+        const advertImage = await screen.findByAltText("0 + 'banner' banner");
+        expect(advertImage).toBeInTheDocument();
+        expect(advertImage).toHaveAttribute('src', 'https://test1.image/?width=3840&quality=75');
       });
 
-      whenSearchPageIsRendered();
+      test('Using Braze Content Cards if enabled', async () => {
+        givenResultsAreReturned();
+        makeQueryMock.mockResolvedValue({
+          data: {
+            banners: [],
+          },
+          loading: false,
+          networkStatus: NetworkStatus.ready,
+        });
 
-      const advertImage = await screen.findByAltText("0 + 'banner' banner");
-      expect(advertImage).toBeInTheDocument();
-      expect(advertImage).toHaveAttribute('src', 'https://test1.image/?width=3840&quality=75');
+        givenExperimentsReturn('control', 'control', 'off', 'treatment');
+        whenSearchPageIsRendered();
+
+        const brazeCarousel = await screen.findByTestId('braze-tenancy-banner_small');
+        expect(brazeCarousel).toBeInTheDocument();
+      });
     });
 
     it('Has no accessibility violations', async () => {
@@ -405,7 +453,12 @@ const givenResultsAreReturned = () => {
   });
 };
 
-const givenExperimentsReturn = (categorySearch: string, v5Search: string, cmsOffers = 'off') => {
+const givenExperimentsReturn = (
+  categorySearch: string,
+  v5Search: string,
+  cmsOffers = 'off',
+  brazeConentCards: string = 'control'
+) => {
   (useAmplitudeExperiment as jest.Mock).mockImplementation((experimentFlag, defaultVariant) => {
     if (experimentFlag === 'category_level_three_search') {
       return { data: { variantName: categorySearch } };
@@ -417,6 +470,10 @@ const givenExperimentsReturn = (categorySearch: string, v5Search: string, cmsOff
 
     if (experimentFlag === 'cms-offers') {
       return { data: { variantName: cmsOffers } };
+    }
+
+    if (experimentFlag === AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED) {
+      return { data: { variantName: brazeConentCards } };
     }
 
     return { data: { variantName: defaultVariant } };

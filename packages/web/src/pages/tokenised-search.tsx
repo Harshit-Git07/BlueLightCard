@@ -4,7 +4,7 @@ import { NextPage } from 'next/types';
 import React, { useContext, useEffect } from 'react';
 
 import { makeQuery } from 'src/graphql/makeQuery';
-
+import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 import { AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB, BRAND } from '@/global-vars';
 import { advertQuery } from 'src/graphql/advertQuery';
 
@@ -23,6 +23,7 @@ import { shuffle } from 'lodash';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 import BannerCarousel from '@/components/BannerCarousel/BannerCarousel';
 import SearchEmptyState from '@/page-components/SearchEmptyState/SearchEmptyState';
+import TenancyBanner from '../common/components/TenancyBanner';
 import Container from '@/components/Container/Container';
 import { getOffersByCategoryUrl } from '@/utils/externalPageUrls';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
@@ -89,6 +90,10 @@ export const TokenisedSearch: NextPage = () => {
   const userCtx = useContext(UserContext);
   const amplitude = useContext(AmplitudeContext);
 
+  const brazeContentCardsEnabled = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED,
+    'control'
+  );
   const categoryLevelThreeSearchExperiment = useAmplitudeExperiment(
     'category_level_three_search',
     'control'
@@ -308,7 +313,7 @@ export const TokenisedSearch: NextPage = () => {
       </>
 
       {/* Adverts */}
-      {adverts.length > 0 && (
+      {brazeContentCardsEnabled.data?.variantName === 'control' && adverts.length > 0 && (
         <Container addBottomHorizontalLine={false}>
           <BannerCarousel
             banners={adverts.map((advert, index) => ({
@@ -317,6 +322,17 @@ export const TokenisedSearch: NextPage = () => {
               linkUrl: advert.link,
             }))}
           />
+        </Container>
+      )}
+
+      {/* Braze small tenancy banner carousel */}
+      {brazeContentCardsEnabled.data?.variantName === 'treatment' && (
+        <Container
+          className="py-5"
+          data-testid="braze-tenancy-banner_small"
+          addBottomHorizontalLine={false}
+        >
+          <TenancyBanner title="bottom" variant="small" />
         </Container>
       )}
     </>

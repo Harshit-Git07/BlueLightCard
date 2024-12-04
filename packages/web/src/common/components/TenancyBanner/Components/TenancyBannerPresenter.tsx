@@ -42,7 +42,7 @@ const TenancyBannerPresenter: FC<Props> = ({
     >
       {banners.map((banner, index) => (
         <CampaignCard
-          key={banner.link}
+          key={`tenancy-banner-${banner.link}-${variant}`}
           image={banner.imageSource}
           linkUrl={banner.link}
           name={banner.title ? banner.title : `banner-${index}`}

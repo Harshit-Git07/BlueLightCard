@@ -155,7 +155,7 @@ describe('Categories E2E Event Handling', async () => {
             _createdAt: '',
             _updatedAt: '',
             _rev: '',
-            id: 2,
+            id: 1,
             name: 'Test Category 2',
             level: 3,
             parentCategoryIds: [],
@@ -227,7 +227,7 @@ describe('Categories E2E Event Handling', async () => {
         organisation: 'blc',
       },
       { Authorization: `Bearer ${testUserTokens.idToken}` },
-      '2',
+      '1',
     );
 
     const results = (await result.json()) as { data: { data: OfferResponse[] } };

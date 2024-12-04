@@ -1,13 +1,13 @@
 import * as target from './UseEmployers';
-import { organisationNoEmployersStub } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-organisations/stubs/OrganisationStubs';
+import { organisationNoEmployersStub } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/stubs/OrganisationStubs';
 import { renderHook, RenderHookResult, waitFor } from '@testing-library/react';
-import { getEmployers } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/service-layer/GetEmployers';
+import { getEmployers } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-employers/service-layer/GetEmployers';
 import { v4 as createUuid } from 'uuid';
 import { buildTestEligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/testing/BuildTestEligibilityDetails';
 import { EligibilityEmployer } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 
 jest.mock(
-  '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/service-layer/GetEmployers'
+  '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-employers/service-layer/GetEmployers'
 );
 
 const getEmployersMock = jest.mocked(getEmployers);
@@ -34,13 +34,19 @@ describe('given the organisation is undefined', () => {
 describe('given a list of employers are returned from the service layer', () => {
   beforeEach(async () => {
     getEmployersMock.mockResolvedValue([
-      { employerId: 'from-service-layer', name: 'From service layer' },
+      {
+        employerId: 'from-service-layer',
+        name: 'From service layer',
+      },
     ]);
 
     const renderResult = renderHook(() => {
       return target.useEmployers(
         buildTestEligibilityDetails({
-          organisation: { id: createUuid(), label: 'From Service Layer' },
+          organisation: {
+            id: createUuid(),
+            label: 'From Service Layer',
+          },
         })
       );
     });
@@ -50,7 +56,12 @@ describe('given a list of employers are returned from the service layer', () => 
   it('should return the result from the service layer', () => {
     waitFor(() => {
       expect(getEmployersMock).toHaveBeenCalled();
-      expect(result.current).toEqual(<EligibilityEmployer[]>[{ id: '1', label: 'Employer 1' }]);
+      expect(result.current).toEqual(<EligibilityEmployer[]>[
+        {
+          id: '1',
+          label: 'Employer 1',
+        },
+      ]);
     });
   });
 });
@@ -78,7 +89,12 @@ describe('given the organisation id is not a uuid', () => {
   beforeEach(() => {
     const renderResult = renderHook(() => {
       return target.useEmployers(
-        buildTestEligibilityDetails({ organisation: { id: '1', label: 'Organisation 1' } })
+        buildTestEligibilityDetails({
+          organisation: {
+            id: '1',
+            label: 'Organisation 1',
+          },
+        })
       );
     });
     result = renderResult.result;
@@ -86,9 +102,18 @@ describe('given the organisation id is not a uuid', () => {
 
   it('should return stub list of employers', () => {
     expect(result.current).toEqual(<Result>[
-      { id: '1', label: 'Employer 1' },
-      { id: '2', label: 'Employer 2' },
-      { id: '3', label: 'Employer 3' },
+      {
+        id: '1',
+        label: 'Employer 1',
+      },
+      {
+        id: '2',
+        label: 'Employer 2',
+      },
+      {
+        id: '3',
+        label: 'Employer 3',
+      },
     ]);
   });
 });

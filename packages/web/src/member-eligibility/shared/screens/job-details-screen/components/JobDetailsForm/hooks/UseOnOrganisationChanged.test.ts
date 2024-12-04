@@ -1,7 +1,7 @@
 import * as target from './UseOnOrganisationChanged';
 import { useCallback } from 'react';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
-import { organisationMultiIdStub } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-organisations/stubs/OrganisationStubs';
+import { organisationMultiIdStub } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/stubs/OrganisationStubs';
 
 jest.mock('react');
 

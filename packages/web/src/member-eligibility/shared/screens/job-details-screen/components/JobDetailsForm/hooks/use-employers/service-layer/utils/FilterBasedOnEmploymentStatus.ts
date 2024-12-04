@@ -9,6 +9,8 @@ export function filterBasedOnEmploymentStatus(
     if (!employmentStatus) return true;
 
     switch (employmentStatus) {
+      case undefined:
+        return true;
       case 'Employed':
         return serviceLayerEmployer.active;
       case 'Retired or Bereaved':

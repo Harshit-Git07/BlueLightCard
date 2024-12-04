@@ -1,20 +1,29 @@
 import { useEffect, useState } from 'react';
-import { getEmployers } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/service-layer/GetEmployers';
-import { toEligibilityEmployer } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/mapper/ToEligibilityEmployer';
+import { getEmployers } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-employers/service-layer/GetEmployers';
+import { toEligibilityEmployer } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-employers/mapper/ToEligibilityEmployer';
 import {
   EligibilityOrganisation,
   EligibilityEmployer,
   EligibilityDetails,
 } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { validate } from 'uuid';
-import { organisationNoEmployersStub } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-organisations/stubs/OrganisationStubs';
 import { filterBasedOnEmploymentStatus } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/service-layer/utils/FilterBasedOnEmploymentStatus';
+import { organisationNoEmployersStub } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/stubs/OrganisationStubs';
 
 // TODO: This will be removed once service layer is fully integrated
 const employersStub: EligibilityEmployer[] = [
-  { id: '1', label: 'Employer 1' },
-  { id: '2', label: 'Employer 2' },
-  { id: '3', label: 'Employer 3' },
+  {
+    id: '1',
+    label: 'Employer 1',
+  },
+  {
+    id: '2',
+    label: 'Employer 2',
+  },
+  {
+    id: '3',
+    label: 'Employer 3',
+  },
 ];
 
 export function useEmployers(

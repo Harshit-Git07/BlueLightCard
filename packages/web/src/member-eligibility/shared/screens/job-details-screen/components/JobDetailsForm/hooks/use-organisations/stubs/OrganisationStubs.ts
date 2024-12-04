@@ -27,5 +27,6 @@ export const organisationsStub: EligibilityOrganisation[] = [
   { id: '3', label: 'Blood Bikes' },
   { id: '4', label: 'Ambulance' },
   { id: '5', label: 'Dentist' },
+  { id: '6', label: 'Healthcare Allied Health' },
   ...fuzzyFrontendActionStubs,
 ];

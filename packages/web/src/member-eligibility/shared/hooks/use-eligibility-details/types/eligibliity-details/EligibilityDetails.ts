@@ -9,6 +9,7 @@ export interface EligibilityDetails {
   organisation?: EligibilityOrganisation;
   employer?: EligibilityEmployer;
   jobTitle?: string;
+  jobDetailsAus?: EligibilityJobDetailsAus;
   promoCode?: string;
   requireMultipleIds?: boolean;
   canSkipIdVerification?: boolean;
@@ -58,6 +59,12 @@ export interface EligibilityOrganisation {
 export interface EligibilityEmployer {
   id: string;
   label: string;
+}
+
+export interface EligibilityJobDetailsAus {
+  isSelfEmployed?: boolean;
+  employerAus?: string;
+  australianBusinessNumber?: string;
 }
 
 export interface EligibilityDetailsMember {

@@ -1,11 +1,11 @@
 import * as target from './UseOrganisations';
 import { renderHook, RenderHookResult, waitFor } from '@testing-library/react';
-import { getOrganisations } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-organisations/service-layer/GetOrganisations';
+import { getOrganisations } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/service-layer/GetOrganisations';
 import { EligibilityOrganisation } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { buildTestEligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/testing/BuildTestEligibilityDetails';
 
 jest.mock(
-  '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-organisations/service-layer/GetOrganisations'
+  '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/service-layer/GetOrganisations'
 );
 
 const getOrganisationsMock = jest.mocked(getOrganisations);
@@ -21,7 +21,10 @@ beforeEach(() => {
 describe('given a list of organisations are returned from the service layer', () => {
   beforeEach(async () => {
     getOrganisationsMock.mockResolvedValue([
-      { organisationId: 'from-service-layer', name: 'From service layer' },
+      {
+        organisationId: 'from-service-layer',
+        name: 'From service layer',
+      },
     ]);
 
     const renderResult = renderHook(() => {
@@ -34,7 +37,10 @@ describe('given a list of organisations are returned from the service layer', ()
     waitFor(() => {
       expect(getOrganisationsMock).toHaveBeenCalled();
       expect(result.current).toEqual(<EligibilityOrganisation[]>[
-        { id: 'from-service-layer', label: 'From service layer' },
+        {
+          id: 'from-service-layer',
+          label: 'From service layer',
+        },
       ]);
     });
   });

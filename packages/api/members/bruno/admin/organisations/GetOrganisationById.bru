@@ -1,0 +1,11 @@
+meta {
+  name: GetOrganisationById
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{apiBaseUrl}}/admin/orgs/{{organisationId}}
+  body: none
+  auth: none
+}

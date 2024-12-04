@@ -7,7 +7,7 @@ import { ValidationError } from '@blc-mono/members/application/errors/Validation
 const service = new CardService();
 
 const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<CardModel[]> => {
-  const { memberId, cardNumber } = event.pathParameters || {};
+  const { memberId } = event.pathParameters || {};
   if (!memberId) {
     throw new ValidationError('Member ID is required');
   }

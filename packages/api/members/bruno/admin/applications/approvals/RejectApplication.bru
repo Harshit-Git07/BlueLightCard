@@ -1,0 +1,11 @@
+meta {
+  name: RejectApplication
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{apiBaseUrl}}/admin/members/{{memberId}}/applications/{{applicationId}}/reject
+  body: json
+  auth: none
+}

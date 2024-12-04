@@ -1,0 +1,4 @@
+export enum IdType {
+  IMAGE_UPLOAD = 'IMAGE_UPLOAD',
+  TRUSTED_DOMAIN = 'TRUSTED_DOMAIN',
+}

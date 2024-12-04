@@ -1,7 +1,7 @@
 import { ProfileService } from '../profileService';
 import { ProfileRepository } from '../../repositories/profileRepository';
 import { OrganisationService } from '../organisationService';
-import { Auth0Client } from '../../auth0/auth0Client';
+import { Auth0ClientService } from '../../auth0/auth0ClientService';
 import { v4 as uuidv4 } from 'uuid';
 import { OrganisationModel } from '../../models/organisationModel';
 import { EmployerModel } from '../../models/employerModel';
@@ -9,13 +9,17 @@ import { CreateProfileModel } from '../../models/profileModel';
 import { NotFoundError } from '../../errors/NotFoundError';
 import { PasswordChangeModel } from '../../models/passwordChangeModel';
 import { EmailChangeModel } from '../../models/emailChangeModel';
+import { EmploymentStatus } from '../../models/enums/EmploymentStatus';
+import { NoteModel } from '../../models/noteModel';
+import { NoteSource } from '../../models/enums/NoteSource';
+import { IdType } from '../../models/enums/IdType';
+import { EmailService } from '../../email/emailService';
+import { TokenSet } from 'auth0';
 
 jest.mock('../../repositories/profileRepository');
 jest.mock('../organisationService');
-jest.mock('../../auth0/auth0Client');
-jest.mock('sst/node/table', () => ({
-  Table: jest.fn(),
-}));
+jest.mock('../../auth0/auth0ClientService');
+jest.mock('../../email/emailService');
 
 describe('ProfileService', () => {
   const memberId = uuidv4();
@@ -38,43 +42,69 @@ describe('ProfileService', () => {
     organisationId,
     name: 'Org1',
     active: true,
-    volunteers: false,
-    retired: false,
-    idRequirements: [],
+    employmentStatus: [EmploymentStatus.EMPLOYED],
+    employedIdRequirements: {
+      minimumRequired: 1,
+      supportedDocuments: [
+        { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
+      ],
+    },
+    retiredIdRequirements: {
+      minimumRequired: 1,
+      supportedDocuments: [
+        { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
+      ],
+    },
+    volunteerIdRequirements: {
+      minimumRequired: 1,
+      supportedDocuments: [
+        { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
+      ],
+    },
     trustedDomains: [],
   };
   const employer: EmployerModel = {
+    organisationId,
     employerId,
     name: 'Employer1',
     active: true,
-    volunteers: false,
-    retired: false,
-    trustedDomains: [],
+    employmentStatus: [EmploymentStatus.EMPLOYED],
   };
   const emailChange: EmailChangeModel = {
     currentEmail: 'email@example.com',
     newEmail: 'newemail@example.com',
   };
-  const passwordChange: PasswordChangeModel = {
-    email: 'john.doe@example.com',
-    currentPassword: 'password',
-    newPassword: 'newPassword',
+  const noteId = uuidv4();
+  const note: NoteModel = {
+    noteId,
+    category: 'General',
+    text: 'Test note',
+    source: NoteSource.ADMIN,
+    pinned: false,
   };
-  const note = { category: 'General', message: 'Test note' };
+  const tokenSet: TokenSet = {
+    access_token: 'accessToken',
+    expires_in: 3600,
+    id_token: 'idToken',
+    token_type: 'Bearer',
+  };
 
   let profileRepositoryMock: jest.Mocked<ProfileRepository>;
   let organisationServiceMock: jest.Mocked<OrganisationService>;
-  let auth0ClientMock: jest.Mocked<Auth0Client>;
+  let auth0ClientMock: jest.Mocked<Auth0ClientService>;
+  let emailClientMock: jest.Mocked<EmailService>;
   let profileService: ProfileService;
 
   beforeEach(() => {
     profileRepositoryMock = new ProfileRepository() as jest.Mocked<ProfileRepository>;
     organisationServiceMock = new OrganisationService() as jest.Mocked<OrganisationService>;
-    auth0ClientMock = new Auth0Client() as jest.Mocked<Auth0Client>;
+    auth0ClientMock = new Auth0ClientService() as jest.Mocked<Auth0ClientService>;
+    emailClientMock = new EmailService() as jest.Mocked<EmailService>;
     profileService = new ProfileService(
       profileRepositoryMock,
       organisationServiceMock,
       auth0ClientMock,
+      emailClientMock,
     );
   });
 
@@ -96,7 +126,7 @@ describe('ProfileService', () => {
     it('should update a profile successfully', async () => {
       organisationServiceMock.getOrganisation.mockResolvedValue(organisation);
       organisationServiceMock.getEmployer.mockResolvedValue(employer);
-      await profileService.updateProfile(profile);
+      await profileService.updateProfile(memberId, profile);
       expect(profileRepositoryMock.updateProfile).toHaveBeenCalledWith(memberId, profile);
     });
 
@@ -104,7 +134,7 @@ describe('ProfileService', () => {
       organisationServiceMock.getOrganisation.mockRejectedValue(
         new NotFoundError('Organisation not found'),
       );
-      await expect(profileService.updateProfile(profile)).rejects.toThrow(NotFoundError);
+      await expect(profileService.updateProfile(memberId, profile)).rejects.toThrow(NotFoundError);
     });
 
     it('should throw an error if employer does not exist', async () => {
@@ -112,7 +142,7 @@ describe('ProfileService', () => {
       organisationServiceMock.getEmployer.mockRejectedValue(
         new NotFoundError('Employer not found'),
       );
-      await expect(profileService.updateProfile(profile)).rejects.toThrow(NotFoundError);
+      await expect(profileService.updateProfile(memberId, profile)).rejects.toThrow(NotFoundError);
     });
   });
 
@@ -157,19 +187,75 @@ describe('ProfileService', () => {
     });
   });
 
+  describe('sendEmailChangeRequest', () => {
+    it('should throw an error if user is not found', async () => {
+      profileRepositoryMock.getProfile.mockRejectedValue(new Error('repository Error'));
+
+      await expect(
+        profileService.sendEmailChangeRequest('123', 'current@example.com', 'new@example.com'),
+      ).rejects.toThrow('repository Error');
+    });
+
+    it('should throw an error if current email does not match', async () => {
+      profileRepositoryMock.getProfile.mockResolvedValue(profile);
+
+      await expect(
+        profileService.sendEmailChangeRequest('123', 'random@email.com', 'new@example.com'),
+      ).rejects.toThrow(
+        'Error sending change email: email in payload does not match current email does not match',
+      );
+    });
+
+    it('should log an error and throw if sendEmailChangeRequest fails', async () => {
+      profileRepositoryMock.getProfile.mockResolvedValue(profile);
+      emailClientMock.sendEmailChangeRequest.mockRejectedValue(new Error('SES error'));
+
+      await expect(
+        profileService.sendEmailChangeRequest('123', profile.email, 'new@example.com'),
+      ).rejects.toThrow('SES error');
+    });
+
+    it('should send an email change request successfully', async () => {
+      profileRepositoryMock.getProfile.mockResolvedValue(profile);
+      await profileService.sendEmailChangeRequest('123', profile.email, 'new@example.com');
+      expect(emailClientMock.sendEmailChangeRequest).toHaveBeenCalledWith('new@example.com');
+    });
+  });
+
   describe('changePassword', () => {
-    it('should change password successfully', async () => {
-      await profileService.changePassword(memberId, passwordChange);
-      expect(auth0ClientMock.changeEmail).toHaveBeenCalledWith(
-        memberId,
-        passwordChange.newPassword,
+    it('should throw validation error when entered email does not match profile', async () => {
+      const passwordChange = passwordChangeModel('not.john.doe@example.com');
+      profileRepositoryMock.getProfile.mockResolvedValue(profile);
+
+      await expect(profileService.changePassword(memberId, passwordChange)).rejects.toThrow(
+        'Email address does not match',
       );
     });
 
     it('should throw an error if changing password fails', async () => {
-      auth0ClientMock.changeEmail.mockRejectedValue(new Error('Change failed'));
+      const passwordChange = passwordChangeModel();
+      const auth0Id = 'auth0|12345';
+      profileRepositoryMock.getProfile.mockResolvedValue(profile);
+      auth0ClientMock.authenticateUserWithPassword.mockResolvedValue(tokenSet);
+      auth0ClientMock.getUserIdByEmail.mockResolvedValue(auth0Id);
+      auth0ClientMock.changePassword.mockRejectedValue(new Error('Change failed'));
+
       await expect(profileService.changePassword(memberId, passwordChange)).rejects.toThrow(
         'Change failed',
+      );
+    });
+
+    it('should change password successfully', async () => {
+      const passwordChange = passwordChangeModel();
+      const auth0Id = 'auth0|12345';
+      profileRepositoryMock.getProfile.mockResolvedValue(profile);
+      auth0ClientMock.authenticateUserWithPassword.mockResolvedValue(tokenSet);
+      auth0ClientMock.getUserIdByEmail.mockResolvedValue(auth0Id);
+
+      await profileService.changePassword(memberId, passwordChange);
+      expect(auth0ClientMock.changePassword).toHaveBeenCalledWith(
+        auth0Id,
+        passwordChange.newPassword,
       );
     });
   });
@@ -219,4 +305,16 @@ describe('ProfileService', () => {
       );
     });
   });
+
+  const passwordChangeModel = (
+    email?: string,
+    currentPassword?: string,
+    newPassword?: string,
+  ): PasswordChangeModel => {
+    return {
+      email: email ? email : 'john.doe@example.com',
+      currentPassword: currentPassword ? currentPassword : 'password',
+      newPassword: newPassword ? newPassword : 'newPassword',
+    };
+  };
 });

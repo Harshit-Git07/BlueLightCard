@@ -1,0 +1,81 @@
+meta {
+  name: UpdateOrganisation
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{apiBaseUrl}}/admin/orgs/{{organisationId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Blue Light Card",
+    "type": "RESERVED",
+    "active": true,
+    "employedIdRequirements": {
+      "minimumRequired": 1,
+      "supportedDocuments": [
+        {
+          "idKey": "payslip",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your payslip"
+        },
+        {
+          "idKey": "passport",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your passport"
+        },
+        {
+          "idKey": "p60",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your P60"
+        }
+      ]
+    },
+    "retiredIdRequirements": {
+      "minimumRequired": 1,
+      "supportedDocuments": [
+        {
+          "idKey": "payslip",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your payslip"
+        },
+        {
+          "idKey": "passport",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your passport"
+        },
+        {
+          "idKey": "p60",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your P60"
+        }
+      ]
+    },
+    "volunteerIdRequirements": {
+      "minimumRequired": 1,
+      "supportedDocuments": [
+        {
+          "idKey": "payslip",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your payslip"
+        },
+        {
+          "idKey": "passport",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your passport"
+        },
+        {
+          "idKey": "p60",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your P60"
+        }
+      ]
+    },
+    "bypassPayment": false,
+    "bypassId": false
+  }
+}

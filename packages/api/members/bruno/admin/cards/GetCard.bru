@@ -1,0 +1,11 @@
+meta {
+  name: GetCard
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{apiBaseUrl}}/admin/members/{{memberId}}/cards/{{cardNumber}}
+  body: none
+  auth: none
+}

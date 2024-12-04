@@ -1,0 +1,18 @@
+meta {
+  name: ChangeEmail
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{apiBaseUrl}}/members/{{memberId}}/profile/email
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "currentEmail": "john@example.com",
+    "newEmail": "john+doe@example.com"
+  }
+}

@@ -8,7 +8,7 @@ const mockDynamoDB = mockClient(DynamoDBDocumentClient);
 
 describe('PromoCodesRepository', () => {
   const mockPromoCode = 'CODE123';
-  const mockParentPromoCodeUuid = 'fdb27574-d07d-463d-9f74-3c783cc086ac';
+  const mockParentPromoCodeId = 'fdb27574-d07d-463d-9f74-3c783cc086ac';
 
   let repository: PromoCodeRepository;
 
@@ -32,7 +32,7 @@ describe('PromoCodesRepository', () => {
 
         expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, {
           TableName: 'memberPromosTest',
-          IndexName: 'gsi2',
+          IndexName: 'PromoCodeIndex',
           KeyConditionExpression: 'code = :code',
           FilterExpression: 'sk = :multiCodeSk OR begins_with(sk, :singleCodeChildSk)',
           ExpressionAttributeValues: {
@@ -50,13 +50,16 @@ describe('PromoCodesRepository', () => {
         const singleUseCodeQueryResult = {
           pk: 'PROMO_CODE#fdb27574-d07d-463d-9f74-3c783cc086ac',
           sk: 'SINGLE_USE#70f4995f-4c86-48ff-b700-79f1b7b216c2',
+          parentId: 'fdb27574-d07d-463d-9f74-3c783cc086ac',
+          singleCodeId: '70f4995f-4c86-48ff-b700-79f1b7b216c2',
+          promoCodeType: PromoCodeType.SINGLE_USE,
           addedDate: '2021-09-07T12:21:17.000Z',
           code: mockPromoCode,
           used: true,
           usedDate: '2021-10-15T12:21:17.000Z',
         };
         const singleUseCodeParsedModel = {
-          parentUuid: 'fdb27574-d07d-463d-9f74-3c783cc086ac',
+          parentId: 'fdb27574-d07d-463d-9f74-3c783cc086ac',
           active: undefined,
           bypassPayment: undefined,
           bypassVerification: undefined,
@@ -72,10 +75,10 @@ describe('PromoCodesRepository', () => {
           promoCodeType: PromoCodeType.SINGLE_USE,
           validityEndDate: undefined,
           validityStartDate: undefined,
-          addedDate: '2021-09-07',
-          singleCodeUuid: '70f4995f-4c86-48ff-b700-79f1b7b216c2',
+          addedDate: '2021-09-07T12:21:17.000Z',
+          singleCodeId: '70f4995f-4c86-48ff-b700-79f1b7b216c2',
           used: true,
-          usedDate: '2021-10-15',
+          usedDate: '2021-10-15T12:21:17.000Z',
         };
         const mockQueryResult = { Items: [singleUseCodeQueryResult] };
         mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
@@ -84,7 +87,7 @@ describe('PromoCodesRepository', () => {
 
         expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, {
           TableName: 'memberPromosTest',
-          IndexName: 'gsi2',
+          IndexName: 'PromoCodeIndex',
           KeyConditionExpression: 'code = :code',
           FilterExpression: 'sk = :multiCodeSk OR begins_with(sk, :singleCodeChildSk)',
           ExpressionAttributeValues: {
@@ -126,13 +129,13 @@ describe('PromoCodesRepository', () => {
       const mockQueryResult = { Items: [singleUseParentCodeQueryResult] };
       mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
 
-      const result = await repository.getSingleUseParentPromoCode(mockParentPromoCodeUuid);
+      const result = await repository.getSingleUseParentPromoCode(mockParentPromoCodeId);
 
       expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, {
         TableName: 'memberPromosTest',
         KeyConditionExpression: 'pk = :pk AND sk = :singleCodeParentSk',
         ExpressionAttributeValues: {
-          ':pk': `PROMO_CODE#${mockParentPromoCodeUuid}`,
+          ':pk': `PROMO_CODE#${mockParentPromoCodeId}`,
           ':singleCodeParentSk': 'SINGLE_USE',
         },
       });
@@ -143,7 +146,7 @@ describe('PromoCodesRepository', () => {
       const mockQueryResult = { Items: [] };
       mockDynamoDB.on(QueryCommand).resolves(mockQueryResult);
 
-      const result = await repository.getSingleUseParentPromoCode(mockParentPromoCodeUuid);
+      const result = await repository.getSingleUseParentPromoCode(mockParentPromoCodeId);
 
       expect(result).toBeNull();
     });
@@ -151,7 +154,7 @@ describe('PromoCodesRepository', () => {
     it('should throw an error when query fails', async () => {
       mockDynamoDB.on(QueryCommand).rejects(new Error('DynamoDB error'));
 
-      await expect(repository.getSingleUseParentPromoCode(mockParentPromoCodeUuid)).rejects.toThrow(
+      await expect(repository.getSingleUseParentPromoCode(mockParentPromoCodeId)).rejects.toThrow(
         'DynamoDB error',
       );
     });
@@ -161,6 +164,8 @@ describe('PromoCodesRepository', () => {
     return {
       pk: 'PROMO_CODE#fdb27574-d07d-463d-9f74-3c783cc086ac',
       sk: type,
+      parentId: 'fdb27574-d07d-463d-9f74-3c783cc086ac',
+      promoCodeType: type,
       active: true,
       bypassPayment: false,
       bypassVerification: true,
@@ -180,27 +185,22 @@ describe('PromoCodesRepository', () => {
 
   const parentCodeParsedModelWithType = (type: PromoCodeType) => {
     return {
-      parentUuid: 'fdb27574-d07d-463d-9f74-3c783cc086ac',
+      parentId: 'fdb27574-d07d-463d-9f74-3c783cc086ac',
+      promoCodeType: type,
       active: true,
       bypassPayment: false,
       bypassVerification: true,
       cardValidityTerm: 2,
       code: mockPromoCode,
       codeProvider: '4489d238-245d-472f-ba17-582d68fd2bd7',
-      createdDate: '2021-09-07',
+      createdDate: '2021-09-07T12:21:17.000Z',
       currentUsages: 300,
       description: 'For NHS employees',
-      lastUpdatedDate: '2021-09-07',
+      lastUpdatedDate: '2021-09-07T12:21:17.000Z',
       maxUsages: 1000,
       name: 'NHS',
-      promoCodeType: type,
-      validityEndDate: '2022-09-07',
-      validityStartDate: '2021-09-07',
-      addedDate: undefined,
-      cardId: undefined,
-      singleCodeUuid: undefined,
-      used: undefined,
-      usedDate: undefined,
+      validityEndDate: '2022-09-07T12:21:17.000Z',
+      validityStartDate: '2021-09-07T12:21:17.000Z',
     };
   };
 });

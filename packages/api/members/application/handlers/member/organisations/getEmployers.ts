@@ -12,7 +12,10 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<EmployerMo
     throw new ValidationError('Organisation ID is required');
   }
 
-  return await service.getEmployers(organisationId);
+  const redactedSchema = EmployerModel.omit({ trustedDomains: true });
+  return (await service.getEmployers(organisationId)).map((employer) =>
+    redactedSchema.parse(employer),
+  );
 };
 
 export const handler = middleware(unwrappedHandler);

@@ -9,9 +9,6 @@ import { ProfileModel } from '../../models/profileModel';
 
 jest.mock('../../repositories/promoCodeRepository');
 jest.mock('../../services/profileService');
-jest.mock('sst/node/table', () => ({
-  Table: jest.fn(),
-}));
 
 describe('PromoCodeService', () => {
   let service: PromoCodeService;
@@ -157,7 +154,7 @@ describe('PromoCodeService', () => {
       lastUpdatedDate: '2021-09-07',
       maxUsages: 1000,
       name: 'NHS',
-      type: type,
+      promoCodeType: type,
       validityEndDate: inDate ? '2122-09-07' : '2021-09-10',
       validityStartDate: '2021-09-07',
       addedDate: undefined,
@@ -182,7 +179,7 @@ describe('PromoCodeService', () => {
       lastUpdatedDate: undefined,
       maxUsages: undefined,
       name: undefined,
-      type: PromoCodeType.SINGLE_USE,
+      promoCodeType: PromoCodeType.SINGLE_USE,
       validityEndDate: undefined,
       validityStartDate: undefined,
       addedDate: '2021-09-07',

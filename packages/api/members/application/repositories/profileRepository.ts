@@ -13,19 +13,30 @@ import { Table } from 'sst/node/table';
 import { v4 as uuidv4 } from 'uuid';
 import { EligibilityStatus } from '../models/enums/EligibilityStatus';
 import { ApplicationReason } from '../models/enums/ApplicationReason';
-import { NoteModel } from '../models/noteModel';
+import { CreateNoteModel, NoteModel } from '../models/noteModel';
 import { CardModel } from '../models/cardModel';
 import { ApplicationModel } from '../models/applicationModel';
-import { CreateProfileModel, ProfileModel, UpdateProfileModel } from '../models/profileModel';
-import { APPLICATION, memberKey, PROFILE, CARD, MEMBER } from './repository';
+import { CreateProfileModel, ProfileModel } from '../models/profileModel';
+import {
+  APPLICATION,
+  memberKey,
+  PROFILE,
+  CARD,
+  MEMBER,
+  noteKey,
+  NOTE,
+  Repository,
+} from './repository';
 import { NotFoundError } from '../errors/NotFoundError';
 
-export class ProfileRepository {
+export class ProfileRepository extends Repository {
   constructor(
-    private readonly dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
+    dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
     // @ts-ignore
     private readonly tableName: string = Table.memberProfiles.tableName,
-  ) {}
+  ) {
+    super(dynamoDB);
+  }
 
   async createProfile(profile: CreateProfileModel): Promise<string> {
     const memberId = uuidv4();
@@ -40,10 +51,7 @@ export class ProfileRepository {
               pk: memberKey(memberId),
               sk: PROFILE,
               memberId,
-              firstName: profile.firstName,
-              lastName: profile.lastName,
-              ...(profile.dateOfBirth && { dateOfBirth: profile.dateOfBirth }),
-              emailAddress: profile.email,
+              ...profile,
             },
           },
         },
@@ -70,36 +78,26 @@ export class ProfileRepository {
   }
 
   async updateProfile(memberId: string, profile: Partial<ProfileModel>): Promise<void> {
-    const updateExpression: string[] = [];
-    const expressionAttributeValues: { [key: string]: any } = {};
-
-    for (const field of Object.keys(profile) as (keyof ProfileModel)[]) {
-      if (profile[field] !== undefined) {
-        updateExpression.push(`${field} = :${field}`);
-        expressionAttributeValues[`:${field}`] = profile[field];
-      }
-    }
-
-    const params = {
-      TableName: this.tableName,
-      Key: {
-        pk: memberKey(memberId),
-        sk: PROFILE,
+    const { applications, card, ...reducedProfile } = profile;
+    await this.partialUpdate({
+      tableName: this.tableName,
+      pk: memberKey(memberId),
+      sk: PROFILE,
+      data: {
+        ...reducedProfile,
+        lastUpdated: new Date().toISOString(),
       },
-      UpdateExpression: `SET ${updateExpression.join(', ')} `,
-      ExpressionAttributeValues: expressionAttributeValues,
-    };
-
-    await this.dynamoDB.send(new UpdateCommand(params));
+    });
   }
 
   // This is temporary until we have OpenSearch in place
   async getProfiles(): Promise<ProfileModel[]> {
     const params: ScanCommandInput = {
       TableName: this.tableName,
-      FilterExpression: 'begins_with(pk, :prefix)',
+      FilterExpression: 'begins_with(pk, :member) AND begins_with(sk, :profile)',
       ExpressionAttributeValues: {
-        ':prefix': MEMBER,
+        ':member': MEMBER,
+        ':profile': PROFILE,
       },
       Limit: 100,
     };
@@ -162,7 +160,7 @@ export class ProfileRepository {
       KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
       ExpressionAttributeValues: {
         ':pk': memberKey(memberId),
-        ':sk': 'NOTE#',
+        ':sk': NOTE,
       },
     };
 
@@ -175,16 +173,33 @@ export class ProfileRepository {
     return result.Items.map((item) => NoteModel.parse(item));
   }
 
-  async createNote(memberId: string, note: NoteModel): Promise<void> {
+  async createNote(memberId: string, note: CreateNoteModel): Promise<string> {
+    const noteId = uuidv4();
     const params = {
       TableName: this.tableName,
       Item: {
         pk: memberKey(memberId),
-        sk: `NOTE#${Date.now()}`,
+        sk: noteKey(noteId),
+        noteId,
         ...note,
-        timestamp: new Date().toISOString(),
+        created: new Date().toISOString(),
+        lastUpdated: new Date().toISOString(),
       },
     };
     await this.dynamoDB.send(new PutCommand(params));
+
+    return noteId;
+  }
+
+  async updateNote(memberId: string, noteId: string, note: Partial<NoteModel>): Promise<void> {
+    await this.partialUpdate({
+      tableName: this.tableName,
+      pk: memberKey(memberId),
+      sk: noteKey(noteId),
+      data: {
+        ...note,
+        lastUpdated: new Date().toISOString(),
+      },
+    });
   }
 }

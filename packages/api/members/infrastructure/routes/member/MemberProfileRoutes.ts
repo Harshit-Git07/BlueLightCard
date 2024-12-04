@@ -1,49 +1,58 @@
 import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
-import { Stack, Table } from 'sst/constructs';
-import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
-import { ApiGatewayV1ApiRouteProps } from 'sst/constructs/ApiGatewayV1Api';
-import { RequestValidator, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Api';
 import { EmailChangeModel } from '@blc-mono/members/application/models/emailChangeModel';
 import { PasswordChangeModel } from '@blc-mono/members/application/models/passwordChangeModel';
 import {
   CreateProfileModel,
+  CreateProfileModelResponse,
   ProfileModel,
   UpdateProfileModel,
 } from '@blc-mono/members/application/models/profileModel';
 
 export function memberProfileRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
   return {
-    'POST /members/profiles': Route.createRoute({
+    'GET /members/profile': Route.createRoute({
+      ...defaultRouteProps,
+      name: 'MemberGetProfileForAuthenticatedUser',
+      handler:
+        'packages/api/members/application/handlers/member/profile/getProfileForAuthenticatedUser.handler',
+      responseModelType: ProfileModel,
+    }),
+    'POST /members/profile': Route.createRoute({
       ...defaultRouteProps,
       name: 'MemberCreateProfile',
       handler: 'packages/api/members/application/handlers/member/profile/createProfile.handler',
       requestModelType: CreateProfileModel,
+      responseModelType: CreateProfileModelResponse,
     }),
-    'PUT /members/profiles': Route.createRoute({
+    'PUT /members/{memberId}/profile': Route.createRoute({
       ...defaultRouteProps,
       name: 'MemberUpdateProfile',
       handler: 'packages/api/members/application/handlers/member/profile/updateProfile.handler',
       requestModelType: UpdateProfileModel,
     }),
-    'GET /members/profiles/{memberId}': Route.createRoute({
+    'GET /members/{memberId}/profile': Route.createRoute({
       ...defaultRouteProps,
       name: 'MemberGetProfile',
       handler: 'packages/api/members/application/handlers/member/profile/getProfile.handler',
       responseModelType: ProfileModel,
     }),
-    'PUT /members/profiles/{memberId}/email': Route.createRoute({
+    'PUT /members/{memberId}/profile/email': Route.createRoute({
       ...defaultRouteProps,
-      name: 'MemberChangeEmail',
-      handler: 'packages/api/members/application/handlers/member/profile/changeEmail.handler',
+      name: 'MemberChangeEmailRequest',
+      handler:
+        'packages/api/members/application/handlers/member/profile/requestEmailChange.handler',
       requestModelType: EmailChangeModel,
+      permissions: ['ses:SendEmail'],
     }),
-    'PUT /members/profiles/{memberId}/password': Route.createRoute({
+    'PUT /members/{memberId}/profile/password': Route.createRoute({
       ...defaultRouteProps,
       name: 'MemberChangePassword',
       handler: 'packages/api/members/application/handlers/member/profile/changePassword.handler',
       requestModelType: PasswordChangeModel,
+      permissions: ['secretsmanager:GetSecretValue'],
     }),
   };
 }

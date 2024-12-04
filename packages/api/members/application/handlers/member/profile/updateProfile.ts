@@ -11,13 +11,18 @@ import { ValidationError } from '@blc-mono/members/application/errors/Validation
 const service = new ProfileService();
 
 const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<void> => {
+  const { memberId } = event.pathParameters || {};
+  if (!memberId) {
+    throw new ValidationError('Member ID is required');
+  }
+
   if (!event.body) {
     throw new ValidationError('Missing request body');
   }
 
   const profile = UpdateProfileModel.parse(JSON.parse(event.body));
-  verifyMemberHasAccessToProfile(event, profile.memberId);
-  await service.updateProfile(profile);
+  verifyMemberHasAccessToProfile(event, memberId);
+  await service.updateProfile(memberId, profile);
 };
 
 export const handler = middleware(unwrappedHandler);

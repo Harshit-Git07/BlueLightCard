@@ -1,21 +1,86 @@
-import { DynamoDBDocumentClient, GetCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
-import { OrganisationModel } from '../models/organisationModel';
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  PutCommand,
+  QueryCommand,
+  UpdateCommand,
+} from '@aws-sdk/lib-dynamodb';
+import { CreateOrganisationModel, OrganisationModel } from '../models/organisationModel';
 import { Table } from 'sst/node/table';
 import { defaultDynamoDbClient } from './dynamoClient';
-import { EmployerModel } from '../models/employerModel';
+import { CreateEmployerModel, EmployerModel } from '../models/employerModel';
 import { NotFoundError } from '../errors/NotFoundError';
-import { EMPLOYER, employerKey, ORGANISATION, organisationKey } from './repository';
+import {
+  EMPLOYER,
+  employerKey,
+  ID_REQUIREMENT,
+  ORGANISATION,
+  organisationKey,
+  Repository,
+} from './repository';
+import { v4 as uuidv4 } from 'uuid';
+import { IdRequirementModel } from '../models/idRequirementsModel';
 
-export class OrganisationRepository {
+export class OrganisationRepository extends Repository {
   constructor(
-    private readonly dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
+    dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
     // @ts-ignore
     private readonly tableName: string = Table.memberOrganisations.tableName,
-  ) {}
+  ) {
+    super(dynamoDB);
+  }
 
-  async createOrganisation(organisation: OrganisationModel): Promise<void> {}
+  async getIdRequirementDocs(): Promise<IdRequirementModel[]> {
+    const queryParams = {
+      TableName: this.tableName,
+      KeyConditionExpression: 'sk = :sk AND begins_with(pk, :pk)',
+      ExpressionAttributeValues: {
+        ':pk': ID_REQUIREMENT,
+        ':sk': ID_REQUIREMENT,
+      },
+      IndexName: 'gsi1',
+    };
 
-  async updateOrganisation(organisation: OrganisationModel): Promise<void> {}
+    const result = await this.dynamoDB.send(new QueryCommand(queryParams));
+
+    if (!result.Items || result.Items.length === 0) {
+      return [];
+    }
+
+    return result.Items.map((org) => IdRequirementModel.parse(org));
+  }
+
+  async createOrganisation(organisation: CreateOrganisationModel): Promise<string> {
+    const organisationId = uuidv4();
+    const params = {
+      TableName: this.tableName,
+      Item: {
+        pk: organisationKey(organisationId),
+        sk: ORGANISATION,
+        organisationId,
+        ...organisation,
+        lastUpdated: new Date().toISOString(),
+      },
+    };
+    await this.dynamoDB.send(new PutCommand(params));
+
+    return organisationId;
+  }
+
+  async updateOrganisation(
+    organisationId: string,
+    organisation: Partial<OrganisationModel>,
+  ): Promise<void> {
+    await this.partialUpdate({
+      tableName: this.tableName,
+      pk: organisationKey(organisationId),
+      sk: ORGANISATION,
+      data: {
+        ...organisation,
+        lastUpdated: new Date().toISOString(),
+      },
+    });
+  }
 
   async getOrganisations(): Promise<OrganisationModel[]> {
     const queryParams = {
@@ -55,9 +120,39 @@ export class OrganisationRepository {
     return OrganisationModel.parse(result.Item);
   }
 
-  async createEmployer(organisation: OrganisationModel): Promise<void> {}
+  async createEmployer(organisationId: string, employer: CreateEmployerModel): Promise<string> {
+    const employerId = uuidv4();
+    const params = {
+      TableName: this.tableName,
+      Item: {
+        pk: organisationKey(organisationId),
+        sk: employerKey(employerId),
+        organisationId,
+        employerId,
+        ...employer,
+        lastUpdated: new Date().toISOString(),
+      },
+    };
+    await this.dynamoDB.send(new PutCommand(params));
 
-  async updateEmployer(organisation: OrganisationModel): Promise<void> {}
+    return employerId;
+  }
+
+  async updateEmployer(
+    organisationId: string,
+    employerId: string,
+    employer: Partial<EmployerModel>,
+  ): Promise<void> {
+    await this.partialUpdate({
+      tableName: this.tableName,
+      pk: organisationKey(organisationId),
+      sk: employerKey(employerId),
+      data: {
+        ...employer,
+        lastUpdated: new Date().toISOString(),
+      },
+    });
+  }
 
   async getEmployers(organisationId: string): Promise<EmployerModel[]> {
     const queryParams = {

@@ -1,0 +1,18 @@
+meta {
+  name: RequestEmailChange
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{memberApiBaseUrl}}/members/profiles/{{memberId}}/email
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "currentEmail": "alsl@sls.com",
+    "newEmail": "change.to.your.email@email.com"
+  }
+}

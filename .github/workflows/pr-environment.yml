@@ -945,9 +945,11 @@ jobs:
           body: |
             ## 🚀 Successfully Backend Members Preview Environment
 
-            <table><tr><td><strong>Latest commit:</strong> </td><td>
-            <code>${{ github.sha }}</code>
-            </td></tr>
+            <table>
+            <tr>
+            <td><strong>Latest commit:</strong></td>
+            <td><code>${{ github.sha }}</code></td>
+            </tr>
             <tr>
             <td><strong>Members API URL:</strong></td>
             <td>
@@ -955,6 +957,9 @@ jobs:
               ${{ needs.backend-members.outputs.members-api-endpoint }}
             </a>
             </td>
+            </tr>
+            <tr>
+            <td><strong>Members Admin API URL:</strong></td>
             <td>
             <a href='${{ needs.backend-members.outputs.members-admin-api-endpoint }}'>
               ${{ needs.backend-members.outputs.members-admin-api-endpoint }}

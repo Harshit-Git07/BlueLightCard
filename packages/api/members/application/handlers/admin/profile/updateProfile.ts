@@ -1,8 +1,23 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 import { middleware } from '../../../middleware';
+import { UpdateProfileModel } from '@blc-mono/members/application/models/profileModel';
+import { ProfileService } from '@blc-mono/members/application/services/profileService';
+import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
+
+const service = new ProfileService();
 
 const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<void> => {
-  // TODO: Implement handler
+  const { memberId } = event.pathParameters || {};
+  if (!memberId) {
+    throw new ValidationError('Member ID is required');
+  }
+
+  if (!event.body) {
+    throw new ValidationError('Missing request body');
+  }
+
+  const profile = UpdateProfileModel.parse(JSON.parse(event.body));
+  await service.updateProfile(memberId, profile);
 };
 
 export const handler = middleware(unwrappedHandler);

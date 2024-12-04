@@ -1,8 +1,6 @@
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 import { APIGatewayProxyEvent } from 'aws-lambda/trigger/api-gateway-proxy';
-import 'dd-trace/init';
 import { middleware } from '../../../middleware';
-import { Context } from 'aws-lambda';
 import { OrganisationModel } from '@blc-mono/members/application/models/organisationModel';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 
@@ -14,7 +12,9 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<Organisati
     throw new ValidationError('Organisation ID is required');
   }
 
-  return await orgService.getOrganisation(organisationId);
+  const redactedSchema = OrganisationModel.omit({ trustedDomains: true });
+  const organisation = await orgService.getOrganisation(organisationId);
+  return redactedSchema.parse(organisation);
 };
 
 export const handler = middleware(unwrappedHandler);

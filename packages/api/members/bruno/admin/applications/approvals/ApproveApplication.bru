@@ -1,0 +1,11 @@
+meta {
+  name: ApproveApplication
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{apiBaseUrl}}/admin/members/{{memberId}}/applications/{{applicationId}}/approve
+  body: json
+  auth: none
+}

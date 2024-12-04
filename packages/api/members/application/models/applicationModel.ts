@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import { ApplicationReason } from './enums/ApplicationReason';
 import { RejectionReason } from './enums/RejectionReason';
+import { EligibilityStatus } from './enums/EligibilityStatus';
 
 export const ApplicationModel = createZodNamedType(
   'ApplicationModel',
@@ -9,7 +10,7 @@ export const ApplicationModel = createZodNamedType(
     memberId: z.string().uuid(),
     applicationId: z.string().uuid(),
     startDate: z.string().date().optional(),
-    eligibilityStatus: z.string().optional(),
+    eligibilityStatus: z.nativeEnum(EligibilityStatus).optional(),
     applicationReason: z.nativeEnum(ApplicationReason).nullable(),
     verificationMethod: z.string().optional(),
     address1: z.string().optional(),
@@ -35,7 +36,6 @@ export type ApplicationModel = z.infer<typeof ApplicationModel>;
 export const CreateApplicationModel = createZodNamedType(
   'CreateApplicationModel',
   ApplicationModel.pick({
-    memberId: true,
     startDate: true,
     eligibilityStatus: true,
     applicationReason: true,
@@ -43,9 +43,19 @@ export const CreateApplicationModel = createZodNamedType(
 );
 export type CreateApplicationModel = z.infer<typeof CreateApplicationModel>;
 
+export const CreateApplicationModelResponse = createZodNamedType(
+  'CreateApplicationModelResponse',
+  z.object({
+    applicationId: z.string().uuid(),
+  }),
+);
+export type CreateApplicationModelResponse = z.infer<typeof CreateApplicationModelResponse>;
+
 export const UpdateApplicationModel = createZodNamedType(
   'UpdateApplicationModel',
   ApplicationModel.omit({
+    memberId: true,
+    applicationId: true,
     idS3LocationPrimary: true,
     idS3LocationSecondary: true,
     applicationReason: true,

@@ -1,10 +1,10 @@
 import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
 import { MarketingPreferencesModel } from '@blc-mono/members/application/models/marketingPreferences';
-import { ApiGatewayV1ApiRouteProps } from 'sst/constructs';
+import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Api';
 
 export function adminMarketingRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
   return {
     'POST /admin/members/marketing/brazeAttributes': Route.createRoute({
       ...defaultRouteProps,

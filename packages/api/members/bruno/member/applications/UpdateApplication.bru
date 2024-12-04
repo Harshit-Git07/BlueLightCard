@@ -5,15 +5,13 @@ meta {
 }
 
 put {
-  url: {{memberApiBaseUrl}}/members/applications
+  url: {{apiBaseUrl}}/members/{{memberId}}/applications/{{applicationId}}
   body: json
   auth: none
 }
 
 body:json {
   {
-    "memberId": "{{memberId}}",
-    "applicationId": "{{applicationId}}",
     "address1": "126 Main St",
     "address2": "Apt 8B",
     "city": "Anytown",

@@ -1,0 +1,17 @@
+meta {
+  name: UpdateCard
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{apiBaseUrl}}/admin/members/{{memberId}}/cards/{{cardNumber}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "cardStatus": "PHYSICAL_CARD"
+  }
+}

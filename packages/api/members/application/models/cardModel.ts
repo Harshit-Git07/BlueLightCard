@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { transformDateToFormatYYYYMMDD } from '@blc-mono/core/utils/date';
 import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import { CardStatus } from './enums/CardStatus';
 import { PaymentStatus } from './enums/PaymentStatus';
@@ -20,3 +19,16 @@ export const CardModel = createZodNamedType(
 );
 
 export type CardModel = z.infer<typeof CardModel>;
+
+export const UpdateCardModel = createZodNamedType(
+  'UpdateCardModel',
+  CardModel.omit({
+    memberId: true,
+    cardNumber: true,
+    expiryDate: true,
+    postedDate: true,
+    purchaseTime: true,
+  }),
+);
+
+export type UpdateCardModel = z.infer<typeof UpdateCardModel>;

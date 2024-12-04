@@ -140,6 +140,29 @@ jobs:
             region: 'eu-west-2'
             brand: 'BLC_UK'
             stage: staging
+#            auth0_domain: BLC_UK_SERVICE_LAYER_AUTH0_DOMAIN
+#            auth0_api_client_id: BLC_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+#            auth0_api_client_secret: BLC_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+#            auth0_password_validation_client_id: BLC_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+#            auth0_password_validation_client_secret: BLC_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+          - deployment: 'dds-uk-staging'
+            region: 'eu-west-2'
+            brand: 'DDS_UK'
+            stage: staging-dds
+#            auth0_domain: DDS_UK_SERVICE_LAYER_AUTH0_DOMAIN
+#            auth0_api_client_id: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+#            auth0_api_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+#            auth0_password_validation_client_id: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+#            auth0_password_validation_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+          - deployment: 'blc-au-staging'
+            region: 'ap-southeast-2'
+            brand: 'BLC_AU'
+            stage: staging
+#            auth0_domain: BLC_AU_SERVICE_LAYER_AUTH0_DOMAIN
+#            auth0_api_client_id: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+#            auth0_api_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+#            auth0_password_validation_client_id: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+#            auth0_password_validation_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
     needs:
       - install
       - test
@@ -173,6 +196,11 @@ jobs:
           DD_API_KEY: '${{ secrets.DATADOG_AWS_INSTRUMENTATION_TOKEN }}'
           USE_DATADOG_AGENT: 'true'
           SKIP_MEMBERS_STACK: false
+#          SERVICE_LAYER_AUTH0_DOMAIN: ${{ secrets[matrix.auth0_domain] }}
+#          SERVICE_LAYER_AUTH0_API_CLIENT_ID: ${{ secrets[matrix.auth0_api_client_id] }}
+#          SERVICE_LAYER_AUTH0_API_CLIENT_SECRET: ${{ secrets[matrix.auth0_api_client_secret] }}
+#          SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID: ${{ secrets[matrix.auth0_password_validation_client_id] }}
+#          SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET: ${{ secrets[matrix.auth0_password_validation_client_secret] }}
         run: npx sst deploy global --stage ${{ matrix.stage }} --region ${{ matrix.region }} && npx sst deploy members members-api members-admin-api --stage ${{ matrix.stage }} --region ${{ matrix.region }}
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog

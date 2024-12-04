@@ -4,71 +4,66 @@ import {
   GetCommandInput,
   PutCommand,
   QueryCommand,
+  QueryCommandInput,
   ScanCommandInput,
+  TransactWriteCommand,
   UpdateCommand,
+  UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb';
-import { ApplicationModel } from '../models/applicationModel';
+import { ApplicationModel, CreateApplicationModel } from '../models/applicationModel';
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
-import { APPLICATION, applicationKey, MEMBER, memberKey } from './repository';
+import { APPLICATION, applicationKey, MEMBER, memberKey, Repository } from './repository';
 import { ScanCommand } from '@aws-sdk/client-dynamodb';
 import { v4 as uuidv4 } from 'uuid';
 import { NotFoundError } from '../errors/NotFoundError';
+import { EligibilityStatus } from '../models/enums/EligibilityStatus';
+import { logger } from '../middleware';
 
-export interface UpsertApplicationOptions {
-  memberId: string;
-  applicationId?: string;
-  application: Partial<ApplicationModel>;
-  isInsert?: boolean;
-}
-
-export class ApplicationRepository {
+export class ApplicationRepository extends Repository {
   constructor(
-    private readonly dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
+    dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
     // @ts-ignore
     private readonly tableName: string = Table.memberProfiles.tableName,
-  ) {}
+  ) {
+    super(dynamoDB);
+  }
 
-  async upsertApplication({
-    memberId,
-    applicationId = uuidv4(),
-    application,
-    isInsert = false,
-  }: UpsertApplicationOptions): Promise<string> {
-    const updateExpression: string[] = ['memberId = :memberId', 'applicationId = :applicationId'];
-    const expressionAttributeValues: { [key: string]: any } = {
-      ':memberId': memberId,
-      ':applicationId': memberId,
-    };
-
-    for (const field of Object.keys(application) as (keyof ApplicationModel)[]) {
-      if (application[field] !== undefined) {
-        updateExpression.push(`${field} = :${field}`);
-        expressionAttributeValues[`:${field}`] = application[field];
-      }
-    }
-
+  async createApplication(memberId: string, application: CreateApplicationModel): Promise<string> {
+    const applicationId = uuidv4();
     const params = {
       TableName: this.tableName,
-      Key: {
+      Item: {
         pk: memberKey(memberId),
         sk: applicationKey(applicationId),
-      },
-      ConditionExpression: isInsert ? 'pk <> :pk OR sk <> :sk' : 'pk = :pk AND sk = :sk',
-      UpdateExpression: `SET ${[...new Set(updateExpression)].join(', ')} `,
-      ExpressionAttributeValues: {
-        ':pk': memberKey(memberId),
-        ':sk': applicationKey(applicationId),
-        ...expressionAttributeValues,
+        memberId,
+        applicationId,
+        ...application,
+        lastUpdated: new Date().toISOString(),
       },
     };
-
-    await this.dynamoDB.send(new UpdateCommand(params));
+    await this.dynamoDB.send(new PutCommand(params));
 
     return applicationId;
   }
 
-  // This is temporary until we have OpenSearch in place
+  async updateApplication(
+    memberId: string,
+    applicationId: string,
+    application: Partial<ApplicationModel>,
+  ): Promise<void> {
+    this.partialUpdate({
+      tableName: this.tableName,
+      pk: memberKey(memberId),
+      sk: applicationKey(applicationId),
+      data: {
+        ...application,
+        lastUpdated: new Date().toISOString(),
+      },
+    });
+  }
+
+  // TODO: This is temporary until we have OpenSearch in place
   async getAllApplications(): Promise<ApplicationModel[]> {
     const params: ScanCommandInput = {
       TableName: this.tableName,
@@ -77,7 +72,7 @@ export class ApplicationRepository {
         ':member': MEMBER,
         ':application': APPLICATION,
       },
-      Limit: 100,
+      Limit: 500,
     };
 
     const result = await this.dynamoDB.send(new ScanCommand(params));
@@ -123,5 +118,65 @@ export class ApplicationRepository {
     }
 
     return ApplicationModel.parse(result.Item);
+  }
+
+  async assignApplicationBatch(
+    adminId: string,
+    adminName: string,
+    applicationIds: string[],
+  ): Promise<string[]> {
+    const updates = applicationIds.map((applicationId) => {
+      return {
+        Update: {
+          TableName: this.tableName,
+          IndexName: 'gsi1',
+          Key: {
+            pk: applicationKey(applicationId),
+            sk: MEMBER,
+          },
+          KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
+          ConditionExpression: 'eligibilityStatus = :currentEligibilityStatus',
+          UpdateExpression:
+            'SET assignedTo = :adminId, assignedToName = :adminName, eligibilityStatus = :newEligibilityStatus',
+          ExpressionAttributeValues: {
+            ':adminId': adminId,
+            ':adminName': adminName,
+            ':currentEligibilityStatus': EligibilityStatus.AWAITING_ID_APPROVAL,
+            ':newEligibilityStatus': EligibilityStatus.ASSIGNED_FOR_APPROVAL,
+          },
+        },
+      };
+    });
+
+    await this.dynamoDB.send(new TransactWriteCommand({ TransactItems: updates }));
+
+    return applicationIds;
+  }
+
+  async releaseApplicationBatch(adminId: string, applicationIds: string[]): Promise<void> {
+    const updates = applicationIds.map((applicationId) => {
+      return {
+        Update: {
+          TableName: this.tableName,
+          IndexName: 'gsi1',
+          Key: {
+            pk: applicationKey(applicationId),
+            sk: MEMBER,
+          },
+          KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
+          ConditionExpression: 'eligibilityStatus = :currentEligibilityStatus',
+          UpdateExpression:
+            'SET assignedTo = :adminId, assignedToName = :adminName, eligibilityStatus = :newEligibilityStatus',
+          ExpressionAttributeValues: {
+            ':adminId': adminId,
+            ':adminName': null,
+            ':currentEligibilityStatus': EligibilityStatus.ASSIGNED_FOR_APPROVAL,
+            ':newEligibilityStatus': EligibilityStatus.AWAITING_ID_APPROVAL,
+          },
+        },
+      };
+    });
+
+    await this.dynamoDB.send(new TransactWriteCommand({ TransactItems: updates }));
   }
 }

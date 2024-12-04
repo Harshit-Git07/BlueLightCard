@@ -1,0 +1,11 @@
+meta {
+  name: GetEmployerById
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{apiBaseUrl}}/orgs/{{organisationId}}/employers/{{employerId}}
+  body: none
+  auth: none
+}

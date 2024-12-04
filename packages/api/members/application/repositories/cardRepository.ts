@@ -9,12 +9,13 @@ import {
 import { CardModel } from '../models/cardModel';
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
-import { cardKey, memberKey } from './repository';
+import { CARD, cardKey, memberKey } from './repository';
 import { NotFoundError } from '../errors/NotFoundError';
 
 export interface UpsertCardOptions {
   memberId: string;
-  card: CardModel;
+  cardNumber: string;
+  card: Partial<CardModel>;
   isInsert?: boolean;
 }
 
@@ -28,9 +29,10 @@ export class CardRepository {
   async getCards(memberId: string): Promise<CardModel[]> {
     const queryParams: QueryCommandInput = {
       TableName: this.tableName,
-      KeyConditionExpression: 'pk = :pk',
+      KeyConditionExpression: 'pk = :pk AND begins_with(sk, :card)',
       ExpressionAttributeValues: {
         ':pk': memberKey(memberId),
+        ':card': CARD,
       },
     };
 
@@ -59,9 +61,17 @@ export class CardRepository {
     return CardModel.parse(result.Item);
   }
 
-  async upsertCard({ memberId, card, isInsert = false }: UpsertCardOptions): Promise<void> {
-    const updateExpression: string[] = [];
-    const expressionAttributeValues: { [key: string]: any } = {};
+  async upsertCard({
+    memberId,
+    cardNumber,
+    card,
+    isInsert = false,
+  }: UpsertCardOptions): Promise<void> {
+    const updateExpression: string[] = ['memberId = :memberId', 'cardNumber = :cardNumber'];
+    const expressionAttributeValues: { [key: string]: any } = {
+      ':memberId': memberId,
+      ':cardNumber': cardNumber,
+    };
 
     for (const field of Object.keys(card) as (keyof CardModel)[]) {
       if (card[field] !== undefined) {
@@ -74,13 +84,13 @@ export class CardRepository {
       TableName: this.tableName,
       Key: {
         pk: memberKey(memberId),
-        sk: cardKey(card.cardNumber),
+        sk: cardKey(cardNumber),
       },
       ConditionExpression: isInsert ? '' : 'pk = :pk AND sk = :sk',
       UpdateExpression: `SET ${updateExpression.join(', ')} `,
       ExpressionAttributeValues: {
         ':pk': memberKey(memberId),
-        ':sk': cardKey(card.cardNumber),
+        ':sk': cardKey(cardNumber),
         ...expressionAttributeValues,
       },
     };

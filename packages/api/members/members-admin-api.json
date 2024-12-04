@@ -1,0 +1,5635 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "chrisvanes-blc-mono-members-admin-api",
+    "version" : "2024-12-02T13:48:39Z"
+  },
+  "servers" : [ {
+    "url" : "https://sp21d5q8va.execute-api.eu-west-2.amazonaws.com/{basePath}",
+    "variables" : {
+      "basePath" : {
+        "default" : "v1"
+      }
+    }
+  } ],
+  "paths" : {
+    "/admin/members/marketing" : {
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/orgs/{organisationId}/employers/{employerId}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "organisationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "employerId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EmployerModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "organisationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "employerId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateEmployerModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "organisationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "employerId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/marketing/preferences/{memberId}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MarketingPreferencesModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MarketingPreferencesModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/payments/checkout" : {
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PaymentModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members" : {
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/id-requirement-docs" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/IdRequirementModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/{memberId}/applications" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApplicationModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateApplicationModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateApplicationModelResponse"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/profile" : {
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateProfileModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateProfileModelResponse"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/payments/history/{memberId}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PaymentModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/{memberId}/profile/notes" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/NoteModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateNoteModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateNoteModelResponse"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/{memberId}/applications/{applicationId}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApplicationModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateApplicationModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/marketing/brazeAttributes" : {
+      "post" : { },
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/cards/batches" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CardPrintBatchModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CardPrintBatchModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/payments/history" : {
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/payments/refund/{transactionId}" : {
+      "post" : {
+        "parameters" : [ {
+          "name" : "transactionId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RefundModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "transactionId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/{memberId}/cards" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CardModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/{memberId}/profile" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProfileModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateProfileModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/allocations/{adminId}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "adminId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ApprovalAllocationModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "adminId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ApprovalAllocationModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "delete" : {
+        "parameters" : [ {
+          "name" : "adminId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ]
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "adminId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/orgs/{organisationId}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "organisationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OrganisationModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "organisationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateOrganisationModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "organisationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/{memberId}/applications/{applicationId}/uploadDocument" : {
+      "post" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DocumentUploadLocation"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/cards" : {
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/orgs" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/OrganisationModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateOrganisationModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateOrganisationResponseModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/marketing/preferences" : {
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/payments/initiate" : {
+      "post" : {
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PaymentModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/payments" : {
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/{memberId}/cards/{cardNumber}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "cardNumber",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CardModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "cardNumber",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateCardModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "cardNumber",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/orgs/{organisationId}/employers" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "organisationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/EmployerModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "parameters" : [ {
+          "name" : "organisationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateEmployerModel"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CreateEmployerResponseModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "organisationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/" : {
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/{memberId}" : {
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/applications" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApplicationModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/payments/refund" : {
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/allocations" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ApprovalAllocationModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/{memberId}/profile/email" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/EmailChangeModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/{memberId}/profile/notes/{noteId}" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "noteId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateNoteModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "noteId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin" : {
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/profiles" : {
+      "get" : {
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ProfileModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post" : { },
+      "options" : {
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/members/{memberId}/profile/password" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/PasswordChangeModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/admin/cards/batches/{batchId}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "batchId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CardPrintBatchModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "parameters" : [ {
+          "name" : "batchId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CardPrintBatchModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "batchId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "CreateApplicationModel" : {
+        "title" : "CreateApplicationModel",
+        "required" : [ "applicationReason" ],
+        "type" : "object",
+        "properties" : {
+          "eligibilityStatus" : {
+            "type" : "string"
+          },
+          "applicationReason" : {
+            "anyOf" : [ {
+              "type" : "string",
+              "enum" : [ "SIGNUP", "RENEWAL", "NAME_CHANGE", "LOST_CARD", "REPRINT" ]
+            }, null ]
+          },
+          "startDate" : {
+            "type" : "string",
+            "format" : "date"
+          }
+        }
+      },
+      "CreateApplicationModelResponse" : {
+        "title" : "CreateApplicationModelResponse",
+        "required" : [ "applicationId" ],
+        "type" : "object",
+        "properties" : {
+          "applicationId" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }
+      },
+      "UpdateCardModel" : {
+        "title" : "UpdateCardModel",
+        "type" : "object",
+        "properties" : {
+          "nameOnCard" : {
+            "type" : "string"
+          },
+          "cardStatus" : {
+            "type" : "string",
+            "enum" : [ "AWAITING_BATCHING", "ADDED_TO_BATCH", "AWAITING_POSTAGE", "PHYSICAL_CARD", "VIRTUAL_CARD", "CARD_LOST", "DISABLED", "CARD_EXPIRED" ]
+          },
+          "paymentStatus" : {
+            "type" : "string",
+            "enum" : [ "AWAITING_PAYMENT", "PAID_CARD", "PAID_PAYPAL", "PAID_PROMO_CODE", "PAID_CHEQUE", "PAID_ADMIN", "PENDING_REFUND", "REFUNDED" ]
+          },
+          "batchNumber" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CreateOrganisationResponseModel" : {
+        "title" : "CreateOrganisationResponseModel",
+        "required" : [ "organisationId" ],
+        "type" : "object",
+        "properties" : {
+          "organisationId" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }
+      },
+      "UpdateProfileModel" : {
+        "title" : "UpdateProfileModel",
+        "required" : [ "dateOfBirth", "firstName", "lastName" ],
+        "type" : "object",
+        "properties" : {
+          "lastName" : {
+            "type" : "string"
+          },
+          "signupDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "organisationId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "gender" : {
+            "type" : "string",
+            "enum" : [ "MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY" ]
+          },
+          "jobTitle" : {
+            "type" : "string"
+          },
+          "county" : {
+            "type" : "string"
+          },
+          "employerName" : {
+            "type" : "string"
+          },
+          "dateOfBirth" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "employmentStatus" : {
+            "type" : "string",
+            "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
+          },
+          "jobReference" : {
+            "type" : "string"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "employerId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "phoneNumber" : {
+            "type" : "string"
+          },
+          "spareEmail" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "spareEmailValidated" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "emailValidated" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "status" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ApplicationModel" : {
+        "title" : "ApplicationModel",
+        "required" : [ "applicationId", "applicationReason", "memberId" ],
+        "type" : "object",
+        "properties" : {
+          "country" : {
+            "type" : "string"
+          },
+          "address2" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "address1" : {
+            "type" : "string"
+          },
+          "nameChangeLastName" : {
+            "type" : "object"
+          },
+          "postcode" : {
+            "type" : "string"
+          },
+          "eligibilityStatus" : {
+            "type" : "string"
+          },
+          "nameChangeDocType" : {
+            "type" : "object"
+          },
+          "nameChangeReason" : {
+            "type" : "object"
+          },
+          "trustedDomainValidated" : {
+            "type" : "boolean"
+          },
+          "nameChangeFirstName" : {
+            "type" : "object"
+          },
+          "idS3LocationSecondary" : {
+            "type" : "string"
+          },
+          "promoCode" : {
+            "type" : "object"
+          },
+          "applicationId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "verificationMethod" : {
+            "type" : "string"
+          },
+          "rejectionReason" : {
+            "anyOf" : [ {
+              "type" : "string",
+              "enum" : [ "DECLINE_INCORRECT_ID", "PICTURE_DECLINE_ID", "DL_PP_DECLINE_ID", "DATE_DECLINE_ID", "BLURRY_IMAGE_DECLINE_ID", "DIFFERENT_NAME_DECLINE_ID", "PASSWORD_PROTECTED_DECLINE_ID", "DECLINE_NOT_ELIGIBLE" ]
+            }, null ]
+          },
+          "applicationReason" : {
+            "anyOf" : [ {
+              "type" : "string",
+              "enum" : [ "SIGNUP", "RENEWAL", "NAME_CHANGE", "LOST_CARD", "REPRINT" ]
+            }, null ]
+          },
+          "startDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "trustedDomainEmail" : {
+            "type" : "string"
+          },
+          "memberId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "idS3LocationPrimary" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ApprovalAllocationModel" : {
+        "title" : "ApprovalAllocationModel",
+        "required" : [ "applicationIds" ],
+        "type" : "object",
+        "properties" : {
+          "applicationIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "uuid"
+            }
+          }
+        }
+      },
+      "UpdateApplicationModel" : {
+        "title" : "UpdateApplicationModel",
+        "type" : "object",
+        "properties" : {
+          "country" : {
+            "type" : "string"
+          },
+          "address2" : {
+            "type" : "string"
+          },
+          "city" : {
+            "type" : "string"
+          },
+          "address1" : {
+            "type" : "string"
+          },
+          "nameChangeLastName" : {
+            "type" : "object"
+          },
+          "postcode" : {
+            "type" : "string"
+          },
+          "eligibilityStatus" : {
+            "type" : "string"
+          },
+          "nameChangeDocType" : {
+            "type" : "object"
+          },
+          "nameChangeReason" : {
+            "type" : "object"
+          },
+          "trustedDomainValidated" : {
+            "type" : "boolean"
+          },
+          "nameChangeFirstName" : {
+            "type" : "object"
+          },
+          "promoCode" : {
+            "type" : "object"
+          },
+          "verificationMethod" : {
+            "type" : "string"
+          },
+          "rejectionReason" : {
+            "anyOf" : [ {
+              "type" : "string",
+              "enum" : [ "DECLINE_INCORRECT_ID", "PICTURE_DECLINE_ID", "DL_PP_DECLINE_ID", "DATE_DECLINE_ID", "BLURRY_IMAGE_DECLINE_ID", "DIFFERENT_NAME_DECLINE_ID", "PASSWORD_PROTECTED_DECLINE_ID", "DECLINE_NOT_ELIGIBLE" ]
+            }, null ]
+          },
+          "startDate" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "trustedDomainEmail" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CreateOrganisationModel" : {
+        "title" : "CreateOrganisationModel",
+        "required" : [ "name" ],
+        "type" : "object",
+        "properties" : {
+          "employedIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "bypassId" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "bypassPayment" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "retiredIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "active" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "trustedDomains" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "default" : [ ]
+          },
+          "type" : {
+            "type" : "object"
+          },
+          "employmentStatus" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
+            }
+          },
+          "volunteerIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          }
+        }
+      },
+      "OrganisationModel" : {
+        "title" : "OrganisationModel",
+        "required" : [ "name", "organisationId" ],
+        "type" : "object",
+        "properties" : {
+          "organisationId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "bypassPayment" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "retiredIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "active" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "idUploadCount" : {
+            "type" : "number",
+            "default" : 0
+          },
+          "type" : {
+            "type" : "object"
+          },
+          "employmentStatus" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
+            }
+          },
+          "volunteerIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "lastUpdated" : {
+            "type" : "string"
+          },
+          "employedIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "bypassId" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "trustedDomains" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "default" : [ ]
+          }
+        }
+      },
+      "CardModel" : {
+        "title" : "CardModel",
+        "required" : [ "cardNumber", "memberId" ],
+        "type" : "object",
+        "properties" : {
+          "expiryDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "nameOnCard" : {
+            "type" : "string"
+          },
+          "purchaseTime" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "cardNumber" : {
+            "type" : "string"
+          },
+          "cardStatus" : {
+            "type" : "string",
+            "enum" : [ "AWAITING_BATCHING", "ADDED_TO_BATCH", "AWAITING_POSTAGE", "PHYSICAL_CARD", "VIRTUAL_CARD", "CARD_LOST", "DISABLED", "CARD_EXPIRED" ]
+          },
+          "paymentStatus" : {
+            "type" : "string",
+            "enum" : [ "AWAITING_PAYMENT", "PAID_CARD", "PAID_PAYPAL", "PAID_PROMO_CODE", "PAID_CHEQUE", "PAID_ADMIN", "PENDING_REFUND", "REFUNDED" ]
+          },
+          "memberId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "postedDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "batchNumber" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CreateProfileModel" : {
+        "title" : "CreateProfileModel",
+        "required" : [ "dateOfBirth", "email", "firstName", "lastName" ],
+        "type" : "object",
+        "properties" : {
+          "firstName" : {
+            "type" : "string"
+          },
+          "lastName" : {
+            "type" : "string"
+          },
+          "dateOfBirth" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "email" : {
+            "type" : "string",
+            "format" : "email"
+          }
+        }
+      },
+      "PaymentModel" : {
+        "title" : "PaymentModel",
+        "required" : [ "amount", "applicationId", "currencyCode" ],
+        "type" : "object",
+        "properties" : {
+          "amount" : {
+            "type" : "number"
+          },
+          "applicationId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "currencyCode" : {
+            "type" : "string"
+          }
+        }
+      },
+      "GenericModel" : {
+        "title" : "GenericModel",
+        "required" : [ "message" ],
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CardPrintBatchModel" : {
+        "title" : "CardPrintBatchModel",
+        "required" : [ "cardNumbers" ],
+        "type" : "object",
+        "properties" : {
+          "cardNumbers" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          }
+        }
+      },
+      "PasswordChangeModel" : {
+        "title" : "PasswordChangeModel",
+        "required" : [ "currentPassword", "email", "newPassword" ],
+        "type" : "object",
+        "properties" : {
+          "newPassword" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "currentPassword" : {
+            "type" : "string"
+          }
+        }
+      },
+      "UpdateOrganisationModel" : {
+        "title" : "UpdateOrganisationModel",
+        "required" : [ "name" ],
+        "type" : "object",
+        "properties" : {
+          "employedIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "bypassId" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "bypassPayment" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "retiredIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "active" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "trustedDomains" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "default" : [ ]
+          },
+          "type" : {
+            "type" : "object"
+          },
+          "employmentStatus" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
+            }
+          },
+          "volunteerIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          }
+        }
+      },
+      "CreateEmployerModel" : {
+        "title" : "CreateEmployerModel",
+        "required" : [ "name" ],
+        "type" : "object",
+        "properties" : {
+          "employedIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "bypassId" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "bypassPayment" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "retiredIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "active" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "trustedDomains" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "default" : [ ]
+          },
+          "type" : {
+            "type" : "object"
+          },
+          "employmentStatus" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
+            }
+          },
+          "volunteerIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          }
+        }
+      },
+      "RefundModel" : {
+        "title" : "RefundModel",
+        "required" : [ "applicationId" ],
+        "type" : "object",
+        "properties" : {
+          "applicationId" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }
+      },
+      "BadRequestModel" : {
+        "title" : "BadRequestModel",
+        "required" : [ "message" ],
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          },
+          "errors" : {
+            "type" : "array",
+            "items" : {
+              "required" : [ "code", "expected", "message", "path", "received" ],
+              "type" : "object",
+              "properties" : {
+                "path" : {
+                  "type" : "array",
+                  "items" : {
+                    "type" : "string"
+                  }
+                },
+                "code" : {
+                  "type" : "string"
+                },
+                "expected" : {
+                  "type" : "string"
+                },
+                "received" : {
+                  "type" : "string"
+                },
+                "message" : {
+                  "type" : "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "UpdateEmployerModel" : {
+        "title" : "UpdateEmployerModel",
+        "required" : [ "name" ],
+        "type" : "object",
+        "properties" : {
+          "employedIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "bypassId" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "bypassPayment" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "retiredIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "active" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "trustedDomains" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "default" : [ ]
+          },
+          "type" : {
+            "type" : "object"
+          },
+          "employmentStatus" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
+            }
+          },
+          "volunteerIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          }
+        }
+      },
+      "ProfileModel" : {
+        "title" : "ProfileModel",
+        "required" : [ "dateOfBirth", "email", "firstName", "lastName", "memberId" ],
+        "type" : "object",
+        "properties" : {
+          "lastName" : {
+            "type" : "string"
+          },
+          "lastLogin" : {
+            "type" : "string"
+          },
+          "organisationId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "gender" : {
+            "type" : "string",
+            "enum" : [ "MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY" ]
+          },
+          "jobTitle" : {
+            "type" : "string"
+          },
+          "county" : {
+            "type" : "string"
+          },
+          "employerName" : {
+            "type" : "string"
+          },
+          "employmentStatus" : {
+            "type" : "string",
+            "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
+          },
+          "spareEmail" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "email" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "memberId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "signupDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "lastIpAddress" : {
+            "type" : "string"
+          },
+          "dateOfBirth" : {
+            "type" : "string",
+            "format" : "date"
+          },
+          "jobReference" : {
+            "type" : "string"
+          },
+          "firstName" : {
+            "type" : "string"
+          },
+          "employerId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "phoneNumber" : {
+            "type" : "string"
+          },
+          "idUploaded" : {
+            "type" : "boolean"
+          },
+          "spareEmailValidated" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "emailValidated" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "gaKey" : {
+            "type" : "string"
+          },
+          "card" : {
+            "required" : [ "cardNumber", "memberId" ],
+            "type" : "object",
+            "properties" : {
+              "expiryDate" : {
+                "type" : "string",
+                "format" : "date-time"
+              },
+              "nameOnCard" : {
+                "type" : "string"
+              },
+              "purchaseTime" : {
+                "type" : "string",
+                "format" : "date-time"
+              },
+              "cardNumber" : {
+                "type" : "string"
+              },
+              "cardStatus" : {
+                "type" : "string",
+                "enum" : [ "AWAITING_BATCHING", "ADDED_TO_BATCH", "AWAITING_POSTAGE", "PHYSICAL_CARD", "VIRTUAL_CARD", "CARD_LOST", "DISABLED", "CARD_EXPIRED" ]
+              },
+              "paymentStatus" : {
+                "type" : "string",
+                "enum" : [ "AWAITING_PAYMENT", "PAID_CARD", "PAID_PAYPAL", "PAID_PROMO_CODE", "PAID_CHEQUE", "PAID_ADMIN", "PENDING_REFUND", "REFUNDED" ]
+              },
+              "memberId" : {
+                "type" : "string",
+                "format" : "uuid"
+              },
+              "postedDate" : {
+                "type" : "string",
+                "format" : "date-time"
+              },
+              "batchNumber" : {
+                "type" : "string"
+              }
+            },
+            "additionalProperties" : false
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "applications" : {
+            "type" : "array",
+            "items" : {
+              "required" : [ "applicationId", "applicationReason", "memberId" ],
+              "type" : "object",
+              "properties" : {
+                "country" : {
+                  "type" : "string"
+                },
+                "address2" : {
+                  "type" : "string"
+                },
+                "city" : {
+                  "type" : "string"
+                },
+                "address1" : {
+                  "type" : "string"
+                },
+                "nameChangeLastName" : {
+                  "type" : "object"
+                },
+                "postcode" : {
+                  "type" : "string"
+                },
+                "eligibilityStatus" : {
+                  "type" : "string"
+                },
+                "nameChangeDocType" : {
+                  "type" : "object"
+                },
+                "nameChangeReason" : {
+                  "type" : "object"
+                },
+                "trustedDomainValidated" : {
+                  "type" : "boolean"
+                },
+                "nameChangeFirstName" : {
+                  "type" : "object"
+                },
+                "idS3LocationSecondary" : {
+                  "type" : "string"
+                },
+                "promoCode" : {
+                  "type" : "object"
+                },
+                "applicationId" : {
+                  "type" : "string",
+                  "format" : "uuid"
+                },
+                "verificationMethod" : {
+                  "type" : "string"
+                },
+                "rejectionReason" : {
+                  "anyOf" : [ {
+                    "type" : "string",
+                    "enum" : [ "DECLINE_INCORRECT_ID", "PICTURE_DECLINE_ID", "DL_PP_DECLINE_ID", "DATE_DECLINE_ID", "BLURRY_IMAGE_DECLINE_ID", "DIFFERENT_NAME_DECLINE_ID", "PASSWORD_PROTECTED_DECLINE_ID", "DECLINE_NOT_ELIGIBLE" ]
+                  }, null ]
+                },
+                "applicationReason" : {
+                  "anyOf" : [ {
+                    "type" : "string",
+                    "enum" : [ "SIGNUP", "RENEWAL", "NAME_CHANGE", "LOST_CARD", "REPRINT" ]
+                  }, null ]
+                },
+                "startDate" : {
+                  "type" : "string",
+                  "format" : "date"
+                },
+                "trustedDomainEmail" : {
+                  "type" : "string"
+                },
+                "memberId" : {
+                  "type" : "string",
+                  "format" : "uuid"
+                },
+                "idS3LocationPrimary" : {
+                  "type" : "string"
+                }
+              },
+              "additionalProperties" : false
+            },
+            "default" : [ ]
+          }
+        }
+      },
+      "DocumentUploadLocation" : {
+        "title" : "DocumentUploadLocation",
+        "required" : [ "preSignedUrl" ],
+        "type" : "object",
+        "properties" : {
+          "preSignedUrl" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CreateEmployerResponseModel" : {
+        "title" : "CreateEmployerResponseModel",
+        "required" : [ "employerId", "organisationId" ],
+        "type" : "object",
+        "properties" : {
+          "employerId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "organisationId" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }
+      },
+      "EmployerModel" : {
+        "title" : "EmployerModel",
+        "required" : [ "employerId", "name", "organisationId" ],
+        "type" : "object",
+        "properties" : {
+          "organisationId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "bypassPayment" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "retiredIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "active" : {
+            "type" : "boolean",
+            "default" : true
+          },
+          "idUploadCount" : {
+            "type" : "number",
+            "default" : 0
+          },
+          "type" : {
+            "type" : "object"
+          },
+          "employmentStatus" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
+            }
+          },
+          "volunteerIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "lastUpdated" : {
+            "type" : "string"
+          },
+          "employerId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "employedIdRequirements" : {
+            "required" : [ "supportedDocuments" ],
+            "type" : "object",
+            "properties" : {
+              "minimumRequired" : {
+                "type" : "number",
+                "default" : 1
+              },
+              "supportedDocuments" : {
+                "type" : "array",
+                "items" : {
+                  "required" : [ "guidelines", "idKey", "type" ],
+                  "type" : "object",
+                  "properties" : {
+                    "idKey" : {
+                      "type" : "string"
+                    },
+                    "guidelines" : {
+                      "type" : "string"
+                    },
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "required" : {
+                      "type" : "boolean",
+                      "default" : false
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          },
+          "bypassId" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "trustedDomains" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            },
+            "default" : [ ]
+          }
+        }
+      },
+      "CreateNoteModelResponse" : {
+        "title" : "CreateNoteModelResponse",
+        "required" : [ "noteId" ],
+        "type" : "object",
+        "properties" : {
+          "noteId" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }
+      },
+      "CreateProfileModelResponse" : {
+        "title" : "CreateProfileModelResponse",
+        "required" : [ "memberId" ],
+        "type" : "object",
+        "properties" : {
+          "memberId" : {
+            "type" : "string",
+            "format" : "uuid"
+          }
+        }
+      },
+      "NoteModel" : {
+        "title" : "NoteModel",
+        "required" : [ "noteId", "text" ],
+        "type" : "object",
+        "properties" : {
+          "lastUpdated" : {
+            "type" : "string",
+            "default" : "2024-12-02T13:45:09.480Z"
+          },
+          "pinned" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "creator" : {
+            "type" : "string"
+          },
+          "created" : {
+            "type" : "string",
+            "default" : "2024-12-02T13:45:09.480Z"
+          },
+          "noteId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "text" : {
+            "type" : "string"
+          },
+          "source" : {
+            "type" : "string",
+            "enum" : [ "ADMIN", "MEMBER", "SYSTEM", "ZENDESK", "LEGACY" ],
+            "default" : "SYSTEM"
+          },
+          "category" : {
+            "type" : "string"
+          }
+        }
+      },
+      "MarketingPreferencesModel" : {
+        "title" : "MarketingPreferencesModel",
+        "required" : [ "moreSpam", "spam" ],
+        "type" : "object",
+        "properties" : {
+          "spam" : {
+            "type" : "object"
+          },
+          "moreSpam" : {
+            "type" : "object"
+          }
+        }
+      },
+      "UpdateNoteModel" : {
+        "title" : "UpdateNoteModel",
+        "required" : [ "text" ],
+        "type" : "object",
+        "properties" : {
+          "pinned" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "creator" : {
+            "type" : "string"
+          },
+          "text" : {
+            "type" : "string"
+          },
+          "source" : {
+            "type" : "string",
+            "enum" : [ "ADMIN", "MEMBER", "SYSTEM", "ZENDESK", "LEGACY" ],
+            "default" : "SYSTEM"
+          },
+          "category" : {
+            "type" : "string"
+          }
+        }
+      },
+      "CreateNoteModel" : {
+        "title" : "CreateNoteModel",
+        "required" : [ "text" ],
+        "type" : "object",
+        "properties" : {
+          "pinned" : {
+            "type" : "boolean",
+            "default" : false
+          },
+          "creator" : {
+            "type" : "string"
+          },
+          "text" : {
+            "type" : "string"
+          },
+          "source" : {
+            "type" : "string",
+            "enum" : [ "ADMIN", "MEMBER", "SYSTEM", "ZENDESK", "LEGACY" ],
+            "default" : "SYSTEM"
+          },
+          "category" : {
+            "type" : "string"
+          }
+        }
+      },
+      "EmailChangeModel" : {
+        "title" : "EmailChangeModel",
+        "required" : [ "currentEmail", "newEmail" ],
+        "type" : "object",
+        "properties" : {
+          "newEmail" : {
+            "type" : "string",
+            "format" : "email"
+          },
+          "currentEmail" : {
+            "type" : "string",
+            "format" : "email"
+          }
+        }
+      },
+      "IdRequirementModel" : {
+        "title" : "IdRequirementModel",
+        "required" : [ "idKey", "type" ],
+        "type" : "object",
+        "properties" : {
+          "idKey" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string",
+            "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+          }
+        }
+      }
+    }
+  }
+}

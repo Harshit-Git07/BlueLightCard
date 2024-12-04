@@ -1,0 +1,11 @@
+meta {
+  name: GetApplicationsForApproval
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{apiBaseUrl}}/admin/members/applications/approvals
+  body: json
+  auth: none
+}

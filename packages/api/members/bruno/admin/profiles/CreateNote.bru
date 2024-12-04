@@ -1,0 +1,21 @@
+meta {
+  name: CreateNote
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{apiBaseUrl}}/admin/members/{{memberId}}/profile/notes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "text": "Note text",
+    "source": "ADMIN",
+    "category": "Test",
+    "pinned": false
+  }
+  
+}

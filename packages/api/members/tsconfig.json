@@ -11,10 +11,6 @@
     "allowJs": true,
     "resolveJsonModule": true
   },
-  "exclude": [
-    "application/braze/__tests__/*",
-    "application/repositories/__tests__/*"
-  ],
   "ts-node": {
     "target": "ES6",
     "module": "CommonJS",

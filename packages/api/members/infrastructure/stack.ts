@@ -1,8 +1,10 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import {
   ApiGatewayV1Api,
-  ApiGatewayV1ApiRouteProps,
+  ApiGatewayV1ApiFunctionRouteProps,
   App,
+  Bucket,
+  dependsOn,
   Stack,
   StackContext,
   use,
@@ -27,16 +29,20 @@ import { adminMarketingRoutes } from './routes/admin/AdminMarketingRoutes';
 import { adminApplicationRoutes } from './routes/admin/AdminApplicationRoutes';
 import { adminOrganisationsRoutes } from './routes/admin/AdminOrganisationsRoutes';
 import { adminCardRoutes } from './routes/admin/AdminCardRoutes';
-import { adminAllocationRoutes } from './routes/admin/AdminAllocationRoutes';
 import { adminPaymentRoutes } from './routes/admin/AdminPaymentRoutes';
 import { adminProfileRoutes } from './routes/admin/AdminProfileRoutes';
 import { DocumentUpload } from './s3/DocumentUploadBucket';
-import { RequestValidator, ResponseType } from 'aws-cdk-lib/aws-apigateway';
-import { DefaultRouteProps, RouteProps } from './routes/route';
+import { ResponseType } from 'aws-cdk-lib/aws-apigateway';
+import { DefaultRouteProps } from './routes/route';
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
+import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
+import { RemovalPolicy } from 'aws-cdk-lib';
+import { createOutboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/createOutboundBatchFileCron';
+import { processInboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/processInboundBatchFileCron';
 
 const SERVICE_NAME = 'members';
 
-export function Members({ app, stack }: StackContext) {
+export async function MembersStack({ app, stack }: StackContext) {
   stack.tags.setTag('service', SERVICE_NAME);
 
   // Profile table - profiles, cards, notes, applications, promo codes
@@ -51,18 +57,31 @@ export function Members({ app, stack }: StackContext) {
     organisationsTable: organisationsTable,
   });
 
+  const batchFilesBucket = new Bucket(stack, 'batchFilesBucket', {
+    cdk: {
+      bucket: {
+        removalPolicy: RemovalPolicy.RETAIN,
+        autoDeleteObjects: false,
+      },
+    },
+  });
+
+  createOutboundBatchFileCron(stack, adminTable);
+  processInboundBatchFileCron(stack, adminTable);
+
   return {
     profilesTable,
     organisationsTable,
     adminTable,
     documentUploadBucket: documentUpload.bucket,
+    batchFilesBucket: batchFilesBucket,
   };
 }
 
 export async function MembersApiStack({ app, stack }: StackContext) {
   stack.tags.setTag('service', SERVICE_NAME);
 
-  const { profilesTable, organisationsTable, documentUploadBucket } = use(Members);
+  const { profilesTable, organisationsTable, documentUploadBucket } = use(MembersStack);
   const { certificateArn } = use(Shared);
 
   const { api, requestValidator, config } = createRestApi(
@@ -85,7 +104,7 @@ export async function MembersApiStack({ app, stack }: StackContext) {
     apiGatewayModelGenerator,
     defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
   };
-  const routes: Record<string, ApiGatewayV1ApiRouteProps<never>> = {
+  const routes: Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> = {
     ...memberProfileRoutes({ ...defaultRouteProps, bind: [profilesTable, organisationsTable] }),
     ...memberApplicationRoutes({
       ...defaultRouteProps,
@@ -94,13 +113,16 @@ export async function MembersApiStack({ app, stack }: StackContext) {
     ...memberOrganisationsRoutes({ ...defaultRouteProps, bind: [organisationsTable] }),
     ...memberMarketingRoutes(defaultRouteProps),
   };
+
   api.addRoutes(stack, routes);
 }
 
 export async function MembersAdminApiStack({ app, stack }: StackContext) {
   stack.tags.setTag('service', SERVICE_NAME);
 
-  const { profilesTable, organisationsTable, adminTable, documentUploadBucket } = use(Members);
+  dependsOn(MembersApiStack);
+
+  const { profilesTable, organisationsTable, adminTable, documentUploadBucket } = use(MembersStack);
   const { certificateArn } = use(Shared);
 
   const { api, requestValidator, config } = createRestApi(
@@ -123,7 +145,7 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
     apiGatewayModelGenerator,
     defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
   };
-  const routes: Record<string, ApiGatewayV1ApiRouteProps<never>> = {
+  const routes: Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> = {
     ...adminProfileRoutes({ ...defaultRouteProps, bind: [profilesTable, organisationsTable] }),
     ...adminMarketingRoutes(defaultRouteProps),
     ...adminApplicationRoutes({
@@ -131,10 +153,10 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
       bind: [profilesTable, organisationsTable, documentUploadBucket],
     }),
     ...adminOrganisationsRoutes({ ...defaultRouteProps, bind: [organisationsTable] }),
-    ...adminCardRoutes({ ...defaultRouteProps, bind: [adminTable] }),
-    ...adminAllocationRoutes({ ...defaultRouteProps, bind: [adminTable] }),
+    ...adminCardRoutes({ ...defaultRouteProps, bind: [profilesTable, adminTable] }),
     ...adminPaymentRoutes({ ...defaultRouteProps, bind: [adminTable] }),
   };
+
   api.addRoutes(stack, routes);
 }
 
@@ -161,6 +183,26 @@ function createRestApi(app: App, stack: Stack, name: string, certificateArn?: st
       DD_SERVICE: SERVICE_NAME,
       DD_SITE: 'datadoghq.eu',
       DD_VERSION: getEnvOrDefault(MemberStackEnvironmentKeys.DD_VERSION, ''),
+      SERVICE_LAYER_AUTH0_DOMAIN: getEnvOrDefault(
+        MemberStackEnvironmentKeys.SERVICE_LAYER_AUTH0_DOMAIN,
+        '',
+      ),
+      SERVICE_LAYER_AUTH0_API_CLIENT_ID: getEnvOrDefault(
+        MemberStackEnvironmentKeys.SERVICE_LAYER_AUTH0_API_CLIENT_ID,
+        '',
+      ),
+      SERVICE_LAYER_AUTH0_API_CLIENT_SECRET: getEnvOrDefault(
+        MemberStackEnvironmentKeys.SERVICE_LAYER_AUTH0_API_CLIENT_SECRET,
+        '',
+      ),
+      SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID: getEnvOrDefault(
+        MemberStackEnvironmentKeys.SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID,
+        '',
+      ),
+      SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET: getEnvOrDefault(
+        MemberStackEnvironmentKeys.SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET,
+        '',
+      ),
     },
     layers,
   });
@@ -251,10 +293,20 @@ const getDomainName = (stage: string, region: string, name: string) => {
 };
 
 const getAustraliaDomainName = (stage: string, name: string) =>
-  stage === 'production' ? `${name}-au.blcshine.io` : `${stage}-${name}-au.blcshine.io`;
+  isProduction(stage) ? `${name}-au.blcshine.io` : `${stage}-${name}-au.blcshine.io`;
 
-const getUKDomainName = (stage: string, name: string) =>
-  stage === 'production' ? `${name}.blcshine.io` : `${stage}-${name}.blcshine.io`;
+const getUKDomainName = (stage: string, name: string) => {
+  if (isProduction(stage)) {
+    return isDdsUkBrand() ? `${name}-dds-uk.blcshine.io` : `${name}.blcshine.io`;
+  } else {
+    return isDdsUkBrand() ? `${stage}-${name}-dds-uk.blcshine.io` : `${stage}-${name}.blcshine.io`;
+  }
+};
+
+export const Members =
+  getEnvRaw(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK) === 'false'
+    ? MembersStack
+    : () => Promise.resolve();
 
 export const MembersApi =
   getEnvRaw(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK) === 'false'

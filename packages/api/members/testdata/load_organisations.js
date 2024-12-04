@@ -16,6 +16,23 @@ if (!process.env.SST_STAGE) {
 const tableName = `${process.env.SST_STAGE}-blc-mono-memberOrganisations`;
 
 async function batchWriteItems(items) {
+  const parseIdRequirements = (idRequirements) => {
+    return {
+      M: {
+        minimumRequired: { N: idRequirements.minimumRequired.toString() },
+        supportedDocuments: {
+          L: idRequirements.supportedDocuments.map((doc) => ({
+            M: {
+              idKey: { S: doc.idKey },
+              type: { S: doc.type },
+              guidelines: { S: doc.guidelines },
+              required: { BOOL: doc.required },
+            },
+          })),
+        },
+      },
+    };
+  };
   const requestItems = items.map((item) => ({
     PutRequest: {
       Item: {
@@ -24,12 +41,16 @@ async function batchWriteItems(items) {
         organisationId: { S: item.organisationId },
         name: { S: item.name },
         type: { S: item.type },
-        idRequirements: { L: JSON.parse(item.idRequirements) },
+        employmentStatus: { L: item.employmentStatus.map((status) => ({ S: status })) },
+        employedIdRequirements: parseIdRequirements(item.employedIdRequirements),
+        retiredIdRequirements: parseIdRequirements(item.retiredIdRequirements),
+        volunteerIdRequirements: parseIdRequirements(item.volunteerIdRequirements),
+        trustedDomains: { L: item.trustedDomains?.map((domain) => ({ S: domain })) ?? [] },
         idUploadCount: { N: item.idUploadCount.toString() },
         bypassPayment: { BOOL: item.bypassPayment },
         bypassId: { BOOL: item.bypassId },
         active: { BOOL: item.active },
-        updated: { S: item.updated },
+        lastUpdated: { S: item.lastUpdated },
       },
     },
   }));

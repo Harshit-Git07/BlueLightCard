@@ -5,14 +5,13 @@ meta {
 }
 
 post {
-  url: {{memberApiBaseUrl}}/members/applications
+  url: {{apiBaseUrl}}/members/{{memberId}}/applications
   body: json
   auth: none
 }
 
 body:json {
   {
-    "memberId": "{{memberId}}",
     "startDate": "2024-09-09",
     "eligibilityStatus": "INELIGIBLE",
     "applicationReason": "LOST_CARD"

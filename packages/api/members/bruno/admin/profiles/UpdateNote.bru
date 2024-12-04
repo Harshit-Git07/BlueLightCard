@@ -1,0 +1,21 @@
+meta {
+  name: UpdateNote
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{apiBaseUrl}}/admin/members/{{memberId}}/profile/notes/f231b0a6-b4b7-4f47-a752-67fe6e1cbffa
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "text": "Updated text",
+    "source": "ADMIN",
+    "category": "Test",
+    "pinned": false
+  }
+  
+}

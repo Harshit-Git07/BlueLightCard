@@ -5,32 +5,44 @@ import { S3 } from 'aws-sdk';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { EligibilityStatus } from '../../models/enums/EligibilityStatus';
 import { v4 as uuidv4 } from 'uuid';
+import { CreateApplicationModel, UpdateApplicationModel } from '../../models/applicationModel';
+import { ApplicationReason } from '../../models/enums/ApplicationReason';
+import { ProfileService } from '../profileService';
 
 jest.mock('../../repositories/applicationRepository');
 jest.mock('../promoCodeService');
 jest.mock('aws-sdk');
-jest.mock('sst/node/bucket', () => ({
-  Bucket: jest.fn(),
-}));
-jest.mock('sst/node/table', () => ({
-  Table: jest.fn(),
+jest.mock('uuid', () => ({
+  v4: jest.fn(),
 }));
 
 describe('ApplicationService', () => {
-  const memberId = uuidv4();
-  const applicationId = uuidv4();
+  const memberId = '7d92ad80-8691-4fc7-839a-715384a8a5e0';
+  const applicationId = '9d2632fb-8983-4f09-bfa1-f652b17e9ca1';
+  const createApplication: CreateApplicationModel = {
+    applicationReason: ApplicationReason.SIGNUP,
+    eligibilityStatus: EligibilityStatus.ELIGIBLE,
+    startDate: '2024-01-01',
+  };
+  const updateApplication: UpdateApplicationModel = {
+    city: 'New York',
+  };
+
   let applicationService: ApplicationService;
   let repositoryMock: jest.Mocked<ApplicationRepository>;
+  let profileServiceMock: jest.Mocked<ProfileService>;
   let promoCodeServiceMock: jest.Mocked<PromoCodeService>;
   let s3ClientMock: jest.Mocked<S3>;
 
   beforeEach(() => {
     repositoryMock = new ApplicationRepository() as jest.Mocked<ApplicationRepository>;
+    profileServiceMock = new ProfileService() as jest.Mocked<ProfileService>;
     promoCodeServiceMock = new PromoCodeService() as jest.Mocked<PromoCodeService>;
     s3ClientMock = new S3() as jest.Mocked<S3>;
 
     applicationService = new ApplicationService(
       repositoryMock,
+      profileServiceMock,
       promoCodeServiceMock,
       s3ClientMock,
       'mockBucketName',
@@ -40,17 +52,17 @@ describe('ApplicationService', () => {
   describe('createApplication', () => {
     it('should throw error if create fails', async () => {
       const error = new Error('Repository error');
-      repositoryMock.upsertApplication.mockRejectedValue(error);
+      repositoryMock.createApplication.mockRejectedValue(error);
 
-      await expect(applicationService.createApplication({ memberId } as any)).rejects.toThrow(
-        error,
-      );
+      await expect(
+        applicationService.createApplication(memberId, createApplication),
+      ).rejects.toThrow(error);
     });
 
     it('should create an application successfully', async () => {
-      repositoryMock.upsertApplication.mockResolvedValue(applicationId);
+      repositoryMock.createApplication.mockResolvedValue(applicationId);
 
-      const result = await applicationService.createApplication({ memberId } as any);
+      const result = await applicationService.createApplication(memberId, createApplication);
 
       expect(result).toBe(applicationId);
     });
@@ -59,34 +71,29 @@ describe('ApplicationService', () => {
   describe('updateApplication', () => {
     it('should throw error if update fails', async () => {
       const error = new Error('Repository error');
-      repositoryMock.upsertApplication.mockRejectedValue(error);
+      repositoryMock.updateApplication.mockRejectedValue(error);
 
       await expect(
-        applicationService.updateApplication({ memberId, applicationId } as any),
+        applicationService.updateApplication(memberId, applicationId, updateApplication),
       ).rejects.toThrow(error);
     });
 
     it('should validate promo code if provided', async () => {
-      const application = { memberId, applicationId, promoCode: 'PROMO' } as any;
-      repositoryMock.upsertApplication.mockResolvedValue(applicationId);
+      const application = { ...updateApplication, promoCode: 'PROMO' } as any;
 
-      await applicationService.updateApplication(application);
+      await applicationService.updateApplication(memberId, applicationId, application);
 
       expect(promoCodeServiceMock.validatePromoCode).toHaveBeenCalledWith(memberId, 'PROMO');
     });
 
     it('should update an application successfully', async () => {
-      const application = { memberId, applicationId } as any;
-      repositoryMock.upsertApplication.mockResolvedValue(applicationId);
+      await applicationService.updateApplication(memberId, applicationId, updateApplication);
 
-      await applicationService.updateApplication(application);
-
-      expect(repositoryMock.upsertApplication).toHaveBeenCalledWith({
+      expect(repositoryMock.updateApplication).toHaveBeenCalledWith(
         memberId,
         applicationId,
-        application,
-        isInsert: false,
-      });
+        updateApplication,
+      );
     });
   });
 
@@ -110,24 +117,6 @@ describe('ApplicationService', () => {
       const result = await applicationService.generateDocumentUploadUrl(memberId, applicationId);
 
       expect(result).toEqual({ preSignedUrl: 'mockUrl' });
-    });
-  });
-
-  describe('getAllApplications', () => {
-    it('should throw error if fetching all applications fails', async () => {
-      const error = new Error('Repository error');
-      repositoryMock.getAllApplications.mockRejectedValue(error);
-
-      await expect(applicationService.getAllApplications()).rejects.toThrow(error);
-    });
-
-    it('should fetch all applications successfully', async () => {
-      const applications = [{ applicationId, memberId }] as any;
-      repositoryMock.getAllApplications.mockResolvedValue(applications);
-
-      const result = await applicationService.getAllApplications();
-
-      expect(result).toBe(applications);
     });
   });
 

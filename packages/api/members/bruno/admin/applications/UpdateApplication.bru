@@ -1,0 +1,25 @@
+meta {
+  name: UpdateApplication
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{apiBaseUrl}}/admin/members/{{memberId}}/applications/{{applicationId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "address1": "126 Main St",
+    "address2": "Apt 8B",
+    "city": "Anytown",
+    "postcode": "BT3 9LE",
+    "country": "United Kingdom",
+    "startDate": "2024-09-12",
+    "verificationMethod": "email",
+    "trustedDomainEmail": "user@example.com",
+    "trustedDomainValidated": false
+  }
+}

@@ -5,11 +5,7 @@ const { compilerOptions } = require('./tsconfig');
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  testPathIgnorePatterns: [
-    '<rootDir>/node_modules/',
-    '<rootDir>/application/braze/',
-    '<rootDir>/application/repositories/',
-  ],
+  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
   moduleNameMapper: {
     ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
     'sst/node/.*': '<rootDir>/__mocks__/sst.js',

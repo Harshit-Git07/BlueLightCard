@@ -1,0 +1,19 @@
+meta {
+  name: ReleaseApprovals
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{apiBaseUrl}}/admin/members/applications/approvals
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "applicationIds": [
+      "{{applicationId}}"
+    ]
+  }
+}

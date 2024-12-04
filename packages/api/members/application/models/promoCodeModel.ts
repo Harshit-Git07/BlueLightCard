@@ -5,17 +5,17 @@ export const PromoCodeModel = createZodNamedType(
   'PromoCodeModel',
   z.object({
     parentId: z.string().uuid(),
-    type: z.string(),
+    promoCodeType: z.string(),
     singleCodeId: z.string().uuid().optional(),
     name: z.string().optional(),
     validityStartDate: z
       .string()
-      .date()
+      .datetime()
       .default(() => new Date().toISOString())
       .optional(),
     validityEndDate: z
       .string()
-      .date()
+      .datetime()
       .default(() => new Date().toISOString())
       .optional(),
     codeProvider: z.string().optional(),
@@ -28,24 +28,24 @@ export const PromoCodeModel = createZodNamedType(
     description: z.string().optional(),
     createdDate: z
       .string()
-      .date()
+      .datetime()
       .default(() => new Date().toISOString())
       .optional(),
     lastUpdatedDate: z
       .string()
-      .date()
+      .datetime()
       .default(() => new Date().toISOString())
       .optional(),
     active: z.boolean().optional(),
     used: z.boolean().optional(),
     addedDate: z
       .string()
-      .date()
+      .datetime()
       .default(() => new Date().toISOString())
       .optional(),
     usedDate: z
       .string()
-      .date()
+      .datetime()
       .default(() => new Date().toISOString())
       .optional(),
   }),

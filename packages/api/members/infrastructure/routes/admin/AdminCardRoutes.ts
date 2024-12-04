@@ -1,29 +1,29 @@
 import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
-import { ApiGatewayV1ApiRouteProps } from 'sst/constructs/ApiGatewayV1Api';
+import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Api';
 import { CardPrintBatchModel } from '@blc-mono/members/application/models/cardPrintBatchModel';
-import { CardModel } from '@blc-mono/members/application/models/cardModel';
+import { CardModel, UpdateCardModel } from '@blc-mono/members/application/models/cardModel';
 
 export function adminCardRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
   return {
-    'GET /admin/cards/{memberId}': Route.createRoute({
+    'GET /admin/members/{memberId}/cards': Route.createRoute({
       ...defaultRouteProps,
       name: 'AdminGetCards',
       handler: 'packages/api/members/application/handlers/admin/cards/getCards.handler',
       responseModelType: CardModel,
     }),
-    'GET /admin/cards/{memberId}/{cardNumber}': Route.createRoute({
+    'GET /admin/members/{memberId}/cards/{cardNumber}': Route.createRoute({
       ...defaultRouteProps,
       name: 'AdminGetCard',
       handler: 'packages/api/members/application/handlers/admin/cards/getCard.handler',
       responseModelType: CardModel,
     }),
-    'PUT /admin/cards/{memberId}': Route.createRoute({
+    'PUT /admin/members/{memberId}/cards/{cardNumber}': Route.createRoute({
       ...defaultRouteProps,
       name: 'AdminUpdateCard',
       handler: 'packages/api/members/application/handlers/admin/cards/updateCard.handler',
-      requestModelType: CardModel,
+      requestModelType: UpdateCardModel,
     }),
     'GET /admin/cards/batches': Route.createRoute({
       ...defaultRouteProps,

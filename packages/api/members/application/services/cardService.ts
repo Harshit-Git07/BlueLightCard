@@ -1,5 +1,5 @@
 import { logger } from '../middleware';
-import { CardModel } from '../models/cardModel';
+import { CardModel, UpdateCardModel } from '../models/cardModel';
 import { CardRepository } from '../repositories/cardRepository';
 
 export class CardService {
@@ -25,11 +25,12 @@ export class CardService {
     }
   }
 
-  async updateCard(memberId: string, card: CardModel): Promise<void> {
+  async updateCard(memberId: string, cardNumber: string, card: UpdateCardModel): Promise<void> {
     try {
       logger.debug({ message: 'Updating card', memberId, card });
       await this.repository.upsertCard({
         memberId,
+        cardNumber,
         card,
         isInsert: false,
       });

@@ -1,34 +1,34 @@
 import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
-import { ApiGatewayV1ApiRouteProps } from 'sst/constructs/ApiGatewayV1Api';
+import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Api';
 import { OrganisationModel } from '@blc-mono/members/application/models/organisationModel';
 import { EmployerModel } from '@blc-mono/members/application/models/employerModel';
 
 export function memberOrganisationsRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
   return {
-    'GET /members/orgs': Route.createRoute({
+    'GET /orgs': Route.createRoute({
       ...defaultRouteProps,
       name: 'MemberGetOrganisations',
       handler:
         'packages/api/members/application/handlers/member/organisations/getOrganisations.handler',
       responseModelType: OrganisationModel,
     }),
-    'GET /members/orgs/{organisationId}': Route.createRoute({
+    'GET /orgs/{organisationId}': Route.createRoute({
       ...defaultRouteProps,
       name: 'MemberGetOrganisation',
       handler:
         'packages/api/members/application/handlers/member/organisations/getOrganisation.handler',
       responseModelType: OrganisationModel,
     }),
-    'GET /members/orgs/{organisationId}/employers': Route.createRoute({
+    'GET /orgs/{organisationId}/employers': Route.createRoute({
       ...defaultRouteProps,
       name: 'MemberGetEmployers',
       handler:
         'packages/api/members/application/handlers/member/organisations/getEmployers.handler',
       responseModelType: EmployerModel,
     }),
-    'GET /members/orgs/{organisationId}/employers/{employerId}': Route.createRoute({
+    'GET /orgs/{organisationId}/employers/{employerId}': Route.createRoute({
       ...defaultRouteProps,
       name: 'MemberGetEmployer',
       handler: 'packages/api/members/application/handlers/member/organisations/getEmployer.handler',

@@ -3,11 +3,10 @@ import { OrganisationModel } from '../../models/organisationModel';
 import { EmployerModel } from '../../models/employerModel';
 import { v4 as uuidv4 } from 'uuid';
 import { OrganisationRepository } from '../../repositories/organisationRepository';
+import { EmploymentStatus } from '../../models/enums/EmploymentStatus';
+import { IdType } from '../../models/enums/IdType';
 
 jest.mock('../../repositories/organisationRepository');
-jest.mock('sst/node/table', () => ({
-  Table: jest.fn(),
-}));
 
 describe('OrganisationService', () => {
   const organisationId = uuidv4();
@@ -17,20 +16,34 @@ describe('OrganisationService', () => {
       organisationId,
       name: 'Org1',
       active: true,
-      volunteers: false,
-      retired: false,
-      idRequirements: [],
+      employmentStatus: [EmploymentStatus.EMPLOYED],
+      employedIdRequirements: {
+        minimumRequired: 1,
+        supportedDocuments: [
+          { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
+        ],
+      },
+      retiredIdRequirements: {
+        minimumRequired: 1,
+        supportedDocuments: [
+          { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
+        ],
+      },
+      volunteerIdRequirements: {
+        minimumRequired: 1,
+        supportedDocuments: [
+          { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
+        ],
+      },
       trustedDomains: [],
     },
   ];
   const employers: EmployerModel[] = [
     {
+      organisationId,
       employerId,
       name: 'Employer1',
       active: true,
-      volunteers: false,
-      retired: false,
-      trustedDomains: [],
     },
   ];
 

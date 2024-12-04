@@ -1,11 +1,11 @@
 import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
-import { ApiGatewayV1ApiRouteProps } from 'sst/constructs/ApiGatewayV1Api';
+import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Api';
 import { PaymentModel } from '@blc-mono/members/application/models/paymentModel';
 import { RefundModel } from '@blc-mono/members/application/models/refundModel';
 
 export function adminPaymentRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
   return {
     'POST /admin/payments/initiate': Route.createRoute({
       ...defaultRouteProps,

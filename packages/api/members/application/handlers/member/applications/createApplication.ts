@@ -1,21 +1,31 @@
 import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 import { middleware } from '../../../middleware';
-import { CreateApplicationModel } from '../../../models/applicationModel';
+import {
+  CreateApplicationModel,
+  CreateApplicationModelResponse,
+} from '../../../models/applicationModel';
 import { ApplicationService } from '../../../services/applicationService';
 import { verifyMemberHasAccessToProfile } from '../memberAuthorization';
 import { ValidationError } from '../../../errors/ValidationError';
 
 const service = new ApplicationService();
 
-const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<Record<string, string>> => {
+const unwrappedHandler = async (
+  event: APIGatewayProxyEvent,
+): Promise<CreateApplicationModelResponse> => {
+  const { memberId } = event.pathParameters || {};
+  if (!memberId) {
+    throw new ValidationError('Member ID is required');
+  }
+
   if (!event.body) {
     throw new ValidationError('Missing request body');
   }
 
   const application = CreateApplicationModel.parse(JSON.parse(event.body));
-  verifyMemberHasAccessToProfile(event, application.memberId);
-  const applicationId = await service.createApplication(application);
-  return { applicationId };
+  verifyMemberHasAccessToProfile(event, memberId);
+  const applicationId = await service.createApplication(memberId, application);
+  return CreateApplicationModelResponse.parse({ applicationId });
 };
 
 export const handler = middleware(unwrappedHandler);

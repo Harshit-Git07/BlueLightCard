@@ -24,7 +24,7 @@ export class PromoCodeService {
     }
 
     let parentCodeDetails: PromoCodeModel | undefined = codeDetails;
-    if (codeDetails.type === PromoCodeType.SINGLE_USE) {
+    if (codeDetails.promoCodeType === PromoCodeType.SINGLE_USE) {
       if (codeDetails.used === false) {
         parentCodeDetails = await this.getParentCode(codeDetails);
       } else {

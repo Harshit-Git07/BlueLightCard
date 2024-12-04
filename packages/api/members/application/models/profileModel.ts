@@ -3,6 +3,7 @@ import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtensio
 import { Gender } from './enums/Gender';
 import { CardModel } from './cardModel';
 import { ApplicationModel } from './applicationModel';
+import { EmploymentStatus } from './enums/EmploymentStatus';
 
 export const ProfileModel = createZodNamedType(
   'ProfileModel',
@@ -29,7 +30,7 @@ export const ProfileModel = createZodNamedType(
     emailValidated: z.boolean().default(false).optional(),
     spareEmail: z.string().email().optional(),
     spareEmailValidated: z.boolean().default(false).optional(),
-    employmentType: z.string().optional(),
+    employmentStatus: z.nativeEnum(EmploymentStatus).optional(),
     organisationId: z.string().uuid().optional(),
     employerId: z.string().uuid().optional(),
     employerName: z.string().optional(),
@@ -42,7 +43,7 @@ export const ProfileModel = createZodNamedType(
     lastIpAddress: z.string().optional(),
     idUploaded: z.boolean().optional(),
     card: CardModel.optional(),
-    applications: z.array(ApplicationModel).default([]),
+    applications: z.array(ApplicationModel).default([]).optional(),
   }),
 );
 export type ProfileModel = z.infer<typeof ProfileModel>;
@@ -58,9 +59,18 @@ export const CreateProfileModel = createZodNamedType(
 );
 export type CreateProfileModel = z.infer<typeof CreateProfileModel>;
 
+export const CreateProfileModelResponse = createZodNamedType(
+  'CreateProfileModelResponse',
+  z.object({
+    memberId: z.string().uuid(),
+  }),
+);
+export type CreateProfileModelResponse = z.infer<typeof CreateProfileModelResponse>;
+
 export const UpdateProfileModel = createZodNamedType(
   'UpdateProfileModel',
   ProfileModel.omit({
+    memberId: true,
     email: true,
     gaKey: true,
     lastLogin: true,

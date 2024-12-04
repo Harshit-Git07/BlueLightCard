@@ -4,8 +4,8 @@ meta {
   seq: 5
 }
 
-get {
-  url: {{memberApiBaseUrl}}/members/applications/{{memberId}}/{{applicationId}}/uploadDocument
+post {
+  url: {{apiBaseUrl}}/members/{{memberId}}/applications/{{applicationId}}/uploadDocument
   body: none
   auth: none
 }

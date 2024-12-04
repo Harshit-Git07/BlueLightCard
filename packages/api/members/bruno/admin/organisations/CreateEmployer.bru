@@ -1,0 +1,80 @@
+meta {
+  name: CreateEmployer
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{apiBaseUrl}}/admin/orgs/{{organisationId}}/employers
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Royal Marine Reserve",
+    "active": true,
+    "employedIdRequirements": {
+      "minimumRequired": 1,
+      "supportedDocuments": [
+        {
+          "idKey": "payslip",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your payslip"
+        },
+        {
+          "idKey": "passport",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your passport"
+        },
+        {
+          "idKey": "p60",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your P60"
+        }
+      ]
+    },
+    "retiredIdRequirements": {
+      "minimumRequired": 1,
+      "supportedDocuments": [
+        {
+          "idKey": "payslip",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your payslip"
+        },
+        {
+          "idKey": "passport",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your passport"
+        },
+        {
+          "idKey": "p60",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your P60"
+        }
+      ]
+    },
+    "volunteerIdRequirements": {
+      "minimumRequired": 1,
+      "supportedDocuments": [
+        {
+          "idKey": "payslip",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your payslip"
+        },
+        {
+          "idKey": "passport",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your passport"
+        },
+        {
+          "idKey": "p60",
+          "type": "IMAGE_UPLOAD",
+          "guidelines": "Upload a photo of your P60"
+        }
+      ]
+    },
+    "bypassPayment": false,
+    "bypassId": false
+  }
+}

@@ -16,6 +16,23 @@ if (!process.env.SST_STAGE) {
 const tableName = `${process.env.SST_STAGE}-blc-mono-memberOrganisations`;
 
 async function batchWriteItems(items) {
+  const parseIdRequirements = (idRequirements) => {
+    return {
+      M: {
+        minimumRequired: { N: idRequirements.minimumRequired.toString() },
+        supportedDocuments: {
+          L: idRequirements.supportedDocuments.map((doc) => ({
+            M: {
+              idKey: { S: doc.idKey },
+              type: { S: doc.type },
+              guidelines: { S: doc.guidelines },
+              required: { BOOL: doc.required },
+            },
+          })),
+        },
+      },
+    };
+  };
   const requestItems = items.map((item) => {
     const sanitisedItem = {
       pk: { S: item.pk },
@@ -27,14 +44,25 @@ async function batchWriteItems(items) {
       bypassPayment: { BOOL: item.bypassPayment },
       bypassId: { BOOL: item.bypassId },
       active: { BOOL: item.active },
-      updated: { S: item.updated },
+      lastUpdated: { S: item.lastUpdated },
     };
 
     if (item.type) {
       sanitisedItem.type = { S: item.type };
     }
-    if (item.idRequirements) {
-      sanitisedItem.idRequirements = { L: JSON.parse(item.idRequirements) };
+    if (item.employmentStatus) {
+      sanitisedItem.employmentStatus = {
+        L: item.employmentStatus.map((status) => ({ S: status })),
+      };
+    }
+    if (item.employedIdRequirements) {
+      sanitisedItem.employedIdRequirements = parseIdRequirements(item.employedIdRequirements);
+    }
+    if (item.retiredIdRequirements) {
+      sanitisedItem.retiredIdRequirements = parseIdRequirements(item.retiredIdRequirements);
+    }
+    if (item.volunteerIdRequirements) {
+      sanitisedItem.volunteerIdRequirements = parseIdRequirements(item.volunteerIdRequirements);
     }
 
     return { PutRequest: { Item: sanitisedItem } };

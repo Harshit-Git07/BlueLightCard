@@ -8,6 +8,7 @@ import { MenuResponse } from '@blc-mono/discovery/application/models/MenuRespons
 import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
 import { ENDPOINTS } from '@blc-mono/discovery/infrastructure/constants/environment';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
+import { buildTestSanityCompany } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityCompany';
 import { buildTestSanityMenuOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMenuOffer';
 import { buildTestSanityMenuThemedOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMenuThemedOffer';
 import { buildTestSanityOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityOffer';
@@ -57,7 +58,8 @@ const dealsOfTheWeekGeneratedMenuUUID = `test-${randomUUID().toString()}`;
 const featuredOffersGeneratedMenuUUID = `test-${randomUUID().toString()}`;
 const flexibleGeneratedSubMenuUUID = `test-${randomUUID().toString()}`;
 const flexibleGeneratedMenuUUID = `test-${randomUUID().toString()}`;
-const offers: SanityOffer[] = [buildTestSanityOffer(generatedOfferUUID, generatedCompanyUUID)];
+const testCompany = buildTestSanityCompany({ _id: generatedCompanyUUID });
+const offers: SanityOffer[] = [buildTestSanityOffer({ _id: generatedOfferUUID, company: testCompany })];
 const marketplaceSanityMenuOffer = buildTestSanityMenuOffer(offers, marketplaceGeneratedMenuUUID);
 const dealsOfTheWeekSanityMenuOffer = buildTestSanityMenuOffer(offers, dealsOfTheWeekGeneratedMenuUUID);
 const featuredOffersSanityMenuOffer = buildTestSanityMenuOffer(offers, featuredOffersGeneratedMenuUUID);
@@ -104,7 +106,12 @@ describe('Menu', async () => {
       });
       await sendTestEvents({
         source: Events.OFFER_DELETED,
-        events: [buildTestSanityOffer(generatedOfferUUID, generatedCompanyUUID)],
+        events: [
+          buildTestSanityOffer({
+            _id: generatedOfferUUID,
+            company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+          }),
+        ],
       });
       await sendTestEvents({
         source: Events.SITE_DELETED,

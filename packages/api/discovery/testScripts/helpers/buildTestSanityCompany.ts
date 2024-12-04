@@ -1,13 +1,13 @@
 import { Company as SanityCompany } from '@bluelightcard/sanity-types';
 import { v4 } from 'uuid';
 
-export function buildTestSanityCompany(): SanityCompany {
+export function buildTestSanityCompany(overrides?: Partial<SanityCompany>): SanityCompany {
   return {
     _type: 'company',
-    _createdAt: '',
-    _updatedAt: '2024-08-05T16:50:14Z',
+    _createdAt: overrides?._createdAt ?? '',
+    _updatedAt: overrides?._updatedAt ?? '2024-08-05T16:50:14Z',
     _rev: '',
-    _id: v4().toString(),
+    _id: overrides?._id ?? v4().toString(),
     brandCompanyDetails: [
       {
         _key: '',

@@ -9,6 +9,7 @@ import { OfferResponse } from '@blc-mono/discovery/application/models/OfferRespo
 import { SimpleCategory } from '@blc-mono/discovery/application/models/SimpleCategory';
 import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
+import { buildTestSanityCompany } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityCompany';
 import { buildTestSanityOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityOffer';
 import { sendTestEvents } from '@blc-mono/discovery/testScripts/helpers/sendTestEvents';
 
@@ -143,7 +144,7 @@ describe('Categories E2E Event Handling', async () => {
 
   const offers: SanityOffer[] = [
     {
-      ...buildTestSanityOffer(activeOfferUUID, generatedCompanyUUID),
+      ...buildTestSanityOffer({ _id: activeOfferUUID, company: buildTestSanityCompany({ _id: generatedCompanyUUID }) }),
       name: activeOfferUUID,
       categorySelection: [
         {
@@ -165,7 +166,10 @@ describe('Categories E2E Event Handling', async () => {
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString(),
     },
     {
-      ...buildTestSanityOffer(activeOfferUUID2, generatedCompanyUUID),
+      ...buildTestSanityOffer({
+        _id: activeOfferUUID2,
+        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+      }),
       name: activeOfferUUID2,
       categorySelection: [
         {

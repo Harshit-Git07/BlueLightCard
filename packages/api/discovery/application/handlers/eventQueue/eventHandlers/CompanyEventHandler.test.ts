@@ -12,16 +12,20 @@ import {
 } from '@blc-mono/discovery/application/repositories/Offer/service/OfferService';
 
 import * as target from './CompanyEventHandler';
+import { handleCompanyLocationsUpdateToCompanies } from './handleCompanyLocationsUpdateToCompanies';
 
 jest.mock('@blc-mono/discovery/application/repositories/Offer/service/OfferService');
 jest.mock('@blc-mono/discovery/application/repositories/Company/service/CompanyService');
 jest.mock('@blc-mono/discovery/application/repositories/Menu/service/MenuService');
+jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/CompanyLocationEventHandler');
+jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/handleCompanyLocationsUpdateToCompanies');
 
 const insertOffersMock = jest.mocked(insertOffers);
 const insertCompanyMock = jest.mocked(insertCompany);
 const getCompanyByIdMock = jest.mocked(getCompanyById);
 const getOffersByCompanyMock = jest.mocked(getOffersByCompany);
 const updateOfferInMenusMock = jest.mocked(updateOfferInMenus);
+const handleCompanyLocationsUpdateToCompaniesMock = jest.mocked(handleCompanyLocationsUpdateToCompanies);
 
 describe('CompanyEventHandler', () => {
   describe('handleCompanyUpdated', () => {
@@ -29,15 +33,26 @@ describe('CompanyEventHandler', () => {
       getOffersByCompanyMock.mockResolvedValue([]);
     });
 
-    describe('and no current company record', () => {
-      it('should insert new company record and update no current offer records', async () => {
+    describe('no current company record and record is updated within company locations update', () => {
+      it('should not insert new company record', async () => {
+        handleCompanyLocationsUpdateToCompaniesMock.mockResolvedValue({ companyRecordUpdated: true });
         const newCompanyRecord = companyFactory.build();
 
         await target.handleCompanyUpdated(newCompanyRecord);
+        expect(insertCompanyMock).not.toHaveBeenCalledWith();
+      });
 
-        expect(insertCompanyMock).toHaveBeenCalledWith(newCompanyRecord);
-        expect(insertOffersMock).not.toHaveBeenCalled();
-        expect(updateOfferInMenusMock).not.toHaveBeenCalled();
+      describe('and record is not updated within company locations update', () => {
+        it('should insert new company record and update no current offer records', async () => {
+          handleCompanyLocationsUpdateToCompaniesMock.mockResolvedValue({ companyRecordUpdated: false });
+          const newCompanyRecord = companyFactory.build();
+
+          await target.handleCompanyUpdated(newCompanyRecord);
+
+          expect(insertCompanyMock).toHaveBeenCalledWith(newCompanyRecord);
+          expect(insertOffersMock).not.toHaveBeenCalled();
+          expect(updateOfferInMenusMock).not.toHaveBeenCalled();
+        });
       });
     });
 
@@ -48,6 +63,7 @@ describe('CompanyEventHandler', () => {
 
       beforeEach(() => {
         getCompanyByIdMock.mockResolvedValue(currentCompanyRecord);
+        handleCompanyLocationsUpdateToCompaniesMock.mockResolvedValue({ companyRecordUpdated: false });
       });
 
       it('should update company record if update record is newer version', async () => {

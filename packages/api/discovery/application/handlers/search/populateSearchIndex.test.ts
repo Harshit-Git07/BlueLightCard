@@ -105,6 +105,7 @@ describe('populateSearchIndex', () => {
           excludedTrusts: [],
           company: {
             id: 'company-1',
+            type: 'company',
             legacyCompanyId: 2,
             name: 'Company 1',
             logo: 'http://example.com/logo1.jpg',
@@ -122,6 +123,7 @@ describe('populateSearchIndex', () => {
               },
             ],
             local: false,
+            locations: [],
             updatedAt: TODAY,
           },
           categories: [

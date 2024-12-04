@@ -26,6 +26,7 @@ describe('mapSanityOfferToOffer', () => {
       excludedTrusts: [],
       company: {
         id: 'company1',
+        type: 'company',
         name: 'Test Company',
         legacyCompanyId: undefined,
         logo: 'logo-ref',
@@ -35,6 +36,7 @@ describe('mapSanityOfferToOffer', () => {
         excludedTrusts: [],
         categories: [],
         local: false,
+        locations: [],
         updatedAt: expect.any(String),
       },
       categories: [

@@ -6,6 +6,7 @@ describe('Company Entity Factory', () => {
     expect(companyEntity).toEqual({
       partitionKey: 'COMPANY-1',
       sortKey: 'COMPANY-1',
+      type: 'company',
       id: '1',
       legacyCompanyId: 201,
       name: 'Sample Company',
@@ -16,6 +17,7 @@ describe('Company Entity Factory', () => {
       excludedTrusts: [],
       categories: expect.any(Array),
       local: true,
+      locations: [],
       updatedAt: '2024-09-01T00:00:00',
     });
   });

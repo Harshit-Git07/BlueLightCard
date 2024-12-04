@@ -20,6 +20,7 @@ const offer: Offer = {
   excludedTrusts: ['trust2'],
   company: {
     id: 'company1',
+    type: 'company',
     name: 'Test Company',
     logo: '',
     ageRestrictions: '',
@@ -29,6 +30,7 @@ const offer: Offer = {
     categories: [],
     local: false,
     updatedAt: '',
+    locations: [],
   },
   categories: [],
   local: true,

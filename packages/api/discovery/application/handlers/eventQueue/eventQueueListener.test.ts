@@ -5,6 +5,7 @@ import {
   handleOfferDeleted,
   handleOfferUpdated,
 } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/OfferEventHandler';
+import { mapSanityCompanyLocationToCompanyLocationEvent } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyLocationToCompanyLocation';
 import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany';
 import { mapSanityMenuOfferToMenuOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
@@ -18,6 +19,7 @@ import { siteFactory } from '../../factories/SiteFactory';
 import { MenuType } from '../../models/MenuResponse';
 import { ThemedMenuOffer } from '../../models/ThemedMenu';
 
+import { handleCompanyLocationsUpdated } from './eventHandlers/CompanyLocationEventHandler';
 import { handleMenusDeleted, handleMenusUpdated } from './eventHandlers/MenusEventHandler';
 import { handleMenuThemedDeleted, handleMenuThemedUpdated } from './eventHandlers/MenuThemedEventHandler';
 import { handleSiteDeleted, handleSiteUpdated } from './eventHandlers/SiteEventHandler';
@@ -25,6 +27,7 @@ import { handler } from './eventQueueListener';
 
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/OfferEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/CompanyEventHandler');
+jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/CompanyLocationEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/MenusEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/MenuThemedEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/SiteEventHandler');
@@ -34,10 +37,12 @@ jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany')
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanitySiteToSite');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityThemedMenuToThemedMenu');
+jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyLocationToCompanyLocation');
 
 const handleOfferUpdatedMock = jest.mocked(handleOfferUpdated);
 const handleOfferDeletedMock = jest.mocked(handleOfferDeleted);
 const handleCompanyUpdatedMock = jest.mocked(handleCompanyUpdated);
+const handleCompanyLocationsUpdatedMock = jest.mocked(handleCompanyLocationsUpdated);
 const handleMenuOfferUpdatedMock = jest.mocked(handleMenusUpdated);
 const handleMenuOfferDeletedMock = jest.mocked(handleMenusDeleted);
 const handleSiteUpdatedMock = jest.mocked(handleSiteUpdated);
@@ -50,6 +55,7 @@ const mapSanityCompanyToCompanyMock = jest.mocked(mapSanityCompanyToCompany);
 const mapSanityMenuOfferToMenuOfferMock = jest.mocked(mapSanityMenuOfferToMenuOffer);
 const mapSanitySiteToSiteMock = jest.mocked(mapSanitySiteToSite);
 const mapSanityThemedMenuToThemedMenuMock = jest.mocked(mapSanityThemedMenuToThemedMenu);
+const mapSanityCompanyLocationToCompanyLocationEventMock = jest.mocked(mapSanityCompanyLocationToCompanyLocationEvent);
 
 describe('eventQueueListener', () => {
   it.each([Events.OFFER_CREATED, Events.OFFER_UPDATED])('should handle %s event', async (event) => {
@@ -78,6 +84,17 @@ describe('eventQueueListener', () => {
     expect(mapSanityCompanyToCompanyMock).toHaveBeenCalledWith('body');
     expect(handleCompanyUpdatedMock).toHaveBeenCalled();
   });
+
+  it.each([Events.COMPANY_LOCATION_BATCH_CREATED, Events.COMPANY_LOCATION_BATCH_UPDATED])(
+    'should handle %s event',
+    async (event) => {
+      const companyLocationRecord = buildSQSRecord(event);
+      await handler({ Records: [companyLocationRecord] });
+
+      expect(mapSanityCompanyLocationToCompanyLocationEventMock).toHaveBeenCalledWith('body');
+      expect(handleCompanyLocationsUpdatedMock).toHaveBeenCalled();
+    },
+  );
 
   it.each([Events.MENU_OFFER_CREATED, Events.MENU_OFFER_UPDATED])('should handle %s event', async (eventSource) => {
     const menuRecord = buildSQSRecord(eventSource);

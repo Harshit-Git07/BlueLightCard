@@ -7,6 +7,7 @@ import { SearchResult } from '@blc-mono/discovery/application/services/opensearc
 import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
 import { ENDPOINTS } from '@blc-mono/discovery/infrastructure/constants/environment';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
+import { buildTestSanityCompany } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityCompany';
 import { buildTestSanityOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityOffer';
 import { sendTestEvents } from '@blc-mono/discovery/testScripts/helpers/sendTestEvents';
 
@@ -77,19 +78,25 @@ describe('Search E2E Event Handling', async () => {
 
   const offers: SanityOffer[] = [
     {
-      ...buildTestSanityOffer(activeOfferUUID, generatedCompanyUUID),
+      ...buildTestSanityOffer({ _id: activeOfferUUID, company: buildTestSanityCompany({ _id: generatedCompanyUUID }) }),
       name: activeOfferUUID,
       start: new Date(Date.now()).toISOString(),
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString(),
     },
     {
-      ...buildTestSanityOffer(expiredOfferUUID, generatedCompanyUUID),
+      ...buildTestSanityOffer({
+        _id: expiredOfferUUID,
+        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+      }),
       name: expiredOfferUUID,
       start: new Date(Date.now()).toISOString(),
       expires: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
     },
     {
-      ...buildTestSanityOffer(evergreenOfferUUID, generatedCompanyUUID),
+      ...buildTestSanityOffer({
+        _id: evergreenOfferUUID,
+        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+      }),
       name: evergreenOfferUUID,
       start: new Date(Date.now()).toISOString(),
       evergreen: true,

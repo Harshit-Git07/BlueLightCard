@@ -5,6 +5,7 @@ describe('Company Factory', () => {
     const company = companyFactory.build();
     expect(company).toEqual({
       id: '1',
+      type: 'company',
       legacyCompanyId: 201,
       name: 'Sample Company',
       logo: 'https://cdn.bluelightcard.co.uk/offerimages/1724052659175.jpg',
@@ -14,6 +15,7 @@ describe('Company Factory', () => {
       excludedTrusts: [],
       categories: expect.any(Array),
       local: true,
+      locations: [],
       updatedAt: '2024-09-01T00:00:00',
     });
   });

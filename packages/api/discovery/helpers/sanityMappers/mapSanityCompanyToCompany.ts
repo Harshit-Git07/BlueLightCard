@@ -19,6 +19,8 @@ export const mapSanityCompanyToCompany = (sanityCompany: SanityCompany): Company
 
   return {
     id: sanityCompany._id,
+    type: 'company',
+    locations: [],
     legacyCompanyId: sanityCompany.companyId,
     name: brandDetails.companyName,
     logo: brandDetails?.companyLogo?.default?.asset?.url ?? '',

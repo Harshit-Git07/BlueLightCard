@@ -13,6 +13,10 @@ import {
   handleOfferDeleted,
   handleOfferUpdated,
 } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/OfferEventHandler';
+import {
+  mapSanityCompanyLocationToCompanyLocationEvent,
+  SanityCompanyLocationEventBody,
+} from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyLocationToCompanyLocation';
 import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany';
 import { mapSanityMenuOfferToMenuOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
@@ -20,6 +24,7 @@ import { mapSanitySiteToSite } from '@blc-mono/discovery/helpers/sanityMappers/m
 import { mapSanityThemedMenuToThemedMenu } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityThemedMenuToThemedMenu';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
+import { handleCompanyLocationsUpdated } from './eventHandlers/CompanyLocationEventHandler';
 import { handleMenusDeleted, handleMenusUpdated } from './eventHandlers/MenusEventHandler';
 import { handleMenuThemedDeleted, handleMenuThemedUpdated } from './eventHandlers/MenuThemedEventHandler';
 import { handleSiteDeleted, handleSiteUpdated } from './eventHandlers/SiteEventHandler';
@@ -42,6 +47,12 @@ const unwrappedHandler = async (event: SQSEvent) => {
         case Events.COMPANY_CREATED:
         case Events.COMPANY_UPDATED:
           await handleCompanyUpdated(mapSanityCompanyToCompany(body.detail as SanityCompany));
+          break;
+        case Events.COMPANY_LOCATION_BATCH_CREATED:
+        case Events.COMPANY_LOCATION_BATCH_UPDATED:
+          await handleCompanyLocationsUpdated(
+            mapSanityCompanyLocationToCompanyLocationEvent(body.detail as SanityCompanyLocationEventBody),
+          );
           break;
         case Events.MENU_OFFER_CREATED:
         case Events.MENU_OFFER_UPDATED: {

@@ -6,6 +6,7 @@ import { ApiGatewayV1Api } from 'sst/node/api';
 import { CompanySummary } from '@blc-mono/discovery/application/models/CompaniesResponse';
 import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
+import { buildTestSanityCompany } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityCompany';
 import { buildTestSanityOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityOffer';
 import { sendTestEvents } from '@blc-mono/discovery/testScripts/helpers/sendTestEvents';
 
@@ -54,7 +55,9 @@ describe('GET /companies', async () => {
     const generatedOfferUUID = `test-${randomUUID().toString()}`;
     const generatedCompanyUUID = `test-company-${randomUUID().toString()}`;
 
-    const offers: SanityOffer[] = [buildTestSanityOffer(generatedOfferUUID, generatedCompanyUUID)];
+    const offers: SanityOffer[] = [
+      buildTestSanityOffer({ _id: generatedOfferUUID, company: buildTestSanityCompany({ _id: generatedCompanyUUID }) }),
+    ];
 
     afterAll(async () => {
       await sendTestEvents({

@@ -5,12 +5,13 @@ import { Company, MenuOffer, MenuThemedOffer, Offer, Site } from '@bluelightcard
 import { EventBus } from 'sst/node/event-bus';
 
 import { getEnv } from '@blc-mono/core/src/utils/getEnv';
+import { SanityCompanyLocationEventBody } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyLocationToCompanyLocation';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 import { DetailTypes } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
 interface TestEvents {
   source: string;
-  events: Offer[] | Company[] | MenuOffer[] | Site[] | MenuThemedOffer[];
+  events: Offer[] | Company[] | MenuOffer[] | Site[] | MenuThemedOffer[] | SanityCompanyLocationEventBody[];
 }
 
 export async function sendTestEvents(testEvents: TestEvents, eventBusName?: string): Promise<void> {

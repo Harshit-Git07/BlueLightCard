@@ -1,4 +1,5 @@
 import { companyFactory } from '@blc-mono/discovery/application/factories/CompanyFactory';
+import { companyLocationFactory } from '@blc-mono/discovery/application/factories/CompanyLocationFactory';
 import { Company } from '@blc-mono/discovery/application/models/Company';
 import { mapCompanyToCompanyEntity } from '@blc-mono/discovery/application/repositories/Company/service/mapper/CompanyMapper';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
@@ -6,6 +7,7 @@ import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructur
 import { CompanyRepository } from '../CompanyRepository';
 
 import * as target from './CompanyService';
+import { mapCompanyLocationToCompanyLocationEntity } from './mapper/CompanyLocationMapper';
 
 jest.mock('@blc-mono/core/utils/getEnv', () => ({
   getEnv: jest.fn().mockImplementation((param) => {
@@ -19,6 +21,10 @@ jest.mock('@blc-mono/core/utils/getEnv', () => ({
     }
   }),
 }));
+
+const givenCompanyRepositoryBatchDeleteThrowsAnError = () => {
+  jest.spyOn(CompanyRepository.prototype, 'batchDelete').mockRejectedValue(new Error('DynamoDB error'));
+};
 
 describe('Company Service', () => {
   describe('insertCompany', () => {
@@ -43,6 +49,48 @@ describe('Company Service', () => {
     const givenCompanyRepositoryInsertThrowsAnError = () => {
       jest.spyOn(CompanyRepository.prototype, 'insert').mockRejectedValue(new Error('DynamoDB error'));
     };
+  });
+
+  describe('deleteCompanyRecords', () => {
+    const company = companyFactory.build();
+    const companyLocation = companyLocationFactory.build();
+    it('should delete company records successfully', async () => {
+      const mockBatchDelete = jest.spyOn(CompanyRepository.prototype, 'batchDelete').mockResolvedValue();
+
+      await target.deleteCompanyRecords([company, companyLocation]);
+
+      expect(mockBatchDelete).toHaveBeenCalledWith([
+        mapCompanyToCompanyEntity(company),
+        mapCompanyLocationToCompanyLocationEntity(companyLocation),
+      ]);
+    });
+
+    it('should throw error when failure in the batch delete', async () => {
+      givenCompanyRepositoryBatchDeleteThrowsAnError();
+      await expect(target.deleteCompanyRecords([company, companyLocation])).rejects.toThrow(
+        `Error ocurred batch deleting company records with length: [2]: [Error: DynamoDB error]`,
+      );
+    });
+  });
+
+  describe('insertCompanyLocations', () => {
+    const companyLocation = companyLocationFactory.build();
+
+    it('should insert company locations successfully', async () => {
+      const mockBatchInsert = jest.spyOn(CompanyRepository.prototype, 'batchInsert').mockResolvedValue();
+
+      await target.insertCompanyLocations([companyLocation]);
+
+      expect(mockBatchInsert).toHaveBeenCalledWith([mapCompanyLocationToCompanyLocationEntity(companyLocation)]);
+    });
+
+    it('should throw error when failure in the batch insert', async () => {
+      jest.spyOn(CompanyRepository.prototype, 'batchInsert').mockRejectedValue(new Error('DynamoDB error'));
+
+      await expect(target.insertCompanyLocations([companyLocation])).rejects.toThrow(
+        `Error occured batch inserting company locations with size: [1]: [Error: DynamoDB error]`,
+      );
+    });
   });
 
   describe('getCompanyById', () => {
@@ -81,5 +129,72 @@ describe('Company Service', () => {
     const givenCompanyRepositoryGetCompanyByIdThrowsAnError = () => {
       jest.spyOn(CompanyRepository.prototype, 'retrieveById').mockRejectedValue(new Error('DynamoDB error'));
     };
+  });
+
+  describe('getCompanyRecordsById', () => {
+    const company = companyFactory.build();
+    const companyLocation = companyLocationFactory.build();
+
+    it('should get company records by id successfully', async () => {
+      jest
+        .spyOn(CompanyRepository.prototype, 'retrieveCompanyRecordsById')
+        .mockResolvedValue([
+          mapCompanyToCompanyEntity(company),
+          mapCompanyLocationToCompanyLocationEntity(companyLocation),
+        ]);
+
+      const result = await target.getCompanyRecordsById(company.id);
+
+      expect(result).toEqual([company, companyLocation]);
+    });
+
+    it('should return "undefined" when company records are returned as undefined', async () => {
+      jest.spyOn(CompanyRepository.prototype, 'retrieveCompanyRecordsById').mockResolvedValue(undefined);
+
+      const result = await target.getCompanyRecordsById(company.id);
+
+      expect(result).toEqual(undefined);
+    });
+
+    it('should throw error when failure in retrieving company records by id', async () => {
+      jest
+        .spyOn(CompanyRepository.prototype, 'retrieveCompanyRecordsById')
+        .mockRejectedValue(new Error('DynamoDB error'));
+
+      await expect(target.getCompanyRecordsById(company.id)).rejects.toThrow(
+        `Error occurred retrieving Company records by id: [${company.id}]: [Error: DynamoDB error]`,
+      );
+    });
+  });
+
+  describe('getCompanyLocationsById', () => {
+    it('should get company locations by id successfully', async () => {
+      const companyLocation = companyLocationFactory.build();
+      jest
+        .spyOn(CompanyRepository.prototype, 'retrieveLocationsByCompanyId')
+        .mockResolvedValue([mapCompanyLocationToCompanyLocationEntity(companyLocation)]);
+
+      const result = await target.getCompanyLocationsById(companyLocation.companyId);
+
+      expect(result).toEqual([companyLocation]);
+    });
+
+    it('should return "undefined" when company locations are returned as undefined', async () => {
+      jest.spyOn(CompanyRepository.prototype, 'retrieveLocationsByCompanyId').mockResolvedValue(undefined);
+
+      const result = await target.getCompanyLocationsById('company-1');
+
+      expect(result).toEqual(undefined);
+    });
+
+    it('should throw error when failure in retrieving company locations by id', async () => {
+      jest
+        .spyOn(CompanyRepository.prototype, 'retrieveLocationsByCompanyId')
+        .mockRejectedValue(new Error('DynamoDB error'));
+
+      await expect(target.getCompanyLocationsById('company-1')).rejects.toThrow(
+        `Error occurred retrieving company locations by id: [company-1]: [Error: DynamoDB error]`,
+      );
+    });
   });
 });

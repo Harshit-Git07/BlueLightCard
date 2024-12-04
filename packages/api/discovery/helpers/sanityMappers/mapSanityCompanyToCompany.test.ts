@@ -8,6 +8,7 @@ describe('mapSanityCompanyToCompany', () => {
   it('should map a valid SanityCompany to a Company object correctly', () => {
     const expected: Company = {
       id: 'company-id',
+      type: 'company',
       legacyCompanyId: 123,
       name: 'Test Company',
       logo: 'https://example.com/logo.jpg',
@@ -25,6 +26,7 @@ describe('mapSanityCompanyToCompany', () => {
         },
       ],
       local: false,
+      locations: [],
       updatedAt: '2023-01-02T00:00:00Z',
     };
 
@@ -36,6 +38,7 @@ describe('mapSanityCompanyToCompany', () => {
   it('should map categories with default values', () => {
     const expected: Company = {
       id: 'company-id',
+      type: 'company',
       legacyCompanyId: 123,
       name: 'Test Company',
       logo: 'https://example.com/logo.jpg',
@@ -53,6 +56,7 @@ describe('mapSanityCompanyToCompany', () => {
         },
       ],
       local: false,
+      locations: [],
       updatedAt: '2023-01-02T00:00:00Z',
     };
 

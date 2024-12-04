@@ -96,7 +96,7 @@ describe('useFetchHomepageData', () => {
     });
 
     it('should return menus with IDs not set as legacy IDs when "cms-offers" experiment on', async () => {
-      givenExperimentsReturn('treatment', 'on');
+      givenExperimentsReturn('on', 'on');
 
       const { result } = renderHook(() => useFetchHomepageData(), {
         wrapper,
@@ -171,6 +171,7 @@ describe('useFetchHomepageData', () => {
         ]);
         expect(result.current.flexibleMenu).toEqual([
           {
+            id: '100',
             title: 'Flexible Menu 1',
             imagehome: 'image-1',
             hide: false,
@@ -180,7 +181,7 @@ describe('useFetchHomepageData', () => {
     });
 
     it('should return menus with IDs set as legacy IDs when "cms-offers" experiment off', async () => {
-      givenExperimentsReturn('treatment', 'off');
+      givenExperimentsReturn('on', 'off');
 
       const { result } = renderHook(() => useFetchHomepageData(), {
         wrapper,
@@ -255,6 +256,7 @@ describe('useFetchHomepageData', () => {
         ]);
         expect(result.current.flexibleMenu).toEqual([
           {
+            id: '100',
             title: 'Flexible Menu 1',
             imagehome: 'image-1',
             hide: false,
@@ -264,7 +266,7 @@ describe('useFetchHomepageData', () => {
     });
 
     it('should return banners if braze content card experiment is control', async () => {
-      givenExperimentsReturn('treatment', 'on', 'control');
+      givenExperimentsReturn('on', 'on', 'control');
 
       const { result } = renderHook(() => useFetchHomepageData(), {
         wrapper,
@@ -289,7 +291,7 @@ describe('useFetchHomepageData', () => {
     });
 
     it('should return no banners if braze content card experiment is treatment', async () => {
-      givenExperimentsReturn('treatment', 'on', 'treatment');
+      givenExperimentsReturn('on', 'on', 'treatment');
 
       const { result } = renderHook(() => useFetchHomepageData(), {
         wrapper,
@@ -301,7 +303,7 @@ describe('useFetchHomepageData', () => {
     });
 
     it('should set loading error state to true if error occurs', async () => {
-      givenExperimentsReturn('treatment', 'on');
+      givenExperimentsReturn('on', 'on');
       mockPlatformAdapter.invokeV5Api.mockRejectedValue(new Error('Error'));
 
       const { result } = renderHook(() => useFetchHomepageData(), {
@@ -343,7 +345,7 @@ describe('useFetchHomepageData', () => {
     });
 
     it('should return results', async () => {
-      givenExperimentsReturn('control', 'off');
+      givenExperimentsReturn('off', 'off');
 
       const { result } = renderHook(() => useFetchHomepageData(), {
         wrapper,
@@ -427,7 +429,7 @@ describe('useFetchHomepageData', () => {
     });
 
     it('should set loading error state to true if error occurs', async () => {
-      givenExperimentsReturn('control', 'on');
+      givenExperimentsReturn('off', 'on');
       makeHomepageQueryMock.mockRejectedValue(new Error('Error'));
 
       const { result } = renderHook(() => useFetchHomepageData(), {
@@ -622,14 +624,14 @@ const v4MockData = {
 };
 
 const givenExperimentsReturn = (
-  v5Search = 'control',
+  modernFlexiMenus = 'off',
   cmsOffers = 'off',
   brazeContentCards = 'control'
 ) => {
   (useAmplitudeExperiment as jest.Mock).mockImplementation((experimentFlag, defaultVariant) => {
-    if (experimentFlag === 'search_v5') {
+    if (experimentFlag === AmplitudeExperimentFlags.MODERN_FLEXI_MENUS) {
       return {
-        data: { variantName: v5Search },
+        data: { variantName: modernFlexiMenus },
         status: 'done',
       };
     }
@@ -656,13 +658,13 @@ const givenExperimentsReturn = (
 };
 
 const givenExperimentsStatusIs = (
-  v5Search = 'pending',
+  modernFlexiMenus = 'pending',
   cmsOffers = 'pending',
   brazeContentCards = 'pending'
 ) => {
   (useAmplitudeExperiment as jest.Mock).mockImplementation((experimentFlag, defaultVariant) => {
-    if (experimentFlag === AmplitudeExperimentFlags.SEARCH_V5) {
-      return { status: v5Search };
+    if (experimentFlag === AmplitudeExperimentFlags.MODERN_FLEXI_MENUS) {
+      return { status: modernFlexiMenus };
     }
 
     if (experimentFlag === AmplitudeExperimentFlags.CMS_OFFERS) {

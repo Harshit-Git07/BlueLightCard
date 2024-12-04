@@ -32,7 +32,10 @@ const useFetchHomepageData = () => {
   const authCtx = useContext(AuthContext);
   const userCtx = useContext(UserContext);
 
-  const searchV5Experiment = useAmplitudeExperiment(AmplitudeExperimentFlags.SEARCH_V5, 'control');
+  const modernFlexiMenusFlag = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.MODERN_FLEXI_MENUS,
+    'off'
+  );
   const offersCmsExperiment = useAmplitudeExperiment(AmplitudeExperimentFlags.CMS_OFFERS, 'off');
   const brazeContentCardsEnabled = useAmplitudeExperiment(
     AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED,
@@ -44,7 +47,7 @@ const useFetchHomepageData = () => {
 
   useEffect(() => {
     if (
-      searchV5Experiment.status === 'pending' ||
+      modernFlexiMenusFlag.status === 'pending' ||
       offersCmsExperiment.status === 'pending' ||
       brazeContentCardsEnabled.status === 'pending'
     ) {
@@ -112,7 +115,7 @@ const useFetchHomepageData = () => {
       }
     };
 
-    if (searchV5Experiment.data?.variantName === 'treatment') {
+    if (modernFlexiMenusFlag.data?.variantName === 'on') {
       const shouldFetchLegacyBanners = brazeContentCardsEnabled.data?.variantName === 'control';
       experimentFetchHomepageData(shouldFetchLegacyBanners);
     } else {
@@ -124,8 +127,8 @@ const useFetchHomepageData = () => {
     userCtx.isAgeGated,
     userCtx.user,
     authCtx.isReady,
-    searchV5Experiment.data?.variantName,
-    searchV5Experiment.status,
+    modernFlexiMenusFlag.data?.variantName,
+    modernFlexiMenusFlag.status,
     offersCmsExperiment.status,
     brazeContentCardsEnabled.status,
     authCtx.authState.idToken,
@@ -242,6 +245,7 @@ const mapFeaturedOffers = (menu: any, useLegacyIds: boolean): FeaturedOffersType
 
 const mapFlexibleMenu = (menu: any): FlexibleMenuType => {
   return {
+    id: menu.id,
     title: menu.title,
     imagehome: menu.imageURL,
     hide: false,

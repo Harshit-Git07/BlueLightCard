@@ -68,6 +68,10 @@ const HomePage: NextPage<any> = () => {
     AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED,
     'control'
   );
+  const modernFlexiMenusFlag = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.MODERN_FLEXI_MENUS,
+    'off'
+  );
 
   const amplitude = useContext(AmplitudeContext);
 
@@ -127,7 +131,10 @@ const HomePage: NextPage<any> = () => {
       hide: offer.hide,
       offername: cleanText(offer.title),
       imageUrl: offer.imagehome ? offer.imagehome : finalFallbackImage,
-      href: `/flexibleOffers.php?id=${index}`,
+      href:
+        modernFlexiMenusFlag.data?.variantName === 'on' && offer.id
+          ? `/flexible-offers?id=${offer.id}`
+          : `/flexibleOffers.php?id=${index}`,
     }))
     .filter((offer) => !offer.hide);
 

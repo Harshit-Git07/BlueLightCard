@@ -65,6 +65,8 @@ export type Offer = {
   offerType: OfferTypeStrLiterals;
   offerName: string;
   imageURL: string;
+  legacyCompanyID?: number;
+  legacyOfferID?: number;
 };
 
 export type FlexibleOfferData = {

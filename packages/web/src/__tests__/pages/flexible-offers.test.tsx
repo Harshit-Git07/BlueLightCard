@@ -18,7 +18,7 @@ const viewOfferMock = jest.fn();
 
 expect.extend(toHaveNoViolations);
 
-const { Error, Loading, Success } = composeStories(stories);
+const { Error, Loading, Success, WithCmsOffers } = composeStories(stories);
 
 const mockRouter: Partial<NextRouter> = {
   push: jest.fn(),
@@ -113,16 +113,22 @@ describe('Flexible Offers page', () => {
       expect(offerName).toBeInTheDocument();
     });
 
-    test('and opens the offer sheet when an offer is clicked', async () => {
+    test('and opens the offer sheet with legacy IDs when an offer is clicked', async () => {
+      const [mockedOffer] = flexibleOfferMock.offers;
       const offer = await within(container).findByLabelText(
-        `${flexibleOfferMock.offers[0].companyName}: ${flexibleOfferMock.offers[0].offerName}`
+        `${flexibleOfferMock.offers[0].companyName}: ${mockedOffer.offerName}`
       );
       await userEvent.click(offer);
 
-      expect(viewOfferMock).toHaveBeenCalled();
+      expect(viewOfferMock).toHaveBeenCalledWith({
+        offerId: mockedOffer.legacyOfferID,
+        companyId: mockedOffer.legacyCompanyID,
+        companyName: mockedOffer.companyName,
+        platform: expect.any(String),
+      });
     });
 
-    test('and logs an analytics event when the page is viewed', async () => {
+    test('and logs an analytics event with when the page is viewed', async () => {
       await within(container).findByText(flexibleOfferMock.title);
 
       expect(storybookPlatformAdapter.logAnalyticsEvent).toHaveBeenCalledWith(
@@ -142,7 +148,60 @@ describe('Flexible Offers page', () => {
       expect(storybookPlatformAdapter.logAnalyticsEvent).not.toHaveBeenCalled();
     });
 
-    test('and logs an analytics event when an offer is clicked', async () => {
+    test('and logs an analytics event with legacy IDs when an offer is clicked', async () => {
+      const offer = await within(container).findByLabelText(
+        `${flexibleOfferMock.offers[0].companyName}: ${flexibleOfferMock.offers[0].offerName}`
+      );
+      await userEvent.click(offer);
+
+      const mockOfferData = flexibleOfferMock.offers[0];
+
+      expect(storybookPlatformAdapter.logAnalyticsEvent).toHaveBeenCalledWith(
+        AmplitudeEvents.FLEXIBLE_OFFERS.CARD_CLICKED,
+        {
+          flexi_menu_id: flexibleOfferMock.id,
+          flexi_menu_title: flexibleOfferMock.title,
+          brand: 'blc-uk',
+          company_name: mockOfferData.companyName,
+          company_id: mockOfferData.legacyCompanyID,
+          offer_name: mockOfferData.offerName,
+          offer_id: mockOfferData.legacyOfferID,
+        }
+      );
+    });
+
+    test('and has no accessibility violations', async () => {
+      const results = await axe(container);
+      expect(results).toHaveNoViolations();
+    });
+  });
+
+  describe('it renders with the CMS Offers flag enabled', () => {
+    let result: RenderResult;
+    let container: RenderResult['container'];
+
+    beforeEach(() => {
+      storybookPlatformAdapter.getAmplitudeFeatureFlag = () => 'on';
+      result = render(<WithCmsOffers />, { wrapper });
+      container = result.container;
+    });
+
+    test('and opens the offer sheet with modern IDs when an offer is clicked', async () => {
+      const [mockedOffer] = flexibleOfferMock.offers;
+      const offer = await within(container).findByLabelText(
+        `${flexibleOfferMock.offers[0].companyName}: ${mockedOffer.offerName}`
+      );
+      await userEvent.click(offer);
+
+      expect(viewOfferMock).toHaveBeenCalledWith({
+        offerId: mockedOffer.offerID,
+        companyId: mockedOffer.companyID,
+        companyName: mockedOffer.companyName,
+        platform: expect.any(String),
+      });
+    });
+
+    test('and logs an analytics event with modern IDs when an offer is clicked', async () => {
       const offer = await within(container).findByLabelText(
         `${flexibleOfferMock.offers[0].companyName}: ${flexibleOfferMock.offers[0].offerName}`
       );
@@ -162,11 +221,6 @@ describe('Flexible Offers page', () => {
           offer_id: mockOfferData.offerID,
         }
       );
-    });
-
-    test('and has no accessibility violations', async () => {
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
     });
   });
 });

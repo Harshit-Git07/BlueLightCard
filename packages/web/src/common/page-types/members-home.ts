@@ -32,6 +32,7 @@ export type MarketPlaceMenuType = {
 };
 
 export type FlexibleMenuType = {
+  id?: string;
   title: string;
   imagehome: string;
   hide: boolean;

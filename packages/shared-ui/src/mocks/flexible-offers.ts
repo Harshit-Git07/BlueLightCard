@@ -14,6 +14,8 @@ export const flexibleOfferMock: FlexibleOfferData = {
       imageURL: 'http://example.com/image1.jpg',
       companyID: '23638',
       companyName: 'Company 1',
+      legacyCompanyID: 12345,
+      legacyOfferID: 54321,
     },
   ],
 };

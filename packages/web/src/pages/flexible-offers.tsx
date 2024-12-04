@@ -12,6 +12,7 @@ import {
   useOfferDetails,
   usePlatformAdapter,
 } from '@bluelightcard/shared-ui';
+import { AmplitudeExperimentFlags } from '../common/utils/amplitude/AmplitudeExperimentFlags';
 import { useRouter } from 'next/router';
 import { BRAND } from '@/root/global-vars';
 import ContentLoader from 'react-content-loader';
@@ -64,6 +65,11 @@ const FlexibleOffersContent: FC = () => {
   const flexiMenuId = String(router.query.id);
   const { data, isSuccess } = useFlexibleOffersData(flexiMenuId);
 
+  const cmsOffersFlag = platformAdapter.getAmplitudeFeatureFlag(
+    AmplitudeExperimentFlags.CMS_OFFERS
+  );
+  const useLegacyIds = cmsOffersFlag !== 'on';
+
   // only log a page view once when data has loaded
   if (isSuccess && data.id && data.title && !pageViewLogged.current) {
     pageViewLogged.current = true;
@@ -75,19 +81,23 @@ const FlexibleOffersContent: FC = () => {
   }
 
   const onOfferClick = (offer: Offer) => {
+    const offerId = useLegacyIds && offer.legacyOfferID ? offer.legacyOfferID : offer.offerID;
+    const companyId =
+      useLegacyIds && offer.legacyCompanyID ? offer.legacyCompanyID : offer.companyID;
+
     platformAdapter.logAnalyticsEvent(AmplitudeEvents.FLEXIBLE_OFFERS.CARD_CLICKED, {
       flexi_menu_id: data.id,
       flexi_menu_title: data.title,
       brand: BRAND,
       company_name: offer.companyName,
-      company_id: offer.companyID,
+      company_id: companyId,
       offer_name: offer.offerName,
-      offer_id: offer.offerID,
+      offer_id: offerId,
     });
 
     viewOffer({
-      offerId: offer.offerID,
-      companyId: offer.companyID,
+      offerId,
+      companyId,
       companyName: offer.companyName,
       platform: platformAdapter.platform,
     });

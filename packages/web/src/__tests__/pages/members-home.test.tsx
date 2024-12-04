@@ -83,9 +83,14 @@ jest.mock('../../offers/components/CardCarousel/CardCarousel', () => {
           {title}
         </button>
         {offers.map((offer: any, index: number) => (
-          <div key={index} data-testid={`offer-card-${index}`} onClick={() => offer.onClick?.()}>
+          <a
+            key={index}
+            data-testid={`offer-card-${index}`}
+            href={offer.href}
+            onClick={() => offer.onClick?.()}
+          >
             {offer.offername}
-          </div>
+          </a>
         ))}
       </div>
     );
@@ -430,6 +435,64 @@ describe('Members-Home Page Tracking', () => {
         featuredOffer.compid,
         'Featured Company'
       );
+    });
+  });
+});
+
+describe('Members-Home Page Carousels', () => {
+  describe('Flexible carousels', () => {
+    describe('With modern flexi menus disabled', () => {
+      it('should link to legacy flexible offers page', async () => {
+        const flexibleItem: FlexibleMenuType = {
+          title: 'Flexible Offer',
+          imagehome: 'test.jpg',
+          hide: false,
+        };
+
+        useFetchHomepageDataMock.mockReturnValue({
+          dealsOfTheWeek: [],
+          featuredOffers: [],
+          flexibleMenu: [flexibleItem],
+          marketplaceMenus: [],
+          banners: [],
+          hasLoaded: true,
+          loadingError: false,
+        });
+
+        whenMembersHomePageIsRendered('control');
+
+        const flexibleOfferLink = await screen.findByText('Flexible Offer');
+        expect(flexibleOfferLink).toHaveAttribute('href', '/flexibleOffers.php?id=0');
+      });
+    });
+
+    describe('With modern flexi menus enabled', () => {
+      it('should link to modern flexible offers page', async () => {
+        const flexibleItem: FlexibleMenuType = {
+          id: 'test-flexible-menu-1',
+          title: 'Flexible Offer',
+          imagehome: 'test.jpg',
+          hide: false,
+        };
+
+        useFetchHomepageDataMock.mockReturnValue({
+          dealsOfTheWeek: [],
+          featuredOffers: [],
+          flexibleMenu: [flexibleItem],
+          marketplaceMenus: [],
+          banners: [],
+          hasLoaded: true,
+          loadingError: false,
+        });
+
+        whenMembersHomePageIsRendered('on');
+
+        const flexibleOfferLink = await screen.findByText('Flexible Offer');
+        expect(flexibleOfferLink).toHaveAttribute(
+          'href',
+          '/flexible-offers?id=test-flexible-menu-1'
+        );
+      });
     });
   });
 });

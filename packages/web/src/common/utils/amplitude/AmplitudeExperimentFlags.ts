@@ -8,5 +8,6 @@ export enum AmplitudeExperimentFlags {
   ENABLE_AUTH0_LOGIN_LOGOUT_WEB_DDS_UK = 'enable-auth0-login-logout-web-dds-uk',
   CMS_OFFERS = 'cms-offers',
   SEARCH_V5 = 'search_v5',
+  MODERN_FLEXI_MENUS = 'modern-flexi-menus-web',
   MODERN_ELIGIBILITY_ENABLED = 'modern-eligibility-enabled',
 }

@@ -43,6 +43,15 @@ Success.parameters = {
   ...DefaultTemplate.parameters,
 };
 
+export const WithCmsOffers = DefaultTemplate.bind({});
+WithCmsOffers.parameters = {
+  ...DefaultTemplate.parameters,
+  plaformAdapter: {
+    ...DefaultTemplate.parameters?.platformAdapter,
+    getAmplitudeFeatureFlag: () => 'on',
+  },
+};
+
 export const Loading = DefaultTemplate.bind({});
 Loading.parameters = {
   ...DefaultTemplate.parameters,

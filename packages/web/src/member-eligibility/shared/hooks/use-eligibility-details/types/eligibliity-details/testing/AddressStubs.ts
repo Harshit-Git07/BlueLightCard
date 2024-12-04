@@ -7,6 +7,7 @@ export const ukAddressStub: UkAddress = {
   line1: '123 Baker St',
   line2: 'Flat B',
   city: 'London',
+  county: 'Down',
   postcode: 'NW1 6XE',
 };
 

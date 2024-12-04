@@ -2,7 +2,7 @@ import * as target from './UseOnAddressSubmitted';
 import {
   ausAddressStub,
   ukAddressStub,
-} from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/hooks/utils/AddressTestUtils';
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/testing/AddressStubs';
 import { renderHook } from '@testing-library/react';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
@@ -96,6 +96,7 @@ describe('given a UK address with empty line2', () => {
       address: {
         line1: ukAddressStub.line1,
         city: ukAddressStub.city,
+        county: ukAddressStub.county,
         postcode: ukAddressStub.postcode,
       },
     });

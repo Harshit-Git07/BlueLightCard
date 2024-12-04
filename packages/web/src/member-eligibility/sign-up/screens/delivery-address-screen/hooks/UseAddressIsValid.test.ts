@@ -1,11 +1,14 @@
 import { renderHook } from '@testing-library/react';
 import * as target from './UseAddressIsValid';
+import { useIsAusBrand } from '@/root/src/member-eligibility/shared/hooks/use-is-aus-brand/UseIsAusBrand';
+import {
+  AusAddress,
+  EligibilityDetails,
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import {
   ausAddressStub,
   ukAddressStub,
-} from '../../../../shared/screens/shared/components/ManualAddressForm/hooks/utils/AddressTestUtils';
-import { useIsAusBrand } from '@/root/src/member-eligibility/shared/hooks/use-is-aus-brand/UseIsAusBrand';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/testing/AddressStubs';
 
 jest.mock('@/root/src/member-eligibility/shared/hooks/use-is-aus-brand/UseIsAusBrand');
 
@@ -41,6 +44,7 @@ describe('given UK address validation', () => {
       address: {
         line1: ukAddressStub.line1,
         city: ukAddressStub.city,
+        state: ukAddressStub.county,
         postcode: ukAddressStub.postcode,
       },
     };
@@ -65,6 +69,7 @@ describe('given UK address validation', () => {
       address: {
         line1: '  ',
         city: ukAddressStub.city,
+        county: 'Down',
         postcode: ukAddressStub.postcode,
       },
     };
@@ -88,6 +93,7 @@ describe('given UK address validation', () => {
       address: {
         line1: ukAddressStub.line1,
         city: '',
+        county: 'Down',
         postcode: ukAddressStub.postcode,
       },
     };
@@ -111,6 +117,7 @@ describe('given UK address validation', () => {
       address: {
         line1: ukAddressStub.line1,
         city: ukAddressStub.city,
+        county: 'Down',
         postcode: '  ',
       },
     };
@@ -163,7 +170,7 @@ describe('given Australian address validation', () => {
         line2: ausAddressStub.line2,
         city: ausAddressStub.city,
         postcode: ausAddressStub.postcode,
-      },
+      } as AusAddress,
     };
 
     beforeEach(() => {

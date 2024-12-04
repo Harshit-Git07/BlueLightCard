@@ -7,7 +7,7 @@ import { BRANDS } from '@/types/brands.enum';
 import {
   ausAddressStub,
   ukAddressStub,
-} from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/hooks/utils/AddressTestUtils';
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/testing/AddressStubs';
 
 const stubAddress: EligibilityDetailsAddress =
   BRAND === BRANDS.BLC_AU ? ausAddressStub : ukAddressStub;

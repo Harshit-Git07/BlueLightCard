@@ -1,12 +1,12 @@
-import * as target from './UseAddressFieldUpdater';
+import * as target from './UseOnAddressFieldChanged';
 import {
   ausAddressStub,
   ukAddressStub,
-} from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/hooks/utils/AddressTestUtils';
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/testing/AddressStubs';
 import { renderHook } from '@testing-library/react';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 
-type Result = ReturnType<typeof target.useAddressFieldUpdater>;
+type Result = ReturnType<typeof target.useOnAddressFieldChanged>;
 
 const setEligibilityDetailsMock = jest.fn();
 let setAddressField: Result;
@@ -24,7 +24,7 @@ describe('given a UK address', () => {
 
   beforeEach(() => {
     const { result } = renderHook(() =>
-      target.useAddressFieldUpdater([initialEligibilityDetails, setEligibilityDetailsMock])
+      target.useOnAddressFieldChanged([initialEligibilityDetails, setEligibilityDetailsMock])
     );
     setAddressField = result.current;
   });
@@ -87,7 +87,7 @@ describe('given an Australian address', () => {
 
   beforeEach(() => {
     const { result } = renderHook(() =>
-      target.useAddressFieldUpdater([initialEligibilityDetails, setEligibilityDetailsMock])
+      target.useOnAddressFieldChanged([initialEligibilityDetails, setEligibilityDetailsMock])
     );
     setAddressField = result.current;
   });
@@ -114,7 +114,7 @@ describe('given no initial address', () => {
 
   beforeEach(() => {
     const { result } = renderHook(() =>
-      target.useAddressFieldUpdater([initialEligibilityDetails, setEligibilityDetailsMock])
+      target.useOnAddressFieldChanged([initialEligibilityDetails, setEligibilityDetailsMock])
     );
     setAddressField = result.current;
   });
@@ -128,6 +128,7 @@ describe('given no initial address', () => {
         line1: '123 Baker St',
         line2: '',
         city: '',
+        county: '',
         postcode: '',
       },
     });
@@ -142,6 +143,7 @@ describe('given no initial address', () => {
         line1: '',
         line2: '',
         city: '',
+        county: '',
         postcode: 'NW1 6XE',
       },
     });

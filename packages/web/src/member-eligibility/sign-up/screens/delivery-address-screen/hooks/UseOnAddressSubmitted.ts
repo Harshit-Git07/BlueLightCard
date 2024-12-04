@@ -1,9 +1,9 @@
 import { useCallback } from 'react';
-import { isAusAddress } from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/hooks/utils/AddressType';
 import { EligibilityDetailsAddress } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import { deliveryAddressEvents } from '@/root/src/member-eligibility/sign-up/screens/delivery-address-screen/amplitude-events/DeliveryAddress';
+import { regionSpecificAddressOptions } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/utils/RegionSpecificAddressOptions';
 
 export function useOnAddressSubmitted(eligibilityDetailsState: EligibilityDetailsState) {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
@@ -18,7 +18,7 @@ export function useOnAddressSubmitted(eligibilityDetailsState: EligibilityDetail
       ...(currentAddress.line2?.trim() && { line2: currentAddress.line2 }),
       city: currentAddress.city,
       postcode: currentAddress.postcode,
-      ...(isAusAddress(currentAddress) ? { state: currentAddress.state } : {}),
+      ...regionSpecificAddressOptions(currentAddress),
     };
 
     setEligibilityDetails({

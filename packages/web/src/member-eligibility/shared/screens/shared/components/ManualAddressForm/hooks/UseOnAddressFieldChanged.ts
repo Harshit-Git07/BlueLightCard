@@ -1,21 +1,22 @@
 import { useCallback } from 'react';
-import { isAusAddress } from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/hooks/utils/AddressType';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import {
   AusAddress,
   EligibilityDetailsAddress,
   UkAddress,
 } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import { regionSpecificAddressOptions } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/utils/RegionSpecificAddressOptions';
 
-type UkOrAusAddress = UkAddress & AusAddress;
+type AddressFields = keyof (UkAddress & AusAddress);
+export type OnAddressFieldChanged = (field: AddressFields, value: string) => void;
 
-export function useAddressFieldUpdater(
+export function useOnAddressFieldChanged(
   eligibilityDetailsState: EligibilityDetailsState
-): (field: keyof UkOrAusAddress, value: string) => void {
+): OnAddressFieldChanged {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
 
   return useCallback(
-    (field: keyof UkOrAusAddress, value: string) => {
+    (field, value) => {
       const currentAddress = eligibilityDetails.address;
 
       const baseAddress: EligibilityDetailsAddress = {
@@ -23,7 +24,7 @@ export function useAddressFieldUpdater(
         line2: currentAddress?.line2 ?? '',
         city: currentAddress?.city ?? '',
         postcode: currentAddress?.postcode ?? '',
-        ...(isAusAddress(currentAddress) ? { state: currentAddress.state } : {}),
+        ...regionSpecificAddressOptions(currentAddress),
       };
 
       const newAddress: EligibilityDetailsAddress = {

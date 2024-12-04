@@ -24,6 +24,7 @@ const initialState: EligibilityDetailsWithoutFlow = {
     line1: 'Charnwood Edge Business Park',
     line2: 'Syston Road',
     city: 'Leicester',
+    county: 'Down',
     postcode: 'LE7 4UZ',
   },
 };

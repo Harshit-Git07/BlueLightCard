@@ -146,16 +146,16 @@ jobs:
             # auth0_api_client_secret: BLC_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
             # auth0_password_validation_client_id: BLC_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
             # auth0_password_validation_client_secret: BLC_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
-#          - deployment: 'blc-au-staging'
-#            region: 'ap-southeast-2'
-#            brand: 'BLC_AU'
-#            stage: staging
-#            brazeSecret: BLC_AU_BRAZE_SERVICE_JSON
-#            # auth0_domain: BLC_AU_SERVICE_LAYER_AUTH0_DOMAIN
-#            # auth0_api_client_id: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_ID
-#            # auth0_api_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
-#            # auth0_password_validation_client_id: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
-#            # auth0_password_validation_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+          - deployment: 'blc-au-staging'
+            region: 'ap-southeast-2'
+            brand: 'BLC_AU'
+            stage: staging
+            brazeSecret: BLC_AU_BRAZE_SERVICE_JSON
+            # auth0_domain: BLC_AU_SERVICE_LAYER_AUTH0_DOMAIN
+            # auth0_api_client_id: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+            # auth0_api_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+            # auth0_password_validation_client_id: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+            # auth0_password_validation_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
 #          - deployment: 'dds-uk-staging'
 #            region: 'eu-west-2'
 #            brand: 'DDS_UK'
@@ -291,16 +291,16 @@ jobs:
             # auth0_api_client_secret: BLC_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
             # auth0_password_validation_client_id: BLC_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
             # auth0_password_validation_client_secret: BLC_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
-#          - deployment: 'blc-au-production'
-#            region: ap-southeast-2
-#            brand: BLC_AU
-#            stage: production
-#            brazeSecret: BLC_AU_BRAZE_SERVICE_JSON
-#            # auth0_domain: BLC_AU_SERVICE_LAYER_AUTH0_DOMAIN
-#            # auth0_api_client_id: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_ID
-#            # auth0_api_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
-#            # auth0_password_validation_client_id: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
-#            # auth0_password_validation_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+          - deployment: 'blc-au-production'
+            region: ap-southeast-2
+            brand: BLC_AU
+            stage: production
+            brazeSecret: BLC_AU_BRAZE_SERVICE_JSON
+            # auth0_domain: BLC_AU_SERVICE_LAYER_AUTH0_DOMAIN
+            # auth0_api_client_id: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+            # auth0_api_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+            # auth0_password_validation_client_id: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+            # auth0_password_validation_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
 #          - deployment: 'dds-uk-production'
 #            region: eu-west-2
 #            brand: DDS_UK

@@ -11,14 +11,14 @@ export const renewalEligibilityDetailsStub: EligibilityDetails = {
   currentScreen: 'Interstitial Screen',
   employmentStatus: 'Employed',
   organisation: {
-    id: 'eadc26a7-e2cf-4f5a-92ba-a298f15d396c',
-    label: 'NHS',
+    id: '43a3ef4f-3c18-41a5-8d0f-8343eca9b6f5',
+    label: 'Police',
   },
   employer: {
-    id: '004d4e03-4843-4b9b-96fd-a86a859870bd',
-    label: 'Bedford Hospital NHS Trust',
+    id: '06cfa39f-e87d-463a-a954-ef1e3f5f176d',
+    label: 'The Port of Tilbury',
   },
-  jobTitle: 'Nurse',
+  jobTitle: 'Officer',
   member: {
     firstName: 'John',
     surname: 'Doe',

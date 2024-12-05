@@ -66,6 +66,14 @@ const Dropdown: FC<DropdownProps> = ({
     };
   }, [placeholder, selectedOption]);
 
+  const inputValue = useMemo(() => {
+    if (searchable) {
+      return searchTerm;
+    }
+
+    return selectedOptionOrPlaceholder?.label;
+  }, [searchable, searchTerm, selectedOptionOrPlaceholder]);
+
   const onInputClicked: MouseEventHandler = (): void => {
     if (searchable) {
       setIsListboxOpen(true);
@@ -164,7 +172,10 @@ const Dropdown: FC<DropdownProps> = ({
 
   useEffect(() => {
     setFilteredOptions(options);
-    setSelectedOption(getSelectedOption(options, selectedValue));
+
+    const selectedOption = getSelectedOption(options, selectedValue);
+    setSelectedOption(selectedOption);
+    setSearchTerm(selectedOption?.label ?? '');
   }, [options]);
 
   useEffect(() => {
@@ -220,7 +231,7 @@ const Dropdown: FC<DropdownProps> = ({
   const placeholderClassName = useMemo(() => {
     const positionStyles =
       selectedOptionOrPlaceholder?.label !== placeholder || searchTerm !== ''
-        ? `top-3 -translate-y-1/2 ${fonts.label}`
+        ? `${fonts.label} top-3 -translate-y-1/2`
         : '';
 
     const colourStyles = disabled ? colours.textOnSurface : colours.textOnSurfaceSubtle;
@@ -276,7 +287,7 @@ const Dropdown: FC<DropdownProps> = ({
           onChange={onComboboxChange}
           onClick={onInputClicked}
           onKeyDown={onComboboxKeyDown}
-          value={searchable ? searchTerm : selectedOptionOrPlaceholder?.label}
+          value={inputValue}
           data-testid="combobox"
         />
 

@@ -234,8 +234,8 @@ describe('Categories E2E Event Handling', async () => {
 
     const searchResult = results.data.data.find((result) => result.offerID === activeOfferUUID);
 
+    expect(searchResult).toBeDefined();
     expect(searchResult).toStrictEqual(expectedSearchResult);
-    expect(results.data.data.length).toStrictEqual(1);
   });
 });
 

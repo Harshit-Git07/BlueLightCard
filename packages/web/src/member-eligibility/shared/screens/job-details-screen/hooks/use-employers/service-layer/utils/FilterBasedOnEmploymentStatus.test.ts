@@ -1,57 +1,57 @@
 import * as target from './FilterBasedOnEmploymentStatus';
-import { ServiceLayerEmployer } from '@/root/src/member-eligibility/shared/types/ServiceLayerEmployer';
+import { buildTestServiceLayerEmployer } from '@/root/src/member-eligibility/shared/types/testing/BuildTestServiceLayerEmployer';
 
-const serviceLayerEmployers: ServiceLayerEmployer[] = [
-  {
+const serviceLayerEmployers = [
+  buildTestServiceLayerEmployer({
     employerId: 'employed',
     name: 'employed',
-    active: true,
-  },
-  {
+    employmentStatus: ['EMPLOYED'],
+  }),
+  buildTestServiceLayerEmployer({
     employerId: 'retired',
     name: 'retired',
-    retired: true,
-  },
-  {
+    employmentStatus: ['RETIRED'],
+  }),
+  buildTestServiceLayerEmployer({
     employerId: 'volunteer',
     name: 'volunteer',
-    volunteers: true,
-  },
+    employmentStatus: ['VOLUNTEER'],
+  }),
 ];
 
 it('should only return employers for the employed status', () => {
   const result = target.filterBasedOnEmploymentStatus(serviceLayerEmployers, 'Employed');
 
-  expect(result).toEqual(<ServiceLayerEmployer[]>[
-    {
+  expect(result).toEqual([
+    buildTestServiceLayerEmployer({
       employerId: 'employed',
       name: 'employed',
-      active: true,
-    },
+      employmentStatus: ['EMPLOYED'],
+    }),
   ]);
 });
 
 it('should only return employers for the retired status', () => {
   const result = target.filterBasedOnEmploymentStatus(serviceLayerEmployers, 'Retired or Bereaved');
 
-  expect(result).toEqual(<ServiceLayerEmployer[]>[
-    {
+  expect(result).toEqual([
+    buildTestServiceLayerEmployer({
       employerId: 'retired',
       name: 'retired',
-      retired: true,
-    },
+      employmentStatus: ['RETIRED'],
+    }),
   ]);
 });
 
 it('should only return employers for the volunteer status', () => {
   const result = target.filterBasedOnEmploymentStatus(serviceLayerEmployers, 'Volunteer');
 
-  expect(result).toEqual(<ServiceLayerEmployer[]>[
-    {
+  expect(result).toEqual([
+    buildTestServiceLayerEmployer({
       employerId: 'volunteer',
       name: 'volunteer',
-      volunteers: true,
-    },
+      employmentStatus: ['VOLUNTEER'],
+    }),
   ]);
 });
 

@@ -1,16 +1,11 @@
 import * as target from './GetEmployers';
-import { ServiceLayerEmployer } from '@/root/src/member-eligibility/shared/types/ServiceLayerEmployer';
+import { buildTestServiceLayerEmployer } from '@/root/src/member-eligibility/shared/types/testing/BuildTestServiceLayerEmployer';
 
 window.fetch = jest.fn();
 
 const fetchMock = jest.mocked(window.fetch);
 
-const serviceLayerEmployers: ServiceLayerEmployer[] = [
-  {
-    employerId: '1',
-    name: 'Employer 1',
-  },
-];
+const serviceLayerEmployers = [buildTestServiceLayerEmployer()];
 
 describe('given service layer responses successfully', () => {
   beforeEach(() => {

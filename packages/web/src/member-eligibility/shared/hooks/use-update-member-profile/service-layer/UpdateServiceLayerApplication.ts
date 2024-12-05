@@ -1,16 +1,8 @@
 import { serviceLayerUrl } from '@/root/src/member-eligibility/shared/constants/ServiceLayerUrl';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
 
-interface Request {
-  promoCode?: Record<string, any>; // TODO: What is this object?
-  verificationMethod?: string;
-  address1?: string;
-  address2?: string;
-  country?: string;
-  city?: string;
-  postcode?: string;
-  trustedDomainEmail?: string;
-}
+type Request = components['schemas']['UpdateApplicationModel'];
 
 export async function updateServiceLayerApplication(
   applicationId: string,

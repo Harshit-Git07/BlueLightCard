@@ -1,33 +1,33 @@
 import * as target from './FilterBasedOnEmploymentStatus';
-import { ServiceLayerOrganisation } from '@/root/src/member-eligibility/shared/types/ServiceLayerOrganisation';
+import { buildTestServiceLayerOrganisation } from '@/root/src/member-eligibility/shared/types/testing/BuildTestServiceLayerOrganisation';
 
-const serviceLayerOrganisations: ServiceLayerOrganisation[] = [
-  {
+const serviceLayerOrganisations = [
+  buildTestServiceLayerOrganisation({
     organisationId: 'employed',
     name: 'employed',
-    active: true,
-  },
-  {
+    employmentStatus: ['EMPLOYED'],
+  }),
+  buildTestServiceLayerOrganisation({
     organisationId: 'retired',
     name: 'retired',
-    retired: true,
-  },
-  {
+    employmentStatus: ['RETIRED'],
+  }),
+  buildTestServiceLayerOrganisation({
     organisationId: 'volunteer',
     name: 'volunteer',
-    volunteers: true,
-  },
+    employmentStatus: ['VOLUNTEER'],
+  }),
 ];
 
 it('should only return employers for the employed status', () => {
   const result = target.filterBasedOnEmploymentStatus(serviceLayerOrganisations, 'Employed');
 
-  expect(result).toEqual(<ServiceLayerOrganisation[]>[
-    {
+  expect(result).toEqual([
+    buildTestServiceLayerOrganisation({
       organisationId: 'employed',
       name: 'employed',
-      active: true,
-    },
+      employmentStatus: ['EMPLOYED'],
+    }),
   ]);
 });
 
@@ -37,24 +37,24 @@ it('should only return employers for the retired status', () => {
     'Retired or Bereaved'
   );
 
-  expect(result).toEqual(<ServiceLayerOrganisation[]>[
-    {
+  expect(result).toEqual([
+    buildTestServiceLayerOrganisation({
       organisationId: 'retired',
       name: 'retired',
-      retired: true,
-    },
+      employmentStatus: ['RETIRED'],
+    }),
   ]);
 });
 
 it('should only return employers for the volunteer status', () => {
   const result = target.filterBasedOnEmploymentStatus(serviceLayerOrganisations, 'Volunteer');
 
-  expect(result).toEqual(<ServiceLayerOrganisation[]>[
-    {
+  expect(result).toEqual([
+    buildTestServiceLayerOrganisation({
       organisationId: 'volunteer',
       name: 'volunteer',
-      volunteers: true,
-    },
+      employmentStatus: ['VOLUNTEER'],
+    }),
   ]);
 });
 

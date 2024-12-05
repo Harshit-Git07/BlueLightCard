@@ -1,8 +1,6 @@
 import { useCallback } from 'react';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { updateServiceLayerApplication } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/service-layer/UpdateServiceLayerApplication';
-import { createServiceLayerApplication } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/service-layer/CreateServiceLayerApplication';
 import { updateServiceLayerProfile } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/service-layer/UpdateServiceLayerProfile';
 
 type Callback = () => Promise<void>;
@@ -17,7 +15,7 @@ export function useUpdateMemberProfile(eligibilityDetailsState: EligibilityDetai
         return;
       }
 
-      const applicationId = await getApplicationId(eligibilityDetails);
+      const applicationId = eligibilityDetails.member.application?.id;
       if (!applicationId) {
         console.error('Cannot update member application as could not get latest application id');
         return;
@@ -29,12 +27,4 @@ export function useUpdateMemberProfile(eligibilityDetailsState: EligibilityDetai
       console.error('Failed to update member application', error);
     }
   }, [eligibilityDetails]);
-}
-
-async function getApplicationId(
-  eligibilityDetails: EligibilityDetails
-): Promise<string | undefined> {
-  if (eligibilityDetails.member?.application?.id) return eligibilityDetails.member.application.id;
-
-  return await createServiceLayerApplication(eligibilityDetails);
 }

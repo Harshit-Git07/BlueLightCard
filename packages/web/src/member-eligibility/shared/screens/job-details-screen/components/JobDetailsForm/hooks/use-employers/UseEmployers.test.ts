@@ -5,6 +5,7 @@ import { getEmployers } from '@/root/src/member-eligibility/shared/screens/job-d
 import { v4 as createUuid } from 'uuid';
 import { buildTestEligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/testing/BuildTestEligibilityDetails';
 import { EligibilityEmployer } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import { buildTestServiceLayerEmployer } from '@/root/src/member-eligibility/shared/types/testing/BuildTestServiceLayerEmployer';
 
 jest.mock(
   '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-employers/service-layer/GetEmployers'
@@ -34,10 +35,10 @@ describe('given the organisation is undefined', () => {
 describe('given a list of employers are returned from the service layer', () => {
   beforeEach(async () => {
     getEmployersMock.mockResolvedValue([
-      {
+      buildTestServiceLayerEmployer({
         employerId: 'from-service-layer',
         name: 'From service layer',
-      },
+      }),
     ]);
 
     const renderResult = renderHook(() => {

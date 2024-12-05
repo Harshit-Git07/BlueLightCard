@@ -3,6 +3,7 @@ import { renderHook, RenderHookResult, waitFor } from '@testing-library/react';
 import { getOrganisations } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/service-layer/GetOrganisations';
 import { EligibilityOrganisation } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { buildTestEligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/testing/BuildTestEligibilityDetails';
+import { buildTestServiceLayerOrganisation } from '@/root/src/member-eligibility/shared/types/testing/BuildTestServiceLayerOrganisation';
 
 jest.mock(
   '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/service-layer/GetOrganisations'
@@ -21,10 +22,10 @@ beforeEach(() => {
 describe('given a list of organisations are returned from the service layer', () => {
   beforeEach(async () => {
     getOrganisationsMock.mockResolvedValue([
-      {
+      buildTestServiceLayerOrganisation({
         organisationId: 'from-service-layer',
         name: 'From service layer',
-      },
+      }),
     ]);
 
     const renderResult = renderHook(() => {

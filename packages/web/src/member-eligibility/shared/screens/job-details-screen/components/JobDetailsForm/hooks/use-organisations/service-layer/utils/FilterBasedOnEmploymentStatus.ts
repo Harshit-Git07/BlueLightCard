@@ -9,14 +9,12 @@ export function filterBasedOnEmploymentStatus(
     if (!employmentStatus) return true;
 
     switch (employmentStatus) {
-      case undefined:
-        return true;
       case 'Employed':
-        return serviceLayerOrganisation.active;
+        return serviceLayerOrganisation.employmentStatus?.includes('EMPLOYED');
       case 'Retired or Bereaved':
-        return serviceLayerOrganisation.retired;
+        return serviceLayerOrganisation.employmentStatus?.includes('RETIRED');
       case 'Volunteer':
-        return serviceLayerOrganisation.volunteers;
+        return serviceLayerOrganisation.employmentStatus?.includes('VOLUNTEER');
     }
   });
 }

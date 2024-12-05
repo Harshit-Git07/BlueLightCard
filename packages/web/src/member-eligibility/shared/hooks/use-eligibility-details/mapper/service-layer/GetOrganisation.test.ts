@@ -1,16 +1,11 @@
 import * as target from './GetOrganisation';
-import { ServiceLayerOrganisation } from '@/root/src/member-eligibility/shared/types/ServiceLayerOrganisation';
+import { buildTestServiceLayerOrganisation } from '@/root/src/member-eligibility/shared/types/testing/BuildTestServiceLayerOrganisation';
 
 window.fetch = jest.fn();
 
 const fetchMock = jest.mocked(window.fetch);
 
-const serviceLayerOrganisations: ServiceLayerOrganisation[] = [
-  {
-    organisationId: '1',
-    name: 'Employer 1',
-  },
-];
+const serviceLayerOrganisations = [buildTestServiceLayerOrganisation()];
 
 describe('given service layer responses successfully', () => {
   beforeEach(() => {

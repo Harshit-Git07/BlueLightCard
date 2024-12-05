@@ -1,19 +1,12 @@
 import { serviceLayerUrl } from '@/root/src/member-eligibility/shared/constants/ServiceLayerUrl';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { isAusAddress } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/utils/IsAusAddress';
+import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
 
-interface Request {
-  firstName?: string;
-  lastName?: string;
-  dateOfBirth?: string; // Example: '2024-12-04'
-  county?: string;
-  employmentStatus?: 'EMPLOYED' | 'RETIRED' | 'VOLUNTEER';
-  organisationId?: string;
-  employerId?: string;
-  employerName?: string;
-  jobTitle?: string;
-  jobReference?: string;
-}
+type Request = Omit<
+  components['schemas']['UpdateProfileModel'],
+  'spareEmailValidated' | 'emailValidated'
+>;
 
 export async function updateServiceLayerProfile(
   eligibilityDetails: EligibilityDetails
@@ -27,12 +20,12 @@ export async function updateServiceLayerProfile(
     const request: Request = {
       firstName: eligibilityDetails.member?.firstName,
       lastName: eligibilityDetails.member?.surname,
-      dateOfBirth: getDateOfBirth(eligibilityDetails),
+      dateOfBirth: getDateOfBirth(eligibilityDetails) as string, // TODO: Forcing this to be a string as we won't always have it
       county: getCounty(eligibilityDetails),
       employmentStatus: getEmploymentStatus(eligibilityDetails),
       organisationId: eligibilityDetails.organisation?.id,
       employerId: eligibilityDetails.employer?.id,
-      employerName: undefined, // TODO: Add AUS specific employer name here
+      employerName: undefined, // TODO: Add AUS specific employer name here?
       jobTitle: eligibilityDetails.jobTitle,
       jobReference: undefined, // TODO: What do we put here?
     };

@@ -42,7 +42,8 @@
     "tailwindcss": "^3.4.1",
     "ts-jest": "^29.1.1",
     "typescript": "5.6.3",
-    "typescript-eslint": "7.6.0"
+    "typescript-eslint": "7.6.0",
+    "openapi-typescript": "7.4.4"
   },
   "peerDependencies": {
     "next": "13.4.12",
@@ -64,7 +65,10 @@
     "test:watch": "jest --watch",
     "format": "prettier --ignore-unknown --write .",
     "format:staged": "prettier --ignore-unknown --write",
-    "lint:staged": "eslint --fix"
+    "lint:staged": "eslint --fix",
+    "generate:api-types": "npm run generate:api-types:members && npm run generate:api-types:members-admin",
+    "generate:api-types:members": "openapi-typescript ../api/members/api/members-api.json -o ./src/generated/MembersApi.ts",
+    "generate:api-types:members-admin": "openapi-typescript ../api/members/api/members-admin-api.json -o ./src/generated/MembersAdminApi.ts"
   },
   "author": "",
   "license": "ISC",

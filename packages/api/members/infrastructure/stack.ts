@@ -304,16 +304,16 @@ const getUKDomainName = (stage: string, name: string) => {
 };
 
 export const Members =
-  getEnvRaw(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK) === 'false'
+  getEnvOrDefault(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK, 'false') === 'false'
     ? MembersStack
     : () => Promise.resolve();
 
 export const MembersApi =
-  getEnvRaw(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK) === 'false'
+  getEnvOrDefault(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK, 'false') === 'false'
     ? MembersApiStack
     : () => Promise.resolve();
 
 export const MembersAdminApi =
-  getEnvRaw(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK) === 'false'
+  getEnvOrDefault(MemberStackEnvironmentKeys.SKIP_MEMBERS_STACK, 'false') === 'false'
     ? MembersAdminApiStack
     : () => Promise.resolve();

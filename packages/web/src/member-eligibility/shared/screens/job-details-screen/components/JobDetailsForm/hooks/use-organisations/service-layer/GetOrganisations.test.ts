@@ -24,9 +24,7 @@ describe('given service layer responses successfully', () => {
   it('should parse and return the payload successfully', async () => {
     const result = await target.getOrganisations();
 
-    expect(fetchMock).toHaveBeenCalledWith(
-      'https://kbb684h8h8.execute-api.eu-west-2.amazonaws.com/v1/orgs'
-    );
+    expect(fetchMock).toHaveBeenCalledWith('https://staging-members-api.blcshine.io/orgs');
     expect(result).toEqual(serviceLayerEmployers);
   });
 });
@@ -39,9 +37,7 @@ describe('given service layer fails to respond', () => {
   it('should return undefined', async () => {
     const result = await target.getOrganisations();
 
-    expect(fetchMock).toHaveBeenCalledWith(
-      'https://kbb684h8h8.execute-api.eu-west-2.amazonaws.com/v1/orgs'
-    );
+    expect(fetchMock).toHaveBeenCalledWith('https://staging-members-api.blcshine.io/orgs');
     expect(result).toEqual(undefined);
   });
 });

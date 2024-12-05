@@ -25,7 +25,7 @@ describe('given service layer responses successfully', () => {
     const result = await target.getEmployers('1');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      'https://kbb684h8h8.execute-api.eu-west-2.amazonaws.com/v1/orgs/1/employers'
+      'https://staging-members-api.blcshine.io/orgs/1/employers'
     );
     expect(result).toEqual(serviceLayerEmployers);
   });
@@ -40,7 +40,7 @@ describe('given service layer fails to respond', () => {
     const result = await target.getEmployers('1');
 
     expect(fetchMock).toHaveBeenCalledWith(
-      'https://kbb684h8h8.execute-api.eu-west-2.amazonaws.com/v1/orgs/1/employers'
+      'https://staging-members-api.blcshine.io/orgs/1/employers'
     );
     expect(result).toEqual(undefined);
   });

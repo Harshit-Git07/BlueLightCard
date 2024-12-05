@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.0.0...bluelightcard/members-v1.1.0) (2024-12-05)
+
+
+### Features
+
+* MM-413 Member APIs clean up ([43d1f33](https://github.com/bluelightcard/BlueLightCard-2.0/commit/43d1f33932a947d192451745321d7663a4949e4c))
+* Mm138 - get/update braze/marketing endpoints ([#3230](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3230)) ([6580959](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6580959cb573796fae4aa317248cbb303aa9dc40))
+
+
+### Other Changes
+
+* M-413 Fixing broken deployment ([#3020](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3020)) ([d9d335b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d9d335b439f4e343500d73a72a9b688bda37be3f))
+* Service layer main ([#3257](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3257)) ([43312c8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/43312c8136fbe265d395e8e56e45004d7b3f9bfb))
+
 ## 1.0.0 (2024-11-14)
 
 

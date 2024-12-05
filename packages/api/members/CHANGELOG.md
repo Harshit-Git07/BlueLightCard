@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.1.0...bluelightcard/members-v1.1.1) (2024-12-05)
+
+
+### Bug Fixes
+
+* [None] Add stub readme ([#3267](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3267)) ([db0994d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/db0994dbf7a130e676bc4e9e9d2401d386d257a7))
+
 ## [1.1.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.0.0...bluelightcard/members-v1.1.0) (2024-12-05)
 
 

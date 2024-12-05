@@ -15,9 +15,11 @@ export function useVerificationMethods(
   eligibilityDetailsState: EligibilityDetailsState
 ): VerificationMethod[] {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
-  const { getDescriptionByTitle } = useVerificationDescriptions();
-  const isMobile = useMobileMediaQuery();
+
   const logAnalyticsEvent = useLogAmplitudeEvent();
+
+  const isMobile = useMobileMediaQuery();
+  const { getDescriptionByTitle } = useVerificationDescriptions();
 
   const handleWorkEmailVerification = useCallback(() => {
     logAnalyticsEvent(verificationMethodEvents.onMethodSelected(eligibilityDetails, 'Work Email'));
@@ -52,7 +54,13 @@ export function useVerificationMethods(
   );
 
   return useMemo(() => {
-    const methodTitles = ['Work Email', 'NHS Smart Card', 'Payslip', 'Work ID Card'];
+    const methodTitles = [
+      'Work Email',
+      'NHS Smart Card',
+      'Payslip',
+      'Work ID Card',
+      'SPPA Headed Letter',
+    ];
 
     return methodTitles.map((title) => {
       const description = getDescriptionByTitle(title);

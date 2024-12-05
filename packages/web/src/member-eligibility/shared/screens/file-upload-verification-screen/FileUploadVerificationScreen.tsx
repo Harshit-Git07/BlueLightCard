@@ -53,8 +53,15 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails]);
 
   const maxNumberOfFilesToUpload = useMemo(() => {
-    return typeof eligibilityDetails.fileVerificationType === 'string' ? 1 : 2;
-  }, [eligibilityDetails]);
+    if (
+      Array.isArray(eligibilityDetails.fileVerificationType) ||
+      firstVerificationMethod.title === 'SPPA Headed Letter'
+    ) {
+      return 2;
+    }
+
+    return 1;
+  }, [eligibilityDetails.fileVerificationType, firstVerificationMethod.title]);
 
   const enoughFilesSelectedForUpload = useMemo(() => {
     if (typeof eligibilityDetails.fileVerificationType === 'string') {
@@ -126,10 +133,11 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
             <ListSelector
               {...firstVerificationMethod}
-              state={
-                secondVerificationMethod ? ListSelectorState.Default : ListSelectorState.Selected
-              }
-              onClick={onBack}
+              className={`${
+                firstVerificationMethod.showTrailingIcon ? 'cursor-pointer' : 'cursor-default'
+              }`}
+              state={ListSelectorState.Selected}
+              onClick={firstVerificationMethod.showTrailingIcon ? onBack : undefined}
             />
 
             {secondVerificationMethod && (
@@ -138,8 +146,11 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
                 <ListSelector
                   {...secondVerificationMethod}
+                  className={`${
+                    secondVerificationMethod.showTrailingIcon ? 'cursor-pointer' : 'cursor-default'
+                  }`}
                   state={ListSelectorState.Selected}
-                  onClick={onBack}
+                  onClick={secondVerificationMethod.showTrailingIcon ? onBack : undefined}
                 />
               </>
             )}

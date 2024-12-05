@@ -42,20 +42,32 @@ function useFirstVerificationMethodDetails(eligibilityDetails: EligibilityDetail
       );
     }
 
+    if (title === 'SPPA Headed Letter') {
+      return <>This must show your full name and organisation</>;
+    }
+
     return undefined;
   }, [title]);
 
   const tag = useMemo(() => {
+    if (title === 'SPPA Headed Letter') {
+      return <VerificationMethodDetailsTag infoMessage="Primary document" />;
+    }
+
     if (Array.isArray(eligibilityDetails.fileVerificationType)) {
       return <VerificationMethodDetailsTag infoMessage="Primary document" />;
     }
 
     return undefined;
-  }, [eligibilityDetails.fileVerificationType]);
+  }, [eligibilityDetails.fileVerificationType, title]);
 
   const showTrailingIcon = useMemo(() => {
+    if (title === 'SPPA Headed Letter') {
+      return true;
+    }
+
     return !Array.isArray(eligibilityDetails.fileVerificationType);
-  }, [eligibilityDetails.fileVerificationType]);
+  }, [eligibilityDetails.fileVerificationType, title]);
 
   return {
     title,
@@ -69,6 +81,10 @@ function useSecondVerificationMethodDetails(
   eligibilityDetails: EligibilityDetails
 ): Details | undefined {
   const title = useMemo(() => {
+    if (eligibilityDetails.fileVerificationType === 'SPPA Headed Letter') {
+      return 'Secondary document';
+    }
+
     if (
       !Array.isArray(eligibilityDetails.fileVerificationType) ||
       eligibilityDetails.fileVerificationType.length !== 2
@@ -80,19 +96,36 @@ function useSecondVerificationMethodDetails(
   }, [eligibilityDetails.fileVerificationType]);
 
   const description = useMemo(() => {
+    if (eligibilityDetails.fileVerificationType === 'SPPA Headed Letter') {
+      return (
+        <>
+          One of:
+          <br />
+          - Certificate of discharge
+          <br />
+          - Certificate of Service
+          <br />
+          - NARF ID Card
+          <br />
+          - P60
+          <br />- Pension document
+        </>
+      );
+    }
+
     if (title === 'Payslip') {
       return 'Must show the social care department within the council\nMust show your full name';
     }
 
     return undefined;
-  }, [title]);
+  }, [eligibilityDetails.fileVerificationType, title]);
 
   const tag = useMemo(() => {
-    if (Array.isArray(eligibilityDetails.fileVerificationType)) {
-      return <VerificationMethodDetailsTag infoMessage="Supporting document" />;
-    }
+    return <VerificationMethodDetailsTag infoMessage="Supporting document" />;
+  }, []);
 
-    return undefined;
+  const showTrailingIcon = useMemo(() => {
+    return eligibilityDetails.fileVerificationType !== 'SPPA Headed Letter';
   }, [eligibilityDetails.fileVerificationType]);
 
   if (!title) return undefined;
@@ -101,6 +134,7 @@ function useSecondVerificationMethodDetails(
     title,
     description,
     tag,
+    showTrailingIcon,
   };
 }
 

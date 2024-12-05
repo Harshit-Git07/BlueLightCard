@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { faCircleBolt } from '@fortawesome/pro-solid-svg-icons';
+import { faCircleBolt, faInfoCircle } from '@fortawesome/pro-solid-svg-icons';
 import Tag from '@bluelightcard/shared-ui/components/Tag';
 
 interface VerificationDescription {
@@ -28,6 +28,13 @@ export function useVerificationDescriptions() {
       'Work ID Card': {
         title: 'Work ID Card',
         description: 'Upload a picture of your Work ID Card',
+      },
+      'SPPA Headed Letter': {
+        title: 'SPPA Headed Letter',
+        description: 'Upload a picture of your headed letter',
+        tag: (
+          <Tag state="Warning" infoMessage="Supporting document needed" iconLeft={faInfoCircle} />
+        ),
       },
     };
 

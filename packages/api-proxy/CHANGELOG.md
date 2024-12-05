@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.0.0 (2024-12-05)
+
+
+### Features
+
+* [DISCO-305] Add api routes for Discovery Aus and DDS ([#2687](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2687)) ([afebb31](https://github.com/bluelightcard/BlueLightCard-2.0/commit/afebb31658b39269784c4f9b35ca538db3913256))
+* add blc prod campaign id ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* add gift card push notification ([#2819](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2819)) ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* add orders endpoints to cloudlare proxies ([#2731](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2731)) ([b821095](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b8210955f0a9332857dcb94b8fb9fbd3a7be51fb))
+* Globalisation of redeem apis ([#2999](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2999)) ([885bd60](https://github.com/bluelightcard/BlueLightCard-2.0/commit/885bd6056f83f47f665f89b38c71e76b2e44e5be))
+* Offers CMS stack API Proxy entry ([#2596](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2596)) ([c3cc706](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c3cc706ac734866857502373f2813673e7c0839d))
+* refactor ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* test ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+
+
+### Bug Fixes
+
+* Corrected offers cms legacy references ([#2605](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2605)) ([6c01078](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6c010788c9738bfb47c9dcc2a09954bc395e3f7f))
+* Reorder the prefix routes in API proxy ([#2643](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2643)) ([3f398d6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3f398d68df95f52dd643938fe8e9c92f62dd15d6))
+
+
+### Other Changes
+
+* [DISCO-1003] Manually increment the api-proxy package version ([#2778](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2778)) ([32ff175](https://github.com/bluelightcard/BlueLightCard-2.0/commit/32ff1753ceeea6c80fee2c664a0c13b2513f6d51))
+* bump typescript to `5.6.3` ([#2743](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2743)) ([d6fc9c8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d6fc9c8e3e2a4fa4fc42ebbe25a9fd0177b24778))
+* **main:** release bluelightcard/api-proxy 1.0.0 ([#2603](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2603)) ([8155b76](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8155b76e621460e251754a48d17a521252595b11))
+* **main:** release bluelightcard/api-proxy 1.1.0 ([#2779](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2779)) ([d2d3b8f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d2d3b8f0d788c714c0541c944636c1303681a7c9))
+* **main:** release bluelightcard/api-proxy 1.2.0 ([#2781](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2781)) ([b85a1e2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b85a1e2c1db5ae2f24dd1f86b34191402c78b511))
+
 ## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/api-proxy-v1.1.0...bluelightcard/api-proxy-v1.2.0) (2024-11-06)
 
 

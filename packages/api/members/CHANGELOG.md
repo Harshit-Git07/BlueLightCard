@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.2.0...bluelightcard/members-v1.2.1) (2024-12-05)
+
+
+### Bug Fixes
+
+* [None] Fix logic for skipping members stacks, disable production Aus and DDS deploys ([#3277](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3277)) ([67cdae8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/67cdae8843eb64506686cb94fb8eb68812562c95))
+
 ## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.1.1...bluelightcard/members-v1.2.0) (2024-12-05)
 
 

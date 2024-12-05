@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.1.1...bluelightcard/members-v1.2.0) (2024-12-05)
+
+
+### Features
+
+* [None] Enable DDS deploy, tweak readme ([#3271](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3271)) ([d27d343](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d27d343777511b07eebfe9978738f4121c992729))
+
 ## [1.1.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.1.0...bluelightcard/members-v1.1.1) (2024-12-05)
 
 

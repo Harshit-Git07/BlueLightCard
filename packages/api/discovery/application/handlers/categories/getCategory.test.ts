@@ -3,12 +3,12 @@ import { APIGatewayEvent } from 'aws-lambda';
 import * as getEnv from '@blc-mono/core/utils/getEnv';
 import { OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
+import { DiscoveryOpenSearchService } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
 import { SearchResult } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
-import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
 
 import { handler } from '../../../application/handlers/categories/getCategory';
 
-jest.mock('../../services/opensearch/OpenSearchService');
+jest.mock('../../services/opensearch/DiscoveryOpenSearchService');
 jest.mock('@blc-mono/core/utils/getEnv');
 
 describe('getCategory Handler', () => {
@@ -35,8 +35,8 @@ describe('getCategory Handler', () => {
   beforeEach(() => {
     jest.spyOn(getEnv, 'getEnv').mockImplementation(() => 'example-variable');
 
-    jest.spyOn(OpenSearchService.prototype, 'queryByCategory').mockResolvedValue(searchResults);
-    jest.spyOn(OpenSearchService.prototype, 'getLatestIndexName').mockResolvedValue('indexName');
+    jest.spyOn(DiscoveryOpenSearchService.prototype, 'queryByCategory').mockResolvedValue(searchResults);
+    jest.spyOn(DiscoveryOpenSearchService.prototype, 'getLatestIndexName').mockResolvedValue('indexName');
   });
 
   it('should return a list of offers for a category', async () => {

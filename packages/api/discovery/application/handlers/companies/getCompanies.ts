@@ -8,7 +8,7 @@ import { isAfter, subMinutes } from 'date-fns';
 import { HttpStatusCode } from '@blc-mono/core/types/http-status-code.enum';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
-import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
+import { DiscoveryOpenSearchService } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
 
 import { CompanySummary } from '../../models/CompaniesResponse';
 
@@ -25,7 +25,7 @@ interface AllCompanies {
 
 let ALL_COMPANIES_CACHE: AllCompanies = {};
 
-const openSearchService = new OpenSearchService();
+const openSearchService = new DiscoveryOpenSearchService();
 
 const handlerUnwrapped = async (event: APIGatewayEvent) => {
   logger.info({ message: `Getting all companies` });

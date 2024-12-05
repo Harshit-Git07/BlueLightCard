@@ -5,9 +5,9 @@ import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { SearchResult } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
 
 import { handler } from '../../../application/handlers/search/getSearch';
-import { OpenSearchService } from '../../services/opensearch/OpenSearchService';
+import { DiscoveryOpenSearchService } from '../../services/opensearch/DiscoveryOpenSearchService';
 
-jest.mock('../../services/opensearch/OpenSearchService');
+jest.mock('../../services/opensearch/DiscoveryOpenSearchService');
 jest.mock('@blc-mono/core/utils/getEnv');
 
 describe('getSearch Handler', () => {
@@ -29,8 +29,8 @@ describe('getSearch Handler', () => {
   beforeEach(() => {
     jest.spyOn(getEnv, 'getEnv').mockImplementation(() => 'example-variable');
 
-    jest.spyOn(OpenSearchService.prototype, 'queryBySearchTerm').mockResolvedValue(searchResults);
-    jest.spyOn(OpenSearchService.prototype, 'getLatestIndexName').mockResolvedValue('indexName');
+    jest.spyOn(DiscoveryOpenSearchService.prototype, 'queryBySearchTerm').mockResolvedValue(searchResults);
+    jest.spyOn(DiscoveryOpenSearchService.prototype, 'getLatestIndexName').mockResolvedValue('indexName');
   });
 
   it('should return a list of results', async () => {
@@ -45,7 +45,7 @@ describe('getSearch Handler', () => {
   });
 
   it('should return empty results when none found', async () => {
-    jest.spyOn(OpenSearchService.prototype, 'queryBySearchTerm').mockResolvedValue([]);
+    jest.spyOn(DiscoveryOpenSearchService.prototype, 'queryBySearchTerm').mockResolvedValue([]);
 
     const results = await whenSearchCalled();
 

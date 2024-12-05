@@ -5,6 +5,7 @@ import {
   App,
   Bucket,
   dependsOn,
+  Queue,
   Stack,
   StackContext,
   use,
@@ -34,16 +35,19 @@ import { adminProfileRoutes } from './routes/admin/AdminProfileRoutes';
 import { DocumentUpload } from './s3/DocumentUploadBucket';
 import { ResponseType } from 'aws-cdk-lib/aws-apigateway';
 import { DefaultRouteProps } from './routes/route';
-import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
+import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
 import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import { createOutboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/createOutboundBatchFileCron';
 import { processInboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/processInboundBatchFileCron';
+import { createMemberProfilesPipe } from '@blc-mono/members/infrastructure/eventbridge/MemberProfilesPipe';
+import { createMemberProfileIndexer } from '@blc-mono/members/infrastructure/lambdas/createMemberProfileIndexer';
 
 const SERVICE_NAME = 'members';
 
 export async function MembersStack({ app, stack }: StackContext) {
   stack.tags.setTag('service', SERVICE_NAME);
+  const { vpc } = use(Shared);
 
   // Profile table - profiles, cards, notes, applications, promo codes
   // Orgs tables - orgs, employers, ID requirements, trusted domains
@@ -68,6 +72,20 @@ export async function MembersStack({ app, stack }: StackContext) {
 
   createOutboundBatchFileCron(stack, adminTable);
   processInboundBatchFileCron(stack, adminTable);
+
+  const memberProfilesTableEventQueue: Queue = new Queue(stack, 'MemberProfilesTableEventQueue', {
+    cdk: {
+      queue: {
+        deadLetterQueue: {
+          queue: new Queue(stack, 'MemberProfilesTableEventQueueDeadLetterQueue').cdk.queue,
+          maxReceiveCount: 3,
+        },
+      },
+    },
+  });
+
+  createMemberProfilesPipe(stack, profilesTable, memberProfilesTableEventQueue);
+  createMemberProfileIndexer(stack, vpc, memberProfilesTableEventQueue, SERVICE_NAME);
 
   return {
     profilesTable,
@@ -105,12 +123,18 @@ export async function MembersApiStack({ app, stack }: StackContext) {
     defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
   };
   const routes: Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> = {
-    ...memberProfileRoutes({ ...defaultRouteProps, bind: [profilesTable, organisationsTable] }),
+    ...memberProfileRoutes({
+      ...defaultRouteProps,
+      bind: [profilesTable, organisationsTable],
+    }),
     ...memberApplicationRoutes({
       ...defaultRouteProps,
       bind: [profilesTable, organisationsTable, documentUploadBucket],
     }),
-    ...memberOrganisationsRoutes({ ...defaultRouteProps, bind: [organisationsTable] }),
+    ...memberOrganisationsRoutes({
+      ...defaultRouteProps,
+      bind: [organisationsTable],
+    }),
     ...memberMarketingRoutes(defaultRouteProps),
   };
 
@@ -146,15 +170,27 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
     defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
   };
   const routes: Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> = {
-    ...adminProfileRoutes({ ...defaultRouteProps, bind: [profilesTable, organisationsTable] }),
+    ...adminProfileRoutes({
+      ...defaultRouteProps,
+      bind: [profilesTable, organisationsTable],
+    }),
     ...adminMarketingRoutes(defaultRouteProps),
     ...adminApplicationRoutes({
       ...defaultRouteProps,
       bind: [profilesTable, organisationsTable, documentUploadBucket],
     }),
-    ...adminOrganisationsRoutes({ ...defaultRouteProps, bind: [organisationsTable] }),
-    ...adminCardRoutes({ ...defaultRouteProps, bind: [profilesTable, adminTable] }),
-    ...adminPaymentRoutes({ ...defaultRouteProps, bind: [adminTable] }),
+    ...adminOrganisationsRoutes({
+      ...defaultRouteProps,
+      bind: [organisationsTable],
+    }),
+    ...adminCardRoutes({
+      ...defaultRouteProps,
+      bind: [profilesTable, adminTable],
+    }),
+    ...adminPaymentRoutes({
+      ...defaultRouteProps,
+      bind: [adminTable],
+    }),
   };
 
   api.addRoutes(stack, routes);
@@ -283,7 +319,11 @@ function createRestApi(app: App, stack: Stack, name: string, certificateArn?: st
   });
   usagePlan.addApiKey(apiKey);
 
-  return { api, requestValidator, config };
+  return {
+    api,
+    requestValidator,
+    config,
+  };
 }
 
 const getDomainName = (stage: string, region: string, name: string) => {

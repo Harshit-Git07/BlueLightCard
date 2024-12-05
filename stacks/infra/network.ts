@@ -4,6 +4,7 @@ import {
   SubnetType,
   Vpc,
   SubnetConfiguration,
+  InterfaceVpcEndpointAwsService,
 } from 'aws-cdk-lib/aws-ec2';
 import { Stack } from 'sst/constructs';
 import {
@@ -48,7 +49,7 @@ export class Network {
   private createVpc(): IVpc {
     const vpcName = isDdsUkBrand() ? VpcName.DDS : VpcName.BLC;
 
-    return new Vpc(this.stack, vpcName, {
+    const vpc = new Vpc(this.stack, vpcName, {
       vpcName: vpcName,
       maxAzs: 3,
       subnetConfiguration: this.subnetConfiguration(),
@@ -58,6 +59,12 @@ export class Network {
         },
       },
     });
+
+    vpc.addInterfaceEndpoint('SqsEndpoint', {
+      service: InterfaceVpcEndpointAwsService.SQS,
+    });
+
+    return vpc;
   }
 
   /**

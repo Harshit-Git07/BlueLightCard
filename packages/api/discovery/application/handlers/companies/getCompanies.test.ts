@@ -4,11 +4,11 @@ import { addMinutes } from 'date-fns';
 import * as getEnv from '@blc-mono/core/utils/getEnv';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { CompanySummary } from '@blc-mono/discovery/application/models/CompaniesResponse';
-import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
+import { DiscoveryOpenSearchService } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
 
 import { handler, resetCache } from './getCompanies';
 
-jest.mock('../../services/opensearch/OpenSearchService');
+jest.mock('../../services/opensearch/DiscoveryOpenSearchService');
 jest.mock('@blc-mono/core/utils/getEnv');
 
 describe('getCompanies Handler', () => {
@@ -29,8 +29,8 @@ describe('getCompanies Handler', () => {
 
     jest.spyOn(getEnv, 'getEnv').mockImplementation(() => 'example-variable');
 
-    jest.spyOn(OpenSearchService.prototype, 'queryAllCompanies').mockResolvedValue(companies);
-    jest.spyOn(OpenSearchService.prototype, 'getLatestIndexName').mockResolvedValue('indexName');
+    jest.spyOn(DiscoveryOpenSearchService.prototype, 'queryAllCompanies').mockResolvedValue(companies);
+    jest.spyOn(DiscoveryOpenSearchService.prototype, 'getLatestIndexName').mockResolvedValue('indexName');
   });
 
   it('should return a list of companies', async () => {
@@ -51,10 +51,10 @@ describe('getCompanies Handler', () => {
     jest.spyOn(global.Date, 'now').mockImplementation(() => timestamp.getTime());
     await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS');
 
-    expect(OpenSearchService.prototype.queryAllCompanies).toHaveBeenCalledTimes(1);
+    expect(DiscoveryOpenSearchService.prototype.queryAllCompanies).toHaveBeenCalledTimes(1);
 
     const cachedResult = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS');
-    expect(OpenSearchService.prototype.queryAllCompanies).toHaveBeenCalledTimes(1);
+    expect(DiscoveryOpenSearchService.prototype.queryAllCompanies).toHaveBeenCalledTimes(1);
     thenResponseShouldEqual(
       cachedResult,
       JSON.stringify({
@@ -68,7 +68,7 @@ describe('getCompanies Handler', () => {
   it('should not use cache on first call', async () => {
     const result = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS');
 
-    expect(OpenSearchService.prototype.queryAllCompanies).toHaveBeenCalledTimes(1);
+    expect(DiscoveryOpenSearchService.prototype.queryAllCompanies).toHaveBeenCalledTimes(1);
     thenResponseShouldEqual(
       result,
       JSON.stringify({
@@ -85,7 +85,7 @@ describe('getCompanies Handler', () => {
 
     const newResult = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS');
 
-    expect(OpenSearchService.prototype.queryAllCompanies).toHaveBeenCalled();
+    expect(DiscoveryOpenSearchService.prototype.queryAllCompanies).toHaveBeenCalled();
     thenResponseShouldEqual(
       newResult,
       JSON.stringify({
@@ -99,7 +99,7 @@ describe('getCompanies Handler', () => {
   it('should not use cache if "skipCache" param is "true"', async () => {
     const result = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS', 'true');
 
-    expect(OpenSearchService.prototype.queryAllCompanies).toHaveBeenCalled();
+    expect(DiscoveryOpenSearchService.prototype.queryAllCompanies).toHaveBeenCalled();
     thenResponseShouldEqual(
       result,
       JSON.stringify({
@@ -111,7 +111,7 @@ describe('getCompanies Handler', () => {
   });
 
   it('should return empty list when no companies found', async () => {
-    jest.spyOn(OpenSearchService.prototype, 'queryAllCompanies').mockResolvedValue([]);
+    jest.spyOn(DiscoveryOpenSearchService.prototype, 'queryAllCompanies').mockResolvedValue([]);
 
     const result = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS');
 
@@ -147,7 +147,7 @@ describe('getCompanies Handler', () => {
 
   it('should return a 500 if OpenSearch query fails', async () => {
     jest
-      .spyOn(OpenSearchService.prototype, 'queryAllCompanies')
+      .spyOn(DiscoveryOpenSearchService.prototype, 'queryAllCompanies')
       .mockRejectedValue(new Error('Error querying OpenSearch'));
     const expectedResponse = Response.Error(new Error('Error querying OpenSearch'));
 

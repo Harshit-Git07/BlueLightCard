@@ -3,12 +3,12 @@ import { datadog } from 'datadog-lambda-js';
 
 import { isPr, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
-import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
+import { DiscoveryOpenSearchService } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 const logger = new Logger({ serviceName: 'delete-old-search-indices' });
-const openSearchService = new OpenSearchService();
+const openSearchService = new DiscoveryOpenSearchService();
 
 export const handlerUnwrapped = async () => {
   const indicesToDelete: string[] = [];

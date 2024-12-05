@@ -2,9 +2,9 @@ import * as getEnv from '@blc-mono/core/utils/getEnv';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 import { handler } from '../../../application/handlers/search/deleteOldSearchIndices';
-import { OpenSearchService } from '../../services/opensearch/OpenSearchService';
+import { DiscoveryOpenSearchService } from '../../services/opensearch/DiscoveryOpenSearchService';
 
-jest.mock('../../services/opensearch/OpenSearchService');
+jest.mock('../../services/opensearch/DiscoveryOpenSearchService');
 jest.mock('@blc-mono/core/utils/getEnv');
 
 describe('deleteOldSearchIndices Handler', () => {
@@ -20,15 +20,15 @@ describe('deleteOldSearchIndices Handler', () => {
   beforeEach(() => {
     givenEnvironmentIs('production');
 
-    deleteIndexMock = jest.spyOn(OpenSearchService.prototype, 'deleteIndex');
+    deleteIndexMock = jest.spyOn(DiscoveryOpenSearchService.prototype, 'deleteIndex');
     getPublishedIndicesForDeletionMock = jest
-      .spyOn(OpenSearchService.prototype, 'getPublishedIndicesForDeletion')
+      .spyOn(DiscoveryOpenSearchService.prototype, 'getPublishedIndicesForDeletion')
       .mockResolvedValue(['index1', 'index2']);
     getDraftIndicesForDeletionMock = jest
-      .spyOn(OpenSearchService.prototype, 'getDraftIndicesForDeletion')
+      .spyOn(DiscoveryOpenSearchService.prototype, 'getDraftIndicesForDeletion')
       .mockResolvedValue(['draft-index1', 'draft-index2']);
     getPrEnvironmentIndicesForDeletionMock = jest
-      .spyOn(OpenSearchService.prototype, 'getPrEnvironmentIndicesForDeletion')
+      .spyOn(DiscoveryOpenSearchService.prototype, 'getPrEnvironmentIndicesForDeletion')
       .mockResolvedValue(['pr-index3', 'pr-index4']);
   });
 
@@ -56,10 +56,10 @@ describe('deleteOldSearchIndices Handler', () => {
 
   it('should not call "deleteIndex" when no published or draft indices available for deletion', async () => {
     getPublishedIndicesForDeletionMock = jest
-      .spyOn(OpenSearchService.prototype, 'getPublishedIndicesForDeletion')
+      .spyOn(DiscoveryOpenSearchService.prototype, 'getPublishedIndicesForDeletion')
       .mockResolvedValue([]);
     getDraftIndicesForDeletionMock = jest
-      .spyOn(OpenSearchService.prototype, 'getDraftIndicesForDeletion')
+      .spyOn(DiscoveryOpenSearchService.prototype, 'getDraftIndicesForDeletion')
       .mockResolvedValue([]);
 
     await handler();

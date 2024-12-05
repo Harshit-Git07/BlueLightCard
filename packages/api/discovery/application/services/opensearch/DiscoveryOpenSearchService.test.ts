@@ -5,7 +5,7 @@ import * as getEnvModule from '@blc-mono/core/utils/getEnv';
 jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 import { openSearchFieldMapping } from '@blc-mono/discovery/application/models/OpenSearchFieldMapping';
 
-import { OpenSearchService } from './OpenSearchService';
+import { DiscoveryOpenSearchService } from './DiscoveryOpenSearchService';
 
 const mockCreate = jest.fn().mockResolvedValue({ acknowledged: true });
 const mockAddBlock = jest.fn().mockResolvedValue({});
@@ -91,7 +91,7 @@ const mockGetLatestWithDraftIndices = (creationDate: string) =>
 const mockBulkCreate = jest.fn().mockResolvedValue({ statusCode: 200 });
 
 describe('OpenSearchService', () => {
-  let openSearchService: OpenSearchService;
+  let openSearchService: DiscoveryOpenSearchService;
   const indexName = 'test-index';
   const sampleDocument = {
     title: 'dummyTitle',
@@ -103,7 +103,7 @@ describe('OpenSearchService', () => {
   });
 
   beforeEach(() => {
-    openSearchService = new OpenSearchService();
+    openSearchService = new DiscoveryOpenSearchService();
     jest.spyOn(openSearchService['openSearchClient'].indices, 'create').mockImplementation(mockCreate);
     jest.spyOn(openSearchService['openSearchClient'].indices, 'addBlock').mockImplementation(mockAddBlock);
     jest.spyOn(openSearchService['openSearchClient'].indices, 'clone').mockImplementation(mockClone);
@@ -142,26 +142,6 @@ describe('OpenSearchService', () => {
     });
 
     expect(mockCreate).toHaveBeenCalledTimes(1);
-  });
-
-  it('should clone an index', async () => {
-    const sourceIndexName = 'draft-test-index';
-    const targetIndexName = 'test-index';
-
-    await openSearchService.cloneIndex(sourceIndexName, targetIndexName);
-
-    expect(mockAddBlock).toHaveBeenCalledWith({
-      index: sourceIndexName,
-      block: 'write',
-    });
-    expect(mockClone).toHaveBeenCalledWith({
-      index: sourceIndexName,
-      target: targetIndexName,
-    });
-    expect(mockPutSettings).toHaveBeenCalledWith({
-      index: sourceIndexName,
-      body: { index: { blocks: { write: false } } },
-    });
   });
 
   describe('Search', () => {
@@ -575,7 +555,7 @@ describe('OpenSearchService', () => {
   });
 
   it('should check if an index exists', async () => {
-    const result = await openSearchService.doesIndexExist(indexName);
+    const result = await openSearchService.indexExists(indexName);
 
     expect(mockExists).toHaveBeenCalledWith({
       index: indexName,

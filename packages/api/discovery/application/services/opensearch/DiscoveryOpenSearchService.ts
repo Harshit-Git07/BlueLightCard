@@ -1,8 +1,8 @@
-import { defaultProvider } from '@aws-sdk/credential-provider-node';
 import { Client } from '@opensearch-project/opensearch';
 import { SearchResponse } from '@opensearch-project/opensearch/api/types';
 import { isBefore, subWeeks } from 'date-fns';
 
+import { OpenSearchService } from '@blc-mono/core/aws/opensearch/OpenSearchService';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { CompanySummary } from '@blc-mono/discovery/application/models/CompaniesResponse';
@@ -18,8 +18,6 @@ import {
 import { OpenSearchSearchRequests } from '@blc-mono/discovery/application/services/opensearch/OpenSearchSearchRequests';
 import { isValidTrust } from '@blc-mono/discovery/application/utils/trustRules';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
 
 export const draftIndexPrefix = 'draft-';
 
@@ -34,34 +32,12 @@ type OpenSearchIndex = {
   creationDate: string;
 };
 
-export class OpenSearchService {
-  private readonly openSearchClient: Client;
+export class DiscoveryOpenSearchService extends OpenSearchService {
   private indicesList: OpenSearchIndex[] = [];
 
   constructor() {
     const searchDomainHost = getEnv(DiscoveryStackEnvironmentKeys.OPENSEARCH_DOMAIN_ENDPOINT);
-    const searchDomainContainsProtocol = searchDomainHost.includes('http');
-
-    this.openSearchClient = new Client({
-      ...AwsSigv4Signer({
-        region: process.env.AWS_REGION ?? 'eu-west-2',
-        service: 'es',
-        getCredentials: () => {
-          const credentialsProvider = defaultProvider();
-          return credentialsProvider();
-        },
-      }),
-      node: searchDomainContainsProtocol ? searchDomainHost : `https://${searchDomainHost}`,
-    });
-  }
-
-  public async doesIndexExist(indexName: string): Promise<boolean> {
-    const response = await this.openSearchClient.indices.exists({
-      index: indexName,
-    });
-
-    logger.info({ message: `Response from checking if index ${indexName} exists was ${response.body}` });
-    return response.body;
+    super(searchDomainHost, logger);
   }
 
   public async createIndex(indexName: string): Promise<void> {
@@ -83,28 +59,6 @@ export class OpenSearchService {
     });
 
     logger.info({ message: `Response from creating index ${indexName} was ${response.statusCode}` });
-  }
-
-  public async cloneIndex(sourceIndexName: string, targetIndexName: string): Promise<void> {
-    try {
-      await this.openSearchClient.indices.addBlock({
-        index: sourceIndexName,
-        block: 'write',
-      });
-      await this.openSearchClient.indices.clone({
-        index: sourceIndexName,
-        target: targetIndexName,
-      });
-      await this.openSearchClient.indices.putSettings({
-        index: sourceIndexName,
-        body: { index: { blocks: { write: false } } },
-      });
-    } catch (error) {
-      logger.error({
-        message: `Error cloning index ${sourceIndexName} as new index ${targetIndexName} - ${JSON.stringify(error)}`,
-      });
-      throw error;
-    }
   }
 
   public async addDocumentsToIndex(documents: OpenSearchBulkCommand[], indexName: string): Promise<void> {
@@ -200,14 +154,6 @@ export class OpenSearchService {
     });
 
     return uniqueResultsSubset;
-  }
-
-  public async deleteIndex(indexName: string): Promise<void> {
-    const response = await this.openSearchClient.indices.delete({
-      index: indexName,
-    });
-
-    logger.info({ message: `Response from deleting index ${indexName} was ${response.statusCode}` });
   }
 
   public async getPublishedIndicesForDeletion(): Promise<string[]> {

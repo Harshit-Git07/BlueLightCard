@@ -1,7 +1,7 @@
 import { Stack } from 'sst/constructs';
 
 import { CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/schemas/common';
-import { getEnv, getEnvOrDefault, getEnvValidated } from '@blc-mono/core/utils/getEnv';
+import { getEnv, getEnvValidated } from '@blc-mono/core/utils/getEnv';
 
 import { MemberStackEnvironmentKeys } from '../constants/environment';
 import { PR_STAGE_REGEX, PRODUCTION_STAGE, STAGING_STAGE } from '../constants/sst';
@@ -16,6 +16,7 @@ export enum MemberStackSearchBrand {
 
 export type MemberStackConfig = {
   apiDefaultAllowedOrigins: string[];
+  openSearchDomainEndpoint?: string;
 };
 
 export class MemberStackConfigResolver {
@@ -78,6 +79,7 @@ export class MemberStackConfigResolver {
         MemberStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS,
         JsonStringSchema.pipe(CORS_ALLOWED_ORIGINS_SCHEMA),
       ),
+      openSearchDomainEndpoint: getEnv(MemberStackEnvironmentKeys.OPENSEARCH_DOMAIN_ENDPOINT),
     };
   }
 }

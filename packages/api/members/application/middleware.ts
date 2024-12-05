@@ -1,5 +1,11 @@
 import { Logger } from '@aws-lambda-powertools/logger';
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context, S3Event } from 'aws-lambda';
+import {
+  APIGatewayProxyEvent,
+  APIGatewayProxyResult,
+  Context,
+  S3Event,
+  SQSEvent,
+} from 'aws-lambda';
 import { datadog } from 'datadog-lambda-js';
 import 'dd-trace/init';
 import { Response } from './utils/restResponse/response';
@@ -112,6 +118,42 @@ export function s3Middleware(handler: S3Handler): S3Handler {
       if (error instanceof ValidationError || error instanceof ZodError) {
         logger.warn('Validation error', error.message);
       }
+    }
+  };
+}
+
+type SQSHandler = (event: SQSEvent, context: Context) => Promise<void>;
+
+export function sqsMiddleware(handler: SQSHandler): SQSHandler {
+  return async (event: SQSEvent, context: Context): Promise<void> => {
+    logger.addContext(context);
+
+    try {
+      auditLogger.info({
+        message: 'Event start',
+        numberOfRecords: event.Records.length,
+      });
+
+      await handler(event, context);
+
+      auditLogger.info({
+        message: 'Event success',
+        numberOfRecords: event.Records.length,
+      });
+    } catch (error: Error | any) {
+      logger.error({ message: 'Error occurred', error });
+
+      auditLogger.info({
+        message: 'Request failed',
+        numberOfRecords: event.Records.length,
+        error: error.message,
+      });
+
+      if (error instanceof ValidationError || error instanceof ZodError) {
+        logger.warn('Validation error', error.message);
+      }
+
+      throw error;
     }
   };
 }

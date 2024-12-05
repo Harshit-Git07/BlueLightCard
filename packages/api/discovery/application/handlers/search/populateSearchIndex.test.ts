@@ -3,7 +3,7 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import * as getEnv from '@blc-mono/core/utils/getEnv';
 import { mapOfferToOpenSearchBody, OpenSearchBody } from '@blc-mono/discovery/application/models/OpenSearchType';
 import * as OffersService from '@blc-mono/discovery/application/repositories/Offer/service/OfferService';
-import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
+import { DiscoveryOpenSearchService } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 import { offerFactory } from '../../factories/OfferFactory';
@@ -12,7 +12,7 @@ import { Offer, OfferType } from '../../models/Offer';
 import { handler } from './populateSearchIndex';
 
 jest.mock('@blc-mono/discovery/application/repositories/Offer/service/OfferService');
-jest.mock('@blc-mono/discovery/application/services/opensearch/OpenSearchService');
+jest.mock('@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService');
 jest.mock('@aws-lambda-powertools/logger');
 jest.mock('@blc-mono/core/utils/getEnv');
 
@@ -50,11 +50,13 @@ describe('populateSearchIndex', () => {
 
       loggerErrorSpy = jest.spyOn(Logger.prototype, 'error');
 
-      jest.spyOn(OpenSearchService.prototype, 'generateIndexName').mockReturnValue('index-name');
+      jest.spyOn(DiscoveryOpenSearchService.prototype, 'generateIndexName').mockReturnValue('index-name');
     });
 
     it('should create draft index successfully', async () => {
-      const createIndexSpy = jest.spyOn(OpenSearchService.prototype, 'createIndex').mockResolvedValue(undefined);
+      const createIndexSpy = jest
+        .spyOn(DiscoveryOpenSearchService.prototype, 'createIndex')
+        .mockResolvedValue(undefined);
 
       await handler();
 
@@ -62,7 +64,7 @@ describe('populateSearchIndex', () => {
     });
 
     it('should throw error if failure creating draft index', async () => {
-      jest.spyOn(OpenSearchService.prototype, 'createIndex').mockRejectedValue(error);
+      jest.spyOn(DiscoveryOpenSearchService.prototype, 'createIndex').mockRejectedValue(error);
 
       await expect(handler()).rejects.toThrow(error);
       expect(loggerErrorSpy).toHaveBeenCalledWith('Error building search index', JSON.stringify(error));
@@ -70,12 +72,12 @@ describe('populateSearchIndex', () => {
 
     describe('and draft index is created successfully', () => {
       beforeEach(() => {
-        jest.spyOn(OpenSearchService.prototype, 'createIndex').mockResolvedValue(undefined);
+        jest.spyOn(DiscoveryOpenSearchService.prototype, 'createIndex').mockResolvedValue(undefined);
       });
 
       it('should convert offers to OpenSearch format and add to index', async () => {
         const addMultipleDocumentsToIndex = jest
-          .spyOn(OpenSearchService.prototype, 'addDocumentsToIndex')
+          .spyOn(DiscoveryOpenSearchService.prototype, 'addDocumentsToIndex')
           .mockResolvedValue(undefined);
         const mockOffers = offerFactory.buildList(1);
         const getMockOffers = jest.spyOn(OffersService, 'getNonLocalOffers').mockResolvedValue(mockOffers);
@@ -182,7 +184,7 @@ describe('populateSearchIndex', () => {
       });
 
       it('should throw error if failure adding documents to index', async () => {
-        jest.spyOn(OpenSearchService.prototype, 'addDocumentsToIndex').mockRejectedValue(error);
+        jest.spyOn(DiscoveryOpenSearchService.prototype, 'addDocumentsToIndex').mockRejectedValue(error);
 
         await expect(handler()).rejects.toThrow(error);
         expect(loggerErrorSpy).toHaveBeenCalledWith('Error building search index', JSON.stringify(error));
@@ -191,12 +193,14 @@ describe('populateSearchIndex', () => {
 
     describe('and draft index is populated successfully', () => {
       beforeEach(() => {
-        jest.spyOn(OpenSearchService.prototype, 'createIndex').mockResolvedValue(undefined);
-        jest.spyOn(OpenSearchService.prototype, 'addDocumentsToIndex').mockResolvedValue(undefined);
+        jest.spyOn(DiscoveryOpenSearchService.prototype, 'createIndex').mockResolvedValue(undefined);
+        jest.spyOn(DiscoveryOpenSearchService.prototype, 'addDocumentsToIndex').mockResolvedValue(undefined);
       });
 
       it('should clone index successfully', async () => {
-        const cloneIndexSpy = jest.spyOn(OpenSearchService.prototype, 'cloneIndex').mockResolvedValue(undefined);
+        const cloneIndexSpy = jest
+          .spyOn(DiscoveryOpenSearchService.prototype, 'cloneIndex')
+          .mockResolvedValue(undefined);
 
         await handler();
 
@@ -204,7 +208,7 @@ describe('populateSearchIndex', () => {
       });
 
       it('should throw error if failure cloning index', async () => {
-        jest.spyOn(OpenSearchService.prototype, 'cloneIndex').mockRejectedValue(error);
+        jest.spyOn(DiscoveryOpenSearchService.prototype, 'cloneIndex').mockRejectedValue(error);
 
         await expect(handler()).rejects.toThrow(error);
         expect(loggerErrorSpy).toHaveBeenCalledWith('Error building search index', JSON.stringify(error));
@@ -213,13 +217,15 @@ describe('populateSearchIndex', () => {
 
     describe('and index is cloned successfully', () => {
       beforeEach(() => {
-        jest.spyOn(OpenSearchService.prototype, 'createIndex').mockResolvedValue(undefined);
-        jest.spyOn(OpenSearchService.prototype, 'addDocumentsToIndex').mockResolvedValue(undefined);
-        jest.spyOn(OpenSearchService.prototype, 'cloneIndex').mockResolvedValue(undefined);
+        jest.spyOn(DiscoveryOpenSearchService.prototype, 'createIndex').mockResolvedValue(undefined);
+        jest.spyOn(DiscoveryOpenSearchService.prototype, 'addDocumentsToIndex').mockResolvedValue(undefined);
+        jest.spyOn(DiscoveryOpenSearchService.prototype, 'cloneIndex').mockResolvedValue(undefined);
       });
 
       it('should delete draft index successfully', async () => {
-        const deleteIndexSpy = jest.spyOn(OpenSearchService.prototype, 'deleteIndex').mockResolvedValue(undefined);
+        const deleteIndexSpy = jest
+          .spyOn(DiscoveryOpenSearchService.prototype, 'deleteIndex')
+          .mockResolvedValue(undefined);
 
         await handler();
 
@@ -227,7 +233,7 @@ describe('populateSearchIndex', () => {
       });
 
       it('should throw error if failure deleting index', async () => {
-        jest.spyOn(OpenSearchService.prototype, 'deleteIndex').mockRejectedValue(error);
+        jest.spyOn(DiscoveryOpenSearchService.prototype, 'deleteIndex').mockRejectedValue(error);
 
         await expect(handler()).rejects.toThrow(error);
         expect(loggerErrorSpy).toHaveBeenCalledWith('Error building search index', JSON.stringify(error));

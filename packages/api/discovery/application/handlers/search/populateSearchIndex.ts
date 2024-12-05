@@ -6,16 +6,16 @@ import { datadog } from 'datadog-lambda-js';
 import { Offer } from '@blc-mono/discovery/application/models/Offer';
 import { mapOfferToOpenSearchBody, OpenSearchBulkCommand } from '@blc-mono/discovery/application/models/OpenSearchType';
 import {
+  DiscoveryOpenSearchService,
   draftIndexPrefix,
-  OpenSearchService,
-} from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
+} from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
 
 import { getNonLocalOffers } from '../../repositories/Offer/service/OfferService';
 
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 const logger = new Logger({ serviceName: 'populate-search-index' });
 
-const openSearchService = new OpenSearchService();
+const openSearchService = new DiscoveryOpenSearchService();
 
 const createOpenSearchDocuments = (items: Offer[]) => {
   const result: OpenSearchBulkCommand[] = [];

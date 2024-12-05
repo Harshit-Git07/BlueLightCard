@@ -7,12 +7,12 @@ import { datadog } from 'datadog-lambda-js';
 import { HttpStatusCode } from '@blc-mono/core/types/http-status-code.enum';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
-import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
+import { DiscoveryOpenSearchService } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
 
 const logger = new LambdaLogger({ serviceName: 'search-get' });
 
-const openSearchService = new OpenSearchService();
+const openSearchService = new DiscoveryOpenSearchService();
 
 const handlerUnwrapped = async (event: APIGatewayEvent) => {
   const { searchTerm, organisation, dob } = getQueryParams(event);

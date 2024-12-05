@@ -12,13 +12,13 @@ import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { categories } from '@blc-mono/discovery/application/handlers/categories/getCategories';
 import { OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
+import { DiscoveryOpenSearchService } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
 import { SearchResult } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
-import { OpenSearchService } from '@blc-mono/discovery/application/services/opensearch/OpenSearchService';
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const logger = new LambdaLogger({ serviceName: 'categories-get' });
 
-const openSearchService = new OpenSearchService();
+const openSearchService = new DiscoveryOpenSearchService();
 const handlerUnwrapped = async (event: APIGatewayEvent) => {
   const categoryId = (event.pathParameters as APIGatewayProxyEventPathParameters)?.id ?? '';
   const { dob, organisation } = getQueryParams(event);

@@ -39,7 +39,7 @@ export const jobDetailsEvents: AmplitudeEvents = {
     },
   }),
   onBackClicked: (eligibilityDetails: EligibilityDetails) => ({
-    event: eligibilityDetails.flow === 'Sign Up' ? 'signup_select' : 'renewal_select',
+    event: eligibilityDetails.flow === 'Sign Up' ? 'signup_click' : 'renewal_click',
     params: {
       page_name: 'JobDetails',
       CTA: 'back',

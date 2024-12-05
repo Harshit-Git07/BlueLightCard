@@ -41,13 +41,13 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
         eligibilityDetails.jobTitle = undefined;
       }
 
-      logAnalyticsEvent(employmentStatusEvents.onForwardClicked(eligibilityDetails));
-
       setEligibilityDetails({
         ...eligibilityDetails,
         currentScreen: 'Job Details Screen',
         employmentStatus,
       });
+
+      logAnalyticsEvent(employmentStatusEvents.onForwardClicked(eligibilityDetails));
     },
     [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails]
   );

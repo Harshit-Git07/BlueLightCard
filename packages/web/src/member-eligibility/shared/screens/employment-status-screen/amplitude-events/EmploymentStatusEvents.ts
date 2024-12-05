@@ -10,7 +10,7 @@ export const employmentStatusEvents: AmplitudeEvents = {
     },
   }),
   onForwardClicked: (eligibilityDetails: EligibilityDetails) => ({
-    event: eligibilityDetails.flow === 'Sign Up' ? 'signup_click' : 'renewal_click',
+    event: eligibilityDetails.flow === 'Sign Up' ? 'signup_select' : 'renewal_select',
     params: {
       page_name: 'EmploymentStatus',
       select_name: 'EmploymentStatus',

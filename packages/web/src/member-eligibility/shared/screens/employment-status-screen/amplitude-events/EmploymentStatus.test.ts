@@ -40,7 +40,7 @@ describe('employmentStatusEvents', () => {
       employmentStatus: 'Employed',
     };
     expect(employmentStatusEvents.onForwardClicked(eligibilityDetails)).toEqual({
-      event: 'signup_click',
+      event: 'signup_select',
       params: {
         page_name: 'EmploymentStatus',
         select_name: 'EmploymentStatus',
@@ -58,7 +58,7 @@ describe('employmentStatusEvents', () => {
       employmentStatus: 'Volunteer',
     };
     expect(employmentStatusEvents.onForwardClicked(eligibilityDetails)).toEqual({
-      event: 'renewal_click',
+      event: 'renewal_select',
       params: {
         page_name: 'EmploymentStatus',
         select_name: 'EmploymentStatus',

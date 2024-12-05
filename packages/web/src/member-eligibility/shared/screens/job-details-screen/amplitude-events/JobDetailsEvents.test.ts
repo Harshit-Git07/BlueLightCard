@@ -144,7 +144,7 @@ describe('jobDetailsEvents', () => {
       currentScreen: 'Job Details Screen',
     };
     expect(jobDetailsEvents.onBackClicked(eligibilityDetails)).toEqual({
-      event: 'signup_select',
+      event: 'signup_click',
       params: {
         page_name: 'JobDetails',
         CTA: 'back',
@@ -158,7 +158,7 @@ describe('jobDetailsEvents', () => {
       currentScreen: 'Job Details Screen',
     };
     expect(jobDetailsEvents.onBackClicked(eligibilityDetails)).toEqual({
-      event: 'renewal_select',
+      event: 'renewal_click',
       params: {
         page_name: 'JobDetails',
         CTA: 'back',

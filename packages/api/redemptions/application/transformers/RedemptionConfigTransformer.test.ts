@@ -1,5 +1,5 @@
 import { as } from '@blc-mono/core/utils/testing';
-import { singleBallotEntityFactory } from '@blc-mono/redemptions/libs/test/factories/ballotEntity.factory';
+import { ballotEntityFactory } from '@blc-mono/redemptions/libs/test/factories/ballotEntity.factory';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { redemptionBallotConfigFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionBallotConfig.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
@@ -32,7 +32,7 @@ const redemptionConfigTransformer: RedemptionConfigTransformer = new RedemptionC
 const vaultEntity: VaultEntity = vaultEntityFactory.build();
 const vaultBatchEntities = vaultBatchEntityFactory.buildList(3);
 const genericEntity: GenericEntity = genericEntityFactory.build();
-const ballotEntity: BallotEntity = singleBallotEntityFactory.build();
+const ballotEntity: BallotEntity = ballotEntityFactory.build();
 
 const redemptionVaultConfig: RedemptionVaultConfig = redemptionVaultConfigFactory.build();
 

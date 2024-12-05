@@ -1,3 +1,5 @@
+import { UsersTrackObject } from 'braze-api';
+
 import { as } from '@blc-mono/core/utils/testing';
 import { RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import { memberRedemptionEventFactory } from '@blc-mono/redemptions/libs/test/factories/memberRedemptionEvent.factory';
@@ -8,6 +10,10 @@ import { IEmailRepository } from '../../repositories/EmailRepository';
 import { EmailService } from './EmailService';
 
 describe('EmailService', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   describe('sendRedemptionTransactionEmail', () => {
     it.each(['vault', 'generic'] satisfies RedemptionType[])(
       'should send email for vault and generic redemption events',
@@ -76,6 +82,26 @@ describe('EmailService', () => {
 
       // Assert
       expect(emailRepository.sendShowCardEmail).toHaveBeenCalled();
+    });
+  });
+
+  describe('setCustomAttributes', () => {
+    it('should pass data through to the email repository', async () => {
+      const usersWithAttributes: UsersTrackObject['attributes'] = [
+        {
+          name: `dummyUserAttribute1`,
+        },
+      ];
+
+      const logger = createTestLogger();
+      const emailRepository: Partial<IEmailRepository> = {
+        usersTrackThrottled: jest.fn(),
+      };
+      const service = new EmailService(logger, as(emailRepository));
+
+      await service.setCustomAttributes(usersWithAttributes);
+
+      expect(emailRepository.usersTrackThrottled).toHaveBeenCalledWith(usersWithAttributes);
     });
   });
 });

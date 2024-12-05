@@ -11,7 +11,6 @@ import { RedemptionsCronJobs } from './RedemptionsCronJobs';
 
 const EVERY_DAY_AT_10_PM = 'cron(0 22 * * ? *)';
 const EVERY_30_MINUTES = 'rate(30 minutes)';
-// const DEV_ONLY_EVERY_1_MINUTE = 'rate(1 minute)';
 
 const putEventsPolicy = new PolicyStatement({
   actions: ['events:PutEvents'],
@@ -21,7 +20,7 @@ const putEventsPolicy = new PolicyStatement({
 
 export function checkBallotsCron(stack: Stack, database: IDatabase, eventBusName: string): Cron {
   const queue = new Queue(stack, 'checkBallotDeadLetterQueue');
-  const vaultCreatedHandler = new SSTFunction(stack, 'checkBallotHandler', {
+  const checkBallotHandler = new SSTFunction(stack, 'checkBallotHandler', {
     database,
     handler: 'packages/api/redemptions/application/handlers/cron/ballots/checkBallotsHandler.handler',
     retryAttempts: 0,
@@ -34,7 +33,7 @@ export function checkBallotsCron(stack: Stack, database: IDatabase, eventBusName
   });
 
   return new Cron(stack, RedemptionsCronJobs.BALLOT_CHECK, {
-    job: vaultCreatedHandler,
+    job: checkBallotHandler,
     schedule: isStaging(stack.stage) ? EVERY_30_MINUTES : EVERY_DAY_AT_10_PM,
     enabled: true,
   });

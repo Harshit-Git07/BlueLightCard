@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { describe } from '@jest/globals';
 
+import { IBallotService } from '@blc-mono/redemptions/application/services/ballot/BallotService';
 import { RedemptionsBallotEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/ballot';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
@@ -12,7 +13,12 @@ describe('RunBallotController', () => {
   describe('invoke', () => {
     it('should invoke the handle method', async () => {
       const testLogger = createTestLogger();
-      const controller = new RunBallotController(testLogger);
+      const ballotService = {
+        findBallotsForDrawDate: jest.fn(),
+        runSingleBallot: jest.fn(),
+        notifyEntriesOfBallotOutcome: jest.fn(),
+      } satisfies IBallotService;
+      const controller = new RunBallotController(testLogger, ballotService);
       const mockEvent = {
         source: RedemptionsBallotEvents.BALLOT_RUN,
         'detail-type': RedemptionsBallotEvents.BALLOT_RUN_DETAIL,

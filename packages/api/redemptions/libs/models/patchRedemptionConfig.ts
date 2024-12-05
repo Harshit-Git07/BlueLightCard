@@ -182,6 +182,35 @@ export const PatchRedemptionConfigVerifyModel = createZodNamedType(
   PatchRedemptionConfigBaseModel.merge(PatchVerifyModel),
 );
 
+export const BallotModelForPatch = createZodNamedType(
+  'BallotModel',
+  z.object({
+    id: z.string(),
+    totalTickets: z.number().positive(),
+    drawDate: z.string().datetime(),
+    eventDate: z.string().datetime(),
+    offerName: z.string(),
+  }),
+);
+
+export type BallotModel = z.infer<typeof BallotModelForPatch>;
+
+export const PatchBallotModel = createZodNamedType(
+  'PatchBallotModel',
+  z
+    .object({
+      redemptionType: z.literal(REDEMPTION_TYPES[5]),
+      url: z.string().url(),
+      ballot: BallotModelForPatch,
+    })
+    .strict(),
+);
+
+export const PatchRedemptionConfigBallotModel = createZodNamedType(
+  'PatchRedemptionConfigBallotModel',
+  PatchRedemptionConfigBaseModel.merge(PatchBallotModel),
+);
+
 export const PatchRedemptionConfigModel = createZodNamedType(
   'PatchRedemptionConfigModel',
   z.discriminatedUnion('redemptionType', [
@@ -193,6 +222,7 @@ export const PatchRedemptionConfigModel = createZodNamedType(
     PatchRedemptionConfigGiftCardModel,
     PatchRedemptionConfigCompareModel,
     PatchRedemptionConfigVerifyModel,
+    PatchRedemptionConfigBallotModel,
   ]),
 );
 
@@ -205,3 +235,4 @@ export type PatchRedemptionConfigVaultQRModel = z.infer<typeof PatchRedemptionCo
 export type PatchRedemptionConfigGiftCardModel = z.infer<typeof PatchRedemptionConfigGiftCardModel>;
 export type PatchRedemptionConfigCompareModel = z.infer<typeof PatchRedemptionConfigCompareModel>;
 export type PatchRedemptionConfigVerifyModel = z.infer<typeof PatchRedemptionConfigVerifyModel>;
+export type PatchRedemptionConfigBallotModel = z.infer<typeof PatchRedemptionConfigBallotModel>;

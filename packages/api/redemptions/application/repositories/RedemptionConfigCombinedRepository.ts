@@ -3,10 +3,13 @@ import { RedemptionConfigRepository } from '@blc-mono/redemptions/application/re
 import { VaultBatchesRepository } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
 import { VaultsRepository } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 
+import { BallotsRepository } from './BallotsRepository';
+
 export interface IRedemptionConfigCombinedRepository {
   deleteRedemptionsFromDatabaseByOfferIds(offerIds: string[]): Promise<void>;
   deleteRedemptionFromDatabaseByOfferId(offerId: string): Promise<void>;
   deleteVaultsByRedemptionId(redemptionId: string): Promise<void>;
+  deleteBallotByRedemptionId(redemptionId: string): Promise<void>;
 }
 
 export class RedemptionConfigCombinedRepository implements IRedemptionConfigCombinedRepository {
@@ -17,6 +20,7 @@ export class RedemptionConfigCombinedRepository implements IRedemptionConfigComb
     VaultsRepository.key,
     VaultBatchesRepository.key,
     GenericsRepository.key,
+    BallotsRepository.key,
   ] as const;
 
   constructor(
@@ -24,6 +28,7 @@ export class RedemptionConfigCombinedRepository implements IRedemptionConfigComb
     private readonly vaultsRepository: VaultsRepository,
     private readonly vaultBatchesRepository: VaultBatchesRepository,
     private readonly genericsRepository: GenericsRepository,
+    private readonly ballotsRepository: BallotsRepository,
   ) {}
 
   public async deleteRedemptionsFromDatabaseByOfferIds(offerIds: string[]): Promise<void> {
@@ -39,6 +44,7 @@ export class RedemptionConfigCombinedRepository implements IRedemptionConfigComb
       const redemptionId = redemption.id;
 
       await this.deleteVaultsByRedemptionId(redemptionId);
+      await this.deleteBallotByRedemptionId(redemptionId);
 
       await this.genericsRepository.deleteByRedemptionId(redemptionId);
       await this.redemptionConfigRepository.deleteById(redemptionId);
@@ -53,6 +59,14 @@ export class RedemptionConfigCombinedRepository implements IRedemptionConfigComb
 
       await this.vaultBatchesRepository.deleteByVaultId(vaultId);
       await this.vaultsRepository.deleteById(vaultId);
+    }
+  }
+
+  public async deleteBallotByRedemptionId(redemptionId: string) {
+    const ballot = await this.ballotsRepository.findOneByRedemptionId(redemptionId);
+
+    if (ballot) {
+      await this.ballotsRepository.deleteById(ballot.id);
     }
   }
 }

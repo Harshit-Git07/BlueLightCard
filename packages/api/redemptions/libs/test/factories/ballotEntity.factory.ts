@@ -2,7 +2,7 @@ import { add, set, sub } from 'date-fns';
 import { Factory } from 'fishery';
 
 import { BallotEntity, NewBallotEntity } from '@blc-mono/redemptions/application/repositories/BallotsRepository';
-import { createBallotsId, createRedemptionsId } from '@blc-mono/redemptions/libs/database/schema';
+import { ballotStatusEnum, createBallotsId, createRedemptionsId } from '@blc-mono/redemptions/libs/database/schema';
 
 export const ballotActiveEntityFactory = () => {
   const date = new Date();
@@ -17,6 +17,7 @@ export const ballotActiveEntityFactory = () => {
     drawDate: add(set(date, timeOptions), { weeks: 1 }),
     eventDate: eventDate,
     created: eventDate,
+    status: 'pending',
   }));
 };
 
@@ -33,6 +34,7 @@ export const ballotEndedEntityFactory = () => {
     drawDate: sub(set(date, timeOptions), { days: 1 }),
     eventDate: eventDate,
     created: eventDate,
+    status: ballotStatusEnum.enumValues[0],
   }));
 };
 
@@ -46,7 +48,7 @@ export const newBallotEntityFactory = Factory.define<NewBallotEntity>(() => ({
   created: new Date(),
 }));
 
-export const singleBallotEntityFactory = Factory.define<BallotEntity>(() => ({
+export const ballotEntityFactory = Factory.define<BallotEntity>(() => ({
   id: createBallotsId(),
   redemptionId: createRedemptionsId(),
   totalTickets: 10,
@@ -54,4 +56,5 @@ export const singleBallotEntityFactory = Factory.define<BallotEntity>(() => ({
   drawDate: new Date(),
   eventDate: new Date(),
   created: new Date(),
+  status: 'pending',
 }));

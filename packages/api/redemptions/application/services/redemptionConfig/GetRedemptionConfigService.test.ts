@@ -6,12 +6,14 @@ import {
   affiliateFactory,
   affiliateRedemptionTypeFactory,
 } from '@blc-mono/redemptions/libs/test/factories/affiliate.factory';
+import { ballotEntityFactory } from '@blc-mono/redemptions/libs/test/factories/ballotEntity.factory';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
 import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
+import { BallotEntity, IBallotsRepository } from '../../repositories/BallotsRepository';
 import { GenericEntity, IGenericsRepository } from '../../repositories/GenericsRepository';
 import { IRedemptionConfigRepository, RedemptionConfigEntity } from '../../repositories/RedemptionConfigRepository';
 import { IVaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
@@ -58,6 +60,11 @@ const mockVaultBatchesRepository: Partial<IVaultBatchesRepository> = {
   updateOneById: jest.fn(),
 };
 
+const mockBallotsRepository: Partial<IBallotsRepository> = {
+  findOneByRedemptionId: jest.fn(),
+  withTransaction: jest.fn(),
+};
+
 const mockRedemptionConfigTransformer: Partial<RedemptionConfigTransformer> = {
   transformToRedemptionConfig: jest.fn(),
 };
@@ -79,6 +86,7 @@ const getRedemptionConfigService = new GetRedemptionConfigService(
   as(mockVaultsRepository),
   as(mockVaultBatchesRepository),
   as(mockRedemptionConfigTransformer),
+  as(mockBallotsRepository),
 );
 
 const offerId = faker.string.sample(10);
@@ -232,6 +240,30 @@ describe('GetRedemptionConfigService', () => {
       vaultEntity: null,
       vaultBatchEntities: [],
       ballotEntity: null,
+    });
+  });
+
+  it('should call transformToRedemptionConfig with ballotEntity when redemptionType is ballot', async () => {
+    const ballotEntity: BallotEntity = ballotEntityFactory.build();
+
+    const ballottRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'ballot',
+    });
+
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValue(ballottRedemptionConfigEntity);
+    mockBallotsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(ballotEntity);
+
+    mockRedemptionConfigTransformer.transformToRedemptionConfig = jest.fn().mockReturnValue(redemptionConfig);
+
+    await getRedemptionConfigService.getRedemptionConfig(offerId);
+
+    expect(mockBallotsRepository.findOneByRedemptionId).toHaveBeenCalledWith(ballottRedemptionConfigEntity.id);
+    expect(mockRedemptionConfigTransformer.transformToRedemptionConfig).toHaveBeenCalledWith({
+      redemptionConfigEntity: ballottRedemptionConfigEntity,
+      genericEntity: null,
+      vaultEntity: null,
+      vaultBatchEntities: [],
+      ballotEntity: ballotEntity,
     });
   });
 });

@@ -1,3 +1,4 @@
+import { UsersTrackObject } from 'braze-api';
 import { mocked } from 'jest-mock';
 
 import { REDEMPTION_TYPES, RedemptionTypes } from '@blc-mono/core/constants/redemptions';
@@ -337,5 +338,133 @@ describe('EmailRepository', () => {
         );
       },
     );
+  });
+
+  describe('usersTrackThrottled', () => {
+    it('tracks users', async () => {
+      const brazeResponseMessage = 'success';
+      const dummyUsersWithAttributes = {
+        dummy: 'usersWithAttributes',
+      } as unknown as UsersTrackObject['attributes'];
+      const logger = createTestLogger();
+      const mockBrazeEmailClient = {
+        users: {
+          track: jest.fn().mockResolvedValue({
+            message: brazeResponseMessage,
+          }),
+        },
+      };
+      const emailClientProvider: IBrazeEmailClientProvider = {
+        getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
+      };
+
+      const repository = new EmailRepository(logger, emailClientProvider);
+
+      await repository.usersTrackThrottled(dummyUsersWithAttributes);
+      expect(mockBrazeEmailClient.users.track).toHaveBeenCalledWith({ attributes: dummyUsersWithAttributes });
+    });
+
+    it('logs successful responses', async () => {
+      const brazeResponseMessage = 'success';
+      const loggerMessage = 'Tracked users successfully';
+      const logger = createTestLogger();
+      const dummyUsersWithAttributes = {} as unknown as UsersTrackObject['attributes'];
+      const mockBrazeEmailClient = {
+        users: {
+          track: jest.fn().mockResolvedValue({
+            message: brazeResponseMessage,
+          }),
+        },
+      };
+      const emailClientProvider: IBrazeEmailClientProvider = {
+        getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
+      };
+
+      const repository = new EmailRepository(logger, emailClientProvider);
+
+      await repository.usersTrackThrottled(dummyUsersWithAttributes);
+      expect(logger.info).toHaveBeenCalledWith({
+        context: { message: brazeResponseMessage },
+        message: loggerMessage,
+      });
+    });
+
+    it('logs successful responses with non-fatal errors', async () => {
+      const brazeResponseMessage = 'success';
+      const loggerMessage = 'Tracked users successfully but with non-fatal errors';
+      const nonFatalErrors = ['some', 'error', 'messages'];
+      const dummyUsersWithAttributes = {} as unknown as UsersTrackObject['attributes'];
+      const logger = createTestLogger();
+      const mockBrazeEmailClient = {
+        users: {
+          track: jest.fn().mockResolvedValue({
+            message: brazeResponseMessage,
+            errors: nonFatalErrors,
+          }),
+        },
+      };
+      const emailClientProvider: IBrazeEmailClientProvider = {
+        getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
+      };
+
+      const repository = new EmailRepository(logger, emailClientProvider);
+
+      await repository.usersTrackThrottled(dummyUsersWithAttributes);
+      expect(logger.info).toHaveBeenCalledWith({
+        context: { message: brazeResponseMessage, errors: nonFatalErrors },
+        message: loggerMessage,
+      });
+    });
+
+    it('logs and throws responses with fatal errors', async () => {
+      const brazeResponseMessage = 'failure';
+      const errorMessage = 'Failed to track user with a fatal error';
+      const dummyUsersWithAttributes = {} as unknown as UsersTrackObject['attributes'];
+      const logger = createTestLogger();
+      const mockBrazeEmailClient = {
+        users: {
+          track: jest.fn().mockResolvedValue({
+            message: brazeResponseMessage,
+          }),
+        },
+      };
+      const emailClientProvider: IBrazeEmailClientProvider = {
+        getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
+      };
+      const repository = new EmailRepository(logger, emailClientProvider);
+
+      const response = () => repository.usersTrackThrottled(dummyUsersWithAttributes);
+
+      await expect(response).rejects.toThrow(errorMessage);
+      expect(logger.info).toHaveBeenCalledWith({
+        context: { message: brazeResponseMessage },
+        message: errorMessage,
+      });
+    });
+
+    it('logs successful throttled tracked users completed', async () => {
+      const brazeResponseMessage = 'success';
+      const loggerMessage = 'Throttled tracked users completed successfully';
+      const logger = createTestLogger();
+      const dummyUsersWithAttributes = {} as unknown as UsersTrackObject['attributes'];
+      const mockBrazeEmailClient = {
+        users: {
+          track: jest.fn().mockResolvedValue({
+            message: brazeResponseMessage,
+          }),
+        },
+      };
+      const emailClientProvider: IBrazeEmailClientProvider = {
+        getClient: () => Promise.resolve(as(mockBrazeEmailClient)),
+      };
+
+      const repository = new EmailRepository(logger, emailClientProvider);
+
+      await repository.usersTrackThrottled(dummyUsersWithAttributes);
+      expect(logger.info).toHaveBeenNthCalledWith(2, {
+        context: { message: 'usersTrackThrottled' },
+        message: loggerMessage,
+      });
+    });
   });
 });

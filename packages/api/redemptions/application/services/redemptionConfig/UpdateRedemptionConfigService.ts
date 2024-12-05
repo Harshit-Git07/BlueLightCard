@@ -1,4 +1,5 @@
 import {
+  BALLOT,
   COMPARE,
   GENERIC,
   GIFTCARD,
@@ -17,6 +18,7 @@ import {
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { Affiliate, RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import {
+  PatchRedemptionConfigBallotModel,
   PatchRedemptionConfigCompareModel,
   PatchRedemptionConfigGenericModel,
   PatchRedemptionConfigGiftCardModel,
@@ -28,6 +30,7 @@ import {
   PatchRedemptionConfigVerifyModel,
 } from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
 
+import { BallotEntity, BallotsRepository, UpdateBallotEntity } from '../../repositories/BallotsRepository';
 import { GenericEntity, GenericsRepository, UpdateGenericEntity } from '../../repositories/GenericsRepository';
 import {
   RedemptionConfigEntity,
@@ -48,7 +51,8 @@ export type UpdateRedemptionConfigError = {
     | 'GenericNotFound'
     | 'GenericCodeEmpty'
     | 'VaultNotFound'
-    | 'MaxPerUserError';
+    | 'MaxPerUserError'
+    | 'BallotNotFound';
   data: {
     message: string;
   };
@@ -74,6 +78,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
     GenericsRepository.key,
     VaultsRepository.key,
     VaultBatchesRepository.key,
+    BallotsRepository.key,
     RedemptionConfigTransformer.key,
     TransactionManager.key,
   ] as const;
@@ -84,6 +89,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
     private readonly genericsRepository: GenericsRepository,
     private readonly vaultsRepository: VaultsRepository,
     private readonly vaultBatchesRepository: VaultBatchesRepository,
+    private readonly ballotsRepository: BallotsRepository,
     private readonly redemptionConfigTransformer: RedemptionConfigTransformer,
     private readonly transactionManager: ITransactionManager,
   ) {}
@@ -136,6 +142,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       const redemptionTransaction = this.redemptionConfigRepository.withTransaction(transactionConnection);
       const genericsTransaction = this.genericsRepository.withTransaction(transactionConnection);
       const vaultsTransaction = this.vaultsRepository.withTransaction(transactionConnection);
+      const ballotsTransaction = this.ballotsRepository.withTransaction(transactionConnection);
 
       switch (patchRedemptionConfigModel.redemptionType) {
         case SHOWCARD:
@@ -155,10 +162,70 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
             vaultsTransaction,
             patchRedemptionConfigModel.redemptionType,
           );
+        case BALLOT:
+          return await this.updateBallot(patchRedemptionConfigModel, redemptionTransaction, ballotsTransaction);
         default:
           exhaustiveCheck(patchRedemptionConfigModel, 'Unhandled redemptionType');
       }
     });
+  }
+
+  private async updateBallot(
+    patchRedemptionConfigBallotModel: PatchRedemptionConfigBallotModel,
+    redemptionTransaction: RedemptionConfigRepository,
+    ballotsTransaction: BallotsRepository,
+  ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
+    const existingBallotEntity: BallotEntity | null = await ballotsTransaction.findOneByRedemptionId(
+      patchRedemptionConfigBallotModel.id,
+    );
+
+    if (existingBallotEntity?.id !== patchRedemptionConfigBallotModel.ballot.id) {
+      return this.updateRedemptionConfigError(
+        'BallotNotFound',
+        patchRedemptionConfigBallotModel,
+        "ballot record does not exist with corresponding id's",
+      );
+    }
+
+    const updateBallotEntity: UpdateBallotEntity = {
+      totalTickets: patchRedemptionConfigBallotModel.ballot.totalTickets,
+      drawDate: new Date(patchRedemptionConfigBallotModel.ballot.drawDate),
+      eventDate: new Date(patchRedemptionConfigBallotModel.ballot.eventDate),
+      offerName: patchRedemptionConfigBallotModel.ballot.offerName,
+    };
+
+    const ballotId: Partial<Pick<BallotEntity, 'id'>> | undefined = await ballotsTransaction.updateOneById(
+      patchRedemptionConfigBallotModel.ballot.id,
+      updateBallotEntity,
+    );
+
+    if (!ballotId) {
+      return this.updateRedemptionConfigError(
+        'Error',
+        patchRedemptionConfigBallotModel,
+        'ballot record failed to update',
+      );
+    }
+
+    const ballotEntity: BallotEntity | null = await ballotsTransaction.findOneById(
+      patchRedemptionConfigBallotModel.ballot.id,
+    );
+
+    const updateRedemptionConfigEntity: UpdateRedemptionConfigEntity = {
+      affiliate: patchRedemptionConfigBallotModel.affiliate as Affiliate,
+      connection: patchRedemptionConfigBallotModel.connection,
+      url: patchRedemptionConfigBallotModel.url,
+    };
+
+    return await this.updateRedemption(
+      patchRedemptionConfigBallotModel,
+      updateRedemptionConfigEntity,
+      redemptionTransaction,
+      null,
+      null,
+      [],
+      ballotEntity,
+    );
   }
 
   private async updateShowCard(
@@ -177,6 +244,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       null,
       null,
       [],
+      null,
     );
   }
 
@@ -201,6 +269,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       null,
       null,
       [],
+      null,
     );
   }
 
@@ -258,6 +327,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       genericEntity,
       null,
       [],
+      null,
     );
   }
 
@@ -335,6 +405,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       null,
       vaultEntity,
       vaultBatchEntities,
+      null,
     );
   }
 
@@ -345,6 +416,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
     genericEntity: GenericEntity | null,
     vaultEntity: VaultEntity | null,
     vaultBatchEntities: VaultBatchEntity[] | [],
+    ballotEntity: BallotEntity | null,
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {
     const redemptionConfigEntity: RedemptionConfigEntity | null = await redemptionTransaction.updateOneById(
       patchRedemptionConfigModel.id,
@@ -366,7 +438,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
         genericEntity: genericEntity,
         vaultEntity: vaultEntity,
         vaultBatchEntities: vaultBatchEntities,
-        ballotEntity: null,
+        ballotEntity: ballotEntity,
       }),
     };
   }
@@ -381,7 +453,8 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
       | 'GenericNotFound'
       | 'GenericCodeEmpty'
       | 'VaultNotFound'
-      | 'MaxPerUserError',
+      | 'MaxPerUserError'
+      | 'BallotNotFound',
     patchRedemptionConfigModel: PatchRedemptionConfigModel,
     message: string,
   ): UpdateRedemptionConfigError {

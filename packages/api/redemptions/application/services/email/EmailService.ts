@@ -1,10 +1,15 @@
+import { UsersTrackObject } from 'braze-api';
+
 import { GENERIC, GIFTCARD, PREAPPLIED, SHOWCARD, VAULT, VAULTQR, VERIFY } from '@blc-mono/core/constants/redemptions';
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { EmailRepository, IEmailRepository } from '@blc-mono/redemptions/application/repositories/EmailRepository';
 
+export type UserWithAttribute = { external_id: string; [custom_attribute: string]: unknown };
+
 export interface IEmailService {
   sendRedemptionTransactionEmail(event: MemberRedemptionEvent): Promise<void>;
+  setCustomAttributes(usersWithAttributes: UsersTrackObject['attributes']): Promise<void>;
 }
 export class EmailService implements IEmailService {
   static readonly key = 'BrazeEmailService' as const;
@@ -71,5 +76,9 @@ export class EmailService implements IEmailService {
         });
         throw new Error('Unhandled redemption type');
     }
+  }
+
+  public async setCustomAttributes(usersWithAttributes: UsersTrackObject['attributes']): Promise<void> {
+    await this.emailRepository.usersTrackThrottled(usersWithAttributes);
   }
 }

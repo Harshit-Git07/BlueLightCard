@@ -1,4 +1,6 @@
-import { Braze, CampaignsTriggerSendObject } from 'braze-api';
+import Bottleneck from 'bottleneck';
+import { Braze, CampaignsTriggerSendObject, UsersTrackObject } from 'braze-api';
+import { v4 as uuidv4 } from 'uuid';
 
 import { GIFTCARD, PREAPPLIED, VERIFY } from '@blc-mono/core/constants/redemptions';
 import { OfferData } from '@blc-mono/core/types/offerdata';
@@ -52,6 +54,7 @@ export interface IEmailRepository {
     redemptionType: RedemptionType,
   ) => Promise<void>;
   sendShowCardEmail: (payload: ShowCardTransactionalEmailParams) => Promise<void>;
+  usersTrackThrottled(usersWithAttributes: UsersTrackObject['attributes']): Promise<void>;
 }
 
 export class EmailRepository implements IEmailRepository {
@@ -59,6 +62,30 @@ export class EmailRepository implements IEmailRepository {
   static inject = [Logger.key, BrazeEmailClientProvider.key] as const;
 
   private emailApiClient: Braze | undefined;
+  private readonly usersTrackLimiter = new Bottleneck({
+    /**
+     * Braze does not seem to enforce a strict concurrency limit. We've chosen a
+     * value of 20 as a conservative value.
+     */
+    maxConcurrent: 20,
+    /**
+     * {@link https://www.braze.com/docs/api/api_limits}
+     *
+     * The Braze users.track endpoint has a rate limit of 3,000 requests per 3
+     * seconds: 3,000/3 = 1,000/second = 1ms between requests.
+     *
+     * BUT!!! Node.js timers aren't precise enough for extremely small intervals
+     * like 1ms and network latency could introduce unexpected variance, so
+     * we've chosen 50ms between requests as a stable and predictable
+     * configuration (≈ 20 requests/second).
+     *
+     * This configuration assumes we will stay well within the rate limit but
+     * can only process around 1,360,000 entries before the lambda times out. If
+     * this becomes a problem, implement a incremental backoff strategy using
+     * bottleneck's advanced features and a lower minTime value.
+     */
+    minTime: 50,
+  });
 
   constructor(
     private logger: ILogger,
@@ -323,5 +350,55 @@ export class EmailRepository implements IEmailRepository {
       message: `successfully sent ${redemptionType} affiliate redemption email`,
       context: emailServiceResponse,
     });
+  }
+
+  public async usersTrackThrottled(usersWithAttributes: UsersTrackObject['attributes']): Promise<void> {
+    const payload: UsersTrackObject = {
+      attributes: usersWithAttributes,
+    };
+
+    await this.usersTrackLimiter
+      .schedule({ id: uuidv4() }, this.usersTrack.bind(this, payload))
+      .then(() => {
+        this.logger.info({
+          message: `Throttled tracked users completed successfully`,
+          context: { message: 'usersTrackThrottled' },
+        });
+      })
+      .catch((error) => {
+        if (error instanceof Bottleneck.BottleneckError) {
+          this.logger.info({
+            message: `Error throttling track user calls`,
+            context: { message: error },
+          });
+        }
+        throw error;
+      });
+  }
+
+  private async usersTrack(usersTrackObject: UsersTrackObject): Promise<void> {
+    const emailClient = await this.getClient();
+    const emailServiceResponse = await emailClient.users.track(usersTrackObject);
+
+    // https://www.braze.com/docs/api/errors/#server-responses
+    if (!emailServiceResponse.message.includes('success')) {
+      this.logger.info({
+        message: `Failed to track user with a fatal error`,
+        context: emailServiceResponse,
+      });
+      throw new Error(`Failed to track user with a fatal error`);
+    }
+
+    if (emailServiceResponse.errors) {
+      this.logger.info({
+        message: `Tracked users successfully but with non-fatal errors`,
+        context: emailServiceResponse,
+      });
+    } else {
+      this.logger.info({
+        message: `Tracked users successfully`,
+        context: emailServiceResponse,
+      });
+    }
   }
 }

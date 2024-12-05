@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { ApiGatewayV1Api } from 'sst/node/api';
 import { afterAll, beforeAll, describe, expect, it, onTestFinished } from 'vitest';
+import { ValidationError } from 'zod-validation-error';
 
 import { PatchRedemptionConfigModel } from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
 
@@ -745,6 +746,126 @@ describe('PATCH Redemption Config', () => {
         },
       };
       expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+    });
+  });
+
+  describe('Ballot Config Type', () => {
+    it('returns redemptionConfig on update success', async () => {
+      const { redemptionConfig, ballot, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
+        redemptionType: 'ballot',
+      }).addBallot();
+      onTestFinished(redemptionConfigHooks.cleanup);
+      await redemptionConfigHooks.insert();
+
+      const payload: PatchRedemptionConfigModel = {
+        id: redemptionConfig.id,
+        offerId: redemptionConfig.offerId,
+        redemptionType: 'ballot',
+        companyId: redemptionConfig.companyId,
+        connection: 'affiliate',
+        affiliate: 'awin',
+        url: 'https://www.awin1.com/',
+        ballot: {
+          ...ballot,
+          drawDate: faker.date.future().toISOString(),
+          eventDate: faker.date.future().toISOString(),
+        },
+      } as const;
+
+      const result = await callPatchRedemptionConfigEndpoint(payload);
+
+      expect(result.status).toBe(200);
+
+      const actualResponseBody = await result.json();
+
+      const expectedResponseBody = {
+        statusCode: 200,
+        data: {
+          id: redemptionConfig.id,
+          offerId: redemptionConfig.offerId,
+          redemptionType: 'ballot',
+          connection: payload.connection,
+          companyId: redemptionConfig.companyId,
+          affiliate: payload.affiliate,
+          url: payload.url,
+          ballot: {
+            id: payload.ballot.id,
+            drawDate: payload.ballot.drawDate,
+            totalTickets: payload.ballot.totalTickets,
+            eventDate: payload.ballot.eventDate,
+            offerName: payload.ballot.offerName,
+            status: 'pending',
+          },
+        },
+      };
+      expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+    });
+
+    it('returns 404 if ballot record cannot be found', async () => {
+      const { redemptionConfig, ballot, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
+        redemptionType: 'ballot',
+      }).addBallot();
+      onTestFinished(redemptionConfigHooks.cleanup);
+      await redemptionConfigHooks.insert();
+
+      const requestBody: PatchRedemptionConfigModel = {
+        id: redemptionConfig.id,
+        offerId: redemptionConfig.offerId,
+        redemptionType: 'ballot',
+        companyId: redemptionConfig.companyId,
+        connection: 'affiliate',
+        affiliate: 'awin',
+        url: 'https://www.awin1.com/',
+        ballot: {
+          ...ballot,
+          id: faker.string.uuid(),
+          drawDate: faker.date.future().toISOString(),
+          eventDate: faker.date.future().toISOString(),
+        },
+      } as const;
+      const result = await callPatchRedemptionConfigEndpoint(requestBody);
+      expect(result.status).toBe(404);
+
+      const actualResponseBody = await result.json();
+
+      const expectedResponseBody = {
+        statusCode: 404,
+        data: {
+          message: `Redemption Config Update - ballot record does not exist with corresponding id's: ${redemptionConfig.id}`,
+        },
+      };
+      expect(actualResponseBody).toStrictEqual(expectedResponseBody);
+    });
+
+    it('returns 400 if ballot totalTickets is not greater than 0', async () => {
+      const { redemptionConfig, ballot, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
+        redemptionType: 'ballot',
+      }).addBallot();
+      onTestFinished(redemptionConfigHooks.cleanup);
+      await redemptionConfigHooks.insert();
+
+      const requestBody: PatchRedemptionConfigModel = {
+        id: redemptionConfig.id,
+        offerId: redemptionConfig.offerId,
+        redemptionType: 'ballot',
+        companyId: redemptionConfig.companyId,
+        connection: 'affiliate',
+        affiliate: 'awin',
+        url: 'https://www.awin1.com/',
+        ballot: {
+          ...ballot,
+          totalTickets: 0,
+          drawDate: faker.date.future().toISOString(),
+          eventDate: faker.date.future().toISOString(),
+        },
+      } as const;
+      const result = await callPatchRedemptionConfigEndpoint(requestBody);
+      expect(result.status).toBe(400);
+
+      const actualResponseBody = (await result.json()) as { error: ValidationError };
+      expect(actualResponseBody.error.message).toEqual(
+        `Validation error: Number must be greater than 0 at "body.ballot.totalTickets"`,
+      );
     });
   });
 });

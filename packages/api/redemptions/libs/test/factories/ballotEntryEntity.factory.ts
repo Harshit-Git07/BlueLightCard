@@ -1,7 +1,7 @@
 import { set, sub } from 'date-fns';
 import { Factory } from 'fishery';
 
-import { BallotEnrtiesEntity } from '@blc-mono/redemptions/application/repositories/BallotEntriesRepository';
+import { BallotEntriesEntity } from '@blc-mono/redemptions/application/repositories/BallotEntriesRepository';
 import {
   ballotEntryStatusEnum,
   createBallotEntriesId,
@@ -13,7 +13,7 @@ export const ballotEntryFactory = () => {
   const timeOptions = { hours: 20, minutes: 30, seconds: 0, milliseconds: 0 };
   const eventDate = set(date, timeOptions);
 
-  return Factory.define<BallotEnrtiesEntity>(() => ({
+  return Factory.define<BallotEntriesEntity>(() => ({
     id: createBallotEntriesId(),
     ballotId: createBallotsId(),
     memberId: '122345',

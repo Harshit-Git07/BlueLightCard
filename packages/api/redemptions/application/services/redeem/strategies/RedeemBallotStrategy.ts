@@ -19,6 +19,9 @@ import { RedemptionConfigEntity } from '../../../repositories/RedemptionConfigRe
 
 import { IRedeemStrategy, RedeemBallotStrategyResult, RedeemParams } from './IRedeemStrategy';
 import { MemberRedemptionEventDetailBuilder } from './MemberRedemptionEventDetailBuilder';
+import { AlreadyEnteredBallotError } from './redeemBallotStrategy/AlreadyEnteredBallotError';
+import { BallotExpiredError } from './redeemBallotStrategy/BallotExpiredError';
+import { NotFoundError } from './redeemVaultStrategy/helpers/NotFoundError';
 
 export class RedeemBallotStrategy implements IRedeemStrategy {
   static readonly key = 'RedeemBallotStrategy' as const;
@@ -54,23 +57,23 @@ export class RedeemBallotStrategy implements IRedeemStrategy {
 
     if (!ballot) {
       this.logger.error({
-        message: `ballot not found`,
+        message: `Ballot not found`,
         context: {
           redemptionId: id,
         },
       });
-      throw new Error('ballot not found');
+      throw new NotFoundError('Ballot not found', 'BallotNotFound');
     }
 
     // Only allow a ballot entry until 21:30 on the drawDate
     if (isRedeemDateNotInRange(ballot.drawDate, entryDate)) {
       this.logger.error({
-        message: `ballot has expired`,
+        message: `Ballot has expired`,
         context: {
           redemptionId: id,
         },
       });
-      throw new Error('ballot has expired');
+      throw new BallotExpiredError('Ballot has expired', 'BallotExpired');
     }
 
     // Member should only be able to redeem ballot type once
@@ -78,12 +81,12 @@ export class RedeemBallotStrategy implements IRedeemStrategy {
 
     if (entry) {
       this.logger.error({
-        message: `member has already entered ballot`,
+        message: `Member has already entered ballot`,
         context: {
           redemptionId: id,
         },
       });
-      throw new Error('member has already entered ballot');
+      throw new AlreadyEnteredBallotError('Member has already entered ballot', 'AlreadyEnteredBallot');
     }
 
     await this.ballotEntriesRepository.create({
@@ -93,7 +96,6 @@ export class RedeemBallotStrategy implements IRedeemStrategy {
       status: ballotEntryStatusEnum.enumValues[0],
     });
 
-    //TODO: get code and url?
     const memberRedemptionEventDetail: MemberRedemptionEventDetail =
       this.memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
         redemptionConfigEntity,

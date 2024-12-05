@@ -2,6 +2,7 @@ import { faker } from '@faker-js/faker';
 import { ApiGatewayV1Api } from 'sst/node/api';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
+import { BallotsRepository } from '@blc-mono/redemptions/application/repositories/BallotsRepository';
 import { E2EDatabaseConnectionManager } from '@blc-mono/redemptions/e2e/helpers/database';
 import { DatabaseConnectionType } from '@blc-mono/redemptions/libs/database/connection';
 
@@ -21,6 +22,7 @@ describe('POST Redemption Config', () => {
   let genericsRepository: GenericsRepository;
   let redemptionConfigRepository: RedemptionConfigRepository;
   let redemptionRepositoryHelper: RedemptionConfigCombinedRepository;
+  let ballotsRepository: BallotsRepository;
 
   beforeAll(async () => {
     connectionManager = await E2EDatabaseConnectionManager.setup(DatabaseConnectionType.READ_WRITE);
@@ -29,11 +31,13 @@ describe('POST Redemption Config', () => {
     vaultBatchesRepository = new VaultBatchesRepository(connectionManager.connection);
     genericsRepository = new GenericsRepository(connectionManager.connection);
     redemptionConfigRepository = new RedemptionConfigRepository(connectionManager.connection);
+    ballotsRepository = new BallotsRepository(connectionManager.connection);
     redemptionRepositoryHelper = new RedemptionConfigCombinedRepository(
       redemptionConfigRepository,
       vaultsRepository,
       vaultBatchesRepository,
       genericsRepository,
+      ballotsRepository,
     );
 
     await redemptionRepositoryHelper.deleteRedemptionsFromDatabaseByOfferIds([
@@ -64,6 +68,7 @@ describe('POST Redemption Config', () => {
       '106',
       '107',
       '108',
+      '109',
     ]);
     await connectionManager?.cleanup();
   });
@@ -388,6 +393,51 @@ describe('POST Redemption Config', () => {
       const result = await callPOSTRedemptionConfigEndpoint(redemptionConfigRequest);
 
       expect(result.status).toBe(400);
+    });
+
+    it('POST /redemptions returns 200 for ballot redemptionType', async () => {
+      const redemptionConfigRequest = {
+        affiliate: 'awin',
+        companyId: faker.string.uuid(),
+        connection: 'direct',
+        offerId: 109,
+        redemptionType: 'ballot',
+        url: faker.internet.url(),
+        ballot: {
+          totalTickets: faker.number.int({ min: 1, max: 100 }),
+          drawDate: faker.date.future().toISOString(),
+          eventDate: faker.date.future().toISOString(),
+          offerName: faker.commerce.productName(),
+        },
+      };
+
+      const result = await callPOSTRedemptionConfigEndpoint(redemptionConfigRequest);
+
+      expect(result.status).toBe(200);
+
+      const actualResponseBody = await result.json();
+
+      const expectedResponseBody = {
+        statusCode: 200,
+        data: {
+          affiliate: redemptionConfigRequest.affiliate,
+          companyId: redemptionConfigRequest.companyId,
+          connection: redemptionConfigRequest.connection,
+          offerId: String(redemptionConfigRequest.offerId),
+          id: expect.any(String),
+          redemptionType: redemptionConfigRequest.redemptionType,
+          url: redemptionConfigRequest.url,
+          ballot: {
+            id: expect.any(String),
+            totalTickets: redemptionConfigRequest.ballot.totalTickets,
+            drawDate: redemptionConfigRequest.ballot.drawDate,
+            eventDate: redemptionConfigRequest.ballot.eventDate,
+            offerName: redemptionConfigRequest.ballot.offerName,
+            status: 'pending',
+          },
+        },
+      };
+      expect(actualResponseBody).toStrictEqual(expectedResponseBody);
     });
   });
 

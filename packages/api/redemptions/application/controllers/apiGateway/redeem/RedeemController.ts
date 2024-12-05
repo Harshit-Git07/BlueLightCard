@@ -6,6 +6,8 @@ import { Result } from '@blc-mono/core/types/result';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { CardStatusHelper, ICardStatusHelper } from '@blc-mono/redemptions/application/helpers/cardStatus';
 import { TokenHelper } from '@blc-mono/redemptions/application/helpers/TokenHelper';
+import { AlreadyEnteredBallotError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemBallotStrategy/AlreadyEnteredBallotError';
+import { BallotExpiredError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemBallotStrategy/BallotExpiredError';
 import { DomainError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/helpers/DomainError';
 import { MaxPerUserReachedError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/helpers/MaxPerUserReachedError';
 import { NoCodesAvailableError } from '@blc-mono/redemptions/application/services/redeem/strategies/redeemVaultStrategy/helpers/NoCodesAvailableError';
@@ -142,7 +144,8 @@ export class RedeemController extends APIGatewayController<ParsedRequest> {
     statusCodeMap.set(MaxPerUserReachedError.name, 403);
     statusCodeMap.set(NoCodesAvailableError.name, 403);
     statusCodeMap.set(RedemptionConfigError.name, 409);
-
+    statusCodeMap.set(BallotExpiredError.name, 404);
+    statusCodeMap.set(AlreadyEnteredBallotError.name, 409);
     return statusCodeMap.get(e.name);
   }
 }

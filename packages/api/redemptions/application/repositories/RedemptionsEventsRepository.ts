@@ -12,6 +12,10 @@ import { RedemptionsBallotEvents } from '@blc-mono/redemptions/infrastructure/ev
 import { RedemptionsVaultBatchEvents } from '@blc-mono/redemptions/infrastructure/eventBridge/events/vaultBatch';
 
 import { RunBallotSchemaEventDetail } from '../controllers/cron/ballot/CheckBallotsController';
+import {
+  SuccessfulBallotSchemaEventDetail,
+  UnsuccessfulBallotSchemaEventDetail,
+} from '../controllers/eventBridge/ballot/RunBallotController';
 import { VaultBatchCreatedEventDetail } from '../controllers/eventBridge/vaultBatch/VaultBatchCreatedController';
 
 // TODO: Detail should not be passed in directly, the methods should have a separate type owned by the repository
@@ -21,6 +25,8 @@ export interface IRedemptionsEventsRepository {
   publishRedemptionEvent(detail: MemberRedemptionEventDetail): Promise<void>;
   publishVaultBatchCreatedEvent(detail: VaultBatchCreatedEventDetail): Promise<void>;
   publishRunBallotEvent(detail: RunBallotSchemaEventDetail): Promise<void>;
+  publishSuccessfulBallotEvent(detail: SuccessfulBallotSchemaEventDetail): Promise<void>;
+  publishUnsuccessfulBallotEvent(detail: UnsuccessfulBallotSchemaEventDetail): Promise<void>;
 }
 
 export class RedemptionsEventsRepository implements IRedemptionsEventsRepository {
@@ -102,6 +108,38 @@ export class RedemptionsEventsRepository implements IRedemptionsEventsRepository
           Source: RedemptionsBallotEvents.BALLOT_RUN,
           DetailType: RedemptionsBallotEvents.BALLOT_RUN_DETAIL,
           Detail: JSON.stringify(detail satisfies RunBallotSchemaEventDetail),
+        },
+      ],
+    });
+    await client.send(command);
+  }
+
+  public async publishSuccessfulBallotEvent(detail: SuccessfulBallotSchemaEventDetail): Promise<void> {
+    const client = new EventBridgeClient();
+    const command = new PutEventsCommand({
+      Entries: [
+        {
+          Time: new Date(),
+          EventBusName: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME),
+          Source: RedemptionsBallotEvents.BALLOT_SUCCESSFUL,
+          DetailType: RedemptionsBallotEvents.BALLOT_SUCCESSFUL_DETAIL,
+          Detail: JSON.stringify(detail satisfies SuccessfulBallotSchemaEventDetail),
+        },
+      ],
+    });
+    await client.send(command);
+  }
+
+  public async publishUnsuccessfulBallotEvent(detail: UnsuccessfulBallotSchemaEventDetail): Promise<void> {
+    const client = new EventBridgeClient();
+    const command = new PutEventsCommand({
+      Entries: [
+        {
+          Time: new Date(),
+          EventBusName: getEnv(RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME),
+          Source: RedemptionsBallotEvents.BALLOT_UNSUCCESSFUL,
+          DetailType: RedemptionsBallotEvents.BALLOT_UNSUCCESSFUL_DETAIL,
+          Detail: JSON.stringify(detail satisfies UnsuccessfulBallotSchemaEventDetail),
         },
       ],
     });

@@ -1,7 +1,9 @@
 import { as } from '@blc-mono/core/utils/testing';
+import { ballotEntityFactory } from '@blc-mono/redemptions/libs/test/factories/ballotEntity.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 
+import { BallotsRepository } from './BallotsRepository';
 import { GenericsRepository } from './GenericsRepository';
 import { RedemptionConfigCombinedRepository } from './RedemptionConfigCombinedRepository';
 import { IRedemptionConfigRepository, RedemptionConfigEntity } from './RedemptionConfigRepository';
@@ -20,6 +22,11 @@ const mockVaultsRepository: Partial<VaultsRepository> = {
   deleteById: jest.fn(),
 };
 
+const mockBallotsRepository: Partial<BallotsRepository> = {
+  findOneByRedemptionId: jest.fn(),
+  deleteById: jest.fn(),
+};
+
 const mockVaultBatchesRepository: Partial<VaultBatchesRepository> = {
   deleteByVaultId: jest.fn(),
   deleteById: jest.fn(),
@@ -34,6 +41,7 @@ const redemptionConfigCombinedRepository = new RedemptionConfigCombinedRepositor
   as(mockVaultsRepository),
   as(mockVaultBatchesRepository),
   as(mockGenericsRepository),
+  as(mockBallotsRepository),
 );
 
 const redemptionConfigEntityOne: RedemptionConfigEntity = redemptionConfigEntityFactory.build();
@@ -43,6 +51,10 @@ const redemptionConfigEntityThree: RedemptionConfigEntity = redemptionConfigEnti
 const vaultEntityOne = vaultEntityFactory.build();
 const vaultEntityTwo = vaultEntityFactory.build();
 const vaultEntityThree = vaultEntityFactory.build();
+
+const ballotEntityOne = ballotEntityFactory.build();
+const ballotEntityTwo = ballotEntityFactory.build();
+const ballotEntityThree = ballotEntityFactory.build();
 
 beforeEach(() => {
   jest.resetAllMocks();
@@ -175,5 +187,28 @@ describe('deleteRedemptionsFromDatabaseByOfferIds', () => {
     await redemptionConfigCombinedRepository.deleteRedemptionsFromDatabaseByOfferIds([]);
 
     expect(mockRedemptionConfigRepository.findOneByOfferId).not.toHaveBeenCalled();
+  });
+
+  test('should delete all ballots for redemptions with offerId', async () => {
+    const offerIds = ['1', '2', '3'];
+
+    mockRedemptionConfigRepository.findOneByOfferId = jest
+      .fn()
+      .mockResolvedValueOnce(redemptionConfigEntityOne)
+      .mockResolvedValueOnce(redemptionConfigEntityTwo)
+      .mockResolvedValueOnce(redemptionConfigEntityThree);
+
+    mockBallotsRepository.findOneByRedemptionId = jest
+      .fn()
+      .mockResolvedValueOnce(ballotEntityOne)
+      .mockResolvedValueOnce(ballotEntityTwo)
+      .mockResolvedValueOnce(ballotEntityThree);
+
+    await redemptionConfigCombinedRepository.deleteRedemptionsFromDatabaseByOfferIds(offerIds);
+
+    expect(mockBallotsRepository.deleteById).toHaveBeenCalledTimes(3);
+    expect(mockBallotsRepository.deleteById).toHaveBeenCalledWith(ballotEntityOne.id);
+    expect(mockBallotsRepository.deleteById).toHaveBeenCalledWith(ballotEntityTwo.id);
+    expect(mockBallotsRepository.deleteById).toHaveBeenCalledWith(ballotEntityThree.id);
   });
 });

@@ -10,6 +10,7 @@ import {
 import { RedemptionConfig } from '@blc-mono/redemptions/application/transformers/RedemptionConfigTransformer';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 import {
+  PatchRedemptionConfigBallotModel,
   PatchRedemptionConfigGenericModel,
   PatchRedemptionConfigModel,
   PatchRedemptionConfigPreAppliedModel,
@@ -81,6 +82,35 @@ describe('UpdateRedemptionConfigController', () => {
     };
   }
 
+  const testBallotBody = {
+    id: `bal-${faker.string.uuid()}`,
+    offerId: faker.string.uuid(),
+    redemptionType: 'ballot',
+    connection: 'affiliate',
+    companyId: faker.string.uuid(),
+    affiliate: 'awin',
+    url: 'https://www.awin1.com/',
+    ballot: {
+      id: `blt-${faker.string.uuid()}`,
+      totalTickets: faker.number.int({ max: 100 }),
+      drawDate: faker.date.future().toISOString(),
+      eventDate: faker.date.future().toISOString(),
+      offerName: faker.string.alpha({ length: 10 }),
+    },
+  } satisfies PatchRedemptionConfigBallotModel;
+
+  const testBallotRedemptionConfig: RedemptionConfig = {
+    ...testBallotBody,
+    offerId: testGenericBody.offerId,
+    companyId: testGenericBody.companyId,
+    ballot: {
+      ...testBallotBody.ballot,
+      drawDate: new Date(testBallotBody.ballot.drawDate),
+      eventDate: new Date(testBallotBody.ballot.eventDate),
+      status: 'pending',
+    },
+  };
+
   const testVaultBody = {
     id: `rdm-${faker.string.uuid()}`,
     offerId: faker.string.uuid(),
@@ -129,7 +159,8 @@ describe('UpdateRedemptionConfigController', () => {
       | 'GenericNotFound'
       | 'GenericCodeEmpty'
       | 'VaultNotFound'
-      | 'MaxPerUserError',
+      | 'MaxPerUserError'
+      | 'BallotNotFound',
   ): UpdateRedemptionConfigError {
     return {
       kind: kind,
@@ -533,6 +564,43 @@ describe('UpdateRedemptionConfigController', () => {
       expect(result.statusCode).toEqual(200);
     });
 
+    it('returns 200 when request body is valid ballot redemptionType', async () => {
+      mockUpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
+        getTestUpdateRedemptionConfigSuccess(testBallotRedemptionConfig),
+      );
+
+      const requestBody = {
+        id: 'rdm-uuid',
+        affiliate: 'awin',
+        companyId: 'UUID',
+        connection: 'affiliate',
+        offerId: 'UUID',
+        redemptionType: 'ballot',
+        url: 'https://www.awin1.com',
+        ballot: {
+          id: 'blt-uuid',
+          totalTickets: 100,
+          drawDate: new Date('2024-12-31'),
+          eventDate: new Date('2024-12-31'),
+          offerName: 'test offer',
+        },
+      };
+      const request: APIGatewayProxyEventV2 = {
+        body: JSON.stringify(requestBody),
+        requestContext: {
+          requestId: 'requestId',
+        },
+        headers: {},
+        pathParameters: {
+          offerId: 'uuid',
+        },
+      } as unknown as APIGatewayProxyEventV2;
+
+      const result = await controller.invoke(request);
+
+      expect(result.statusCode).toEqual(200);
+    });
+
     it.each([
       ['vault', 'eagleEye', ''],
       ['vault', 'eagleEye', 0],
@@ -691,5 +759,27 @@ describe('UpdateRedemptionConfigController', () => {
 
       expect(result.statusCode).toEqual(400);
     });
+  });
+
+  /**
+   * ballot redemptionType tests
+   */
+
+  it('Maps "BallottNotFound" result for vault redemption correctly to 404 response', async () => {
+    mockUpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
+      getTestUpdateRedemptionConfigError('BallotNotFound'),
+    );
+    const controller = new UpdateRedemptionConfigController(logger, mockUpdateRedemptionConfigService);
+    const actual = await controller.handle(getParsedRequest(testBallotBody.offerId, testBallotBody));
+    expect(actual.statusCode).toEqual(404);
+  });
+
+  it('Maps "Ok" result for ballot redemption correctly correctly to 200 response', async () => {
+    mockUpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
+      getTestUpdateRedemptionConfigSuccess(testVaultRedemptionConfig),
+    );
+    const controller = new UpdateRedemptionConfigController(logger, mockUpdateRedemptionConfigService);
+    const actual = await controller.handle(getParsedRequest(testBallotBody.offerId, testBallotBody));
+    expect(actual.statusCode).toEqual(200);
   });
 });

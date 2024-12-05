@@ -256,5 +256,7 @@ function mockRedemptionEventsRepository(): IRedemptionsEventsRepository {
     publishRedemptionEvent: jest.fn(),
     publishVaultBatchCreatedEvent: jest.fn(),
     publishRunBallotEvent: jest.fn(),
+    publishSuccessfulBallotEvent: jest.fn(),
+    publishUnsuccessfulBallotEvent: jest.fn(),
   };
 }

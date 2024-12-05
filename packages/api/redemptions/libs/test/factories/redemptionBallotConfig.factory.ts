@@ -12,5 +12,6 @@ export const redemptionBallotConfigFactory = Factory.define<RedemptionBallotConf
     eventDate: faker.date.recent(),
     offerName: faker.string.uuid(),
     created: faker.date.recent(),
+    status: 'pending',
   };
 });

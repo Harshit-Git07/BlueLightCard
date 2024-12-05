@@ -4,6 +4,7 @@ import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { UpdateRedemptionConfigController } from '@blc-mono/redemptions/application/controllers/adminApiGateway/redemptionConfig/UpdateRedemptionConfigController';
+import { BallotsRepository } from '@blc-mono/redemptions/application/repositories/BallotsRepository';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { RedemptionConfigRepository } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { VaultBatchesRepository } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
@@ -24,6 +25,7 @@ const controller = createInjector()
   .provideValue(DatabaseConnection.key, connection)
   .provideClass(TransactionManager.key, TransactionManager)
   .provideClass(RedemptionConfigRepository.key, RedemptionConfigRepository)
+  .provideClass(BallotsRepository.key, BallotsRepository)
   .provideClass(GenericsRepository.key, GenericsRepository)
   .provideClass(VaultsRepository.key, VaultsRepository)
   .provideClass(VaultBatchesRepository.key, VaultBatchesRepository)

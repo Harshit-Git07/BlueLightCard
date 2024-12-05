@@ -35,6 +35,8 @@ import { createDwhMemberRedemptionRule } from './eventBridge/rules/dwhMemberRede
 import { createDwhMemberRetrievedRedemptionDetailsRule } from './eventBridge/rules/dwhMemberRetrievedRedemptionDetailsRule';
 import { createRedemptionPushNotificationRule } from './eventBridge/rules/redemptionPushNotificationRule';
 import { runBallotRule } from './eventBridge/rules/redemptionRunBallotRule';
+import { runSuccessfulBallotRule } from './eventBridge/rules/redemptionSuccessfulBallotRule';
+import { runUnsuccessfulBallotRule } from './eventBridge/rules/redemptionUnsuccessfulBallotRule';
 import { createVaultBatchCreatedRule } from './eventBridge/rules/vaultBatchCreatedRule';
 import { createVaultCodesUploadRule } from './eventBridge/rules/vaultCodesUploadRule';
 import { createVaultCreatedRule } from './eventBridge/rules/VaultCreatedRule';
@@ -134,7 +136,9 @@ async function RedemptionsStack({ app, stack }: StackContext) {
       vaultBatchCreatedRule: createVaultBatchCreatedRule(stack, config, database),
       vaultThresholdEmailRule: createVaultThresholdEmailRule(stack, config, database),
       redemptionPushNotificationRule: createRedemptionPushNotificationRule(stack, config),
-      runBallotRule: runBallotRule(stack, database),
+      runBallotRule: runBallotRule(stack, database, bus.eventBusName),
+      runSuccessfulBallotRule: runSuccessfulBallotRule(stack, database, config),
+      runUnsuccessfulBallotRule: runUnsuccessfulBallotRule(stack, database, config),
     },
     {
       vaultCodesUploadRule: createVaultCodesUploadRule(stack, database, vaultCodesUpload, bus.eventBusName),

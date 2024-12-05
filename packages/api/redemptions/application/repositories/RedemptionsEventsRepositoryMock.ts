@@ -6,4 +6,6 @@ export class RedemptionsEventsRepositoryMock implements IRedemptionsEventsReposi
   public publishRedemptionEvent = jest.fn().mockResolvedValue(undefined);
   public publishVaultBatchCreatedEvent = jest.fn().mockResolvedValue(undefined);
   public publishRunBallotEvent = jest.fn().mockResolvedValue(undefined);
+  public publishSuccessfulBallotEvent = jest.fn().mockResolvedValue(undefined);
+  public publishUnsuccessfulBallotEvent = jest.fn().mockResolvedValue(undefined);
 }

@@ -121,4 +121,97 @@ describe('BallotsRepository', () => {
       expect(result).toEqual(createdBallot[0]);
     });
   });
+
+  describe('updateOneById', () => {
+    it('update an existing ballot', async () => {
+      const repository = new BallotsRepository(connection);
+      const redemption: RedemptionConfigEntity = redemptionConfigEntityFactory.build();
+      const id = 'bal-123';
+      const ballot: NewBallotEntity = newBallotEntityFactory.build({
+        id,
+        redemptionId: redemption.id,
+        totalTickets: 10,
+        offerName: 'offer one',
+        drawDate: new Date(),
+        eventDate: new Date(),
+      });
+      const updated = { ...ballot, totalTickets: 20 };
+
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+
+      const created = await repository.create(ballot);
+
+      expect(created.totalTickets).toEqual(ballot.totalTickets);
+
+      await repository.updateOneById(id, updated);
+
+      const updatedBallot = await connection.db
+        .select()
+        .from(ballotsTable)
+        .where(eq(ballotsTable.redemptionId, redemption.id))
+        .execute();
+
+      expect(updated.totalTickets).toEqual(updatedBallot[0].totalTickets);
+    });
+  });
+
+  describe('updateBallotStatus', () => {
+    it('update the status of an existing ballot', async () => {
+      const repository = new BallotsRepository(connection);
+      const redemption: RedemptionConfigEntity = redemptionConfigEntityFactory.build();
+      const id = 'bal-123';
+      const ballot: NewBallotEntity = newBallotEntityFactory.build({
+        id,
+        redemptionId: redemption.id,
+        totalTickets: 10,
+        offerName: 'offer one',
+        drawDate: new Date(),
+        eventDate: new Date(),
+      });
+
+      const updated = { ...ballot, status: 'drawing' };
+
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+
+      const created = await repository.create(ballot);
+
+      expect(created.status).toEqual('pending');
+
+      await repository.updateBallotStatus(id, 'drawing');
+
+      const updatedBallot = await connection.db
+        .select()
+        .from(ballotsTable)
+        .where(eq(ballotsTable.redemptionId, redemption.id))
+        .execute();
+
+      expect(updated.status).toEqual(updatedBallot[0].status);
+    });
+  });
+
+  describe('deleteBallot', () => {
+    it('remove an existing ballot', async () => {
+      const repository = new BallotsRepository(connection);
+      const redemption: RedemptionConfigEntity = redemptionConfigEntityFactory.build();
+      const id = 'bal-123';
+      const ballot: NewBallotEntity = newBallotEntityFactory.build({
+        id,
+        redemptionId: redemption.id,
+        totalTickets: 10,
+        offerName: 'offer one',
+        drawDate: new Date(),
+        eventDate: new Date(),
+      });
+
+      await connection.db.insert(redemptionsTable).values(redemption).execute();
+
+      await repository.create(ballot);
+
+      await repository.deleteById(id);
+
+      const found = await repository.findOneById(id);
+
+      expect(found).toEqual(null);
+    });
+  });
 });

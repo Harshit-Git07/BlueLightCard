@@ -1,5 +1,6 @@
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 
+import { BallotEntity, BallotsRepository, IBallotsRepository } from '../../repositories/BallotsRepository';
 import { GenericEntity, GenericsRepository, IGenericsRepository } from '../../repositories/GenericsRepository';
 import {
   IRedemptionConfigRepository,
@@ -40,6 +41,7 @@ export class GetRedemptionConfigService implements IGetRedemptionConfigService {
     VaultsRepository.key,
     VaultBatchesRepository.key,
     RedemptionConfigTransformer.key,
+    BallotsRepository.key,
   ] as const;
 
   constructor(
@@ -49,6 +51,7 @@ export class GetRedemptionConfigService implements IGetRedemptionConfigService {
     private readonly vaultsRepository: IVaultsRepository,
     private readonly vaultBatchesRepository: IVaultBatchesRepository,
     private readonly redemptionConfigTransformer: RedemptionConfigTransformer,
+    private readonly ballotsRepository: IBallotsRepository,
   ) {}
 
   public async getRedemptionConfig(offerId: string): Promise<RedemptionConfigResult> {
@@ -63,6 +66,7 @@ export class GetRedemptionConfigService implements IGetRedemptionConfigService {
     let genericEntity: GenericEntity | null = null;
     let vaultEntity: VaultEntity | null = null;
     let vaultBatchEntities: VaultBatchEntity[] = [];
+    let ballotEntity: BallotEntity | null = null;
 
     try {
       redemptionConfigEntity = await this.redemptionConfigRepository.findOneByOfferId(offerId);
@@ -97,6 +101,10 @@ export class GetRedemptionConfigService implements IGetRedemptionConfigService {
       }
     }
 
+    if (redemptionType === 'ballot') {
+      ballotEntity = await this.ballotsRepository.findOneByRedemptionId(redemptionConfigEntity.id);
+    }
+
     return Promise.resolve({
       kind: 'Ok',
       data: this.redemptionConfigTransformer.transformToRedemptionConfig({
@@ -104,7 +112,7 @@ export class GetRedemptionConfigService implements IGetRedemptionConfigService {
         genericEntity: genericEntity,
         vaultEntity: vaultEntity,
         vaultBatchEntities: vaultBatchEntities,
-        ballotEntity: null,
+        ballotEntity: ballotEntity,
       }),
     });
   }

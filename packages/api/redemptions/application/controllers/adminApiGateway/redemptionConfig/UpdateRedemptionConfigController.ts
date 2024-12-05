@@ -59,6 +59,7 @@ export class UpdateRedemptionConfigController extends APIGatewayController<Parse
       case 'GenericCodeEmpty':
       case 'VaultNotFound':
       case 'MaxPerUserError':
+      case 'BallotNotFound':
         return {
           statusCode: 404,
           data: results.data,

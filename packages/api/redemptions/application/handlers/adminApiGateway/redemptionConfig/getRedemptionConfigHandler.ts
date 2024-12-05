@@ -4,6 +4,7 @@ import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Logger } from '@blc-mono/core/utils/logger/logger';
 import { GetRedemptionConfigController } from '@blc-mono/redemptions/application/controllers/adminApiGateway/redemptionConfig/GetRedemptionConfigController';
+import { BallotsRepository } from '@blc-mono/redemptions/application/repositories/BallotsRepository';
 import { GenericsRepository } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { RedemptionConfigRepository } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { VaultBatchesRepository } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
@@ -32,6 +33,7 @@ const controller = createInjector()
   .provideClass(RedemptionVaultConfigTransformer.key, RedemptionVaultConfigTransformer)
   .provideClass(RedemptionBallotConfigTransformer.key, RedemptionBallotConfigTransformer)
   .provideClass(RedemptionConfigTransformer.key, RedemptionConfigTransformer)
+  .provideClass(BallotsRepository.key, BallotsRepository)
 
   // API Service
   .provideClass(GetRedemptionConfigService.key, GetRedemptionConfigService)

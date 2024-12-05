@@ -34,5 +34,7 @@
     "istanbul-merge": "2.0.0",
     "prettier": "3.2.5"
   },
-  "dependencies": {}
+  "dependencies": {
+    "bottleneck": "2.19.5"
+  }
 }

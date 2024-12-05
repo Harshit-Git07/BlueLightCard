@@ -49,6 +49,8 @@ export const ballotEntryStatusEnum = pgEnum('ballotEntryStatus', [
   'expired',
 ]);
 
+export const ballotStatusEnum = pgEnum('ballotStatus', ['pending', 'drawing', 'drawn']);
+
 export type Affiliate = (typeof affiliateEnum.enumValues)[number];
 export type Integration = (typeof integrationEnum.enumValues)[number];
 export type OfferType = (typeof offerTypeEnum.enumValues)[number];
@@ -57,7 +59,7 @@ export type Status = (typeof statusEnum.enumValues)[number];
 export type VaultType = (typeof vaultTypeEnum.enumValues)[number];
 export type Connection = (typeof connectionEnum.enumValues)[number];
 export type BallotEntryStatus = (typeof ballotEntryStatusEnum.enumValues)[number];
-
+export type BallotStatus = (typeof ballotStatusEnum.enumValues)[number];
 export const redemptionsPrefix = 'rdm';
 export const createRedemptionsId = (): string => `${redemptionsPrefix}-${uuidv4()}`;
 export const createRedemptionsIdE2E = (): string => `e2e:${createRedemptionsId()}`;
@@ -187,20 +189,27 @@ export const integrationCodesTable = pgTable(
 export const ballotsPrefix = 'bal';
 export const createBallotsId = (): string => `${ballotsPrefix}-${uuidv4()}`;
 export const createBallotsIdE2E = (): string => `e2e:${createBallotsId()}`;
-export const ballotsTable = pgTable('ballots', {
-  // PK
-  id: varchar('id').primaryKey().$defaultFn(createBallotsId),
-  // FK
-  redemptionId: varchar('redemptionId')
-    .references(() => redemptionsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
-    .notNull(),
-  // Other
-  drawDate: timestamp('drawDate').notNull(),
-  totalTickets: integer('totalTickets').default(0).notNull(),
-  eventDate: timestamp('eventDate').notNull(),
-  offerName: varchar('offerName').notNull(),
-  created: timestamp('created').defaultNow().notNull(),
-});
+export const ballotsTable = pgTable(
+  'ballots',
+  {
+    // PK
+    id: varchar('id').primaryKey().$defaultFn(createBallotsId),
+    // FK
+    redemptionId: varchar('redemptionId')
+      .references(() => redemptionsTable.id, DEFAULT_FOREIGN_KEY_ACTIONS)
+      .notNull(),
+    // Other
+    drawDate: timestamp('drawDate').notNull(),
+    totalTickets: integer('totalTickets').default(0).notNull(),
+    eventDate: timestamp('eventDate').notNull(),
+    offerName: varchar('offerName').notNull(),
+    created: timestamp('created').defaultNow().notNull(),
+    status: ballotStatusEnum('status').default('pending').notNull(),
+  },
+  (table) => ({
+    icDrawDateIdx: index('bal_draw_date_idx').on(table.drawDate),
+  }),
+);
 
 export const ballotEntriesPrefix = 'bae';
 export const createBallotEntriesId = (): string => `${ballotEntriesPrefix}-${uuidv4()}`;

@@ -438,6 +438,38 @@ describe('CreateRedemptionConfigController', () => {
 
       expect(result.statusCode).toEqual(400);
     });
+
+    it('returns 200 when request body is valid ballot redemptionType', async () => {
+      MockCreateRedemptionConfigService.createRedemptionConfig.mockResolvedValue({
+        kind: 'Ok',
+        data: { some: 'data' },
+      });
+
+      const requestBody = {
+        redemptionType: 'ballot',
+        companyId: 'UUID',
+        offerId: 'UUID',
+        url: 'http://www.test.com',
+        ballot: {
+          totalTickets: 1,
+          drawDate: faker.date.future().toISOString(),
+          eventDate: faker.date.future().toISOString(),
+          offerName: 'my-offer',
+        },
+      };
+
+      const request: APIGatewayProxyEventV2 = {
+        body: JSON.stringify(requestBody),
+        requestContext: {
+          requestId: 'requestId',
+        },
+        headers: {},
+      } as unknown as APIGatewayProxyEventV2;
+
+      const result = await controller.invoke(request);
+
+      expect(result.statusCode).toEqual(200);
+    });
   });
 
   it('returns 200 for a successful request', async () => {

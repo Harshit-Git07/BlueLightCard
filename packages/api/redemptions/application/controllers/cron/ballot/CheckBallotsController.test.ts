@@ -11,7 +11,11 @@ describe('CheckBallotsController', () => {
   describe('invoke', () => {
     it('should invoke the handle method', async () => {
       const testLogger = createTestLogger();
-      const ballotService = { findBallotsForDrawDate: jest.fn() } satisfies IBallotService;
+      const ballotService = {
+        findBallotsForDrawDate: jest.fn(),
+        runSingleBallot: jest.fn(),
+        notifyEntriesOfBallotOutcome: jest.fn(),
+      } satisfies IBallotService;
       const controller = new CheckBallotsController(testLogger, ballotService);
       const mockEvent = {
         source: 'aws.events',

@@ -36,6 +36,8 @@ describe('BallotRedemptioStrategy', () => {
       publishMemberRetrievedRedemptionDetailsEvent: jest.fn(),
       publishVaultBatchCreatedEvent: jest.fn(),
       publishRunBallotEvent: jest.fn(),
+      publishSuccessfulBallotEvent: jest.fn(),
+      publishUnsuccessfulBallotEvent: jest.fn(),
     };
   }
 
@@ -46,6 +48,9 @@ describe('BallotRedemptioStrategy', () => {
       findOneById: jest.fn(),
       findBallotsForDrawDate: jest.fn(),
       create: jest.fn(),
+      updateOneById: jest.fn(),
+      updateBallotStatus: jest.fn(),
+      deleteById: jest.fn(),
     };
   }
 
@@ -55,6 +60,10 @@ describe('BallotRedemptioStrategy', () => {
       withTransaction: jest.fn(),
       findOneByBallotAndMemberId: jest.fn(),
       findOneById: jest.fn(),
+      findByBallotIdAndStatus: jest.fn(),
+      findMemberIdsByBallotIdAndStatusWithLimitAndOffset: jest.fn(),
+      updateManyBatchEntriesNotInArray: jest.fn(),
+      updateManyBatchEntriesInArray: jest.fn(),
     };
   }
 
@@ -98,7 +107,7 @@ describe('BallotRedemptioStrategy', () => {
         callBallotStrategy(testBallotRedemption, mockedSilentLogger, {
           ballotsRepository: as(mockedBallotsRepository),
         }),
-      ).rejects.toThrow('ballot not found');
+      ).rejects.toThrow('Ballot not found');
     });
 
     it('should return an error when ballot entry is after 21:30', async () => {
@@ -112,7 +121,7 @@ describe('BallotRedemptioStrategy', () => {
         callBallotStrategy(testBallotRedemption, mockedSilentLogger, {
           ballotsRepository: as(mockedBallotsRepository),
         }),
-      ).rejects.toThrow('ballot has expired');
+      ).rejects.toThrow('Ballot has expired');
     });
 
     it('Should return an error if member attempts to redeem ballot more than once', async () => {
@@ -129,7 +138,7 @@ describe('BallotRedemptioStrategy', () => {
           ballotsRepository: as(mockedBallotsRepository),
           ballotEntriesRepository: as(mockedBallotEntriesRepository),
         }),
-      ).rejects.toThrow('member has already entered ballot');
+      ).rejects.toThrow('Member has already entered ballot');
     });
 
     it('Should save ballot and publish member redemption event', async () => {

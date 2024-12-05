@@ -147,8 +147,8 @@ export const BallotModel = createZodNamedType(
   'BallotModel',
   z.object({
     totalTickets: z.number().positive(),
-    drawDate: z.string(),
-    eventDate: z.string(),
+    drawDate: z.string().datetime(),
+    eventDate: z.string().datetime(),
     offerName: z.string(),
   }),
 );

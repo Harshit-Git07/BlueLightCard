@@ -10,6 +10,7 @@ describe('RedemptionTransactionalEmailController', () => {
     const logger = createTestLogger();
     const mockEmailService = {
       sendRedemptionTransactionEmail: jest.fn(),
+      setCustomAttributes: jest.fn(),
     } satisfies IEmailService;
     const controller = new RedemptionTransactionalEmailController(logger, mockEmailService);
     const event = memberRedemptionEventFactory.build();

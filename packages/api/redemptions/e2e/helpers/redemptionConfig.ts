@@ -1,10 +1,13 @@
 import { faker } from '@faker-js/faker';
 import { eq, inArray } from 'drizzle-orm';
 
+import { BallotEntity } from '@blc-mono/redemptions/application/repositories/BallotsRepository';
 import { RedemptionConfigEntity } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 import { VaultBatchEntity } from '@blc-mono/redemptions/application/repositories/VaultBatchesRepository';
 import { VaultEntity } from '@blc-mono/redemptions/application/repositories/VaultsRepository';
 import {
+  ballotsTable,
+  createBallotsIdE2E,
   createRedemptionsIdE2E,
   createVaultBatchesIdE2E,
   createVaultIdE2E,
@@ -14,6 +17,7 @@ import {
   vaultCodesTable,
   vaultsTable,
 } from '@blc-mono/redemptions/libs/database/schema';
+import { ballotEntityFactory } from '@blc-mono/redemptions/libs/test/factories/ballotEntity.factory';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
@@ -36,12 +40,14 @@ type RedemptionConfigTestHookContext = {
   vault?: VaultEntity;
   vaultBatch?: VaultBatchEntity;
   batches?: VaultBatchEntity[];
+  ballot?: BallotEntity;
 };
 
 type RedemptionConfigParameters = Parameters<typeof redemptionConfigEntityFactory.build>[0];
 type GenericParameters = Parameters<typeof genericEntityFactory.build>[0];
 type VaultParameters = Parameters<typeof vaultEntityFactory.build>[0];
 type VaultBatchParameters = Parameters<typeof vaultBatchEntityFactory.build>[0];
+type BallotParameters = Parameters<typeof ballotEntityFactory.build>[0];
 
 export const buildRedemptionConfig = (
   connectionManager: E2EDatabaseConnectionManager,
@@ -49,6 +55,8 @@ export const buildRedemptionConfig = (
 ) => {
   let createdGeneric: TestHook;
   let createdVault: TestHook;
+  let createdBallot: TestHook;
+
   const redemptionType = redemptionParams.redemptionType ?? faker.helpers.arrayElement(['vault', 'vaultQR']);
   const redemptionConfig = redemptionConfigEntityFactory.build({
     id: createRedemptionsIdE2E(),
@@ -63,10 +71,12 @@ export const buildRedemptionConfig = (
       await connectionManager.connection.db.insert(redemptionsTable).values(redemptionConfig);
       await createdGeneric?.insert();
       await createdVault?.insert();
+      await createdBallot?.insert();
     },
     async cleanup() {
       await createdGeneric?.cleanup();
       await createdVault?.cleanup();
+      await createdBallot?.cleanup();
       await connectionManager.connection.db
         .delete(redemptionsTable)
         .where(eq(redemptionsTable.id, redemptionConfig.id));
@@ -80,6 +90,11 @@ export const buildRedemptionConfig = (
       const vaultData = buildVault(connectionManager, { ...params, redemptionId: redemptionConfig.id }, hooks);
       createdVault = vaultData;
       return { ...vaultData, ...hooks };
+    },
+    addBallot(params: Parameters<typeof buildBallot>[1] = {}) {
+      const ballotData = buildBallot(connectionManager, { ...params, redemptionId: redemptionConfig.id });
+      createdBallot = ballotData;
+      return { ...ballotData, ...hooks };
     },
   };
 
@@ -213,4 +228,27 @@ export const buildVaultCodes = (
       );
     },
   };
+};
+
+export const buildBallot = (
+  connectionManager: E2EDatabaseConnectionManager,
+  ballotParams: NonNullable<BallotParameters>,
+) => {
+  const ballot = ballotEntityFactory.build({
+    ...ballotParams,
+    id: createBallotsIdE2E(),
+    redemptionId: ballotParams.redemptionId,
+  });
+
+  const hooks = {
+    ballot,
+    async insert() {
+      await connectionManager.connection.db.insert(ballotsTable).values(ballot);
+    },
+    async cleanup() {
+      await connectionManager.connection.db.delete(ballotsTable).where(eq(ballotsTable.id, ballot.id));
+    },
+  };
+
+  return hooks;
 };

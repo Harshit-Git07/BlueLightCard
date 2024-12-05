@@ -1,9 +1,9 @@
-import { between, eq } from 'drizzle-orm';
+import { and, between, eq } from 'drizzle-orm';
 
 import { every } from '@blc-mono/core/utils/drizzle';
 import { DatabaseTransactionConnection } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
-import { ballotsTable } from '@blc-mono/redemptions/libs/database/schema';
+import { ballotsTable, BallotStatus } from '@blc-mono/redemptions/libs/database/schema';
 
 import { Repository } from './Repository';
 
@@ -13,12 +13,17 @@ export type BallotEntityWithId = { ballotId: (typeof ballotsTable.$inferSelect)[
 
 export type NewBallotEntity = Omit<typeof ballotsTable.$inferInsert, 'created'>;
 
+export type UpdateBallotEntity = Partial<typeof ballotsTable.$inferInsert>;
+
 export interface IBallotsRepository {
   findBallotsForDrawDate(startDrawDate: Date, endDrawDate: Date): Promise<BallotEntityWithId[]>;
   findOneById(id: string): Promise<BallotEntity | null>;
   findOneByRedemptionId(redemptionId: string): Promise<BallotEntity | null>;
   withTransaction(transaction: DatabaseTransactionConnection): BallotsRepository;
   create(newBallotEntity: NewBallotEntity): Promise<BallotEntity>;
+  updateOneById(id: string, updateBallotEntity: UpdateBallotEntity): Promise<Pick<BallotEntity, 'id'> | undefined>;
+  updateBallotStatus(ballotId: string, status: BallotStatus): Promise<void>;
+  deleteById(id: string): Promise<Pick<BallotEntity, 'id'>[]>;
 }
 
 export class BallotsRepository extends Repository implements IBallotsRepository {
@@ -29,7 +34,7 @@ export class BallotsRepository extends Repository implements IBallotsRepository 
     return await this.connection.db
       .select({ ballotId: ballotsTable.id })
       .from(ballotsTable)
-      .where(between(ballotsTable.drawDate, startDrawDate, endDrawDate))
+      .where(and(between(ballotsTable.drawDate, startDrawDate, endDrawDate), eq(ballotsTable.status, 'pending')))
       .execute();
   }
 
@@ -49,6 +54,23 @@ export class BallotsRepository extends Repository implements IBallotsRepository 
     return this.atMostOne(result);
   }
 
+  public async updateOneById(
+    id: string,
+    updateBallotEntity: UpdateBallotEntity,
+  ): Promise<Pick<BallotEntity, 'id'> | undefined> {
+    return await this.connection.db
+      .update(ballotsTable)
+      .set(updateBallotEntity)
+      .where(eq(ballotsTable.id, id))
+      .returning({ id: ballotsTable.id })
+      .execute()
+      .then((result) => result?.at(0));
+  }
+
+  public async updateBallotStatus(ballotId: string, status: BallotStatus): Promise<void> {
+    await this.connection.db.update(ballotsTable).set({ status }).where(eq(ballotsTable.id, ballotId)).execute();
+  }
+
   public withTransaction(transaction: DatabaseTransactionConnection): BallotsRepository {
     return new BallotsRepository(transaction);
   }
@@ -62,5 +84,13 @@ export class BallotsRepository extends Repository implements IBallotsRepository 
         .returning()
         .execute(),
     );
+  }
+
+  public async deleteById(id: string): Promise<Pick<BallotEntity, 'id'>[]> {
+    return await this.connection.db
+      .delete(ballotsTable)
+      .where(eq(ballotsTable.id, id))
+      .returning({ id: ballotsTable.id })
+      .execute();
   }
 }

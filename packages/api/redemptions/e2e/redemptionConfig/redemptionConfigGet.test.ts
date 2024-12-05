@@ -2,6 +2,8 @@ import { faker } from '@faker-js/faker';
 import { ApiGatewayV1Api } from 'sst/node/api';
 import { afterAll, beforeAll, describe, expect, onTestFinished, test } from 'vitest';
 
+import { BallotsRepository } from '@blc-mono/redemptions/application/repositories/BallotsRepository';
+
 import { GenericsRepository } from '../../application/repositories/GenericsRepository';
 import { RedemptionConfigCombinedRepository } from '../../application/repositories/RedemptionConfigCombinedRepository';
 import { RedemptionConfigRepository } from '../../application/repositories/RedemptionConfigRepository';
@@ -17,6 +19,7 @@ let apiKey: string;
 
 let vaultsRepository: VaultsRepository;
 let vaultBatchesRepository: VaultBatchesRepository;
+let ballotsRepository: BallotsRepository;
 let genericsRepository: GenericsRepository;
 let redemptionConfigRepository: RedemptionConfigRepository;
 let redemptionRepositoryHelper: RedemptionConfigCombinedRepository;
@@ -31,12 +34,14 @@ beforeAll(async () => {
   vaultsRepository = new VaultsRepository(connectionManager.connection);
   vaultBatchesRepository = new VaultBatchesRepository(connectionManager.connection);
   genericsRepository = new GenericsRepository(connectionManager.connection);
+  ballotsRepository = new BallotsRepository(connectionManager.connection);
   redemptionConfigRepository = new RedemptionConfigRepository(connectionManager.connection);
   redemptionRepositoryHelper = new RedemptionConfigCombinedRepository(
     redemptionConfigRepository,
     vaultsRepository,
     vaultBatchesRepository,
     genericsRepository,
+    ballotsRepository,
   );
 
   // Set a conservative timeout
@@ -296,6 +301,44 @@ describe('GET Redemption Config', () => {
     };
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
     expect(result.status).toBe(404);
+  }, 15000);
+
+  test('GET /redemptions/{offerId} should return 200 for redemptionType ballot', async () => {
+    const { redemptionConfig, ballot, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
+      offerId: '5',
+      redemptionType: 'ballot',
+    }).addBallot();
+
+    onTestFinished(redemptionConfigHooks.cleanup);
+    await redemptionConfigHooks.insert();
+
+    const ballotRedemptionConfig = redemptionConfig!;
+    const result = await callRedemptionConfigEndpoint(ballotRedemptionConfig.offerId);
+
+    const actualResponseBody = await result.json();
+    const expectedResponseBody = {
+      statusCode: 200,
+      data: {
+        id: redemptionConfig.id,
+        offerId: redemptionConfig.offerId,
+        redemptionType: 'ballot',
+        companyId: redemptionConfig.companyId,
+        url: redemptionConfig.url,
+        affiliate: redemptionConfig.affiliate,
+        connection: redemptionConfig.connection,
+        ballot: {
+          id: ballot.id,
+          totalTickets: ballot.totalTickets,
+          offerName: ballot.offerName,
+          drawDate: ballot.drawDate.toISOString(),
+          eventDate: ballot.eventDate.toISOString(),
+          status: ballot.status,
+        },
+      },
+    };
+
+    expect(result.status).toBe(200);
+    expect(actualResponseBody).toStrictEqual(expectedResponseBody);
   }, 15000);
 });
 

@@ -7,6 +7,9 @@ import { afterAll, beforeAll, describe, expect, onTestFinished, test } from 'vit
 import { REDEMPTION_TYPES } from '../../core/src/constants/redemptions';
 import { DatabaseConnectionType } from '../libs/database/connection';
 import {
+  ballotEntriesTable,
+  ballotsTable,
+  createBallotsIdE2E,
   createRedemptionsIdE2E,
   createVaultBatchesIdE2E,
   createVaultCodesIdE2E,
@@ -17,6 +20,7 @@ import {
   vaultCodesTable,
   vaultsTable,
 } from '../libs/database/schema';
+import { ballotEntityFactory } from '../libs/test/factories/ballotEntity.factory';
 import { redemptionConfigEntityFactory } from '../libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '../libs/test/factories/vaultBatchEntity.factory';
 import { vaultCodeEntityFactory } from '../libs/test/factories/vaultCodeEntity.factory';
@@ -65,6 +69,27 @@ describe('POST /member/redeem', () => {
       },
       cleanup: async () => {
         await connectionManager.connection.db.delete(redemptionsTable).where(eq(redemptionsTable.id, redemption.id));
+      },
+    };
+  };
+
+  const buildBallot = (redemptionId: string, drawDate: Date) => {
+    const ballot = ballotEntityFactory.build({
+      id: createBallotsIdE2E(),
+      redemptionId: redemptionId,
+      drawDate: drawDate,
+    });
+
+    return {
+      ballot,
+      insert: async () => {
+        await connectionManager.connection.db.insert(ballotsTable).values(ballot);
+      },
+      cleanup: async () => {
+        await connectionManager.connection.db
+          .delete(ballotEntriesTable)
+          .where(eq(ballotEntriesTable.ballotId, ballot.id));
+        await connectionManager.connection.db.delete(ballotsTable).where(eq(ballotsTable.id, ballot.id));
       },
     };
   };
@@ -573,6 +598,128 @@ describe('POST /member/redeem', () => {
       statusCode: 409,
     };
     expect(body).toStrictEqual(expect.objectContaining(expectedBody));
+    expect(result.status).toBe(409);
+  });
+
+  test('should redeem a ballot offer', { timeout: 60_000 }, async () => {
+    // Arrange
+    const { redemption, ...redemptionTestHooks } = buildTestRedemption('ballot');
+    const { ...ballotTestHooks } = buildBallot(redemption.id, faker.date.future());
+
+    onTestFinished(() => executeAsyncSequence(ballotTestHooks.cleanup, redemptionTestHooks.cleanup));
+    await executeAsyncSequence(redemptionTestHooks.insert, ballotTestHooks.insert);
+
+    const companyName = faker.company.name();
+    const offerName = faker.commerce.productName();
+
+    // Act
+    const result = await sendRedemptionRequest({
+      offerId: redemption.offerId,
+      companyName,
+      offerName,
+    });
+
+    // Assert
+    const body = await result.json();
+    expect(body).toEqual({
+      data: {
+        kind: 'Ok',
+        redemptionType: 'ballot',
+        redemptionDetails: {},
+      },
+      statusCode: 200,
+    });
+    expect(result.status).toBe(200);
+  });
+
+  test('should only allow a ballot entry if ballot is found', { timeout: 60_000 }, async () => {
+    // Arrange
+    const { redemption, ...redemptionTestHooks } = buildTestRedemption('ballot');
+
+    onTestFinished(() => executeAsyncSequence(redemptionTestHooks.cleanup));
+    await executeAsyncSequence(redemptionTestHooks.insert);
+    // Act
+    const result = await sendRedemptionRequest({
+      offerId: redemption.offerId,
+      companyName: faker.company.name(),
+      offerName: faker.commerce.productName(),
+    });
+
+    // Assert
+    const body = await result.json();
+    expect(body).toEqual({
+      data: {
+        kind: 'BallotNotFound',
+        message: 'Ballot not found',
+      },
+      statusCode: 404,
+    });
+    expect(result.status).toBe(404);
+  });
+
+  test('should only allow a ballot entry until 21:30 on the drawDate', { timeout: 60_000 }, async () => {
+    // Arrange
+    const { redemption, ...redemptionTestHooks } = buildTestRedemption('ballot');
+    const { ...ballotTestHooks } = buildBallot(redemption.id, faker.date.past());
+
+    onTestFinished(() => executeAsyncSequence(ballotTestHooks.cleanup, redemptionTestHooks.cleanup));
+    await executeAsyncSequence(redemptionTestHooks.insert, ballotTestHooks.insert);
+
+    const companyName = faker.company.name();
+    const offerName = faker.commerce.productName();
+
+    // Act
+    const result = await sendRedemptionRequest({
+      offerId: redemption.offerId,
+      companyName,
+      offerName,
+    });
+
+    // Assert
+    const body = await result.json();
+    expect(body).toEqual({
+      data: {
+        kind: 'BallotExpired',
+        message: 'Ballot has expired',
+      },
+      statusCode: 404,
+    });
+    expect(result.status).toBe(404);
+  });
+
+  test('should only allow member to redeem ballot type once', { timeout: 60_000 }, async () => {
+    // Arrange
+    const { redemption, ...redemptionTestHooks } = buildTestRedemption('ballot');
+    const { ...ballotTestHooks } = buildBallot(redemption.id, faker.date.future());
+
+    onTestFinished(() => executeAsyncSequence(ballotTestHooks.cleanup, redemptionTestHooks.cleanup));
+    await executeAsyncSequence(redemptionTestHooks.insert, ballotTestHooks.insert);
+
+    const companyName = faker.company.name();
+    const offerName = faker.commerce.productName();
+
+    await sendRedemptionRequest({
+      offerId: redemption.offerId,
+      companyName,
+      offerName,
+    });
+
+    // Act
+    const result = await sendRedemptionRequest({
+      offerId: redemption.offerId,
+      companyName,
+      offerName,
+    });
+
+    // Assert
+    const body = await result.json();
+    expect(body).toEqual({
+      data: {
+        kind: 'AlreadyEnteredBallot',
+        message: 'Member has already entered ballot',
+      },
+      statusCode: 409,
+    });
     expect(result.status).toBe(409);
   });
 

@@ -13,17 +13,20 @@ import {
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { Integration, RedemptionType, Status } from '@blc-mono/redemptions/libs/database/schema';
 import {
+  PatchRedemptionConfigBallotModel,
   PatchRedemptionConfigGenericModel,
   PatchRedemptionConfigShowCardModel,
   PatchRedemptionConfigVaultModel,
 } from '@blc-mono/redemptions/libs/models/patchRedemptionConfig';
 import { affiliateFactory } from '@blc-mono/redemptions/libs/test/factories/affiliate.factory';
+import { ballotEntityFactory } from '@blc-mono/redemptions/libs/test/factories/ballotEntity.factory';
 import { genericEntityFactory } from '@blc-mono/redemptions/libs/test/factories/genericEntity.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultBatchEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultBatchEntity.factory';
 import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/vaultEntity.factory';
 import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
+import { IBallotsRepository } from '../../repositories/BallotsRepository';
 import { IVaultBatchesRepository } from '../../repositories/VaultBatchesRepository';
 import { IVaultsRepository } from '../../repositories/VaultsRepository';
 import { RedemptionConfig, RedemptionConfigTransformer } from '../../transformers/RedemptionConfigTransformer';
@@ -40,6 +43,7 @@ const testCompanyId = faker.string.uuid();
 const testGenericId = `gnr-${faker.string.uuid()}`;
 const testVaultId = `vlt-${faker.string.uuid()}`;
 const testVaultBatchId = `vbt-${faker.string.uuid()}`;
+const testBallotId = `blt-${faker.string.uuid()}`;
 
 const testVaultBatchBody = vaultBatchEntityFactory.build({
   id: testVaultBatchId,
@@ -47,6 +51,23 @@ const testVaultBatchBody = vaultBatchEntityFactory.build({
   created: new Date(),
   expiry: new Date(),
 });
+
+const testBallotBody = {
+  id: testRedemptionId,
+  companyId: testCompanyId,
+  offerId: testOfferId,
+  connection: 'none',
+  redemptionType: 'ballot',
+  url: 'example.url.com',
+  affiliate: 'awin',
+  ballot: {
+    id: testBallotId,
+    totalTickets: 10,
+    drawDate: new Date().toISOString(),
+    eventDate: new Date().toISOString(),
+    offerName: 'offer one',
+  },
+} satisfies PatchRedemptionConfigBallotModel;
 
 const testVaultBody = {
   id: testRedemptionId,
@@ -124,6 +145,7 @@ const mockGenericsRepository: Partial<IGenericsRepository> = {};
 const mockVaultsRepository: Partial<IVaultsRepository> = {};
 const mockVaultBatchesRepository: Partial<IVaultBatchesRepository> = {};
 const mockRedemptionConfigTransformer: Partial<RedemptionConfigTransformer> = {};
+const mockBallotsRepository: Partial<IBallotsRepository> = {};
 
 const stubTransactionManager: Partial<TransactionManager> = {
   withTransaction(callback) {
@@ -141,6 +163,7 @@ const updateRedemptionConfigService = new UpdateRedemptionConfigService(
   as(mockGenericsRepository),
   as(mockVaultsRepository),
   as(mockVaultBatchesRepository),
+  as(mockBallotsRepository),
   as(mockRedemptionConfigTransformer),
   as(stubTransactionManager),
 );
@@ -213,6 +236,7 @@ describe('UpdateRedemptionConfigService', () => {
     mockGenericTransaction();
     mockVaultTransaction();
     mockRedemptionConfigTransaction();
+    mockBallotTransaction();
 
     const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError =
       await updateRedemptionConfigService.updateRedemptionConfig(String(testOfferId), {
@@ -231,6 +255,7 @@ describe('UpdateRedemptionConfigService', () => {
     mockGenericExist(false);
     mockGenericTransaction();
     mockVaultTransaction();
+    mockBallotTransaction();
 
     mockRedemptionConfigTransaction();
 
@@ -252,6 +277,7 @@ describe('UpdateRedemptionConfigService', () => {
     mockGenericsUpdateSucceeds(false);
     mockGenericTransaction();
     mockVaultTransaction();
+    mockBallotTransaction();
 
     mockRedemptionConfigTransaction();
 
@@ -270,6 +296,7 @@ describe('UpdateRedemptionConfigService', () => {
     mockGenericsUpdateSucceeds(true);
     mockGenericTransaction();
     mockVaultTransaction();
+    mockBallotTransaction();
 
     mockRedemptionConfigUpdateSucceeds(false);
     mockRedemptionConfigTransaction();
@@ -289,6 +316,7 @@ describe('UpdateRedemptionConfigService', () => {
     mockGenericsUpdateSucceeds(true);
     mockGenericTransaction();
     mockVaultTransaction();
+    mockBallotTransaction();
 
     mockRedemptionConfigUpdateSucceeds(true, {
       id: testRedemptionId,
@@ -328,6 +356,7 @@ describe('UpdateRedemptionConfigService', () => {
       //mock repo(s) responses/resolves that execute inside transactionManager(s)
       mockGenericTransaction();
       mockVaultTransaction();
+      mockBallotTransaction();
 
       mockRedemptionConfigUpdateSucceeds(false);
       mockRedemptionConfigTransaction();
@@ -359,6 +388,7 @@ describe('UpdateRedemptionConfigService', () => {
       //mock repo(s) responses/resolves that execute inside transactionManager(s)
       mockGenericTransaction();
       mockVaultTransaction();
+      mockBallotTransaction();
 
       mockRedemptionConfigUpdateSucceeds(true, {
         id: testPayloadFactory.id,
@@ -390,6 +420,7 @@ describe('UpdateRedemptionConfigService', () => {
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericTransaction();
     mockVaultTransaction();
+    mockBallotTransaction();
 
     mockRedemptionConfigUpdateSucceeds(false);
     mockRedemptionConfigTransaction();
@@ -407,6 +438,7 @@ describe('UpdateRedemptionConfigService', () => {
     //mock repo(s) responses/resolves that execute inside transactionManager(s)
     mockGenericTransaction();
     mockVaultTransaction();
+    mockBallotTransaction();
 
     mockRedemptionConfigUpdateSucceeds(true, {
       id: testRedemptionId,
@@ -438,6 +470,7 @@ describe('UpdateRedemptionConfigService', () => {
     mockVaultExist(false);
     mockGenericTransaction();
     mockVaultTransaction();
+    mockBallotTransaction();
 
     mockRedemptionConfigTransaction();
 
@@ -459,6 +492,7 @@ describe('UpdateRedemptionConfigService', () => {
     mockVaultUpdateSucceeds(false);
     mockGenericTransaction();
     mockVaultTransaction();
+    mockBallotTransaction();
 
     mockRedemptionConfigTransaction();
 
@@ -484,6 +518,7 @@ describe('UpdateRedemptionConfigService', () => {
       mockVaultFindOneById();
       mockVaultUpdateSucceeds(true);
       mockVaultTransaction();
+      mockBallotTransaction();
 
       mockRedemptionConfigUpdateSucceeds(true, {
         id: testRedemptionId,
@@ -522,6 +557,7 @@ describe('UpdateRedemptionConfigService', () => {
     mockVaultUpdateSucceeds(true);
     mockGenericTransaction();
     mockVaultTransaction();
+    mockBallotTransaction();
 
     mockRedemptionConfigUpdateSucceeds(true, {
       id: testRedemptionId,
@@ -548,6 +584,72 @@ describe('UpdateRedemptionConfigService', () => {
       'max limit per user cannot be less than 1',
     );
 
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return kind "Ok" when the ballot offer redemptions record updates correctly', async () => {
+    mockRedemptionConfigExist(true, 'ballot');
+    mockBallotTransaction();
+    mockBallotFindOneByRedemptionId();
+    mockUpdateOneById();
+    mockFindOneById();
+
+    mockRedemptionConfigUpdateSucceeds(true, {
+      id: testRedemptionId,
+      offerId: testBallotBody.offerId,
+      redemptionType: testBallotBody.redemptionType,
+      connection: testBallotBody.connection,
+      companyId: testBallotBody.companyId,
+      affiliate: testBallotBody.affiliate,
+      url: testBallotBody.url,
+      offerType: 'in-store',
+    });
+    mockRedemptionConfigTransaction();
+
+    mockRedemptionConfigTransformer.transformToRedemptionConfig = jest.fn().mockReturnValue(testBallotBody);
+
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError =
+      await updateRedemptionConfigService.updateRedemptionConfig(String(testOfferId), testBallotBody);
+
+    expect(actual.kind).toEqual('Ok');
+    expect(actual.data).toEqual(testBallotBody);
+  });
+
+  it('should return kind "BallotNotFound" when the ballot record does not exist', async () => {
+    mockRedemptionConfigExist(true, 'ballot');
+
+    //mock repo(s) responses/resolves that execute inside transactionManager(s)
+    mockBallotExist(false);
+    mockBallotTransaction();
+
+    mockRedemptionConfigTransaction();
+
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError =
+      await updateRedemptionConfigService.updateRedemptionConfig(String(testOfferId), testBallotBody);
+
+    const expected: UpdateRedemptionConfigError = getExpectedError(
+      'BallotNotFound',
+      "ballot record does not exist with corresponding id's",
+    );
+    expect(actual).toEqual(expected);
+  });
+
+  it('should return kind "Error" when the ballot offer redemption record fails to update', async () => {
+    mockRedemptionConfigExist(true, 'ballot');
+    mockGenericTransaction();
+    mockBallotFindOneByRedemptionId();
+    mockVaultTransaction();
+    mockBallotTransaction();
+    mockUpdateOneById();
+    mockFindOneById();
+
+    mockRedemptionConfigUpdateSucceeds(false);
+    mockRedemptionConfigTransaction();
+
+    const actual: UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError =
+      await updateRedemptionConfigService.updateRedemptionConfig(String(testOfferId), testBallotBody);
+
+    const expected: UpdateRedemptionConfigError = getExpectedError('Error', 'redemption record failed to update');
     expect(actual).toEqual(expected);
   });
 });
@@ -632,6 +734,41 @@ function mockVaultTransaction(): void {
   mockVaultsRepository.withTransaction = jest.fn().mockReturnValue(mockVaultsRepository);
 }
 
+function mockBallotTransaction(): void {
+  mockBallotsRepository.withTransaction = jest.fn().mockReturnValue(mockBallotsRepository);
+}
+
+function mockBallotFindOneByRedemptionId(): void {
+  const value = ballotEntityFactory.build({
+    id: testBallotId,
+  });
+  mockBallotsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(value);
+}
+
+function mockUpdateOneById(): void {
+  const value = ballotEntityFactory.build({
+    id: testBallotId,
+  });
+  mockBallotsRepository.updateOneById = jest.fn().mockResolvedValue(value);
+}
+
+function mockFindOneById(): void {
+  const value = ballotEntityFactory.build({
+    id: testBallotId,
+  });
+  mockBallotsRepository.findOneById = jest.fn().mockResolvedValue(value);
+}
+
+function mockBallotExist(exist: boolean): void {
+  const value = exist
+    ? vaultEntityFactory.build({
+        id: testBallotId,
+        redemptionId: testRedemptionId,
+      })
+    : null;
+  mockBallotsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(value);
+}
+
 function getExpectedError(
   kind:
     | 'Error'
@@ -642,7 +779,8 @@ function getExpectedError(
     | 'GenericNotFound'
     | 'GenericCodeEmpty'
     | 'VaultNotFound'
-    | 'MaxPerUserError',
+    | 'MaxPerUserError'
+    | 'BallotNotFound',
   message: string,
 ): UpdateRedemptionConfigError {
   return {

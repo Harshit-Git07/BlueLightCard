@@ -69,5 +69,6 @@ export const ballotRedemptionConfigFactory = Factory.define<RedemptionConfig>(()
     eventDate: faker.date.future(),
     offerName: faker.string.alphanumeric(),
     created: faker.date.past(),
+    status: 'pending',
   },
 }));

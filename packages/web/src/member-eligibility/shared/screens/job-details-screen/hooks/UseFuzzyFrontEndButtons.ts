@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 
 const promoCodeStub = 'test promo code';
 

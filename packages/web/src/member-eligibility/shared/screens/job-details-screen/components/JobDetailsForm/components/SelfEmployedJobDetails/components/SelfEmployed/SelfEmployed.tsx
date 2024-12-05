@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler, FC } from 'react';
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import Checkbox from '@bluelightcard/shared-ui/components/Checkbox';
 import { SelfEmployedFields } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/SelfEmployedJobDetails/components/SelfEmployed/components/SelfEmployedFields/SelfEmployedFields';

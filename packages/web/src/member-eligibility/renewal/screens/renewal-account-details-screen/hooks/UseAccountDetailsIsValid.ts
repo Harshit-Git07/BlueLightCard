@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { useAddressIsValid } from '@/root/src/member-eligibility/sign-up/screens/delivery-address-screen/hooks/UseAddressIsValid';
 
 export function useAccountDetailsValid(eligibilityDetailsState: EligibilityDetailsState): boolean {

@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { act, screen } from '@testing-library/react';
 import { VerificationMethodScreen } from './VerificationMethodScreen';
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { renderWithMockedPlatformAdapter } from '../../testing/MockedPlatformAdaptor';
 
 const mockSetEligibilityDetails = jest.fn();

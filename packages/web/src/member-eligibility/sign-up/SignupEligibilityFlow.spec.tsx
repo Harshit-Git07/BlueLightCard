@@ -1,9 +1,10 @@
 import '@testing-library/jest-dom';
-import { act, fireEvent, screen } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { SignupEligibilityFlow } from './SignupEligibilityFlow';
-import { renderWithMockedPlatformAdapter } from '../shared/testing/MockedPlatformAdaptor';
 import { uploadFileToServiceLayer } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/components/hooks/use-file-upload-state/service-layer/UploadFile';
+import { useUpdateMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/UseUpdateMemberProfile';
+import { renderWithMockedPlatformAdapter } from '../shared/testing/MockedPlatformAdaptor';
 
 jest.mock('react-use');
 jest.mock('next/router', () => ({
@@ -12,14 +13,22 @@ jest.mock('next/router', () => ({
 jest.mock(
   '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/components/hooks/use-file-upload-state/service-layer/UploadFile'
 );
+jest.mock(
+  '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/UseUpdateMemberProfile'
+);
 
 const pngFile = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
 const pdfFile = new File(['(⌐□_□)'], 'test.pdf', { type: 'application/pdf' });
 
 const uploadFileToServiceLayerMock = jest.mocked(uploadFileToServiceLayer);
+const useUpdateMemberProfileMock = jest.mocked(useUpdateMemberProfile);
+
+const updateMemberProfileMock = jest.fn();
 
 beforeEach(() => {
   uploadFileToServiceLayerMock.mockResolvedValue(Promise.resolve());
+  useUpdateMemberProfileMock.mockReturnValue(updateMemberProfileMock);
+  updateMemberProfileMock.mockResolvedValue(Promise.resolve());
 });
 
 // TODO: Test back button behaviour too
@@ -114,22 +123,31 @@ describe('given a signing up member that needs to prove their eligibility to use
                   const input = screen.getByRole('textbox');
                   await userEvent.type(input, 'test@NHS.com');
                   const nextButton = screen.getByTestId('send-verification-link-button');
+
                   act(() => nextButton.click());
                 });
 
-                it('should navigate to the resend email screen', () => {
-                  const emailRetryScreen = screen.getByTestId('work-email-retry-screen');
-                  expect(emailRetryScreen).toBeInTheDocument();
+                it('should navigate to the resend email screen', async () => {
+                  await waitFor(() => {
+                    const emailRetryScreen = screen.getByTestId('work-email-retry-screen');
+                    expect(emailRetryScreen).toBeInTheDocument();
+                  });
                 });
 
                 // TODO: This will require probably a new render with state injected in
                 describe('when they click the verification link on the email', () => {
                   beforeEach(async () => {
+                    await waitFor(() => {
+                      const emailRetryScreen = screen.getByTestId('work-email-retry-screen');
+                      expect(emailRetryScreen).toBeInTheDocument();
+                    });
+
                     fireEvent.keyDown(window, {
                       key: '.',
                       ctrlKey: true,
                     });
                     const nextButton = screen.getByTestId('next-button-1');
+
                     act(() => nextButton.click());
                   });
 

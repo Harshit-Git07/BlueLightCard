@@ -4,7 +4,7 @@ import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import FileUploadCounter from '@bluelightcard/shared-ui/components/FileUpload/FileUploadCounter';
 import FileUploadStatusCard from '@bluelightcard/shared-ui/components/FileUpload/FileUploadStatusCard';
 import { useFileUploadState } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/components/hooks/use-file-upload-state/UseFileUploadState';
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import { fileUploadVerificationEvents } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/amplitude-events/FileUploadVerificationEvents';
 

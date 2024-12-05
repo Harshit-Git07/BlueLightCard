@@ -1,4 +1,4 @@
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { jobDetailsEvents } from '@/root/src/member-eligibility/shared/screens/job-details-screen/amplitude-events/JobDetailsEvents';
 import { MouseEventHandler, useCallback } from 'react';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';

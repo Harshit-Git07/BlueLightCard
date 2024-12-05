@@ -4,7 +4,7 @@ import { Link, ThemeVariant } from '@bluelightcard/shared-ui/index';
 import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import ProgressBar from '@bluelightcard/shared-ui/components/ProgressBar';
 import { totalNumberOfProgressBarSteps } from '@/root/src/member-eligibility/shared/constants/TotalNumberOfSignUpFlowProgressBarSteps';
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import {
   FuzzyFrontendButtonProps,
   FuzzyFrontendButtons,

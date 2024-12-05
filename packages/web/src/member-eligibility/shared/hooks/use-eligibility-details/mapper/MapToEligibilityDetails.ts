@@ -1,13 +1,22 @@
 import {
+  AusAddress,
   EligibilityDetails,
+  EligibilityDetailsAddress,
+  EligibilityDetailsApplication,
   EligibilityDetailsMember,
   EligibilityEmployer,
   EligibilityOrganisation,
   EmploymentStatus,
+  UkAddress,
 } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
-import { ServiceLayerMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/ServiceLayerMemberProfile';
+import {
+  ServiceLayerApplication,
+  ServiceLayerMemberProfile,
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/ServiceLayerMemberProfile';
 import { getEmployerFromServiceLayer } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/mapper/service-layer/GetEmployer';
 import { getOrganisationFromServiceLayer } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/mapper/service-layer/GetOrganisation';
+import { BRANDS } from '@/types/brands.enum';
+import { BRAND } from '@/root/global-vars';
 
 type EligibilityDetailsWithoutFlowAndScreen = Omit<EligibilityDetails, 'flow' | 'currentScreen'>;
 
@@ -16,6 +25,7 @@ export async function mapToEligibilityDetails(
 ): Promise<EligibilityDetailsWithoutFlowAndScreen> {
   return {
     member: getMemberDetails(memberProfile),
+    address: getAddressDetails(memberProfile),
     employmentStatus: getEmploymentStatus(memberProfile),
     organisation: await getOrganisation(memberProfile),
     employer: await getEmployer(memberProfile),
@@ -34,6 +44,75 @@ function getMemberDetails(memberProfile: ServiceLayerMemberProfile): Eligibility
     firstName: memberProfile.firstName,
     surname: memberProfile.lastName,
     dob: new Date(memberProfile.dateOfBirth),
+    application: getApplicationDetails(memberProfile),
+  };
+}
+
+function getApplicationDetails(
+  memberProfile: ServiceLayerMemberProfile
+): EligibilityDetailsApplication | undefined {
+  const latestApplication = memberProfile.applications?.at(-1);
+  if (!latestApplication) return undefined;
+
+  return {
+    id: latestApplication.applicationId,
+  };
+}
+
+function getAddressDetails(
+  memberProfile: ServiceLayerMemberProfile
+): EligibilityDetailsAddress | undefined {
+  const latestApplication = memberProfile.applications?.at(-1);
+  if (!latestApplication) return undefined;
+
+  if (BRAND === BRANDS.BLC_AU) {
+    return getAusAddressDetails(memberProfile, latestApplication);
+  }
+
+  return getUkAddressDetails(memberProfile, latestApplication);
+}
+
+function getAusAddressDetails(
+  memberProfile: ServiceLayerMemberProfile,
+  latestApplication: ServiceLayerApplication
+): AusAddress | undefined {
+  if (
+    latestApplication.address1 === undefined ||
+    latestApplication.city === undefined ||
+    latestApplication.postcode === undefined ||
+    memberProfile.county === undefined
+  ) {
+    return undefined;
+  }
+
+  return {
+    line1: latestApplication.address1,
+    line2: latestApplication.address2,
+    city: latestApplication.city,
+    state: memberProfile.county,
+    postcode: latestApplication.postcode,
+  };
+}
+
+function getUkAddressDetails(
+  memberProfile: ServiceLayerMemberProfile,
+  latestApplication: ServiceLayerApplication
+): UkAddress | undefined {
+  if (
+    latestApplication.address1 === undefined ||
+    latestApplication.city === undefined ||
+    latestApplication.postcode === undefined ||
+    memberProfile.county === undefined
+  ) {
+    return undefined;
+  }
+
+  return {
+    line1: latestApplication.address1,
+    line2: latestApplication.address2,
+    city: latestApplication.city,
+    county: memberProfile.county,
+    postcode: latestApplication.postcode,
   };
 }
 

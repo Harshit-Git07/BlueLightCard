@@ -1,13 +1,15 @@
 import '@testing-library/jest-dom';
 import { screen } from '@testing-library/react';
 import { DeliveryAddressScreen } from './DeliveryAddressScreen';
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { renderWithMockedPlatformAdapter } from '@/root/src/member-eligibility/shared/testing/MockedPlatformAdaptor';
+
 const mockSetEligibilityDetails = jest.fn();
 
 describe('DeliveryAddressScreen', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
     const customState: EligibilityDetailsState = [
       {
         flow: 'Sign Up',
@@ -15,7 +17,6 @@ describe('DeliveryAddressScreen', () => {
       },
       mockSetEligibilityDetails,
     ];
-
     renderWithMockedPlatformAdapter(
       <DeliveryAddressScreen eligibilityDetailsState={customState} />
     );

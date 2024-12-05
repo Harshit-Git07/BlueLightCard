@@ -1,6 +1,5 @@
 import React, { FC, useMemo } from 'react';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
-import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { useRenewalEligibilityDetails } from '@/root/src/member-eligibility/renewal/hooks/use-renewal-eligibility-details/UseRenewalEligibilityDetails';
 import { RenewalInterstitialScreen } from '@/root/src/member-eligibility/renewal/screens/renewal-interstitial-screen/RenewalInterstitialScreen';
 import { RenewalAccountDetailsScreen } from './screens/renewal-account-details-screen/RenewalAccountDetailsScreen';
@@ -12,6 +11,7 @@ import { WorkEmailRetryScreen } from '@/root/src/member-eligibility/shared/scree
 import { FileUploadVerificationScreen } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/FileUploadVerificationScreen';
 import { SuccessScreen } from '@/root/src/member-eligibility/shared/screens/success-screen/SuccessScreen';
 import { PaymentScreen } from '@/root/src/member-eligibility/shared/screens/payment-screen/PaymentScreen';
+import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 
 interface Props {
   initialState?: EligibilityDetails;
@@ -28,7 +28,7 @@ export const RenewalEligibilityFlow: FC<Props> = ({ initialState }) => {
 
   const props: VerifyEligibilityScreenProps = useMemo(() => {
     return {
-      eligibilityDetailsState: eligibilityDetailsState,
+      eligibilityDetailsState,
     };
   }, [eligibilityDetailsState]);
 

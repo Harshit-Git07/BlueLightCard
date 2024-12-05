@@ -41,8 +41,8 @@ export const RenewalInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
   const reviewEmploymentDetailsCardHasButton = useMemo(() => {
     if (makeAPaymentCardHasButton) return false;
 
-    return false; // TODO: What triggers this?
-  }, [makeAPaymentCardHasButton]);
+    return eligibilityDetails.address;
+  }, [eligibilityDetails.address, makeAPaymentCardHasButton]);
 
   const showReviewEmploymentDetailsCard = useMemo(() => {
     return !makeAPaymentCardHasButton;

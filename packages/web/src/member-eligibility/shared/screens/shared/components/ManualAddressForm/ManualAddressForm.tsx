@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import TextInput from '@bluelightcard/shared-ui/components/TextInput';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { useOnAddressFieldChanged } from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/hooks/UseOnAddressFieldChanged';
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { RegionAddressFields } from './components/RegionAddressFields';
 
 interface ManualAddressFormProps {

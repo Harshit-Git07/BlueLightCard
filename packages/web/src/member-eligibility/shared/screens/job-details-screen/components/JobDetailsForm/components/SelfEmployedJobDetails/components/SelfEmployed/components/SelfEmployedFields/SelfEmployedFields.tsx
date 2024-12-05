@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, FC } from 'react';
 import TextInput from '@bluelightcard/shared-ui/components/TextInput';
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { useOnEmployerChange } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/SelfEmployedJobDetails/components/SelfEmployed/components/SelfEmployedFields/hooks/UseOnEmployerChange';
 import { useOnAbnChange } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/SelfEmployedJobDetails/components/SelfEmployed/components/SelfEmployedFields/hooks/UseOnAbnChange';
 

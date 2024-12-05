@@ -1,7 +1,8 @@
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { MouseEventHandler, useCallback } from 'react';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import { workEmailVerificationEvents } from '@/root/src/member-eligibility/shared/screens/work-email-verification-screen/amplitude-events/WorkEmailVerificationEvents';
+import { useUpdateMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/UseUpdateMemberProfile';
 
 type Callback = MouseEventHandler<HTMLButtonElement>;
 
@@ -11,21 +12,22 @@ export function useOnSendVerificationLink(
   const [eligibilityDetails, setEligibilityDetailsState] = eligibilityDetailsState;
 
   const logAnalyticsEvent = useLogAmplitudeEvent();
+  const updateMemberProfile = useUpdateMemberProfile(eligibilityDetailsState);
 
-  // TODO: An API call to send the email is needed here.
   return useCallback<MouseEventHandler<HTMLButtonElement>>(
     (event) => {
       event.preventDefault();
-      logAnalyticsEvent(workEmailVerificationEvents.onEmailAdded(eligibilityDetails));
 
+      logAnalyticsEvent(workEmailVerificationEvents.onEmailAdded(eligibilityDetails));
       logAnalyticsEvent(workEmailVerificationEvents.onSendClicked(eligibilityDetails));
 
-      setEligibilityDetailsState({
-        ...eligibilityDetails,
-        currentScreen: 'Work Email Retry Screen',
-        emailVerification: eligibilityDetails.emailVerification,
+      updateMemberProfile().then(() => {
+        setEligibilityDetailsState({
+          ...eligibilityDetails,
+          currentScreen: 'Work Email Retry Screen',
+        });
       });
     },
-    [eligibilityDetails, logAnalyticsEvent, setEligibilityDetailsState]
+    [eligibilityDetails, logAnalyticsEvent, setEligibilityDetailsState, updateMemberProfile]
   );
 }

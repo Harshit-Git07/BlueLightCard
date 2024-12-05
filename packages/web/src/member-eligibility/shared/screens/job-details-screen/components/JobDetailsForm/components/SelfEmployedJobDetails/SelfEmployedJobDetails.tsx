@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { useOrganisations } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/UseOrganisations';
 import { useOnOrganisationChanged } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/UseOnOrganisationChanged';
 import { useOnJobTitleChange } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/UseOnJobTitleChange';

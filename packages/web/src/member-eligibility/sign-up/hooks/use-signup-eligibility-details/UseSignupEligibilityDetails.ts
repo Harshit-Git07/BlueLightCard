@@ -1,5 +1,7 @@
-import { Dispatch } from 'react';
-import { useEligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
+import {
+  EligibilityDetailsState,
+  useEligibilityDetails,
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import {
   EligibilityDetails,
   EligibilityDetailsWithoutFlow,
@@ -13,7 +15,7 @@ export const eligibilityDetailsStub: EligibilityDetails = {
 
 export function useSignupEligibilityDetails(
   initialState: EligibilityDetailsWithoutFlow = eligibilityDetailsStub
-): [EligibilityDetails, Dispatch<EligibilityDetails>] {
+): EligibilityDetailsState {
   return useEligibilityDetails({
     ...initialState,
     flow: 'Sign Up',

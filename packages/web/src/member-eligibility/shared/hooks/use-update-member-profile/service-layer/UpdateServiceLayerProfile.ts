@@ -1,0 +1,78 @@
+import { serviceLayerUrl } from '@/root/src/member-eligibility/shared/constants/ServiceLayerUrl';
+import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import { isAusAddress } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/utils/IsAusAddress';
+
+interface Request {
+  firstName?: string;
+  lastName?: string;
+  dateOfBirth?: string; // Example: '2024-12-04'
+  county?: string;
+  employmentStatus?: 'EMPLOYED' | 'RETIRED' | 'VOLUNTEER';
+  organisationId?: string;
+  employerId?: string;
+  employerName?: string;
+  jobTitle?: string;
+  jobReference?: string;
+}
+
+export async function updateServiceLayerProfile(
+  eligibilityDetails: EligibilityDetails
+): Promise<string | undefined> {
+  try {
+    if (!eligibilityDetails.member?.id) {
+      console.error('No member id available so cannot update application');
+      return undefined;
+    }
+
+    const request: Request = {
+      firstName: eligibilityDetails.member?.firstName,
+      lastName: eligibilityDetails.member?.surname,
+      dateOfBirth: getDateOfBirth(eligibilityDetails),
+      county: getCounty(eligibilityDetails),
+      employmentStatus: getEmploymentStatus(eligibilityDetails),
+      organisationId: eligibilityDetails.organisation?.id,
+      employerId: eligibilityDetails.employer?.id,
+      employerName: undefined, // TODO: Add AUS specific employer name here
+      jobTitle: eligibilityDetails.jobTitle,
+      jobReference: undefined, // TODO: What do we put here?
+    };
+    const result = await fetch(
+      `${serviceLayerUrl}/members/${eligibilityDetails.member.id}/profile`,
+      {
+        method: 'PUT',
+        body: JSON.stringify(request),
+      }
+    );
+
+    if (!result.ok) {
+      console.error('Failed to update member application for unknown reason', result.body);
+      return undefined;
+    }
+  } catch (error) {
+    console.error('Failed to create member application', error);
+    return undefined;
+  }
+}
+
+function getCounty(eligibilityDetails: EligibilityDetails): string | undefined {
+  if (isAusAddress(eligibilityDetails.address)) {
+    return eligibilityDetails.address.state;
+  }
+
+  return eligibilityDetails.address?.county;
+}
+
+function getDateOfBirth(eligibilityDetails: EligibilityDetails): string | undefined {
+  return eligibilityDetails.member?.dob?.toISOString()?.split('T')?.[0];
+}
+
+function getEmploymentStatus(eligibilityDetails: EligibilityDetails): Request['employmentStatus'] {
+  switch (eligibilityDetails.employmentStatus) {
+    case 'Employed':
+      return 'EMPLOYED';
+    case 'Retired or Bereaved':
+      return 'RETIRED';
+    default:
+      return 'VOLUNTEER';
+  }
+}

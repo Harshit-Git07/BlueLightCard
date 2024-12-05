@@ -1,23 +1,19 @@
-import { Dispatch, useCallback, useContext, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { useGetMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/service-layer/UseGetMemberProfile';
 import { mapToEligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/mapper/MapToEligibilityDetails';
 import AuthContext from '@/context/Auth/AuthContext';
 
-export function useEligibilityDetails(
-  initialState: EligibilityDetails
-): [EligibilityDetails, Dispatch<EligibilityDetails>] {
+export type EligibilityDetailsState = [
+  EligibilityDetails,
+  Dispatch<SetStateAction<EligibilityDetails>>
+];
+
+export function useEligibilityDetails(initialState: EligibilityDetails): EligibilityDetailsState {
   const [eligibilityDetails, setEligibilityDetails] = useState(initialState);
 
   const { isReady } = useContext(AuthContext);
   const getMemberProfile = useGetMemberProfile();
-
-  const onEligibilityDetailsChanged: Dispatch<EligibilityDetails> = useCallback((newState) => {
-    setEligibilityDetails((previousState) => ({
-      ...previousState,
-      ...newState,
-    }));
-  }, []);
 
   useEffect(() => {
     if (!isReady) return;
@@ -38,5 +34,5 @@ export function useEligibilityDetails(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isReady]);
 
-  return [eligibilityDetails, onEligibilityDetailsChanged];
+  return [eligibilityDetails, setEligibilityDetails];
 }

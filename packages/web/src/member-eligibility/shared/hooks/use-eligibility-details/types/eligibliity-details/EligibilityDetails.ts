@@ -73,10 +73,10 @@ export interface EligibilityDetailsMember {
   firstName: string;
   surname: string;
   dob?: Date;
-  application?: Application;
+  application?: EligibilityDetailsApplication;
 }
 
-interface Application {
+export interface EligibilityDetailsApplication {
   id: string;
 }
 

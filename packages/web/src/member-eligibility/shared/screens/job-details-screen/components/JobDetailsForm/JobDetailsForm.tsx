@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { NormalJobDetails } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/NormalJobDetails/NormalJobDetails';
 import { SelfEmployedJobDetails } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/SelfEmployedJobDetails/SelfEmployedJobDetails';
-import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
+import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { useIsAusBrand } from '@/root/src/member-eligibility/shared/hooks/use-is-aus-brand/UseIsAusBrand';
 
 interface Props {

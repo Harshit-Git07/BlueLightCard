@@ -23,7 +23,7 @@ export interface ServiceLayerMemberProfile {
   gaKey?: string;
   status?: string;
   card?: Card;
-  applications?: Application[];
+  applications?: ServiceLayerApplication[];
 }
 
 interface Card {
@@ -53,7 +53,7 @@ interface Card {
   batchNumber?: string;
 }
 
-interface Application {
+export interface ServiceLayerApplication {
   memberId: string; // uuid
   applicationId: string; // uuid
   applicationReason: 'SIGNUP' | 'RENEWAL' | 'NAME_CHANGE' | 'LOST_CARD' | 'REPRINT';

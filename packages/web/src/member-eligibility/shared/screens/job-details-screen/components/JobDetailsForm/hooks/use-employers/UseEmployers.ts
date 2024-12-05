@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { getEmployers } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-employers/service-layer/GetEmployers';
 import { toEligibilityEmployer } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-employers/mapper/ToEligibilityEmployer';
 import {
-  EligibilityOrganisation,
-  EligibilityEmployer,
   EligibilityDetails,
+  EligibilityEmployer,
+  EligibilityOrganisation,
 } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { validate } from 'uuid';
 import { filterBasedOnEmploymentStatus } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/service-layer/utils/FilterBasedOnEmploymentStatus';

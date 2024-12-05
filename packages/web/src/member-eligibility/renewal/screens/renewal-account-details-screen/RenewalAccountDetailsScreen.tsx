@@ -26,13 +26,13 @@ export const RenewalAccountDetailsScreen: FC<VerifyEligibilityScreenProps> = ({
 
   useLogAnalyticsPageView(eligibilityDetails);
 
-  const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
   const onFirstNameChange = useOnFirstNameChange(eligibilityDetailsState);
   const onSurnameChange = useOnSurnameChange(eligibilityDetailsState);
   const onDobChange = useOnDobChange(eligibilityDetailsState);
   const isAccountDetailsValid = useAccountDetailsValid(eligibilityDetailsState);
   const handleNext = useHandleNext(eligibilityDetailsState);
   const handleBack = useHandleBack(eligibilityDetailsState);
+  const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 
   return (
     <EligibilityScreen>

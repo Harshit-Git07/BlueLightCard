@@ -5,6 +5,7 @@ import { getEnv, getEnvOrDefault, getEnvValidated } from '@blc-mono/core/utils/g
 
 import { MemberStackEnvironmentKeys } from '../constants/environment';
 import { PR_STAGE_REGEX, PRODUCTION_STAGE, STAGING_STAGE } from '../constants/sst';
+import { isEphemeral, isPr, isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 
 export type MemberStackRegion = 'eu-west-2' | 'ap-southeast-2';
 
@@ -20,11 +21,13 @@ export type MemberStackConfig = {
 export class MemberStackConfigResolver {
   public static for(stack: Stack, region: MemberStackRegion): MemberStackConfig {
     switch (true) {
-      case PRODUCTION_STAGE === stack.stage:
+      case isProduction(stack.stage):
         return this.forProductionStage(region);
-      case STAGING_STAGE === stack.stage:
+      case isStaging(stack.stage):
         return this.forStagingStage(region);
-      case PR_STAGE_REGEX.test(stack.stage):
+      case isPr(stack.stage):
+        return this.forPrStage();
+      case isEphemeral(stack.stage):
         return this.forPrStage();
       default:
         return this.fromEnvironmentVariables();

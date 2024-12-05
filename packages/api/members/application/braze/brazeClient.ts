@@ -2,48 +2,19 @@
 import axios from 'axios';
 import * as AWS from 'aws-sdk';
 import { logger } from '../middleware';
+import { NotFoundError } from '../errors/NotFoundError';
 
 export default class BrazeClient {
-  private apiKey: string = '';
-
   constructor(
-    dev: boolean = false,
-    brand: string = 'BLC_UK',
     private readonly instanceUrl: string = 'rest.fra-02.braze.eu',
-  ) {
-    this.setApiKey(false, brand);
-  }
-
-  async setApiKey(dev: boolean, brand: string) {
-    try {
-      const secret = (await this.getApiKeySecrets(dev)) || '';
-      const apiKeys = JSON.parse(secret);
-      let result;
-      switch (brand) {
-        case 'DDS':
-          result = dev ? apiKeys.DDS_DEV_API_KEY : apiKeys.DDS_API_KEY;
-          this.apiKey = result;
-          break;
-        case 'BLC_AU':
-          result = dev ? apiKeys.BLC_AU_DEV_API_KEY : apiKeys.BLC_AU_API_KEY;
-          this.apiKey = result;
-          break;
-        default:
-          result = dev ? apiKeys.BLC_UK_DEV_API_KEY : apiKeys.BLC_UK_API_KEY;
-          this.apiKey = result;
-          break;
-      }
-    } catch (error) {
-      logger.error({ message: 'Error setting api key', error });
-      throw error;
-    }
-  }
+    private readonly brazeJson: object = JSON.parse(process.env.BRAZE_SERVICE_JSON),
+  ) {}
 
   async getAttributes(memberId: string, attributes: string[]): Promise<Record<string, string>> {
     const checkListUrl = `https://${this.instanceUrl}/users/export/ids`;
 
     const headers = {
-      Authorization: `Bearer ${this.apiKey}`,
+      Authorization: `Bearer ${this.brazeJson.BRAZE_SERVICE_API_KEY}`,
       'Content-Type': 'application/json',
     };
 
@@ -56,6 +27,7 @@ export default class BrazeClient {
 
     try {
       const { data } = await axios.post(checkListUrl, body, { headers });
+
       if (data.users[0] === undefined) {
         throw new NotFoundError('Braze user not found');
       }
@@ -76,8 +48,8 @@ export default class BrazeClient {
         }
         let array2 = {};
         for (let i = 0; i < Object.keys(array).length; i++) {
-          for (let z = 0; z < arrayOfFieldsToExport.length; z++) {
-            array2[arrayOfFieldsToExport[z]] = array[arrayOfFieldsToExport[z]];
+          for (let z = 0; z < attributes.length; z++) {
+            array2[attributes[z]] = array[attributes[z]];
             delete array2['custom_attributes'];
           }
         }
@@ -94,9 +66,8 @@ export default class BrazeClient {
 
   async getMarketingPreferences(memberId: string, environment: 'web' | 'mobile') {
     const checkListUrl = `https://${this.instanceUrl}/users/export/ids`;
-
     const headers = {
-      Authorization: `Bearer ${this.apiKey}`,
+      Authorization: `Bearer ${this.brazeJson.BRAZE_SERVICE_API_KEY}`,
       'Content-Type': 'application/json',
     };
 
@@ -117,7 +88,7 @@ export default class BrazeClient {
         (array, [key, value]): [string, string] => {
           if (key === 'custom_attributes') {
             array.sms_subscribe =
-              value.sms_subscribe !== 'subscribed' && value.sms_subscribe != undefined
+              value.sms_subscribe === 'opted_in' && value.sms_subscribe != undefined
                 ? value.sms_subscribe
                 : 'unsubscribed';
             array.analytics =
@@ -161,13 +132,14 @@ export default class BrazeClient {
     }));
   }
 
-  async enableTracking(memberId: string, attributes: any): Promise<void> {
+  async updateBraze(memberId: string, attributes: any): Promise<void> {
     const checkListUrl = `https://${this.instanceUrl}/users/track`;
+    const containsSmsSubscribe = attributes.hasOwnProperty('sms_subscribe');
 
     const options = attributes;
 
     const headers = {
-      Authorization: `Bearer ${this.apiKey}`,
+      Authorization: `Bearer ${this.brazeJson.BRAZE_SERVICE_API_KEY}`,
       'Content-Type': 'application/json',
     };
 
@@ -185,6 +157,25 @@ export default class BrazeClient {
 
     try {
       await axios.post(checkListUrl, body, { headers });
+      if (containsSmsSubscribe) {
+        //update subscription group
+
+        if (
+          this.brazeJson.BRAZE_SERVICE_MARKETING_SMS_CAMPAIGN_ID !== undefined &&
+          this.brazeJson.BRAZE_SERVICE_MARKETING_SMS_CAMPAIGN_ID !== ''
+        ) {
+          try {
+            await this.updateSubscriptionGroup(
+              memberId,
+              this.brazeJson.BRAZE_SERVICE_MARKETING_SMS_CAMPAIGN_ID,
+              attributes['sms_subscribe'],
+            );
+          } catch (error) {
+            logger.error({ message: 'Error updating Braze subscription group', error });
+            throw error;
+          }
+        }
+      }
     } catch (error) {
       logger.error({ message: 'Error updating Braze', error });
       throw error;
@@ -193,47 +184,23 @@ export default class BrazeClient {
 
   async updateSubscriptionGroup(memberId: string, groupId: string, value: string): Promise<void> {
     const checkListUrl = `https://${this.instanceUrl}/subscription/status/set`;
+    const subGroupStatus = value === 'opted_in' ? 'subscribed' : 'unsubscribed';
 
     const headers = {
-      Authorization: `Bearer ${this.apiKey}`,
+      Authorization: `Bearer ${this.brazeJson.BRAZE_SERVICE_API_KEY}`,
       'Content-Type': 'application/json',
     };
 
-    const attributesArray = {
+    const body = {
       external_id: memberId,
       subscription_group_id: groupId,
-      subscription_state: value,
-    };
-
-    const body = {
-      attributes: [attributesArray],
+      subscription_state: subGroupStatus,
     };
 
     try {
       await axios.post(checkListUrl, body, { headers });
     } catch (error) {
       logger.error({ message: 'Error updating Braze', error });
-      throw error;
-    }
-  }
-
-  // Can we use SST bindings to inject this and avoid hard coded ARNs?
-  private async getApiKeySecrets(dev: boolean): Promise<string | undefined> {
-    const secretArn =
-      dev === true
-        ? 'arn:aws:secretsmanager:eu-west-2:314658777488:secret:develop/brazeV2-W2QONL'
-        : 'arn:aws:secretsmanager:eu-west-2:676719682338:secret:production/braze-QpyePT';
-    const secretsManager = new AWS.SecretsManager();
-
-    const params = {
-      SecretId: secretArn,
-    };
-
-    try {
-      const response = await secretsManager.getSecretValue(params).promise();
-      return response.SecretString;
-    } catch (error) {
-      logger.error({ message: 'Error fetching secret:', error });
       throw error;
     }
   }

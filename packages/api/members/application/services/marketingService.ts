@@ -2,12 +2,7 @@ import { logger } from '../middleware';
 import BrazeClient from '../braze/brazeClient';
 
 export default class MarketingService {
-  constructor(
-    private readonly brazeClient: BrazeClient = new BrazeClient(
-      process.env.STAGE === 'production' ? false : true,
-      process.env.BRAND,
-    ),
-  ) {}
+  constructor(private readonly brazeClient: BrazeClient = new BrazeClient()) {}
 
   async getAttributes(memberId: string, attributes: string[]): Promise<Record<string, string>> {
     try {
@@ -29,9 +24,10 @@ export default class MarketingService {
     }
   }
 
-  async updatePreferences(memberId: string, environment: 'web' | 'mobile') {
+  async updateBraze(memberId: string, attributes: object) {
     try {
       logger.debug({ message: 'Updating marketing preferences', memberId });
+      await this.brazeClient.updateBraze(memberId, attributes);
     } catch (error) {
       logger.error({ message: 'Error updating marketing preferences', error });
       throw error;

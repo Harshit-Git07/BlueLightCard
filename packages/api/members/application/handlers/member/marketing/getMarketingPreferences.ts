@@ -2,6 +2,8 @@ import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 import { middleware } from '../../../middleware';
 import MarketingService from '@blc-mono/members/application/services/marketingService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
+import { MarketingPreferencesModel } from '@blc-mono/members/application/models/marketingPreferences';
+import { verifyMemberHasAccessToProfile } from '../memberAuthorization';
 
 const service = new MarketingService();
 
@@ -13,6 +15,7 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<any> => {
     throw new ValidationError('Environment must be either "web" or "mobile"');
   }
 
+  verifyMemberHasAccessToProfile(event, memberId);
   return await service.getPreferences(memberId, environment);
 };
 

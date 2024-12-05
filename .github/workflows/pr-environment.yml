@@ -414,7 +414,11 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        region: ['eu-west-2']
+        include:
+          - deployment: 'blc-uk-pr'
+            region: 'eu-west-2'
+            brand: BLC_UK
+            brazeSecret: BLC_UK_BRAZE_SERVICE_JSON
     outputs:
       members-api-endpoint: ${{ steps.sst-members-outputs.outputs.membersApiUrl }}
       members-admin-api-endpoint: ${{ steps.sst-members-outputs.outputs.membersAdminApiUrl }}
@@ -431,9 +435,10 @@ jobs:
       - run: npm run build
       - name: Deploy Members
         env:
-          BRAND: BLC_UK
+          BRAND: ${{ matrix.brand }}
           SKIP_MEMBERS_STACK: false
-        run: npx sst deploy members members-api members-admin-api --stage $PR_PREFIX --region ${{matrix.region}} --verbose
+          BRAZE_SERVICE_JSON: ${{ secrets[matrix.brazeSecret] }}
+        run: npx sst deploy members members-api members-admin-api --stage $PR_PREFIX --region ${{matrix.region}}
       - name: Extract Api URL and set output
         id: sst-members-outputs
         run: |
@@ -446,6 +451,60 @@ jobs:
         run: |
           echo ${{ steps.sst-members-outputs.outputs.membersApiUrl }}
           echo ${{ steps.sst-members-outputs.outputs.membersAdminApiUrl }}
+
+  backend-members-dds:
+    needs:
+      - changes
+      - install
+      - backend-shared
+      - backend-shared-dds
+    name: Deploy DDS Backend for PR (members)
+    if: ${{ needs.changes.outputs.backend-members == 'true' && github.actor != 'dependabot[bot]' && contains(github.event.pull_request.labels.*.name, 'ready-for-test') && contains(github.event.pull_request.labels.*.name, 'dds-ready-for-test')}}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - deployment: 'dds-uk-pr'
+            region: 'eu-west-2'
+            brand: DDS_UK
+            brazeSecret: DDS_UK_BRAZE_SERVICE_JSON
+    outputs:
+      members-api-endpoint: ${{ steps.sst-members-dds-outputs.outputs.membersApiUrl }}
+      members-admin-api-endpoint: ${{ steps.sst-members-dds-outputs.outputs.ddsMembersAdminApiUrl }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
+          aws-region: ${{matrix.region}}
+      - run: npm run build
+      - name: Deploy Members DDS
+        env:
+          BRAND: ${{ matrix.brand }}
+          SKIP_MEMBERS_STACK: false
+          BRAZE_SERVICE_JSON: ${{ secrets[matrix.brazeSecret] }}
+          BLC_UK_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.blc-uk-cognito-user-pool-id }}
+          BLC_UK_OLD_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.blc-uk-old-cognito-user-pool-id }}
+          DDS_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.dds-cognito-user-pool-id }}
+          DDS_OLD_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.dds-old-cognito-user-pool-id }}
+          BLC_UK_IDENTITY_API_ID: ${{ needs.backend-shared.outputs.identity-api-id }}
+        run: npx sst deploy members members-api members-admin-api --stage $PR_PREFIX_DDS --region ${{matrix.region}}
+      - name: Extract Api URL and set output
+        id: sst-members-dds-outputs
+        run: |
+          cat .sst/outputs.json
+          DDS_MEMBERS_URL=$(jq -r '.[].MembersApiEndpoint | select(. != null)' .sst/outputs.json)
+          DDS_MEMBERS_ADMIN_URL=$(jq -r '.[].MembersAdminApiEndpoint | select(. != null)' .sst/outputs.json)
+          echo "ddsMembersApiUrl=$DDS_MEMBERS_URL" >> $GITHUB_OUTPUT
+          echo "ddsMembersAdminApiUrl=$DDS_MEMBERS_ADMIN_URL" >> $GITHUB_OUTPUT
+      - name: Echo outputs
+        run: |
+          echo ${{ steps.sst-members-dds-outputs.outputs.ddsMembersApiUrl }}
+          echo ${{ steps.sst-members-dds-outputs.outputs.ddsMembersAdminApiUrl }}
 
   # Deploy the frontend
   # Matrix Deployment for each brand does not allow dynamic outputs which is needed to be able to create the comment

@@ -1,0 +1,27 @@
+meta {
+  name: AdminGetBrazeAttributes
+  type: http
+  seq: 10
+}
+
+post {
+  url: https://{{api_key_admin_sst}}.execute-api.eu-west-2.amazonaws.com/v1/admin/members/{{memberId}}/marketing/braze
+  body: json
+  auth: apikey
+}
+
+auth:apikey {
+  key: x-api-key
+  value: {{api_key_aws}}
+  placement: header
+}
+
+body:json {
+  {
+    "attributes": ["sms_subscribe", "trust", "0.0", "email_subscribe"]
+  }
+}
+
+vars:pre-request {
+  memberId: ec110e88-fb0a-11ee-b68d-506b8d536548
+}

@@ -8,7 +8,7 @@
     "lint:fix": "eslint . --fix",
     "test": "npm run test:unit",
     "test:coverage": "npm run test:unit -- --coverage",
-    "test:unit": "jest",
+    "test:unit": "jest --runInBand",
     "typecheck": "tsc -noEmit",
     "dev": "sst dev"
   },

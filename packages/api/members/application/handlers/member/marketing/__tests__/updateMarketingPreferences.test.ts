@@ -9,12 +9,12 @@ describe('updateMarketingPreferences handler', () => {
   const environment = 'web';
   const event = {
     pathParameters: { memberId, environment },
-    body: JSON.stringify({ preferences: 'some-preferences' }),
+    body: JSON.stringify({ attributes: {} }),
   } as unknown as APIGatewayProxyEvent;
   const context = {} as Context;
 
   beforeEach(() => {
-    MarketingService.prototype.updatePreferences = jest.fn().mockResolvedValue({});
+    MarketingService.prototype.updateBraze = jest.fn().mockResolvedValue({});
   });
 
   it('should return 400 if memberId or environment is missing', async () => {
@@ -39,9 +39,9 @@ describe('updateMarketingPreferences handler', () => {
     expect(response.statusCode).toEqual(400);
   });
 
-  it('should return 200 on successful update', async () => {
+  it('should return 204 on successful update', async () => {
     const response = await handler(event, context);
-    expect(response.statusCode).toEqual(200);
+    expect(response.statusCode).toEqual(204);
   });
 });
 

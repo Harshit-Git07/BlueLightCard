@@ -1,23 +1,25 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { middleware } from '../../../middleware';
 import MarketingService from '@blc-mono/members/application/services/marketingService';
+import { verifyMemberHasAccessToProfile } from '../memberAuthorization';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
+import { BrazeUpdateModel } from '@blc-mono/members/application/models/brazeUpdateModel';
 
 const service = new MarketingService();
 
-const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<any> => {
-  const { memberId, environment } = event.pathParameters || {};
-  if (!memberId || !environment) {
-    throw new ValidationError('Member ID and Environment is required');
-  } else if (environment !== 'web' && environment !== 'mobile') {
-    throw new ValidationError('Environment must be either "web" or "mobile"');
+const unwrappedHandler = async (event: APIGatewayProxyEvent) => {
+  const { memberId } = event.pathParameters || {};
+  if (!memberId) {
+    throw new ValidationError('Member ID is required');
   }
 
   if (!event.body) {
     throw new ValidationError('Missing request body');
   }
 
-  return await service.updatePreferences(memberId, environment);
+  const model = BrazeUpdateModel.parse(JSON.parse(event.body));
+  verifyMemberHasAccessToProfile(event, memberId);
+  await service.updateBraze(memberId, model.attributes);
 };
 
 export const handler = middleware(unwrappedHandler);

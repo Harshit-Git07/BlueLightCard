@@ -1,0 +1,24 @@
+meta {
+  name: UpdateBrazeAttributes
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{apiBaseUrl}}/admin/members/{{memberId}}/marketing/braze/update
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "attributes": {
+      "sms_subscribe": "unsubscribed",
+      "trust": "Air Ambulance"
+    }
+  }
+}
+
+vars:pre-request {
+  memberId: ec110e88-fb0a-11ee-b68d-506b8d536548
+}

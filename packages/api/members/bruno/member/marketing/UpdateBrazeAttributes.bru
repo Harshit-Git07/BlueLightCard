@@ -1,19 +1,13 @@
 meta {
   name: UpdateBrazeAttributes
   type: http
-  seq: 8
+  seq: 2
 }
 
 post {
-  url: https://{{api_key_sst}}.execute-api.eu-west-2.amazonaws.com/v1/members/{{memberId}}/marketing/braze/update
+  url: {{apiBaseUrl}}/members/{{memberId}}/marketing/braze/update
   body: json
-  auth: apikey
-}
-
-auth:apikey {
-  key: x-api-key
-  value: {{api_key_aws}}
-  placement: header
+  auth: none
 }
 
 body:json {

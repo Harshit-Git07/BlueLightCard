@@ -57,6 +57,7 @@ export function getOfferQuery(id: string | undefined | null, useCms: boolean, is
     enabled: !!id && isEnabled,
     queryKey: ['offer', id],
     queryFn: () => getOffer(adapter, id, useCms),
+    retry: false,
   });
 }
 

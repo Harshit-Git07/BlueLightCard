@@ -156,21 +156,21 @@ jobs:
             # auth0_api_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
             # auth0_password_validation_client_id: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
             # auth0_password_validation_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
-#          - deployment: 'dds-uk-staging'
-#            region: 'eu-west-2'
-#            brand: 'DDS_UK'
-#            stage: staging-dds
-#            brazeSecret: DDS_UK_BRAZE_SERVICE_JSON
-#            blcUkCognitoUserPoolId: 'eu-west-2_Ow2L8azIb'
-#            blcUkOldCognitoUserPoolId: 'eu-west-2_rNmQEiFS4'
-#            ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
-#            ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
-#            blcUkIdentityApiId: 'tr1afrar24'
-#            # auth0_domain: DDS_UK_SERVICE_LAYER_AUTH0_DOMAIN
-#            # auth0_api_client_id: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
-#            # auth0_api_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
-#            # auth0_password_validation_client_id: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
-#            # auth0_password_validation_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+          - deployment: 'dds-uk-staging'
+            region: 'eu-west-2'
+            brand: 'DDS_UK'
+            stage: staging-dds
+            brazeSecret: DDS_UK_BRAZE_SERVICE_JSON
+            blcUkCognitoUserPoolId: 'eu-west-2_Ow2L8azIb'
+            blcUkOldCognitoUserPoolId: 'eu-west-2_rNmQEiFS4'
+            ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
+            ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
+            blcUkIdentityApiId: 'tr1afrar24'
+            # auth0_domain: DDS_UK_SERVICE_LAYER_AUTH0_DOMAIN
+            # auth0_api_client_id: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+            # auth0_api_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+            # auth0_password_validation_client_id: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+            # auth0_password_validation_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
     needs:
       - install
       - test
@@ -301,21 +301,21 @@ jobs:
             # auth0_api_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
             # auth0_password_validation_client_id: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
             # auth0_password_validation_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
-#          - deployment: 'dds-uk-production'
-#            region: eu-west-2
-#            brand: DDS_UK
-#            stage: production-dds
-#            brazeSecret: DDS_UK_BRAZE_SERVICE_JSON
-#            blcUkCognitoUserPoolId: 'eu-west-2_D3aAVuWHo'
-#            blcUkOldCognitoUserPoolId: 'eu-west-2_jrwTfFRgM'
-#            ddsCognitoUserPoolId: 'eu-west-2_3WlS5ZkAh'
-#            ddsOldCognitoUserPoolId: 'eu-west-2_y2KyCUbVT'
-#            blcUkIdentityApiId: 'ue8dcieh75'
-#            # auth0_domain: DDS_UK_SERVICE_LAYER_AUTH0_DOMAIN
-#            # auth0_api_client_id: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
-#            # auth0_api_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
-#            # auth0_password_validation_client_id: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
-#            # auth0_password_validation_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+          - deployment: 'dds-uk-production'
+            region: eu-west-2
+            brand: DDS_UK
+            stage: production-dds
+            brazeSecret: DDS_UK_BRAZE_SERVICE_JSON
+            blcUkCognitoUserPoolId: 'eu-west-2_D3aAVuWHo'
+            blcUkOldCognitoUserPoolId: 'eu-west-2_jrwTfFRgM'
+            ddsCognitoUserPoolId: 'eu-west-2_3WlS5ZkAh'
+            ddsOldCognitoUserPoolId: 'eu-west-2_y2KyCUbVT'
+            blcUkIdentityApiId: 'ue8dcieh75'
+            # auth0_domain: DDS_UK_SERVICE_LAYER_AUTH0_DOMAIN
+            # auth0_api_client_id: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+            # auth0_api_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+            # auth0_password_validation_client_id: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+            # auth0_password_validation_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
     needs:
       - install
       - test

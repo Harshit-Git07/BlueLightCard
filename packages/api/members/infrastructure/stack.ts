@@ -35,7 +35,7 @@ import { adminProfileRoutes } from './routes/admin/AdminProfileRoutes';
 import { DocumentUpload } from './s3/DocumentUploadBucket';
 import { ResponseType } from 'aws-cdk-lib/aws-apigateway';
 import { DefaultRouteProps } from './routes/route';
-import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
+import { isStaging, isProduction } from '@blc-mono/core/utils/checkEnvironment';
 import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import { createOutboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/createOutboundBatchFileCron';
@@ -253,7 +253,7 @@ function createRestApi(app: App, stack: Stack, name: string, certificateArn?: st
     },
     cdk: {
       restApi: {
-        ...(['production', 'staging'].includes(stack.stage) &&
+        ...((isProduction(stack.stage) || isStaging(stack.stage)) &&
           certificateArn && {
             domainName: {
               domainName: getDomainName(stack.stage, app.region, name),

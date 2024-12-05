@@ -1,6 +1,6 @@
 import {
   BALLOT,
-  CREDITCARD,
+  COMPARE,
   GENERIC,
   GIFTCARD,
   PREAPPLIED,
@@ -41,12 +41,12 @@ export type RedeemAffiliateStrategyResultBaseType<AffiliateRedemptionType extend
 };
 
 export type RedeemPreAppliedStrategyResult = RedeemAffiliateStrategyResultBaseType<typeof PREAPPLIED>;
-export type RedeemCreditCardStrategyResult = RedeemAffiliateStrategyResultBaseType<typeof CREDITCARD>;
+export type RedeemCompareStrategyResult = RedeemAffiliateStrategyResultBaseType<typeof COMPARE>;
 export type RedeemGiftCardStrategyResult = RedeemAffiliateStrategyResultBaseType<typeof GIFTCARD>;
 export type RedeemVerifyStrategyResult = RedeemAffiliateStrategyResultBaseType<typeof VERIFY>;
 export type RedeemAffiliateStrategyResult =
   | RedeemPreAppliedStrategyResult
-  | RedeemCreditCardStrategyResult
+  | RedeemCompareStrategyResult
   | RedeemGiftCardStrategyResult
   | RedeemVerifyStrategyResult;
 

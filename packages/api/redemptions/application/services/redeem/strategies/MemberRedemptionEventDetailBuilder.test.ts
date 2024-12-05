@@ -230,7 +230,7 @@ describe('buildMemberRedemptionEventDetail', () => {
     expect(actualMemberRedemptionEventDetail).toEqual(expectedMemberRedemptionEventDetail);
   });
 
-  describe.each(['creditCard', 'giftCard', 'preApplied', 'verify'] as const)(
+  describe.each(['compare', 'giftCard', 'preApplied', 'verify'] as const)(
     '%s Affiliate redemptions',
     (redemptionType) => {
       it(`builds a member redemption event detail`, () => {

@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 
 import {
-  CREDITCARD,
   GENERIC,
   GIFTCARD,
   PREAPPLIED,
@@ -31,8 +30,6 @@ beforeEach(() => {
     'showCard_env_val';
   process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID] =
     'giftCard_env_val';
-  process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_CREDIT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID] =
-    'creditCard_env_val';
   process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VERIFY_PUSH_NOTIFICATION_CAMPAIGN_ID] = 'verify_env_val';
 });
 
@@ -44,7 +41,6 @@ afterEach(() => {
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GENERIC_PUSH_NOTIFICATION_CAMPAIGN_ID];
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID];
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID];
-  delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_CREDIT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID];
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VERIFY_PUSH_NOTIFICATION_CAMPAIGN_ID];
 });
 
@@ -60,7 +56,6 @@ describe('PushNotificationRepository', () => {
       [PREAPPLIED, 'preApplied_env_val'],
       [SHOWCARD, 'showCard_env_val'],
       [GIFTCARD, 'giftCard_env_val'],
-      [CREDITCARD, 'creditCard_env_val'],
       [VERIFY, 'verify_env_val'],
     ])('should send push notification with redemptionType %s', async (redemptionType, campaignEnvVar) => {
       // Arrange

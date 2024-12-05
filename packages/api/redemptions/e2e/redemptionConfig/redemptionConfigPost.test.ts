@@ -156,13 +156,13 @@ describe('POST Redemption Config', () => {
       expect(actualResponseBody).toStrictEqual(expectedResponseBody);
     });
 
-    it('POST /redemptions returns 200 for creditCard redemptionType', async () => {
+    it('POST /redemptions returns 200 for compare redemptionType', async () => {
       const redemptionConfigRequest = {
         affiliate: 'awin',
         companyId: faker.string.uuid(),
         connection: 'affiliate',
         offerId: 107,
-        redemptionType: 'creditCard',
+        redemptionType: 'compare',
         url: 'https://www.credit-cards.co.uk/',
       };
 

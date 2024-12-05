@@ -313,7 +313,7 @@ describe('UpdateRedemptionConfigService', () => {
     expect(actual.data).toEqual(testGenericRedemptionConfig);
   });
 
-  it.each(['preApplied', 'giftCard', 'creditCard', 'verify'] as const)(
+  it.each(['preApplied', 'giftCard', 'compare', 'verify'] as const)(
     'should return kind "Error" when %s offer redemption record fails to update',
     async (redemptionType) => {
       const testPayloadFactory = affiliateFactory.build({
@@ -340,7 +340,7 @@ describe('UpdateRedemptionConfigService', () => {
     },
   );
 
-  it.each(['preApplied', 'giftCard', 'creditCard', 'verify'] as const)(
+  it.each(['preApplied', 'giftCard', 'compare', 'verify'] as const)(
     'should return kind "Ok" when %s redemption record updates correctly',
     async (redemptionType) => {
       const testPayloadFactory = affiliateFactory.build({

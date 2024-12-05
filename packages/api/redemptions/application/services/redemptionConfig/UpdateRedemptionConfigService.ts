@@ -1,5 +1,5 @@
 import {
-  CREDITCARD,
+  COMPARE,
   GENERIC,
   GIFTCARD,
   PREAPPLIED,
@@ -17,7 +17,7 @@ import {
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
 import { Affiliate, RedemptionType } from '@blc-mono/redemptions/libs/database/schema';
 import {
-  PatchRedemptionConfigCreditCardModel,
+  PatchRedemptionConfigCompareModel,
   PatchRedemptionConfigGenericModel,
   PatchRedemptionConfigGiftCardModel,
   PatchRedemptionConfigModel,
@@ -142,7 +142,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
           return await this.updateShowCard(patchRedemptionConfigModel, redemptionTransaction);
         case PREAPPLIED:
         case GIFTCARD:
-        case CREDITCARD:
+        case COMPARE:
         case VERIFY:
           return await this.updateAffiliateTypes(patchRedemptionConfigModel, redemptionTransaction);
         case GENERIC:
@@ -184,7 +184,7 @@ export class UpdateRedemptionConfigService implements IUpdateRedemptionConfigSer
     patchRedemptionConfigAffiliateModel:
       | PatchRedemptionConfigPreAppliedModel
       | PatchRedemptionConfigGiftCardModel
-      | PatchRedemptionConfigCreditCardModel
+      | PatchRedemptionConfigCompareModel
       | PatchRedemptionConfigVerifyModel,
     redemptionTransaction: RedemptionConfigRepository,
   ): Promise<UpdateRedemptionConfigSuccess | UpdateRedemptionConfigError> {

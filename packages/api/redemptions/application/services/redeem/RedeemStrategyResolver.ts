@@ -1,6 +1,6 @@
 import {
   BALLOT,
-  CREDITCARD,
+  COMPARE,
   GENERIC,
   GIFTCARD,
   PREAPPLIED,
@@ -50,7 +50,7 @@ export class RedeemStrategyResolver implements IRedeemStrategyResolver {
       case GENERIC:
         return this.redeemGenericStrategy;
       case PREAPPLIED:
-      case CREDITCARD:
+      case COMPARE:
       case VERIFY:
         return this.redeemAffiliateStrategy;
       case SHOWCARD:

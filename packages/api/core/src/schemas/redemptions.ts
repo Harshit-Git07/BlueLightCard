@@ -47,14 +47,16 @@ export const MemberRedemptionEventDetailSchema = z.object({
       offerName: z.string(),
       affiliate: z.string().nullable(),
       clientType: ClientTypeSchema,
-      vaultDetails: z.object({
-        id: z.string(),
-        alertBelow: NON_NEGATIVE_INT,
-        vaultType: z.union([z.literal('standard'), z.literal('legacy')]),
-        email: z.string().email(),
-        integration: z.string().nullable().optional(),
-        integrationId: z.string().nullable().optional(),
-      }).optional(),
+      vaultDetails: z
+        .object({
+          id: z.string(),
+          alertBelow: NON_NEGATIVE_INT,
+          vaultType: z.union([z.literal('standard'), z.literal('legacy')]),
+          email: z.string().email(),
+          integration: z.string().nullable().optional(),
+          integrationId: z.string().nullable().optional(),
+        })
+        .optional(),
     }),
     z.union([
       z.object({
@@ -89,7 +91,7 @@ export const MemberRedemptionEventDetailSchema = z.object({
         url: z.string(),
       }),
       z.object({
-        redemptionType: z.literal('creditCard'),
+        redemptionType: z.literal('compare'),
         url: z.string(),
       }),
       z.object({

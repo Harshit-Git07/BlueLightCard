@@ -249,10 +249,10 @@ describe('GET Redemption Config', () => {
     expect(result.status).toBe(200);
   }, 15000);
 
-  test('GET /redemptions/{offerId} should return 200 for redemptionType CreditCard', async () => {
+  test('GET /redemptions/{offerId} should return 200 for redemptionType compare', async () => {
     const { redemptionConfig, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
       offerId: '4',
-      redemptionType: 'creditCard',
+      redemptionType: 'compare',
       connection: 'direct',
       url: faker.internet.url(),
       affiliate: null,
@@ -270,7 +270,7 @@ describe('GET Redemption Config', () => {
       data: {
         id: redemptionConfig.id,
         offerId: redemptionConfig.offerId,
-        redemptionType: 'creditCard',
+        redemptionType: 'compare',
         companyId: redemptionConfig.companyId,
         affiliate: null,
         connection: 'direct',

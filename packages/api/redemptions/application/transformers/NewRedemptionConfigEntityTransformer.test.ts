@@ -78,11 +78,11 @@ const giftCardRequestBody: PostRedemptionConfigModel = {
   url: 'www.url.com',
 };
 
-const creditCardRequestBody: PostRedemptionConfigModel = {
+const compareRequestBody: PostRedemptionConfigModel = {
   companyId: faker.string.uuid(),
   offerId: faker.string.uuid(),
   connection: 'none',
-  redemptionType: 'creditCard',
+  redemptionType: 'compare',
   affiliate: 'awin',
   url: 'www.url.com',
 };
@@ -136,7 +136,7 @@ describe('transformToNewRedemptionConfigEntity', () => {
     ['vault' as const, vaultRequestBody],
     ['generic' as const, genericRequestBody],
     ['giftCard' as const, giftCardRequestBody],
-    ['creditCard' as const, creditCardRequestBody],
+    ['compare' as const, compareRequestBody],
     ['verify' as const, verifyRequestBody],
     ['ballot' as const, ballotRequestBody],
   ])('maps %s to "online" offerType', (redemptionType, redemptionConfigRequestBody) => {

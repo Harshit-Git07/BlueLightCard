@@ -1,6 +1,6 @@
 import {
   BALLOT,
-  CREDITCARD,
+  COMPARE,
   GENERIC,
   GIFTCARD,
   PREAPPLIED,
@@ -64,7 +64,7 @@ export type MemberRedemptionParams = MemberRedemptionBaseParams &
           | typeof PREAPPLIED
           | typeof SHOWCARD
           | typeof BALLOT
-          | typeof CREDITCARD
+          | typeof COMPARE
           | typeof VERIFY;
         code?: never;
         integration?: never;
@@ -100,7 +100,7 @@ export class MemberRedemptionParamsDto {
           integration: redemptionDetails.vaultDetails?.integration,
           integrationId: redemptionDetails.vaultDetails?.integrationId,
         });
-      case CREDITCARD:
+      case COMPARE:
       case GIFTCARD:
       case PREAPPLIED:
       case SHOWCARD:

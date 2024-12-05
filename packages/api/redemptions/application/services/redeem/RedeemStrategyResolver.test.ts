@@ -1,6 +1,6 @@
 import {
   BALLOT,
-  CREDITCARD,
+  COMPARE,
   GENERIC,
   GIFTCARD,
   PREAPPLIED,
@@ -31,7 +31,7 @@ describe('RedeemStrategyResolver', () => {
     [GENERIC, redeemGenericStrategy],
     [GIFTCARD, redeemAffiliateStrategy],
     [PREAPPLIED, redeemAffiliateStrategy],
-    [CREDITCARD, redeemAffiliateStrategy],
+    [COMPARE, redeemAffiliateStrategy],
     [SHOWCARD, redeemShowCardStrategy],
     [VAULT, redeemVaultStrategy],
     [VAULTQR, redeemVaultStrategy],

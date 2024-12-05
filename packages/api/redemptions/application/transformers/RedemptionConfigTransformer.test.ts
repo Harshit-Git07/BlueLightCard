@@ -187,7 +187,7 @@ describe('transformToRedemptionConfig', () => {
     expect(actualRedemptionConfig).toStrictEqual(expectedRedemptionConfig);
   });
 
-  it.each(['verify', 'preApplied', 'giftCard', 'creditCard'] as const)(
+  it.each(['verify', 'preApplied', 'giftCard', 'compare'] as const)(
     'returns formatted RedemptionConfig when redemptionType is [%s]',
     (redemptionType) => {
       const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({

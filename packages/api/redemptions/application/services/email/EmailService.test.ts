@@ -34,30 +34,27 @@ describe('EmailService', () => {
       },
     );
 
-    it.each(['verify', 'creditCard', 'giftCard', 'preApplied'])(
-      'sends email for %s Affiliate redemption events',
-      async () => {
-        // Arrange
-        const logger = createTestLogger();
-        const emailRepository: Partial<IEmailRepository> = {
-          sendAffiliateTransactionalEmail: jest.fn(),
-        };
-        const service = new EmailService(logger, as(emailRepository));
-        const event = memberRedemptionEventFactory.build({
-          detail: {
-            redemptionDetails: {
-              redemptionType: 'preApplied',
-            },
+    it.each(['verify', 'giftCard', 'preApplied'])('sends email for %s Affiliate redemption events', async () => {
+      // Arrange
+      const logger = createTestLogger();
+      const emailRepository: Partial<IEmailRepository> = {
+        sendAffiliateTransactionalEmail: jest.fn(),
+      };
+      const service = new EmailService(logger, as(emailRepository));
+      const event = memberRedemptionEventFactory.build({
+        detail: {
+          redemptionDetails: {
+            redemptionType: 'preApplied',
           },
-        });
+        },
+      });
 
-        // Act
-        await service.sendRedemptionTransactionEmail(event);
+      // Act
+      await service.sendRedemptionTransactionEmail(event);
 
-        // Assert
-        expect(emailRepository.sendAffiliateTransactionalEmail).toHaveBeenCalled();
-      },
-    );
+      // Assert
+      expect(emailRepository.sendAffiliateTransactionalEmail).toHaveBeenCalled();
+    });
 
     it('sends email for showCard redemption events', async () => {
       // Arrange

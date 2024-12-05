@@ -1,5 +1,5 @@
 {
-  "version": "6",
+  "version": "7",
   "dialect": "postgresql",
   "tables": {
     "public.generics": {
@@ -38,7 +38,10 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
     "public.redemptions": {
       "name": "redemptions",
@@ -102,7 +105,10 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
     "public.vaultBatches": {
       "name": "vaultBatches",
@@ -140,7 +146,10 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
     "public.vaultCodes": {
       "name": "vaultCodes",
@@ -212,7 +221,10 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
     "public.vaults": {
       "name": "vaults",
@@ -301,7 +313,10 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     }
   },
   "enums": {
@@ -361,5 +376,9 @@
     "columns": {}
   },
   "id": "4611b897-c63a-4be8-8a4b-bf8b62e039f0",
-  "prevId": "08230ba9-5e77-49a9-bfd2-eb7744f4c67d"
+  "prevId": "08230ba9-5e77-49a9-bfd2-eb7744f4c67d",
+  "sequences": {},
+  "policies": {},
+  "views": {},
+  "roles": {}
 }

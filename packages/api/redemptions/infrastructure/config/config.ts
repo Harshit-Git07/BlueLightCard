@@ -53,7 +53,6 @@ type BrazeEmailCampaignsConfig = {
   brazeShowCardEmailCampaignId: string;
   brazeVaultEmailCampaignId: string;
   brazeVaultQrCodeEmailCampaignId: string;
-  brazeCreditCardEmailCampaignId: string;
   brazeVerifyEmailCampaignId: string;
 };
 
@@ -64,7 +63,6 @@ type BrazePushNotificationRedemptionCampaignsConfig = {
   brazeRedemptionGenericPushNotificationCampaignId: string;
   brazeRedemptionShowCardPushNotificationCampaignId: string;
   brazeRedemptionGiftCardPushNotificationCampaignId: string;
-  brazeRedemptionCreditCardPushNotificationCampaignId: string;
   brazeRedemptionVerifyPushNotificationCampaignId: string;
 };
 
@@ -169,7 +167,6 @@ export class RedemptionsStackConfigResolver {
           brazePreAppliedEmailCampaignId: 'ab5691a2-0504-4099-88ef-56ac7ef5f03c',
           brazeVaultQrCodeEmailCampaignId: '31172aa1-2e31-4a77-b9ac-43896f511beb',
           brazeShowCardEmailCampaignId: 'bf54574e-f31e-418b-bd10-649762b74e6a',
-          brazeCreditCardEmailCampaignId: 'a53670bb-e1a5-4edf-9aed-f753c41a0b2a',
           brazeVerifyEmailCampaignId: '3f33aec9-f493-4542-a190-db9e091118a4',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
@@ -179,7 +176,6 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionGenericPushNotificationCampaignId: '378d0b0e-aa79-4b7e-a1a8-96459db8379a',
           brazeRedemptionShowCardPushNotificationCampaignId: '90df7afd-5d1d-48d5-a4a5-a71c9279c1d0',
           brazeRedemptionGiftCardPushNotificationCampaignId: '656a2dc3-7350-48cd-b492-eaa91c59e6e4',
-          brazeRedemptionCreditCardPushNotificationCampaignId: '51f244e8-dea7-4114-ae3c-befcc478aad2',
           brazeRedemptionVerifyPushNotificationCampaignId: '62072665-5906-4bfd-b432-3e7bd15f1729',
         },
         sesConfig: {
@@ -226,7 +222,6 @@ export class RedemptionsStackConfigResolver {
           brazeShowCardEmailCampaignId: '16260349-af64-6342-693b-fcc610fa97ad',
           brazeVaultEmailCampaignId: '1392bce7-45a4-7e40-7f91-d053740c6a9c',
           brazeVaultQrCodeEmailCampaignId: '87597364-b176-96f5-4583-06e74126416b',
-          brazeCreditCardEmailCampaignId: 'd7841542-d94f-48d0-ac9c-eb4141d73af3',
           brazeVerifyEmailCampaignId: 'd4209313-6532-4b4a-8d3d-3619d6854096',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
@@ -236,7 +231,6 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionGenericPushNotificationCampaignId: '8f91d5da-45a7-4838-8178-781801df34da',
           brazeRedemptionShowCardPushNotificationCampaignId: 'a291d19f-6720-4975-8ca8-88bed8ad7783',
           brazeRedemptionGiftCardPushNotificationCampaignId: '3b5982f8-3f64-45ad-8796-98aa8b636e6c',
-          brazeRedemptionCreditCardPushNotificationCampaignId: '7efffa74-9a9a-4166-8e7c-5eb157ab98f7',
           brazeRedemptionVerifyPushNotificationCampaignId: '93f213a3-4ec5-418e-9334-95078fb3da27',
         },
         sesConfig: {
@@ -283,7 +277,6 @@ export class RedemptionsStackConfigResolver {
           brazeShowCardEmailCampaignId: '781508f5-bea7-1532-bd7b-1cf73879c077',
           brazeVaultEmailCampaignId: '533ea136-1e73-52c4-e037-b95a4f545362',
           brazeVaultQrCodeEmailCampaignId: '38688c03-8b5c-43da-fb38-76908480b5e9',
-          brazeCreditCardEmailCampaignId: '711af610-587c-4287-9473-eeac27efe9a5',
           brazeVerifyEmailCampaignId: 'ef8cd635-e74e-459d-8e94-d1326654350b',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
@@ -293,7 +286,6 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionGenericPushNotificationCampaignId: 'd1bf3172-944b-4ba5-8ae6-7b9417d548c9',
           brazeRedemptionShowCardPushNotificationCampaignId: '2fe74877-e587-4853-a66f-33a2e0cb6461',
           brazeRedemptionGiftCardPushNotificationCampaignId: 'd5cfc6f1-1059-42aa-820b-41ff706adead',
-          brazeRedemptionCreditCardPushNotificationCampaignId: 'bee6236d-0125-40fc-8dbe-da9eb558aea2',
           brazeRedemptionVerifyPushNotificationCampaignId: '4f9a1882-3822-4021-bfea-33b41eb92471',
         },
         sesConfig: {
@@ -354,7 +346,6 @@ export class RedemptionsStackConfigResolver {
           brazePreAppliedEmailCampaignId: '00816603-1b52-42b3-9816-903508163c7e',
           brazeVaultQrCodeEmailCampaignId: 'eb6dac40-f99b-4634-889b-2f6451beaa82',
           brazeShowCardEmailCampaignId: '27928c2b-3d29-4837-8b62-4989da1383a9',
-          brazeCreditCardEmailCampaignId: 'bd2d3f3d-ac31-492f-a3c2-94f18d7e199d',
           brazeVerifyEmailCampaignId: 'd9e80016-85d3-4e73-a76e-022a96fa8f0d',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
@@ -364,7 +355,6 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionGenericPushNotificationCampaignId: '1b0b84ce-4595-411c-adc1-e8aa6c225cac',
           brazeRedemptionShowCardPushNotificationCampaignId: '2ca64df5-3768-40bc-8ad6-2735b9e3de45',
           brazeRedemptionGiftCardPushNotificationCampaignId: '758714b3-8913-4ce7-aa76-16f82c835399',
-          brazeRedemptionCreditCardPushNotificationCampaignId: '794a1a6b-c9df-4a13-85dc-f32661a93230',
           brazeRedemptionVerifyPushNotificationCampaignId: 'f0bafd20-3381-4cef-a2c8-68610274a823',
         },
         sesConfig: {
@@ -416,7 +406,6 @@ export class RedemptionsStackConfigResolver {
           brazeShowCardEmailCampaignId: 'e08f6174-cff9-ca5d-8742-ff505843a821',
           brazeVaultEmailCampaignId: 'e5d1d088-b766-6edf-8b9a-85b26da52ea2',
           brazeVaultQrCodeEmailCampaignId: 'a83acf23-6427-60d5-da8e-122dd7a002d2',
-          brazeCreditCardEmailCampaignId: 'ad740d22-7f70-253d-1bb0-69938cf9e9d0',
           brazeVerifyEmailCampaignId: '6299b1f9-3ed4-4422-ab0b-c7ce4752ff2e',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
@@ -426,7 +415,6 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionGenericPushNotificationCampaignId: '27e574d3-a8f7-4f08-a668-f90b3c36d5a6',
           brazeRedemptionShowCardPushNotificationCampaignId: 'af41d99b-4003-4344-a69d-2a403bb45090',
           brazeRedemptionGiftCardPushNotificationCampaignId: '4c63b04f-b707-4f26-9e93-94be58392980',
-          brazeRedemptionCreditCardPushNotificationCampaignId: '6d5d088c-e222-48eb-bca5-0db35e392eef',
           brazeRedemptionVerifyPushNotificationCampaignId: '98a17573-6a3f-44ab-b509-824f3924087f',
         },
         sesConfig: {
@@ -477,7 +465,6 @@ export class RedemptionsStackConfigResolver {
           brazeShowCardEmailCampaignId: '1d187e2e-481b-a128-5a5d-e81e1291de01',
           brazeVaultEmailCampaignId: '3a791d7c-8a61-5fb9-d41f-68c861bbf87f',
           brazeVaultQrCodeEmailCampaignId: '3fadd0eb-f39c-88f0-c6c4-8d410c2dae72',
-          brazeCreditCardEmailCampaignId: 'b7caf5ad-b8dd-c1ca-499a-808dccff007b',
           brazeVerifyEmailCampaignId: '723c5e1d-c752-46db-a387-37e80f6653fe',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
@@ -487,7 +474,6 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionGenericPushNotificationCampaignId: '0779e9f8-1839-48a5-bde4-7479ce4c796b',
           brazeRedemptionShowCardPushNotificationCampaignId: 'fca683b8-ceff-4663-9b9c-2d8a79553a82',
           brazeRedemptionGiftCardPushNotificationCampaignId: 'c218976e-4181-4fa0-8a8c-8ec06b5bb302',
-          brazeRedemptionCreditCardPushNotificationCampaignId: 'b0c4a0ad-696e-4372-b6ec-21b92286db8a',
           brazeRedemptionVerifyPushNotificationCampaignId: 'd48b793d-ab28-40df-a73f-58a69a790dbf',
         },
         sesConfig: {
@@ -540,7 +526,6 @@ export class RedemptionsStackConfigResolver {
         brazeShowCardEmailCampaignId: '27928c2b-3d29-4837-8b62-4989da1383a9',
         brazeVaultEmailCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
         brazeVaultQrCodeEmailCampaignId: 'eb6dac40-f99b-4634-889b-2f6451beaa82',
-        brazeCreditCardEmailCampaignId: 'bd2d3f3d-ac31-492f-a3c2-94f18d7e199d',
         brazeVerifyEmailCampaignId: 'd9e80016-85d3-4e73-a76e-022a96fa8f0d',
       },
       brazePushNotificationRedemptionCampaignsConfig: {
@@ -550,7 +535,6 @@ export class RedemptionsStackConfigResolver {
         brazeRedemptionGenericPushNotificationCampaignId: '1b0b84ce-4595-411c-adc1-e8aa6c225cac',
         brazeRedemptionShowCardPushNotificationCampaignId: '2ca64df5-3768-40bc-8ad6-2735b9e3de45',
         brazeRedemptionGiftCardPushNotificationCampaignId: '758714b3-8913-4ce7-aa76-16f82c835399',
-        brazeRedemptionCreditCardPushNotificationCampaignId: '794a1a6b-c9df-4a13-85dc-f32661a93230',
         brazeRedemptionVerifyPushNotificationCampaignId: 'f0bafd20-3381-4cef-a2c8-68610274a823',
       },
       sesConfig: {
@@ -633,10 +617,6 @@ export class RedemptionsStackConfigResolver {
         brazeShowCardEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID),
         brazeVaultEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULT_EMAIL_CAMPAIGN_ID),
         brazeVaultQrCodeEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID),
-        brazeCreditCardEmailCampaignId: getEnvOrDefault(
-          RedemptionsStackEnvironmentKeys.BRAZE_CREDIT_CARD_EMAIL_CAMPAIGN_ID,
-          'bd2d3f3d-ac31-492f-a3c2-94f18d7e199d',
-        ),
         brazeVerifyEmailCampaignId: getEnvOrDefault(
           RedemptionsStackEnvironmentKeys.BRAZE_VERIFY_EMAIL_CAMPAIGN_ID,
           'd9e80016-85d3-4e73-a76e-022a96fa8f0d',
@@ -660,9 +640,6 @@ export class RedemptionsStackConfigResolver {
         ),
         brazeRedemptionGiftCardPushNotificationCampaignId: getEnv(
           RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID,
-        ),
-        brazeRedemptionCreditCardPushNotificationCampaignId: getEnv(
-          RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_CREDIT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID,
         ),
         brazeRedemptionVerifyPushNotificationCampaignId: getEnvOrDefault(
           RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VERIFY_PUSH_NOTIFICATION_CAMPAIGN_ID,

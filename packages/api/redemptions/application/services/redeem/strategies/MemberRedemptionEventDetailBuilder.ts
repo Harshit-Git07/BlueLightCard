@@ -116,7 +116,7 @@ export class MemberRedemptionEventDetailBuilder {
           },
         };
         return memberRedemptionEventDetail;
-      case 'creditCard':
+      case 'compare':
       case 'giftCard':
       case 'preApplied':
       case 'verify':

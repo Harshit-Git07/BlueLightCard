@@ -303,7 +303,7 @@ describe('UpdateRedemptionConfigController', () => {
       delete process.env[RedemptionsStackEnvironmentKeys.ADMIN_API_DEFAULT_ALLOWED_ORIGINS];
     });
 
-    it('returns 200 when request body is valid creditCard redemptionType', async () => {
+    it('returns 200 when request body is valid compare redemptionType', async () => {
       mockUpdateRedemptionConfigService.updateRedemptionConfig.mockResolvedValue(
         getTestUpdateRedemptionConfigSuccess(testVaultRedemptionConfig),
       );
@@ -314,7 +314,7 @@ describe('UpdateRedemptionConfigController', () => {
         companyId: 'UUID',
         connection: 'affiliate',
         offerId: 'UUID',
-        redemptionType: 'creditCard',
+        redemptionType: 'compare',
         url: 'https://www.awin1.com',
       };
       const request: APIGatewayProxyEventV2 = {

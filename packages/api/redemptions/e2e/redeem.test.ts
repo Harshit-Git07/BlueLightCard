@@ -318,7 +318,7 @@ describe('POST /member/redeem', () => {
     expect(body).toHaveProperty('data.redemptionDetails.code'); //this will be a random value we cannot assess
   });
 
-  test.each(['creditCard', 'giftCard', 'preApplied', 'verify'] as const)(
+  test.each(['compare', 'giftCard', 'preApplied', 'verify'] as const)(
     'should redeem a %s Affiliate offer',
     async (redemptionType) => {
       // Arrange

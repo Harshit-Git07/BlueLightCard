@@ -83,13 +83,13 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
       url: 'https://www.awin1.com/',
     },
     {
-      id: `${redemptionsPrefix}-1s245ga-13a8-4cf3-a072-creditcard00`,
+      id: `${redemptionsPrefix}-1s245ga-13a8-4cf3-a072-compare00`,
       affiliate: 'awin',
       companyId: 'company-9179',
       connection: 'affiliate',
       offerId: '8728',
       offerType: 'online',
-      redemptionType: 'creditCard',
+      redemptionType: 'compare',
       url: 'https://www.awin1.com/',
     },
     {

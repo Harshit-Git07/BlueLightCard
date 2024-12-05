@@ -1,4 +1,4 @@
-import { CREDITCARD, GIFTCARD, PREAPPLIED, VERIFY } from '@blc-mono/core/constants/redemptions';
+import { COMPARE, GIFTCARD, PREAPPLIED, VERIFY } from '@blc-mono/core/constants/redemptions';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { AffiliateHelper } from '@blc-mono/redemptions/application/helpers/affiliate/AffiliateHelper';
 import { RedemptionConfigEntity } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
@@ -33,7 +33,7 @@ export class RedeemAffiliateStrategy implements IRedeemStrategy {
     if (
       redemptionConfigEntity.redemptionType !== GIFTCARD &&
       redemptionConfigEntity.redemptionType !== PREAPPLIED &&
-      redemptionConfigEntity.redemptionType !== CREDITCARD &&
+      redemptionConfigEntity.redemptionType !== COMPARE &&
       redemptionConfigEntity.redemptionType !== VERIFY
     ) {
       throw new Error('Unexpected redemption type');

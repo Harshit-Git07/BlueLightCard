@@ -222,9 +222,9 @@ describe('PATCH Redemption Config', () => {
     expect(actualResponseBody).toStrictEqual(expectedResponseBody);
   });
 
-  it('returns redemptionConfig for creditCard redemptionType on update success', async () => {
+  it('returns redemptionConfig for compare redemptionType on update success', async () => {
     const { redemptionConfig, ...redemptionConfigHooks } = buildRedemptionConfig(connectionManager, {
-      redemptionType: 'creditCard',
+      redemptionType: 'compare',
       connection: 'affiliate',
       url: faker.internet.url(),
       affiliate: 'awin',
@@ -237,7 +237,7 @@ describe('PATCH Redemption Config', () => {
       id: redemptionConfig.id,
       offerId: redemptionConfig.offerId,
       companyId: redemptionConfig.companyId,
-      redemptionType: 'creditCard',
+      redemptionType: 'compare',
       connection: 'direct',
       affiliate: null,
       url: faker.internet.url(),
@@ -255,7 +255,7 @@ describe('PATCH Redemption Config', () => {
         id: redemptionConfig.id,
         offerId: redemptionConfig.offerId,
         companyId: redemptionConfig.companyId,
-        redemptionType: 'creditCard',
+        redemptionType: 'compare',
         connection: payload.connection,
         affiliate: payload.affiliate,
         url: payload.url,

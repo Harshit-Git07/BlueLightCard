@@ -3,7 +3,6 @@ import { EventBusRuleProps, Queue, Stack } from 'sst/constructs';
 
 import {
   BALLOT,
-  CREDITCARD,
   GENERIC,
   GIFTCARD,
   PREAPPLIED,
@@ -51,8 +50,6 @@ export function createRedemptionPushNotificationRule(stack: Stack, config: Redem
         config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionShowCardPushNotificationCampaignId,
       [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID]:
         config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionGiftCardPushNotificationCampaignId,
-      [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_CREDIT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID]:
-        config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionCreditCardPushNotificationCampaignId,
       [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VERIFY_PUSH_NOTIFICATION_CAMPAIGN_ID]:
         config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionVerifyPushNotificationCampaignId,
     },
@@ -64,7 +61,7 @@ export function createRedemptionPushNotificationRule(stack: Stack, config: Redem
       detailType: [RedemptionEventDetailType.MEMBER_REDEMPTION],
       detail: {
         redemptionDetails: {
-          redemptionType: [VAULT, VAULTQR, GENERIC, PREAPPLIED, SHOWCARD, BALLOT, GIFTCARD, CREDITCARD, VERIFY],
+          redemptionType: [VAULT, VAULTQR, GENERIC, PREAPPLIED, SHOWCARD, BALLOT, GIFTCARD, VERIFY],
         },
       },
     },

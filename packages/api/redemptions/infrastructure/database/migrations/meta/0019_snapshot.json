@@ -1,7 +1,5 @@
 {
-  "id": "43315c89-c916-4231-8f5a-260fe0676217",
-  "prevId": "c0b117bb-66f7-49f8-a8ae-f78ff56dfaa3",
-  "version": "6",
+  "version": "7",
   "dialect": "postgresql",
   "tables": {
     "public.ballotEntries": {
@@ -49,29 +47,52 @@
       },
       "indexes": {
         "ba_ballot_idx": {
+          "columns": [
+            {
+              "expression": "ballotId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
           "name": "ba_ballot_idx",
-          "columns": ["ballotId"],
-          "isUnique": false
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         },
         "ba_member_idx": {
+          "columns": [
+            {
+              "expression": "memberId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
           "name": "ba_member_idx",
-          "columns": ["memberId"],
-          "isUnique": false
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "ballotEntries_ballotId_ballots_id_fk": {
           "name": "ballotEntries_ballotId_ballots_id_fk",
           "tableFrom": "ballotEntries",
-          "tableTo": "ballots",
           "columnsFrom": ["ballotId"],
+          "tableTo": "ballots",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
     "public.ballots": {
       "name": "ballots",
@@ -127,15 +148,18 @@
         "ballots_redemptionId_redemptions_id_fk": {
           "name": "ballots_redemptionId_redemptions_id_fk",
           "tableFrom": "ballots",
-          "tableTo": "redemptions",
           "columnsFrom": ["redemptionId"],
+          "tableTo": "redemptions",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
     "public.generics": {
       "name": "generics",
@@ -165,15 +189,18 @@
         "generics_redemptionId_redemptions_id_fk": {
           "name": "generics_redemptionId_redemptions_id_fk",
           "tableFrom": "generics",
-          "tableTo": "redemptions",
           "columnsFrom": ["redemptionId"],
+          "tableTo": "redemptions",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
     "public.integrationCodes": {
       "name": "integrationCodes",
@@ -232,29 +259,52 @@
       },
       "indexes": {
         "ic_vault_idx": {
+          "columns": [
+            {
+              "expression": "vaultId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
           "name": "ic_vault_idx",
-          "columns": ["vaultId"],
-          "isUnique": false
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         },
         "ic_member_idx": {
+          "columns": [
+            {
+              "expression": "memberId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
           "name": "ic_member_idx",
-          "columns": ["memberId"],
-          "isUnique": false
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "integrationCodes_vaultId_vaults_id_fk": {
           "name": "integrationCodes_vaultId_vaults_id_fk",
           "tableFrom": "integrationCodes",
-          "tableTo": "vaults",
           "columnsFrom": ["vaultId"],
+          "tableTo": "vaults",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
     "public.redemptions": {
       "name": "redemptions",
@@ -316,7 +366,10 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
     "public.vaultBatches": {
       "name": "vaultBatches",
@@ -359,15 +412,18 @@
         "vaultBatches_vaultId_vaults_id_fk": {
           "name": "vaultBatches_vaultId_vaults_id_fk",
           "tableFrom": "vaultBatches",
-          "tableTo": "vaults",
           "columnsFrom": ["vaultId"],
+          "tableTo": "vaults",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
     "public.vaultCodes": {
       "name": "vaultCodes",
@@ -420,59 +476,112 @@
       },
       "indexes": {
         "vault_idx": {
+          "columns": [
+            {
+              "expression": "vaultId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
           "name": "vault_idx",
-          "columns": ["vaultId"],
-          "isUnique": false
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         },
         "batch_idx": {
+          "columns": [
+            {
+              "expression": "batchId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
           "name": "batch_idx",
-          "columns": ["batchId"],
-          "isUnique": false
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         },
         "created_idx": {
+          "columns": [
+            {
+              "expression": "created",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
           "name": "created_idx",
-          "columns": ["created"],
-          "isUnique": false
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         },
         "expiry_idx": {
+          "columns": [
+            {
+              "expression": "expiry",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
           "name": "expiry_idx",
-          "columns": ["expiry"],
-          "isUnique": false
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         },
         "member_idx": {
+          "columns": [
+            {
+              "expression": "memberId",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "with": {},
           "name": "member_idx",
-          "columns": ["memberId"],
-          "isUnique": false
+          "isUnique": false,
+          "method": "btree",
+          "concurrently": false
         }
       },
       "foreignKeys": {
         "vaultCodes_vaultId_vaults_id_fk": {
           "name": "vaultCodes_vaultId_vaults_id_fk",
           "tableFrom": "vaultCodes",
-          "tableTo": "vaults",
           "columnsFrom": ["vaultId"],
+          "tableTo": "vaults",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         },
         "vaultCodes_batchId_vaultBatches_id_fk": {
           "name": "vaultCodes_batchId_vaultBatches_id_fk",
           "tableFrom": "vaultCodes",
-          "tableTo": "vaultBatches",
           "columnsFrom": ["batchId"],
+          "tableTo": "vaultBatches",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "idx_unique_vault_code": {
           "name": "idx_unique_vault_code",
-          "nullsNotDistinct": true,
-          "columns": ["vaultId", "code"]
+          "columns": ["vaultId", "code"],
+          "nullsNotDistinct": true
         }
-      }
+      },
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     },
     "public.vaults": {
       "name": "vaults",
@@ -557,15 +666,18 @@
         "vaults_redemptionId_redemptions_id_fk": {
           "name": "vaults_redemptionId_redemptions_id_fk",
           "tableFrom": "vaults",
-          "tableTo": "redemptions",
           "columnsFrom": ["redemptionId"],
+          "tableTo": "redemptions",
           "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "cascade"
+          "onUpdate": "cascade",
+          "onDelete": "restrict"
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {}
+      "uniqueConstraints": {},
+      "policies": {},
+      "isRLSEnabled": false,
+      "checkConstraints": {}
     }
   },
   "enums": {
@@ -625,8 +737,14 @@
   },
   "schemas": {},
   "_meta": {
-    "columns": {},
     "schemas": {},
-    "tables": {}
-  }
+    "tables": {},
+    "columns": {}
+  },
+  "id": "43315c89-c916-4231-8f5a-260fe0676217",
+  "prevId": "c0b117bb-66f7-49f8-a8ae-f78ff56dfaa3",
+  "sequences": {},
+  "policies": {},
+  "views": {},
+  "roles": {}
 }

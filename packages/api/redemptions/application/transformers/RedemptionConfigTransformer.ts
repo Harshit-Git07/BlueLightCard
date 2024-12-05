@@ -1,6 +1,6 @@
 import {
   BALLOT,
-  CREDITCARD,
+  COMPARE,
   GENERIC,
   GIFTCARD,
   PREAPPLIED,
@@ -89,7 +89,7 @@ export class RedemptionConfigTransformer {
     if (
       redemptionType === PREAPPLIED ||
       redemptionType === GIFTCARD ||
-      redemptionType === CREDITCARD ||
+      redemptionType === COMPARE ||
       redemptionType === VERIFY
     ) {
       redemptionProperties.url = redemptionConfigDto.redemptionConfigEntity.url;

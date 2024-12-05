@@ -211,23 +211,23 @@ describe('GetRedemptionConfigService', () => {
     });
   });
 
-  it('should call transformToRedemptionConfig when redemptionType is creditCard', async () => {
-    const creditCardPayloadFactory: affiliateRedemptionTypeFactory = affiliateFactory.build({
-      redemptionType: 'creditCard',
+  it('should call transformToRedemptionConfig when redemptionType is compare', async () => {
+    const comparePayloadFactory: affiliateRedemptionTypeFactory = affiliateFactory.build({
+      redemptionType: 'compare',
     });
 
-    const creditCardRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
-      redemptionType: 'creditCard',
+    const compareRedemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'compare',
     });
 
-    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValue(creditCardRedemptionConfigEntity);
-    mockGenericsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(creditCardPayloadFactory);
+    mockRedemptionConfigRepository.findOneByOfferId = jest.fn().mockResolvedValue(compareRedemptionConfigEntity);
+    mockGenericsRepository.findOneByRedemptionId = jest.fn().mockResolvedValue(comparePayloadFactory);
     mockRedemptionConfigTransformer.transformToRedemptionConfig = jest.fn().mockReturnValue(redemptionConfig);
 
-    await getRedemptionConfigService.getRedemptionConfig(creditCardRedemptionConfigEntity.offerId);
+    await getRedemptionConfigService.getRedemptionConfig(compareRedemptionConfigEntity.offerId);
 
     expect(mockRedemptionConfigTransformer.transformToRedemptionConfig).toHaveBeenCalledWith({
-      redemptionConfigEntity: creditCardRedemptionConfigEntity,
+      redemptionConfigEntity: compareRedemptionConfigEntity,
       genericEntity: null,
       vaultEntity: null,
       vaultBatchEntities: [],

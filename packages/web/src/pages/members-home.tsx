@@ -75,6 +75,9 @@ const HomePage: NextPage<any> = () => {
 
   const amplitude = useContext(AmplitudeContext);
 
+  // TODO: Disabled due to Friday code freeze
+  // useEligibilityRedirector();
+
   const {
     banners,
     dealsOfTheWeek,

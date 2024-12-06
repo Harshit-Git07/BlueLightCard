@@ -9,14 +9,14 @@ import {
   EmploymentStatus,
   UkAddress,
 } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
-import {
-  ServiceLayerApplication,
-  ServiceLayerMemberProfile,
-} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/ServiceLayerMemberProfile';
 import { getEmployerFromServiceLayer } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/mapper/service-layer/GetEmployer';
 import { getOrganisationFromServiceLayer } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/mapper/service-layer/GetOrganisation';
 import { BRANDS } from '@/types/brands.enum';
 import { BRAND } from '@/root/global-vars';
+import {
+  ServiceLayerApplication,
+  ServiceLayerMemberProfile,
+} from '@/root/src/member-eligibility/service-layer/member-profile/types/ServiceLayerMemberProfile';
 
 type EligibilityDetailsWithoutFlowAndScreen = Omit<EligibilityDetails, 'flow' | 'currentScreen'>;
 

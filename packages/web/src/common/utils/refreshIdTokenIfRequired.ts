@@ -16,16 +16,11 @@ export async function refreshIdTokenIfRequired(): Promise<string> {
 
     if (AuthTokensService.expiryTimeHasPassed(tokenExpiryInSecondsSinceEpoch)) {
       // Token has expired so re-authentication is required
-      const refreshedSuccessfully = Auth0Service.isAuth0Issuer(issuer)
-        ? await Auth0Service.updateTokensUsingRefreshToken(
-            refreshToken,
-            AuthTokensService.setTokens
-          )
-        : await reAuthFromRefreshToken(
-            usernameFromToken,
-            refreshToken,
-            AuthTokensService.setTokens
-          );
+      const refreshedSuccessfully = await performTokenRefresh(
+        issuer,
+        refreshToken,
+        usernameFromToken
+      );
       if (refreshedSuccessfully) {
         // Need to get the idToken again as it has been updated in local storage
         idToken = AuthTokensService.getIdToken();
@@ -37,4 +32,19 @@ export async function refreshIdTokenIfRequired(): Promise<string> {
   }
 
   return idToken;
+}
+
+async function performTokenRefresh(
+  issuer: string,
+  refreshToken: string,
+  usernameFromToken: string
+) {
+  if (Auth0Service.isAuth0Issuer(issuer)) {
+    return await Auth0Service.updateTokensUsingRefreshToken(
+      refreshToken,
+      AuthTokensService.setTokens
+    );
+  }
+
+  return await reAuthFromRefreshToken(usernameFromToken, refreshToken, AuthTokensService.setTokens);
 }

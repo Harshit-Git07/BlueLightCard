@@ -35,55 +35,56 @@ export function useFileUploadState(
     return selectedFiles.map((fileDetails) => fileDetails.file);
   }, [selectedFiles]);
 
-  const uploadNewFiles = useCallback(
-    async (newFilesSelectedForUpload: File[]) => {
+  const handleFileUploadResult = useCallback(
+    async (file: File) => {
       try {
-        const newFilesWithLoadingStatus: FileDetails[] = newFilesSelectedForUpload.map(
-          (newFile) => {
-            return {
-              file: newFile,
-              status: UploadStatus.Loading,
-            };
-          }
-        );
-        setSelectedFiles([...selectedFiles, ...newFilesWithLoadingStatus]);
-        setFileSelectionError(undefined);
+        await uploadFileToServiceLayer(eligibilityDetails, file);
+        setSelectedFiles((files) => {
+          const index = files.findIndex((fileDetails) => fileDetails.file === file);
+          if (index === -1) return files;
 
-        for (const file of newFilesSelectedForUpload) {
-          try {
-            await uploadFileToServiceLayer(eligibilityDetails, file);
-            setSelectedFiles((files) => {
-              const index = files.findIndex((fileDetails) => fileDetails.file === file);
-              if (index === -1) return files;
-
-              const clonedFiles = [...files];
-              clonedFiles[index] = {
-                file,
-                status: UploadStatus.Success,
-              };
-              return clonedFiles;
-            });
-          } catch (error) {
-            console.error('Failed to upload file', error);
-            setSelectedFiles((files) => {
-              const index = files.findIndex((fileDetails) => fileDetails.file === file);
-              if (index === -1) return files;
-
-              const clonedFiles = [...files];
-              clonedFiles[index] = {
-                file,
-                status: UploadStatus.Error,
-                failedReason: 'Upload failed, please remove and try again',
-              };
-              return clonedFiles;
-            });
-          }
-        }
+          const clonedFiles = [...files];
+          clonedFiles[index] = {
+            file,
+            status: UploadStatus.Success,
+          };
+          return clonedFiles;
+        });
       } catch (error) {
-        console.error('Failed to upload new files', error);
+        console.error('Failed to upload file', error);
+        setSelectedFiles((files) => {
+          const index = files.findIndex((fileDetails) => fileDetails.file === file);
+          if (index === -1) return files;
+
+          const clonedFiles = [...files];
+          clonedFiles[index] = {
+            file,
+            status: UploadStatus.Error,
+            failedReason: 'Upload failed, please remove and try again',
+          };
+          return clonedFiles;
+        });
       }
     },
-    [eligibilityDetails, selectedFiles]
+    [eligibilityDetails]
+  );
+
+  const uploadNewFiles = useCallback(
+    (newFilesSelectedForUpload: File[]) => {
+      const newFilesWithLoadingStatus: FileDetails[] = newFilesSelectedForUpload.map((newFile) => {
+        return {
+          file: newFile,
+          status: UploadStatus.Loading,
+        };
+      });
+      setSelectedFiles([...selectedFiles, ...newFilesWithLoadingStatus]);
+      setFileSelectionError(undefined);
+
+      for (const file of newFilesSelectedForUpload) {
+        handleFileUploadResult(file);
+      }
+    },
+    [handleFileUploadResult, selectedFiles]
   );
 
   const onFilesAdded: OnFilesAdded = useCallback(
@@ -99,7 +100,7 @@ export function useFileUploadState(
       }
 
       await updateMemberProfile();
-      await uploadNewFiles(newFilesSelectedForUpload);
+      uploadNewFiles(newFilesSelectedForUpload);
     },
     [maxNumberOfFiles, selectedFilesAsFiles, updateMemberProfile, uploadNewFiles]
   );

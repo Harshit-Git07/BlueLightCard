@@ -1,5 +1,6 @@
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { serviceLayerUrl } from '@/root/src/member-eligibility/shared/constants/ServiceLayerUrl';
+import { refreshIdTokenIfRequired } from '@/utils/refreshIdTokenIfRequired';
 
 export async function uploadFileToServiceLayer(
   eligibilityDetails: EligibilityDetails,
@@ -23,10 +24,14 @@ async function getPresignedUrl(
     throw new Error('No application id available so cannot get presigned url to upload file to');
   }
 
+  const idToken = await refreshIdTokenIfRequired();
   const result = await fetch(
     `${serviceLayerUrl}/members/${eligibilityDetails.member?.id}/applications/${eligibilityDetails.member.application.id}/uploadDocument`,
     {
-      method: 'GET',
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
     }
   );
 

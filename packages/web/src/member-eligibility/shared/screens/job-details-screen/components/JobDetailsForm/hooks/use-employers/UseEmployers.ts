@@ -7,7 +7,6 @@ import {
   EligibilityOrganisation,
 } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { validate } from 'uuid';
-import { filterBasedOnEmploymentStatus } from '@/root/src/member-eligibility/shared/screens/job-details-screen/hooks/use-employers/service-layer/utils/FilterBasedOnEmploymentStatus';
 import { organisationNoEmployersStub } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/stubs/OrganisationStubs';
 
 // TODO: This will be removed once service layer is fully integrated
@@ -38,21 +37,16 @@ export function useEmployers(
   useEffect(() => {
     if (!organisation) return;
 
-    getEmployers(organisation.id).then((serviceLayerEmployers) => {
-      // TODO: If it is not a valid uuid then we know it's a stub so will short circuit. This can be removed later once integration is complete
-      if (!validate(organisation.id)) {
-        setEmployers(getInitialState(organisation));
-        return;
-      }
+    // TODO: If it is not a valid uuid then we know it's a stub so will short circuit. This can be removed later once integration is complete
+    if (!validate(organisation.id)) {
+      setEmployers(getInitialState(organisation));
+      return;
+    }
 
+    getEmployers(organisation.id).then((serviceLayerEmployers) => {
       if (!serviceLayerEmployers) return;
 
-      const serviceLayerEmployersWithSameEmploymentStatus = filterBasedOnEmploymentStatus(
-        serviceLayerEmployers,
-        employmentStatus
-      );
-      const asEligibilityEmployers =
-        serviceLayerEmployersWithSameEmploymentStatus.map(toEligibilityEmployer);
+      const asEligibilityEmployers = serviceLayerEmployers.map(toEligibilityEmployer);
 
       setEmployers(asEligibilityEmployers);
     });

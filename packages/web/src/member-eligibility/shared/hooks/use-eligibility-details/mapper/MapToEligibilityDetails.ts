@@ -120,12 +120,12 @@ function getEmploymentStatus(
   memberProfile: ServiceLayerMemberProfile
 ): EmploymentStatus | undefined {
   // TODO: Find out what these actually resolve to
-  switch (memberProfile.status) {
-    case 'Employed':
+  switch (memberProfile.employmentStatus) {
+    case 'EMPLOYED':
       return 'Employed';
-    case 'Retired':
+    case 'RETIRED':
       return 'Retired or Bereaved';
-    case 'Volunteer':
+    case 'VOLUNTEER':
       return 'Volunteer';
   }
 }

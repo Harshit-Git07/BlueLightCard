@@ -13,6 +13,7 @@ import {
   usePlatformAdapter,
   RedeemResultKind,
   offerTypeLabelMap,
+  Typography,
 } from '../../../../index';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 import type { RedemptionType } from '../../types';
@@ -61,14 +62,6 @@ const OfferSheetDetailsPage: FC = () => {
         redemption_type: redemptionType,
       },
     });
-  };
-
-  const handleMaxPerUserReached = () => {
-    setMaxPerUserReached(true);
-    setTimeout(() => {
-      logCodeClicked(events.VAULT_CODE_REDIRECT_TO_VAULT);
-      platformAdapter.navigate('/vaultcodes.php');
-    }, 3000);
   };
 
   const getRedemptionData = async () => {
@@ -130,7 +123,7 @@ const OfferSheetDetailsPage: FC = () => {
           return <></>;
       }
     } else if (redeemData?.data?.kind === RedeemResultKind.MaxPerUserReached) {
-      handleMaxPerUserReached();
+      setMaxPerUserReached(true);
     } else {
       setShowErrorPage(true);
     }
@@ -163,7 +156,7 @@ const OfferSheetDetailsPage: FC = () => {
         onClose();
       }
     } else if (redeemData?.data?.kind === RedeemResultKind.MaxPerUserReached) {
-      handleMaxPerUserReached();
+      setMaxPerUserReached(true);
     } else {
       setShowErrorPage(true);
     }
@@ -358,11 +351,9 @@ const OfferSheetDetailsPage: FC = () => {
 
   const maxPerUserReachedSecondaryButton = (
     <MagicButton
-      variant={MagicBtnVariant.Pressed}
+      variant={MagicBtnVariant.Disabled}
       className="w-full"
-      icon={faWandMagicSparkles}
-      label="Taking you to the vault"
-      description="You have reached the code limit for this offer"
+      label={primaryButtonText(redemptionType)}
     />
   );
 
@@ -433,6 +424,23 @@ const OfferSheetDetailsPage: FC = () => {
               ))}
             </div>
             {renderButton()}
+            {maxPerUserReached && (
+              <div className="mt-2 text-center">
+                <Typography
+                  variant="body-light"
+                  className="!text-colour-onSurface-subtle !dark:text-colour-onSurface-subtle-dark"
+                >
+                  You have reached the code limit for this offer.
+                </Typography>
+                <Typography
+                  variant="body-light"
+                  className="!text-colour-onSurface-subtle !dark:text-colour-onSurface-subtle-dark"
+                >
+                  {/* eslint-disable-next-line react/no-unescaped-entities */}
+                  Check your emails we've sent you earlier to redeem this offer.
+                </Typography>
+              </div>
+            )}
           </div>
         </>
       )}

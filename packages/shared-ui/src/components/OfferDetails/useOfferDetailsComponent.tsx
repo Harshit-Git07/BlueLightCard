@@ -39,14 +39,28 @@ export const OfferDetailsLink: FC<OfferDetailsComponentProps> = () => {
 
 export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
+  const { offerMeta } = useAtomValue(offerSheetAtom);
   const [experiment, setExperiment] = useState('control');
+  const fsiCompanyIdsEnv = process.env.NEXT_PUBLIC_FSI_COMPANY_IDS?.trim()
+    .split(', ')
+    ?.filter(Boolean);
+  let fsiCompanyIds;
+  let isFsi = false;
+
+  if (fsiCompanyIdsEnv && fsiCompanyIdsEnv.length > 0) {
+    fsiCompanyIds = fsiCompanyIdsEnv.map((i) => Number(i));
+  }
+
+  if (fsiCompanyIds) {
+    isFsi = fsiCompanyIds.includes(Number(offerMeta.companyId));
+  }
 
   function getOfferDetailsComponent() {
-    if (!experiment || experiment === 'control') {
+    if ((!experiment || experiment === 'control') && isFsi) {
       return OfferDetailsLink;
     }
 
-    if (experiment === 'treatment' || experiment === 'on') {
+    if (!isFsi) {
       return OfferSheet;
     }
 

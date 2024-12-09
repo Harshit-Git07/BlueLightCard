@@ -79,6 +79,9 @@ const AUTH0_CLIENT_SECRET = process.env.NEXT_PUBLIC_AUTH0_CLIENT_SECRET ?? '';
 const AUTH0_DOMAIN = process.env.NEXT_PUBLIC_AUTH0_DOMAIN ?? '';
 const AUTH0_REDIRECT_URL = process.env.NEXT_PUBLIC_AUTH0_REDIRECT_URL ?? '';
 
+//FSI Company IDs
+const FSI_COMPANY_IDS = process.env.NEXT_PUBLIC_FSI_COMPANY_IDS ?? '';
+
 /*
  * Language is made up of the lng and region
  * Example: [lng]-[region]
@@ -149,4 +152,5 @@ module.exports = {
   AUTH0_CLIENT_ID,
   AUTH0_CLIENT_SECRET,
   AUTH0_REDIRECT_URL,
+  FSI_COMPANY_IDS,
 };

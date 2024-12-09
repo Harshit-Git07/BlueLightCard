@@ -35,3 +35,4 @@ export const BRAND = process.env.NEXT_PUBLIC_APP_BRAND ?? 'blc-uk';
 export const IS_SSR = typeof window === 'undefined';
 export const USE_NATIVE_MOCK = process.env.NEXT_PUBLIC_USE_NATIVE_MOCK === 'true';
 export const USE_DEV_TOOLS = process.env.NEXT_PUBLIC_USE_DEV_TOOLS === 'true';
+export const FSI_COMPANY_IDS = process.env.NEXT_PUBLIC_FSI_COMPANY_IDS ?? '';

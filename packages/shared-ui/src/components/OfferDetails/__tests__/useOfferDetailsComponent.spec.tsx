@@ -7,15 +7,28 @@ import { PlatformVariant } from 'src/types';
 const supportedRedemptionTypes = ['vault', 'generic'];
 
 describe('useOfferDetailsComponent', () => {
+  const env = process.env;
   beforeEach(() => {
+    process.env = env;
     jest.clearAllMocks();
   });
 
-  test('it returns offer details link by default', () => {
+  test('it returns offer details link by default', async () => {
     const mockPlatformAdapter = useMockPlatformAdapter();
     mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('off');
+    process.env.NEXT_PUBLIC_FSI_COMPANY_IDS = '16913';
 
     const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
+
+    await act(async () => {
+      await result.current.updateOfferDetailsComponent({
+        offerId: 1,
+        companyId: 16913,
+        companyName: 'companyName',
+        platform: PlatformVariant.MobileHybrid,
+        amplitudeCtx: null,
+      });
+    });
 
     expect(result.current.OfferDetailsComponent).toBe(OfferDetailsLink);
   });
@@ -25,13 +38,14 @@ describe('useOfferDetailsComponent', () => {
     async (redemptionType) => {
       const mockPlatformAdapter = useMockPlatformAdapter(200, { data: { redemptionType } });
       mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('control');
+      process.env.NEXT_PUBLIC_FSI_COMPANY_IDS = '16913';
 
       const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
 
       await act(async () => {
         await result.current.updateOfferDetailsComponent({
           offerId: 1,
-          companyId: 1,
+          companyId: 16913,
           companyName: 'companyName',
           platform: PlatformVariant.MobileHybrid,
           amplitudeCtx: null,
@@ -90,13 +104,14 @@ describe('useOfferDetailsComponent', () => {
     const mockPlatformAdapter = useMockPlatformAdapter(200, {
       data: { redemptionType: 'unsupported-redemption-type' },
     });
+    process.env.NEXT_PUBLIC_FSI_COMPANY_IDS = '16913';
 
     const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
 
     await act(async () => {
       await result.current.updateOfferDetailsComponent({
         offerId: 1,
-        companyId: 1,
+        companyId: 16913,
         companyName: 'companyName',
         platform: PlatformVariant.MobileHybrid,
         amplitudeCtx: null,
@@ -109,13 +124,14 @@ describe('useOfferDetailsComponent', () => {
   test('it returns the offer details link if an error is thrown when getting the redemption details', async () => {
     const mockPlatformAdapter = useMockPlatformAdapter(500);
     mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('control');
+    process.env.NEXT_PUBLIC_FSI_COMPANY_IDS = '16913';
 
     const { result } = renderHook(() => useOfferDetailsComponent(mockPlatformAdapter));
 
     await act(async () => {
       await result.current.updateOfferDetailsComponent({
         offerId: 1,
-        companyId: 1,
+        companyId: 16913,
         companyName: 'companyName',
         platform: PlatformVariant.MobileHybrid,
         amplitudeCtx: null,

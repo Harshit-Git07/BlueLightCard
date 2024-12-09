@@ -11,7 +11,8 @@ import { getOfferQuery } from '../../../../api';
 
 const OfferSheetController: FC = () => {
   const adapter = usePlatformAdapter();
-  const { offerDetails, showRedemptionPage, offerMeta, isOpen } = useAtomValue(offerSheetAtom);
+  const { offerDetails, showRedemptionPage, offerMeta, isOpen, redemptionType } =
+    useAtomValue(offerSheetAtom);
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
   const cmsFlagResult = adapter.getAmplitudeFeatureFlag('cms-offers');
 
@@ -32,6 +33,10 @@ const OfferSheetController: FC = () => {
       }));
     }
   }, [offerQuery.isSuccess]);
+
+  if (!redemptionType && offerMeta.companyId) {
+    return <OfferDetailsErrorPage />;
+  }
 
   switch (offerQuery.status) {
     case 'pending':

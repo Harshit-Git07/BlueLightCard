@@ -55,16 +55,17 @@ const CompanyPage = () => {
   const userCtx = useContext(UserContext);
   const amplitude = useContext(AmplitudeContext);
 
+  const brand = BRAND === 'blc-au' ? 'blc-aus' : BRAND;
   const adverts = useQuery({
     queryKey: ['companyPageAdverts', userCtx.isAgeGated ?? true],
     queryFn: async () => {
-      const bannerData = await makeQuery(advertQuery(BRAND, userCtx.isAgeGated ?? true));
+      const bannerData = await makeQuery(advertQuery(brand, userCtx.isAgeGated ?? true));
       const banners = shuffle(bannerData.data.banners).slice(0, 2) as BannerDataType[];
       return banners.map((advert) => {
         const splitLink = advert.link.split('cid=');
         const cidSplit = splitLink[1].split('&');
         const cid = cidSplit[0];
-        const link = 'https://www.bluelightcard.co.uk/company?cid=' + cid;
+        const link = '/company?cid=' + cid;
         return { ...advert, link };
       });
     },

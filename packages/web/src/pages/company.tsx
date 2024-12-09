@@ -36,6 +36,7 @@ import CompanyPageWebHeader from '../page-components/Company/CompanyPageWebHeade
 import { BannerDataType } from '../page-components/Company/types';
 
 const getBrand = () => {
+  //returns the name of the current brand
   switch (BRAND) {
     case BRANDS.BLC_UK:
     case BRANDS.BLC_AU:

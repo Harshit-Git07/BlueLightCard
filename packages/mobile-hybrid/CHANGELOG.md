@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.49.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.48.0...bluelightcard/mobile-hybrid-v1.49.0) (2024-12-09)
+
+
+### Features
+
+* forcing chore for mobile-hibrid ([#3320](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3320)) ([c32e404](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c32e404758acef52b75f16a33bd073145038749b))
+
 ## [1.48.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.47.0...bluelightcard/mobile-hybrid-v1.48.0) (2024-12-09)
 
 

@@ -17,7 +17,7 @@ const getFilteredOffers = (offers: V2CompaniesGetCompanyOffersResponse, selected
   if (selectedType === 'All') {
     return offers;
   }
-  // returns only the offers of the selected type
+  // returns the offers that match the selected type
   return offers.filter((offer) => offer.type === selectedType);
 };
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.95.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.94.0...bluelightcard/web-v1.95.0) (2024-12-09)
+
+
+### Features
+
+* forcing chore for web ([#3319](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3319)) ([6f86622](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6f86622c082139023169126b630ae5d640f8b2a6))
+
 ## [1.94.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.93.0...bluelightcard/web-v1.94.0) (2024-12-09)
 
 

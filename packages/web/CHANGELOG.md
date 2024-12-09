@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.94.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.93.0...bluelightcard/web-v1.94.0) (2024-12-09)
+
+
+### Features
+
+* [MER-288] Add eligibility detection to members-home ([#3239](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3239)) ([ab65259](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ab652596ecea39ba27e92f6ec6598cab760bcd90))
+* [MER-309] Add SPPA Headed Letter verification method flow ([#3259](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3259)) ([2e38ca7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2e38ca760041ea159f77a90a5d2978139c69f79e))
+* [MER-444] Add county field to address screens ([#3256](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3256)) ([56fbe44](https://github.com/bluelightcard/BlueLightCard-2.0/commit/56fbe44ef3bd26a7b5f21ac8b6c2efe3cbb69f12))
+* Add open api type generator ([#3240](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3240)) ([a15e7bb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a15e7bbf3d872b470b07cf2da8f2c166c592cec0))
+* Feat/to 1259 replace legacy company page links to modern ([#3211](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3211)) ([ec228aa](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ec228aaa33d88fb6dcb78d8fc70830d50de9bafd))
+* Integrate and test member profile on service layer ([#3296](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3296)) ([3e1d32a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3e1d32a934ead1b07e629991305862b49eb22d3d))
+* MER-262-renewal modal ([#3250](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3250)) ([71f08d1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/71f08d13a0d22e5e11176e3c9b5fb6af9f5b5605))
+* to-1260 dw replace legacy offer sheet links to modern ([#3283](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3283)) ([cba8f4e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cba8f4e9bd6e9588a5c4c28979bf333dcc68ec0d))
+* TO-1338  ([#3303](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3303)) ([ff292bd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ff292bd9f17c4b6b8bbe3e210ac511445a366c87))
+* Update member profile when submitting ID, email, or address ([#3252](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3252)) ([273cffe](https://github.com/bluelightcard/BlueLightCard-2.0/commit/273cffe51112502e47cdde045bf91025cea6a832))
+
+
+### Bug Fixes
+
+* Dropdowns will now show the initial value correctly ([#3261](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3261)) ([fa80d73](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fa80d732aefcf452e4ac50a3dcba3414fa71b3aa))
+* Point eligibility at staging environment again ([#3266](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3266)) ([122d5f6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/122d5f6077ed7ae6b75575fcd3930b3fbb73d0e9))
+
 ## [1.93.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.92.0...bluelightcard/web-v1.93.0) (2024-12-04)
 
 

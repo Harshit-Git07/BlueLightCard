@@ -10,6 +10,7 @@ export function createMemberProfileIndexer(
   stack: Stack,
   vpc: IVpc,
   memberProfilesTableEventQueue: Queue,
+  openSearchDomainEndpoint: string,
   service: string,
 ): void {
   const config = MemberStackConfigResolver.for(stack, stack.region as MemberStackRegion);
@@ -18,8 +19,7 @@ export function createMemberProfileIndexer(
     handler:
       'packages/api/members/application/handlers/admin/opensearch/memberProfileIndexer.handler',
     environment: {
-      // TODO: Add OpenSearch domain endpoint once cluster is available
-      OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? '',
+      OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomainEndpoint,
       STAGE: stack.stage ?? '',
       SERVICE: service,
     },

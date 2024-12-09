@@ -42,7 +42,6 @@ import { createOutboundBatchFileCron } from '@blc-mono/members/infrastructure/cr
 import { processInboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/processInboundBatchFileCron';
 import { createMemberProfilesPipe } from '@blc-mono/members/infrastructure/eventbridge/MemberProfilesPipe';
 import { createMemberProfileIndexer } from '@blc-mono/members/infrastructure/lambdas/createMemberProfileIndexer';
-import { MembersOpenSearchDomain } from './opensearch/MembersOpenSearchDomain';
 
 const SERVICE_NAME = 'members';
 
@@ -85,15 +84,8 @@ export async function MembersStack({ app, stack }: StackContext) {
     },
   });
 
-  const openSearchDomain = await new MembersOpenSearchDomain(stack, vpc).setup();
   createMemberProfilesPipe(stack, profilesTable, memberProfilesTableEventQueue);
-  createMemberProfileIndexer(
-    stack,
-    vpc,
-    memberProfilesTableEventQueue,
-    openSearchDomain,
-    SERVICE_NAME,
-  );
+  createMemberProfileIndexer(stack, vpc, memberProfilesTableEventQueue, SERVICE_NAME);
 
   return {
     profilesTable,

@@ -31,7 +31,3 @@ export function isLocal(stage: string): boolean {
 export function isCreateNewOpenSearchDomainTrue(): boolean {
   return process.env.OPENSEARCH_CREATE_NEW_DOMAIN?.toLowerCase() === 'true'
 }
-
-export function isCreateNewMembersOpenSearchDomainTrue(): boolean {
-  return process.env.MEMBERS_OPENSEARCH_CREATE_NEW_DOMAIN?.toLowerCase() === 'true'
-}

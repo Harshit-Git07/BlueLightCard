@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.48.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.47.0...bluelightcard/mobile-hybrid-v1.48.0) (2024-12-09)
+
+
+### Features
+
+* Feat/to 1259 replace legacy company page links to modern ([#3211](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3211)) ([ec228aa](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ec228aaa33d88fb6dcb78d8fc70830d50de9bafd))
+* to-1260 dw replace legacy offer sheet links to modern ([#3283](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3283)) ([cba8f4e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cba8f4e9bd6e9588a5c4c28979bf333dcc68ec0d))
+
 ## [1.47.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.46.2...bluelightcard/mobile-hybrid-v1.47.0) (2024-12-04)
 
 

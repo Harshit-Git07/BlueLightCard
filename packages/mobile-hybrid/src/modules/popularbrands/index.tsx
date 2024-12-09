@@ -4,23 +4,13 @@ import brands from './brands';
 import PopularBrands from '@/components/PopularBrands/PopularBrands';
 import InvokeNativeAnalytics from '@/invoke/analytics';
 import { AmplitudeEvents } from '@/utils/amplitude/amplitudeEvents';
-import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
-import { useAmplitude } from '@/hooks/useAmplitude';
-import { AmplitudeExperimentState } from '@/components/AmplitudeProvider/types';
 
 const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const PopularBrandsSlider: FC = () => {
-  const { is } = useAmplitude();
   const onBrandItemClick = (compid: number) => {
-    const companyPageExperiment = is(
-      Experiments.NEW_COMPANY_PAGE,
-      AmplitudeExperimentState.Treatment,
-    );
-
-    if (companyPageExperiment) navigation.navigate(`/company?cid=${compid}`);
-    else navigation.navigate(`/offerdetails.php?cid=${compid}`);
+    navigation.navigate(`/company?cid=${compid}`);
 
     analytics.logAnalyticsEvent({
       event: AmplitudeEvents.HOMEPAGE_CAROUSEL_CARD_CLICKED,

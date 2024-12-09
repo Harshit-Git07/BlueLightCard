@@ -56,11 +56,11 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
   }
 
   function getOfferDetailsComponent() {
-    if ((!experiment || experiment === 'control') && isFsi) {
+    if (!experiment || experiment === 'control' || isFsi) {
       return OfferDetailsLink;
     }
 
-    if (!isFsi) {
+    if (experiment === 'treatment' || experiment === 'on') {
       return OfferSheet;
     }
 

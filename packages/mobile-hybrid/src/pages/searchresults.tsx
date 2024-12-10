@@ -45,7 +45,7 @@ const SearchResultsPage: NextPage = () => {
 
   return (
     <div>
-      <SearchModule placeholder="Search for an offer" />
+      <SearchModule />
       <SearchResults />
       <Amplitude keyName={FeatureFlags.SEARCH_RESULTS_PAGE_CATEGORIES_LINKS} value="on">
         <BrowseCategories categories={browseCategories} onCategoryClick={onCategoryClick} />

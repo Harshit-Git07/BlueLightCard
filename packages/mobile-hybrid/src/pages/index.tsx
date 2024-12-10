@@ -11,8 +11,7 @@ import Offers from '@/modules/offers';
 import CampaignBanner from '@/components/CampaignBanner';
 import type { CampaignEvent } from '@/components/CampaignBanner/types';
 import PromoBanner from '@/modules/promobanner';
-import InvokeNativeNavigation from '@/invoke/navigation';
-import { SearchBar, usePlatformAdapter } from '@bluelightcard/shared-ui';
+import { usePlatformAdapter } from '@bluelightcard/shared-ui';
 import PopularBrandsSlider from '@/modules/popularbrands';
 import { useOnResume } from '@/hooks/useAppLifecycle';
 import { APIUrl, BRAND } from '@/globals';
@@ -24,11 +23,10 @@ import USPBanner from '@/components/UspBanner/UspBanner';
 import Amplitude from '@/components/Amplitude/Amplitude';
 import { useAmplitude } from '@/hooks/useAmplitude';
 import { AmplitudeExperimentState } from '@/components/AmplitudeProvider/types';
+import SearchModule from '@/modules/search';
 import useOffers from '@/hooks/useOffers';
-import { GetSearchVariant } from '../experiments/getSearchVariant';
 
 const apiCall = new InvokeNativeAPICall();
-const navigation = new InvokeNativeNavigation();
 const analytics = new InvokeNativeAnalytics();
 
 const Home: NextPage<any> = () => {
@@ -94,8 +92,6 @@ const Home: NextPage<any> = () => {
     );
   };
 
-  const searchVariant = GetSearchVariant();
-
   return (
     <main ref={bodyHeight}>
       <div className="mb-9">
@@ -107,15 +103,7 @@ const Home: NextPage<any> = () => {
           <USPBanner></USPBanner>
         </Amplitude>
 
-        <SearchBar
-          onSearch={(searchTerm) =>
-            navigation.navigate(
-              `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,
-            )
-          }
-          placeholderText="Search stores or brands"
-          experimentalSearchVariant={searchVariant}
-        />
+        <SearchModule useDeeplinkVersion={true} />
 
         <PromoBanner />
 

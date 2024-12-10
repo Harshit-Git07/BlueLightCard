@@ -1,14 +1,23 @@
 import plugin from 'tailwindcss/plugin';
+import { env } from '@bluelightcard/shared-ui/env';
+import { createBrandedPreset } from '@bluelightcard/shared-ui/tailwind';
 import type { Config } from 'tailwindcss';
 const { fontFamily } = require('tailwindcss/defaultTheme');
 
+const brand = env.APP_BRAND;
+
+const isStorybookLifecycle =
+  process.env.npm_lifecycle_event === 'storybook' ||
+  process.env.npm_lifecycle_event === 'build-storybook';
+
 const config: Config = {
-  darkMode: ['class', '[data-theme^="dark-"]'],
+  darkMode: isStorybookLifecycle ? 'media' : 'class',
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
+    '../shared-ui/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   prefix: '',
   theme: {
@@ -62,6 +71,7 @@ const config: Config = {
     }),
   ],
   safelist: ['action', 'ghost'],
+  presets: [createBrandedPreset(brand)],
 };
 
 export default config;

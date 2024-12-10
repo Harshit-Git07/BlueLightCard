@@ -19,6 +19,7 @@ const nextConfig = {
     ],
   },
   swcMinify: true,
+  transpilePackages: ['@bluelightcard/shared-ui'],
 
   async redirects() {
     return await client.fetch(groq`*[_type == 'redirect']{

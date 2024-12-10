@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.2.1...bluelightcard/members-v1.3.0) (2024-12-10)
+
+
+### Features
+
+* [MM-105] Add initial members search domain ([#3299](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3299)) ([e335fa2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e335fa2243129236c4f41223ad8e0c9cf723e701))
+* [MM-105] Add Members OpenSearch ingestion pipeline ([#3253](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3253)) ([022213d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/022213d56b8ce63dd15cb84fc3de81e801ce5c01))
+* MM-452 Add full promo code functionality back in ([#3306](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3306)) ([4416ad1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4416ad10c6581dd8720e7d8157cfbeef36f3c409))
+
+
+### Bug Fixes
+
+* [None] Fix stage check around domain name creation ([#3282](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3282)) ([85eea0b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/85eea0b11939b46b948949e7d4d73f0b5a374b0a))
+
+
+### Other Changes
+
+* Updating Bruno collections ([#3288](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3288)) ([ade9367](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ade9367a9e7428b558436ab29f11096237d3554c))
+
 ## [1.2.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.2.0...bluelightcard/members-v1.2.1) (2024-12-05)
 
 

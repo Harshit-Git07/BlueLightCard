@@ -23,9 +23,6 @@ on:
 
 permissions: write-all
 
-env:
-  prod_role_to_assume: arn:aws:iam::676719682338:role/github-action-role
-
 jobs:
   install:
     name: Install
@@ -278,6 +275,47 @@ jobs:
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
+    name: Release
+    environment: Production
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - deployment: 'blc-uk-production'
+            region: eu-west-2
+            brand: BLC_UK
+            stage: production
+            brazeSecret: BLC_UK_BRAZE_SERVICE_JSON
+            # auth0_domain: BLC_UK_SERVICE_LAYER_AUTH0_DOMAIN
+            # auth0_api_client_id: BLC_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+            # auth0_api_client_secret: BLC_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+            # auth0_password_validation_client_id: BLC_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+            # auth0_password_validation_client_secret: BLC_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+#          - deployment: 'blc-au-production'
+#            region: ap-southeast-2
+#            brand: BLC_AU
+#            stage: production
+#            brazeSecret: BLC_AU_BRAZE_SERVICE_JSON
+#            # auth0_domain: BLC_AU_SERVICE_LAYER_AUTH0_DOMAIN
+#            # auth0_api_client_id: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+#            # auth0_api_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+#            # auth0_password_validation_client_id: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+#            # auth0_password_validation_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+#          - deployment: 'dds-uk-production'
+#            region: eu-west-2
+#            brand: DDS_UK
+#            stage: production-dds
+#            brazeSecret: DDS_UK_BRAZE_SERVICE_JSON
+#            blcUkCognitoUserPoolId: 'eu-west-2_D3aAVuWHo'
+#            blcUkOldCognitoUserPoolId: 'eu-west-2_jrwTfFRgM'
+#            ddsCognitoUserPoolId: 'eu-west-2_3WlS5ZkAh'
+#            ddsOldCognitoUserPoolId: 'eu-west-2_y2KyCUbVT'
+#            blcUkIdentityApiId: 'ue8dcieh75'
+#            # auth0_domain: DDS_UK_SERVICE_LAYER_AUTH0_DOMAIN
+#            # auth0_api_client_id: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+#            # auth0_api_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+#            # auth0_password_validation_client_id: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+#            # auth0_password_validation_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
     needs:
       - install
       - test
@@ -285,7 +323,62 @@ jobs:
       - changelog
       - build
       # - e2e-test-staging
-    uses: ./.github/workflows/production-deploy-members.yml
-    with:
-      aws_role: ${{ env.prod_role_to_assume }}
-    secrets: inherit
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ matrix.region }}
+          role-to-assume: arn:aws:iam::676719682338:role/github-action-role
+      - name: Build
+        run: npm run build
+      - name: Get Service Tags
+        run: |
+          echo "DD_VERSION=$(date +%m-%d-%Y)-$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "DD_ENV=production" >> $GITHUB_ENV
+          echo "DD_GIT_COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+          echo "DD_GIT_REPOSITORY_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
+      - name: Deploy
+        env:
+          BRAND: ${{ matrix.brand }}
+          DD_VERSION: '${{ env.DD_VERSION }}'
+          DD_ENV: '${{ env.DD_ENV }}'
+          DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
+          DD_GIT_REPOSITORY_URL: '${{ env.DD_GIT_REPOSITORY_URL }}'
+          DD_API_KEY: '${{ secrets.DATADOG_AWS_INSTRUMENTATION_TOKEN }}'
+          USE_DATADOG_AGENT: 'true'
+          BRAZE_SERVICE_JSON: ${{ secrets[matrix.brazeSecret] }}
+          BLC_UK_COGNITO_USER_POOL_ID: ${{ matrix.blcUkCognitoUserPoolId }}
+          BLC_UK_OLD_COGNITO_USER_POOL_ID: ${{ matrix.blcUkOldCognitoUserPoolId }}
+          DDS_COGNITO_USER_POOL_ID: ${{ matrix.ddsCognitoUserPoolId }}
+          DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
+          BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
+          # SERVICE_LAYER_AUTH0_DOMAIN: ${{ secrets[matrix.auth0_domain] }}
+          # SERVICE_LAYER_AUTH0_API_CLIENT_ID: ${{ secrets[matrix.auth0_api_client_id] }}
+          # SERVICE_LAYER_AUTH0_API_CLIENT_SECRET: ${{ secrets[matrix.auth0_api_client_secret] }}
+          # SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID: ${{ secrets[matrix.auth0_password_validation_client_id] }}
+          # SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET: ${{ secrets[matrix.auth0_password_validation_client_secret] }}
+        run: npx sst deploy global --stage ${{matrix.stage}} --region ${{matrix.region}} && npx sst deploy members members-api members-admin-api --stage ${{matrix.stage}} --region ${{matrix.region}}
+      - name: Datadog deployment metrics
+        uses: ./.github/actions/datadog
+        with:
+          environment: ${{matrix.stage}}
+          service_name: 'members'
+          workflow_run_id: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DATADOG_DORA_METRICS_CLIENT_TOKEN: ${{ secrets.DATADOG_DORA_METRICS_CLIENT_TOKEN }}
+      - name: Send Slack message on failure
+        if: ${{ failure() }}
+        uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
+          title: "@here :x: Production deployment failed for Members!"
+      - name: Send Slack message on success
+        if: ${{ success() }}
+        uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
+          title: ":rocket: Production deployment for Members was successful!"

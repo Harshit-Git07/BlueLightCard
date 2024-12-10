@@ -1,6 +1,6 @@
 import { ApplicationService } from '../applicationService';
 import { ApplicationRepository } from '../../repositories/applicationRepository';
-import { PromoCodeService } from '../promoCodeService';
+import { PromoCodesService } from '../promoCodesService';
 import { S3 } from 'aws-sdk';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { EligibilityStatus } from '../../models/enums/EligibilityStatus';
@@ -10,7 +10,7 @@ import { ApplicationReason } from '../../models/enums/ApplicationReason';
 import { ProfileService } from '../profileService';
 
 jest.mock('../../repositories/applicationRepository');
-jest.mock('../promoCodeService');
+jest.mock('../promoCodesService');
 jest.mock('aws-sdk');
 jest.mock('uuid', () => ({
   v4: jest.fn(),
@@ -31,13 +31,13 @@ describe('ApplicationService', () => {
   let applicationService: ApplicationService;
   let repositoryMock: jest.Mocked<ApplicationRepository>;
   let profileServiceMock: jest.Mocked<ProfileService>;
-  let promoCodeServiceMock: jest.Mocked<PromoCodeService>;
+  let promoCodeServiceMock: jest.Mocked<PromoCodesService>;
   let s3ClientMock: jest.Mocked<S3>;
 
   beforeEach(() => {
     repositoryMock = new ApplicationRepository() as jest.Mocked<ApplicationRepository>;
     profileServiceMock = new ProfileService() as jest.Mocked<ProfileService>;
-    promoCodeServiceMock = new PromoCodeService() as jest.Mocked<PromoCodeService>;
+    promoCodeServiceMock = new PromoCodesService() as jest.Mocked<PromoCodesService>;
     s3ClientMock = new S3() as jest.Mocked<S3>;
 
     applicationService = new ApplicationService(
@@ -76,14 +76,6 @@ describe('ApplicationService', () => {
       await expect(
         applicationService.updateApplication(memberId, applicationId, updateApplication),
       ).rejects.toThrow(error);
-    });
-
-    it('should validate promo code if provided', async () => {
-      const application = { ...updateApplication, promoCode: 'PROMO' } as any;
-
-      await applicationService.updateApplication(memberId, applicationId, application);
-
-      expect(promoCodeServiceMock.validatePromoCode).toHaveBeenCalledWith(memberId, 'PROMO');
     });
 
     it('should update an application successfully', async () => {

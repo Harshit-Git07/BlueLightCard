@@ -9,10 +9,11 @@ import { EligibilityStatus } from '../models/enums/EligibilityStatus';
 import { DocumentUploadLocation } from '../models/documentUpload';
 import { S3 } from 'aws-sdk';
 import { Bucket } from 'sst/node/bucket';
-import { PromoCodeService } from './promoCodeService';
+import { PromoCodesService } from './promoCodesService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { ProfileService } from './profileService';
 import { ApplicationBatchApprovalModel } from '../models/applicationApprovalModel';
+import { PromoCodeResponseModel } from '@blc-mono/members/application/models/promoCodeModel';
 
 export interface ApplicationSearch {
   eligibilityStatus?: EligibilityStatus;
@@ -37,7 +38,7 @@ export class ApplicationService {
   constructor(
     private readonly repository: ApplicationRepository = new ApplicationRepository(),
     private readonly profileService: ProfileService = new ProfileService(),
-    private readonly promoCodeService: PromoCodeService = new PromoCodeService(),
+    private readonly promoCodeService: PromoCodesService = new PromoCodesService(),
     private readonly s3Client: S3 = new S3({ region: process.env.REGION ?? 'eu-west-2' }),
     // @ts-ignore
     private readonly uploadBucketName: string = Bucket.documentUploadBucket.bucketName,
@@ -59,15 +60,10 @@ export class ApplicationService {
     application: UpdateApplicationModel,
   ): Promise<void> {
     try {
-      logger.debug({ message: 'Creating application', application });
-
-      if (application.promoCode) {
-        this.promoCodeService.validatePromoCode(memberId, application.promoCode);
-      }
-
+      logger.debug({ message: 'Updating application', application });
       await this.repository.updateApplication(memberId, applicationId, application);
     } catch (error) {
-      logger.error({ message: 'Error creating application', error });
+      logger.error({ message: 'Error updating application', error });
       throw error;
     }
   }

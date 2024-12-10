@@ -1,9 +1,6 @@
 import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 import { middleware } from '../../../middleware';
-import {
-  ApplicationModel,
-  UpdateApplicationModel,
-} from '@blc-mono/members/application/models/applicationModel';
+import { UpdateApplicationModel } from '@blc-mono/members/application/models/applicationModel';
 import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
 import { verifyMemberHasAccessToProfile } from '../memberAuthorization';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
@@ -21,6 +18,11 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<void> => {
   }
 
   const application = UpdateApplicationModel.parse(JSON.parse(event.body));
+
+  if (application.promoCode || application.promoCodeApplied) {
+    throw new ValidationError('Promo code cannot be updated');
+  }
+
   verifyMemberHasAccessToProfile(event, memberId);
   return await service.updateApplication(memberId, applicationId, application);
 };

@@ -7,6 +7,7 @@ import {
   UpdateApplicationModel,
 } from '@blc-mono/members/application/models/applicationModel';
 import { DocumentUploadLocation } from '@blc-mono/members/application/models/documentUpload';
+import { PromoCodeResponseModel } from '@blc-mono/members/application/models/promoCodeModel';
 
 export function memberApplicationRoutes(
   defaultRouteProps: DefaultRouteProps,
@@ -47,6 +48,21 @@ export function memberApplicationRoutes(
       handler:
         'packages/api/members/application/handlers/member/applications/uploadDocument.handler',
       responseModelType: DocumentUploadLocation,
+    }),
+    'POST /members/{memberId}/applications/{applicationId}/code/validate/{promoCode}':
+      Route.createRoute({
+        ...defaultRouteProps,
+        name: 'ValidatePromoCode',
+        handler:
+          'packages/api/members/application/handlers/member/applications/validatePromoCode.handler',
+        responseModelType: PromoCodeResponseModel,
+      }),
+    'PUT /members/{memberId}/applications/{applicationId}/code/apply': Route.createRoute({
+      ...defaultRouteProps,
+      name: 'ApplyPromoCode',
+      handler:
+        'packages/api/members/application/handlers/member/applications/applyPromoCode.handler',
+      responseModelType: UpdateApplicationModel,
     }),
   };
 }

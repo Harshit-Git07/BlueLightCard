@@ -1,21 +1,32 @@
-import { PromoCodeService } from '../../services/promoCodeService';
-import { PromoCodeRepository } from '../../repositories/promoCodeRepository';
+import { PromoCodesService } from '../promoCodesService';
+import { PromoCodesRepository } from '../../repositories/promoCodesRepository';
 import { ProfileService } from '../../services/profileService';
 import { ValidationError } from '../../errors/ValidationError';
 import { PromoCodeType } from '../../models/enums/PromoCodeType';
 import { PromoCodeModel } from '../../models/promoCodeModel';
 import { v4 as uuidv4 } from 'uuid';
 import { ProfileModel } from '../../models/profileModel';
+import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
+import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
 
-jest.mock('../../repositories/promoCodeRepository');
+jest.mock('../../repositories/promoCodesRepository');
 jest.mock('../../services/profileService');
 
+interface PromoCodeConditions {
+  active: boolean;
+  inDate: boolean;
+  withinUsages: boolean;
+  hasCodeProvider: boolean;
+  bypassVerification: boolean;
+  bypassPayment: boolean;
+}
+
 describe('PromoCodeService', () => {
-  let service: PromoCodeService;
-  let promoCodeRepositoryMock: jest.Mocked<PromoCodeRepository>;
+  let service: PromoCodesService;
+  let promoCodesRepositoryMock: jest.Mocked<PromoCodesRepository>;
   let profileServiceMock: jest.Mocked<ProfileService>;
   const memberId = uuidv4();
-  const promoCodeId = 'CODE123';
+  const promoCode = 'CODE123';
 
   const profile: ProfileModel = {
     memberId,
@@ -29,10 +40,12 @@ describe('PromoCodeService', () => {
   };
 
   beforeEach(() => {
-    promoCodeRepositoryMock = new PromoCodeRepository() as jest.Mocked<PromoCodeRepository>;
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date(2023, 0, 1));
+    promoCodesRepositoryMock = new PromoCodesRepository() as jest.Mocked<PromoCodesRepository>;
     profileServiceMock = new ProfileService() as jest.Mocked<ProfileService>;
 
-    service = new PromoCodeService(promoCodeRepositoryMock, profileServiceMock);
+    service = new PromoCodesService(promoCodesRepositoryMock, profileServiceMock);
   });
 
   afterEach(() => {
@@ -41,72 +54,87 @@ describe('PromoCodeService', () => {
 
   describe('validatePromoCode', () => {
     it('should throw ValidationError if promo code does not exist', async () => {
-      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue(null);
+      promoCodesRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue(null);
 
-      await expect(service.validatePromoCode(memberId, promoCodeId)).rejects.toThrow(
+      await expect(service.validatePromoCode(memberId, promoCode)).rejects.toThrow(
         new ValidationError('Promo code does not exist'),
       );
     });
 
     it('should throw ValidationError if single use promo code has already been used', async () => {
       const singleUseCodeModel = singleUseCodeModelWithUsed(true);
-      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+      promoCodesRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
         singleUseCodeModel,
       ]);
 
-      await expect(service.validatePromoCode(memberId, promoCodeId)).rejects.toThrow(
+      await expect(service.validatePromoCode(memberId, promoCode)).rejects.toThrow(
         new ValidationError('Promo code has already been used'),
       );
     });
 
     it('should throw ValidationError if parent promo code details cannot be found', async () => {
       const singleUseCodeModel = singleUseCodeModelWithUsed(false);
-      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+      promoCodesRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
         singleUseCodeModel,
       ]);
-      promoCodeRepositoryMock.getSingleUseParentPromoCode.mockResolvedValue(null);
+      promoCodesRepositoryMock.getSingleUseParentPromoCode.mockResolvedValue(null);
 
-      await expect(service.validatePromoCode(memberId, promoCodeId)).rejects.toThrow(
+      await expect(service.validatePromoCode(memberId, promoCode)).rejects.toThrow(
         new ValidationError('Promo code details cannot be found'),
       );
     });
 
     it('should throw ValidationError if promo code is invalid', async () => {
-      const parentCodeModel = parentCodeModelWithType(PromoCodeType.MULTI_USE, false);
-      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+      const parentCodeModel = parentCodeModelWithType(PromoCodeType.MULTI_USE, {
+        active: false,
+        inDate: true,
+        withinUsages: true,
+        hasCodeProvider: true,
+        bypassPayment: false,
+        bypassVerification: false,
+      });
+      promoCodesRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
         parentCodeModel,
       ]);
 
-      await expect(service.validatePromoCode(memberId, promoCodeId)).rejects.toThrow(
+      await expect(service.validatePromoCode(memberId, promoCode)).rejects.toThrow(
         new ValidationError('Promo code is invalid'),
       );
     });
 
     it('should throw ValidationError if promo code is not applicable for this employer', async () => {
-      const parentCodeModel = parentCodeModelWithType(PromoCodeType.MULTI_USE);
-      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+      const parentCodeModel = parentCodeModelWithType(PromoCodeType.MULTI_USE, {
+        active: true,
+        inDate: true,
+        withinUsages: true,
+        hasCodeProvider: true,
+        bypassPayment: false,
+        bypassVerification: false,
+      });
+      promoCodesRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
         parentCodeModel,
       ]);
       profileServiceMock.getProfile.mockResolvedValue(profile);
 
-      await expect(service.validatePromoCode(memberId, promoCodeId)).rejects.toThrow(
+      await expect(service.validatePromoCode(memberId, promoCode)).rejects.toThrow(
         new ValidationError('Promo code is not applicable for this employer'),
       );
     });
 
     it('should return promo code response model if promo code is valid and has no code provider', async () => {
-      const parentCodeModel = parentCodeModelWithType(
-        PromoCodeType.MULTI_USE,
-        true,
-        true,
-        true,
-        false,
-      );
-      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+      const parentCodeModel = parentCodeModelWithType(PromoCodeType.MULTI_USE, {
+        active: true,
+        hasCodeProvider: false,
+        inDate: true,
+        withinUsages: true,
+        bypassPayment: false,
+        bypassVerification: false,
+      });
+      promoCodesRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
         parentCodeModel,
       ]);
 
-      const result = await service.validatePromoCode(memberId, promoCodeId);
+      const result = await service.validatePromoCode(memberId, promoCode);
 
       expect(result).toStrictEqual({
         bypassPayment: parentCodeModel.bypassPayment,
@@ -115,8 +143,15 @@ describe('PromoCodeService', () => {
     });
 
     it('should return promo code response model if promo code is valid and code provider matches member profile', async () => {
-      const parentCodeModel = parentCodeModelWithType(PromoCodeType.MULTI_USE);
-      promoCodeRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+      const parentCodeModel = parentCodeModelWithType(PromoCodeType.MULTI_USE, {
+        active: true,
+        hasCodeProvider: true,
+        inDate: true,
+        withinUsages: true,
+        bypassPayment: false,
+        bypassVerification: false,
+      });
+      promoCodesRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
         parentCodeModel,
       ]);
       profileServiceMock.getProfile.mockResolvedValue({
@@ -124,7 +159,7 @@ describe('PromoCodeService', () => {
         employerId: parentCodeModel.codeProvider,
       });
 
-      const result = await service.validatePromoCode(memberId, promoCodeId);
+      const result = await service.validatePromoCode(memberId, promoCode);
 
       expect(result).toStrictEqual({
         bypassPayment: parentCodeModel.bypassPayment,
@@ -133,29 +168,94 @@ describe('PromoCodeService', () => {
     });
   });
 
+  describe('on apply promo code', () => {
+    const applicationId = 'e533971b-4273-4d2c-90bd-ff9c30f230c9';
+    const promoCodeApplied = true;
+
+    describe('and bypass payment is true', () => {
+      it('should call update promo code usage', async () => {
+        const parentCodeModel = parentCodeModelWithType(PromoCodeType.MULTI_USE, {
+          active: true,
+          hasCodeProvider: false,
+          inDate: true,
+          withinUsages: true,
+          bypassPayment: true,
+          bypassVerification: false,
+        });
+        promoCodesRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+          parentCodeModel,
+        ]);
+        const expectedApplicationUpdateModel = {
+          promoCode: promoCode,
+          promoCodeApplied: promoCodeApplied,
+          paymentStatus: PaymentStatus.PAID_PROMO_CODE,
+          purchaseDate: '2023-01-01T00:00:00.000Z',
+        };
+
+        await service.applyPromoCode(memberId, applicationId, promoCode, promoCodeApplied);
+
+        expect(promoCodesRepositoryMock.updatePromoCodeUsage).toHaveBeenCalledWith(
+          PromoCodeType.MULTI_USE,
+          parentCodeModel.parentId,
+          memberId,
+          applicationId,
+          expectedApplicationUpdateModel,
+        );
+      });
+    });
+
+    describe('and bypass verification is true', () => {
+      it('should call update promo code usage', async () => {
+        const parentCodeModel = parentCodeModelWithType(PromoCodeType.MULTI_USE, {
+          active: true,
+          hasCodeProvider: false,
+          inDate: true,
+          withinUsages: true,
+          bypassVerification: true,
+          bypassPayment: false,
+        });
+        promoCodesRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue([
+          parentCodeModel,
+        ]);
+        const expectedApplicationUpdateModel = {
+          eligibilityStatus: EligibilityStatus.ELIGIBLE,
+          promoCode: promoCode,
+          promoCodeApplied: promoCodeApplied,
+        };
+
+        await service.applyPromoCode(memberId, applicationId, promoCode, promoCodeApplied);
+
+        expect(promoCodesRepositoryMock.updatePromoCodeUsage).toHaveBeenCalledWith(
+          PromoCodeType.MULTI_USE,
+          parentCodeModel.parentId,
+          memberId,
+          applicationId,
+          expectedApplicationUpdateModel,
+        );
+      });
+    });
+  });
+
   const parentCodeModelWithType = (
     type: PromoCodeType,
-    active: boolean = true,
-    inDate: boolean = true,
-    withinUsages: boolean = true,
-    hasCodeProvider: boolean = true,
+    conditions: PromoCodeConditions,
   ): PromoCodeModel => {
     return {
       parentId: 'fdb27574-d07d-463d-9f74-3c783cc086ac',
-      active: active,
-      bypassPayment: false,
-      bypassVerification: true,
+      active: conditions.active,
+      bypassPayment: conditions.bypassPayment,
+      bypassVerification: conditions.bypassVerification,
       cardValidityTerm: 2,
-      code: promoCodeId,
-      codeProvider: hasCodeProvider ? uuidv4() : '',
+      code: promoCode,
+      codeProvider: conditions.hasCodeProvider ? uuidv4() : '',
       createdDate: '2021-09-07',
-      currentUsages: withinUsages ? 300 : 1000,
+      currentUsages: conditions.withinUsages ? 300 : 1000,
       description: 'For NHS employees',
       lastUpdatedDate: '2021-09-07',
       maxUsages: 1000,
       name: 'NHS',
       promoCodeType: type,
-      validityEndDate: inDate ? '2122-09-07' : '2021-09-10',
+      validityEndDate: conditions.inDate ? '2122-09-07' : '2021-09-10',
       validityStartDate: '2021-09-07',
       addedDate: undefined,
       singleCodeId: undefined,
@@ -171,7 +271,7 @@ describe('PromoCodeService', () => {
       bypassPayment: undefined,
       bypassVerification: undefined,
       cardValidityTerm: undefined,
-      code: promoCodeId,
+      code: promoCode,
       codeProvider: undefined,
       createdDate: undefined,
       currentUsages: undefined,

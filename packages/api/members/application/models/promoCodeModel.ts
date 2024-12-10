@@ -1,11 +1,13 @@
 import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import { z } from 'zod';
+import { ApplicationModel } from '@blc-mono/members/application/models/applicationModel';
+import { PromoCodeType } from '@blc-mono/members/application/models/enums/PromoCodeType';
 
 export const PromoCodeModel = createZodNamedType(
   'PromoCodeModel',
   z.object({
     parentId: z.string().uuid(),
-    promoCodeType: z.string(),
+    promoCodeType: z.nativeEnum(PromoCodeType),
     singleCodeId: z.string().uuid().optional(),
     name: z.string().optional(),
     validityStartDate: z
@@ -52,3 +54,12 @@ export const PromoCodeModel = createZodNamedType(
 );
 
 export type PromoCodeModel = z.infer<typeof PromoCodeModel>;
+
+export const PromoCodeResponseModel = createZodNamedType(
+  'PromoCodeResponseModel',
+  PromoCodeModel.pick({
+    bypassVerification: true,
+    bypassPayment: true,
+  }),
+);
+export type PromoCodeResponseModel = z.infer<typeof PromoCodeResponseModel>;

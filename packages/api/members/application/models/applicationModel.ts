@@ -3,6 +3,7 @@ import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtensio
 import { ApplicationReason } from './enums/ApplicationReason';
 import { RejectionReason } from './enums/RejectionReason';
 import { EligibilityStatus } from './enums/EligibilityStatus';
+import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
 
 export const ApplicationModel = createZodNamedType(
   'ApplicationModel',
@@ -11,6 +12,8 @@ export const ApplicationModel = createZodNamedType(
     applicationId: z.string().uuid(),
     startDate: z.string().date().optional(),
     eligibilityStatus: z.nativeEnum(EligibilityStatus).optional(),
+    paymentStatus: z.nativeEnum(PaymentStatus).optional(),
+    purchaseDate: z.string().datetime().optional(),
     applicationReason: z.nativeEnum(ApplicationReason).optional(),
     address1: z.string().optional(),
     address2: z.string().optional(),
@@ -18,6 +21,7 @@ export const ApplicationModel = createZodNamedType(
     postcode: z.string().optional(),
     country: z.string().optional(),
     promoCode: z.string().nullable().optional(),
+    promoCodeApplied: z.boolean().optional(),
     idS3LocationPrimary: z.string().optional(),
     idS3LocationSecondary: z.string().optional(),
     trustedDomainEmail: z.string().optional(),
@@ -61,3 +65,15 @@ export const UpdateApplicationModel = createZodNamedType(
   }),
 );
 export type UpdateApplicationModel = z.infer<typeof UpdateApplicationModel>;
+
+export const ApplyPromoCodeApplicationModel = createZodNamedType(
+  'ApplyPromoCodeApplicationModel',
+  ApplicationModel.pick({
+    promoCode: true,
+    promoCodeApplied: true,
+    eligibilityStatus: true,
+    paymentStatus: true,
+    purchaseDate: true,
+  }),
+);
+export type ApplyPromoCodeApplicationModel = z.infer<typeof ApplyPromoCodeApplicationModel>;

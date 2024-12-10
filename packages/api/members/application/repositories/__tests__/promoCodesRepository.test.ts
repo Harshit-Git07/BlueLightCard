@@ -1,8 +1,9 @@
 import { mockClient } from 'aws-sdk-client-mock';
-import { DynamoDBDocumentClient, QueryCommand } from '@aws-sdk/lib-dynamodb';
-import { PromoCodeRepository } from '@blc-mono/members/application/repositories/promoCodeRepository';
+import { DynamoDBDocumentClient, QueryCommand, TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
+import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
 import { PromoCodeType } from '@blc-mono/members/application/models/enums/PromoCodeType';
 import 'aws-sdk-client-mock-jest';
+import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
 
 const mockDynamoDB = mockClient(DynamoDBDocumentClient);
 
@@ -10,10 +11,13 @@ describe('PromoCodesRepository', () => {
   const mockPromoCode = 'CODE123';
   const mockParentPromoCodeId = 'fdb27574-d07d-463d-9f74-3c783cc086ac';
 
-  let repository: PromoCodeRepository;
+  let repository: PromoCodesRepository;
 
   beforeEach(() => {
-    repository = new PromoCodeRepository(mockDynamoDB as any, 'memberPromosTest');
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date(2023, 0, 1));
+    repository = new PromoCodesRepository(mockDynamoDB as any, 'memberProfilesTest');
   });
 
   afterEach(() => {
@@ -31,7 +35,7 @@ describe('PromoCodesRepository', () => {
         const result = await repository.getMultiUseOrSingleUseChildPromoCode(mockPromoCode);
 
         expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, {
-          TableName: 'memberPromosTest',
+          TableName: 'memberProfilesTest',
           IndexName: 'PromoCodeIndex',
           KeyConditionExpression: 'code = :code',
           FilterExpression: 'sk = :multiCodeSk OR begins_with(sk, :singleCodeChildSk)',
@@ -86,7 +90,7 @@ describe('PromoCodesRepository', () => {
         const result = await repository.getMultiUseOrSingleUseChildPromoCode(mockPromoCode);
 
         expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, {
-          TableName: 'memberPromosTest',
+          TableName: 'memberProfilesTest',
           IndexName: 'PromoCodeIndex',
           KeyConditionExpression: 'code = :code',
           FilterExpression: 'sk = :multiCodeSk OR begins_with(sk, :singleCodeChildSk)',
@@ -132,7 +136,7 @@ describe('PromoCodesRepository', () => {
       const result = await repository.getSingleUseParentPromoCode(mockParentPromoCodeId);
 
       expect(mockDynamoDB).toHaveReceivedCommandWith(QueryCommand, {
-        TableName: 'memberPromosTest',
+        TableName: 'memberProfilesTest',
         KeyConditionExpression: 'pk = :pk AND sk = :singleCodeParentSk',
         ExpressionAttributeValues: {
           ':pk': `PROMO_CODE#${mockParentPromoCodeId}`,
@@ -157,6 +161,100 @@ describe('PromoCodesRepository', () => {
       await expect(repository.getSingleUseParentPromoCode(mockParentPromoCodeId)).rejects.toThrow(
         'DynamoDB error',
       );
+    });
+  });
+
+  describe('on update promo code usage', () => {
+    const promoCodeType = PromoCodeType.SINGLE_USE;
+    const parentPromoCodeId = '11c1a379-1cdf-49ac-9bd1-1bce39e511ef';
+    const memberId = 'b487a39d-7b78-4070-936c-72e6bd085d03';
+    const applicationId = 'ea5f7186-2187-4d45-87cc-57451fb61e68';
+    const singlePromoCodeId = '726ddaea-2baa-4fd7-97a0-9db2b89260d6';
+    const applicationModel = {
+      eligibilityStatus: EligibilityStatus.ELIGIBLE,
+      promoCode: mockPromoCode,
+      promoCodeApplied: true,
+    };
+
+    it('should update promo code usage and application successfully', async () => {
+      await repository.updatePromoCodeUsage(
+        promoCodeType,
+        parentPromoCodeId,
+        memberId,
+        applicationId,
+        applicationModel,
+        singlePromoCodeId,
+      );
+
+      expect(mockDynamoDB).toHaveReceivedCommandWith(TransactWriteCommand, {
+        TransactItems: [
+          {
+            Update: {
+              TableName: 'memberProfilesTest',
+              Key: {
+                pk: `MEMBER#${memberId}`,
+                sk: `APPLICATION#${applicationId}`,
+              },
+              UpdateExpression: `SET #eligibilityStatus = :eligibilityStatus, #promoCode = :promoCode, #promoCodeApplied = :promoCodeApplied `,
+              ExpressionAttributeNames: {
+                '#eligibilityStatus': 'eligibilityStatus',
+                '#promoCode': 'promoCode',
+                '#promoCodeApplied': 'promoCodeApplied',
+              },
+              ExpressionAttributeValues: {
+                ':eligibilityStatus': applicationModel.eligibilityStatus,
+                ':promoCode': applicationModel.promoCode,
+                ':promoCodeApplied': applicationModel.promoCodeApplied,
+              },
+            },
+          },
+          {
+            Update: {
+              TableName: 'memberProfilesTest',
+              Key: {
+                pk: `PROMO_CODE#${parentPromoCodeId}`,
+                sk: promoCodeType,
+              },
+              UpdateExpression: `ADD currentUsages :increment`,
+              ExpressionAttributeValues: {
+                ':increment': 1,
+              },
+            },
+          },
+          {
+            Update: {
+              TableName: 'memberProfilesTest',
+              Key: {
+                pk: `PROMO_CODE#${parentPromoCodeId}`,
+                sk: `SINGLE_USE#${singlePromoCodeId}`,
+              },
+              UpdateExpression: 'SET #used = :used, #usedDate = :usedDate',
+              ExpressionAttributeNames: {
+                '#used': 'used',
+                '#usedDate': 'usedDate',
+              },
+              ExpressionAttributeValues: {
+                ':used': true,
+                ':usedDate': '2023-01-01T00:00:00.000Z',
+              },
+            },
+          },
+        ],
+      });
+    });
+
+    it('should throw an error when transact write fails', async () => {
+      mockDynamoDB.on(TransactWriteCommand).rejects(new Error('DynamoDB error'));
+
+      await expect(
+        repository.updatePromoCodeUsage(
+          promoCodeType,
+          parentPromoCodeId,
+          memberId,
+          applicationId,
+          applicationModel,
+        ),
+      ).rejects.toThrow('DynamoDB error');
     });
   });
 

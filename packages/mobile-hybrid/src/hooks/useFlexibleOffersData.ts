@@ -2,15 +2,22 @@ import { V5_API_URL } from '@/globals';
 import { usePlatformAdapter } from '@bluelightcard/shared-ui';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import type { FlexibleOfferData } from '@bluelightcard/shared-ui';
+import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
+import { useAtomValue } from 'jotai';
+import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 const useFlexibleOffersData = (flexiMenuId: string) => {
+  const amplitudeExperiments = useAtomValue(experimentsAndFeatureFlags);
   const platformAdapter = usePlatformAdapter();
 
-  if (!flexiMenuId || flexiMenuId === 'undefined')
+  const v5ApiFlag = amplitudeExperiments[FeatureFlags.V5_API_INTEGRATION] ?? 'off';
+
+  if (!flexiMenuId || flexiMenuId === 'undefined') {
     throw new Error('Valid flexi menu ID not provided');
+  }
 
   return useSuspenseQuery({
-    queryKey: ['flexibleOffersData', flexiMenuId],
+    queryKey: ['flexibleOffersData', flexiMenuId, `v5-${v5ApiFlag}`],
     refetchInterval: false,
     refetchIntervalInBackground: false,
     refetchOnMount: false,

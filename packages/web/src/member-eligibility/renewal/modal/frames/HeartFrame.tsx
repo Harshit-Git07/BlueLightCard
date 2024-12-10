@@ -22,7 +22,7 @@ export const HeartFrame: FC<Props> = ({ isMobile = false }) => {
       <Icon className={isMobile ? 'w-[64px] h-[48px]' : ''} />
 
       <div className={`${font} pb-[8px]`}>
-        Join our community of members{' '}
+        Join our community of members.{' '}
         <span className="text-colour-onSurface-subtle"> Connect, share & thrive.</span>
       </div>
     </div>

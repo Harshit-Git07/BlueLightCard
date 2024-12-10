@@ -21,9 +21,10 @@ import {
 
 interface Props {
   onClose?: OnClose;
+  ifCardExpiredMoreThan30Days?: boolean;
 }
 
-export const RenewalModalMobile: FC<Props> = () => {
+export const RenewalModalMobile: FC<Props> = ({ onClose, ifCardExpiredMoreThan30Days }) => {
   const imagePath = getModalImage();
   const platformAdapter = usePlatformAdapter();
 
@@ -40,7 +41,9 @@ export const RenewalModalMobile: FC<Props> = () => {
       renewalEvents.onClickLater.event,
       renewalEvents.onClickLater.params
     );
+    onClose?.();
   };
+
   return (
     <EligibilityMobileModal imagePath={imagePath} data-testid="sign-up-success-screen">
       <div className="flex flex-col justify-center align-center gap-[4px]">
@@ -58,13 +61,26 @@ export const RenewalModalMobile: FC<Props> = () => {
 
         <StarFrame isMobile />
 
-        <div className="flex flex-col gap-[12px]">
-          <Button size="Large" onClick={onClickRenewMembership}>
-            Renew membership
-          </Button>
+        <div className="flex w-full gap-[8px]">
+          {!ifCardExpiredMoreThan30Days && (
+            <Button
+              data-testid="delay-renewal-button-mobile"
+              variant={ThemeVariant.Secondary}
+              onClick={onClickLater}
+              className="w-1/5"
+              size="Large"
+            >
+              Later
+            </Button>
+          )}
 
-          <Button variant={ThemeVariant.Secondary} onClick={onClickLater} size="Large">
-            Later
+          <Button
+            data-testid="renewal-button-mobile"
+            className={!ifCardExpiredMoreThan30Days ? 'w-4/5 ml-auto' : 'w-full'}
+            onClick={onClickRenewMembership}
+            size="Large"
+          >
+            Renew membership
           </Button>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { SuccessModalDesktop } from '@/root/src/member-eligibility/shared/screen
 import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { useEligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { SuccessModelMobile } from '@/root/src/member-eligibility/shared/screens/success-screen/components/SuccessScreenMobile';
 
 interface Props {

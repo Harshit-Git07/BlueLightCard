@@ -3,12 +3,19 @@ import { useMediaQuery, useMobileMediaQuery } from '@bluelightcard/shared-ui/hoo
 import { RenewalModalDesktop } from '@/root/src/member-eligibility/renewal/modal/RenewalModalDesktop';
 import { RenewalModalMobile } from '@/root/src/member-eligibility/renewal/modal/RenewalModalMobile';
 import { usePlatformAdapter } from '@bluelightcard/shared-ui/adapters';
+import { OnClose } from '@/root/src/member-eligibility/shared/screens/success-screen/types/OnClose';
 
 interface Props {
   forceMobileView?: boolean;
+  onClose?: OnClose;
+  ifCardExpiredMoreThan30Days?: boolean;
 }
 
-export const RenewalModal: FC<Props> = ({ forceMobileView }) => {
+export const RenewalModal: FC<Props> = ({
+  forceMobileView,
+  onClose,
+  ifCardExpiredMoreThan30Days,
+}) => {
   const platformAdapter = usePlatformAdapter();
   const isMobileInPortraitMode = useMediaQuery('(max-height: 600px) and (orientation: landscape)');
   const isMobile = useMobileMediaQuery();
@@ -28,8 +35,18 @@ export const RenewalModal: FC<Props> = ({ forceMobileView }) => {
   }, [forceMobileView, isMobile, isMobileInPortraitMode]);
 
   if (useMobileView) {
-    return <RenewalModalMobile />;
+    return (
+      <RenewalModalMobile
+        ifCardExpiredMoreThan30Days={ifCardExpiredMoreThan30Days}
+        onClose={onClose}
+      />
+    );
   }
 
-  return <RenewalModalDesktop />;
+  return (
+    <RenewalModalDesktop
+      ifCardExpiredMoreThan30Days={ifCardExpiredMoreThan30Days}
+      onClose={onClose}
+    />
+  );
 };

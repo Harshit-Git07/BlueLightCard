@@ -4,6 +4,9 @@ import { useMedia } from 'react-use';
 import { renderWithMockedPlatformAdapter } from '@/root/src/member-eligibility/shared/testing/MockedPlatformAdaptor';
 
 jest.mock('react-use');
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
 
 const useMediaMock = jest.mocked(useMedia);
 

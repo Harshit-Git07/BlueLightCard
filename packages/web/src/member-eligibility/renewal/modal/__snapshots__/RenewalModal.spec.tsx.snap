@@ -71,7 +71,7 @@ exports[`snapshot test renders a the desktop renewal modal 1`] = `
                       <div
                         class="font-typography-title-medium-semibold font-typography-title-medium-semibold-weight text-typography-title-medium-semibold leading-typography-title-medium-semibold tracking-typography-title-medium-semibold pb-[8px]"
                       >
-                        Join our community of members
+                        Join our community of members.
                          
                         <span
                           class="text-colour-onSurface-subtle"
@@ -138,16 +138,18 @@ exports[`snapshot test renders a the desktop renewal modal 1`] = `
                   </div>
                 </div>
                 <div
-                  class="flex w-full gap-[8px]"
+                  class="flex w-full max-w-[1200px] mx-auto gap-[8px]"
                 >
                   <button
                     class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark w-1/5 text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                    data-testid="delay-renewal-button"
                     type="button"
                   >
                     Later
                   </button>
                   <button
                     class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none w-4/5 ml-auto text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                    data-testid="renewal-button"
                     type="button"
                   >
                     Renew membership
@@ -227,7 +229,7 @@ exports[`snapshot test renders a the desktop renewal modal 1`] = `
                     <div
                       class="font-typography-title-medium-semibold font-typography-title-medium-semibold-weight text-typography-title-medium-semibold leading-typography-title-medium-semibold tracking-typography-title-medium-semibold pb-[8px]"
                     >
-                      Join our community of members
+                      Join our community of members.
                        
                       <span
                         class="text-colour-onSurface-subtle"
@@ -294,16 +296,18 @@ exports[`snapshot test renders a the desktop renewal modal 1`] = `
                 </div>
               </div>
               <div
-                class="flex w-full gap-[8px]"
+                class="flex w-full max-w-[1200px] mx-auto gap-[8px]"
               >
                 <button
                   class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark w-1/5 text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                  data-testid="delay-renewal-button"
                   type="button"
                 >
                   Later
                 </button>
                 <button
                   class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none w-4/5 ml-auto text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                  data-testid="renewal-button"
                   type="button"
                 >
                   Renew membership
@@ -407,7 +411,7 @@ exports[`snapshot test renders a the mobile renewal modal 1`] = `
               <div
                 class="font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold pb-[8px]"
               >
-                Join our community of members
+                Join our community of members.
                  
                 <span
                   class="text-colour-onSurface-subtle"
@@ -468,19 +472,21 @@ exports[`snapshot test renders a the mobile renewal modal 1`] = `
               </div>
             </div>
             <div
-              class="flex flex-col gap-[12px]"
+              class="flex w-full gap-[8px]"
             >
               <button
-                class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
-                type="button"
-              >
-                Renew membership
-              </button>
-              <button
-                class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark w-1/5 text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                data-testid="delay-renewal-button-mobile"
                 type="button"
               >
                 Later
+              </button>
+              <button
+                class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none w-4/5 ml-auto text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                data-testid="renewal-button-mobile"
+                type="button"
+              >
+                Renew membership
               </button>
             </div>
           </div>
@@ -534,7 +540,7 @@ exports[`snapshot test renders a the mobile renewal modal 1`] = `
             <div
               class="font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold pb-[8px]"
             >
-              Join our community of members
+              Join our community of members.
                
               <span
                 class="text-colour-onSurface-subtle"
@@ -595,19 +601,21 @@ exports[`snapshot test renders a the mobile renewal modal 1`] = `
             </div>
           </div>
           <div
-            class="flex flex-col gap-[12px]"
+            class="flex w-full gap-[8px]"
           >
             <button
-              class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
-              type="button"
-            >
-              Renew membership
-            </button>
-            <button
-              class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark w-1/5 text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              data-testid="delay-renewal-button-mobile"
               type="button"
             >
               Later
+            </button>
+            <button
+              class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none w-4/5 ml-auto text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              data-testid="renewal-button-mobile"
+              type="button"
+            >
+              Renew membership
             </button>
           </div>
         </div>

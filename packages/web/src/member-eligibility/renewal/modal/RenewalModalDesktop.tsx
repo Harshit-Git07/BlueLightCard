@@ -21,9 +21,10 @@ import {
 
 interface Props {
   onClose?: OnClose;
+  ifCardExpiredMoreThan30Days?: boolean;
 }
 
-export const RenewalModalDesktop: FC<Props> = () => {
+export const RenewalModalDesktop: FC<Props> = ({ onClose, ifCardExpiredMoreThan30Days }) => {
   const imagePath = getModalImage();
   const platformAdapter = usePlatformAdapter();
 
@@ -39,6 +40,7 @@ export const RenewalModalDesktop: FC<Props> = () => {
       renewalEvents.onClickLater.event,
       renewalEvents.onClickLater.params
     );
+    onClose?.();
   };
 
   return (
@@ -67,16 +69,25 @@ export const RenewalModalDesktop: FC<Props> = () => {
             </div>
           </div>
 
-          <div className="flex w-full gap-[8px]">
+          <div className="flex w-full max-w-[1200px] mx-auto gap-[8px]">
+            {!ifCardExpiredMoreThan30Days && (
+              <Button
+                data-testid="delay-renewal-button"
+                variant={ThemeVariant.Secondary}
+                onClick={onClickLater}
+                className="w-1/5"
+                size="Large"
+              >
+                Later
+              </Button>
+            )}
+
             <Button
-              variant={ThemeVariant.Secondary}
+              data-testid="renewal-button"
+              className={!ifCardExpiredMoreThan30Days ? 'w-4/5 ml-auto' : 'w-full'}
               onClick={onClickRenewMembership}
-              className="w-1/5"
               size="Large"
             >
-              Later
-            </Button>
-            <Button className="w-4/5 ml-auto" onClick={onClickLater} size="Large">
               Renew membership
             </Button>
           </div>

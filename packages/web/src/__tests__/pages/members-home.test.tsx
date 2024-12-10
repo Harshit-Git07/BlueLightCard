@@ -16,6 +16,8 @@ import { useMedia } from 'react-use';
 import AmplitudeContext from '@/root/src/common/context/AmplitudeContext';
 import useFetchHomepageData from '@/hooks/useFetchHomepageData';
 import { BannerType, FeaturedOffersType, FlexibleMenuType } from '@/page-types/members-home';
+import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui/adapters';
+import { useShowRenewalModal } from '@/root/src/member-eligibility/hooks/UseShowRenewalModal';
 
 jest.mock('@bluelightcard/shared-ui', () => {
   const eventBus = {
@@ -113,6 +115,14 @@ jest.mock('../../offers/components/PromoBanner/PromoBannerPlaceholder', () => {
   };
 });
 
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}));
+
+jest.mock('@/root/src/member-eligibility/hooks/UseShowRenewalModal', () => ({
+  useShowRenewalModal: jest.fn(),
+}));
+
 const mockTrackHomepageCarouselClick = jest.fn();
 const mockTrackHomepageCarouselInteraction = jest.fn();
 const mockTrackTenancyClick = jest.fn();
@@ -174,7 +184,7 @@ const userContextTypeFactory = Factory.define<UserContextType>(() => ({
   },
 }));
 
-describe('Members-Home Page Tenancy Banner', () => {
+describe('Members-Home Page', () => {
   beforeEach(() => {
     useFetchHomepageDataMock.mockReturnValue({
       dealsOfTheWeek: [],
@@ -193,44 +203,91 @@ describe('Members-Home Page Tenancy Banner', () => {
     });
   });
 
-  it('renders a promo banner placeholder while Braze experiment is loading', async () => {
-    whenMembersHomePageIsRendered('control');
+  describe('Renewal modal', () => {
+    it('should render renewal modal - with the option to delay (Later button)', () => {
+      (useShowRenewalModal as jest.Mock).mockReturnValue({
+        shouldShowRenewalModal: true,
+        onHideRenewalModal: jest.fn(),
+        ifCardExpiredMoreThan30Days: false,
+      });
+      whenMembersHomePageIsRendered('on');
 
-    const placeholder = screen.getByTestId('tenancy-banner-experiment-placeholder');
-    expect(placeholder).toBeInTheDocument();
+      const renewalModal = screen.getByTestId('renewal-modal');
+      const laterButton = screen.getByTestId('delay-renewal-button');
+
+      expect(renewalModal).toBeInTheDocument();
+      expect(laterButton).toBeInTheDocument();
+    });
+
+    it('should render renewal modal - with No option to delay (Later button) ', () => {
+      (useShowRenewalModal as jest.Mock).mockReturnValue({
+        shouldShowRenewalModal: true,
+        onHideRenewalModal: jest.fn(),
+        ifCardExpiredMoreThan30Days: true,
+      });
+      whenMembersHomePageIsRendered('on');
+
+      const renewalModal = screen.getByTestId('renewal-modal');
+      const laterButton = screen.queryByTestId('delay-renewal-button');
+
+      expect(renewalModal).toBeInTheDocument();
+      expect(laterButton).not.toBeInTheDocument();
+    });
+
+    it('should not render renewal modal', () => {
+      (useShowRenewalModal as jest.Mock).mockReturnValue({
+        shouldShowRenewalModal: false,
+        onHideRenewalModal: jest.fn(),
+        ifCardExpiredMoreThan30Days: false,
+      });
+      whenMembersHomePageIsRendered('on');
+
+      const renewalModal = screen.queryByTestId('renewal-modal');
+
+      expect(renewalModal).not.toBeInTheDocument();
+    });
   });
 
-  describe('GraphQL banner', () => {
-    it('renders when Braze experiment is control', async () => {
+  describe('Tenancy Banner', () => {
+    it('renders a promo banner placeholder while Braze experiment is loading', async () => {
       whenMembersHomePageIsRendered('control');
 
-      const graphQLCarousel = await screen.findByTestId('homepage-sponsor-banners');
-      expect(graphQLCarousel).toBeInTheDocument();
+      const placeholder = screen.getByTestId('tenancy-banner-experiment-placeholder');
+      expect(placeholder).toBeInTheDocument();
     });
 
-    it('does not render the Braze banner', async () => {
-      whenMembersHomePageIsRendered('control');
+    describe('GraphQL banner', () => {
+      it('renders when Braze experiment is control', async () => {
+        whenMembersHomePageIsRendered('control');
 
-      await screen.findByTestId('homepage-sponsor-banners');
-      const brazeCarousel = screen.queryByTestId('braze-tenancy-banner');
-      expect(brazeCarousel).not.toBeInTheDocument();
-    });
-  });
+        const graphQLCarousel = await screen.findByTestId('homepage-sponsor-banners');
+        expect(graphQLCarousel).toBeInTheDocument();
+      });
 
-  describe('Braze banner', () => {
-    beforeEach(() => {
-      whenMembersHomePageIsRendered('treatment');
-    });
+      it('does not render the Braze banner', async () => {
+        whenMembersHomePageIsRendered('control');
 
-    it('renders when Braze experiment is treatment', async () => {
-      const brazeCarousel = await screen.findByTestId('braze-tenancy-banner');
-      expect(brazeCarousel).toBeInTheDocument();
+        await screen.findByTestId('homepage-sponsor-banners');
+        const brazeCarousel = screen.queryByTestId('braze-tenancy-banner');
+        expect(brazeCarousel).not.toBeInTheDocument();
+      });
     });
 
-    it('does not render the GraphQL banner', async () => {
-      await screen.findByTestId('braze-tenancy-banner');
-      const graphQLCarousel = screen.queryByTestId('homepage-sponsor-banners');
-      expect(graphQLCarousel).not.toBeInTheDocument();
+    describe('Braze banner', () => {
+      beforeEach(() => {
+        whenMembersHomePageIsRendered('treatment');
+      });
+
+      it('renders when Braze experiment is treatment', async () => {
+        const brazeCarousel = await screen.findByTestId('braze-tenancy-banner');
+        expect(brazeCarousel).toBeInTheDocument();
+      });
+
+      it('does not render the GraphQL banner', async () => {
+        await screen.findByTestId('braze-tenancy-banner');
+        const graphQLCarousel = screen.queryByTestId('homepage-sponsor-banners');
+        expect(graphQLCarousel).not.toBeInTheDocument();
+      });
     });
   });
 });
@@ -497,7 +554,7 @@ describe('Members-Home Page Carousels', () => {
   });
 });
 
-const whenMembersHomePageIsRendered = (variant: string) => {
+const WhenMembersHomePageIsRendered = ({ variant }: { variant: string }) => {
   const mockAuthContext: Partial<AuthContextType> = {
     authState: {
       idToken: '23123',
@@ -532,22 +589,28 @@ const whenMembersHomePageIsRendered = (variant: string) => {
     trackEventAsync: jest.fn().mockResolvedValue(undefined),
     trackEvent: jest.fn(),
   };
+  const mockPlatformAdapter = useMockPlatformAdapter();
 
-  return render(
-    <QueryClientProvider client={new QueryClient()}>
-      <UserContext.Provider value={userContext}>
-        <AuthedAmplitudeExperimentProvider initExperimentClient={experimentClientMock}>
-          <RouterContext.Provider value={mockRouter as NextRouter}>
-            <AuthContext.Provider value={mockAuthContext as AuthContextType}>
-              <AmplitudeContext.Provider value={mockAmplitudeContext}>
-                <UserContext.Provider value={userContext}>
-                  <HomePage />
-                </UserContext.Provider>
-              </AmplitudeContext.Provider>
-            </AuthContext.Provider>
-          </RouterContext.Provider>
-        </AuthedAmplitudeExperimentProvider>
-      </UserContext.Provider>
-    </QueryClientProvider>
+  return (
+    <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+      <QueryClientProvider client={new QueryClient()}>
+        <UserContext.Provider value={userContext}>
+          <AuthedAmplitudeExperimentProvider initExperimentClient={experimentClientMock}>
+            <RouterContext.Provider value={mockRouter as NextRouter}>
+              <AuthContext.Provider value={mockAuthContext as AuthContextType}>
+                <AmplitudeContext.Provider value={mockAmplitudeContext}>
+                  <UserContext.Provider value={userContext}>
+                    <HomePage />
+                  </UserContext.Provider>
+                </AmplitudeContext.Provider>
+              </AuthContext.Provider>
+            </RouterContext.Provider>
+          </AuthedAmplitudeExperimentProvider>
+        </UserContext.Provider>
+      </QueryClientProvider>
+    </PlatformAdapterProvider>
   );
 };
+
+const whenMembersHomePageIsRendered = (variant: string) =>
+  render(<WhenMembersHomePageIsRendered variant={variant} />);

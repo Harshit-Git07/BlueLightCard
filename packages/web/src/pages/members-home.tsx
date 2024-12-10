@@ -30,6 +30,8 @@ import AmplitudeContext from '../common/context/AmplitudeContext';
 import { useMedia } from 'react-use';
 import TenancyBanner from '../common/components/TenancyBanner';
 import useFetchHomepageData from '@/hooks/useFetchHomepageData';
+import { RenewalModal } from '@/root/src/member-eligibility/renewal/modal/RenewalModal';
+import { useShowRenewalModal } from '@/root/src/member-eligibility/hooks/UseShowRenewalModal';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -74,6 +76,9 @@ const HomePage: NextPage<any> = () => {
   );
 
   const amplitude = useContext(AmplitudeContext);
+
+  const { shouldShowRenewalModal, onHideRenewalModal, ifCardExpiredMoreThan30Days } =
+    useShowRenewalModal();
 
   // TODO: Disabled due to Friday code freeze
   // useEligibilityRedirector();
@@ -169,6 +174,13 @@ const HomePage: NextPage<any> = () => {
 
   return (
     <>
+      {shouldShowRenewalModal && (
+        <RenewalModal
+          data-testid="renewal-modal"
+          ifCardExpiredMoreThan30Days={ifCardExpiredMoreThan30Days}
+          onClose={onHideRenewalModal}
+        />
+      )}
       {loadingError && (
         <Container className="pt-5" addBottomHorizontalLine={false}>
           <AlertBox

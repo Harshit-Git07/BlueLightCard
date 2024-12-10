@@ -7,7 +7,7 @@ import { useUpdateMemberProfile } from '@/root/src/member-eligibility/shared/hoo
 import { renderWithMockedPlatformAdapter } from '../shared/testing/MockedPlatformAdaptor';
 
 jest.mock('react-use');
-jest.mock('next/router', () => ({
+jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 jest.mock(

@@ -1,9 +1,9 @@
 import { Meta, StoryFn } from '@storybook/react';
-import SearchModule from './';
+import SearchModule from './index';
 import { useSetAtom } from 'jotai/index';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { useEffect } from 'react';
-import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui';
+import { StorybookPlatformAdapterDecorator } from '../../../../shared-ui/src/adapters';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 const componentMeta: Meta<typeof SearchModule> = {
@@ -32,9 +32,13 @@ const RecentSearchesTemplate: StoryFn<typeof SearchModule> = (args) => {
 };
 
 export const Default = Template.bind({});
-Default.args = {};
+Default.args = {
+  placeholder: 'Search for offers',
+};
 
 export const RecentSearchesEnabled = RecentSearchesTemplate.bind({});
-RecentSearchesEnabled.args = {};
+RecentSearchesEnabled.args = {
+  placeholder: 'Search for offers',
+};
 
 export default componentMeta;

@@ -135,9 +135,6 @@ const FlexibleOffersContent: FC = () => {
 const FlexibleOffersPage: NextPage = () => {
   const setSpinner = useSetAtom(spinner);
   setSpinner(false);
-  const router = useRouter();
-
-  if (!router.isReady) return <FlexibleOffersSkeleton />;
 
   return (
     <ErrorBoundary fallback={<ErrorState page="flexi_menu" />}>

@@ -89,7 +89,7 @@ export class DwhKenisisFirehoseStreams {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.tblpayments` : undefined)
     }).setup();
 		this.callbackVaultRedemptionStream = new KenisisFirehoseStream(stack, 'dwh-vaultIntegrationCallback', callbackVaultRedemptionStreamNames[brandFromEnv]).setup();
-    this.redemptionStream = new KenisisFirehoseStream(stack, 'dwh-redemptions', `dwh-${MAP_BRAND[getBrandFromEnv()]}-redemption`, {
+    this.redemptionStream = new KenisisFirehoseStream(stack, 'dwh-redemptions', `dwh-${MAP_BRAND[getBrandFromEnv()]}-redemptions`, {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.redemption` : undefined)
     }).setup();
 

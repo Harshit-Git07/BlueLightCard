@@ -11,6 +11,7 @@ describe('CallbackService', () => {
     return {
       logOfferView: jest.fn(),
       logRedemption: jest.fn(),
+      logRedemptions: jest.fn(),
       logRedemptionAttempt: jest.fn(),
       logVaultRedemption: jest.fn(),
       logCallbackEagleEyeVaultRedemption: jest.fn(),

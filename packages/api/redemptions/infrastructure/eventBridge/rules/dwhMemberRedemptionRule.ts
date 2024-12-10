@@ -30,12 +30,15 @@ export function createDwhMemberRedemptionRule(
         dwhKenisisFirehoseStreams.vaultStream.getStreamName(),
       [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_REDEMPTIONS_STREAM_NAME]:
         dwhKenisisFirehoseStreams.redemptionTypeStream.getStreamName(),
+      [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_MEMBER_REDEMPTIONS_STREAM_NAME]:
+        dwhKenisisFirehoseStreams.redemptionStream.getStreamName(),
       // Datadog unified service tracking
       DD_SERVICE: 'redemptions',
     },
     permissions: [
       dwhKenisisFirehoseStreams.vaultStream.getPutRecordPolicyStatement(),
       dwhKenisisFirehoseStreams.redemptionTypeStream.getPutRecordPolicyStatement(),
+      dwhKenisisFirehoseStreams.redemptionStream.getPutRecordPolicyStatement(),
     ],
   });
   return {

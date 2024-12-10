@@ -137,6 +137,7 @@ describe('DwhLoggingService', () => {
       const repository = {
         logVaultRedemption: jest.fn(),
         logRedemption: jest.fn(),
+        logRedemptions: jest.fn(),
       };
       const service = new DwhLoggingService(as(repository));
       const params = new MemberRedemptionParamsDto(memberRedemptionParamsFactory.build());
@@ -147,6 +148,8 @@ describe('DwhLoggingService', () => {
       // Assert
       expect(repository.logRedemption).toHaveBeenCalledTimes(1);
       expect(repository.logRedemption).toHaveBeenCalledWith(params);
+      expect(repository.logRedemptions).toHaveBeenCalledTimes(1);
+      expect(repository.logRedemptions).toHaveBeenCalledWith(params);
     });
 
     it.each(['vault', 'vaultQR'] as const)(
@@ -156,6 +159,7 @@ describe('DwhLoggingService', () => {
         const repository = {
           logVaultRedemption: jest.fn(),
           logRedemption: jest.fn(),
+          logRedemptions: jest.fn(),
         };
 
         const service = new DwhLoggingService(as(repository));
@@ -180,6 +184,8 @@ describe('DwhLoggingService', () => {
           data.integration,
           data.integrationId,
         );
+        expect(repository.logRedemptions).toHaveBeenCalledTimes(1);
+        expect(repository.logRedemptions).toHaveBeenCalledWith(params);
       },
     );
 
@@ -188,6 +194,7 @@ describe('DwhLoggingService', () => {
       const repository = {
         logVaultRedemption: jest.fn(),
         logRedemption: jest.fn(),
+        logRedemptions: jest.fn(),
       };
       const service = new DwhLoggingService(as(repository));
       const params = new MemberRedemptionParamsDto(
@@ -201,6 +208,8 @@ describe('DwhLoggingService', () => {
 
       // Assert
       expect(repository.logVaultRedemption).not.toHaveBeenCalled();
+      expect(repository.logRedemptions).toHaveBeenCalledTimes(1);
+      expect(repository.logRedemptions).toHaveBeenCalledWith(params);
     });
 
     it('should bubble errors to the caller', async () => {
@@ -208,6 +217,7 @@ describe('DwhLoggingService', () => {
       const repository = {
         logVaultRedemption: jest.fn().mockRejectedValue(new Error('Test error')),
         logRedemption: jest.fn().mockRejectedValue(new Error('Test error')),
+        logRedemptions: jest.fn().mockRejectedValue(new Error('Test error')),
       };
       const service = new DwhLoggingService(as(repository));
       const params = new MemberRedemptionParamsDto(memberRedemptionParamsFactory.build());
@@ -221,6 +231,9 @@ describe('DwhLoggingService', () => {
   });
 
   describe('MemberRedemptionParamsDto', () => {
+    beforeEach(() => {
+      process.env.BRAND = 'BLC_UK';
+    });
     it.each(['compare', 'generic', 'giftCard', 'preApplied', 'showCard', 'vault', 'verify'] as const)(
       'allows creation of a DTO from a %s redemption event',
       (redemptionType) => {
@@ -239,6 +252,8 @@ describe('DwhLoggingService', () => {
         expect(dto.data.companyId).toBe(redemptionDetails.companyId);
         expect(dto.data.offerId).toBe(redemptionDetails.offerId);
         expect(dto.data.memberId).toBe(event.detail.memberDetails.memberId);
+        expect(dto.data.brand).toBe(process.env.BRAND);
+        expect(dto.data.eventTime).toBe(event.time);
       },
     );
   });

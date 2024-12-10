@@ -63,6 +63,7 @@ export class DwhKenisisFirehoseStreams {
   public readonly redemptionTypeStream: IFirehoseStreamAdapter;
   public readonly paymentStream: IFirehoseStreamAdapter;
 	public readonly callbackVaultRedemptionStream: IFirehoseStreamAdapter;
+  public readonly redemptionStream: IFirehoseStreamAdapter;
 
   constructor(stack: Stack) {
     // Creates Firehose stream references. Mocked in Production environments if present within `UNMANAGED_STREAMS` list.
@@ -88,6 +89,9 @@ export class DwhKenisisFirehoseStreams {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.tblpayments` : undefined)
     }).setup();
 		this.callbackVaultRedemptionStream = new KenisisFirehoseStream(stack, 'dwh-vaultIntegrationCallback', callbackVaultRedemptionStreamNames[brandFromEnv]).setup();
+    this.redemptionStream = new KenisisFirehoseStream(stack, 'dwh-redemptions', `dwh-${MAP_BRAND[getBrandFromEnv()]}-redemption`, {
+      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.redemption` : undefined)
+    }).setup();
 
   }
 }

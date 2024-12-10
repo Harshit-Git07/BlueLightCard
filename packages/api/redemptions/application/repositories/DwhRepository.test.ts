@@ -188,6 +188,7 @@ describe('DwhRepository', () => {
     it('should send the correct data to the vault stream', async () => {
       // Arrange
       process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME] = 'vaultStream';
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_MEMBER_REDEMPTIONS_STREAM_NAME] = 'redemption';
       const offerId = faker.string.uuid();
       const companyId = faker.string.uuid();
       const code = 'code';
@@ -199,13 +200,28 @@ describe('DwhRepository', () => {
 
       // Act
       await dwhRepository.logVaultRedemption(offerId, companyId, memberId, code, integration, integrationId);
+      await dwhRepository.logRedemptions({
+        data: {
+          offerId,
+          companyId,
+          memberId,
+          code,
+          integration,
+          integrationId,
+          redemptionType: 'vault',
+          clientType: 'mobile',
+          eventTime: '2024-12-05T00:00:00.000Z',
+          vaultId: 'vault-id',
+          brand: 'BLC_UK',
+        },
+      });
 
       // Assert
       const calls = mockFirehoseClient.calls();
-      expect(calls.length).toBe(1);
-      const putCommand = calls[0].args[0] as PutRecordCommand;
+      expect(calls.length).toBe(2);
+      let putCommand = calls[0].args[0] as PutRecordCommand;
       expect(putCommand.input.DeliveryStreamName).toBe('vaultStream');
-      const data = JSON.parse(new TextDecoder().decode(putCommand.input.Record!.Data!));
+      let data = JSON.parse(new TextDecoder().decode(putCommand.input.Record!.Data!));
       expect(data).toStrictEqual({
         compid: companyId,
         code: 'code',
@@ -214,6 +230,21 @@ describe('DwhRepository', () => {
         offer_id: offerId,
         integration: 'uniqodo',
         integration_id: 'uniqodo-id',
+      });
+      putCommand = calls[1].args[0] as PutRecordCommand;
+      expect(putCommand.input.DeliveryStreamName).toBe('redemption');
+      data = JSON.parse(new TextDecoder().decode(putCommand.input.Record!.Data!));
+      expect(data).toStrictEqual({
+        company_id: companyId,
+        code: 'code',
+        member_id: '3',
+        event_time: '2024-12-05T00:00:00.000Z',
+        offer_id: offerId,
+        vault_id: 'vault-id',
+        client_type: 'mobile',
+        brand: 'BLC_UK',
+        origin: 'new stack',
+        redemption_type: 'vault',
       });
     });
     it('should bubble exceptions from the firehose client to the caller unable to reach vault stream', async () => {
@@ -253,6 +284,9 @@ describe('DwhRepository', () => {
         offerId: '1',
         integration: 'uniqodo',
         integrationId: 'uniqodo-id',
+        eventTime: '2024-12-05T00:00:00.000Z',
+        vaultId: 'vault-id',
+        brand: 'BLC_UK',
       });
 
       // Act
@@ -292,12 +326,83 @@ describe('DwhRepository', () => {
         offerId: '1',
         integration: 'uniqodo',
         integrationId: 'uniqodo-id',
+        vaultId: '2',
+        brand: 'BLC_UK',
+        eventTime: '2024-12-05T00:00:00.000Z',
       });
 
       mockFirehoseClient.on(PutRecordCommand).rejects('reject stream');
 
       // Act
       const result = dwhRepository.logRedemption(dto);
+
+      // Assert
+      await expect(result).rejects.toThrow();
+    });
+  });
+
+  describe('logRedemptions', () => {
+    it('should send the correct data to the redemption stream', async () => {
+      // Arrange
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_MEMBER_REDEMPTIONS_STREAM_NAME] = 'firehose-redemption';
+      mockFirehoseClient.on(PutRecordCommand);
+      const dwhRepository = new DwhRepository();
+      const companyId = faker.string.uuid();
+
+      const dto = new MemberRedemptionParamsDto({
+        redemptionType: 'generic',
+        clientType: 'mobile',
+        code: 'code',
+        companyId: companyId,
+        memberId: '3',
+        offerId: '1',
+        eventTime: '2024-12-09T00:00:00.000Z',
+        brand: 'BLC_UK',
+      });
+
+      // Act
+      await dwhRepository.logRedemptions(dto);
+
+      // Assert
+      const calls = mockFirehoseClient.calls();
+      expect(calls.length).toBe(1);
+      const putCommand = calls[0].args[0] as PutRecordCommand;
+      expect(putCommand.input.DeliveryStreamName).toBe('firehose-redemption');
+      const data = new TextDecoder().decode(putCommand.input.Record!.Data);
+
+      expect(JSON.parse(data)).toStrictEqual({
+        redemption_type: 'generic',
+        client_type: 'mobile',
+        code: 'code',
+        event_time: '2024-12-09T00:00:00.000Z',
+        company_id: companyId,
+        member_id: '3',
+        offer_id: '1',
+        origin: 'new stack',
+        brand: 'BLC_UK',
+        vault_id: '',
+      });
+    });
+    it('should bubble exceptions from the firehose client to the caller unable to reach vault stream', async () => {
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME] = 'firehose-redemptions';
+      const dwhRepository = new DwhRepository();
+      const companyId = faker.string.uuid();
+
+      const dto = new MemberRedemptionParamsDto({
+        redemptionType: 'generic',
+        clientType: 'mobile',
+        code: 'code',
+        companyId: companyId,
+        memberId: '3',
+        offerId: '1',
+        brand: 'BLC_UK',
+        eventTime: '2024-12-09T00:00:00.000Z',
+      });
+
+      mockFirehoseClient.on(PutRecordCommand).rejects('reject stream');
+
+      // Act
+      const result = dwhRepository.logRedemptions(dto);
 
       // Assert
       await expect(result).rejects.toThrow();

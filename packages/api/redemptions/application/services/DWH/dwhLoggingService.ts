@@ -11,6 +11,7 @@ import {
 } from '@blc-mono/core/constants/redemptions';
 import { ClientType } from '@blc-mono/core/schemas/domain';
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
+import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { redemptionTypeEnum } from '@blc-mono/redemptions/libs/database/schema';
 
@@ -42,6 +43,8 @@ interface MemberRedemptionBaseParams {
   offerId: string;
   companyId: string;
   memberId: string;
+  eventTime: string;
+  brand: string;
 }
 
 export type MemberRedemptionParams = MemberRedemptionBaseParams &
@@ -51,12 +54,14 @@ export type MemberRedemptionParams = MemberRedemptionBaseParams &
         code: string;
         integration?: never;
         integrationId?: never;
+        vaultId?: never;
       }
     | {
         redemptionType: typeof VAULT | typeof VAULTQR;
         code: string;
         integration: string | null | undefined;
         integrationId: string | null | undefined;
+        vaultId: string | null | undefined;
       }
     | {
         redemptionType:
@@ -69,6 +74,7 @@ export type MemberRedemptionParams = MemberRedemptionBaseParams &
         code?: never;
         integration?: never;
         integrationId?: never;
+        vaultId?: never;
       }
   );
 
@@ -82,6 +88,8 @@ export class MemberRedemptionParamsDto {
       companyId: redemptionDetails.companyId,
       memberId: event.detail.memberDetails.memberId,
       offerId: redemptionDetails.offerId,
+      eventTime: event.time,
+      brand: getBrandFromEnv(),
     };
 
     switch (redemptionDetails.redemptionType) {
@@ -99,6 +107,7 @@ export class MemberRedemptionParamsDto {
           code: redemptionDetails.code,
           integration: redemptionDetails.vaultDetails?.integration,
           integrationId: redemptionDetails.vaultDetails?.integrationId,
+          vaultId: redemptionDetails.vaultDetails?.id,
         });
       case COMPARE:
       case GIFTCARD:
@@ -149,5 +158,7 @@ export class DwhLoggingService implements IDwhLoggingService {
     }
 
     await this.dwhRepository.logRedemption(dto);
+
+    await this.dwhRepository.logRedemptions(dto);
   }
 }

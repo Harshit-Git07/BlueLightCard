@@ -19,6 +19,7 @@ export interface IDwhRepository {
     integrationId: string | null | undefined,
   ): Promise<void>;
   logRedemption(dto: MemberRedemptionParamsDto): Promise<void>;
+  logRedemptions(dto: MemberRedemptionParamsDto): Promise<void>;
   logCallbackEagleEyeVaultRedemption(data: EagleEyeModel): Promise<void>;
   logCallbackUniqodoVaultRedemption(data: UniqodoModel): Promise<void>;
 }
@@ -147,6 +148,30 @@ export class DwhRepository implements IDwhRepository {
             integration: dto.data.integration,
             integration_id: dto.data.integrationId,
             origin: 'new stack',
+          }),
+        ),
+      },
+    });
+    await firehoseClient.send(firehoseCommand);
+  }
+
+  async logRedemptions(dto: MemberRedemptionParamsDto) {
+    const firehoseClient = new FirehoseClient();
+    const firehoseCommand = new PutRecordCommand({
+      DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_MEMBER_REDEMPTIONS_STREAM_NAME),
+      Record: {
+        Data: Buffer.from(
+          JSON.stringify({
+            redemption_type: dto.data.redemptionType,
+            client_type: dto.data.clientType,
+            code: dto.data.code ?? '',
+            event_time: dto.data.eventTime,
+            company_id: dto.data.companyId,
+            member_id: dto.data.memberId,
+            offer_id: dto.data.offerId.toString(),
+            origin: 'new stack',
+            brand: dto.data.brand,
+            vault_id: dto.data.vaultId ?? '',
           }),
         ),
       },

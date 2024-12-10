@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { queryOptions } from '@tanstack/react-query';
-import { usePlatformAdapter } from '../index';
+import { getBrandedIdentityPath, usePlatformAdapter } from '../index';
 
 const userResponseModel = z.object({
   message: z.string(),
@@ -15,7 +15,7 @@ export function userQuery() {
   return queryOptions({
     queryKey: ['user'],
     queryFn: async () => {
-      const result = await platformAdapter.invokeV5Api('/eu/identity/user', {
+      const result = await platformAdapter.invokeV5Api(`${getBrandedIdentityPath()}/user`, {
         method: 'GET',
       });
 

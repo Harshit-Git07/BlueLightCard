@@ -102,19 +102,33 @@ describe('getOffer', () => {
       }
     });
 
-    test('getOffer calls the offer endpoint', async () => {
-      const mockOffer = createModernOffer();
-      const mockPlatformAdapter = useMockPlatformAdapter(200, mockOffer);
+    describe.each([
+      ['blc-uk', '/eu/offers/v2/v2'],
+      ['blc-au', '/au/offers/v2/v2'],
+      ['dds-uk', '/eu/offers/dds/v2/v2'],
+    ])('for different brands', (brand, expectedPath) => {
+      const originalEnv = process.env;
 
-      const result = await getOffer(mockPlatformAdapter, mockOffer.id, useCms);
+      afterAll(() => {
+        process.env = originalEnv;
+      });
 
-      expect(result).toEqual(mockOffer);
-      expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(
-        `/eu/offers/v2/v2/offers/${mockOffer.id.toString()}`,
-        {
-          method: 'GET',
-        },
-      );
+      test(`getOffer calls the offer endpoint for ${brand}`, async () => {
+        process.env = { ...originalEnv, NEXT_PUBLIC_APP_BRAND: brand };
+
+        const mockOffer = createModernOffer();
+        const mockPlatformAdapter = useMockPlatformAdapter(200, mockOffer);
+
+        const result = await getOffer(mockPlatformAdapter, mockOffer.id, useCms);
+
+        expect(result).toEqual(mockOffer);
+        expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(
+          `${expectedPath}/offers/${mockOffer.id.toString()}`,
+          {
+            method: 'GET',
+          },
+        );
+      });
     });
 
     test.each([
@@ -205,31 +219,45 @@ describe('getOffer', () => {
       }
     });
 
-    test.each([
-      ['This is a test offer description.', 'These are the terms and conditions.'],
-      [undefined, undefined],
-    ])('getOffer calls the offer endpoint', async (description, terms) => {
-      const mockOffer = createLegacyOffer({ description, terms });
-      const mockPlatformAdapter = useMockPlatformAdapter(200, { data: mockOffer });
+    describe.each([
+      ['blc-uk', '/eu/offers'],
+      ['blc-au', '/au/offers'],
+      ['dds-uk', '/eu/offers/dds'],
+    ])('for different brands', (brand, expectedPath) => {
+      const originalEnv = process.env;
 
-      const result = await getOffer(mockPlatformAdapter, mockOffer.id.toString(), useCms);
-
-      expect(result).toEqual({
-        id: mockOffer.id.toString(),
-        name: mockOffer.name,
-        description: !description ? null : createLegacyOfferDescription(mockOffer.description),
-        type: 'gift-card',
-        expires: mockOffer.expiry.toISOString(),
-        termsAndConditions: !terms ? null : createLegacyOfferTerms(mockOffer.terms),
-        image: mockOffer.image,
-        companyId: mockOffer.companyId.toString(),
+      afterAll(() => {
+        process.env = originalEnv;
       });
-      expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(
-        `/eu/offers/offers/${mockOffer.id.toString()}`,
-        {
-          method: 'GET',
-        },
-      );
+      describe.each([
+        ['This is a test offer description.', 'These are the terms and conditions.'],
+        [undefined, undefined],
+      ])(`getOffer calls the offer endpoint for ${brand}`, (description, terms) => {
+        test(`with${description ? '' : 'out'} a description and terms`, async () => {
+          process.env = { ...originalEnv, NEXT_PUBLIC_APP_BRAND: brand };
+          const mockOffer = createLegacyOffer({ description, terms });
+          const mockPlatformAdapter = useMockPlatformAdapter(200, { data: mockOffer });
+
+          const result = await getOffer(mockPlatformAdapter, mockOffer.id.toString(), useCms);
+
+          expect(result).toEqual({
+            id: mockOffer.id.toString(),
+            name: mockOffer.name,
+            description: !description ? null : createLegacyOfferDescription(mockOffer.description),
+            type: 'gift-card',
+            expires: mockOffer.expiry.toISOString(),
+            termsAndConditions: !terms ? null : createLegacyOfferTerms(mockOffer.terms),
+            image: mockOffer.image,
+            companyId: mockOffer.companyId.toString(),
+          });
+          expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(
+            `${expectedPath}/offers/${mockOffer.id.toString()}`,
+            {
+              method: 'GET',
+            },
+          );
+        });
+      });
     });
 
     test.each([

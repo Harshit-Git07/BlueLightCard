@@ -18,11 +18,8 @@ type IOfferDetailsContext = {
   viewOffer: (offerData: OfferData) => Promise<void>;
 };
 export const OfferDetailsContext: Context<IOfferDetailsContext> = createContext({
-  viewOffer: (offerData: OfferData) => {
-    // [TODO] What is offerData here for? Temp for something later?
-    console.log(offerData);
-    return Promise.resolve();
-  },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  viewOffer: (offerData: OfferData) => Promise.resolve(),
 });
 export const useOfferDetails = () => useContext(OfferDetailsContext);
 

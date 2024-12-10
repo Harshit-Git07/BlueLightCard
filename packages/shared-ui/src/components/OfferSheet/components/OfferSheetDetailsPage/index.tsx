@@ -14,6 +14,7 @@ import {
   RedeemResultKind,
   offerTypeLabelMap,
   Typography,
+  getBrandedRedemptionsPath,
 } from '../../../../index';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 import type { RedemptionType } from '../../types';
@@ -65,14 +66,17 @@ const OfferSheetDetailsPage: FC = () => {
   };
 
   const getRedemptionData = async () => {
-    const result = await platformAdapter.invokeV5Api('/eu/redemptions/member/redeem', {
-      method: 'POST',
-      body: JSON.stringify({
-        offerId: offerData.id,
-        companyName: offerMeta?.companyName || '',
-        offerName: offerData.name || '',
-      }),
-    });
+    const result = await platformAdapter.invokeV5Api(
+      `${getBrandedRedemptionsPath()}/member/redeem`,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          offerId: offerData.id,
+          companyName: offerMeta?.companyName || '',
+          offerName: offerData.name || '',
+        }),
+      },
+    );
 
     return JSON.parse(result.data);
   };

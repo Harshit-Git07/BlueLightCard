@@ -1,4 +1,9 @@
-import { getPathFromUrl, getBrandedOffersPath } from '../pathUtils';
+import {
+  getPathFromUrl,
+  getBrandedOffersPath,
+  getBrandedIdentityPath,
+  getBrandedRedemptionsPath,
+} from '../pathUtils';
 
 describe('getPathFromUrl', () => {
   const errorCases = [
@@ -63,6 +68,50 @@ describe.each([
 
     it(`should return ${expected}`, () => {
       expect(getBrandedOffersPath(useCms)).toBe(expected);
+    });
+  });
+});
+
+describe.each([
+  ['blc-uk', '/eu/redemptions'],
+  ['blc-au', '/au/redemptions'],
+  ['dds-uk', '/eu/redemptions/dds'],
+])('getBrandedRedemptionsPath', (brand, expected) => {
+  const originalEnv = process.env;
+
+  afterAll(() => {
+    process.env = originalEnv;
+  });
+
+  describe(`when the brand is '${brand}'`, () => {
+    beforeEach(() => {
+      process.env = { ...originalEnv, NEXT_PUBLIC_APP_BRAND: brand };
+    });
+
+    it(`should return ${expected}`, () => {
+      expect(getBrandedRedemptionsPath()).toBe(expected);
+    });
+  });
+});
+
+describe.each([
+  ['blc-uk', '/eu/identity'],
+  ['blc-au', '/au/identity'],
+  ['dds-uk', '/eu/identity'],
+])('getBrandedIdentityPath', (brand, expected) => {
+  const originalEnv = process.env;
+
+  afterAll(() => {
+    process.env = originalEnv;
+  });
+
+  describe(`when the brand is '${brand}'`, () => {
+    beforeEach(() => {
+      process.env = { ...originalEnv, NEXT_PUBLIC_APP_BRAND: brand };
+    });
+
+    it(`should return ${expected}`, () => {
+      expect(getBrandedIdentityPath()).toBe(expected);
     });
   });
 });

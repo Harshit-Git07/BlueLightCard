@@ -94,7 +94,9 @@ jobs:
     if: ${{ success() }}
     needs:
       - revert-members
-    uses: bluelightcard/github-actions-slack-notification@v1
-    with:
-      webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
-      title: ":rocket: Production successfully reverted to ${{ inputs.commit_hash_or_tag }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: bluelightcard/github-actions-slack-notification@v1
+        with:
+          webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
+          title: ":rocket: Production successfully reverted to ${{ inputs.commit_hash_or_tag }}"

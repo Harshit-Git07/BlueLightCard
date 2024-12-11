@@ -77,7 +77,11 @@ export async function MembersStack({ app, stack }: StackContext) {
     },
   });
 
-  if (!isDdsUkBrand()) {
+  const enableAutomaticCardBatching = getEnvOrDefault(
+    MemberStackEnvironmentKeys.ENABLE_AUTOMATIC_EXTERNAL_CARD_BATCHING,
+    'false',
+  );
+  if (enableAutomaticCardBatching !== 'false' && !isDdsUkBrand()) {
     createOutboundBatchFileCron(
       stack,
       adminTable,

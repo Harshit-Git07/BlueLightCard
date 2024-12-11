@@ -1,0 +1,100 @@
+name: Revert Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      commit_hash_or_tag:
+        description: The commit SHA that you wish to revert to
+        required: true
+env:
+  prod_role_to_assume: arn:aws:iam::676719682338:role/github-action-role
+
+jobs:
+  revert-identity:
+    name: Revert Identity
+    uses: ./.github/workflows/production-deploy-identity.yml
+    with:
+      commit_hash_or_tag: ${{ input.commit_hash_or_tag }}
+    secrets: inherit
+
+  revert-offers:
+    name: Revert Offers
+    uses: ./.github/workflows/production-deploy-offers.yml
+    with:
+      commit_hash_or_tag: ${{ input.commit_hash_or_tag }}
+    secrets: inherit
+    needs: revert-identity
+
+  revert-redemptions:
+    name: Revert Redemptions
+    uses: ./.github/workflows/production-deploy-redemptions.yml
+    with:
+      commit_hash_or_tag: ${{ input.commit_hash_or_tag }}
+    secrets: inherit
+    needs: revert-offers
+
+  revert-discovery:
+    name: Revert Identity
+    uses: ./.github/workflows/production-deploy-discovery.yml
+    with:
+      commit_hash_or_tag: ${{ input.commit_hash_or_tag }}
+    secrets: inherit
+    needs: revert-redemptions
+
+  revert-mobile-hybrid:
+    name: Revert Mobile Hybrid
+    uses: ./.github/workflows/production-deploy-mobile-hybrid.yml
+    with:
+      commit_hash_or_tag: ${{ input.commit_hash_or_tag }}
+    secrets: inherit
+    needs: revert-discovery
+
+  revert-web:
+    name: Revert Web
+    uses: ./.github/workflows/production-deploy-web.yml
+    with:
+      commit_hash_or_tag: ${{ input.commit_hash_or_tag }}
+    secrets: inherit
+    needs: revert-mobile-hybrid
+
+  revert-orders:
+    name: Revert Orders
+    uses: ./.github/workflows/production-deploy-orders.yml
+    with:
+      commit_hash_or_tag: ${{ input.commit_hash_or_tag }}
+    secrets: inherit
+    needs: revert-web
+
+  revert-payments:
+    name: Revert Payments
+    uses: ./.github/workflows/production-deploy-payments.yml
+    with:
+      commit_hash_or_tag: ${{ input.commit_hash_or_tag }}
+    secrets: inherit
+    needs: revert-orders
+
+  revert-member-services-hub:
+    name: Revert Member Services Hub
+    uses: ./.github/workflows/production-deploy-member-services-hub.yml
+    with:
+      commit_hash_or_tag: ${{ input.commit_hash_or_tag }}
+    secrets: inherit
+    needs: revert-payments
+
+  revert-members:
+    name: Revert Members
+    uses: ./.github/workflows/production-deploy-members.yml
+    with:
+      commit_hash_or_tag: ${{ input.commit_hash_or_tag }}
+    secrets: inherit
+    needs: revert-member-services-hub
+
+  notify-slack:
+    name: Notify Slack of success
+    if: ${{ success() }}
+    needs:
+      - revert-members
+    uses: bluelightcard/github-actions-slack-notification@v1
+    with:
+      webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
+      title: ":rocket: Production successfully reverted to ${{ inputs.commit_hash_or_tag }}"

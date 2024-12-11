@@ -84,9 +84,18 @@ export function mapOrganisationsAndEmployers(
       name: organisationName,
       active: true,
       employmentStatus: mapEmploymentStatus(mappingsByOrganisation),
-      employedIdRequirements: getCommonIdDocuments(employers, EmploymentStatus.EMPLOYED),
-      retiredIdRequirements: getCommonIdDocuments(employers, EmploymentStatus.RETIRED),
-      volunteerIdRequirements: getCommonIdDocuments(employers, EmploymentStatus.VOLUNTEER),
+      employedIdRequirements: getCommonIdDocuments(
+        employers.get(organisationId),
+        EmploymentStatus.EMPLOYED,
+      ),
+      retiredIdRequirements: getCommonIdDocuments(
+        employers.get(organisationId),
+        EmploymentStatus.RETIRED,
+      ),
+      volunteerIdRequirements: getCommonIdDocuments(
+        employers.get(organisationId),
+        EmploymentStatus.VOLUNTEER,
+      ),
       lastUpdated: new Date().toISOString(),
     };
     organisations.push(organisation);
@@ -152,15 +161,17 @@ export function mapIdRequirements(
 
   mappings.forEach((rule) => {
     if (rule.employmentStatus.toUpperCase().includes(employmentStatus)) {
-      supportedDocuments.push({
-        idKey: rule.idKey,
-        type: rule.idType as IdType,
-        title: rule.idTitle,
-        guidelines: rule.idGuidelines,
-        description: rule.idDescription,
-        required: rule.required === 'true',
-      });
-      minimumRequired = Math.max(rule.minimumRequired, minimumRequired);
+      if (Object.values(IdType).includes(rule.idType as IdType)) {
+        supportedDocuments.push({
+          idKey: rule.idKey,
+          type: rule.idType.toUpperCase() as IdType,
+          title: rule.idTitle,
+          guidelines: rule.idGuidelines,
+          description: rule.idDescription,
+          required: rule.required === 'true',
+        });
+        minimumRequired = Math.max(rule.minimumRequired, minimumRequired);
+      }
     }
   });
 
@@ -174,31 +185,32 @@ export function mapIdRequirements(
 }
 
 function getCommonIdDocuments(
-  employers: Map<string, CreateEmployerModel[]>,
+  employers: CreateEmployerModel[] | undefined,
   employmentStatus: EmploymentStatus,
 ) {
   const documents: SupportedDocumentModel[][] = [];
   let minimumRequired = 1;
 
-  employers.forEach((employerList) => {
-    employerList.forEach((employer) => {
-      let idRequirements: IdRequirementsModel | undefined = undefined;
-      if (employmentStatus === EmploymentStatus.RETIRED) {
-        idRequirements = employer.retiredIdRequirements;
-      }
-      if (employmentStatus === EmploymentStatus.EMPLOYED) {
-        idRequirements = employer.employedIdRequirements;
-      }
-      if (employmentStatus === EmploymentStatus.VOLUNTEER) {
-        idRequirements = employer.volunteerIdRequirements;
-      }
-      if (idRequirements !== undefined) {
-        documents.push(idRequirements.supportedDocuments);
-        minimumRequired = idRequirements.minimumRequired;
-      }
-    });
+  employers?.forEach((employer) => {
+    let idRequirements: IdRequirementsModel | undefined = undefined;
+    if (employmentStatus === EmploymentStatus.RETIRED) {
+      idRequirements = employer.retiredIdRequirements;
+    }
+    if (employmentStatus === EmploymentStatus.EMPLOYED) {
+      idRequirements = employer.employedIdRequirements;
+    }
+    if (employmentStatus === EmploymentStatus.VOLUNTEER) {
+      idRequirements = employer.volunteerIdRequirements;
+    }
+    if (idRequirements !== undefined) {
+      documents.push(idRequirements.supportedDocuments);
+      minimumRequired = idRequirements.minimumRequired;
+    }
   });
 
+  if (documents.length === 0) {
+    return undefined;
+  }
   const commonIdDocuments = documents.reduce((acc, curr) => {
     return acc.filter((doc) => curr.some((d) => d.idKey === doc.idKey));
   });

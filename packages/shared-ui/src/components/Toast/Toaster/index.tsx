@@ -12,10 +12,10 @@ export const getToastClasses = (position: ToastPosition) => {
 
   return conditionalStrings({
     'fixed z-[1000] w-full max-w-[713px]': always,
-    'left-[64px]': isLeft,
+    'left-0': isLeft,
     'left-1/2 -translate-x-1/2': isCenter,
-    'right-[64px]': isRight,
-    'top-[64px]': isTop,
+    'right-0': isRight,
+    'top-0': isTop,
     'bottom-0': !isTop,
   });
 };
@@ -34,4 +34,3 @@ export const Toaster = () => {
 };
 
 export default Toaster;
-export { default as useToaster } from './useToaster';

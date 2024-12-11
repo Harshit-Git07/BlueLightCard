@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import RowItem, { Props } from '.';
 import { defaultCountries, parseCountry } from 'react-international-phone';
@@ -42,7 +42,7 @@ describe('RowItem component', () => {
 
     const innerSpan = rowItem.querySelector('span');
     expect(innerSpan).toHaveClass(
-      'py-2 pl-[20px] pr-3 flex w-full gap-2 items-center cursor-pointer font-typography-body text-typography-body font-typography-body-weight group',
+      ' py-2 pl-5 pr-3 flex w-full gap-2 items-center cursor-pointer font-typography-body text-typography-body font-typography-body-weight group',
     );
 
     const countryName = screen.getByText(defaultProps.name);

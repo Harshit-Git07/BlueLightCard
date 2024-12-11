@@ -32,6 +32,26 @@ export const AUTHENTICATED_NAVIGATION_AUS: NavigationItem[] = [
       },
     ],
   },
+  {
+    id: 'my-card',
+    label: 'My Card',
+    url: '/highstreetcard.php',
+  },
+  {
+    id: 'my-account',
+    label: 'My Account',
+    url: '/account.php',
+  },
+  {
+    id: 'faq',
+    label: "FAQ's",
+    url: '/contactblc.php',
+  },
+  {
+    id: 'sign-out',
+    label: 'Logout',
+    url: '/',
+  },
 ];
 
 export const UNAUTHENTICATED_NAVIGATION_AUS: NavigationItem[] = [];

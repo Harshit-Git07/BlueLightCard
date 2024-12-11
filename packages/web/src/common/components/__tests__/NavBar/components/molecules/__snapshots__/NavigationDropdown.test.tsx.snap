@@ -21,7 +21,7 @@ exports[`NavigationDropdown renders 1`] = `
         </p>
         <svg
           aria-hidden="true"
-          class="svg-inline--fa fa-chevron-down ml-[8px]"
+          class="svg-inline--fa fa-chevron-down "
           data-icon="chevron-down"
           data-prefix="fas"
           focusable="false"

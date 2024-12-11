@@ -234,8 +234,28 @@ describe('getNavigationItems', () => {
             url: 'https://motoring-discounts.bluelightcard.co.uk',
           },
         ],
-        id: 'discover-savings',
-        label: 'Discover savings',
+        id: 'discover-more',
+        label: 'Discover More',
+      },
+      {
+        id: 'my-card',
+        label: 'My Card',
+        url: '/highstreetcard.php',
+      },
+      {
+        id: 'my-account',
+        label: 'My Account',
+        url: '/account.php',
+      },
+      {
+        id: 'faq',
+        label: "FAQ's",
+        url: 'https://bluelightcard.zendesk.com/hc/en-gb/signin',
+      },
+      {
+        id: 'sign-out',
+        label: 'Logout',
+        url: '/logout.php',
       },
     ];
     const results = getNavigationItems(BRANDS.BLC_UK, true, false, {

@@ -1,0 +1,67 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as InfoWrapper from './InfoWrapper.stories';
+
+<Meta of={InfoWrapper} />
+
+# InfoWrapper
+
+- [Overview](#overview)
+- [Props](#props)
+- [Variants](#variants)
+- [Implementation](#implementation)
+
+## Overview
+
+A wrapping component used to add information to elements
+
+<Canvas of={InfoWrapper.ExampleUsage} />
+
+## Props
+
+<Controls />
+
+## Variants
+
+All Props
+
+<Canvas of={InfoWrapper.AllProps} />
+
+Only Label
+
+<Canvas of={InfoWrapper.Label} />
+
+Label And Help
+
+<Canvas of={InfoWrapper.LabelAndHelp} />
+
+Label And Help On Top
+
+<Canvas of={InfoWrapper.LabelAndHelpOnTop} />
+
+Label And Description
+
+<Canvas of={InfoWrapper.LabelAndDescription} />
+
+## Implementation
+
+Usage example using jsx
+
+```jsx
+const Form: FC = () => {
+  return
+      <InfoWrapper
+        label="Username"
+        htmlFor="username"
+        description="You cannot change this later"
+        helpIcon
+        helpText="Cannot contain spaces"
+      >
+        <input
+          className="h-8 px-2 rounded-md outline outline-1 border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark"
+          id="username"
+          type="text"
+          placeholder="Username"
+        />
+      </InfoWrapper>
+};
+```

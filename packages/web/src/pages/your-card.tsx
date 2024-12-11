@@ -6,6 +6,7 @@ import {
   NoCardImage,
   ThemeVariant,
   Typography,
+  useGetCustomerProfile,
   YourCard,
 } from '@bluelightcard/shared-ui';
 import { fonts } from '@bluelightcard/shared-ui/tailwind/theme';
@@ -13,31 +14,37 @@ import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
 import { BRAND } from '@/global-vars';
 import withAccountLayout from '../common/layouts/AccountBaseLayout/withAccountLayout';
 import { getBrandStrapline } from '@bluelightcard/shared-ui/components/YourCard/text';
-import useMemberId from '@bluelightcard/shared-ui/hooks/useMemberId';
-import RequestNewCardButton from '@bluelightcard/shared-ui/components/RequestNewCard/RequestNewCardButton';
-import useMemberCard from '@bluelightcard/shared-ui/components/RequestNewCard/useMemberCard';
-import useMemberApplication from '@bluelightcard/shared-ui/components/RequestNewCard/useMemberApplication';
 
-const YourCardPage: NextPage = () => {
-  const memberId = useMemberId();
+const MyCardPage: NextPage = () => {
+  const memberUuid = 'member-uuid';
 
-  const { isLoading, card, firstName, lastName } = useMemberCard(memberId);
-  const { application } = useMemberApplication(memberId);
-
-  if (isLoading) {
+  const { isFetching, data: customerProfile } = useGetCustomerProfile(BRAND, memberUuid);
+  if (isFetching) {
     return null;
   }
   const strapline = getBrandStrapline(BRAND);
 
-  const hasGenerated = !!card?.cardNumber;
-  const hasNotGenerated = !hasGenerated && application;
+  const hasGenerated = !!customerProfile?.card.cardNumber;
+  const hasNotGenerated = !hasGenerated && customerProfile?.applications.length;
   const hasNoCard = !hasGenerated && !hasNotGenerated;
 
   return (
     <div className="flex flex-col gap-5">
       <div className="flex justify-between items-center tablet-xl:mt-5">
         <Typography variant="title-large">Your card</Typography>
-        {hasGenerated ? <RequestNewCardButton /> : null}
+
+        {hasGenerated ? (
+          <Button
+            className="hidden tablet-xl:block"
+            variant={ThemeVariant.Tertiary}
+            iconRight={faCreditCardBlank}
+            type="button"
+            size="Large"
+            onClick={() => {}}
+          >
+            Request new card
+          </Button>
+        ) : null}
       </div>
 
       {!hasNoCard ? (
@@ -45,10 +52,10 @@ const YourCardPage: NextPage = () => {
           <div className="flex justify-center mt-5 tablet-xl:mt-3">
             <YourCard
               brand={BRAND}
-              firstName={firstName}
-              lastName={lastName}
-              accountNumber={card?.cardNumber}
-              expiryDate={card?.purchaseTime}
+              firstName={customerProfile?.firstName ?? ''}
+              lastName={customerProfile?.lastName ?? ''}
+              accountNumber={customerProfile?.card.cardNumber}
+              expiryDate={customerProfile?.card?.cardExpiry}
             />
           </div>
 
@@ -60,7 +67,7 @@ const YourCardPage: NextPage = () => {
                     variant={ThemeVariant.Primary}
                     label="Copy card number"
                     size="Large"
-                    copyText={card?.cardNumber ?? ''}
+                    copyText={customerProfile?.card.cardNumber ?? ''}
                     fullWidth={true}
                   />
 
@@ -109,4 +116,4 @@ const YourCardPage: NextPage = () => {
   );
 };
 
-export default withAccountLayout(YourCardPage, {});
+export default withAccountLayout(MyCardPage, {});

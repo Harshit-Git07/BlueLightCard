@@ -24,17 +24,8 @@ export const IS_STORYBOOK_LIFECYCLE =
 
 export const focusableElements = ['button', 'a', 'input', 'textarea', 'select'];
 
-
-export enum Keys {
-  ESCAPE = 'Escape',
-  ENTER = 'Enter',
-  DOWN_ARROW = 'ArrowDown',
-  UP_ARROW = 'ArrowUp',
-}
-
 const V5_REGION = process.env.NEXT_PUBLIC_APP_BRAND === 'blc-au' ? 'au' : 'eu';
 
 export const V5_API_URL = {
   Menus: `/${V5_REGION}/discovery/menus`,
 } as const;
-

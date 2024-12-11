@@ -8,8 +8,7 @@ const ukCountry = defaultCountries.map(parseCountry).find((country) => country.i
 describe('ClickableFlag component', () => {
   const mockToggleDropdown = jest.fn();
   const defaultProps: Props = {
-    iso2: ukCountry.iso2,
-    name: ukCountry.name,
+    country: ukCountry,
     isOpen: false,
     toggleDropdown: mockToggleDropdown,
     disabled: false,

@@ -9,11 +9,11 @@ exports[`DropdownList component matches open/closed snapshots 1`] = `
       class="sticky top-0 bg-inherit"
     >
       <span
-        class="py-2 px-[20px] flex gap-2 items-center bg-colour-surface-container-light dark:bg-colour-surface-container-dark font-typography-body text-typography-body font-typography-body-weight group"
+        class="py-2 px-5 flex gap-2 items-center bg-colour-surface-container-light dark:bg-colour-surface-container-dark font-typography-body text-typography-body font-typography-body-weight group"
       >
         <img
           alt="Flag of Afghanistan"
-          class="react-international-phone-flag-emoji h-full w-[32px] rounded-sm"
+          class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
           data-country="af"
           draggable="false"
           loading="lazy"
@@ -35,11 +35,11 @@ exports[`DropdownList component matches open/closed snapshots 1`] = `
         </p>
       </span>
       <div
-        class="w-full rounded bg-colour-onSurface-outline dark:bg-colour-onSurface-outline-dark"
+        class="w-full bg-colour-onSurface-outline dark:bg-colour-onSurface-outline-dark rounded"
       />
     </div>
     <div
-      class="max-h-[125px] m-[1px] rounded  pr-0 overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-colour-onSurface-outline [&::-webkit-scrollbar-track]:bg-surface-container-light dark:bg-colour-surface-container-dark [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
+      class="max-h-[125px] m-[1px] rounded  pr-0  overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-colour-onSurface-outline [&::-webkit-scrollbar-track]:bg-surface-container-light dark:bg-colour-surface-container-dark [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
     >
       <li>
         <button
@@ -50,11 +50,11 @@ exports[`DropdownList component matches open/closed snapshots 1`] = `
           title="Albania"
         >
           <span
-            class="py-2 pl-[20px] pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
           >
             <img
               alt=""
-              class="react-international-phone-flag-emoji h-full w-[32px] rounded-sm"
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
               data-country="al"
               data-testid="flag-image"
               draggable="false"
@@ -84,11 +84,11 @@ exports[`DropdownList component matches open/closed snapshots 1`] = `
           title="Algeria"
         >
           <span
-            class="py-2 pl-[20px] pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
           >
             <img
               alt=""
-              class="react-international-phone-flag-emoji h-full w-[32px] rounded-sm"
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
               data-country="dz"
               data-testid="flag-image"
               draggable="false"
@@ -118,11 +118,11 @@ exports[`DropdownList component matches open/closed snapshots 1`] = `
           title="Andorra"
         >
           <span
-            class="py-2 pl-[20px] pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
           >
             <img
               alt=""
-              class="react-international-phone-flag-emoji h-full w-[32px] rounded-sm"
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
               data-country="ad"
               data-testid="flag-image"
               draggable="false"
@@ -152,11 +152,11 @@ exports[`DropdownList component matches open/closed snapshots 1`] = `
           title="Angola"
         >
           <span
-            class="py-2 pl-[20px] pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
           >
             <img
               alt=""
-              class="react-international-phone-flag-emoji h-full w-[32px] rounded-sm"
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
               data-country="ao"
               data-testid="flag-image"
               draggable="false"
@@ -191,11 +191,11 @@ exports[`DropdownList component matches open/closed snapshots 2`] = `
       class="sticky top-0 bg-inherit"
     >
       <span
-        class="py-2 px-[20px] flex gap-2 items-center bg-colour-surface-container-light dark:bg-colour-surface-container-dark font-typography-body text-typography-body font-typography-body-weight group"
+        class="py-2 px-5 flex gap-2 items-center bg-colour-surface-container-light dark:bg-colour-surface-container-dark font-typography-body text-typography-body font-typography-body-weight group"
       >
         <img
           alt="Flag of Afghanistan"
-          class="react-international-phone-flag-emoji h-full w-[32px] rounded-sm"
+          class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
           data-country="af"
           draggable="false"
           loading="lazy"
@@ -217,11 +217,11 @@ exports[`DropdownList component matches open/closed snapshots 2`] = `
         </p>
       </span>
       <div
-        class="w-full rounded bg-colour-onSurface-outline dark:bg-colour-onSurface-outline-dark"
+        class="w-full bg-colour-onSurface-outline dark:bg-colour-onSurface-outline-dark rounded"
       />
     </div>
     <div
-      class="max-h-[125px] m-[1px] rounded  pr-0 overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-colour-onSurface-outline [&::-webkit-scrollbar-track]:bg-surface-container-light dark:bg-colour-surface-container-dark [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
+      class="max-h-[125px] m-[1px] rounded  pr-0  overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-colour-onSurface-outline [&::-webkit-scrollbar-track]:bg-surface-container-light dark:bg-colour-surface-container-dark [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full"
     >
       <li>
         <button
@@ -232,11 +232,11 @@ exports[`DropdownList component matches open/closed snapshots 2`] = `
           title="Albania"
         >
           <span
-            class="py-2 pl-[20px] pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
           >
             <img
               alt=""
-              class="react-international-phone-flag-emoji h-full w-[32px] rounded-sm"
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
               data-country="al"
               data-testid="flag-image"
               draggable="false"
@@ -266,11 +266,11 @@ exports[`DropdownList component matches open/closed snapshots 2`] = `
           title="Algeria"
         >
           <span
-            class="py-2 pl-[20px] pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
           >
             <img
               alt=""
-              class="react-international-phone-flag-emoji h-full w-[32px] rounded-sm"
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
               data-country="dz"
               data-testid="flag-image"
               draggable="false"
@@ -300,11 +300,11 @@ exports[`DropdownList component matches open/closed snapshots 2`] = `
           title="Andorra"
         >
           <span
-            class="py-2 pl-[20px] pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
           >
             <img
               alt=""
-              class="react-international-phone-flag-emoji h-full w-[32px] rounded-sm"
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
               data-country="ad"
               data-testid="flag-image"
               draggable="false"
@@ -334,11 +334,11 @@ exports[`DropdownList component matches open/closed snapshots 2`] = `
           title="Angola"
         >
           <span
-            class="py-2 pl-[20px] pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+            class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
           >
             <img
               alt=""
-              class="react-international-phone-flag-emoji h-full w-[32px] rounded-sm"
+              class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
               data-country="ao"
               data-testid="flag-image"
               draggable="false"

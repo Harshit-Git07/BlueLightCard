@@ -14,8 +14,6 @@ export const colours = {
   backgroundSurface: 'bg-colour-surface-light dark:bg-colour-surface-dark',
   backgroundSurfaceContainer:
     'bg-colour-surface-container-light dark:bg-colour-surface-container-dark',
-  backgroundSurfaceContainerDisabled:
-    'bg-colour-surface-container-disabled-light dark:bg-colour-surface-container-disabled-dark',
   backgroundPrimaryContainer:
     'bg-colour-primary-container-light dark:bg-colour-primary-container-dark',
   backgroundOnSurfaceOutline: 'bg-colour-onSurface-outline dark:bg-colour-onSurface-outline-dark',
@@ -24,7 +22,7 @@ export const colours = {
   onSuccessBright: 'text-colour-onSuccess-bright dark:text-colour-onSuccess-bright-dark',
 
   borderPrimary: 'border-colour-primary dark:border-colour-primary-dark',
-  borderPrimaryOnFocus: 'border-colour-primary dark:border-colour-primary-dark',
+  borderPrimaryOnFocus: 'focus:border-colour-primary dark:focus:border-colour-primary-dark',
   borderPrimaryHover: 'border-colour-primary-hover dark:border-colour-primary-hover-dark',
   borderOnSurfaceOutline:
     'border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark',
@@ -60,8 +58,6 @@ export const fonts = {
   titleSmall:
     'font-typography-title-small font-typography-title-small-weight text-typography-title-small leading-typography-title-small tracking-typography-title-small',
   body: 'font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body',
-  bodyLarge:
-    'font-typography-body-large font-typography-body-large-weight text-typography-body-large leading-typography-body-large tracking-typography-body-large',
   bodyLight:
     'font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light tracking-typography-body-light',
   bodySemiBold:

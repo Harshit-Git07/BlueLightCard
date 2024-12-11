@@ -1,4 +1,4 @@
-import React, { FC, KeyboardEvent, useEffect, useMemo, useState, SyntheticEvent } from 'react';
+import React, { FC, KeyboardEvent, useEffect, useMemo, useState } from 'react';
 import { ListSelectorProps, ListSelectorState } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight } from '@fortawesome/pro-regular-svg-icons';
@@ -28,12 +28,12 @@ const ListSelector: FC<ListSelectorProps> = ({
     }
   };
 
-  const handleClick = (e?: SyntheticEvent) => {
+  const handleClick = () => {
     // Set the state to Selected when clicked
     setCurrentState(ListSelectorState.Selected);
 
     if (onClick) {
-      onClick(e);
+      onClick();
     }
   };
 

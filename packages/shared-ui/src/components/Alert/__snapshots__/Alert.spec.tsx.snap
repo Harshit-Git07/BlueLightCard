@@ -24,7 +24,7 @@ exports[`Alert Component renders correctly for Banner variant 1`] = `
       >
         <svg
           aria-hidden="true"
-          className="svg-inline--fa fa-circle-check text-[20px] flex content-start pt-1 tablet:pt-[0px] tablet:text-[32px]"
+          className="svg-inline--fa fa-circle-check text-[20px] flex content-start pt-1 tablet:pt-[0px] tablet:text-[24px]"
           data-icon="circle-check"
           data-prefix="fas"
           data-testid="icon"
@@ -43,7 +43,7 @@ exports[`Alert Component renders correctly for Banner variant 1`] = `
       </div>
     </div>
     <div
-      className="tablet:flex tablet:mx-6 justify-between ml-4 m-auto w-full"
+      className="tablet:flex tablet:mx-6 ml-4 m-auto w-full"
     >
       <div
         className="flex-col content-center  max-w-[750px] tablet:pr-[16px]"

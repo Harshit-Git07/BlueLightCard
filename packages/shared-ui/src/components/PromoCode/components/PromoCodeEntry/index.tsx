@@ -96,7 +96,7 @@ const PromoCodeEntry: React.FC<PromoCodeEntryProps> = ({
                   onChange={onChange}
                   onKeyDown={onKeyDown}
                   placeholder={placeholder}
-                  validationMessage={errorMessage}
+                  message={errorMessage}
                 />
               </div>
 

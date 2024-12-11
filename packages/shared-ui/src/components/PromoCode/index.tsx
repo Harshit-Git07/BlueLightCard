@@ -7,6 +7,7 @@ const PromoCode: FC<PromoCodeProps> = ({
   name,
   variant = 'default',
   value = '',
+  maxChars,
   onChange,
   onKeyDown,
   onApply,
@@ -66,6 +67,7 @@ const PromoCode: FC<PromoCodeProps> = ({
         <PromoCodeEntry
           name={name}
           value={value}
+          maxChars={maxChars}
           onChange={onChange}
           onKeyDown={onKeyDown}
           onApply={onApply}

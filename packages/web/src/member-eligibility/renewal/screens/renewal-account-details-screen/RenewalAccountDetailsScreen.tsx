@@ -53,18 +53,17 @@ export const RenewalAccountDetailsScreen: FC<VerifyEligibilityScreenProps> = ({
               placeholder="First Name"
               onChange={onFirstNameChange}
               value={eligibilityDetails.member?.firstName}
-              isRequired={true}
+              required={true}
             />
 
             <TextInput
               placeholder="Surname"
               onChange={onSurnameChange}
               value={eligibilityDetails.member?.surname}
-              isRequired={true}
+              required={true}
             />
 
             <DatePicker
-              htmlFor={''}
               onChange={onDobChange}
               value={eligibilityDetails.member?.dob}
               minAgeConstraint={16}

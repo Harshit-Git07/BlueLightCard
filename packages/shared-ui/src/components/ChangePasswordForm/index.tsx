@@ -1,11 +1,10 @@
 import { FC, FormEvent } from 'react';
-import { ApiMessage } from '../../api/types';
+import { ApiMessage } from './useChangePasswordPut';
 import useDrawer from '../Drawer/useDrawer';
-import { useChangePasswordState } from './hooks/useChangePasswordState';
+import { useChangePasswordState } from './useChangePasswordState';
 import { PasswordInputGroup } from './components/PasswordInputGroup';
 import AccountDrawer from '../AccountDrawer';
 import copy from './copy';
-import { PasswordFields } from './constants';
 
 export type Props = {
   memberId: string;
@@ -13,8 +12,14 @@ export type Props = {
 };
 
 const ChangePasswordForm: FC<Props> = ({ memberId, onPasswordUpdateSuccess }) => {
-  const { formState, saveDisabled, updatePasswordValue, updatePasswordError, makeApiRequest } =
-    useChangePasswordState(memberId);
+  const {
+    formState,
+    saveDisabled,
+    updatePasswordValue,
+    updatePasswordError,
+    onFieldBlur,
+    makeApiRequest,
+  } = useChangePasswordState(memberId);
   const { close } = useDrawer();
 
   const onFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -33,12 +38,11 @@ const ChangePasswordForm: FC<Props> = ({ memberId, onPasswordUpdateSuccess }) =>
     onPasswordUpdateSuccess();
     close();
   };
-
   const handleError = (error: ApiMessage) => {
     if (error.code === '401') {
-      updatePasswordError(copy.validation.incorrectCurrentPassword, PasswordFields.current);
+      updatePasswordError(copy.validation.incorrectCurrentPassword, 'currentPassword');
     } else {
-      updatePasswordError(error.detail, PasswordFields.new);
+      updatePasswordError(error.detail, 'newPassword');
     }
   };
 
@@ -47,15 +51,17 @@ const ChangePasswordForm: FC<Props> = ({ memberId, onPasswordUpdateSuccess }) =>
       <AccountDrawer
         title={copy.title}
         primaryButtonLabel={copy.primaryButtonLabel}
-        primaryButtonOnClick={() => {
-          console.log('not implemented');
-        }}
+        primaryButtonOnClick={() => {}}
         primaryButtonAdditionalProps={{ type: 'submit' }}
         secondaryButtonLabel={copy.secondaryButtonLabel}
         secondaryButtonOnClick={close}
         isDisabled={saveDisabled}
       >
-        <PasswordInputGroup formState={formState} updatePasswordValue={updatePasswordValue} />
+        <PasswordInputGroup
+          formState={formState}
+          updatePasswordValue={updatePasswordValue}
+          onBlur={onFieldBlur}
+        />
       </AccountDrawer>
     </form>
   );

@@ -1,111 +1,85 @@
 import { PasswordInputGroup, PasswordInputGroupProps } from './PasswordInputGroup';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { CurrentFormState } from '../types';
-import { PasswordFields } from '../constants';
-import { act } from 'react';
+import { initialFormState } from '../useChangePasswordState';
+import { act, render, screen } from '@testing-library/react';
+import { userEvent } from '@storybook/testing-library';
 
 const mockUpdateValue = jest.fn();
-
-const defaultProps: PasswordInputGroupProps = {
-  formState: {
-    [PasswordFields.current]: { value: '', error: '' },
-    [PasswordFields.new]: { value: '', error: '' },
-    [PasswordFields.confirm]: { value: '', error: '' },
-  },
-  updatePasswordValue: mockUpdateValue,
-};
-
+const mockBlur = jest.fn();
 describe('PasswordInputGroup', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  const defaultProps: PasswordInputGroupProps = {
+    formState: initialFormState,
+    updatePasswordValue: mockUpdateValue,
+    onBlur: mockBlur,
+  };
 
   it('matches snapshot in default state', () => {
     const { container } = render(<PasswordInputGroup {...defaultProps} />);
+
     expect(container).toMatchSnapshot();
   });
 
   it('matches snapshot in populated state', () => {
-    const populatedState: CurrentFormState = {
-      [PasswordFields.current]: { value: 'testCurrentPassword', error: '' },
-      [PasswordFields.new]: { value: 'testNewPassword', error: '' },
-      [PasswordFields.confirm]: { value: 'testNewPasswordConfirm', error: '' },
-    };
     const { container } = render(
-      <PasswordInputGroup {...defaultProps} formState={populatedState} />,
+      <PasswordInputGroup
+        {...defaultProps}
+        formState={{
+          currentPassword: { value: 'testCurrentPassword' },
+          newPassword: { value: 'testNewPassword' },
+          newPasswordConfirm: { value: 'testNewPasswordConfirm' },
+        }}
+      />,
     );
+
     expect(container).toMatchSnapshot();
   });
 
-  it('calls updatePasswordValue with correct parameters when input changes', async () => {
+  it('triggers callback with correct params when inputting values into correct elements', async () => {
     render(<PasswordInputGroup {...defaultProps} />);
 
-    const currentPasswordInput = screen.getAllByLabelText(/current password/i)[0];
-    await userEvent.type(currentPasswordInput, 'a');
-    expect(mockUpdateValue).toHaveBeenLastCalledWith('a', PasswordFields.current);
+    const currentPasswordInputField = screen.getAllByLabelText('Current password')[1];
+    await act(async () => {
+      await userEvent.type(currentPasswordInputField, 'testCurrentPassword');
+    });
+    expect(mockUpdateValue).toHaveBeenLastCalledWith('testCurrentPassword', 'currentPassword');
 
-    const newPasswordInput = screen.getAllByLabelText(/new password/i)[0];
-    await userEvent.type(newPasswordInput, 'b');
-    expect(mockUpdateValue).toHaveBeenLastCalledWith('b', PasswordFields.new);
+    const newPasswordInputField = screen.getAllByLabelText('New password')[1];
+    await act(async () => {
+      await userEvent.type(newPasswordInputField, 'testNewPassword');
+    });
+    expect(mockUpdateValue).toHaveBeenLastCalledWith('testNewPassword', 'newPassword');
 
-    const confirmPasswordInput = screen.getAllByLabelText(/confirm new password/i)[0];
-    await userEvent.type(confirmPasswordInput, 'c');
-    expect(mockUpdateValue).toHaveBeenLastCalledWith('c', PasswordFields.confirm);
+    const newPasswordConfirmInputField = screen.getAllByLabelText('Confirm new password')[1];
+    await act(async () => {
+      await userEvent.type(newPasswordConfirmInputField, 'testNewPasswordConfirm');
+    });
+    expect(mockUpdateValue).toHaveBeenLastCalledWith(
+      'testNewPasswordConfirm',
+      'newPasswordConfirm',
+    );
   });
 
-  describe('Validation logic (isValid)', () => {
-    it('marks field as valid if it has no error', () => {
-      const formStateWithValidField: CurrentFormState = {
-        [PasswordFields.current]: { value: 'validPassword', error: '' },
-        [PasswordFields.new]: { value: '', error: '' },
-        [PasswordFields.confirm]: { value: '', error: '' },
-      };
-      render(<PasswordInputGroup {...defaultProps} formState={formStateWithValidField} />);
+  it('triggers blur callback with correct params when blurring field', async () => {
+    render(<PasswordInputGroup {...defaultProps} />);
 
-      const currentPasswordInput = screen.getAllByLabelText(/current password/i)[0];
-      expect(currentPasswordInput).toHaveAttribute('aria-invalid', 'false');
+    const currentPasswordInputField = screen.getAllByLabelText('Current password')[1];
+    await act(async () => {
+      await userEvent.type(currentPasswordInputField, ' ');
+      await userEvent.tab();
     });
+    expect(mockBlur).toHaveBeenLastCalledWith('currentPassword');
 
-    it('marks field as invalid if it has an error', () => {
-      const formStateWithInvalidField: CurrentFormState = {
-        [PasswordFields.current]: { value: 'invalidPassword', error: 'Invalid password' },
-        [PasswordFields.new]: { value: '', error: '' },
-        [PasswordFields.confirm]: { value: '', error: '' },
-      };
-      render(<PasswordInputGroup {...defaultProps} formState={formStateWithInvalidField} />);
-
-      const currentPasswordInput = screen.getAllByLabelText(/current password/i)[0];
-      expect(currentPasswordInput).toHaveAttribute('aria-invalid', 'true');
+    const newPasswordInputField = screen.getAllByLabelText('New password')[1];
+    await act(async () => {
+      await userEvent.type(newPasswordInputField, ' ');
+      await userEvent.tab();
     });
-  });
+    expect(mockBlur).toHaveBeenLastCalledWith('newPassword');
 
-  describe('Error message display', () => {
-    it('shows validation message when field has an error', async () => {
-      const formStateWithError: CurrentFormState = {
-        [PasswordFields.current]: { value: '', error: 'The current password is required.' },
-        [PasswordFields.new]: { value: '', error: '' },
-        [PasswordFields.confirm]: { value: '', error: '' },
-      };
-      render(<PasswordInputGroup {...defaultProps} formState={formStateWithError} />);
-
-      const currentPasswordInput = screen.getAllByLabelText(/current password/i)[0];
-
-      await act(async () => {
-        await userEvent.type(currentPasswordInput, 'dirty');
-        await userEvent.clear(currentPasswordInput);
-      });
-
-      const errorMessage = screen.getByText('The current password is required.');
-
-      expect(errorMessage).toBeInTheDocument();
+    const newPasswordConfirmInputField = screen.getAllByLabelText('Confirm new password')[1];
+    await act(async () => {
+      await userEvent.type(newPasswordConfirmInputField, ' ');
+      await userEvent.tab();
     });
-
-    it('does not show validation message when field has no error', () => {
-      render(<PasswordInputGroup {...defaultProps} />);
-
-      const errorMessage = screen.queryByText('The current password is required.');
-      expect(errorMessage).not.toBeInTheDocument();
-    });
+    expect(mockBlur).toHaveBeenLastCalledWith('newPasswordConfirm');
   });
 });

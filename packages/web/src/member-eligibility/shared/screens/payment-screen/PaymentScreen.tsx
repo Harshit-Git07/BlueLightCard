@@ -4,19 +4,18 @@ import LoadingSpinner from '@bluelightcard/shared-ui/components/LoadingSpinner';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
 import { EligibilityBody } from '@/root/src/member-eligibility/shared/screens/shared/components/body/EligibilityBody';
 import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
+import {
+  isSuccessResult,
+  useClientSecret,
+} from '@/root/src/member-eligibility/shared/screens/payment-screen/hooks/UseClientSecret';
 import { StripePaymentComponent } from '@/root/src/member-eligibility/shared/screens/payment-screen/components/StripePaymentComponent';
 import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/payment-screen/hooks/UseFuzzyFrontendButtons';
 import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
-
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
 import { paymentEvents } from '@/root/src/member-eligibility/shared/screens/payment-screen/ampltitude-events/PaymentEvents';
-import {
-  isSuccessResult,
-  useClientSecret,
-} from '@bluelightcard/shared-ui/components/Payment/useClientSecret';
 
 export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDetailsState }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
@@ -106,6 +105,7 @@ export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDet
           )}
         </div>
       </EligibilityBody>
+
       <FuzzyFrontendButtons buttons={fuzzyFrontendButtons} putInFloatingDock />
     </EligibilityScreen>
   );

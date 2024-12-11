@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import RadioButtonGroup, { RadioGroupItems } from './index';
-import { SyntheticEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 // Meta data of the component to build the story
 const componentMeta: Meta<typeof RadioButtonGroup> = {
@@ -60,7 +60,7 @@ const testItemsWithLabels: RadioGroupItems = [
 const DefaultTemplate: StoryFn<typeof RadioButtonGroup> = (args) => {
   const { name, disabled, items, withBorder } = args;
   const [selectedId, setSelectedId] = useState('');
-  const onChangeHandler = (_: SyntheticEvent, id: string = '') => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>, id: string = '') => {
     setSelectedId(id);
   };
 

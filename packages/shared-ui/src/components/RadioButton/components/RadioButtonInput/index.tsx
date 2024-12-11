@@ -1,11 +1,11 @@
-import { FC, SyntheticEvent } from 'react';
+import { ChangeEvent, FC } from 'react';
 import { conditionalStrings } from '../../../../utils/conditionalStrings';
 
 interface RadioButtonInputProps {
   id?: string;
   name?: string;
   checked?: boolean;
-  onChange?: (e: SyntheticEvent, id?: string) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>, id?: string) => void;
   disabled?: boolean;
   value?: string;
 }
@@ -39,7 +39,7 @@ const RadioButtonInput: FC<RadioButtonInputProps> = ({
 }) => {
   const classes = getClasses(checked, disabled);
 
-  const onChangeHandler = (e: SyntheticEvent) => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     if (!onChange) return;
 
     onChange(e, id);

@@ -1,5 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react';
 import ClickableFlag from '.';
+import { defaultCountries, parseCountry } from 'react-international-phone';
+
+const ukCountry = defaultCountries.map(parseCountry).find((country) => country.iso2 === 'gb')!;
 
 const componentMeta: Meta<typeof ClickableFlag> = {
   title: 'Component System/PhoneNumberInput/ClickableFlag',
@@ -11,8 +14,7 @@ const DefaultTemplate: StoryFn<typeof ClickableFlag> = (args) => <ClickableFlag 
 export const Default = DefaultTemplate.bind({});
 
 Default.args = {
-  iso2: 'gb',
-  name: 'UK',
+  country: ukCountry,
   isOpen: false,
   toggleDropdown: () => undefined,
 };
@@ -20,8 +22,7 @@ Default.args = {
 export const IsOpen = DefaultTemplate.bind({});
 
 IsOpen.args = {
-  iso2: 'gb',
-  name: 'UK',
+  country: ukCountry,
   isOpen: true,
   toggleDropdown: () => undefined,
 };

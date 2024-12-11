@@ -1,10 +1,9 @@
 import { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import Dropdown from '../Dropdown';
-import { DatePickerProps, SplitDate } from './types';
-import FieldLabel from '../FieldLabel';
-import moment from 'moment';
 import { DropdownOption } from '../Dropdown/types';
-import ValidationMessage from '../ValidationMessage';
+import InfoWrapper from '../InfoWrapper';
+import { fonts } from '../../tailwind/theme';
+import { DatePickerProps, SplitDate } from './types';
 
 const generateDateOptions = (minAgeConstraint: number = 0) => {
   const currentDate = new Date();
@@ -35,7 +34,7 @@ const generateDateOptions = (minAgeConstraint: number = 0) => {
     'November',
     'December',
   ].map((month, i) => ({
-    id: `${i}`,
+    id: `${i + 1}`,
     label: month,
   }));
 
@@ -51,27 +50,13 @@ const generateDateOptions = (minAgeConstraint: number = 0) => {
   };
 };
 
-const getSplitFromDate = (value?: Date): SplitDate => {
-  return value
-    ? {
-        day: value.getDate(),
-        month: value.getMonth(),
-        year: value.getFullYear(),
-      }
-    : {
-        day: undefined,
-        month: undefined,
-        year: undefined,
-      };
-};
-
 const DatePicker: FC<DatePickerProps> = ({
   value,
   disabled,
   errorMessage,
   onChange,
   minAgeConstraint,
-  ...fieldLabelProps
+  ...infoProps
 }) => {
   const calculateAge = useCallback((birthDate: Date): number => {
     const today = new Date();
@@ -89,66 +74,85 @@ const DatePicker: FC<DatePickerProps> = ({
     [minAgeConstraint],
   );
 
-  const [date, setDate] = useState<SplitDate>(getSplitFromDate(value));
-  useEffect(() => {
-    setDate(getSplitFromDate(value));
-  }, [value]);
+  const initialDate: SplitDate = value
+    ? {
+        day: value.getDate(),
+        month: value.getMonth() + 1,
+        year: value.getFullYear(),
+      }
+    : {
+        day: undefined,
+        month: undefined,
+        year: undefined,
+      };
 
-  const changed = (newDate: SplitDate) => {
-    const m = moment(newDate);
-    const YYYYMMDD = m.format('YYYY-MM-DD');
-    if (!m.isValid() || !newDate.day || !newDate.month === undefined || !newDate.year) {
-      // update internal state anyway
-      setDate(newDate);
+  const [date, setDate] = useState<SplitDate>(initialDate);
+
+  const handleDayChange = (selectedDay: DropdownOption) => {
+    setDate({
+      ...date,
+      day: +selectedDay.id,
+    });
+  };
+  const handleMonthChange = (selectedMonth: DropdownOption) => {
+    setDate({
+      ...date,
+      month: +selectedMonth.id,
+    });
+  };
+  const handleYearChange = (selectedYear: DropdownOption) => {
+    setDate({
+      ...date,
+      year: +selectedYear.id,
+    });
+  };
+
+  const maxDays: number =
+    date.month && date.year ? new Date(date.year, date.month, 0).getDate() : 31;
+
+  let isUnderAge = false;
+  if (date.day && date.month && date.year) {
+    isUnderAge =
+      calculateAge(new Date(date.year, date.month - 1, date.day)) < (minAgeConstraint ?? 0);
+  }
+
+  const isDateInvalid = !!date.day && date.day > maxDays;
+  const isInvalid = isDateInvalid || isUnderAge;
+  const hasError = !disabled && (!!errorMessage || isInvalid);
+
+  useEffect(() => {
+    if (isInvalid) {
       onChange();
       return;
     }
 
-    // the controlling component can choose to update this component's prop value if it wants to
-    const createdDate = new Date(YYYYMMDD);
-    onChange(createdDate);
-  };
+    if (date.day && date.month && date.year) {
+      const createdDate = new Date(Date.UTC(date.year, date.month - 1, date.day));
+      if (!createdDate) {
+        onChange();
+        return;
+      }
 
-  const handleDayChange = (selectedDay: DropdownOption) => {
-    changed({ ...date, day: +selectedDay.id });
-  };
-
-  const handleMonthChange = (selectedMonth: DropdownOption) => {
-    changed({ ...date, month: +selectedMonth.id });
-  };
-
-  const handleYearChange = (selectedYear: DropdownOption) => {
-    changed({ ...date, year: +selectedYear.id });
-  };
-
-  let isUnderAge = false;
-  if (date.day && date.month && date.year) {
-    isUnderAge = calculateAge(new Date(date.year, date.month, date.day)) < (minAgeConstraint ?? 0);
-  }
-
-  const isDateValid = !date.day || moment(date).isValid();
-  const isInvalid = !isDateValid || isUnderAge;
-  const hasError = !disabled && (!!errorMessage || isInvalid);
-
-  const monthValue = date.month !== undefined ? monthOptions[date.month] : undefined;
+      onChange(createdDate);
+    }
+  }, [date, isInvalid]);
 
   return (
-    <div>
-      <FieldLabel {...fieldLabelProps} />
+    <InfoWrapper {...infoProps}>
       <div
         className="flex flex-col sm:flex-row tablet:gap-[8px] mobile:gap-[16px]"
-        aria-labelledby={fieldLabelProps.label}
+        aria-labelledby={infoProps.id}
       >
         <Dropdown
           aria-label="day"
           aria-invalid={hasError}
           options={dayOptions}
+          placeholder="Day"
+          error={hasError}
           maxItemsShown={4}
-          placeholder={'Day'}
-          isValid={!hasError}
-          value={date.day !== undefined ? dayOptions[date.day - 1] : undefined}
-          onChange={handleDayChange}
-          isDisabled={disabled}
+          selectedValue={date.day?.toString()}
+          onSelect={handleDayChange}
+          disabled={disabled}
         />
 
         <Dropdown
@@ -156,11 +160,11 @@ const DatePicker: FC<DatePickerProps> = ({
           aria-invalid={hasError}
           options={monthOptions}
           placeholder="Month"
+          error={hasError}
           maxItemsShown={4}
-          isValid={!hasError}
-          value={monthValue}
-          onChange={handleMonthChange}
-          isDisabled={disabled}
+          selectedValue={date.month?.toString()}
+          onSelect={handleMonthChange}
+          disabled={disabled}
         />
 
         <Dropdown
@@ -168,28 +172,20 @@ const DatePicker: FC<DatePickerProps> = ({
           aria-invalid={hasError}
           options={yearOptions}
           placeholder="Year"
+          error={hasError}
           maxItemsShown={4}
-          isValid={!hasError}
-          value={
-            date.year !== undefined
-              ? yearOptions.find((option) => +option.label === date.year)
-              : undefined
-          }
-          onChange={handleYearChange}
-          isDisabled={disabled}
+          selectedValue={date.year?.toString()}
+          onSelect={handleYearChange}
+          disabled={disabled}
         />
       </div>
 
-      {hasError ? (
-        <ValidationMessage
-          htmlFor={fieldLabelProps.htmlFor}
-          isValid={false}
-          isDisabled={disabled ?? false}
-          message={!isDateValid ? 'Date is invalid' : errorMessage}
-        />
-      ) : null}
-    </div>
+      {hasError && (
+        <p className={`${fonts.bodySmall} text-colour-error`} role="alert">
+          {isInvalid ? 'Date is invalid' : errorMessage}
+        </p>
+      )}
+    </InfoWrapper>
   );
 };
-
 export default DatePicker;

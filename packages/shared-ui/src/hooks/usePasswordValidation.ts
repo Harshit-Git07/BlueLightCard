@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { passwordRules, passwordSchema } from '../../schemas/PasswordSchema';
+import { passwordRules, passwordSchema } from '../schemas/PasswordSchema';
 
 export function usePasswordValidation() {
   const validationRequirements = useMemo(

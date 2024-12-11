@@ -175,7 +175,7 @@ const SearchBar: FC<SearchProps> = ({
     experimentalBorderVariant(),
   ];
 
-  const formClasses = ['z-10', 'w-full'];
+  const formClasses = ['p-4', 'z-10', 'w-full'];
 
   if (experimentalFormVariant() !== '') {
     formClasses.push(experimentalFormVariant());

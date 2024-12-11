@@ -1,18 +1,16 @@
-import { FC, SyntheticEvent, useMemo } from 'react';
+import { ChangeEvent, FC, useMemo } from 'react';
 import RadioButton from '../../index';
 
-export type RadioGroupItem = {
+export type RadioGroupItems = {
   id: string;
   label?: string;
-};
-
-export type RadioGroupItems = RadioGroupItem[];
+}[];
 
 interface RadioGroupProps {
   disabled?: boolean;
   name: string;
   items: RadioGroupItems;
-  onChange?: (e: SyntheticEvent, id?: string) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>, id?: string) => void;
   value?: string;
   withBorder?: boolean;
 }
@@ -35,13 +33,13 @@ const RadioGroup: FC<RadioGroupProps> = ({
     });
   }, [items]);
 
-  const onChangeHandler = (e: SyntheticEvent, id?: string) => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>, id?: string) => {
     if (!onChange) return;
     onChange(e, id);
   };
 
   return (
-    <fieldset className={'flex flex-col gap-2'}>
+    <fieldset>
       {cleanItems.map(({ id, label }) => (
         <RadioButton
           key={id}

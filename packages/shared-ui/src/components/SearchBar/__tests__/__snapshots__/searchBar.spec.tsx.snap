@@ -3,7 +3,7 @@
 exports[`clears the search bar 1`] = `
 <div>
   <form
-    class="z-10 w-full"
+    class="p-4 z-10 w-full"
   >
     <div
       class="relative"
@@ -47,7 +47,7 @@ exports[`clears the search bar 1`] = `
 exports[`displays an error edits the search bar with incorrect value 1`] = `
 <div>
   <form
-    class="z-10 w-full"
+    class="p-4 z-10 w-full"
   >
     <div
       class="relative"
@@ -111,7 +111,7 @@ exports[`displays an error edits the search bar with incorrect value 1`] = `
 exports[`displays an error shows an error when submitting less than the required characters 1`] = `
 <div>
   <form
-    class="z-10 w-full"
+    class="p-4 z-10 w-full"
   >
     <div
       class="relative"
@@ -180,7 +180,7 @@ exports[`displays an error shows an error when submitting less than the required
 exports[`edits the search bar 1`] = `
 <div>
   <form
-    class="z-10 w-full"
+    class="p-4 z-10 w-full"
   >
     <div
       class="relative"
@@ -244,7 +244,7 @@ exports[`edits the search bar 1`] = `
 exports[`renders the search bar 1`] = `
 <div>
   <form
-    class="z-10 w-full"
+    class="p-4 z-10 w-full"
   >
     <div
       class="relative"
@@ -282,7 +282,7 @@ exports[`renders the search bar 1`] = `
 exports[`renders the search bar with active experiments \`dark\` 1`] = `
 <div>
   <form
-    class="z-10 w-full bg-colour-primary-light shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]"
+    class="p-4 z-10 w-full bg-colour-primary-light shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]"
   >
     <div
       class="relative"
@@ -320,7 +320,7 @@ exports[`renders the search bar with active experiments \`dark\` 1`] = `
 exports[`renders the search bar with active experiments \`light\` 1`] = `
 <div>
   <form
-    class="z-10 w-full bg-[#F6F9FF] shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]"
+    class="p-4 z-10 w-full bg-[#F6F9FF] shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]"
   >
     <div
       class="relative"
@@ -358,7 +358,7 @@ exports[`renders the search bar with active experiments \`light\` 1`] = `
 exports[`resets the search bar 1`] = `
 <div>
   <form
-    class="z-10 w-full"
+    class="p-4 z-10 w-full"
   >
     <div
       class="relative"
@@ -396,7 +396,7 @@ exports[`resets the search bar 1`] = `
 exports[`submits the search bar 1`] = `
 <div>
   <form
-    class="z-10 w-full"
+    class="p-4 z-10 w-full"
   >
     <div
       class="relative"

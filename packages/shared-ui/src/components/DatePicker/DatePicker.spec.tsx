@@ -1,34 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import DatePicker from './';
-import { act, ComponentProps } from 'react';
+import { ComponentProps } from 'react';
 import userEvent from '@testing-library/user-event';
-
-const { getByLabelText, findByText, getByText, queryByText, getAllByTestId } = screen;
-
-const selectDate = async (day: string, month: string, year: string) => {
-  const dayDropdown = getByLabelText('Day');
-  const monthDropdown = getByLabelText('Month');
-  const yearDropdown = getByLabelText('Year');
-
-  await act(async () => {
-    await userEvent.click(dayDropdown);
-  });
-  const number2 = await findByText(day);
-  await act(async () => {
-    await userEvent.click(number2);
-    await userEvent.click(monthDropdown);
-  });
-  const september = await findByText(month);
-  await act(async () => {
-    await userEvent.click(september);
-    await userEvent.click(yearDropdown);
-  });
-  const y1995 = await findByText(year);
-  await act(async () => {
-    await userEvent.click(y1995);
-  });
-};
 
 describe('DatePicker component', () => {
   let props: ComponentProps<typeof DatePicker>;
@@ -36,7 +10,6 @@ describe('DatePicker component', () => {
   beforeEach(() => {
     props = {
       onChange: jest.fn(),
-      htmlFor: '',
     };
   });
 
@@ -46,7 +19,7 @@ describe('DatePicker component', () => {
   });
 
   it('should render 3 dropdowns with placeholders', () => {
-    render(<DatePicker {...props} />);
+    const { getAllByTestId, getByLabelText } = render(<DatePicker {...props} />);
 
     const dropdowns = getAllByTestId('combobox');
     expect(dropdowns).toHaveLength(3);
@@ -57,23 +30,19 @@ describe('DatePicker component', () => {
   });
 
   it('should allow user interactions when enabled', async () => {
-    render(<DatePicker {...props} />);
+    const { getByLabelText, getByText } = render(<DatePicker {...props} />);
 
     const dayDropdown = getByLabelText('Day');
-    await act(async () => {
-      await userEvent.click(dayDropdown);
-    });
+    await userEvent.click(dayDropdown);
 
     const day31 = getByText('31');
-    await act(async () => {
-      await userEvent.click(day31);
-    });
+    await userEvent.click(day31);
 
     expect(dayDropdown).toHaveValue('31');
   });
 
   it('should not allow user interactions when disabled', async () => {
-    render(<DatePicker disabled {...props} />);
+    const { getByLabelText, queryByText } = render(<DatePicker disabled {...props} />);
 
     const dayDropdown = getByLabelText('Day');
     const monthDropdown = getByLabelText('Month');
@@ -83,36 +52,78 @@ describe('DatePicker component', () => {
     expect(monthDropdown).toBeDisabled();
     expect(yearDropdown).toBeDisabled();
 
-    await act(async () => {
-      await userEvent.click(dayDropdown);
-    });
+    await userEvent.click(dayDropdown);
+
     const day31 = queryByText('31');
     expect(day31).not.toBeInTheDocument();
   });
 
   it('should call onChange with selected date', async () => {
     const onChangeSpy = jest.spyOn(props, 'onChange');
-    render(<DatePicker {...props} />);
-    await selectDate('2', 'September', '1995');
-    expect(onChangeSpy).toHaveBeenCalledTimes(3);
-    expect(onChangeSpy).toHaveBeenLastCalledWith(new Date('1995-09-02'));
+    const { getByLabelText, getByText } = render(<DatePicker {...props} />);
+
+    const dayDropdown = getByLabelText('Day');
+    const monthDropdown = getByLabelText('Month');
+    const yearDropdown = getByLabelText('Year');
+
+    await userEvent.click(dayDropdown);
+    await userEvent.click(getByText('2'));
+
+    await userEvent.click(monthDropdown);
+    await userEvent.click(getByText('September'));
+
+    await userEvent.click(yearDropdown);
+    await userEvent.click(getByText('1995'));
+
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);
+    expect(onChangeSpy).toHaveBeenCalledWith(new Date('1995-09-02'));
   });
 
   it('should show error when invalid date', async () => {
-    render(<DatePicker {...props} />);
-    await selectDate('31', 'April', '1995');
+    const { getByLabelText, getByText } = render(<DatePicker {...props} />);
+
+    const dayDropdown = getByLabelText('Day');
+    const monthDropdown = getByLabelText('Month');
+    const yearDropdown = getByLabelText('Year');
+
+    await userEvent.click(dayDropdown);
+    await userEvent.click(getByText('31'));
+
+    await userEvent.click(monthDropdown);
+    await userEvent.click(getByText('April'));
+
+    await userEvent.click(yearDropdown);
+    await userEvent.click(getByText('1995'));
+
     expect(getByText('Date is invalid')).toBeInTheDocument();
   });
 
   it('should show invalid date error as priority over errorMessage', async () => {
-    render(<DatePicker {...props} errorMessage="There is an error" />);
-    await selectDate('31', 'April', '1995');
+    const { getByLabelText, getByText, queryByText } = render(
+      <DatePicker {...props} errorMessage="There is an error" />,
+    );
+
+    const dayDropdown = getByLabelText('Day');
+    const monthDropdown = getByLabelText('Month');
+    const yearDropdown = getByLabelText('Year');
+
+    await userEvent.click(dayDropdown);
+    await userEvent.click(getByText('31'));
+
+    await userEvent.click(monthDropdown);
+    await userEvent.click(getByText('April'));
+
+    await userEvent.click(yearDropdown);
+    await userEvent.click(getByText('1995'));
+
     expect(getByText('Date is invalid')).toBeInTheDocument();
     expect(queryByText('There is an error')).not.toBeInTheDocument();
   });
 
   it('should not show invalid date error when disabled', async () => {
-    render(<DatePicker {...props} disabled errorMessage="There is an error" />);
+    const { getByLabelText, queryByText } = render(
+      <DatePicker {...props} disabled errorMessage="There is an error" />,
+    );
 
     const dayDropdown = getByLabelText('Day');
     const monthDropdown = getByLabelText('Month');
@@ -127,13 +138,27 @@ describe('DatePicker component', () => {
 
   it('should call onChange with nothing when invalid date', async () => {
     const onChangeSpy = jest.spyOn(props, 'onChange');
-    render(<DatePicker {...props} />);
-    await selectDate('31', 'April', '1995');
+    const { getByLabelText, getByText } = render(<DatePicker {...props} />);
+
+    const dayDropdown = getByLabelText('Day');
+    const monthDropdown = getByLabelText('Month');
+    const yearDropdown = getByLabelText('Year');
+
+    await userEvent.click(dayDropdown);
+    await userEvent.click(getByText('31'));
+
+    await userEvent.click(monthDropdown);
+    await userEvent.click(getByText('April'));
+
+    await userEvent.click(yearDropdown);
+    await userEvent.click(getByText('1995'));
+
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);
     expect(onChangeSpy).toHaveBeenCalledWith();
   });
 
   it('should render error message when errorMessage is passed', () => {
-    render(<DatePicker errorMessage="Invalid date" {...props} />);
+    const { getByText } = render(<DatePicker errorMessage="Invalid date" {...props} />);
     expect(getByText('Invalid date')).toBeInTheDocument();
   });
 
@@ -143,7 +168,7 @@ describe('DatePicker component', () => {
       label: 'Date of Birth',
       description: 'Please enter your date of birth',
     };
-    render(<DatePicker {...infoProps} />);
+    const { getByText } = render(<DatePicker {...infoProps} />);
 
     expect(getByText('Date of Birth')).toBeInTheDocument();
     expect(getByText('Please enter your date of birth')).toBeInTheDocument();

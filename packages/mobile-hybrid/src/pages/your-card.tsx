@@ -2,35 +2,30 @@ import { NextPage } from 'next';
 import { BRAND } from '@/globals';
 import {
   ButtonV2 as Button,
-  CardVerificationAlerts,
   CopyButton,
   fonts,
   NoCardImage,
   ThemeVariant,
+  useGetCustomerProfile,
   YourCard,
 } from '@bluelightcard/shared-ui';
 import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
 import useRouterReady from '@/hooks/useRouterReady';
 import { SyntheticEvent } from 'react';
 import { getBrandStrapline } from '@bluelightcard/shared-ui/components/YourCard/text';
-import useMemberId from '@bluelightcard/shared-ui/hooks/useMemberId';
-import useMemberCard from '@bluelightcard/shared-ui/components/RequestNewCard/useMemberCard';
-import useMemberApplication from '@bluelightcard/shared-ui/components/RequestNewCard/useMemberApplication';
 
 const MyCardPage: NextPage = () => {
-  const memberId = useMemberId();
+  const memberUuid = 'member-uuid';
   useRouterReady();
 
-  const { isLoading, card, firstName, lastName } = useMemberCard(memberId);
-  const { application } = useMemberApplication(memberId);
-
-  const hasGenerated = !!card?.cardNumber;
-  const hasNotGenerated = !hasGenerated && application;
+  const { isFetching, data: customerProfile } = useGetCustomerProfile(BRAND, memberUuid);
+  const hasGenerated = !!customerProfile?.card.cardNumber;
+  const hasNotGenerated = !hasGenerated && customerProfile?.applications.length;
   const hasNoCard = !hasGenerated && !hasNotGenerated;
 
   const strapline = getBrandStrapline(BRAND);
 
-  if (isLoading) {
+  if (isFetching) {
     return null;
   }
 
@@ -51,15 +46,13 @@ const MyCardPage: NextPage = () => {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <YourCard
               brand={BRAND}
-              firstName={firstName}
-              lastName={lastName}
-              accountNumber={card?.cardNumber}
-              expiryDate={card?.purchaseTime}
+              firstName={customerProfile?.firstName ?? ''}
+              lastName={customerProfile?.lastName ?? ''}
+              accountNumber={customerProfile?.card.cardNumber}
+              expiryDate={customerProfile?.card?.cardExpiry}
             />
           </div>
         </div>
-
-        <CardVerificationAlerts memberUuid={memberId} />
 
         {hasGenerated ? (
           <div className={`absolute bottom-0 pb-[24px] flex flex-col items-center w-full`}>
@@ -68,7 +61,7 @@ const MyCardPage: NextPage = () => {
                 variant={ThemeVariant.Primary}
                 label="Copy card number"
                 size="Large"
-                copyText={card?.cardNumber}
+                copyText={customerProfile!.card.cardNumber!}
                 fullWidth={true}
               />
 

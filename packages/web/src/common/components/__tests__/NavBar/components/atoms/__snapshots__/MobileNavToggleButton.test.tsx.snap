@@ -3,20 +3,17 @@
 exports[`MobileNavToggleButton renders 1`] = `
 <div>
   <button
-    aria-expanded="true"
-    aria-label="Close menu"
+    class="flex h-full justify-center items-center gap-1 cursor-pointer tablet:hidden text-NavBar-icon-colour dark:text-NavBar-icon-colour-dark"
     data-testid="mobile-nav-toggle-button"
   >
     <svg
       aria-hidden="true"
-      class="svg-inline--fa fa-xmark fa-lg"
+      class="svg-inline--fa fa-xmark "
       data-icon="xmark"
       data-prefix="fas"
       focusable="false"
-      height="24"
       role="img"
       viewBox="0 0 384 512"
-      width="24"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

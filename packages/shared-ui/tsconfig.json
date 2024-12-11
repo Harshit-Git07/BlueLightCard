@@ -17,8 +17,7 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@blc/offers-legacy/*": ["../api/offers/src/*"],
-      "@/global-vars": ["./src/global-vars"]
+      "@blc/offers-legacy/*": ["../api/offers/src/*"]
     }
   },
   "include": [

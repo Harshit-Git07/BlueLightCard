@@ -1,30 +1,38 @@
-import { ProfileSchema } from '../components/CardVerificationAlerts/types';
+import type { CustomerProfileData } from '../types';
 
-const customerProfileNoCardMock: ProfileSchema = {
-  memberId: 'testMemberId',
+const customerProfileNoCardMock: CustomerProfileData = {
   firstName: 'Name',
   lastName: 'Last-name',
   dateOfBirth: '2024-12-12T00:00:00Z',
   phoneNumber: '+447239100223',
-  email: 'email@test.co.uk',
+  emailAddres: 'email@test.co.uk',
   county: 'UK',
+  employmentType: 'employment type',
   organisationId: 'organisation-id',
   employerId: 'employer-id',
   employerName: 'Test employer',
-  jobTitle: 'Manager',
-  jobReference: 'reference 123',
-  card: undefined,
-  emailValidated: false,
-  spareEmailValidated: false,
+  jobtitle: 'Manager',
+  reference: 'reference 123',
+  card: {},
   applications: [],
 };
 
-const customerProfileCardNotGeneratedMock: ProfileSchema = {
-  ...customerProfileNoCardMock,
+const customerProfileCardNotGeneratedMock: CustomerProfileData = {
+  firstName: 'Name',
+  lastName: 'Last-name',
+  dateOfBirth: '2024-12-12T00:00:00Z',
+  phoneNumber: '+447239100223',
+  emailAddres: 'email@test.co.uk',
+  county: 'UK',
+  employmentType: 'employment type',
+  organisationId: 'organisation-id',
+  employerId: 'employer-id',
+  employerName: 'Test employer',
+  jobtitle: 'Manager',
+  reference: 'reference 123',
+  card: {},
   applications: [
     {
-      applicationId: 'testApplicationId',
-      memberId: 'testMemberId',
       startDate: '2024-12-12T00:00:00Z',
       eligibilityStatus: 'ELIGIBLE',
       applicationReason: 'SIGNUP',
@@ -34,21 +42,35 @@ const customerProfileCardNotGeneratedMock: ProfileSchema = {
       city: 'Testville',
       postcode: '12345',
       country: 'Testland',
+      promoCode: 'promo 123',
       trustedDomainEmail: 'test.co.uk',
+      trustedDomainVerified: true,
+      rejectionReason: '',
     },
   ],
 };
 
-const customerProfileCardGeneratedMock: ProfileSchema = {
-  ...customerProfileNoCardMock,
+const customerProfileCardGeneratedMock: CustomerProfileData = {
+  firstName: 'Name',
+  lastName: 'Last-name',
+  dateOfBirth: '2024-12-12T00:00:00Z',
+  phoneNumber: '+447239100223',
+  emailAddres: 'email@test.co.uk',
+  county: 'UK',
+  employmentType: 'employment type',
+  organisationId: 'organisation-id',
+  employerId: 'employer-id',
+  employerName: 'Test employer',
+  jobtitle: 'Manager',
+  reference: 'reference 123',
   card: {
-    memberId: 'test',
     cardNumber: 'BLC01234567',
-    purchaseTime: '2024-12-12T00:00:00Z',
-    expiryDate: '2024-12-12T00:00:00Z',
+    cardCreated: '2024-12-12T00:00:00Z',
+    cardExpiry: '2024-12-12T00:00:00Z',
     cardStatus: 'PHYSICAL_CARD',
-    paymentStatus: 'PAID_CARD',
+    cardPaymentStatus: 'PAID_CARD',
   },
+  applications: [],
 };
 
 export {

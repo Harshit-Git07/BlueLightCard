@@ -6,7 +6,8 @@ export interface PromoCodeProps {
   name?: string;
   variant?: PromoCodeVariant;
   value?: string;
-  onChange: ChangeEventHandler<HTMLInputElement>;
+  maxChars?: number;
+  onChange?: ChangeEventHandler<HTMLInputElement>;
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
   onApply: (value: string) => void;
   onRemove?: () => void;

@@ -1,12 +1,14 @@
-import { PasswordFields } from './constants';
-import { ApiResponseError, ApiResponseSuccess } from '../../api/types';
+import {
+  UpdatePasswordErrorApiResponse,
+  UpdatePasswordSuccessApiResponse,
+} from './useChangePasswordPut';
 
 export type InputElementState = {
   value: string;
   error?: string;
 };
 
-export type PasswordField = `${PasswordFields}`;
+export type PasswordField = 'currentPassword' | 'newPassword' | 'newPasswordConfirm';
 
 export type CurrentFormState = Record<PasswordField, InputElementState>;
 
@@ -15,11 +17,11 @@ export type UpdatePasswordPayload = {
   newPassword: string;
 };
 
-type UpdatePasswordSuccessResponse = Partial<ApiResponseSuccess> & {
+type UpdatePasswordSuccessResponse = Partial<UpdatePasswordSuccessApiResponse> & {
   type: 'success';
 };
 
-type UpdatePasswordErrorResponse = Partial<ApiResponseError> & {
+type UpdatePasswordErrorResponse = Partial<UpdatePasswordErrorApiResponse> & {
   type: 'error';
 };
 

@@ -1,44 +1,28 @@
-import { FieldProps } from '../../types';
-import { KeyboardEvent, RefObject } from 'react';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+
+export type DropdownProps = {
+  options: DropdownOptions;
+  placeholder: string;
+  disabled?: boolean;
+  searchable?: boolean;
+  dropdownItemsClassName?: string;
+  onSelect: (option: DropdownOption) => void;
+  onOpen?: (listbox: HTMLElement) => void;
+  label?: string;
+  showTooltipIcon?: boolean;
+  tooltipIcon?: IconDefinition;
+  tooltipText?: string;
+  helpText?: string;
+  message?: string;
+  error?: boolean;
+  selectedValue?: string;
+  maxItemsShown?: number;
+  className?: string;
+};
+
+export type DropdownOptions = DropdownOption[];
 
 export type DropdownOption = {
   id: string;
   label: string;
 };
-
-export type DropdownOptions = DropdownOption[];
-
-type OnChange = (option: DropdownOption) => void;
-type Value = DropdownOption | string;
-
-export type DropdownProps = FieldProps<OnChange, Value> & {
-  onOpen?: (listbox: HTMLElement) => void;
-  options: DropdownOptions;
-  searchable?: boolean;
-  dropdownItemsClassName?: string;
-  maxItemsShown?: number;
-  className?: string;
-};
-
-export interface DropdownListProps {
-  className?: string;
-  listboxRef: RefObject<HTMLDivElement>;
-  dropdownId: string;
-  options: DropdownOptions;
-  maxItemsShown?: number;
-  disabled?: boolean;
-  selectedOption?: DropdownOption;
-  onSelected: (option: DropdownOption) => void;
-  onOptionKeyDown: OnKeyDown;
-}
-
-export interface DropdownListItemProps {
-  option: DropdownOption;
-  index: number;
-  selectedOption?: DropdownOption;
-  disabled?: boolean;
-  onSelected: (option: DropdownOption) => void;
-  onOptionKeyDown: OnKeyDown;
-}
-
-type OnKeyDown = (event: KeyboardEvent, option: DropdownOption) => void;

@@ -3,10 +3,10 @@ import Toast from './index';
 import Button from '../Button/index';
 import { ThemeVariant } from '../../types';
 import { ToastStatus } from './ToastTypes';
-import { SyntheticEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import RadioButtonGroup from '../RadioButton/components/RadioButtonGroup/index';
 import Typography from '../Typography';
-import { faCircleRadiation, faTrashCircle, faUserCircle } from '@fortawesome/pro-solid-svg-icons';
+import { faTrashCircle, faUserCircle, faCircleRadiation } from '@fortawesome/pro-solid-svg-icons';
 
 const lorem =
   'Lorem ipsum dolor sit amet consectetur. Ut condimentum aliquet quis odio erat in nec.';
@@ -119,7 +119,8 @@ export const ToastStates: StoryFn<typeof Toast> = (args) => {
     );
   };
 
-  const handleChangeState = (_: SyntheticEvent, id?: string) => setStatus(id as ToastStatus);
+  const handleChangeState = (_: ChangeEvent<HTMLInputElement>, id?: string) =>
+    setStatus(id as ToastStatus);
 
   return (
     <div>

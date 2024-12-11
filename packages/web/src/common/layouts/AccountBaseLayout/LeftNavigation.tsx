@@ -6,20 +6,11 @@ import LeftNavigationLinks from './LeftNavigationLinks';
 type Props = {
   isOpen: boolean;
   accountNumber: string | undefined;
-  firstName: string;
-  lastName: string;
   onLinkSelection: (href: string) => void;
   onCloseDrawer: () => void;
 };
 
-const LeftNavigation = ({
-  isOpen,
-  accountNumber,
-  firstName,
-  lastName,
-  onLinkSelection,
-  onCloseDrawer,
-}: Props) => {
+const LeftNavigation = ({ isOpen, accountNumber, onLinkSelection, onCloseDrawer }: Props) => {
   return (
     <div
       className={`
@@ -34,7 +25,7 @@ const LeftNavigation = ({
       </div>
 
       <div className="block tablet:hidden pl-4 my-5 w-[350px]">
-        <AccountDetails accountNumber={accountNumber} firstName={firstName} lastName={lastName} />
+        <AccountDetails accountNumber={accountNumber} firstName="Name" lastName="Last-name" />
       </div>
 
       <div className="w-[350px] tablet:w-[198px] desktop:w-[294px]">

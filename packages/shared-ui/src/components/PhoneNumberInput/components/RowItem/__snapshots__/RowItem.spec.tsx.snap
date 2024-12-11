@@ -10,7 +10,7 @@ exports[`RowItem component matches snapshots 1`] = `
     title="United Kingdom"
   >
     <span
-      class="py-2 pl-[20px] pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
+      class="py-2 pl-5 pr-3  flex w-full gap-2 items-center cursor-pointer  font-typography-body text-typography-body font-typography-body-weight group"
     >
       <div
         data-testid="flag-image"

@@ -14,6 +14,21 @@ const componentMeta: Meta<typeof PhoneNumberInput> = {
       control: 'boolean',
       description: '`boolean`: Whether to show validation errors. (default: `false`)',
     },
+    defaultCountry: {
+      control: 'text',
+      description:
+        '`string`: The default country code. (default: `gb or ua depending on local but to add more countries needs to be updated`)',
+    },
+    emptyErrorMessage: {
+      control: 'text',
+      description:
+        '`string`: Message displayed when input is empty. (default: `Please enter a phone number`)',
+    },
+    invalidErrorMessage: {
+      control: 'text',
+      description:
+        '`string`: Message displayed for invalid phone numbers. (default: `Please enter a valid phone number`)',
+    },
     label: {
       control: 'text',
       description: '`string`: Label text for the input. (default: ``)',

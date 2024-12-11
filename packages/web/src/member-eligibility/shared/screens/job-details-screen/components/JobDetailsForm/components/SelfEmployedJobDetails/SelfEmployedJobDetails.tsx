@@ -23,9 +23,10 @@ export const SelfEmployedJobDetails: FC<Props> = ({ eligibilityDetailsState }) =
         placeholder="Select your organisation"
         options={organisations}
         maxItemsShown={4}
-        value={eligibilityDetails.organisation?.id}
+        selectedValue={eligibilityDetails.organisation?.id}
         searchable
-        onChange={onOrganisationSelected}
+        showTooltipIcon
+        onSelect={onOrganisationSelected}
       />
 
       <SelfEmployed

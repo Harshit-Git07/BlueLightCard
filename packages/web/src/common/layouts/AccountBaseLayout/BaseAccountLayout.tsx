@@ -1,23 +1,20 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AccountDetails, CardVerificationAlerts, Drawer } from '@bluelightcard/shared-ui';
-import NavBar from '../../components/NavBar';
+import { AccountDetails, useGetCustomerProfile } from '@bluelightcard/shared-ui';
+import { BRAND } from '@/global-vars';
+import NavBar from '../../components/NavBar/NavBar';
 import { LayoutProps } from './types';
 import Footer from '../../../common/components/Footer/Footer';
 import { useMedia } from 'react-use';
 import LeftNavigation from './LeftNavigation';
-import Toaster from '@bluelightcard/shared-ui/components/Toast/Toaster';
-import useMemberProfileGet from '@bluelightcard/shared-ui/hooks/useMemberProfileGet';
-import useMemberId from '@bluelightcard/shared-ui/hooks/useMemberId';
-import MyAccountDebugTools from '@bluelightcard/shared-ui/components/MyAccountDebugTools';
-import Fuzzy from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy/Fuzzy';
 
 const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const isMobile = useMedia('(max-width: 767px)');
 
-  const memberId = useMemberId();
-  const { memberProfile } = useMemberProfileGet(memberId);
+  const memberUuid = 'member-uuid';
+
+  const { data: customerProfile } = useGetCustomerProfile(BRAND, memberUuid);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -54,11 +51,6 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className={`flex flex-col ${isOpen ? 'h-screen overflow-hidden' : 'min-h-screen'}`}>
-      <Fuzzy>
-        <MyAccountDebugTools />
-      </Fuzzy>
-      <Drawer />
-      <Toaster />
       <NavBar
         isAuthenticated
         onSearchCompanyChange={onSearchCompanyChange}
@@ -69,9 +61,9 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
 
       <div className="pl-4 mt-16 flex flex-col hidden tablet:block desktop:container mx-5 desktop:mx-auto">
         <AccountDetails
-          accountNumber={memberProfile?.card?.cardNumber}
-          firstName={memberProfile?.firstName ?? 'Name'}
-          lastName={memberProfile?.lastName ?? 'Last-name'}
+          accountNumber={customerProfile?.card.cardNumber}
+          firstName="Name"
+          lastName="Last-name"
         />
       </div>
 
@@ -80,9 +72,7 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
       >
         <LeftNavigation
           isOpen={isOpen}
-          accountNumber={memberProfile?.card?.cardNumber}
-          firstName={memberProfile?.firstName ?? 'Name'}
-          lastName={memberProfile?.lastName ?? 'Last-name'}
+          accountNumber={customerProfile?.card.cardNumber}
           onLinkSelection={linkSelectionHandler}
           onCloseDrawer={toggleDrawer}
         />
@@ -99,7 +89,6 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
       </div>
 
       {!isOpen ? <Footer isAuthenticated /> : null}
-      <CardVerificationAlerts memberUuid={memberId} />
     </div>
   );
 };

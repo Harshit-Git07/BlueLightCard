@@ -24,15 +24,7 @@
     "oas": "npm -ws run --if-present oas",
     "e2e:identity": "npm -ws run --if-present e2e:identity",
     "prepare": "husky install",
-    "seed": "esbuild scripts/seed/index.ts --bundle --platform=node --outdir=dist && node dist/index.js",
-    "lint:ui:shared": "cd packages/shared-ui && npm run lint  && npm run typecheck",
-    "lint:ui:web": "cd packages/web && npm run lint",
-    "lint:ui:hybrid": "cd packages/mobile-hybrid && npm run lint  && npm run typecheck",
-    "lint:ui": "npm run lint:ui:shared && npm run lint:ui:web && npm run lint:ui:hybrid",
-    "test:ui:shared": "cd packages/shared-ui && npm run test",
-    "test:ui:web": "cd packages/web && npm run test",
-    "test:ui:hybrid": "cd packages/mobile-hybrid && npm run test",
-    "test:ui": "npm run test:ui:shared && npm run test:ui:web && npm run test:ui:hybrid"
+    "seed": "esbuild scripts/seed/index.ts --bundle --platform=node --outdir=dist && node dist/index.js"
   },
   "lint-staged": {
     "packages/api/redemptions/**/*.{js,jsx,mjs,ts,tsx,mts,json,md}": [

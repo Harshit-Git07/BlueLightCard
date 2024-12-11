@@ -5,7 +5,7 @@ import Tooltip from '../Tooltip';
 import { TextCase, transformTextCase } from '../../utils/transformTextCase';
 import { colours, fonts } from '../../tailwind/theme';
 
-export interface FieldLabelProps extends PropsWithChildren {
+interface Props extends PropsWithChildren {
   label?: string;
   description?: string;
   htmlFor: string;
@@ -13,7 +13,7 @@ export interface FieldLabelProps extends PropsWithChildren {
   tooltipPosition?: 'top' | 'bottom' | 'left' | 'right';
 }
 
-const FieldLabel: FC<FieldLabelProps> = ({
+const FieldLabel: FC<Props> = ({
   label,
   description,
   tooltip,
@@ -31,10 +31,12 @@ const FieldLabel: FC<FieldLabelProps> = ({
             htmlFor={htmlFor}
             aria-label={label}
           >
-            {transformTextCase(label, TextCase.CAPS_FIRST_LETTER)}
+            {transformTextCase(label, TextCase.CAPS_FIRST_LETTER_ONLY)}
           </label>
           {tooltip ? (
-            <Tooltip text={tooltip} htmlFor={htmlFor} position={tooltipPosition}>
+            // TODO: MAMA-174 add htmlFor prop to tooltip to correctly calculate ariaDescribedBy in parent input
+            // <Tooltip text={tooltip} htmlFor={htmlFor} position={tooltipPosition}>
+            <Tooltip text={tooltip} position={tooltipPosition}>
               <FontAwesomeIcon
                 icon={faCircleInfo}
                 className={`h-3.5 ${colours.textOnSurfaceSubtle}`}

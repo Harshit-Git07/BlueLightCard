@@ -34,8 +34,8 @@ export const AUTHENTICATED_NAVIGATION_UK: NavigationItem[] = [
     ],
   },
   {
-    id: 'discover-savings',
-    label: 'Discover savings',
+    id: 'discover-more',
+    label: 'Discover More',
     children: [
       {
         id: 'deal-finder',
@@ -58,6 +58,26 @@ export const AUTHENTICATED_NAVIGATION_UK: NavigationItem[] = [
         url: 'https://motoring-discounts.bluelightcard.co.uk',
       },
     ],
+  },
+  {
+    id: 'my-card',
+    label: 'My Card',
+    url: '/highstreetcard.php',
+  },
+  {
+    id: 'my-account',
+    label: 'My Account',
+    url: '/account.php',
+  },
+  {
+    id: 'faq',
+    label: "FAQ's",
+    url: '/support.php#questions',
+  },
+  {
+    id: 'sign-out',
+    label: 'Logout',
+    url: '/',
   },
 ];
 

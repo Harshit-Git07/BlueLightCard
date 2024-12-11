@@ -79,7 +79,6 @@ export const ButtonColour: ThemeColorTokens = {
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-
   Large: 'h-[40px] flex items-center justify-center gap-[8px]',
   XSmall: `h-[28px] flex items-center justify-center gap-[8px] ${fonts.labelSemiBold}`,
   Small: 'h-[32px] flex items-center justify-center gap-[8px]',
@@ -89,7 +88,6 @@ const sizeSpecificPadding: Record<ButtonSize, string> = {
   Large: 'py-[8px] px-[24px]',
   XSmall: 'py-[8px] px-[8px]',
   Small: 'py-[4px] px-[12px]',
-
 };
 
 const Button: FC<ButtonProps> = ({

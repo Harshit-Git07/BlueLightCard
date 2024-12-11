@@ -1,39 +1,35 @@
 import { Meta, StoryFn } from '@storybook/react';
 import Dropdown from './';
-import { DropdownOption, DropdownProps } from './types';
-import { useState } from 'react';
+import { DropdownProps } from './types';
+import { noop } from 'lodash';
 
 const componentMeta: Meta<typeof Dropdown> = {
   title: 'Component System/Dropdown',
   component: Dropdown,
   argTypes: {
-    onChange: { action: 'Option selected' },
+    onSelect: { action: 'Option selected' },
     onOpen: { action: 'Opened' },
   },
 };
 
-const DefaultTemplate: StoryFn<typeof Dropdown> = (args) => {
-  const [selectedOption, setSelectedOption] = useState<DropdownOption | undefined>(undefined);
-
-  const onSelect = (option: DropdownOption) => {
-    setSelectedOption(option);
-  };
-
-  return <Dropdown {...args} onChange={onSelect} value={selectedOption} />;
-};
+const DefaultTemplate: StoryFn<typeof Dropdown> = (args) => <Dropdown {...args} />;
 
 export const Default = DefaultTemplate.bind({});
 
 const defaultArgs: DropdownProps = {
   label: '',
-  tooltip: '',
-  description: '',
-  validationMessage: '',
+  showTooltipIcon: false,
+  tooltipIcon: undefined,
+  tooltipText: '',
+  helpText: '',
+  message: '',
   placeholder: 'Select company',
-  isDisabled: false,
+  disabled: false,
   searchable: false,
-  isValid: undefined,
+  error: false,
+  selectedValue: '',
   dropdownItemsClassName: '',
+  onSelect: noop,
   options: [
     {
       id: '1',
@@ -77,32 +73,34 @@ Searchable.args = {
 export const Disabled = DefaultTemplate.bind({});
 Disabled.args = {
   ...Default.args,
-  isDisabled: true,
+  disabled: true,
 };
 
 export const FullLabelsAndText = DefaultTemplate.bind({});
 FullLabelsAndText.args = {
   ...Default.args,
   label: 'Label Text',
-  tooltip: 'Tool tip text',
-  description: 'Help text',
-  validationMessage: 'Message text',
+  showTooltipIcon: true,
+  tooltipText: 'Tool tip text',
+  helpText: 'Help text',
+  message: 'Message text',
 };
 
 export const ErrorState = DefaultTemplate.bind({});
 ErrorState.args = {
   ...Default.args,
-  isValid: false,
+  error: true,
 };
 
 export const ErrorStateFullLabelsAndText = DefaultTemplate.bind({});
 ErrorStateFullLabelsAndText.args = {
   ...Default.args,
-  isValid: false,
+  error: true,
   label: 'Label Text',
-  tooltip: 'Tool tip text',
-  description: 'Help text',
-  validationMessage: 'Message text',
+  showTooltipIcon: true,
+  tooltipText: 'Tool tip text',
+  helpText: 'Help text',
+  message: 'Message text',
 };
 
 export default componentMeta;

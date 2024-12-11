@@ -2,7 +2,6 @@ import { ChangeEventHandler, FC, useEffect, useMemo, useState } from 'react';
 import { CountryData, CountryIso2, parseCountry, ParsedCountry } from 'react-international-phone';
 import RowItem from '../RowItem';
 import SearchRowItem from '../SearchRowItem';
-import { colours } from '../../../../tailwind/theme';
 
 export type Props = {
   dropdownOpen: boolean;
@@ -57,7 +56,7 @@ const DropdownList: FC<Props> = ({
 
   return (
     <ul
-      className={`${dropdownOpen ? 'block' : 'hidden'} top-[58px] p-[2px] absolute w-full ${colours.backgroundSurfaceContainer} ${className}`}
+      className={`${dropdownOpen ? 'block' : 'hidden'} top-[58px] p-[2px] absolute w-full bg-colour-surface-container-light dark:bg-colour-surface-container-dark ${className}`}
     >
       <div className="sticky top-0 bg-inherit">
         <SearchRowItem
@@ -67,10 +66,10 @@ const DropdownList: FC<Props> = ({
           searchText={userSearch}
           onChange={searchValueOnChange}
         />
-        <div className={`w-full rounded ${colours.backgroundOnSurfaceOutline}`} />
+        <div className="w-full bg-colour-onSurface-outline dark:bg-colour-onSurface-outline-dark rounded" />
       </div>
       <div
-        className={`max-h-[125px] m-[1px] rounded  ${filteredCountries.length > 2 && 'pr-0 overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-colour-onSurface-outline [&::-webkit-scrollbar-track]:bg-surface-container-light dark:bg-colour-surface-container-dark [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full'}`}
+        className={`max-h-[125px] m-[1px] rounded  ${filteredCountries.length > 2 && 'pr-0  overflow-y-scroll [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-colour-onSurface-outline [&::-webkit-scrollbar-track]:bg-surface-container-light dark:bg-colour-surface-container-dark [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-thumb]:rounded-full'}`}
       >
         {filteredCountries.map((c) => (
           <li key={c.iso2}>

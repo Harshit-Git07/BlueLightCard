@@ -38,7 +38,7 @@ describe('validateFile', () => {
     expect(result.type).toEqual('error');
   });
 
-  it.skip('ignores password protected pdf files', async () => {
+  it('ignores password protected pdf files', async () => {
     mockGetDocument.mockRejectedValue({ name: 'PasswordException' });
     const protectedFile = new File(['(⌐□_□)'], 'chucknorris.pdf', { type: 'application/pdf' });
 

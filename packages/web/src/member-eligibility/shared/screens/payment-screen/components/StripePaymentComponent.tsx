@@ -3,7 +3,7 @@ import PaymentForm, {
   StripePaymentResult,
 } from '@bluelightcard/shared-ui/components/Payment/PaymentForm';
 import React, { FC, useCallback } from 'react';
-import { useStripeClient } from '@bluelightcard/shared-ui/components/Payment/useStripeClient';
+import { useStripeClient } from '@/root/src/member-eligibility/shared/screens/payment-screen/providers/Stripe';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import { paymentEvents } from '@/root/src/member-eligibility/shared/screens/payment-screen/ampltitude-events/PaymentEvents';

@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import RadioButton from './index';
-import { SyntheticEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import RadioButtonInput from './components/RadioButtonInput/index';
 
 const ascii = `
@@ -57,7 +57,7 @@ export const WorkingExample: StoryFn<typeof RadioButton> = (args) => {
   const { withBorder, disabled } = args;
   const [selectedId, setSelectedId] = useState('');
   const ids = ['Batman', 'Penguin', 'Joker', 'Robin'];
-  const onChangeHandler = (_: SyntheticEvent, id: string = '') => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>, id: string = '') => {
     setSelectedId(id);
   };
 
@@ -198,7 +198,7 @@ export const AllStatesAndVariants: StoryFn<typeof RadioButton> = () => {
 
 export const CompositionExample: StoryFn<typeof RadioButton> = () => {
   const [selectedId, setSelectedId] = useState('batman');
-  const onChangeHandler = (_: SyntheticEvent, id = '') => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>, id = '') => {
     setSelectedId(id);
   };
   return (

@@ -1,4 +1,4 @@
-import { FieldLabelProps } from '../FieldLabel';
+import { InfoWrapperProps } from '../InfoWrapper';
 
 export type SplitDate = {
   day?: number;
@@ -12,4 +12,4 @@ export type DatePickerProps = {
   errorMessage?: string;
   onChange: (date?: Date) => void;
   minAgeConstraint?: number;
-} & FieldLabelProps;
+} & InfoWrapperProps;

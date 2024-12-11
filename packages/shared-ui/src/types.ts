@@ -180,11 +180,11 @@ export enum BRAND {
 
 export type Brand = BRAND.BLC_UK | BRAND.BLC_AU | BRAND.DDS_UK;
 
-export type FieldProps<onChangeType = ChangeEventHandler<HTMLInputElement>, valueType = string> = {
+export type FieldProps = {
   id?: string;
   name?: string;
-  onChange?: onChangeType;
-  value?: valueType;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  value?: string;
   isValid?: boolean | undefined;
   label?: string;
   tooltip?: string;

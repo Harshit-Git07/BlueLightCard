@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
 import { Offer as SanityOffer } from '@bluelightcard/sanity-types';
+import { addMonths, subMonths } from 'date-fns';
 import { ApiGatewayV1Api } from 'sst/node/api';
 
 import { SearchResult } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
@@ -73,24 +74,40 @@ describe('Search E2E Event Handling', async () => {
   const generatedCompanyUUID = `test-company-${randomUUID().toString()}`;
 
   const activeOfferUUID = `test-${randomUUID().toString()}`;
-  const expiredOfferUUID = `test-${randomUUID().toString()}`;
+  const expiryDateReachedOfferUUID = `test-${randomUUID().toString()}`;
+  const futureStartDateOfferUUID = `test-${randomUUID().toString()}`;
   const evergreenOfferUUID = `test-${randomUUID().toString()}`;
+  const statusExpiredOfferUUID = `test-${randomUUID().toString()}`;
+  const invalidStartDateOfferNoExpiryDateUUID = `test-${randomUUID().toString()}`;
+  const invalidExpiryDateOfferNoStartDateUUID = `test-${randomUUID().toString()}`;
+  const validStartDateOfferNoExpiryDateUUID = `test-${randomUUID().toString()}`;
+  const validExpiryDateOfferNoStartDateUUID = `test-${randomUUID().toString()}`;
 
   const offers: SanityOffer[] = [
     {
       ...buildTestSanityOffer({ _id: activeOfferUUID, company: buildTestSanityCompany({ _id: generatedCompanyUUID }) }),
       name: activeOfferUUID,
-      start: new Date(Date.now()).toISOString(),
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString(),
+      start: subMonths(new Date(), 1).toISOString(),
+      expires: addMonths(new Date(), 1).toISOString(),
+      evergreen: false,
     },
     {
       ...buildTestSanityOffer({
-        _id: expiredOfferUUID,
+        _id: expiryDateReachedOfferUUID,
         company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
       }),
-      name: expiredOfferUUID,
-      start: new Date(Date.now()).toISOString(),
-      expires: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString(),
+      name: expiryDateReachedOfferUUID,
+      start: subMonths(new Date(), 2).toISOString(),
+      expires: subMonths(new Date(), 1).toISOString(),
+    },
+    {
+      ...buildTestSanityOffer({
+        _id: futureStartDateOfferUUID,
+        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+      }),
+      name: futureStartDateOfferUUID,
+      start: addMonths(new Date(), 1).toISOString(),
+      expires: addMonths(new Date(), 2).toISOString(),
     },
     {
       ...buildTestSanityOffer({
@@ -98,9 +115,56 @@ describe('Search E2E Event Handling', async () => {
         company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
       }),
       name: evergreenOfferUUID,
-      start: new Date(Date.now()).toISOString(),
+      start: undefined,
       evergreen: true,
       expires: undefined,
+    },
+    {
+      ...buildTestSanityOffer({
+        _id: statusExpiredOfferUUID,
+        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+      }),
+      name: statusExpiredOfferUUID,
+      start: subMonths(new Date(), 1).toISOString(),
+      expires: addMonths(new Date(), 1).toISOString(),
+      status: 'expired',
+    },
+    {
+      ...buildTestSanityOffer({
+        _id: invalidStartDateOfferNoExpiryDateUUID,
+        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+      }),
+      name: invalidStartDateOfferNoExpiryDateUUID,
+      start: addMonths(new Date(), 1).toISOString(),
+      expires: undefined,
+    },
+    {
+      ...buildTestSanityOffer({
+        _id: invalidExpiryDateOfferNoStartDateUUID,
+        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+      }),
+      name: invalidExpiryDateOfferNoStartDateUUID,
+      start: undefined,
+      expires: subMonths(new Date(), 1).toISOString(),
+    },
+    {
+      ...buildTestSanityOffer({
+        _id: validStartDateOfferNoExpiryDateUUID,
+        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+      }),
+      name: validStartDateOfferNoExpiryDateUUID,
+      start: subMonths(new Date(), 1).toISOString(),
+      expires: undefined,
+    },
+    {
+      ...buildTestSanityOffer({
+        _id: validExpiryDateOfferNoStartDateUUID,
+        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+      }),
+
+      name: validExpiryDateOfferNoStartDateUUID,
+      start: undefined,
+      expires: addMonths(new Date(), 1).toISOString(),
     },
   ];
 
@@ -119,7 +183,7 @@ describe('Search E2E Event Handling', async () => {
     await new Promise((resolve) => setTimeout(resolve, 5000));
   });
 
-  it('should consume offer created event with offer expires set', async () => {
+  it('should return offer with valid offer start and end dates set', async () => {
     const companyName = offers[0].company?.brandCompanyDetails?.[0]?.companyName ?? '';
     const expectedSearchResult: SearchResult = {
       ID: activeOfferUUID,
@@ -145,22 +209,9 @@ describe('Search E2E Event Handling', async () => {
     expect(searchResult).toStrictEqual(expectedSearchResult);
   });
 
-  it('should not return expired offers in search results', async () => {
-    const result = await whenSearchIsCalledWith(
-      { query: expiredOfferUUID, dob: '1990-01-01', organisation: 'DEN' },
-      { Authorization: `Bearer ${testUserTokens.idToken}` },
-    );
-
-    const results = (await result.json()) as { data: SearchResult[] };
-
-    const searchResult = results.data.find((result) => result.ID === expiredOfferUUID);
-
-    expect([searchResult]).toStrictEqual([undefined]);
-  });
-
-  it('should consume offer created event with offer expires as undefined', async () => {
-    const companyName = offers[2].company?.brandCompanyDetails?.[0]?.companyName ?? '';
-    const companyId = offers[2].company?._id ?? 0;
+  it('should return offer with offer expires & offer start as undefined (evergeen)', async () => {
+    const companyName = offers[3].company?.brandCompanyDetails?.[0]?.companyName ?? '';
+    const companyId = offers[3].company?._id ?? 0;
 
     const expectedSearchResult: SearchResult[] = [
       {
@@ -185,5 +236,128 @@ describe('Search E2E Event Handling', async () => {
 
     const searchResult = results.data.find((result) => result.ID === evergreenOfferUUID);
     expect([searchResult]).toStrictEqual(expectedSearchResult);
+  });
+
+  it('should return offer with offer expires not set & offer start valid', async () => {
+    const companyName = offers[7].company?.brandCompanyDetails?.[0]?.companyName ?? '';
+    const companyId = offers[7].company?._id ?? 0;
+
+    const expectedSearchResult: SearchResult[] = [
+      {
+        ID: validStartDateOfferNoExpiryDateUUID,
+        OfferName: validStartDateOfferNoExpiryDateUUID,
+        OfferType: 'online',
+        offerimg: 'https://testimage.com',
+        CompID: companyId.toString(),
+        LegacyID: 1,
+        OfferDescription: 'Test to see if all linked to webhook - attempt n',
+        LegacyCompanyID: 1,
+        CompanyName: companyName,
+      },
+    ];
+
+    const result = await whenSearchIsCalledWith(
+      { query: validStartDateOfferNoExpiryDateUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { Authorization: `Bearer ${testUserTokens.idToken}` },
+    );
+
+    const results = (await result.json()) as { data: SearchResult[] };
+
+    const searchResult = results.data.find((result) => result.ID === validStartDateOfferNoExpiryDateUUID);
+    expect([searchResult]).toStrictEqual(expectedSearchResult);
+  });
+
+  it('should return offer with offer start not set & offer expires valid', async () => {
+    const companyName = offers[8].company?.brandCompanyDetails?.[0]?.companyName ?? '';
+    const companyId = offers[8].company?._id ?? 0;
+
+    const expectedSearchResult: SearchResult[] = [
+      {
+        ID: validExpiryDateOfferNoStartDateUUID,
+        OfferName: validExpiryDateOfferNoStartDateUUID,
+        OfferType: 'online',
+        offerimg: 'https://testimage.com',
+        CompID: companyId.toString(),
+        LegacyID: 1,
+        OfferDescription: 'Test to see if all linked to webhook - attempt n',
+        LegacyCompanyID: 1,
+        CompanyName: companyName,
+      },
+    ];
+
+    const result = await whenSearchIsCalledWith(
+      { query: validExpiryDateOfferNoStartDateUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { Authorization: `Bearer ${testUserTokens.idToken}` },
+    );
+
+    const results = (await result.json()) as { data: SearchResult[] };
+
+    const searchResult = results.data.find((result) => result.ID === validExpiryDateOfferNoStartDateUUID);
+    expect([searchResult]).toStrictEqual(expectedSearchResult);
+  });
+
+  it('should not return offers with expiry date reached in search results', async () => {
+    const result = await whenSearchIsCalledWith(
+      { query: expiryDateReachedOfferUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { Authorization: `Bearer ${testUserTokens.idToken}` },
+    );
+
+    const results = (await result.json()) as { data: SearchResult[] };
+
+    const searchResult = results.data.find((result) => result.ID === expiryDateReachedOfferUUID);
+
+    expect([searchResult]).toStrictEqual([undefined]);
+  });
+
+  it('should not return offers not yet started in search results', async () => {
+    const result = await whenSearchIsCalledWith(
+      { query: futureStartDateOfferUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { Authorization: `Bearer ${testUserTokens.idToken}` },
+    );
+
+    const results = (await result.json()) as { data: SearchResult[] };
+
+    const searchResult = results.data.find((result) => result.ID === futureStartDateOfferUUID);
+
+    expect([searchResult]).toStrictEqual([undefined]);
+  });
+
+  it('should not return offers status "expired" in search results', async () => {
+    const result = await whenSearchIsCalledWith(
+      { query: statusExpiredOfferUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { Authorization: `Bearer ${testUserTokens.idToken}` },
+    );
+
+    const results = (await result.json()) as { data: SearchResult[] };
+
+    const searchResult = results.data.find((result) => result.ID === statusExpiredOfferUUID);
+
+    expect([searchResult]).toStrictEqual([undefined]);
+  });
+
+  it('should not return offer with no expiry date and start date in the future in search results', async () => {
+    const result = await whenSearchIsCalledWith(
+      { query: invalidStartDateOfferNoExpiryDateUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { Authorization: `Bearer ${testUserTokens.idToken}` },
+    );
+
+    const results = (await result.json()) as { data: SearchResult[] };
+
+    const searchResult = results.data.find((result) => result.ID === invalidStartDateOfferNoExpiryDateUUID);
+
+    expect([searchResult]).toStrictEqual([undefined]);
+  });
+
+  it('should not return offer with no start date and expiry date in the past in search results', async () => {
+    const result = await whenSearchIsCalledWith(
+      { query: invalidExpiryDateOfferNoStartDateUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { Authorization: `Bearer ${testUserTokens.idToken}` },
+    );
+
+    const results = (await result.json()) as { data: SearchResult[] };
+
+    const searchResult = results.data.find((result) => result.ID === invalidExpiryDateOfferNoStartDateUUID);
+
+    expect([searchResult]).toStrictEqual([undefined]);
   });
 });

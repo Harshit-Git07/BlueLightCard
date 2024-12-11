@@ -50,26 +50,85 @@ describe('OpenSearchSearchRequests', () => {
     },
   };
 
-  const expectedOfferNotExpiredAndEvergreenQuery: QueryDslQueryContainer = {
+  const expectedOfferIsLive: QueryDslQueryContainer = {
     bool: {
-      should: [
-        {
-          bool: {
-            must_not: {
-              exists: {
-                field: 'offer_expires', // Condition for documents without offer_expires
-              },
-            },
-          },
-        },
+      must: [
         {
           bool: {
             filter: [
               {
-                range: {
-                  offer_expires: {
-                    gte: 'now', // Condition for future dates
-                  },
+                term: {
+                  offer_status: 'live',
+                },
+              },
+            ],
+          },
+        },
+        {
+          bool: {
+            should: [
+              {
+                bool: {
+                  must_not: [
+                    {
+                      exists: {
+                        field: 'offer_expires',
+                      },
+                    },
+                    {
+                      exists: {
+                        field: 'offer_start',
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                bool: {
+                  filter: [
+                    {
+                      bool: {
+                        should: [
+                          {
+                            range: {
+                              offer_expires: {
+                                gte: 'now',
+                              },
+                            },
+                          },
+                          {
+                            bool: {
+                              must_not: {
+                                exists: {
+                                  field: 'offer_expires',
+                                },
+                              },
+                            },
+                          },
+                        ],
+                        minimum_should_match: 1,
+                      },
+                    },
+                  ],
+                  should: [
+                    {
+                      range: {
+                        offer_start: {
+                          lte: 'now',
+                        },
+                      },
+                    },
+                    {
+                      bool: {
+                        must_not: {
+                          exists: {
+                            field: 'offer_start',
+                          },
+                        },
+                      },
+                    },
+                  ],
+                  minimum_should_match: 1,
                 },
               },
             ],
@@ -168,7 +227,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferTypeQuery,
       expectedAgeRestrictedQuery,
       expectedCompanyNameQuery,
-      expectedOfferNotExpiredAndEvergreenQuery,
+      expectedOfferIsLive,
     ]);
 
     const result = target.buildSearchRequest(searchTerm, offerType);
@@ -193,7 +252,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferTypeQuery,
       expectedAgeRestrictedQuery,
       expectedTagsQuery,
-      expectedOfferNotExpiredAndEvergreenQuery,
+      expectedOfferIsLive,
     ]);
 
     const result = target.buildSearchRequest(searchTerm, offerType);
@@ -206,7 +265,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferTypeQuery,
       expectedAgeRestrictedQuery,
       expectedOfferNameQuery,
-      expectedOfferNotExpiredAndEvergreenQuery,
+      expectedOfferIsLive,
     ]);
 
     const result = target.buildSearchRequest(searchTerm, offerType);
@@ -219,7 +278,7 @@ describe('OpenSearchSearchRequests', () => {
       expectedOfferTypeQuery,
       expectedAgeRestrictedQuery,
       expectedCompanyNameFuzzyQuery,
-      expectedOfferNotExpiredAndEvergreenQuery,
+      expectedOfferIsLive,
     ]);
 
     const result = target.buildSearchRequest(searchTerm, offerType);
@@ -232,7 +291,7 @@ describe('OpenSearchSearchRequests', () => {
       const categoryId = '123';
       const expectedSearchRequest = buildSearchRequest([
         expectedAgeRestrictedQuery,
-        expectedOfferNotExpiredAndEvergreenQuery,
+        expectedOfferIsLive,
         {
           match: {
             category_id: categoryId,
@@ -252,7 +311,7 @@ describe('OpenSearchSearchRequests', () => {
       body: {
         query: {
           bool: {
-            must: [expectedAgeRestrictedQuery, expectedOfferNotExpiredAndEvergreenQuery],
+            must: [expectedAgeRestrictedQuery, expectedOfferIsLive],
           },
         },
         size: 0,

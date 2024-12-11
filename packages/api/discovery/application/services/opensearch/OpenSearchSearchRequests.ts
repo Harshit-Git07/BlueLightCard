@@ -7,8 +7,8 @@ import {
   companyNameFuzzyQuery,
   companyNameInCompaniesAllQuery,
   companyNameQuery,
+  offerIsLiveQuery,
   offerNameQuery,
-  offerNotExpiredAndEvergreenQuery,
   offerTagQuery,
   offerTypeQuery,
 } from '@blc-mono/discovery/application/services/opensearch/OpenSearchQueries';
@@ -62,7 +62,7 @@ export class OpenSearchSearchRequests {
     const mustQueries = [
       ageRestrictionsQuery(this.ageRestrictions),
       companyNameQuery(this.searchTerm),
-      offerNotExpiredAndEvergreenQuery(),
+      offerIsLiveQuery(),
     ];
 
     if (this.offerType) {
@@ -81,7 +81,7 @@ export class OpenSearchSearchRequests {
   }
 
   private buildAllCompaniesSearch(): SearchRequest {
-    const mustQueries = [ageRestrictionsQuery(this.ageRestrictions), offerNotExpiredAndEvergreenQuery()];
+    const mustQueries = [ageRestrictionsQuery(this.ageRestrictions), offerIsLiveQuery()];
 
     return {
       index: this.index,
@@ -128,7 +128,7 @@ export class OpenSearchSearchRequests {
     const mustQueries = [
       ageRestrictionsQuery(this.ageRestrictions),
       offerTagQuery(this.searchTerm),
-      offerNotExpiredAndEvergreenQuery(),
+      offerIsLiveQuery(),
     ];
 
     if (this.offerType) {
@@ -150,7 +150,7 @@ export class OpenSearchSearchRequests {
     const mustQueries = [
       ageRestrictionsQuery(this.ageRestrictions),
       offerNameQuery(this.searchTerm),
-      offerNotExpiredAndEvergreenQuery(),
+      offerIsLiveQuery(),
     ];
 
     if (this.offerType) {
@@ -172,7 +172,7 @@ export class OpenSearchSearchRequests {
     const mustQueries = [
       ageRestrictionsQuery(this.ageRestrictions),
       companyNameFuzzyQuery(this.searchTerm),
-      offerNotExpiredAndEvergreenQuery(),
+      offerIsLiveQuery(),
     ];
 
     if (this.offerType) {
@@ -191,11 +191,7 @@ export class OpenSearchSearchRequests {
   }
 
   private buildCategoryIdSearch(categoryId: string): SearchRequest {
-    const mustQueries = [
-      ageRestrictionsQuery(this.ageRestrictions),
-      offerNotExpiredAndEvergreenQuery(),
-      categoryIdQuery(categoryId),
-    ];
+    const mustQueries = [ageRestrictionsQuery(this.ageRestrictions), offerIsLiveQuery(), categoryIdQuery(categoryId)];
     return {
       ...this.buildBaseSearch(),
       body: {

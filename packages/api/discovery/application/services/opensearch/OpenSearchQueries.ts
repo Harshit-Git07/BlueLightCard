@@ -100,10 +100,18 @@ export const offerNameQuery = (searchTerm: string): QueryDslQueryContainer => {
   };
 };
 
+export const offerIsLiveQuery = (): QueryDslQueryContainer => {
+  return {
+    bool: {
+      must: [offerStatusLiveQuery(), offerNotExpiredAndEvergreenQuery()],
+    },
+  };
+};
+
 export const offerNotExpiredAndEvergreenQuery = (): QueryDslQueryContainer => {
   return {
     bool: {
-      should: [offerEvergreenQuery(), offerNotExpiredQuery()],
+      should: [offerEvergreenQuery(), offerWithinExpiryRangeQuery()],
     },
   };
 };
@@ -111,24 +119,80 @@ export const offerNotExpiredAndEvergreenQuery = (): QueryDslQueryContainer => {
 export const offerEvergreenQuery = (): QueryDslQueryContainer => {
   return {
     bool: {
-      must_not: {
-        exists: {
-          field: 'offer_expires',
+      must_not: [
+        {
+          exists: {
+            field: 'offer_expires',
+          },
         },
-      },
+        {
+          exists: {
+            field: 'offer_start',
+          },
+        },
+      ],
     },
   };
 };
 
-export const offerNotExpiredQuery = (): QueryDslQueryContainer => {
+export const offerWithinExpiryRangeQuery = (): QueryDslQueryContainer => {
   return {
     bool: {
       filter: [
         {
+          bool: {
+            should: [
+              {
+                range: {
+                  offer_expires: {
+                    gte: 'now',
+                  },
+                },
+              },
+              {
+                bool: {
+                  must_not: {
+                    exists: {
+                      field: 'offer_expires',
+                    },
+                  },
+                },
+              },
+            ],
+            minimum_should_match: 1,
+          },
+        },
+      ],
+      should: [
+        {
           range: {
-            offer_expires: {
-              gte: 'now',
+            offer_start: {
+              lte: 'now',
             },
+          },
+        },
+        {
+          bool: {
+            must_not: {
+              exists: {
+                field: 'offer_start',
+              },
+            },
+          },
+        },
+      ],
+      minimum_should_match: 1,
+    },
+  };
+};
+
+export const offerStatusLiveQuery = (): QueryDslQueryContainer => {
+  return {
+    bool: {
+      filter: [
+        {
+          term: {
+            offer_status: 'live',
           },
         },
       ],

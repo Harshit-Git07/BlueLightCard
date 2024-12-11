@@ -7,6 +7,11 @@ export default defineConfig({
     include: ['./e2e/**/*.test.ts'],
     globals: true,
     testTimeout: 60000,
+    poolOptions: {
+      threads: {
+        singleThread: true,
+      },
+    },
   },
   esbuild: {
     target: 'es2020',

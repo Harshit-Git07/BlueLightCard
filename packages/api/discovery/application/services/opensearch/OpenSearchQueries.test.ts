@@ -1,6 +1,5 @@
 import * as getEnvModule from '@blc-mono/core/utils/getEnv';
 import { AgeRestriction } from '@blc-mono/discovery/application/models/AgeRestrictions';
-jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 import {
   ageRestrictionsQuery,
   categoryIdQuery,
@@ -9,10 +8,13 @@ import {
   companyNameQuery,
   offerEvergreenQuery,
   offerNameQuery,
-  offerNotExpiredQuery,
+  offerStatusLiveQuery,
   offerTagQuery,
   offerTypeQuery,
+  offerWithinExpiryRangeQuery,
 } from '@blc-mono/discovery/application/services/opensearch/OpenSearchQueries';
+
+jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 
 describe('OpenSearchQueries', () => {
   const searchTerm = 'Nike';
@@ -146,21 +148,56 @@ describe('OpenSearchQueries', () => {
     expect(query).toEqual(expectedQuery);
   });
 
-  it('should build an offer not expired query', () => {
+  it('should build an offer within valid expiry range query', () => {
     const expectedQuery = {
       bool: {
         filter: [
           {
+            bool: {
+              should: [
+                {
+                  range: {
+                    offer_expires: {
+                      gte: 'now',
+                    },
+                  },
+                },
+                {
+                  bool: {
+                    must_not: {
+                      exists: {
+                        field: 'offer_expires',
+                      },
+                    },
+                  },
+                },
+              ],
+              minimum_should_match: 1,
+            },
+          },
+        ],
+        should: [
+          {
             range: {
-              offer_expires: {
-                gte: 'now', // Condition for future dates
+              offer_start: {
+                lte: 'now',
+              },
+            },
+          },
+          {
+            bool: {
+              must_not: {
+                exists: {
+                  field: 'offer_start',
+                },
               },
             },
           },
         ],
+        minimum_should_match: 1,
       },
     };
-    const query = offerNotExpiredQuery();
+    const query = offerWithinExpiryRangeQuery();
 
     expect(query).toEqual(expectedQuery);
   });
@@ -168,14 +205,38 @@ describe('OpenSearchQueries', () => {
   it('should build an offer evergreen query', () => {
     const expectedQuery = {
       bool: {
-        must_not: {
-          exists: {
-            field: 'offer_expires', // Condition for documents without offer_expires
+        must_not: [
+          {
+            exists: {
+              field: 'offer_expires',
+            },
           },
-        },
+          {
+            exists: {
+              field: 'offer_start',
+            },
+          },
+        ],
       },
     };
     const query = offerEvergreenQuery();
+
+    expect(query).toEqual(expectedQuery);
+  });
+
+  it('should build an offer_status live query', () => {
+    const expectedQuery = {
+      bool: {
+        filter: [
+          {
+            term: {
+              offer_status: 'live',
+            },
+          },
+        ],
+      },
+    };
+    const query = offerStatusLiveQuery();
 
     expect(query).toEqual(expectedQuery);
   });

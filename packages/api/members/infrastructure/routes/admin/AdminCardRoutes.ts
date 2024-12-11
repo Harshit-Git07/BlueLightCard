@@ -28,29 +28,25 @@ export function adminCardRoutes(
     'GET /admin/cards/batches': Route.createRoute({
       ...defaultRouteProps,
       name: 'AdminGetCardPrintBatches',
-      handler:
-        'packages/api/members/application/handlers/admin/cards/batch/getCardPrintBatches.handler',
+      handler: 'packages/api/members/application/handlers/admin/batch/getCardPrintBatches.handler',
       responseModelType: CardPrintBatchModel,
     }),
     'GET /admin/cards/batches/{batchId}': Route.createRoute({
       ...defaultRouteProps,
       name: 'AdminGetCardPrintBatch',
-      handler:
-        'packages/api/members/application/handlers/admin/cards/batch/getCardPrintBatch.handler',
+      handler: 'packages/api/members/application/handlers/admin/batch/getCardPrintBatch.handler',
       responseModelType: CardPrintBatchModel,
     }),
     'POST /admin/cards/batches': Route.createRoute({
       ...defaultRouteProps,
       name: 'AdminCreateCardPrintBatch',
-      handler:
-        'packages/api/members/application/handlers/admin/cards/batch/createCardPrintBatch.handler',
+      handler: 'packages/api/members/application/handlers/admin/batch/createCardPrintBatch.handler',
       requestModelType: CardPrintBatchModel,
     }),
     'PUT /admin/cards/batches/{batchId}': Route.createRoute({
       ...defaultRouteProps,
       name: 'AdminUpdateCardPrintBatch',
-      handler:
-        'packages/api/members/application/handlers/admin/cards/batch/updateCardPrintBatch.handler',
+      handler: 'packages/api/members/application/handlers/admin/batch/updateCardPrintBatch.handler',
       requestModelType: CardPrintBatchModel,
     }),
   };

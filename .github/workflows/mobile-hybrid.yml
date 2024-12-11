@@ -237,5 +237,5 @@ jobs:
       - changelog
       - sharedui-changelog
       - staging
-    uses: ./.github/workflows/production-deploy-offers.yml
+    uses: ./.github/workflows/production-deploy-mobile-hybrid.yml
     secrets: inherit

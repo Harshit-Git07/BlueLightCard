@@ -158,7 +158,7 @@ export function mapIdRequirements(
         title: rule.idTitle,
         guidelines: rule.idGuidelines,
         description: rule.idDescription,
-        required: Boolean(rule.required),
+        required: rule.required === 'true',
       });
       minimumRequired = Math.max(rule.minimumRequired, minimumRequired);
     }

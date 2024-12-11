@@ -2,7 +2,7 @@ import { MemberRedemptionEventDetail } from '@blc-mono/core/schemas/redemptions'
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { RedemptionConfigEntity } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
 
-import { RedeemParams, VaultDetails } from './IRedeemStrategy';
+import { BallotDetails, RedeemParams, VaultDetails } from './IRedeemStrategy';
 import { RedemptionConfigError } from './redeemVaultStrategy/helpers/RedemptionConfigError';
 
 export type BuildMemberRedemptionEventDetailParams = {
@@ -11,6 +11,7 @@ export type BuildMemberRedemptionEventDetailParams = {
   url?: string;
   code?: string;
   vaultDetails?: VaultDetails;
+  ballotDetails?: BallotDetails;
 };
 
 export class MemberRedemptionEventDetailBuilder {
@@ -21,7 +22,8 @@ export class MemberRedemptionEventDetailBuilder {
   ): MemberRedemptionEventDetail {
     let memberRedemptionEventDetail: MemberRedemptionEventDetail;
 
-    const { redemptionConfigEntity, params, url, code, vaultDetails } = buildMemberRedemptionEventDetailParams;
+    const { redemptionConfigEntity, params, url, code, vaultDetails, ballotDetails } =
+      buildMemberRedemptionEventDetailParams;
 
     const memberDetails = {
       memberId: params.memberId,
@@ -43,10 +45,10 @@ export class MemberRedemptionEventDetailBuilder {
         memberRedemptionEventDetail = {
           memberDetails,
           redemptionDetails: {
+            redemptionType: 'ballot',
+            url: url ?? '',
             ...baseRedemptionDetails,
-            redemptionType: 'generic',
-            code: '',
-            url: '',
+            ...ballotDetails,
           },
         };
         return memberRedemptionEventDetail;

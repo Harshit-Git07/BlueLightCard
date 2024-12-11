@@ -57,6 +57,15 @@ export const MemberRedemptionEventDetailSchema = z.object({
           integrationId: z.string().nullable().optional(),
         })
         .optional(),
+      ballotDetails: z
+        .object({
+          id: z.string(),
+          totalTickets: NON_NEGATIVE_INT,
+          eventDate: z.string(),
+          drawDate: z.string(),
+          offerName: z.string(),
+        })
+        .optional(),
     }),
     z.union([
       z.object({
@@ -83,7 +92,6 @@ export const MemberRedemptionEventDetailSchema = z.object({
       }),
       z.object({
         redemptionType: z.literal('ballot'),
-        code: z.string(),
         url: z.string(),
       }),
       z.object({

@@ -54,6 +54,7 @@ type BrazeEmailCampaignsConfig = {
   brazeVaultEmailCampaignId: string;
   brazeVaultQrCodeEmailCampaignId: string;
   brazeVerifyEmailCampaignId: string;
+  brazeBallotEmailCampaignId: string;
 };
 
 type BrazePushNotificationRedemptionCampaignsConfig = {
@@ -168,6 +169,7 @@ export class RedemptionsStackConfigResolver {
           brazeVaultQrCodeEmailCampaignId: '31172aa1-2e31-4a77-b9ac-43896f511beb',
           brazeShowCardEmailCampaignId: 'bf54574e-f31e-418b-bd10-649762b74e6a',
           brazeVerifyEmailCampaignId: '3f33aec9-f493-4542-a190-db9e091118a4',
+          brazeBallotEmailCampaignId: '',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
           brazeRedemptionVaultPushNotificationCampaignId: 'add3d84e-0ed2-447f-a2f8-a61fed443927',
@@ -223,6 +225,7 @@ export class RedemptionsStackConfigResolver {
           brazeVaultEmailCampaignId: '1392bce7-45a4-7e40-7f91-d053740c6a9c',
           brazeVaultQrCodeEmailCampaignId: '87597364-b176-96f5-4583-06e74126416b',
           brazeVerifyEmailCampaignId: 'd4209313-6532-4b4a-8d3d-3619d6854096',
+          brazeBallotEmailCampaignId: '',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
           brazeRedemptionVaultPushNotificationCampaignId: '7c67b20d-71c3-4cc3-b967-99ad95b4d977',
@@ -278,6 +281,7 @@ export class RedemptionsStackConfigResolver {
           brazeVaultEmailCampaignId: '533ea136-1e73-52c4-e037-b95a4f545362',
           brazeVaultQrCodeEmailCampaignId: '38688c03-8b5c-43da-fb38-76908480b5e9',
           brazeVerifyEmailCampaignId: 'ef8cd635-e74e-459d-8e94-d1326654350b',
+          brazeBallotEmailCampaignId: '',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
           brazeRedemptionVaultPushNotificationCampaignId: 'f50c6960-d3ca-48e4-af6c-3590b1e5e63d',
@@ -347,6 +351,7 @@ export class RedemptionsStackConfigResolver {
           brazeVaultQrCodeEmailCampaignId: 'eb6dac40-f99b-4634-889b-2f6451beaa82',
           brazeShowCardEmailCampaignId: '27928c2b-3d29-4837-8b62-4989da1383a9',
           brazeVerifyEmailCampaignId: 'd9e80016-85d3-4e73-a76e-022a96fa8f0d',
+          brazeBallotEmailCampaignId: '11189170-53b3-4a22-8175-8d4ee7111a2b',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
           brazeRedemptionVaultPushNotificationCampaignId: '96d2da22-654d-418d-9184-28d6d01a08c2',
@@ -407,6 +412,7 @@ export class RedemptionsStackConfigResolver {
           brazeVaultEmailCampaignId: 'e5d1d088-b766-6edf-8b9a-85b26da52ea2',
           brazeVaultQrCodeEmailCampaignId: 'a83acf23-6427-60d5-da8e-122dd7a002d2',
           brazeVerifyEmailCampaignId: '6299b1f9-3ed4-4422-ab0b-c7ce4752ff2e',
+          brazeBallotEmailCampaignId: '',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
           brazeRedemptionVaultPushNotificationCampaignId: 'c3ca36e2-399e-466a-8b66-5fd992084ee1',
@@ -466,6 +472,7 @@ export class RedemptionsStackConfigResolver {
           brazeVaultEmailCampaignId: '3a791d7c-8a61-5fb9-d41f-68c861bbf87f',
           brazeVaultQrCodeEmailCampaignId: '3fadd0eb-f39c-88f0-c6c4-8d410c2dae72',
           brazeVerifyEmailCampaignId: '723c5e1d-c752-46db-a387-37e80f6653fe',
+          brazeBallotEmailCampaignId: '',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
           brazeRedemptionVaultPushNotificationCampaignId: '8d74b2ad-07ab-4674-95ea-3ed0943e4e7c',
@@ -527,6 +534,7 @@ export class RedemptionsStackConfigResolver {
         brazeVaultEmailCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
         brazeVaultQrCodeEmailCampaignId: 'eb6dac40-f99b-4634-889b-2f6451beaa82',
         brazeVerifyEmailCampaignId: 'd9e80016-85d3-4e73-a76e-022a96fa8f0d',
+        brazeBallotEmailCampaignId: '11189170-53b3-4a22-8175-8d4ee7111a2b',
       },
       brazePushNotificationRedemptionCampaignsConfig: {
         brazeRedemptionVaultPushNotificationCampaignId: '96d2da22-654d-418d-9184-28d6d01a08c2',
@@ -621,6 +629,7 @@ export class RedemptionsStackConfigResolver {
           RedemptionsStackEnvironmentKeys.BRAZE_VERIFY_EMAIL_CAMPAIGN_ID,
           'd9e80016-85d3-4e73-a76e-022a96fa8f0d',
         ),
+        brazeBallotEmailCampaignId: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_BALLOT_EMAIL_CAMPAIGN_ID),
       },
       brazePushNotificationRedemptionCampaignsConfig: {
         brazeRedemptionGenericPushNotificationCampaignId: getEnv(

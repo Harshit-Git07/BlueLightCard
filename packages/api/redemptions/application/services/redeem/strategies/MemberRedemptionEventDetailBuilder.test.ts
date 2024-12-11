@@ -281,4 +281,36 @@ describe('buildMemberRedemptionEventDetail', () => {
       });
     },
   );
+
+  it('builds a ballot MemberRedemptionEventDetail', () => {
+    const redemptionConfigEntity: RedemptionConfigEntity = redemptionConfigEntityFactory.build({
+      redemptionType: 'ballot',
+    });
+
+    const actualMemberRedemptionEventDetail: MemberRedemptionEventDetail =
+      memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
+        redemptionConfigEntity,
+        params,
+      });
+
+    const expectedMemberRedemptionEventDetail: MemberRedemptionEventDetail = {
+      memberDetails: {
+        memberId: params.memberId,
+        brazeExternalUserId: params.brazeExternalUserId,
+      },
+      redemptionDetails: {
+        redemptionType: 'ballot',
+        url: '',
+        redemptionId: redemptionConfigEntity.id,
+        companyId: redemptionConfigEntity.companyId,
+        companyName: params.companyName,
+        offerId: redemptionConfigEntity.offerId,
+        offerName: params.offerName,
+        affiliate: redemptionConfigEntity.affiliate,
+        clientType: params.clientType,
+      },
+    };
+
+    expect(actualMemberRedemptionEventDetail).toEqual(expectedMemberRedemptionEventDetail);
+  });
 });

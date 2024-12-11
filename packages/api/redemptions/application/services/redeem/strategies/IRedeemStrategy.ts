@@ -16,12 +16,6 @@ import { RedemptionConfigEntity } from '../../../repositories/RedemptionConfigRe
 
 export type RedeemVaultRedemptionType = typeof VAULTQR | typeof VAULT;
 
-export type RedeemBallotStrategyResult = {
-  kind: 'Ok';
-  redemptionType: typeof BALLOT;
-  redemptionDetails: Record<never, never>;
-};
-
 export type RedeemGenericStrategyResult = {
   kind: 'Ok';
   redemptionType: typeof GENERIC;
@@ -54,6 +48,23 @@ export type RedeemShowCardStrategyResult = {
   kind: 'Ok';
   redemptionType: typeof SHOWCARD;
   redemptionDetails: Record<never, never>;
+};
+
+export type BallotDetails = {
+  drawDate: Date;
+  eventDate: Date;
+  totalTickets: number;
+  offerName: string;
+};
+
+export type RedeemBallotStrategyRedemptionDetails = {
+  ballotDetails?: BallotDetails;
+};
+
+export type RedeemBallotStrategyResult = {
+  kind: 'Ok';
+  redemptionType: typeof BALLOT;
+  redemptionDetails: RedeemBallotStrategyRedemptionDetails;
 };
 
 export type VaultDetails = {

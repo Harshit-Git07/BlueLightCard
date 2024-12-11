@@ -100,8 +100,12 @@ export class RedeemBallotStrategy implements IRedeemStrategy {
       this.memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
         redemptionConfigEntity,
         params,
-        url: '',
-        code: '',
+        ballotDetails: {
+          drawDate: ballot.drawDate,
+          eventDate: ballot.eventDate,
+          totalTickets: ballot.totalTickets,
+          offerName: ballot.offerName,
+        },
       });
 
     await this.redemptionsEventsRepository.publishRedemptionEvent(memberRedemptionEventDetail).catch((error) => {
@@ -114,7 +118,14 @@ export class RedeemBallotStrategy implements IRedeemStrategy {
     return Promise.resolve({
       kind: 'Ok',
       redemptionType: 'ballot',
-      redemptionDetails: {},
+      redemptionDetails: {
+        ballotDetails: {
+          drawDate: ballot.drawDate,
+          eventDate: ballot.eventDate,
+          totalTickets: ballot.totalTickets,
+          offerName: ballot.offerName,
+        },
+      },
     });
   }
 }

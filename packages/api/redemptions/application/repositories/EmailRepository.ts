@@ -18,6 +18,18 @@ import {
   IBrazeEmailClientProvider,
 } from '@blc-mono/redemptions/libs/Email/BrazeEmailClientProvider';
 
+export type BallotTransactionalEmailParams = {
+  brazeExternalUserId: string;
+  memberId: string;
+  eventDate: string;
+  drawDate: string;
+  offerName: string;
+  totalTickets: number;
+  url: string;
+  companyName: string;
+  redemptionType: RedemptionType;
+};
+
 export type VaultOrGenericTransactionalEmailParams = {
   brazeExternalUserId: string;
   memberId: string;
@@ -55,6 +67,7 @@ export interface IEmailRepository {
   ) => Promise<void>;
   sendShowCardEmail: (payload: ShowCardTransactionalEmailParams) => Promise<void>;
   usersTrackThrottled(usersWithAttributes: UsersTrackObject['attributes']): Promise<void>;
+  sendBallotTransactionalEmail: (payload: BallotTransactionalEmailParams) => Promise<void>;
 }
 
 export class EmailRepository implements IEmailRepository {
@@ -348,6 +361,49 @@ export class EmailRepository implements IEmailRepository {
 
     this.logger.info({
       message: `successfully sent ${redemptionType} affiliate redemption email`,
+      context: emailServiceResponse,
+    });
+  }
+
+  async sendBallotTransactionalEmail(params: BallotTransactionalEmailParams): Promise<void> {
+    const emailClient = await this.getClient();
+
+    const { redemptionType, brazeExternalUserId } = params;
+    if (redemptionType !== 'ballot') {
+      this.logger.info({
+        message: `redemption type is incorrect for ballot email template: ${redemptionType}`,
+        context: params,
+      });
+      throw new Error('RedemptionType error, expects ballot');
+    }
+
+    const emailPayload: CampaignsTriggerSendObject = {
+      campaign_id: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_BALLOT_EMAIL_CAMPAIGN_ID),
+      recipients: [
+        {
+          external_user_id: brazeExternalUserId,
+        },
+      ],
+      trigger_properties: {
+        eventDate: params.eventDate,
+        drawDate: params.drawDate,
+        eventName: params.offerName,
+        totalTickets: params.totalTickets,
+      },
+    };
+
+    const emailServiceResponse = await emailClient.campaigns.trigger.send(emailPayload);
+
+    if (!emailServiceResponse.message.includes('success')) {
+      this.logger.info({
+        message: `Failed to send ${redemptionType} email`,
+        context: emailServiceResponse,
+      });
+      throw new Error(`Failed to send ${redemptionType} email`);
+    }
+
+    this.logger.info({
+      message: `successfully sent ${redemptionType} email`,
       context: emailServiceResponse,
     });
   }

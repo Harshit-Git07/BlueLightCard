@@ -44,6 +44,8 @@ export function createRedemptionTransactionalEmailRule(
         config.brazeEmailCampaignsConfig.brazeShowCardEmailCampaignId,
       [RedemptionsStackEnvironmentKeys.BRAZE_VERIFY_EMAIL_CAMPAIGN_ID]:
         config.brazeEmailCampaignsConfig.brazeVerifyEmailCampaignId,
+      [RedemptionsStackEnvironmentKeys.BRAZE_BALLOT_EMAIL_CAMPAIGN_ID]:
+        config.brazeEmailCampaignsConfig.brazeBallotEmailCampaignId,
       // Datadog unified service tracking
       DD_SERVICE: 'redemptions',
     },
@@ -55,7 +57,7 @@ export function createRedemptionTransactionalEmailRule(
       detailType: [RedemptionEventDetailType.MEMBER_REDEMPTION],
       detail: {
         redemptionDetails: {
-          redemptionType: ['vault', 'generic', 'preApplied', 'vaultQR', 'showCard', 'giftCard', 'verify'],
+          redemptionType: ['vault', 'generic', 'preApplied', 'vaultQR', 'showCard', 'giftCard', 'verify', 'ballot'],
         },
       },
     },

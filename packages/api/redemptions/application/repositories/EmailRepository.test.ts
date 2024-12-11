@@ -30,6 +30,7 @@ describe('EmailRepository', () => {
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID] = 'test';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID] = 'test';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_VERIFY_EMAIL_CAMPAIGN_ID] = 'verify_env_val';
+    process.env[RedemptionsStackEnvironmentKeys.BRAZE_BALLOT_EMAIL_CAMPAIGN_ID] = 'ballot_env_val';
   });
 
   afterEach(() => {
@@ -41,6 +42,7 @@ describe('EmailRepository', () => {
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_VAULTQR_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_VERIFY_EMAIL_CAMPAIGN_ID];
+    delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_BALLOT_EMAIL_CAMPAIGN_ID];
   });
 
   describe('sendVaultOrGenericTransactionalEmail', () => {
@@ -466,5 +468,87 @@ describe('EmailRepository', () => {
         message: loggerMessage,
       });
     });
+  });
+
+  describe('sendBallotTransactionalEmail', () => {
+    it('sends an email for ballot redemption type', async () => {
+      // Arrange
+      const logger = createTestLogger();
+      const mockEmailClient = {
+        campaigns: {
+          trigger: {
+            send: jest.fn().mockResolvedValue({
+              message: 'success',
+            }),
+          },
+        },
+      };
+
+      const emailClientProvider: IBrazeEmailClientProvider = {
+        getClient: () => Promise.resolve(as(mockEmailClient)),
+      };
+      const repository = new EmailRepository(logger, emailClientProvider);
+      const payload = {
+        brazeExternalUserId: 'test',
+        companyName: 'test',
+        redemptionType: 'ballot',
+        memberId: 'test',
+        offerName: 'test',
+        url: 'test',
+        eventDate: 'test',
+        drawDate: 'test',
+        totalTickets: 1,
+      } as const;
+
+      // Act
+      await repository.sendBallotTransactionalEmail(payload);
+      expect(mockEmailClient.campaigns.trigger.send).toHaveBeenCalled();
+      expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].campaign_id).toEqual('ballot_env_val');
+      expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].recipients[0].external_user_id).toEqual(
+        payload.brazeExternalUserId,
+      );
+
+      expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
+        eventName: payload.offerName,
+        eventDate: payload.eventDate,
+        drawDate: payload.drawDate,
+        totalTickets: payload.totalTickets,
+      });
+    });
+
+    it.each(allExceptRedemptionTypes('ballot'))(
+      'throws an error for unhandled redemption type %s',
+      async (redemptionType) => {
+        // Arrange
+        const logger = createTestLogger();
+        const mockEmailClient = {};
+        const emailClientProvider: IBrazeEmailClientProvider = {
+          getClient: () => Promise.resolve(as(mockEmailClient)),
+        };
+        const repository = new EmailRepository(logger, emailClientProvider);
+        const payload = {
+          brazeExternalUserId: 'test',
+          companyName: 'test',
+          redemptionType: redemptionType,
+          memberId: 'test',
+          offerName: 'test',
+          url: 'test',
+          eventDate: 'test',
+          drawDate: 'test',
+          totalTickets: 1,
+        };
+
+        // Act
+        const act = () => repository.sendBallotTransactionalEmail(payload);
+
+        // Assert
+        await expect(act).rejects.toThrow('RedemptionType error, expects ballot');
+        expect(logger.info).toHaveBeenCalledWith(
+          expect.objectContaining({
+            message: `redemption type is incorrect for ballot email template: ${redemptionType}`,
+          }),
+        );
+      },
+    );
   });
 });

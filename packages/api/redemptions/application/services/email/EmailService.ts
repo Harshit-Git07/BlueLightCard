@@ -1,6 +1,15 @@
 import { UsersTrackObject } from 'braze-api';
 
-import { GENERIC, GIFTCARD, PREAPPLIED, SHOWCARD, VAULT, VAULTQR, VERIFY } from '@blc-mono/core/constants/redemptions';
+import {
+  BALLOT,
+  GENERIC,
+  GIFTCARD,
+  PREAPPLIED,
+  SHOWCARD,
+  VAULT,
+  VAULTQR,
+  VERIFY,
+} from '@blc-mono/core/constants/redemptions';
 import { MemberRedemptionEvent } from '@blc-mono/core/schemas/redemptions';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { EmailRepository, IEmailRepository } from '@blc-mono/redemptions/application/repositories/EmailRepository';
@@ -24,6 +33,19 @@ export class EmailService implements IEmailService {
     const redemptionType = event.detail.redemptionDetails.redemptionType;
 
     switch (redemptionType) {
+      case BALLOT:
+        await this.emailRepository.sendBallotTransactionalEmail({
+          brazeExternalUserId: event.detail.memberDetails.brazeExternalUserId,
+          memberId: event.detail.memberDetails.memberId,
+          companyName: event.detail.redemptionDetails.companyName,
+          offerName: event.detail.redemptionDetails.offerName,
+          url: event.detail.redemptionDetails?.url ?? '',
+          redemptionType: redemptionType,
+          eventDate: event.detail.redemptionDetails.ballotDetails?.eventDate ?? '',
+          drawDate: event.detail.redemptionDetails.ballotDetails?.drawDate ?? '',
+          totalTickets: event.detail.redemptionDetails.ballotDetails?.totalTickets ?? 0,
+        });
+        break;
       case GENERIC:
       case VAULTQR:
       case VAULT: {

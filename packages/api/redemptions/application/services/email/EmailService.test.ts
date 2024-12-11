@@ -83,6 +83,28 @@ describe('EmailService', () => {
       // Assert
       expect(emailRepository.sendShowCardEmail).toHaveBeenCalled();
     });
+
+    it('sends email for ballot redemption events', async () => {
+      // Arrange
+      const logger = createTestLogger();
+      const emailRepository: Partial<IEmailRepository> = {
+        sendBallotTransactionalEmail: jest.fn(),
+      };
+      const service = new EmailService(logger, as(emailRepository));
+      const event = memberRedemptionEventFactory.build({
+        detail: {
+          redemptionDetails: {
+            redemptionType: 'ballot',
+          },
+        },
+      });
+
+      // Act
+      await service.sendRedemptionTransactionEmail(event);
+
+      // Assert
+      expect(emailRepository.sendBallotTransactionalEmail).toHaveBeenCalled();
+    });
   });
 
   describe('setCustomAttributes', () => {

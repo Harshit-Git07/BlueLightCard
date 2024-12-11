@@ -109,6 +109,7 @@ jobs:
             discoveryEventBusName: 'staging-blc-mono-eventBus'
             cmsAccount: '971422711515'
             userProfileEndpoint: https://staging-identity.blcshine.io/user
+            companyLocationDwhStream: 'staging-dwh-blc-uk-company-location'
           - deployment: 'dds-uk-staging'
             region: 'eu-west-2'
             stagingBaseUrl: https://www.ddsstaging.bluelightcard.tech
@@ -125,6 +126,7 @@ jobs:
             ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
             blcUkIdentityApiId: 'tr1afrar24'
             userProfileEndpoint: https://staging-identity.blcshine.io/user
+            companyLocationDwhStream: 'staging-dds-dwh-dds-uk-company-location'
           - deployment: 'blc-aus-staging'
             region: 'ap-southeast-2'
             cmsAccount: '971422711515'
@@ -136,6 +138,7 @@ jobs:
             stage: staging
             discoveryEventBusName: 'staging-blc-mono-eventBus'
             userProfileEndpoint: https://staging-identity-au.blcshine.io/user
+            companyLocationDwhStream: 'staging-dwh-blc-au-company-location'
     needs:
       - install
       - test
@@ -155,6 +158,7 @@ jobs:
       OFFERS_DISCOVERY_EVENT_BUS_NAME: ${{ matrix.discoveryEventBusName }}
       OFFERS_CMS_ACCOUNT: ${{ matrix.cmsAccount }}
       USER_PROFILE_ENDPOINT: ${{ matrix.userProfileEndpoint }}
+      DWH_FIREHOSE_COMPANY_LOCATION_STREAM_NAME: ${{ matrix.companyLocationDwhStream }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -220,6 +224,7 @@ jobs:
             brand: BLC_UK
             stage: production
             userProfileEndpoint: https://identity.blcshine.io/user
+            companyLocationDwhStream: 'production-dwh-blc-uk-company-location'
           - deployment: 'dds-uk-production'
             region: 'eu-west-2'
             prodBaseUrl: https://www.defencediscountservice.co.uk
@@ -234,6 +239,7 @@ jobs:
             ddsOldCognitoUserPoolId: 'eu-west-2_y2KyCUbVT'
             blcUkIdentityApiId: 'ue8dcieh75'
             userProfileEndpoint: https://identity.blcshine.io/user
+            companyLocationDwhStream: 'production-dds-dwh-dds-uk-company-location'
           - namespace: 'blc-aus-production'
             region: 'ap-southeast-2'
             prodBaseUrl: https://www.bluelightcard.com.au
@@ -243,6 +249,7 @@ jobs:
             brand: BLC_AU
             stage: production
             userProfileEndpoint: https://identity-au.blcshine.io/user
+            companyLocationDwhStream: 'production-dwh-blc-au-company-location'
     needs:
       - install
       - test
@@ -261,6 +268,7 @@ jobs:
       DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
       BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
       USER_PROFILE_ENDPOINT: ${{ matrix.userProfileEndpoint }}
+      DWH_FIREHOSE_COMPANY_LOCATION_STREAM_NAME: ${{ matrix.companyLocationDwhStream }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -27,6 +27,7 @@ export function createCMSEventBus(
       },
     },
   };
+
   const dataWarehouseCompanyRule = {
     pattern: {
       source: ['lambda.sanity.webhook'],
@@ -37,6 +38,7 @@ export function createCMSEventBus(
       },
     },
   };
+
   const dataWarehouseMenuRule = {
     pattern: {
       source: ['lambda.sanity.webhook'],

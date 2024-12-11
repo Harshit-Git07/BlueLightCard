@@ -1,5 +1,6 @@
 import { PutEventsCommand } from '@aws-sdk/client-eventbridge';
 import { type WebhookEventResult } from '@bluelightcard/sanity-types';
+import { type CompanyLocationBatch } from 'src/lib/events';
 
 import { type ILogger } from '@blc-mono/core/utils/logger';
 
@@ -11,12 +12,14 @@ type ArrayElement<ArrayType> = ArrayType extends readonly (infer ElementType)[]
   ? ElementType
   : never;
 
-const generateSource = (record: ArrayElement<WebhookEventResult>): string => {
+const generateSource = (
+  record: ArrayElement<WebhookEventResult> | CompanyLocationBatch,
+): string => {
   return `${record._type}.${record.operation}d`;
 };
 
 export async function publishToEventBus(
-  record: ArrayElement<WebhookEventResult>,
+  record: ArrayElement<WebhookEventResult> | CompanyLocationBatch,
   busName: string,
   logger: ILogger,
 ) {

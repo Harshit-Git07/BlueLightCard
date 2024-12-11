@@ -5,6 +5,7 @@ import { Api, Config, Function, type StackContext, use } from 'sst/constructs';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { CliLogger } from '@blc-mono/core/utils/logger';
 import { Identity } from '@blc-mono/identity/stack';
+import { Shared } from '@blc-mono/shared/stack';
 
 import { createTables } from './infrastructure/dynamo';
 import { createCMSEventBus } from './infrastructure/eventbridge';
@@ -19,6 +20,8 @@ const cliLogger = new CliLogger();
 
 export function OffersCMS({ stack }: StackContext) {
   const { authorizer } = use(Identity);
+  const { dwhKenisisFirehoseStreams } = use(Shared);
+
   const discoveryBusName = env.OFFERS_DISCOVERY_EVENT_BUS_NAME || '';
 
   const { rawDataTable, offersDataTable, companyDataTable } = createTables(stack);
@@ -28,6 +31,11 @@ export function OffersCMS({ stack }: StackContext) {
     bind: [rawDataTable, offersDataTable, companyDataTable],
     environment: env,
   });
+  consumerFunction.attachPermissions([
+    'sqs:SendMessage',
+    dwhKenisisFirehoseStreams.companyLocationStream.getPutRecordPolicyStatement(),
+    'firehose:PutRecordBatch',
+  ]);
 
   if (discoveryBusName.length > 0) {
     const discoBus = AwsEventBus.fromEventBusName(stack, EVENT_BUS_ID, discoveryBusName);

@@ -63,6 +63,7 @@ export class DwhKenisisFirehoseStreams {
   public readonly redemptionTypeStream: IFirehoseStreamAdapter;
   public readonly paymentStream: IFirehoseStreamAdapter;
 	public readonly callbackVaultRedemptionStream: IFirehoseStreamAdapter;
+  public readonly companyLocationStream: IFirehoseStreamAdapter;
   public readonly redemptionStream: IFirehoseStreamAdapter;
 
   constructor(stack: Stack) {
@@ -75,7 +76,7 @@ export class DwhKenisisFirehoseStreams {
 
     const redshiftSchemaName = secret.secretValueFromJson('schema');
 		const brandFromEnv = getBrandFromEnv()
-    const brandPrefix = platformMap[brandFromEnv];
+    const brandPrefix = platformMap[brandFromEnv];MAP_BRAND[getBrandFromEnv()]
 
     this.compViewStream = new KenisisFirehoseStream(stack, 'dwh-compView', `dwh-${brandPrefix}-production-compView`).setup();
     this.compClickStream = new KenisisFirehoseStream(stack, 'dwh-compClick', `dwh-${brandPrefix}-production-compClick`).setup();
@@ -89,6 +90,9 @@ export class DwhKenisisFirehoseStreams {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.tblpayments` : undefined)
     }).setup();
 		this.callbackVaultRedemptionStream = new KenisisFirehoseStream(stack, 'dwh-vaultIntegrationCallback', callbackVaultRedemptionStreamNames[brandFromEnv]).setup();
+    this.companyLocationStream = new KenisisFirehoseStream(stack, 'dwh-companyLocation', `dwh-${MAP_BRAND[getBrandFromEnv()]}-company-location`,{
+        tableName: redshiftSchemaName ? `${redshiftSchemaName}.company_location` : undefined, //table name to be confirmed
+    }).setup();
     this.redemptionStream = new KenisisFirehoseStream(stack, 'dwh-redemptions', `dwh-${MAP_BRAND[getBrandFromEnv()]}-redemptions`, {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.redemption` : undefined)
     }).setup();

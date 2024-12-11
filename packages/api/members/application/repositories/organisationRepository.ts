@@ -3,7 +3,6 @@ import {
   GetCommand,
   PutCommand,
   QueryCommand,
-  UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { CreateOrganisationModel, OrganisationModel } from '../models/organisationModel';
 import { Table } from 'sst/node/table';
@@ -20,6 +19,7 @@ import {
 } from './repository';
 import { v4 as uuidv4 } from 'uuid';
 import { IdRequirementModel } from '../models/idRequirementsModel';
+import { NativeAttributeValue } from '@aws-sdk/util-dynamodb';
 
 export class OrganisationRepository extends Repository {
   constructor(
@@ -65,6 +65,28 @@ export class OrganisationRepository extends Repository {
     await this.dynamoDB.send(new PutCommand(params));
 
     return organisationId;
+  }
+
+  async createOrganisations(organisations: CreateOrganisationModel[]): Promise<string[]> {
+    const organisationIds: string[] = [];
+    const organisationsToInsert: Record<string, NativeAttributeValue>[] = [];
+
+    organisations.forEach((organisation) => {
+      const organisationId = uuidv4();
+      organisationIds.push(organisationId);
+
+      organisationsToInsert.push({
+        pk: organisationKey(organisationId),
+        sk: ORGANISATION,
+        organisationId,
+        ...organisation,
+        lastUpdated: new Date().toISOString(),
+      });
+    });
+
+    await this.batchInsert(organisationsToInsert, this.tableName);
+
+    return organisationIds;
   }
 
   async updateOrganisation(
@@ -136,6 +158,32 @@ export class OrganisationRepository extends Repository {
     await this.dynamoDB.send(new PutCommand(params));
 
     return employerId;
+  }
+
+  async createEmployers(
+    organisationId: string,
+    employers: CreateEmployerModel[],
+  ): Promise<string[]> {
+    const employerIds: string[] = [];
+    const employersToInsert: Record<string, NativeAttributeValue>[] = [];
+
+    employers.forEach((employer) => {
+      const employerId = uuidv4();
+      employerIds.push(employerId);
+
+      employersToInsert.push({
+        pk: organisationKey(organisationId),
+        sk: employerKey(employerId),
+        organisationId,
+        employerId,
+        ...employer,
+        lastUpdated: new Date().toISOString(),
+      });
+    });
+
+    await this.batchInsert(employersToInsert, this.tableName);
+
+    return employerIds;
   }
 
   async updateEmployer(

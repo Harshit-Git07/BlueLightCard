@@ -7,6 +7,10 @@ import {
 import { logger } from '../middleware';
 import { CreateEmployerModel, EmployerModel, UpdateEmployerModel } from '../models/employerModel';
 import { IdRequirementModel } from '../models/idRequirementsModel';
+import {
+  getOrganisationIdMappings,
+  mapOrganisationsAndEmployers,
+} from '@blc-mono/members/application/utils/organisationIdMapping';
 
 export class OrganisationService {
   constructor(private repository: OrganisationRepository = new OrganisationRepository()) {}
@@ -27,6 +31,16 @@ export class OrganisationService {
       return await this.repository.createOrganisation(organisation);
     } catch (error) {
       logger.error({ message: 'Error creating organisation', error });
+      throw error;
+    }
+  }
+
+  async createOrganisations(organisations: OrganisationModel[]): Promise<string[]> {
+    try {
+      logger.debug({ message: 'Creating organisations' });
+      return await this.repository.createOrganisations(organisations);
+    } catch (error) {
+      logger.error({ message: 'Error creating organisations', error });
       throw error;
     }
   }
@@ -74,6 +88,19 @@ export class OrganisationService {
     }
   }
 
+  async createEmployers(
+    organisationId: string,
+    employers: CreateEmployerModel[],
+  ): Promise<string[]> {
+    try {
+      logger.debug({ message: 'Creating employers' });
+      return await this.repository.createEmployers(organisationId, employers);
+    } catch (error) {
+      logger.error({ message: 'Error creating employers', error });
+      throw error;
+    }
+  }
+
   async updateEmployer(
     organisationId: string,
     employerId: string,
@@ -106,5 +133,19 @@ export class OrganisationService {
       logger.error({ message: 'Error fetching employer', employerId, error });
       throw error;
     }
+  }
+
+  async loadOrganisationsAndEmployers(): Promise<void> {
+    logger.info({ message: 'Loading Organisations and Employers' });
+    const organisationIdMappings = await getOrganisationIdMappings();
+    const { organisations, employers } = mapOrganisationsAndEmployers(organisationIdMappings);
+
+    await this.createOrganisations(organisations);
+    for (const organisationId of employers.keys()) {
+      await this.createEmployers(organisationId, employers.get(organisationId) ?? []);
+    }
+    logger.info({
+      message: `Loaded ${organisations.length} Organisations`,
+    });
   }
 }

@@ -19,7 +19,9 @@ export const EmployerModel = createZodNamedType(
           z.object({
             idKey: z.string(),
             type: z.nativeEnum(IdType),
+            title: z.string(),
             guidelines: z.string(),
+            description: z.string(),
             required: z.boolean().default(false),
           }),
         ),
@@ -32,7 +34,9 @@ export const EmployerModel = createZodNamedType(
           z.object({
             idKey: z.string(),
             type: z.nativeEnum(IdType),
+            title: z.string(),
             guidelines: z.string(),
+            description: z.string(),
             required: z.boolean().default(false),
           }),
         ),
@@ -45,7 +49,9 @@ export const EmployerModel = createZodNamedType(
           z.object({
             idKey: z.string(),
             type: z.nativeEnum(IdType),
+            title: z.string(),
             guidelines: z.string(),
+            description: z.string(),
             required: z.boolean().default(false),
           }),
         ),
@@ -91,3 +97,36 @@ export const UpdateEmployerModel = createZodNamedType(
   }),
 );
 export type UpdateEmployerModel = z.infer<typeof UpdateEmployerModel>;
+
+export const IdRequirementsModel = createZodNamedType(
+  'IdRequirementsModel',
+  z.object({
+    minimumRequired: z.number().default(1),
+    supportedDocuments: z.array(
+      z.object({
+        idKey: z.string(),
+        type: z.nativeEnum(IdType),
+        title: z.string(),
+        guidelines: z.string(),
+        description: z.string(),
+        required: z.boolean().default(false),
+      }),
+    ),
+  }),
+);
+
+export type IdRequirementsModel = z.infer<typeof IdRequirementsModel>;
+
+export const SupportedDocumentModel = createZodNamedType(
+  'SupportedDocumentModel',
+  z.object({
+    idKey: z.string(),
+    type: z.nativeEnum(IdType),
+    title: z.string(),
+    guidelines: z.string(),
+    description: z.string(),
+    required: z.boolean().default(false),
+  }),
+);
+
+export type SupportedDocumentModel = z.infer<typeof SupportedDocumentModel>;

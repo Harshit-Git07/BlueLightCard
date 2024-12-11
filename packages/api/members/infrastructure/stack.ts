@@ -20,7 +20,7 @@ import { createAdminTable } from '@blc-mono/members/infrastructure/dynamodb/crea
 import { createOrganisationsTable } from '@blc-mono/members/infrastructure/dynamodb/createOrganisationsTable';
 import { createProfilesTable } from '@blc-mono/members/infrastructure/dynamodb/createProfilesTable';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
-import { getEnvOrDefault, getEnvRaw } from '@blc-mono/core/utils/getEnv';
+import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 import { memberProfileRoutes } from '@blc-mono/members/infrastructure/routes/member/MemberProfileRoutes';
 import { memberApplicationRoutes } from '@blc-mono/members/infrastructure/routes/member/MemberApplicationRoutes';
@@ -42,6 +42,7 @@ import { createOutboundBatchFileCron } from '@blc-mono/members/infrastructure/cr
 import { processInboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/processInboundBatchFileCron';
 import { createMemberProfilesPipe } from '@blc-mono/members/infrastructure/eventbridge/MemberProfilesPipe';
 import { createMemberProfileIndexer } from '@blc-mono/members/infrastructure/lambdas/createMemberProfileIndexer';
+import { createSeedOrganisations } from '@blc-mono/members/infrastructure/lambdas/createSeedOrganisations';
 
 const SERVICE_NAME = 'members';
 
@@ -101,6 +102,7 @@ export async function MembersStack({ app, stack }: StackContext) {
 
   createMemberProfilesPipe(stack, profilesTable, memberProfilesTableEventQueue);
   createMemberProfileIndexer(stack, vpc, memberProfilesTableEventQueue, SERVICE_NAME);
+  createSeedOrganisations(stack, organisationsTable, SERVICE_NAME);
 
   return {
     profilesTable,

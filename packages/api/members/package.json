@@ -8,7 +8,7 @@
     "lint:fix": "eslint . --fix",
     "test": "npm run test:unit",
     "test:coverage": "npm run test:unit -- --coverage",
-    "test:unit": "jest --runInBand",
+    "test:unit": "jest  --runInBand",
     "typecheck": "tsc -noEmit",
     "dev": "sst dev"
   },
@@ -39,6 +39,7 @@
     "aws-jwt-verify": "4.0.0",
     "axios": "1.4.0",
     "base-64": "1.0.0",
+    "csv-parser": "3.0.0",
     "date-fns": "2.30.0",
     "libphonenumber-js": "1.10.37",
     "ts-node": "^10.9.1",

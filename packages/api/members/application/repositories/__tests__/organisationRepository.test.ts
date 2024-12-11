@@ -1,7 +1,6 @@
 import {
+  BatchWriteCommand,
   DynamoDBDocumentClient,
-  QueryCommand,
-  GetCommand,
   PutCommand,
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
@@ -20,30 +19,27 @@ jest.mock('uuid', () => ({
 }));
 
 const organisationId = '2c84e384-5a36-4453-9cef-e343d080e5f0';
+const supportedDocument = {
+  idKey: 'passport',
+  title: 'Passport',
+  description: 'Passport Document',
+  type: IdType.IMAGE_UPLOAD,
+  guidelines: 'Upload your passport',
+  required: false,
+};
+const idRequirements = {
+  minimumRequired: 1,
+  supportedDocuments: [supportedDocument],
+};
 const organisation: OrganisationModel = {
   organisationId: organisationId,
   name: 'Test Organisation',
   type: 'Non-Profit',
   active: true,
   employmentStatus: [EmploymentStatus.EMPLOYED],
-  employedIdRequirements: {
-    minimumRequired: 1,
-    supportedDocuments: [
-      { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
-    ],
-  },
-  retiredIdRequirements: {
-    minimumRequired: 1,
-    supportedDocuments: [
-      { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
-    ],
-  },
-  volunteerIdRequirements: {
-    minimumRequired: 1,
-    supportedDocuments: [
-      { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
-    ],
-  },
+  employedIdRequirements: idRequirements,
+  retiredIdRequirements: idRequirements,
+  volunteerIdRequirements: idRequirements,
   idUploadCount: 0,
   trustedDomains: [],
   bypassPayment: false,
@@ -73,6 +69,7 @@ let dynamoDBMock = {
   send: jest.fn(),
 };
 const putCommandMock = PutCommand as jest.MockedClass<typeof PutCommand>;
+const batchWriteCommandMock = BatchWriteCommand as jest.MockedClass<typeof BatchWriteCommand>;
 const updateCommandMock = UpdateCommand as jest.MockedClass<typeof UpdateCommand>;
 
 describe('OrganisationRepository', () => {
@@ -102,87 +99,122 @@ describe('OrganisationRepository', () => {
   });
 
   describe('createOrganisation', () => {
+    const expectedPutRequestItem = {
+      active: true,
+      bypassId: false,
+      bypassPayment: false,
+      employedIdRequirements: {
+        minimumRequired: 1,
+        supportedDocuments: [
+          {
+            idKey: 'passport',
+            required: false,
+            guidelines: 'Upload your passport',
+            description: 'Passport Document',
+            title: 'Passport',
+            type: 'IMAGE_UPLOAD',
+          },
+        ],
+      },
+      employmentStatus: ['EMPLOYED'],
+      lastUpdated: '2023-01-01T00:00:00.000Z',
+      name: 'New Organisation',
+      organisationId: '2c84e384-5a36-4453-9cef-e343d080e5f0',
+      pk: 'ORGANISATION#2c84e384-5a36-4453-9cef-e343d080e5f0',
+      retiredIdRequirements: {
+        minimumRequired: 1,
+        supportedDocuments: [
+          {
+            idKey: 'passport',
+            required: false,
+            guidelines: 'Upload your passport',
+            description: 'Passport Document',
+            title: 'Passport',
+            type: 'IMAGE_UPLOAD',
+          },
+        ],
+      },
+      sk: 'ORGANISATION',
+      trustedDomains: [],
+      type: 'Non-Profit',
+      volunteerIdRequirements: {
+        minimumRequired: 1,
+        supportedDocuments: [
+          {
+            idKey: 'passport',
+            required: false,
+            guidelines: 'Upload your passport',
+            description: 'Passport Document',
+            title: 'Passport',
+            type: 'IMAGE_UPLOAD',
+          },
+        ],
+      },
+    };
+
+    const createOrganisation: CreateOrganisationModel = {
+      name: 'New Organisation',
+      type: 'Non-Profit',
+      active: true,
+      employmentStatus: [EmploymentStatus.EMPLOYED],
+      employedIdRequirements: idRequirements,
+      retiredIdRequirements: idRequirements,
+      volunteerIdRequirements: idRequirements,
+      trustedDomains: [],
+      bypassPayment: false,
+      bypassId: false,
+    };
+
     it('should create a new organisation', async () => {
       (uuidv4 as jest.Mock).mockReturnValueOnce(organisationId);
       dynamoDBMock.send.mockResolvedValue({});
-      const createOrganisation: CreateOrganisationModel = {
-        name: 'New Organisation',
-        type: 'Non-Profit',
-        active: true,
-        employmentStatus: [EmploymentStatus.EMPLOYED],
-        employedIdRequirements: {
-          minimumRequired: 1,
-          supportedDocuments: [
-            { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
-          ],
-        },
-        retiredIdRequirements: {
-          minimumRequired: 1,
-          supportedDocuments: [
-            { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
-          ],
-        },
-        volunteerIdRequirements: {
-          minimumRequired: 1,
-          supportedDocuments: [
-            { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
-          ],
-        },
-        trustedDomains: [],
-        bypassPayment: false,
-        bypassId: false,
-      };
       const result = await repository.createOrganisation(createOrganisation);
 
       expect(result).toBe(organisationId);
       expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(PutCommand));
       expect(putCommandMock).toHaveBeenCalledWith({
         TableName: 'memberOrganisations',
-        Item: {
-          active: true,
-          bypassId: false,
-          bypassPayment: false,
-          employedIdRequirements: {
-            minimumRequired: 1,
-            supportedDocuments: [
-              {
-                idKey: 'passport',
-                required: false,
-                guidelines: '',
-                type: 'IMAGE_UPLOAD',
+        Item: expectedPutRequestItem,
+      });
+    });
+    it('should create multiple organisations', async () => {
+      (uuidv4 as jest.Mock).mockReturnValue(organisationId);
+      dynamoDBMock.send.mockResolvedValue({});
+      const createOrganisation1: CreateOrganisationModel = {
+        ...createOrganisation,
+        name: 'New Organisation 1',
+      };
+      const createOrganisation2: CreateOrganisationModel = {
+        ...createOrganisation,
+        name: 'New Organisation 2',
+      };
+      const result = await repository.createOrganisations([
+        createOrganisation1,
+        createOrganisation2,
+      ]);
+
+      expect(result).toStrictEqual([organisationId, organisationId]);
+      expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(BatchWriteCommand));
+      expect(batchWriteCommandMock).toHaveBeenCalledWith({
+        RequestItems: {
+          memberOrganisations: [
+            {
+              PutRequest: {
+                Item: {
+                  ...expectedPutRequestItem,
+                  name: 'New Organisation 1',
+                },
               },
-            ],
-          },
-          employmentStatus: ['EMPLOYED'],
-          lastUpdated: '2023-01-01T00:00:00.000Z',
-          name: 'New Organisation',
-          organisationId: '2c84e384-5a36-4453-9cef-e343d080e5f0',
-          pk: 'ORGANISATION#2c84e384-5a36-4453-9cef-e343d080e5f0',
-          retiredIdRequirements: {
-            minimumRequired: 1,
-            supportedDocuments: [
-              {
-                idKey: 'passport',
-                required: false,
-                guidelines: '',
-                type: 'IMAGE_UPLOAD',
+            },
+            {
+              PutRequest: {
+                Item: {
+                  ...expectedPutRequestItem,
+                  name: 'New Organisation 2',
+                },
               },
-            ],
-          },
-          sk: 'ORGANISATION',
-          trustedDomains: [],
-          type: 'Non-Profit',
-          volunteerIdRequirements: {
-            minimumRequired: 1,
-            supportedDocuments: [
-              {
-                idKey: 'passport',
-                required: false,
-                guidelines: '',
-                type: 'IMAGE_UPLOAD',
-              },
-            ],
-          },
+            },
+          ],
         },
       });
     });
@@ -243,34 +275,75 @@ describe('OrganisationRepository', () => {
   });
 
   describe('createEmployer', () => {
+    const createEmployer = {
+      name: 'New Employer',
+      active: true,
+      employmentStatus: [],
+      trustedDomains: [],
+      bypassPayment: false,
+      bypassId: false,
+    };
+    const expectedPutRequestItem = {
+      active: true,
+      bypassId: false,
+      bypassPayment: false,
+      employmentStatus: [],
+      lastUpdated: '2023-01-01T00:00:00.000Z',
+      name: 'New Employer',
+      organisationId: 'bd5db78f-bc9a-4523-80fc-af7853510186',
+      pk: 'ORGANISATION#bd5db78f-bc9a-4523-80fc-af7853510186',
+      sk: 'ORGANISATION',
+      trustedDomains: [],
+    };
+
     it('should create a new employer', async () => {
       (uuidv4 as jest.Mock).mockReturnValueOnce(employerId);
       dynamoDBMock.send.mockResolvedValue({});
-      const createEmployer = {
-        name: 'New Employer',
-        active: true,
-        employmentStatus: [],
-        trustedDomains: [],
-        bypassPayment: false,
-        bypassId: false,
-      };
       const result = await repository.createOrganisation(createEmployer);
 
       expect(result).toBe(employerId);
       expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(PutCommand));
       expect(putCommandMock).toHaveBeenCalledWith({
         TableName: 'memberOrganisations',
-        Item: {
-          active: true,
-          bypassId: false,
-          bypassPayment: false,
-          employmentStatus: [],
-          lastUpdated: '2023-01-01T00:00:00.000Z',
-          name: 'New Employer',
-          organisationId: 'bd5db78f-bc9a-4523-80fc-af7853510186',
-          pk: 'ORGANISATION#bd5db78f-bc9a-4523-80fc-af7853510186',
-          sk: 'ORGANISATION',
-          trustedDomains: [],
+        Item: expectedPutRequestItem,
+      });
+    });
+    it('should create multiple employers', async () => {
+      (uuidv4 as jest.Mock).mockReturnValue(employerId);
+      dynamoDBMock.send.mockResolvedValue({});
+      const createEmployer1 = {
+        ...createEmployer,
+        name: 'New Employer 1',
+      };
+      const createEmployer2 = {
+        ...createEmployer,
+        name: 'New Employer 2',
+      };
+
+      const result = await repository.createOrganisations([createEmployer1, createEmployer2]);
+
+      expect(result).toStrictEqual([employerId, employerId]);
+      expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(BatchWriteCommand));
+      expect(batchWriteCommandMock).toHaveBeenCalledWith({
+        RequestItems: {
+          memberOrganisations: [
+            {
+              PutRequest: {
+                Item: {
+                  ...expectedPutRequestItem,
+                  name: 'New Employer 1',
+                },
+              },
+            },
+            {
+              PutRequest: {
+                Item: {
+                  ...expectedPutRequestItem,
+                  name: 'New Employer 2',
+                },
+              },
+            },
+          ],
         },
       });
     });

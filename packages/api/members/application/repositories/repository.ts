@@ -1,4 +1,10 @@
-import { DynamoDBDocumentClient, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  BatchWriteCommand,
+  BatchWriteCommandInput,
+  BatchWriteCommandOutput,
+  DynamoDBDocumentClient,
+  UpdateCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { defaultDynamoDbClient } from './dynamoClient';
 import { ApplyPromoCodeApplicationModel } from '@blc-mono/members/application/models/applicationModel';
 
@@ -56,6 +62,10 @@ export interface PartialUpdateProps<T> {
   data: Partial<T>;
 }
 
+const DYNAMODB_MAX_BATCH_WRITE_SIZE = 25;
+const MAX_BATCH_RETRY_ATTEMPTS = 5;
+const MAX_BASE_DELAY = 1000;
+
 export class Repository {
   constructor(readonly dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient) {}
 
@@ -90,5 +100,56 @@ export class Repository {
     }
 
     return [updateExpression, expressionAttributeNames, expressionAttributeValues];
+  }
+
+  async batchInsert<T>(items: Record<string, T>[], tableName: string): Promise<void> {
+    for (let i = 0; i < items.length; i += DYNAMODB_MAX_BATCH_WRITE_SIZE) {
+      const chunk = items.slice(i, i + DYNAMODB_MAX_BATCH_WRITE_SIZE);
+      await this.batchWrite({
+        RequestItems: {
+          [tableName]: chunk.map((item) => ({
+            PutRequest: {
+              Item: item,
+            },
+          })),
+        },
+      });
+    }
+  }
+
+  private async batchWrite(params: BatchWriteCommandInput): Promise<void> {
+    try {
+      let data: BatchWriteCommandOutput;
+      data = await this.dynamoDB.send(new BatchWriteCommand(params));
+
+      let attempt = 0;
+
+      while (
+        data.UnprocessedItems &&
+        Object.keys(data.UnprocessedItems).length > 0 &&
+        attempt < MAX_BATCH_RETRY_ATTEMPTS
+      ) {
+        attempt++;
+        const delay = this.getBackoffDelayWithJitter(attempt);
+
+        await new Promise((resolve) => setTimeout(resolve, delay));
+
+        data = await this.dynamoDB.send(
+          new BatchWriteCommand({
+            ...params,
+            RequestItems: data.UnprocessedItems,
+          }),
+        );
+      }
+    } catch (error) {
+      const message = 'Error trying to batch write records using DynamoDB service';
+      throw new Error(`${message}: [${error}]`);
+    }
+  }
+
+  private getBackoffDelayWithJitter(attempt: number): number {
+    const delay = MAX_BASE_DELAY * Math.pow(2, attempt);
+
+    return delay + Math.random() * delay;
   }
 }

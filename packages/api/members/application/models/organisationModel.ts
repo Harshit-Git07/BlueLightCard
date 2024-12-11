@@ -18,7 +18,9 @@ export const OrganisationModel = createZodNamedType(
           z.object({
             idKey: z.string(),
             type: z.nativeEnum(IdType),
+            title: z.string(),
             guidelines: z.string(),
+            description: z.string(),
             required: z.boolean().default(false),
           }),
         ),
@@ -31,7 +33,9 @@ export const OrganisationModel = createZodNamedType(
           z.object({
             idKey: z.string(),
             type: z.nativeEnum(IdType),
+            title: z.string(),
             guidelines: z.string(),
+            description: z.string(),
             required: z.boolean().default(false),
           }),
         ),
@@ -44,7 +48,9 @@ export const OrganisationModel = createZodNamedType(
           z.object({
             idKey: z.string(),
             type: z.nativeEnum(IdType),
+            title: z.string(),
             guidelines: z.string(),
+            description: z.string(),
             required: z.boolean().default(false),
           }),
         ),

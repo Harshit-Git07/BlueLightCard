@@ -10,6 +10,18 @@ jest.mock('@blc-mono/members/application/services/organisationService');
 describe('getEmployers handler', () => {
   const organisationId = uuidv4();
   const employerId = uuidv4();
+  const supportedDocument = {
+    idKey: 'passport',
+    title: 'Passport',
+    description: 'Passport Document',
+    type: IdType.IMAGE_UPLOAD,
+    guidelines: 'Upload your passport',
+    required: false,
+  };
+  const idRequirements = {
+    minimumRequired: 1,
+    supportedDocuments: [supportedDocument],
+  };
   const employers: EmployerModel[] = [
     {
       organisationId,
@@ -17,24 +29,9 @@ describe('getEmployers handler', () => {
       name: 'Employer1',
       active: false,
       employmentStatus: [EmploymentStatus.EMPLOYED],
-      employedIdRequirements: {
-        minimumRequired: 1,
-        supportedDocuments: [
-          { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
-        ],
-      },
-      retiredIdRequirements: {
-        minimumRequired: 1,
-        supportedDocuments: [
-          { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
-        ],
-      },
-      volunteerIdRequirements: {
-        minimumRequired: 1,
-        supportedDocuments: [
-          { idKey: 'passport', type: IdType.IMAGE_UPLOAD, guidelines: '', required: false },
-        ],
-      },
+      employedIdRequirements: idRequirements,
+      retiredIdRequirements: idRequirements,
+      volunteerIdRequirements: idRequirements,
     },
   ];
   const event = { pathParameters: { organisationId } } as unknown as APIGatewayProxyEvent;

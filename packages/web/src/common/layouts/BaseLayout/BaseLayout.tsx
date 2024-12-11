@@ -1,6 +1,6 @@
 // components/Layout.tsx
 import Footer from '@/components/Footer/Footer';
-import NavBar from '@/components/NavBar/NavBar';
+import NavBar from '@/root/src/common/components/NavBar';
 import {
   logSearchCompanyEvent,
   logSearchCategoryEvent,

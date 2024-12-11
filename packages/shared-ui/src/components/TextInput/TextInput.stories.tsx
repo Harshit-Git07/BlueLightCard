@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import TextInput from './';
 
@@ -26,16 +26,8 @@ const meta: Meta<typeof TextInput> = {
     value: {
       description: 'The value of the element',
     },
-    required: {
+    isRequired: {
       control: 'boolean',
-    },
-    maxLength: {
-      control: 'number',
-      description: 'The max length of string allowed',
-    },
-    showCharCount: {
-      control: 'boolean',
-      description: 'Show the number of remaining characters',
     },
     onChange: {
       control: { disable: true },
@@ -48,19 +40,17 @@ const meta: Meta<typeof TextInput> = {
     placeholder: {
       description: 'The placeholder text',
     },
-    min: { control: 'number' },
-    max: { control: 'number' },
     label: {
       description: 'The label text',
     },
-    tooltipText: {
-      description: 'If helpText is supplied then an (i) icon will show and display the help text',
+    tooltip: {
+      description: 'If tooltip is supplied then an (i) icon will show and display the tooltip text',
     },
-    message: {
+    validationMessage: {
       description:
         'Additional information or error message details displayed immediately below the input element',
     },
-    helpText: {
+    description: {
       description: 'Additional information to be displayed between the label and the input itself',
     },
   },
@@ -68,9 +58,26 @@ const meta: Meta<typeof TextInput> = {
 
 export default meta;
 
-const Template: StoryFn<typeof TextInput> = (args) => {
-  const [value, setValue] = React.useState(args.value ?? '');
-  return <TextInput {...args} value={value} onChange={(e) => setValue(e.target.value)} />;
+const Template: StoryFn = (args) => {
+  const [value, setValue] = useState(args.value ?? '');
+  const [validationMessage, setValidationMessage] = useState(args.validationMessage);
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setValue(newValue.length <= (args.maxLength ?? 200) ? newValue : value);
+  };
+
+  useEffect(() => {
+    if (args.maxLength) {
+      const charsLeft = args.maxLength - value.length;
+      const charsLeftString = `${charsLeft} characters remaining`;
+      setValidationMessage(charsLeftString);
+    }
+  }, [value]);
+
+  return (
+    <TextInput {...args} value={value} validationMessage={validationMessage} onChange={onChange} />
+  );
 };
 
 export const Default = Template.bind({});
@@ -90,7 +97,14 @@ export const Error = Template.bind({});
 Error.args = {
   ...Default.args,
   isValid: false,
-  message: 'This field is inValid',
+  validationMessage: 'This field is inValid',
+};
+
+export const Success = Template.bind({});
+Success.args = {
+  ...Default.args,
+  isValid: true,
+  validationMessage: 'This field is valid',
 };
 
 export const Disabled = Template.bind({});
@@ -99,38 +113,36 @@ Disabled.args = {
   isDisabled: true,
 };
 
-export const ShowHelpMessage = Template.bind({});
-ShowHelpMessage.args = {
+export const WithTooltip = Template.bind({});
+WithTooltip.args = {
   ...Default.args,
-  tooltipText: 'This is a help message',
+  label: 'Hover over the info icon',
+  tooltip: 'This is a tooltip',
 };
 
-export const ShowInfoMessage = Template.bind({});
-ShowInfoMessage.args = {
+export const WithValidationMessage = Template.bind({});
+WithValidationMessage.args = {
   ...Default.args,
-  message: 'Additional information about this field',
+  label: '',
+  validationMessage: 'Input feedback or validation message',
 };
 
-export const WithMaxChars = Template.bind({});
-WithMaxChars.args = {
+export const MaxLengthExample = Template.bind({});
+MaxLengthExample.args = {
   ...Default.args,
-  maxLength: 20,
-  showCharCount: true,
+  maxLength: 10,
 };
 
 export const WithAllFeatures = Template.bind({});
 WithAllFeatures.args = {
   id: 'my-id',
   name: 'my-name',
-  isValid: true,
   isDisabled: false,
   value: 'Bob',
-  required: true,
-  maxLength: 5,
-  showCharCount: true,
+  isRequired: true,
   placeholder: 'short name',
   label: 'A short string here',
-  tooltipText: 'This is limited to 5 chars',
-  message: 'Some info text',
-  helpText: 'This is a description',
+  tooltip: 'This is a tooltip',
+  validationMessage: 'Some info text',
+  description: 'This is a description',
 };

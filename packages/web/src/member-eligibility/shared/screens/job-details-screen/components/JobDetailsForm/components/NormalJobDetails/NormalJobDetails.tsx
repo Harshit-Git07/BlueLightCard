@@ -42,10 +42,9 @@ export const NormalJobDetails: FC<NormalJobDetailsProps> = ({
         placeholder="Select your organisation"
         options={organisations}
         maxItemsShown={4}
-        selectedValue={eligibilityDetails.organisation?.id}
+        value={eligibilityDetails.organisation?.id}
         searchable
-        showTooltipIcon
-        onSelect={onOrganisationSelected}
+        onChange={onOrganisationSelected}
       />
 
       {employers !== undefined && employers.length !== 0 && (
@@ -53,9 +52,9 @@ export const NormalJobDetails: FC<NormalJobDetailsProps> = ({
           placeholder="Select your employer"
           options={employers}
           maxItemsShown={4}
-          selectedValue={eligibilityDetails.employer?.id}
+          value={eligibilityDetails.employer?.id}
           searchable
-          onSelect={onEmployerSelected}
+          onChange={onEmployerSelected}
         />
       )}
 
@@ -65,7 +64,7 @@ export const NormalJobDetails: FC<NormalJobDetailsProps> = ({
             placeholder="Enter job title"
             onChange={onJobTitleChange}
             value={eligibilityDetails.jobTitle}
-            message={isNextButtonDisabled ? 'Please enter a valid job title' : undefined}
+            validationMessage={isNextButtonDisabled ? 'Please enter a valid job title' : undefined}
             isValid={!isNextButtonDisabled}
           />
 

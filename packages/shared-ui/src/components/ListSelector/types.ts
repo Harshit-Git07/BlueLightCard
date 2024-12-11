@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, SyntheticEvent } from 'react';
 
 export enum ListSelectorState {
   Default = 'default',
@@ -10,7 +10,7 @@ export interface ListSelectorProps {
   ariaLabel?: string;
   title?: string;
   state?: ListSelectorState;
-  onClick?: () => void;
+  onClick?: (e?: SyntheticEvent) => void;
   tag?: ReactNode;
   description?: ReactNode;
   showTrailingIcon?: boolean;

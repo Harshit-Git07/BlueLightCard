@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import DatePicker from './';
-import { useState, FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { z } from 'zod';
 import Button from '../Button-V2';
 
@@ -81,20 +81,24 @@ export const ExampleUsage = () => {
   };
 
   return (
-    <form className="h-[300px]" onSubmit={handleSubmit}>
-      <DatePicker
-        id="dob"
-        label="Date of Birth"
-        description="Please enter your date of birth"
-        helpText="Must be over 18 years old"
-        value={formData.dob}
-        onChange={(date) => setFormData({ ...formData, dob: date })}
-        errorMessage={error?.dob ? error.dob[0] : undefined}
-      />
-      <Button type="submit" className="mt-2">
-        Submit
-      </Button>
-    </form>
+    <div>
+      <form className="h-[300px]" onSubmit={handleSubmit}>
+        <DatePicker
+          label="Date of Birth"
+          description="Please enter your date of birth"
+          tooltip="Must be over 18 years old"
+          value={formData.dob}
+          onChange={(date) => setFormData({ ...formData, dob: date })}
+          errorMessage={error?.dob ? error.dob[0] : undefined}
+          htmlFor={'dob'}
+        />
+        <Button type="submit" className="mt-2">
+          Submit
+        </Button>
+      </form>
+
+      <pre>onChange param {JSON.stringify(formData.dob, null, 2)}</pre>
+    </div>
   );
 };
 

@@ -58,7 +58,7 @@ const LeftNavigationLinks = ({ onSelection }: Props) => {
           );
         })}
 
-        <li className="h-[50px] ml-[-6px] tablet:ml-[-22px] flex items-center">
+        <li className="h-[50px] ml-[17px] tablet:ml-[0] flex items-center">
           <Button
             variant={ThemeVariant.Tertiary}
             iconRight={faSignOut}

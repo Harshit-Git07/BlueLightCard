@@ -46,9 +46,9 @@ const RowItem: FC<Props> = ({ iso2, name, dialCode, onClick, totalItem }) => {
       tabIndex={0}
     >
       <span
-        className={`py-2 pl-5 ${itemLength ? 'pr-5' : 'pr-3'}  flex w-full gap-2 items-center cursor-pointer  ${fontStyles} group`}
+        className={`py-2 pl-[20px] ${itemLength ? 'pr-[20px]' : 'pr-3'}  flex w-full gap-2 items-center cursor-pointer  ${fontStyles} group`}
       >
-        <FlagImage data-testid="flag-image" iso2={iso2} className="h-full w-8 rounded-sm" />
+        <FlagImage data-testid="flag-image" iso2={iso2} className="h-full w-[32px] rounded-sm" />
         <p className={`${countryTextStyles} ${textHoverStyles}`}>{name}</p>
         <p className={`ml-auto ${dialCodeTextStyles} ${textHoverStyles}`}>+{dialCode}</p>
       </span>

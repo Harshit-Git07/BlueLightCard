@@ -1,22 +1,7 @@
-import { ChangeEventHandler, KeyboardEventHandler } from 'react';
+import { KeyboardEventHandler } from 'react';
+import { FieldProps } from '../../types';
 
-export interface TextInputProps {
-  className?: string;
-  id?: string;
-  name?: string;
-  isValid?: boolean;
-  isDisabled?: boolean;
-  value?: string;
-  required?: boolean;
-  maxLength?: number;
-  showCharCount?: boolean;
-  onChange?: ChangeEventHandler<HTMLInputElement>;
+export type TextInputProps = FieldProps & {
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
-  placeholder?: string;
-  min?: number;
-  max?: number;
-  label?: string;
-  tooltipText?: string;
-  message?: string;
-  helpText?: string;
-}
+  maxLength?: number;
+};

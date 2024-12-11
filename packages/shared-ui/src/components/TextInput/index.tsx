@@ -1,107 +1,96 @@
-import React, { FC, useId } from 'react';
+import React, { FC, useId, useState } from 'react';
 
 import { TextInputProps } from './types';
-import InfoWrapper from '../InfoWrapper';
-import { colours, fonts } from '../../tailwind/theme';
-import { conditionalStrings } from '../../utils/conditionalStrings';
+import { colours, fonts, getInputBorderClasses } from '../../tailwind/theme';
 import FloatingPlaceholder from '../FloatingPlaceholder';
+import FieldLabel from '../FieldLabel';
+import { floatingPlaceholderInputClasses } from '../FloatingPlaceholder/utils';
+import ValidationMessage from '../ValidationMessage';
+import { getAriaDescribedBy } from '../../utils/getAriaDescribedBy';
 
 const TextInput: FC<TextInputProps> = ({
-  className = '',
   id,
   name,
-  isValid = true,
+  isValid = undefined,
   isDisabled = false,
   value,
-  required = false,
+  isRequired = false,
   maxLength = 200,
-  showCharCount = false,
   onChange,
   onKeyDown,
   placeholder,
-  min,
-  max,
   label,
-  tooltipText,
-  message,
-  helpText,
+  tooltip,
+  description,
+  validationMessage,
 }) => {
-  const remainingChars = maxLength - (value?.length ?? 0);
-
   const randomId = useId();
-  const elementId = id ?? randomId;
-  const helpMessageId = `${elementId}-help`;
-  const infoMessageId = `${elementId}-info`;
-  const charCountId = `${elementId}-char-count`;
+  const [isFocused, setIsFocused] = useState(false);
 
-  const getAriaDescribedBy = () => {
-    const ids = [];
-    if (tooltipText) ids.push(helpMessageId);
-    if (message) ids.push(infoMessageId);
-    if (showCharCount) ids.push(charCountId);
-    return ids.length > 0 ? ids.join(' ') : undefined;
+  const componentId = id ?? randomId;
+  const ariaDescribedBy = getAriaDescribedBy(
+    componentId,
+    tooltip,
+    description,
+    placeholder,
+    validationMessage,
+  );
+
+  const borderClasses = getInputBorderClasses(isDisabled, isFocused, isValid);
+
+  const classes = {
+    input: `w-full px-4 h-[50px] ${floatingPlaceholderInputClasses(!!placeholder)} ${fonts.body} ${
+      isDisabled
+        ? `${colours.textOnSurfaceDisabled} cursor-not-allowed`
+        : `${colours.textOnSurface} cursor-pointer`
+    } ${isDisabled ? colours.backgroundSurfaceContainer : 'bg-transparent'} ${borderClasses}`,
   };
-
-  const inError = !isValid && !isDisabled;
-  const isDefault = !inError && !isDisabled;
-
-  const inputClasses = conditionalStrings({
-    [`${colours.textOnSurface} bg-transparent w-full rounded px-4 border focus:outline-none pt-6 pb-2 h-[50px] peer`]:
-      true,
-    [`${colours.borderOnSurfaceOutlineSubtle}`]: isDisabled,
-    [`${colours.borderError} `]: inError,
-    [`${colours.borderOnSurfaceOutline} focus:border-colour-primary focus:dark:border-colour-primary-dark`]:
-      isDefault,
-  });
-
-  const labelClasses = conditionalStrings({
-    [fonts.bodySmall]: true,
-    [`${colours.textOnSurfaceSubtle} focus:text-colour-primary focus:dark:text-colour-primary-dark`]:
-      !inError,
-    [`${colours.textError}`]: inError,
-  });
 
   const hasValue = !!value;
 
   return (
-    <div className={className}>
-      <InfoWrapper htmlFor={elementId} label={label} description={helpText} helpText={tooltipText}>
-        <div className="relative h-[50px]">
-          <input
-            id={elementId}
-            className={inputClasses}
-            value={value}
-            maxLength={maxLength}
-            min={min}
-            max={max}
-            name={name}
-            required={required}
-            onChange={onChange}
-            onKeyDown={onKeyDown}
-            disabled={isDisabled}
-            aria-invalid={!isValid}
-            aria-required={required}
-            aria-describedby={getAriaDescribedBy()}
+    <div>
+      {label ? (
+        <FieldLabel
+          htmlFor={componentId}
+          label={label}
+          description={description}
+          tooltip={tooltip}
+        />
+      ) : null}
+      <div className="relative h-[50px] w-full">
+        <input
+          id={componentId}
+          className={classes.input}
+          value={value}
+          maxLength={maxLength}
+          name={name}
+          required={isRequired}
+          onChange={onChange}
+          onKeyDown={onKeyDown}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          disabled={isDisabled}
+          aria-invalid={!isValid}
+          aria-required={isRequired}
+          aria-describedby={ariaDescribedBy}
+        />
+        {placeholder ? (
+          <FloatingPlaceholder
+            htmlFor={componentId}
+            hasValue={hasValue}
+            isDisabled={isDisabled}
+            text={placeholder}
           />
-          <FloatingPlaceholder htmlFor={elementId} hasValue={hasValue} isDisabled={isDisabled}>
-            {placeholder}
-          </FloatingPlaceholder>
-        </div>
-      </InfoWrapper>
+        ) : null}
+      </div>
 
-      {message ? (
-        <div>
-          <label htmlFor={elementId} id={infoMessageId} className={labelClasses}>
-            {message}
-          </label>
-        </div>
-      ) : null}
-
-      {showCharCount ? (
-        <div id={charCountId} className={labelClasses}>
-          {remainingChars} characters remaining
-        </div>
-      ) : null}
+      <ValidationMessage
+        message={validationMessage}
+        htmlFor={componentId}
+        isValid={isValid}
+        isDisabled={isDisabled}
+      />
     </div>
   );
 };

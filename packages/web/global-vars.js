@@ -22,7 +22,6 @@ const ENVIRONMENT = process.env.NEXT_PUBLIC_ENVIRONMENT;
 const HOLIDAY_URL =
   process.env.NEXT_PUBLIC_APP_HOLIDAY_URL ?? 'https://holiday-discounts.bluelightcard.co.uk';
 
-// Proxy
 const API_PROXY_URL = process.env.NEXT_PUBLIC_API_PROXY_URL ?? '';
 
 // Identity API

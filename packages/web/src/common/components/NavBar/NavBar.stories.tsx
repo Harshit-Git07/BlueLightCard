@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui';
-import NavBar from './NavBar';
+import { colours, StorybookPlatformAdapterDecorator } from '@bluelightcard/shared-ui';
+import NavBar from '.';
 import AuthenticatedNavBar from './components/organisms/AuthenticatedNavBar';
 import UnauthenticatedNavBar from './components/organisms/UnauthenticatedNavBar';
 import { getNavigationItems } from './helpers/getNavigationItems';
@@ -62,7 +62,7 @@ const componentMeta: Meta = {
 
 export default componentMeta;
 
-const HeaderTemplate: StoryFn = ({ isAuthenticated, isSticky, isZendeskV1BlcUkEnabled }) => {
+const DefaultTemplate: StoryFn = ({ isAuthenticated, isSticky, isZendeskV1BlcUkEnabled }) => {
   const navigationItems = getNavigationItems(
     BRAND as BRANDS,
     isAuthenticated,
@@ -70,7 +70,7 @@ const HeaderTemplate: StoryFn = ({ isAuthenticated, isSticky, isZendeskV1BlcUkEn
     { isAuth0LoginLogoutWebEnabled: false, isCognitoUIEnabled: false }
   );
   return (
-    <div className="border">
+    <div>
       <header className="sticky top-0 z-10">
         {isAuthenticated ? (
           <AuthenticatedNavBar
@@ -79,11 +79,14 @@ const HeaderTemplate: StoryFn = ({ isAuthenticated, isSticky, isZendeskV1BlcUkEn
             onSearchTerm={() => {}}
             isSticky={isSticky}
             navigationItems={navigationItems}
+            onToggleMobileSideBar={() => alert('Open Account Menu')}
           />
         ) : (
           <UnauthenticatedNavBar />
         )}
-        <div className="bg-colour-surface-container dark:bg-colour-surface-container-dark text-colour-onSurface dark:text-colour-onSurface-dark h-28 flex items-center justify-center">
+        <div
+          className={`h-28 flex items-center justify-center ${colours.backgroundSurfaceContainer} ${colours.textOnSurface} `}
+        >
           Some Content...
         </div>
       </header>
@@ -91,13 +94,14 @@ const HeaderTemplate: StoryFn = ({ isAuthenticated, isSticky, isZendeskV1BlcUkEn
   );
 };
 
-export const DeviceView = HeaderTemplate.bind({});
-DeviceView.args = {
+export const Default = DefaultTemplate.bind({});
+Default.args = {
   isAuthenticated: true,
+  isSticky: false,
 };
 
-export const StickyHeaderView = HeaderTemplate.bind({});
-StickyHeaderView.args = {
+export const Sticky = DefaultTemplate.bind({});
+Sticky.args = {
   isAuthenticated: true,
   isSticky: true,
 };

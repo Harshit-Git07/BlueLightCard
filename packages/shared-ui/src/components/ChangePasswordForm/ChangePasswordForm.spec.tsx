@@ -1,11 +1,12 @@
 import ChangePasswordForm, { Props } from '.';
 import '@testing-library/jest-dom';
-import { act, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../adapters';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import copy from './copy';
 import { userEvent } from '@storybook/testing-library';
 import { V5_API_URL } from 'client/src/common/globals/apiUrl';
+import { act } from 'react';
 
 const mockClose = jest.fn();
 jest.mock('../Drawer/useDrawer', () => () => ({
@@ -152,61 +153,65 @@ describe('Save button & Validation', () => {
 
     expect(screen.getByText(copy.validation.doesNotMatch)).toBeInTheDocument();
   });
-});
 
-describe('Cancel button', () => {
-  it('triggers drawer close', async () => {
-    const { cancelButton } = testHarness();
+  describe('ChangePasswordForm', () => {
+    describe('Cancel button', () => {
+      it('triggers drawer close', async () => {
+        const { cancelButton } = testHarness();
 
-    await act(async () => await userEvent.click(cancelButton));
+        await act(async () => await userEvent.click(cancelButton));
 
-    expect(mockClose).toHaveBeenCalled();
-  });
-});
-
-describe('Submission', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  it('triggers callbacks onclick if submit request successful', async () => {
-    const { saveButton, adapter } = await submittableHarness();
-
-    await act(async () => await userEvent.click(saveButton));
-
-    expect(mockPasswordUpdateSuccess).toHaveBeenCalled();
-    expect(mockClose).toHaveBeenCalled();
-    expect(adapter.invokeV5Api).toHaveBeenCalledWith(
-      `${V5_API_URL.User}/${defaultProps.memberId}`,
-      {
-        body: JSON.stringify({
-          currentPassword: 'currentPassword',
-          newPassword: validPassword,
-        }),
-        method: 'PUT',
-      },
-    );
-  });
-
-  it('displays duplicate error if api returns 401', async () => {
-    const { saveButton, adapter } = await submittableHarness(401, { errors: [{ code: '401' }] });
-
-    await act(async () => await userEvent.click(saveButton));
-
-    expect(mockPasswordUpdateSuccess).not.toHaveBeenCalled();
-    expect(screen.getByText(copy.validation.incorrectCurrentPassword)).toBeInTheDocument();
-    expect(adapter.invokeV5Api).toHaveBeenCalled();
-  });
-
-  it('displays api error for other error code', async () => {
-    const { saveButton, adapter } = await submittableHarness(400, {
-      errors: [{ code: '400', detail: 'testError' }],
+        expect(mockClose).toHaveBeenCalled();
+      });
     });
 
-    await act(async () => await userEvent.click(saveButton));
+    describe('Submission', () => {
+      beforeEach(() => {
+        jest.clearAllMocks();
+      });
 
-    expect(mockPasswordUpdateSuccess).not.toHaveBeenCalled();
-    expect(screen.getByText('testError')).toBeInTheDocument();
-    expect(adapter.invokeV5Api).toHaveBeenCalled();
+      it('triggers callbacks onclick if submit request successful', async () => {
+        const { saveButton, adapter } = await submittableHarness();
+
+        await act(async () => await userEvent.click(saveButton));
+
+        expect(mockPasswordUpdateSuccess).toHaveBeenCalled();
+        expect(mockClose).toHaveBeenCalled();
+        expect(adapter.invokeV5Api).toHaveBeenCalledWith(
+          `${V5_API_URL.User}/${defaultProps.memberId}`,
+          {
+            body: JSON.stringify({
+              currentPassword: 'currentPassword',
+              newPassword: validPassword,
+            }),
+            method: 'PUT',
+          },
+        );
+      });
+
+      it('displays duplicate error if api returns 401', async () => {
+        const { saveButton, adapter } = await submittableHarness(401, {
+          errors: [{ code: '401' }],
+        });
+
+        await act(async () => await userEvent.click(saveButton));
+
+        expect(mockPasswordUpdateSuccess).not.toHaveBeenCalled();
+        expect(screen.getByText(copy.validation.incorrectCurrentPassword)).toBeInTheDocument();
+        expect(adapter.invokeV5Api).toHaveBeenCalled();
+      });
+
+      it('displays api error for other error code', async () => {
+        const { saveButton, adapter } = await submittableHarness(400, {
+          errors: [{ code: '400', detail: 'testError' }],
+        });
+
+        await act(async () => await userEvent.click(saveButton));
+
+        expect(mockPasswordUpdateSuccess).not.toHaveBeenCalled();
+        expect(screen.getByText('testError')).toBeInTheDocument();
+        expect(adapter.invokeV5Api).toHaveBeenCalled();
+      });
+    });
   });
 });

@@ -27,9 +27,9 @@ const testHarness = (status = 200, data = {}) => {
       </QueryClientProvider>
     </PlatformAdapterProvider>,
   );
-  const currentEmail = screen.getByLabelText(changeEmailAddressText.currentEmail.label, {});
-  const newEmail = screen.getByLabelText(changeEmailAddressText.newEmail.label, {});
-  const confirmEmail = screen.getByLabelText(changeEmailAddressText.confirmEmail.label, {});
+  const currentEmail = screen.getAllByLabelText(changeEmailAddressText.currentEmail.label, {})[0];
+  const newEmail = screen.getAllByLabelText(changeEmailAddressText.newEmail.label, {})[0];
+  const confirmEmail = screen.getAllByLabelText(changeEmailAddressText.confirmEmail.label, {})[0];
   const saveBtn = screen.getByText('Save', { exact: true });
   const cancelBtn = screen.getByText('Cancel', { exact: true });
   return {

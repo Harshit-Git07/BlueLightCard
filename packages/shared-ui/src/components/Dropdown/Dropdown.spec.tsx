@@ -1,11 +1,8 @@
-import '@testing-library/jest-dom';
-import { act, render, screen, within } from '@testing-library/react';
-import { userEvent } from '@testing-library/user-event';
-import { composeStories } from '@storybook/react';
-import * as stories from './Dropdown.stories';
+import { render, screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { DropdownOptions, DropdownProps } from './types';
-
-const { Default, Searchable } = composeStories(stories);
+import Dropdown from '.';
+import { act } from 'react';
 
 const onSelectMock = jest.fn();
 
@@ -41,224 +38,206 @@ const options: DropdownOptions = [
 ];
 
 beforeEach(() => {
+  jest.resetAllMocks();
   window.HTMLElement.prototype.scrollIntoView = jest.fn();
 });
 
-describe('given initial render of default component', () => {
-  let combobox: HTMLElement;
-
-  beforeEach(async () => {
-    const args: DropdownProps = {
-      label: 'label',
-      helpText: 'helptext',
-      tooltipText: 'tooltip',
-      message: 'message',
-      error: true,
-      selectedValue: '1',
+describe('Dropdown Component', () => {
+  const setup = (props?: Partial<DropdownProps>) => {
+    const defaultArgs: DropdownProps = {
+      label: 'Label',
+      description: 'helptext',
+      tooltip: 'tooltip',
+      validationMessage: 'message',
+      isValid: true,
+      value: options[0],
       maxItemsShown: 3,
       options,
-      placeholder: 'placeholder',
-      onSelect: onSelectMock,
-      disabled: false,
+      placeholder: 'Placeholder',
+      onChange: onSelectMock,
+      isDisabled: false,
     };
-    render(<Default {...args} />);
 
-    combobox = screen.getByTestId('combobox');
-  });
+    return render(<Dropdown {...defaultArgs} {...props} />);
+  };
 
-  it('should render successfully', async () => {
-    expect(combobox).toBeInTheDocument();
-  });
+  describe('Default Dropdown', () => {
+    it('renders successfully with all props', () => {
+      setup();
 
-  describe('on clicking on the dropdown', () => {
-    let dropdownList: HTMLElement;
-
-    beforeEach(async () => {
-      await act(() => userEvent.click(combobox));
-      dropdownList = screen.getByTestId('dropdownList');
+      expect(screen.getByTestId('combobox')).toBeInTheDocument();
+      expect(screen.getByText('Label')).toBeInTheDocument();
+      expect(screen.getByText('helptext')).toBeInTheDocument();
+      expect(screen.getByText('Placeholder')).toBeInTheDocument();
     });
 
-    it('should render the options', async () => {
-      const selectOptionOne = await within(dropdownList).getByText('Option One');
-      expect(selectOptionOne).toBeInTheDocument();
+    it('does not render options initially', () => {
+      setup();
+
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
     });
 
-    describe('on clicking on an option', () => {
-      beforeEach(async () => {
-        await act(async () => {
-          await userEvent.click(await within(dropdownList).getByText('Option One'));
+    describe('when clicking the dropdown', () => {
+      it('displays options', async () => {
+        setup();
+
+        await userEvent.click(screen.getByTestId('combobox'));
+
+        const dropdownList = screen.getByRole('listbox');
+        expect(dropdownList).toBeInTheDocument();
+        expect(within(dropdownList).getByText('Option One')).toBeInTheDocument();
+      });
+
+      it('closes when clicking outside', async () => {
+        setup();
+
+        await userEvent.click(screen.getByTestId('combobox'));
+        await userEvent.click(document.body);
+
+        expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+      });
+
+      it('calls onSelect when an option is clicked', async () => {
+        setup();
+
+        await userEvent.click(screen.getByTestId('combobox'));
+        const option = screen.getByText('Option Two');
+        await userEvent.click(option);
+
+        expect(onSelectMock).toHaveBeenCalledWith(expect.objectContaining(options[1]));
+      });
+    });
+
+    describe('keyboard navigation', () => {
+      it('opens dropdown with Enter key when focused', async () => {
+        setup();
+        const combobox = screen.getByTestId('combobox');
+
+        combobox.focus();
+        await userEvent.keyboard('{Enter}');
+
+        await waitFor(() => {
+          expect(screen.getByRole('listbox')).toBeInTheDocument();
         });
       });
 
-      it('then the dropdown will close and the selected option will be submitted to the on select callback', async () => {
-        const optionOne = await within(dropdownList).findByText('Option One');
-        expect(onSelectMock).toHaveBeenCalledWith({ id: '1', label: 'Option One' });
-        expect(optionOne).not.toBeInTheDocument();
-      });
-    });
-  });
+      it('navigates options with ArrowDown and ArrowUp', async () => {
+        setup();
 
-  describe('when tab key is pressed', () => {
-    beforeEach(async () => {
-      await userEvent.keyboard('{Tab}');
-    });
+        const combobox = screen.getByTestId('combobox');
+        await userEvent.click(combobox);
 
-    it('then the combobox should be focused', async () => {
-      expect(combobox).toHaveFocus();
-    });
+        const options = screen.getAllByRole('option');
 
-    describe('when enter key is pressed on focused combobox', () => {
-      let dropdownList: HTMLElement;
-
-      beforeEach(async () => {
-        await act(() => userEvent.keyboard('{Enter}'));
-        dropdownList = screen.getByTestId('dropdownList');
-      });
-
-      it('then the options will be shown', async () => {
-        const optionOne = await within(dropdownList).findByText('Option One');
-        expect(optionOne).toBeInTheDocument();
-      });
-
-      it('then first option can be focused via a down keyboard button press', async () => {
         await userEvent.keyboard('{ArrowDown}');
+        expect(document.activeElement).toBe(options[0]);
 
-        const optionOne = await within(dropdownList).findByText('Option One');
-        expect(optionOne).toHaveFocus();
-      });
-
-      it('then second option can be focused via two down keyboard button presses', async () => {
         await userEvent.keyboard('{ArrowDown}');
-        await userEvent.keyboard('{ArrowDown}');
+        expect(document.activeElement).toBe(options[1]);
 
-        const optionTwo = await within(dropdownList).findByText('Option Two');
-        expect(optionTwo).toHaveFocus();
-      });
-
-      it('then the up arrow button will navigate up the list of options', async () => {
-        await userEvent.keyboard('{ArrowDown}');
         await userEvent.keyboard('{ArrowUp}');
-
-        const optionOne = await within(dropdownList).findByText('Option One');
-        expect(optionOne).toHaveFocus();
+        expect(document.activeElement).toBe(options[0]);
       });
 
-      describe('when the escape button is pressed', () => {
-        beforeEach(async () => {
-          await userEvent.keyboard('{ArrowDown}');
-          await act(() => userEvent.keyboard('{Escape}'));
-        });
+      it('selects an option with Enter', async () => {
+        setup();
 
-        it('then the dropdown will close and the combobox will be focused again', async () => {
-          const optionOne = await within(dropdownList).findByText('Option One');
-          expect(optionOne).not.toBeInTheDocument();
-          expect(combobox).toHaveFocus();
-        });
-      });
-
-      describe('when an option is selected via the enter key', () => {
-        beforeEach(async () => {
-          await userEvent.keyboard('{ArrowDown}');
-          await act(() => userEvent.keyboard('{Enter}'));
-        });
-
-        it('then the dropdown will close and the selected option will be submitted to the on select callback', async () => {
-          const optionOne = await within(dropdownList).findByText('Option One');
-          expect(onSelectMock).toHaveBeenCalledWith({ id: '1', label: 'Option One' });
-          expect(optionOne).not.toBeInTheDocument();
-        });
-      });
-    });
-  });
-});
-
-describe('given initial render of searchable component', () => {
-  beforeEach(() => {
-    render(<Searchable onSelect={onSelectMock} />);
-  });
-
-  describe('when text is typed into the search box', () => {
-    let dropdownList: HTMLElement;
-
-    beforeEach(async () => {
-      const combobox = await screen.getByTestId('combobox');
-      await act(() => userEvent.type(combobox, 'Option T'));
-
-      dropdownList = screen.getByTestId('dropdownList');
-    });
-
-    it('should filter options that do not match the search query', async () => {
-      const optionOne = await within(dropdownList).queryByText('Option One');
-
-      expect(optionOne).not.toBeInTheDocument();
-    });
-
-    it('should display options that match the filter', async () => {
-      const optionTwo = await within(dropdownList).queryByText('Option Two');
-      const optionThree = await within(dropdownList).queryByText('Option Three');
-
-      expect(optionTwo).toBeInTheDocument();
-      expect(optionThree).toBeInTheDocument();
-    });
-
-    describe('when the keyboard controls are used to select the second option', () => {
-      beforeEach(async () => {
+        const combobox = screen.getByTestId('combobox');
+        await userEvent.click(combobox);
         await userEvent.keyboard('{ArrowDown}');
-        await act(() => userEvent.keyboard('{Enter}'));
+        await userEvent.keyboard('{Enter}');
+
+        expect(onSelectMock).toHaveBeenCalledWith(expect.objectContaining(options[0]));
       });
 
-      it('should call the onSelect function with the selected option', () => {
-        expect(onSelectMock).toHaveBeenCalledWith({ id: '2', label: 'Option Two' });
-      });
-    });
+      it('closes the dropdown with Escape', async () => {
+        setup();
 
-    describe('when the combo box is cleared', () => {
-      beforeEach(async () => {
-        const combobox = await screen.getByTestId('combobox');
-        await act(() => userEvent.type(combobox, '{Backspace}'.repeat(8)));
-      });
+        const combobox = screen.getByTestId('combobox');
+        await userEvent.type(combobox, '{Enter}');
+        await userEvent.keyboard('{Escape}');
 
-      it('then the full options list will be shown', async () => {
-        const optionThree = await within(dropdownList).queryByText('Option Three');
-
-        expect(optionThree).toBeInTheDocument();
+        expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
       });
     });
   });
 
-  describe('when the expand button is clicked', () => {
-    beforeEach(async () => {
-      const expandIcon = await screen.getByTestId('dropdown-expand-icon');
-      await act(() => userEvent.click(expandIcon));
+  describe('Searchable Dropdown', () => {
+    it('renders successfully with search functionality', () => {
+      setup({ searchable: true });
+
+      expect(screen.getByTestId('combobox')).toHaveAttribute('type', 'text');
     });
 
-    it('should focus the text field', async () => {
-      const combobox = await screen.getByTestId('combobox');
-      expect(combobox).toHaveFocus();
+    describe('when typing in the search box', () => {
+      it('filters options based on search term', async () => {
+        setup({ searchable: true });
+
+        const combobox = screen.getByTestId('combobox');
+        await act(async () => {
+          await userEvent.clear(combobox);
+          await userEvent.type(combobox, 'Option T');
+        });
+
+        const dropdownList = screen.getByRole('listbox');
+        expect(dropdownList).toBeInTheDocument();
+
+        expect(within(dropdownList).queryByText('Option One')).not.toBeInTheDocument();
+        expect(within(dropdownList).getByText('Option Two')).toBeInTheDocument();
+        expect(within(dropdownList).getByText('Option Three')).toBeInTheDocument();
+      });
+
+      it('clears the filter when the search term is erased', async () => {
+        setup({ searchable: true });
+
+        const combobox = screen.getByTestId('combobox');
+        await act(async () => {
+          await userEvent.type(combobox, 'Option T');
+          await userEvent.clear(combobox);
+          await userEvent.click(combobox); // Ensure dropdown opens after clearing
+        });
+        const dropdownList = screen.getByRole('listbox');
+        expect(within(dropdownList).getByText('Option One')).toBeInTheDocument();
+      });
+    });
+
+    describe('keyboard navigation in search mode', () => {
+      it('navigates filtered options and selects with Enter', async () => {
+        setup({ searchable: true });
+
+        const combobox = screen.getByTestId('combobox');
+        await act(async () => {
+          await userEvent.clear(combobox);
+          await userEvent.type(combobox, 'Option');
+          await userEvent.keyboard('{ArrowDown}');
+          await userEvent.keyboard('{Enter}');
+        });
+        expect(onSelectMock).toHaveBeenCalledWith(expect.objectContaining(options[0]));
+      });
     });
   });
-});
 
-describe('given a tooltip has been configured', () => {
-  beforeEach(() => {
-    const args: DropdownProps = {
-      label: 'label',
-      helpText: 'helptext',
-      showTooltipIcon: true,
-      tooltipText: 'tooltip',
-      message: 'message',
-      error: true,
-      selectedValue: '1',
-      maxItemsShown: 3,
-      options,
-      placeholder: 'placeholder',
-      onSelect: onSelectMock,
-      disabled: false,
-    };
-    render(<Default {...args} />);
+  describe('Disabled Dropdown', () => {
+    it('does not open or allow interaction when disabled', async () => {
+      setup({ isDisabled: true });
+
+      const combobox = screen.getByTestId('combobox');
+      expect(combobox).toBeDisabled();
+
+      await userEvent.click(combobox);
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    });
   });
 
-  it('should render the tooltip', async () => {
-    expect(await screen.getByTestId('tooltip')).toBeInTheDocument();
+  describe('Tooltip functionality', () => {
+    it('renders tooltip when configured', async () => {
+      setup({ tooltip: 'Tooltip test' });
+
+      const trigger = screen.getByLabelText('information');
+
+      await userEvent.hover(trigger);
+
+      expect(await screen.findByRole('tooltip')).toHaveTextContent('Tooltip test');
+    });
   });
 });

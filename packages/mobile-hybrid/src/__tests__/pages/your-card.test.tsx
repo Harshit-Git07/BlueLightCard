@@ -2,7 +2,7 @@ import '@testing-library/jest-dom/extend-expect';
 import { FC, PropsWithChildren } from 'react';
 import { NextRouter } from 'next/router';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import {
@@ -11,13 +11,10 @@ import {
 } from '../../../../shared-ui/src/adapters';
 import Spinner from '@/modules/Spinner';
 import MyCardPage from '@/pages/your-card';
-import {
-  customerProfileCardGeneratedMock,
-  customerProfileCardNotGeneratedMock,
-  customerProfileNoCardMock,
-} from '../../../../shared-ui/src/mocks';
 import { formatDateDDMMYYYY } from '../../../../shared-ui/src/utils/dates';
 import * as globals from '@/globals';
+import { ApplicationSchema } from '@bluelightcard/shared-ui/components/CardVerificationAlerts/types';
+import { defaultApplication } from '@bluelightcard/shared-ui/components/CardVerificationAlerts/testData';
 
 const mockGlobals = globals as { BRAND: string };
 jest.mock('@/globals', () => ({
@@ -46,15 +43,29 @@ jest.mock('next/router', () => ({
   useRouter: () => mockRouter,
 }));
 
-jest.mock('@tanstack/react-query', () => {
-  const actualReactQuery = jest.requireActual('@tanstack/react-query');
-  return {
-    ...actualReactQuery,
-    useQuery: jest.fn(),
-  };
-});
+const mockUseMemberCard = jest.fn();
+jest.mock('../../../../shared-ui/src/components/RequestNewCard/useMemberCard', () => ({
+  __esModule: true,
+  default: () => mockUseMemberCard(),
+}));
+
+const mockUseMemberApplication = jest.fn();
+jest.mock('../../../../shared-ui/src/components/RequestNewCard/useMemberApplication', () => ({
+  __esModule: true,
+  default: () => mockUseMemberApplication(),
+}));
+
+const awaitingIdProfile: ApplicationSchema = {
+  ...defaultApplication,
+  applicationReason: 'SIGNUP',
+  eligibilityStatus: 'INELIGIBLE',
+};
 
 describe('MyCard Page', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   const mockPlatformAdapter = useMockPlatformAdapter();
 
   const WithSpinner: FC<PropsWithChildren> = ({ children }) => {
@@ -84,29 +95,36 @@ describe('MyCard Page', () => {
     );
   };
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
   test('displays generated card page', async () => {
-    (useQuery as jest.Mock).mockReturnValue({
-      isSuccess: true,
-      data: customerProfileCardGeneratedMock,
+    const firstName = 'firstname';
+    const lastName = 'lastname';
+    const cardNumber = 'BLC01234567';
+    const expiryDate = '2024-12-12T00: 00: 00Z';
+
+    mockUseMemberCard.mockReturnValue({
+      firstName,
+      lastName,
+      card: {
+        memberId: 'test',
+        cardNumber,
+        purchaseTime: '2024-12-12T00: 00: 00Z',
+        expiryDate,
+        cardStatus: 'PHYSICAL_CARD',
+        paymentStatus: 'PAID_CARD',
+      },
     });
+
+    mockUseMemberApplication.mockReturnValue({ application: awaitingIdProfile });
 
     whenPageIsRendered();
 
-    const name = await screen.findByText(
-      `${customerProfileCardGeneratedMock.firstName} ${customerProfileCardGeneratedMock.lastName}`,
-    );
+    const name = await screen.findByText(`${firstName} ${lastName}`);
     expect(name).toBeInTheDocument();
 
-    const accNo = await screen.findByText(customerProfileCardGeneratedMock.card!.cardNumber!);
+    const accNo = await screen.findByText(cardNumber!);
     expect(accNo).toBeInTheDocument();
 
-    const formattedDate = formatDateDDMMYYYY(
-      new Date(customerProfileCardGeneratedMock.card!.cardExpiry!).toString(),
-    );
+    const formattedDate = formatDateDDMMYYYY(new Date(expiryDate).toString());
     const date = screen.queryByText(formattedDate!);
     expect(date).toBeInTheDocument();
 
@@ -119,16 +137,20 @@ describe('MyCard Page', () => {
   });
 
   test('displays NOT generated card page', async () => {
-    (useQuery as jest.Mock).mockReturnValue({
-      isSuccess: true,
-      data: customerProfileCardNotGeneratedMock,
+    const firstName = 'firstname';
+    const lastName = 'lastname';
+
+    mockUseMemberCard.mockReturnValue({
+      firstName,
+      lastName,
+      card: {},
     });
+
+    mockUseMemberApplication.mockReturnValue({ application: awaitingIdProfile });
 
     whenPageIsRendered();
 
-    const name = await screen.findByText(
-      `${customerProfileCardNotGeneratedMock.firstName} ${customerProfileCardNotGeneratedMock.lastName}`,
-    );
+    const name = await screen.findByText(`${firstName} ${lastName}`);
     expect(name).toBeInTheDocument();
 
     const defaultAccNo = screen.getByText('BLC0000000');
@@ -148,16 +170,20 @@ describe('MyCard Page', () => {
   });
 
   test('displays No card present page', async () => {
-    (useQuery as jest.Mock).mockReturnValue({
-      isSuccess: true,
-      data: customerProfileNoCardMock,
+    const firstName = 'firstname';
+    const lastName = 'lastname';
+
+    mockUseMemberCard.mockReturnValue({
+      firstName,
+      lastName,
+      card: {},
     });
+
+    mockUseMemberApplication.mockReturnValue({ application: null });
 
     whenPageIsRendered();
 
-    const name = screen.queryByText(
-      `${customerProfileNoCardMock.firstName} ${customerProfileNoCardMock.lastName}`,
-    );
+    const name = screen.queryByText(`${firstName} ${lastName}`);
     expect(name).not.toBeInTheDocument();
 
     const copyBtn = screen.queryByRole('button', { name: 'copy' });
@@ -191,10 +217,16 @@ describe('MyCard Page', () => {
       jest.clearAllMocks();
     });
 
-    (useQuery as jest.Mock).mockReturnValue({
-      isSuccess: true,
-      data: customerProfileNoCardMock,
+    const firstName = 'firstname';
+    const lastName = 'lastname';
+
+    mockUseMemberCard.mockReturnValue({
+      firstName,
+      lastName,
+      card: {},
     });
+
+    mockUseMemberApplication.mockReturnValue({ application: null });
 
     describe(`when the brand is '${brand}'`, () => {
       it(`should display: ${message}`, () => {

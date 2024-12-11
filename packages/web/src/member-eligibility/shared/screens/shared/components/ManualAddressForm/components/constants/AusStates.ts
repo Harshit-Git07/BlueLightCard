@@ -1,6 +1,6 @@
 import { DropdownOptions } from '@bluelightcard/shared-ui/components/Dropdown/types';
 
-const australiaStates = [
+export const australianStates = [
   'New South Wales',
   'Victoria',
   'Queensland',
@@ -11,7 +11,7 @@ const australiaStates = [
   'Australian Capital Territory',
 ];
 
-export const australianStatesDropdownOptions: DropdownOptions = australiaStates.map((state) => ({
+export const australianStatesDropdownOptions: DropdownOptions = australianStates.map((state) => ({
   id: state,
   label: state,
 }));

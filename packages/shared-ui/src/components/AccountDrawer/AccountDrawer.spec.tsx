@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 
 describe('AccountDrawer', () => {
   const title = 'Account Settings';
+  const subtitle = 'This is a subtitle';
   const primaryButtonLabel = 'Save';
   const secondaryButtonLabel = 'Cancel';
   const primaryButtonOnClick = jest.fn();
@@ -14,6 +15,7 @@ describe('AccountDrawer', () => {
     render(
       <AccountDrawer
         title={customTitle}
+        subtitle={subtitle}
         primaryButtonLabel={primaryButtonLabel}
         primaryButtonOnClick={primaryButtonOnClick}
         secondaryButtonLabel={secondaryButtonLabel}
@@ -48,6 +50,11 @@ describe('AccountDrawer', () => {
     it('renders title', () => {
       const { drawerContainer } = setup();
       expect(drawerContainer).toHaveTextContent(title);
+    });
+
+    it('renders subtitle', () => {
+      const { drawerContainer } = setup();
+      expect(drawerContainer).toHaveTextContent(subtitle);
     });
 
     it('does not render title when not provided', () => {

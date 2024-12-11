@@ -1,24 +1,25 @@
-import React, { FC } from 'react';
+import React, { ChangeEvent, FC } from 'react';
 import TextInput from '@bluelightcard/shared-ui/components/TextInput';
 import Dropdown from '@bluelightcard/shared-ui/components/Dropdown';
+import { DropdownOption } from '@bluelightcard/shared-ui/components/Dropdown/types';
 import {
   AusAddress,
   EligibilityDetailsAddress,
   UkAddress,
 } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import { australianStatesDropdownOptions } from './constants/AusStates';
 import { useIsAusBrand } from '@/root/src/member-eligibility/shared/hooks/use-is-aus-brand/UseIsAusBrand';
-import { australianStatesDropdownOptions } from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/components/constants/AusStates';
-import { ukCountyDropdownOptions } from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/components/constants/UkCounties';
-import { OnAddressFieldChanged } from '@/root/src/member-eligibility/shared/screens/shared/components/ManualAddressForm/hooks/UseOnAddressFieldChanged';
 
 interface RegionAddressFieldsProps {
   address?: EligibilityDetailsAddress;
-  onAddressFieldChanged: OnAddressFieldChanged;
+  handleFieldChange: (field: keyof (UkAddress & AusAddress), value: string) => void;
+  handleStateSelect: (option: DropdownOption) => void;
 }
 
 export const RegionAddressFields: FC<RegionAddressFieldsProps> = ({
   address,
-  onAddressFieldChanged,
+  handleFieldChange,
+  handleStateSelect,
 }) => {
   const isAus = useIsAusBrand();
 
@@ -29,44 +30,35 @@ export const RegionAddressFields: FC<RegionAddressFieldsProps> = ({
           placeholder="Suburb"
           name="address-level2"
           value={address?.city ?? ''}
-          onChange={(error) => onAddressFieldChanged('city', error.target.value)}
-          required
+          onChange={(error: ChangeEvent<HTMLInputElement>) =>
+            handleFieldChange('city', error.target.value)
+          }
+          isRequired
         />
 
         <Dropdown
-          onSelect={(option) => {
-            onAddressFieldChanged('state', option.label);
-          }}
+          onChange={handleStateSelect}
           options={australianStatesDropdownOptions}
-          selectedValue={(address as AusAddress)?.state ?? ''}
+          value={australianStatesDropdownOptions.find(
+            (state) => state.label === (address as AusAddress).state
+          )}
           placeholder="State"
           maxItemsShown={4}
-          searchable
+          searchable={true}
         />
       </>
     );
   }
 
   return (
-    <>
-      <TextInput
-        placeholder="Town/City"
-        name="address-level3"
-        value={address?.city ?? ''}
-        onChange={(error) => onAddressFieldChanged('city', error.target.value)}
-        required
-      />
-
-      <Dropdown
-        onSelect={(option) => {
-          onAddressFieldChanged('county', option.label);
-        }}
-        options={ukCountyDropdownOptions}
-        selectedValue={(address as UkAddress)?.county ?? ''}
-        placeholder="County"
-        maxItemsShown={4}
-        searchable
-      />
-    </>
+    <TextInput
+      placeholder="Town/City"
+      name="address-level3"
+      value={address?.city ?? ''}
+      onChange={(error: ChangeEvent<HTMLInputElement>) =>
+        handleFieldChange('city', error.target.value)
+      }
+      isRequired
+    />
   );
 };

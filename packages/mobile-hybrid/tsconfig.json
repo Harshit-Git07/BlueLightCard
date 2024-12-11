@@ -38,7 +38,8 @@
       ],
       "@bluelightcard/shared-ui/*": [
         "../shared-ui/src/*"
-      ]
+      ],
+      "@/global-vars": ["./src/globals"]
     }
   },
   "include": [

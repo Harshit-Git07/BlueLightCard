@@ -40,11 +40,11 @@ List of variants can be shown below here.
 **Error**
 <Canvas of={TextInput.Error}/>
 
+**Success**
+<Canvas of={TextInput.Success}/>
+
 **Disabled**
 <Canvas of={TextInput.Disabled}/>
-
-**With All Features**
-<Canvas of={TextInput.WithAllFeatures}/>
 
 ## Implementation
 Usage example using jsx
@@ -54,38 +54,24 @@ import React, { useState } from 'react';
 import TextInput from './TextInput';
 
 const ExampleComponent = () => {
-  const [inputValue, setInputValue] = useState('');
-  const [isValid, setIsValid] = useState(true);
-  const [infoText, setInfoText] = useState('');
+  const [value, setValue] = useState(args.value ?? '');
+  const [validationMessage, setValidationMessage] = useState(args.validationMessage);
 
-  const handleInputChange = (e) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-    setInputValue(newValue);
-
-    if (newValue.length < 3) {
-      setIsValid(false);
-      setInfoText('Input must be at least 3 characters long');
-    } else {
-      setIsValid(true);
-      setInfoText('');
-    }
+    setValue(newValue.length <= args.maxLength ? newValue : value);
   };
 
+  useEffect(() => {
+    if (args.maxLength) {
+      const charsLeft = args.maxLength - value.length;
+      const charsLeftString = `${charsLeft} characters remaining`;
+      setValidationMessage(charsLeftString);
+    }
+  }, [value]);
+
   return (
-    <div className="p-4">
-      <TextInput
-        id="textInput1"
-        name="example-input"
-        label="Example Input"
-        placeholder="Enter text here"
-        value={inputValue}
-        onChange={handleInputChange}
-        isValid={isValid}
-        infoText={infoText}
-        required={true}
-        maxChars={50}
-      />
-    </div>
+    <TextInput {...args} value={value} validationMessage={validationMessage} onChange={onChange} />
   );
 };
 

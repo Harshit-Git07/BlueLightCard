@@ -6,80 +6,56 @@ import {
   useCallback,
   useEffect,
   useId,
-  useMemo,
   useRef,
   useState,
 } from 'react';
 import { DropdownOption, DropdownProps } from './types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/pro-solid-svg-icons';
-import DropdownLabel from './components/DropdownLabel';
 import DropdownList from './components/DropdownList';
-import { getSelectedOption } from './utils/DropdownPlaceholderBuilder';
-import { colours, fonts } from '../../tailwind/theme';
+import FloatingPlaceholder from '../FloatingPlaceholder';
+import FieldLabel from '../FieldLabel';
+import { colours, fonts, getInputBorderClasses } from '../../tailwind/theme';
+import { floatingPlaceholderInputClasses } from '../FloatingPlaceholder/utils';
+import ValidationMessage from '../ValidationMessage';
 
 const Dropdown: FC<DropdownProps> = ({
-  className = '',
-  dropdownItemsClassName = '',
-  options,
-  placeholder,
-  disabled,
-  searchable,
-  onSelect,
-  onOpen,
+  id,
+  onChange: onSelect,
+  value: selectedValue,
+  isValid = undefined,
   label,
-  showTooltipIcon,
-  tooltipIcon,
-  tooltipText,
-  helpText,
-  message,
-  error = false,
-  selectedValue,
+  tooltip,
+  description,
+  placeholder = '',
+  validationMessage,
+  isDisabled = false,
+  onOpen,
+  options,
+  searchable,
+  dropdownItemsClassName,
   maxItemsShown,
 }) => {
-  const [selectedOption, setSelectedOption] = useState(getSelectedOption(options, selectedValue));
+  const inputValue = typeof selectedValue === 'string' ? selectedValue : selectedValue?.label ?? '';
+  const [searchTerm, setSearchTerm] = useState(inputValue);
   const [isListboxOpen, setIsListboxOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [tooltipOpen, setTooltipOpen] = useState(false);
   const [filteredOptions, setFilteredOptions] = useState(options);
 
-  const dropdownId = useId();
+  const randomId = useId();
+  const componentId = id ?? randomId;
+  const dropdownId = `dropdown-${componentId}`;
   const labelId = useId();
-  const dropdownPlaceholderId = useId();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const comboboxRef = useRef<HTMLInputElement>(null);
   const listboxRef = useRef<HTMLDivElement>(null);
 
-  const numberOfItemsToShow = useMemo(() => {
-    if (!maxItemsShown) return undefined;
+  useEffect(() => {
+    if (!searchable) return;
+    setSearchTerm(inputValue);
+  }, [inputValue, searchable]);
 
-    return Math.min(filteredOptions.length, maxItemsShown);
-  }, [maxItemsShown, filteredOptions]);
-
-  const selectedOptionOrPlaceholder = useMemo(() => {
-    if (selectedOption) return selectedOption;
-
-    return {
-      id: placeholder,
-      label: placeholder,
-    };
-  }, [placeholder, selectedOption]);
-
-  const inputValue = useMemo(() => {
-    if (searchable) {
-      return searchTerm;
-    }
-
-    return selectedOptionOrPlaceholder?.label;
-  }, [searchable, searchTerm, selectedOptionOrPlaceholder]);
-
-  const onInputClicked: MouseEventHandler = (): void => {
-    if (searchable) {
-      setIsListboxOpen(true);
-      return;
-    }
-
+  const onDropdownClicked: MouseEventHandler = (): void => {
     setIsListboxOpen(!isListboxOpen);
   };
 
@@ -111,12 +87,13 @@ const Dropdown: FC<DropdownProps> = ({
     setSearchTerm(event.target.value);
 
     if (event.target.value === '') {
+      setIsListboxOpen(false);
       setFilteredOptions(options);
       return;
     }
 
     const searchTerm = event.target.value.toLowerCase().trimStart();
-    const filteredOptions = options.filter((option) => {
+    const filteredOptions = options.filter((option: DropdownOption) => {
       const labelAdjustedForSearching = option.label.toLowerCase().trimStart();
       return labelAdjustedForSearching.includes(searchTerm);
     });
@@ -125,12 +102,12 @@ const Dropdown: FC<DropdownProps> = ({
     setIsListboxOpen(true);
   };
 
-  const onOptionKeyDown = (event: ReactKeyboardEvent, newSelectedOption: DropdownOption) => {
+  const onKeyDownOption = (event: ReactKeyboardEvent, newSelectedOption: DropdownOption) => {
     event.preventDefault();
     event.stopPropagation();
 
     if (event.key === 'Enter' || event.key === ' ') {
-      handleSelectOption(newSelectedOption);
+      onSelectOption(newSelectedOption);
     }
 
     if (event.key === 'Escape') {
@@ -147,24 +124,18 @@ const Dropdown: FC<DropdownProps> = ({
     }
   };
 
-  const handleSelectOption = (option: DropdownOption) => {
-    if (disabled) return;
+  const onSelectOption = (option: DropdownOption) => {
+    if (isDisabled) return;
 
     setSearchTerm(option.label);
-    setSelectedOption(option);
     setIsListboxOpen(false);
-    onSelect(option);
+    onSelect && onSelect(option);
   };
 
   const handleClickOutside = useCallback(
     (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsListboxOpen(false);
-
-        // This ensures that the placeholder label returns to it's default state when there is no value
-        if (searchable && searchTerm === '') {
-          setSelectedOption(undefined);
-        }
       }
     },
     [dropdownRef.current],
@@ -172,10 +143,6 @@ const Dropdown: FC<DropdownProps> = ({
 
   useEffect(() => {
     setFilteredOptions(options);
-
-    const selectedOption = getSelectedOption(options, selectedValue);
-    setSelectedOption(selectedOption);
-    setSearchTerm(selectedOption?.label ?? '');
   }, [options]);
 
   useEffect(() => {
@@ -206,127 +173,107 @@ const Dropdown: FC<DropdownProps> = ({
     onOpen(listboxRef.current);
   }, [onOpen, isListboxOpen]);
 
-  const dropdownContainerStyles = useMemo(() => {
-    const colourStyles = disabled ? colours.backgroundSurfaceContainer : colours.backgroundSurface;
-    const borderStyles = error ? colours.borderError : colours.borderOnSurfaceOutline;
+  const borderClasses = getInputBorderClasses(isDisabled, isListboxOpen, isValid);
 
-    return `${colourStyles} ${borderStyles} flex justify-between items-center relative w-full rounded-[4px] border cursor-pointer`;
-  }, [disabled]);
+  const classes = {
+    wrapper: `group relative inline-block w-full`,
+    inputWrapper: `relative`,
+    input: `z-20 w-full h-[50px] px-[16px] text-left ${floatingPlaceholderInputClasses(
+      !!placeholder,
+    )} ${fonts.body} ${
+      isDisabled
+        ? `${colours.textOnSurfaceDisabled} cursor-not-allowed`
+        : `${colours.textOnSurface} cursor-pointer`
+    } ${isDisabled ? colours.backgroundSurfaceContainer : 'bg-transparent'} ${borderClasses}`,
+    chevronIconButton: `absolute top-1/2 right-4 -translate-y-1/2 pointer-events-none ${
+      isDisabled && 'z-30'
+    }`,
+    chevronIcon: `w-[16px] h-[16px] ${
+      isDisabled ? colours.textOnSurfaceDisabled : colours.textOnSurface
+    }`,
+  };
 
-  const inputClassName = useMemo(() => {
-    const opacityStyles =
-      selectedOptionOrPlaceholder?.label === placeholder && !searchable
-        ? 'opacity-0 group-focus-within:opacity-100 group-focus-within:text-opacity-0'
-        : '';
-
-    const colourStyles = disabled
-      ? `${colours.backgroundSurfaceContainer} ${colours.textOnSurfaceDisabled}`
-      : `${colours.backgroundSurface} ${colours.textOnSurface}`;
-
-    const outlineClasses = searchable ? '' : 'outline-none';
-
-    return `${opacityStyles} ${colourStyles} ${outlineClasses} ${fonts.body} ${colours.borderOnSurfaceOutline} w-full h-12 px-4 pt-3 rounded-[4px] text-left group-focus-within:border-colour-primary dark:group-focus-within:border-colour-dds-denim-400 bg-transparent dark:placeholder-colour-onSurface-dark`;
-  }, [selectedOptionOrPlaceholder, placeholder, searchable, disabled]);
-
-  const placeholderClassName = useMemo(() => {
-    const positionStyles =
-      selectedOptionOrPlaceholder?.label !== placeholder || searchTerm !== ''
-        ? `${fonts.label} top-3 -translate-y-1/2`
-        : '';
-
-    const colourStyles = disabled ? colours.textOnSurface : colours.textOnSurfaceSubtle;
-
-    return `${positionStyles} ${colourStyles} absolute left-4 transition-all duration-200 pointer-events-none ${fonts.body} group-focus-within:top-3 group-focus-within:-translate-y-1/2 group-focus-within:font-typography-label group-focus-within:font-typography-label-weight group-focus-within:text-typography-label group-focus-within:leading-typography-label`;
-  }, [selectedOptionOrPlaceholder?.label, placeholder, searchTerm, disabled]);
-
-  const messageClassName = useMemo(() => {
-    const colourStyles = error
-      ? colours.textError
-      : `${colours.textOnSurfaceSubtle} group-focus-within:text-colour-primary dark:group-focus-within:text-colour-dds-denim-400`;
-
-    return `${colourStyles} ${fonts.body} flex my-[8px]`;
-  }, [error]);
+  const selectedOption: DropdownOption | undefined = options.find(
+    (opt) => opt === selectedValue || opt.id === selectedValue,
+  );
 
   return (
-    <div className={`${className} group relative inline-block w-full`} ref={dropdownRef}>
-      {label && (
-        <DropdownLabel
-          labelId={labelId}
-          dropdownId={dropdownId}
+    <div className={classes.wrapper} ref={dropdownRef}>
+      {label ? (
+        <FieldLabel
           label={label}
-          tooltipText={tooltipText}
-          tooltipOpen={tooltipOpen}
-          showTooltipIcon={showTooltipIcon}
-          tooltipIcon={tooltipIcon}
-          onTooltipClicked={() => setTooltipOpen(!tooltipOpen)}
+          description={description}
+          htmlFor={componentId}
+          tooltipPosition="right"
+          tooltip={tooltip}
         />
-      )}
+      ) : null}
 
-      {helpText && (
-        <div className={`${fonts.body} ${colours.textOnSurfaceSubtle} flex my-[8px]`}>
-          {helpText}
-        </div>
-      )}
-
-      <div className={dropdownContainerStyles}>
+      <div className={classes.inputWrapper}>
         <input
-          id={dropdownId}
+          id={componentId}
           ref={comboboxRef}
-          className={inputClassName}
+          className={classes.input}
           role="combobox"
-          disabled={disabled}
+          disabled={isDisabled}
           autoComplete="off"
           spellCheck={false}
           tabIndex={0}
-          aria-controls={isListboxOpen ? `dropdown-listbox-${dropdownId}` : ''}
+          aria-controls={`dropdown-listbox-${componentId}`}
           aria-expanded={isListboxOpen}
-          aria-describedby={dropdownPlaceholderId}
-          aria-label={placeholder}
+          aria-describedby={label ? `description-${componentId}` : undefined}
+          aria-label={placeholder ?? dropdownId}
           aria-labelledby={label ? labelId : undefined}
           type={searchable ? 'text' : 'button'}
           onChange={onComboboxChange}
-          onClick={onInputClicked}
+          onClick={onDropdownClicked}
           onKeyDown={onComboboxKeyDown}
-          value={inputValue}
+          value={searchable ? searchTerm : inputValue}
           data-testid="combobox"
         />
+        {placeholder ? (
+          <FloatingPlaceholder
+            htmlFor={componentId}
+            hasValue={searchable ? !!searchTerm : !!selectedValue}
+            isDisabled={isDisabled}
+            text={placeholder}
+          />
+        ) : null}
 
-        <span id={dropdownPlaceholderId} className={placeholderClassName}>
-          {placeholder}
-        </span>
-
-        <FontAwesomeIcon
-          className={`${disabled ? colours.textOnSurfaceDisabled : colours.textOnSurfaceSubtle}} ${fonts.body} px-4 py-3`}
-          size="sm"
-          icon={isListboxOpen ? faChevronUp : faChevronDown}
-          data-testid="dropdown-expand-icon"
-          onClick={() => {
-            if (disabled) return;
-
-            if (!isListboxOpen) {
-              comboboxRef.current?.focus();
-            }
-
-            setIsListboxOpen(!isListboxOpen);
-          }}
-        />
+        <button
+          type="button"
+          className={classes.chevronIconButton}
+          title={isListboxOpen ? 'Close dropdown' : 'Open dropdown'}
+          aria-label={isListboxOpen ? 'Close dropdown' : 'Open dropdown'}
+          disabled={isDisabled}
+        >
+          <FontAwesomeIcon
+            className={classes.chevronIcon}
+            icon={isListboxOpen ? faChevronUp : faChevronDown}
+          />
+        </button>
       </div>
 
-      {isListboxOpen && (
+      {isListboxOpen ? (
         <DropdownList
-          listboxRef={listboxRef}
           className={dropdownItemsClassName}
-          dropdownId={dropdownId}
-          maxItemsShown={numberOfItemsToShow}
+          listboxRef={listboxRef}
+          dropdownId={componentId}
+          maxItemsShown={maxItemsShown}
           options={filteredOptions}
-          disabled={disabled}
-          selectedOption={selectedOptionOrPlaceholder}
-          onSelected={handleSelectOption}
-          onOptionKeyDown={onOptionKeyDown}
+          disabled={isDisabled}
+          selectedOption={selectedOption}
+          onSelected={onSelectOption}
+          onOptionKeyDown={onKeyDownOption}
         />
-      )}
+      ) : null}
 
-      {message && !isListboxOpen && <div className={messageClassName}>{message}</div>}
+      <ValidationMessage
+        message={validationMessage}
+        htmlFor={dropdownId}
+        isValid={isValid}
+        isDisabled={isDisabled}
+      />
     </div>
   );
 };

@@ -33,12 +33,12 @@ const Alert: FC<AlertProps> = ({
     Banner: {
       fullWidth: 'w-full',
       variant: 'sticky top-0 left-0 z-50 px-[1rem] tablet:px-[3.5rem] laptop:px-[6.5rem] py-[1rem]',
-      layout: 'tablet:flex tablet:mx-6',
+      layout: 'tablet:flex tablet:mx-6 justify-between',
       title: `${fonts.titleSmall} tablet:font-typography-title-medium-semibold tablet:font-typography-title-medium-semibold-weight tablet:text-typography-title-medium-semibold tablet:leading-typography-title-medium-semibold tablet:tracking-typography-title-medium-semibold`,
       subtext: `pt-2 ${fonts.bodySmall} tablet:font-typography-body tablet:font-typography-body-weight tablet:text-typography-body tablet:leading-typography-body tablet:tracking-typography-body`,
       children: 'mt-[0.75rem] tablet:mt-0 tablet:justify-end',
       icon: 'tablet:items-center',
-      iconSize: 'pt-1 tablet:pt-[0px] tablet:text-[24px]',
+      iconSize: 'pt-1 tablet:pt-[0px] tablet:text-[32px]',
     },
     Inline: {
       fullWidth: isFullWidth ? 'w-full' : 'mx-auto',

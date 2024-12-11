@@ -5,6 +5,7 @@ import UserContext from '@/context/User/UserContext';
 import useFetchCompaniesOrCategories, { CompanyType } from '@/hooks/useFetchCompaniesOrCategories';
 import { PillProps } from '@bluelightcard/shared-ui/components/PillGroup/types';
 import { isCategorySelected } from './helpers/isCategorySelected';
+import { DropdownOption } from '@bluelightcard/shared-ui/components/Dropdown/types';
 
 type SearchDropDownPresenterProps = {
   onSearchCategoryChange: (categoryId: string, categoryName: string) => void;
@@ -81,6 +82,7 @@ export const SearchDropDownPresenter = ({
             </p>
 
             <Dropdown
+              dropdownItemsClassName="max-h-[240px]"
               placeholder="Search for a company"
               maxItemsShown={5}
               searchable
@@ -88,12 +90,12 @@ export const SearchDropDownPresenter = ({
                 id: company.id,
                 label: company.name,
               }))}
-              onOpen={onCompanyDropdownOpen}
-              onSelect={(option) => {
+              onChange={(option: DropdownOption) => {
                 if (option) {
                   onSearchCompanyChange(option.id, option.label);
                 }
               }}
+              onOpen={onCompanyDropdownOpen}
             />
           </div>
         </div>

@@ -1,16 +1,17 @@
-import { FC, useId } from 'react';
+import { FC } from 'react';
 import { conditionalStrings } from '../../utils/conditionalStrings';
 import { useCSSMerge } from '../../hooks/useCSS';
 
 export type Props = {
   children: React.ReactNode;
   text: string;
+  htmlFor: string;
   position: 'top' | 'bottom' | 'right' | 'left';
   isMaxWidth?: boolean;
   isOpen?: boolean;
 };
 
-const Tooltip: FC<Props> = ({ children, text, position, isOpen, isMaxWidth = false }) => {
+const Tooltip: FC<Props> = ({ children, text, htmlFor, position, isOpen, isMaxWidth = false }) => {
   const squareWidthCss = conditionalStrings({
     'w-60': isMaxWidth,
     'w-max': !isMaxWidth,
@@ -27,7 +28,9 @@ const Tooltip: FC<Props> = ({ children, text, position, isOpen, isMaxWidth = fal
     squareWidthCss,
     squarePositionCss,
     'transition-opacity ease-in pointer-events-none',
-    `max-w-60 text-center rounded px-4 py-[6px] ${!isOpen && 'opacity-0'} group-hover:opacity-100 absolute`,
+    `max-w-60 text-center rounded px-4 py-[6px] ${
+      !isOpen && 'opacity-0'
+    } group-hover:opacity-100 absolute`,
     'bg-colour-surface-inverse dark:bg-colour-surface-inverse-dark dark:text-colour-onSurface text-colour-onSurface-dark',
     'font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small',
   );
@@ -44,13 +47,10 @@ const Tooltip: FC<Props> = ({ children, text, position, isOpen, isMaxWidth = fal
     caretPositionCss,
   );
 
-  const id = useId();
-
   return (
     <div className="group relative inline-block">
-      <div aria-describedby={id}>{children}</div>
-
-      <div id={id} role="tooltip" className={squareCss}>
+      {children}
+      <div id={`${htmlFor}-tooltip`} role="tooltip" aria-label={text} className={squareCss}>
         <span className={caretCss}></span>
         {text}
       </div>

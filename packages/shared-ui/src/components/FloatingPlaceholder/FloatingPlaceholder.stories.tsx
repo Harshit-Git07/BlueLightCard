@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import FloatingPlaceholder from './';
 import TextInput from '../TextInput';
 
@@ -9,8 +9,12 @@ const componentMeta: Meta<typeof FloatingPlaceholder> = {
 };
 
 const DefaultTemplate: StoryFn<typeof FloatingPlaceholder> = (args) => {
-  const [v, setV] = useState(args.hasValue ? 'Hello World' : '');
-  args.hasValue = !!v;
+  const [value, setValue] = useState(args.hasValue ? 'Hello World' : '');
+  args.hasValue = !!value;
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setValue(e.target.value);
+  };
 
   return (
     <TextInput
@@ -18,8 +22,8 @@ const DefaultTemplate: StoryFn<typeof FloatingPlaceholder> = (args) => {
       placeholder={'This is a placeholder'}
       id={args.htmlFor}
       isDisabled={args.isDisabled}
-      value={v}
-      onChange={(e) => setV(e.target.value)}
+      value={value}
+      onChange={onChange}
     />
   );
 };

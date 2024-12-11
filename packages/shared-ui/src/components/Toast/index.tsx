@@ -48,11 +48,11 @@ const Toast: FC<ToastProps> = ({
 }) => {
   const { closeToast, timer } = useToaster();
 
-  const articleClasses = 'w-full py-4 px-4 max-w-[713px] min-h-12';
+  const articleClasses = 'w-full py-4 px-4 max-w-[713px] min-h-[48px]';
   const iconPositioning = 'absolute left-4 top-4';
-  const iconClasses = 'left-4 top-4 w-6 h-6';
+  const iconClasses = 'left-4 top-4 w-[24px] h-[24px]';
   const xPositioning = 'top-4 right-4';
-  const bodyPaddingX = 'pl-10 pr-5';
+  const bodyPaddingX = 'pl-[40px] pr-[20px]';
   const titleClasses = `${fonts.titleMediumSemiBold} text-colour-onSurface dark:text-colour-onSurface-dark`;
   const subtextClasses = `${fonts.body} text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark`;
   const dropShadow = 'shadow-[0px_1px_4px_0px_#0000001F]';
@@ -95,7 +95,7 @@ const Toast: FC<ToastProps> = ({
           onClick={handleClose}
           aria-label={'close'}
         >
-          <FontAwesomeIcon icon={faXmark} className={'w-6 h-6'} />
+          <FontAwesomeIcon icon={faXmark} className={'w-[24px] h-[24px]'} />
         </button>
       ) : null}
     </article>
@@ -103,3 +103,4 @@ const Toast: FC<ToastProps> = ({
 };
 
 export default Toast;
+export * from './ToastTypes';

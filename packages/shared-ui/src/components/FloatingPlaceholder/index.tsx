@@ -1,10 +1,11 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC } from 'react';
 import { colours, fonts } from '../../tailwind/theme';
+import { TextCase, transformTextCase } from '../../utils/transformTextCase';
 import { conditionalStrings } from '../../utils/conditionalStrings';
 
 export type FloatingPlaceholderProps = {
   htmlFor: string;
-  children: ReactNode;
+  text: string;
   hasValue: boolean;
   isDisabled?: boolean;
 };
@@ -20,11 +21,11 @@ const peerFocusBodyLight = [
 const FloatingPlaceholder: FC<FloatingPlaceholderProps> = ({
   htmlFor,
   hasValue,
-  children,
+  text,
   isDisabled = false,
 }) => {
   const placeHolderClasses = conditionalStrings({
-    ['left-4 -translate-y-1/2 absolute transition-all pointer-events-none']: true,
+    [`left-4 -translate-y-1/2 absolute transition-all pointer-events-none`]: true,
     [`top-[25px] peer-focus:top-4 ${fonts.body} ${peerFocusBodyLight} peer-focus:text-xs`]:
       !hasValue,
     [`top-4 text-xs ${fonts.bodyLight}`]: hasValue,
@@ -33,12 +34,13 @@ const FloatingPlaceholder: FC<FloatingPlaceholderProps> = ({
   });
   return (
     <label
+      id={`${htmlFor}-placeholder`}
       htmlFor={htmlFor}
       className={placeHolderClasses}
       aria-disabled={isDisabled}
       aria-hidden={isDisabled}
     >
-      {children}
+      {transformTextCase(text, TextCase.CAPS_FIRST_LETTER)}
     </label>
   );
 };

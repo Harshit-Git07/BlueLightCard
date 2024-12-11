@@ -1,11 +1,11 @@
-import { ChangeEvent, FC } from 'react';
+import { ChangeEvent, FC, SyntheticEvent } from 'react';
 
 type ToggleInputProps = {
   id?: string;
   name?: string;
   selected?: boolean;
   disabled?: boolean;
-  onChange?: (e: ChangeEvent<HTMLInputElement>, id?: string) => void;
+  onChange?: (e: SyntheticEvent, id?: string) => void;
 };
 
 // colour definitions

@@ -61,10 +61,11 @@ export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
           </div>
 
           <TextInput
-            className="w-full"
             placeholder="Enter work email address"
             onChange={onWorkEmailChanged}
-            message={!canSendVerificationEmail ? 'Please enter a valid email address' : undefined}
+            validationMessage={
+              !canSendVerificationEmail ? 'Please enter a valid email address' : undefined
+            }
             isValid={canSendVerificationEmail}
             value={eligibilityDetails?.emailVerification ?? undefined}
           />

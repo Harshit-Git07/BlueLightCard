@@ -31,21 +31,21 @@ const Drawer = () => {
     'opacity-0 pointer-events-none': !isOpen,
   });
 
-  const sidebarMobile = 'w-full rounded-t-3xl laptop:rounded-none';
-  const sidebarLaptop = 'laptop:w-[384px]';
+  const sidebarMobile = 'w-full rounded-t-3xl tablet:rounded-none';
+  const sidebartablet = 'tablet:w-[384px]';
 
   const sidebarClasses = conditionalStrings({
     'flex flex-col duration-500 fixed bottom-0 z-[100] bg-colour-surface dark:bg-colour-surface-dark transition-top transition-right':
       true,
     [sidebarMobile]: true,
-    [sidebarLaptop]: true,
-    'top-[100%] laptop:top-0 right-0 laptop:-right-[384px]': !isOpen,
-    'top-[10%] laptop:top-0 right-0': isOpen,
+    [sidebartablet]: true,
+    'top-[100%] tablet:top-0 right-0 tablet:-right-[384px]': !isOpen,
+    'top-[10%] tablet:top-0 right-0': isOpen,
   });
 
   return (
     <div className={'fixed top-0 left-0 z-50'} aria-label={'sidebar'} aria-hidden={!isOpen}>
-      <button className={blackoutClasses} onClick={onClose} />
+      <button aria-label="panel-close" className={blackoutClasses} onClick={onClose} />
       <aside className={sidebarClasses}>
         {isOpen && showCloseButton ? (
           <div className="flex w-full justify-end p-4 text-colour-onSurface dark:text-colour-onSurface-dark">
@@ -55,7 +55,7 @@ const Drawer = () => {
           </div>
         ) : null}
         {isOpen ? (
-          <div className={'h-full grow-1 overflow-y-auto'} aria-live={'polite'} aria-atomic={true}>
+          <div className={'h-full flex-1 overflow-y-auto'} aria-live={'polite'} aria-atomic={true}>
             {children}
           </div>
         ) : null}

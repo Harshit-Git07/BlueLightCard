@@ -47,6 +47,8 @@ export class WebPlatformAdapter implements IPlatformAdapter {
     const brandHeaderValue = getBrandHeaderValue();
     if (brandHeaderValue) headers['x-brand'] = brandHeaderValue;
 
+    console.log({ API_PROXY_URL, path, endpoint });
+
     const response = await fetch(`${endpoint}${queryParameters}`, {
       method: options.method,
       headers,
@@ -61,7 +63,11 @@ export class WebPlatformAdapter implements IPlatformAdapter {
 
   logAnalyticsEvent(event: string, parameters: AmplitudeLogParams): void {
     const amplitudeService = amplitudeStore.get(amplitudeServiceAtom);
-    amplitudeService.trackEventAsync(event, parameters);
+    try {
+      amplitudeService.trackEventAsync(event, parameters);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   navigate(path: string): void {

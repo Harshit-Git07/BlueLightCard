@@ -1,18 +1,18 @@
 import React, { act } from 'react';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
-import PasswordInput, { Props } from './';
 import userEvent from '@testing-library/user-event';
-
-jest.spyOn(React, 'useId').mockImplementation(() => 'mocked-id');
+import PasswordInput, { Props } from './';
 
 describe('PasswordInput Component', () => {
   const onChangeMock = jest.fn();
   const defaultProps: Props = {
+    id: 'mocked-id',
+    label: 'Password',
     onChange: onChangeMock,
     isValid: undefined,
     hideRequirements: false,
-    password: '',
+    value: '',
   };
 
   beforeEach(() => {
@@ -21,30 +21,37 @@ describe('PasswordInput Component', () => {
 
   it('renders with default props', () => {
     render(<PasswordInput {...defaultProps} />);
-    expect(screen.getByLabelText('Password')).toBeInTheDocument();
+    expect(screen.getByLabelText('password-mocked-id')).toBeInTheDocument();
   });
 
   it('renders with custom props', () => {
     render(
       <PasswordInput
         {...defaultProps}
-        label="FieldName"
-        helpMessage="Description"
-        infoMessage="InfoOnlyShowsWithInPut"
-        showIcon
+        label="Custom Password"
+        description="Enter your password"
+        validationMessage="Password is invalid"
+        tooltip="Password requirements"
         isDisabled={false}
       />,
     );
-    expect(screen.getByText('FieldName')).toBeInTheDocument();
-    expect(screen.getByText('Description')).toBeInTheDocument();
-    expect(screen.queryByText('InfoOnlyShowsWithInPut')).toBeNull();
+
+    const label = screen.getByText('Custom Password');
+    const description = screen.getByText('Enter your password');
+
+    expect(label).toBeInTheDocument();
+    expect(description).toBeInTheDocument();
+
+    // The validation message should not appear until the input is dirty.
+    const validationMessage = screen.queryByText('Password is invalid');
+    expect(validationMessage).not.toBeInTheDocument();
   });
 
   it('toggles password visibility when eye icon is clicked', async () => {
     render(<PasswordInput {...defaultProps} />);
 
     const eyeButton = screen.getByLabelText('Show password');
-    const input = screen.getByLabelText('Password');
+    const input = screen.getByLabelText('password-mocked-id');
 
     expect(input).toHaveAttribute('type', 'password');
 
@@ -57,76 +64,73 @@ describe('PasswordInput Component', () => {
   });
 
   it('calls onChange on input change and sets dirty state', async () => {
-    render(<PasswordInput {...defaultProps} isValid={false} infoMessage="Password is invalid" />);
+    render(
+      <PasswordInput {...defaultProps} isValid={false} validationMessage="Password is invalid" />,
+    );
 
-    const input = screen.getByLabelText('Password');
+    const input = screen.getByLabelText('password-mocked-id');
 
     await act(async () => {
       await userEvent.type(input, 'password123');
     });
 
-    expect(onChangeMock).toHaveBeenCalledWith('password123');
-    expect(screen.getByRole('alert')).toHaveTextContent('Password is invalid');
+    expect(onChangeMock).toHaveBeenCalledTimes(11); // "password123" is 11 characters.
+
+    expect(screen.getByText('Password is invalid')).toBeInTheDocument();
   });
 
   it('shows and hides validation rules on focus and blur', async () => {
     render(<PasswordInput {...defaultProps} />);
 
-    const input = screen.getByLabelText('Password');
+    const input = screen.getByLabelText('password-mocked-id');
 
-    // Initially, rules should not be visible
-    expect(screen.queryByText('Your password must contain:')).toBeNull();
+    expect(screen.queryByText('Your password must contain:')).not.toBeInTheDocument();
 
-    // Focus event should show rules
     await act(async () => {
       await userEvent.click(input);
     });
     expect(screen.getByText('Your password must contain:')).toBeInTheDocument();
 
-    // Blur event should hide rules
     await act(async () => {
       await userEvent.tab();
     });
-    expect(screen.queryByText('Your password must contain:')).toBeNull();
+    expect(screen.queryByText('Your password must contain:')).not.toBeInTheDocument();
 
-    // Blur event hides rules even if populated
     await act(async () => {
       await userEvent.type(input, 'password123');
-    });
-    await act(async () => {
       await userEvent.tab();
     });
-    expect(screen.queryByText('Your password must contain:')).toBeNull();
+    expect(screen.queryByText('Your password must contain:')).not.toBeInTheDocument();
   });
 
   it('disables input and interactions when isDisabled is true', async () => {
     render(<PasswordInput {...defaultProps} isDisabled={true} />);
 
-    const input = screen.getByLabelText('Password');
+    const input = screen.getByLabelText('password-mocked-id');
     expect(input).toBeDisabled();
 
     const eyeButton = screen.getByLabelText('Show password');
     await act(async () => {
       await userEvent.click(eyeButton);
     });
-    expect(input).toHaveAttribute('type', 'password'); // No change since input is disabled
+    expect(input).toHaveAttribute('type', 'password');
   });
 
   it('does not render password requirements if hideRequirements is true', async () => {
     render(<PasswordInput {...defaultProps} hideRequirements={true} />);
 
-    const input = screen.getByLabelText('Password');
+    const input = screen.getByLabelText('password-mocked-id');
     await act(async () => {
       await userEvent.click(input);
     });
 
-    expect(screen.queryByText('Your password must contain:')).toBeNull();
+    expect(screen.queryByText('Your password must contain:')).not.toBeInTheDocument();
   });
 
   it('renders password requirements if hideRequirements is false', async () => {
     render(<PasswordInput {...defaultProps} />);
 
-    const input = screen.getByLabelText('Password');
+    const input = screen.getByLabelText('password-mocked-id');
     await act(async () => {
       await userEvent.click(input);
     });
@@ -134,60 +138,36 @@ describe('PasswordInput Component', () => {
     expect(screen.getByText('Your password must contain:')).toBeInTheDocument();
   });
 
-  it('does not render icon if showIcon is false', () => {
-    render(<PasswordInput {...defaultProps} showIcon={false} />);
-
-    expect(screen.queryByLabelText('Information icon')).toBeNull();
-  });
-
-  it('does not render icon if label is empty', () => {
-    render(<PasswordInput {...defaultProps} label="" />);
-
-    expect(screen.queryByLabelText('Information icon')).toBeNull();
-  });
-
-  it('renders icon wih a title prefixed with the value of label', () => {
-    render(<PasswordInput {...defaultProps} label="prefix" />);
-
-    expect(screen.queryByLabelText('prefix Information')).toBeInTheDocument();
-  });
-
-  test('sets aria-invalid to true when the password is invalid', () => {
+  it('sets aria-invalid to true when the password is invalid', () => {
     render(<PasswordInput {...defaultProps} isValid={false} />);
-    const input = screen.getByLabelText('Password');
+    const input = screen.getByLabelText('password-mocked-id');
     expect(input).toHaveAttribute('aria-invalid', 'true');
   });
 
-  test('does not set aria-invalid when the password is valid', () => {
-    render(<PasswordInput {...defaultProps} isValid />);
-    const input = screen.getByLabelText('Password');
-    expect(input).not.toHaveAttribute('aria-invalid');
+  it('sets aria-invalid to false when isValid is true', () => {
+    render(<PasswordInput {...defaultProps} isValid={true} id="mock-id" />);
+    const validInput = screen.getByLabelText('password-mock-id');
+    expect(validInput).toHaveAttribute('aria-invalid', 'false');
   });
 
-  test('does not set aria-invalid when the password is undefined', () => {
-    render(<PasswordInput {...defaultProps} isValid={undefined} />);
-    const input = screen.getByLabelText('Password');
-    expect(input).not.toHaveAttribute('aria-invalid');
+  it('does not set aria-invalid when is isValid undefined', () => {
+    render(<PasswordInput {...defaultProps} isValid={undefined} id="mock-id-2" />);
+    const undefinedInput = screen.getByLabelText('password-mock-id-2');
+    expect(undefinedInput).not.toHaveAttribute('aria-invalid');
   });
 
-  test('applies aria-describedby when helpMessage is provided', () => {
-    render(<PasswordInput {...defaultProps} isValid helpMessage="This is a help message" />);
-    const input = screen.getByLabelText('Password');
-    expect(input).toHaveAttribute('aria-describedby', 'helpMessage-mocked-id');
+  it('applies aria-describedby when description is provided', () => {
+    render(<PasswordInput {...defaultProps} description="This is a help message" />);
+    const input = screen.getByLabelText('password-mocked-id');
+    expect(input).toHaveAttribute('aria-describedby', 'description-mocked-id');
   });
 
-  test('does not apply aria-describedby when helpMessage is not provided', () => {
-    render(<PasswordInput {...defaultProps} isValid />);
-    const input = screen.getByLabelText('Password');
-    expect(input).not.toHaveAttribute('aria-describedby');
-  });
+  it('displays validation message with role alert and aria-live', async () => {
+    render(
+      <PasswordInput {...defaultProps} isValid={false} validationMessage="Password is invalid" />,
+    );
 
-  test('displays validation message with role alert and aria-live', async () => {
-    render(<PasswordInput {...defaultProps} isValid infoMessage="Password is invalid" />);
-
-    const input = screen.getByLabelText('Password');
-
-    // Type a password
+    const input = screen.getByLabelText('password-mocked-id');
     await act(async () => {
       await userEvent.type(input, '123pass');
     });
@@ -197,8 +177,8 @@ describe('PasswordInput Component', () => {
     expect(alert).toHaveTextContent('Password is invalid');
   });
 
-  test('applies correct title to the eye icon button', async () => {
-    render(<PasswordInput {...defaultProps} isValid />);
+  it('applies correct title to the eye icon button', async () => {
+    render(<PasswordInput {...defaultProps} />);
     const toggleButton = screen.getByLabelText('Show password');
     expect(toggleButton).toHaveAttribute('title', 'Show password');
     await act(async () => {

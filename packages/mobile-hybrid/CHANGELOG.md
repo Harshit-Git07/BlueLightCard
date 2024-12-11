@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.49.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.49.0...bluelightcard/mobile-hybrid-v1.49.1) (2024-12-11)
+
+
+### Bug Fixes
+
+* disco 1072 mobile hybrid search from homepage is still using legacy search ([#3063](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3063)) ([56558dd](https://github.com/bluelightcard/BlueLightCard-2.0/commit/56558ddcf2e30275c4df455c8e6507c6ae3642c2))
+* handle error state with router check ([#3302](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3302)) ([fa3ff4b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fa3ff4bd0bc8e900c3ce0ee62fe65539622c1df1))
+
 ## [1.49.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.48.0...bluelightcard/mobile-hybrid-v1.49.0) (2024-12-09)
 
 

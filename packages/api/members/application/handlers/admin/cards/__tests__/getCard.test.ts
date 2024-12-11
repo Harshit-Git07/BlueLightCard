@@ -2,13 +2,22 @@ import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import { CardModel } from '@blc-mono/members/application/models/cardModel';
 import { CardService } from '@blc-mono/members/application/services/cardService';
+import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
 
 jest.mock('@blc-mono/members/application/services/cardService');
 
 describe('getCard handler', () => {
   const memberId = uuidv4();
   const cardNumber = 'BLC123456789';
-  const card: CardModel = { memberId, cardNumber, expiryDate: '2024-01-01' };
+  const card: CardModel = {
+    cardStatus: CardStatus.PHYSICAL_CARD,
+    createdDate: '2023-01-01T00:00:00.000Z',
+    nameOnCard: 'John Doe',
+    purchaseDate: '2023-01-01T00:00:00.000Z',
+    memberId,
+    cardNumber,
+    expiryDate: '2024-01-01',
+  };
   const event = {
     pathParameters: { memberId, cardNumber },
   } as any as APIGatewayProxyEvent;

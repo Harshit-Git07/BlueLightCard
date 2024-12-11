@@ -1,6 +1,7 @@
 import { logger } from '../middleware';
 import { CardModel, UpdateCardModel } from '../models/cardModel';
 import { CardRepository } from '../repositories/cardRepository';
+import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
 
 export class CardService {
   constructor(private readonly repository: CardRepository = new CardRepository()) {}
@@ -11,6 +12,16 @@ export class CardService {
       return await this.repository.getCards(memberId);
     } catch (error) {
       logger.error({ message: 'Error fetching cards', error });
+      throw error;
+    }
+  }
+
+  async getCardsWithStatus(cardStatus: CardStatus): Promise<CardModel[]> {
+    try {
+      logger.debug({ message: 'Fetching cards' });
+      return await this.repository.getCardsWithStatus(cardStatus);
+    } catch (error) {
+      logger.error({ message: 'Error fetching cards with status', error });
       throw error;
     }
   }

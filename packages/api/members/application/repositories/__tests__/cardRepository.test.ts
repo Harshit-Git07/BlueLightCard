@@ -1,9 +1,4 @@
-import {
-  DynamoDBDocumentClient,
-  UpdateCommand,
-  QueryCommand,
-  GetCommand,
-} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { CardRepository } from '../cardRepository';
 import { CardModel } from '../../models/cardModel';
 import { NotFoundError } from '../../errors/NotFoundError';
@@ -21,9 +16,10 @@ const card: CardModel = {
   cardNumber: cardNumber,
   nameOnCard: 'John Doe',
   cardStatus: CardStatus.PHYSICAL_CARD,
+  createdDate: '2023-01-01T00:00:00Z',
   expiryDate: '2023-12-31T23:59:59Z',
   postedDate: '2023-01-01T00:00:00Z',
-  purchaseTime: '2023-01-01T00:00:00Z',
+  purchaseDate: '2023-01-01T00:00:00Z',
   paymentStatus: PaymentStatus.PAID_CARD,
 };
 
@@ -32,6 +28,7 @@ let dynamoDBMock = {
   send: jest.fn(),
 };
 const updateCommandMock = UpdateCommand as jest.MockedClass<typeof UpdateCommand>;
+const queryCommandMock = QueryCommand as jest.MockedClass<typeof QueryCommand>;
 
 describe('CardRepository', () => {
   beforeEach(() => {
@@ -69,6 +66,29 @@ describe('CardRepository', () => {
     });
   });
 
+  describe('getCardsWithStatus', () => {
+    it('should return an empty array if no cards are found', async () => {
+      dynamoDBMock.send.mockResolvedValue({ Items: [] });
+      const result = await repository.getCardsWithStatus(CardStatus.AWAITING_BATCHING);
+      expect(result).toEqual([]);
+    });
+
+    it('should return cards with matching status', async () => {
+      const items = [card];
+      dynamoDBMock.send.mockResolvedValue({ Items: items });
+      const result = await repository.getCardsWithStatus(CardStatus.AWAITING_BATCHING);
+      expect(result).toEqual(items.map((item) => CardModel.parse(item)));
+      expect(queryCommandMock).toHaveBeenCalledWith({
+        TableName: 'memberProfiles',
+        IndexName: 'CardStatusIndex',
+        KeyConditionExpression: 'cardStatus = :cardStatus',
+        ExpressionAttributeValues: {
+          ':cardStatus': CardStatus.AWAITING_BATCHING,
+        },
+      });
+    });
+  });
+
   describe('upsertCard', () => {
     it('should insert a new card', async () => {
       dynamoDBMock.send.mockResolvedValue({});
@@ -88,15 +108,16 @@ describe('CardRepository', () => {
         },
         ConditionExpression: '',
         UpdateExpression:
-          'SET memberId = :memberId, cardNumber = :cardNumber, memberId = :memberId, cardNumber = :cardNumber, nameOnCard = :nameOnCard, cardStatus = :cardStatus, expiryDate = :expiryDate, postedDate = :postedDate, purchaseTime = :purchaseTime, paymentStatus = :paymentStatus ',
+          'SET memberId = :memberId, cardNumber = :cardNumber, memberId = :memberId, cardNumber = :cardNumber, nameOnCard = :nameOnCard, cardStatus = :cardStatus, createdDate = :createdDate, expiryDate = :expiryDate, postedDate = :postedDate, purchaseDate = :purchaseDate, paymentStatus = :paymentStatus ',
         ExpressionAttributeValues: {
           ':memberId': memberId,
           ':cardNumber': cardNumber,
           ':nameOnCard': 'John Doe',
           ':cardStatus': 'PHYSICAL_CARD',
+          ':createdDate': '2023-01-01T00:00:00Z',
           ':expiryDate': '2023-12-31T23:59:59Z',
           ':postedDate': '2023-01-01T00:00:00Z',
-          ':purchaseTime': '2023-01-01T00:00:00Z',
+          ':purchaseDate': '2023-01-01T00:00:00Z',
           ':paymentStatus': 'PAID_CARD',
           ':pk': memberKey(memberId),
           ':sk': cardKey(cardNumber),
@@ -122,15 +143,16 @@ describe('CardRepository', () => {
         },
         ConditionExpression: 'pk = :pk AND sk = :sk',
         UpdateExpression:
-          'SET memberId = :memberId, cardNumber = :cardNumber, memberId = :memberId, cardNumber = :cardNumber, nameOnCard = :nameOnCard, cardStatus = :cardStatus, expiryDate = :expiryDate, postedDate = :postedDate, purchaseTime = :purchaseTime, paymentStatus = :paymentStatus ',
+          'SET memberId = :memberId, cardNumber = :cardNumber, memberId = :memberId, cardNumber = :cardNumber, nameOnCard = :nameOnCard, cardStatus = :cardStatus, createdDate = :createdDate, expiryDate = :expiryDate, postedDate = :postedDate, purchaseDate = :purchaseDate, paymentStatus = :paymentStatus ',
         ExpressionAttributeValues: {
           ':memberId': memberId,
           ':cardNumber': cardNumber,
           ':nameOnCard': 'John Doe',
           ':cardStatus': 'PHYSICAL_CARD',
+          ':createdDate': '2023-01-01T00:00:00Z',
           ':expiryDate': '2023-12-31T23:59:59Z',
           ':postedDate': '2023-01-01T00:00:00Z',
-          ':purchaseTime': '2023-01-01T00:00:00Z',
+          ':purchaseDate': '2023-01-01T00:00:00Z',
           ':paymentStatus': 'PAID_CARD',
           ':pk': memberKey(memberId),
           ':sk': cardKey(cardNumber),

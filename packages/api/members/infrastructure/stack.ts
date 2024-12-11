@@ -36,7 +36,7 @@ import { DocumentUpload } from './s3/DocumentUploadBucket';
 import { ResponseType } from 'aws-cdk-lib/aws-apigateway';
 import { DefaultRouteProps } from './routes/route';
 import { isStaging, isProduction } from '@blc-mono/core/utils/checkEnvironment';
-import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
+import { getBrandFromEnv, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import { createOutboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/createOutboundBatchFileCron';
 import { processInboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/processInboundBatchFileCron';
@@ -48,6 +48,12 @@ const SERVICE_NAME = 'members';
 export async function MembersStack({ app, stack }: StackContext) {
   stack.tags.setTag('service', SERVICE_NAME);
   const { vpc } = use(Shared);
+
+  stack.setDefaultFunctionProps({
+    environment: {
+      BRAND: getBrandFromEnv(),
+    },
+  });
 
   // Profile table - profiles, cards, notes, applications, promo codes
   // Orgs tables - orgs, employers, ID requirements, trusted domains
@@ -70,8 +76,17 @@ export async function MembersStack({ app, stack }: StackContext) {
     },
   });
 
-  createOutboundBatchFileCron(stack, adminTable);
-  processInboundBatchFileCron(stack, adminTable);
+  if (!isDdsUkBrand()) {
+    createOutboundBatchFileCron(
+      stack,
+      adminTable,
+      profilesTable,
+      organisationsTable,
+      documentUpload.bucket,
+      batchFilesBucket,
+    );
+    processInboundBatchFileCron(stack, adminTable);
+  }
 
   const memberProfilesTableEventQueue: Queue = new Queue(stack, 'MemberProfilesTableEventQueue', {
     cdk: {
@@ -211,6 +226,7 @@ function createRestApi(app: App, stack: Stack, name: string, certificateArn?: st
     timeout: 20,
     environment: {
       service: SERVICE_NAME,
+      BRAND: getBrandFromEnv(),
       USE_DATADOG_AGENT: getEnvOrDefault(MemberStackEnvironmentKeys.USE_DATADOG_AGENT, 'false'),
       DD_API_KEY: getEnvOrDefault(MemberStackEnvironmentKeys.DD_API_KEY, ''),
       DD_ENV: process.env?.SST_STAGE || 'undefined',

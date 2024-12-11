@@ -5,6 +5,7 @@ import {
   PutCommand,
   QueryCommand,
   QueryCommandInput,
+  ScanCommand,
   ScanCommandInput,
   TransactWriteCommand,
   UpdateCommand,
@@ -14,11 +15,9 @@ import { ApplicationModel, CreateApplicationModel } from '../models/applicationM
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
 import { APPLICATION, applicationKey, MEMBER, memberKey, Repository } from './repository';
-import { ScanCommand } from '@aws-sdk/client-dynamodb';
 import { v4 as uuidv4 } from 'uuid';
 import { NotFoundError } from '../errors/NotFoundError';
 import { EligibilityStatus } from '../models/enums/EligibilityStatus';
-import { logger } from '../middleware';
 
 export class ApplicationRepository extends Repository {
   constructor(

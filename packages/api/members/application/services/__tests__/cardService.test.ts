@@ -11,9 +11,13 @@ describe('CardService', () => {
   const memberId = uuidv4();
   const cardNumber = 'BLC123456789';
   const card: CardModel = {
-    memberId,
-    cardNumber,
+    cardNumber: cardNumber,
     cardStatus: CardStatus.PHYSICAL_CARD,
+    createdDate: '2023-01-01T00:00:00.000Z',
+    nameOnCard: 'John Doe',
+    purchaseDate: '2023-01-01T00:00:00.000Z',
+    memberId,
+    expiryDate: '2024-01-01',
   };
   const updateCard: UpdateCardModel = {
     cardStatus: CardStatus.PHYSICAL_CARD,

@@ -13,7 +13,6 @@ import { PromoCodesService } from './promoCodesService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { ProfileService } from './profileService';
 import { ApplicationBatchApprovalModel } from '../models/applicationApprovalModel';
-import { PromoCodeResponseModel } from '@blc-mono/members/application/models/promoCodeModel';
 
 export interface ApplicationSearch {
   eligibilityStatus?: EligibilityStatus;

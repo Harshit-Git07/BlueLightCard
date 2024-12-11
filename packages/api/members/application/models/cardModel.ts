@@ -2,19 +2,25 @@ import { z } from 'zod';
 import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import { CardStatus } from './enums/CardStatus';
 import { PaymentStatus } from './enums/PaymentStatus';
+import { PrintingErrorStatus } from '@blc-mono/members/application/models/enums/PrintingErrorStatus';
 
 export const CardModel = createZodNamedType(
   'CardModel',
   z.object({
     memberId: z.string().uuid(),
     cardNumber: z.string(),
-    nameOnCard: z.string().optional(),
-    cardStatus: z.nativeEnum(CardStatus).optional(),
-    expiryDate: z.string().datetime().optional(),
-    postedDate: z.string().datetime().optional(),
-    purchaseTime: z.string().datetime().optional(),
+    nameOnCard: z.string(),
+    cardStatus: z.nativeEnum(CardStatus),
+    createdDate: z.string().datetime(),
+    expiryDate: z.string().datetime(),
+    postedDate: z.string().datetime().nullable().optional(),
+    purchaseDate: z.string().datetime().optional(),
+    refundedDate: z.string().datetime().nullable().optional(),
     paymentStatus: z.nativeEnum(PaymentStatus).optional(),
     batchNumber: z.string().optional(),
+    printingErrorStatus: z.nativeEnum(PrintingErrorStatus).optional(),
+    promoCode: z.string().optional(),
+    updated: z.string().datetime().nullable().optional(),
   }),
 );
 
@@ -25,9 +31,11 @@ export const UpdateCardModel = createZodNamedType(
   CardModel.omit({
     memberId: true,
     cardNumber: true,
+    createdDate: true,
     expiryDate: true,
     postedDate: true,
-    purchaseTime: true,
+    purchaseDate: true,
+    nameOnCard: true,
   }),
 );
 

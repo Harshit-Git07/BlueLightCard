@@ -9,8 +9,9 @@ import {
 import { CardModel } from '../models/cardModel';
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
-import { CARD, cardKey, memberKey } from './repository';
+import { CARD, cardKey, MEMBER, memberKey, PROFILE } from './repository';
 import { NotFoundError } from '../errors/NotFoundError';
+import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
 
 export interface UpsertCardOptions {
   memberId: string;
@@ -37,6 +38,25 @@ export class CardRepository {
     };
 
     const result = await this.dynamoDB.send(new QueryCommand(queryParams));
+    if (!result.Items || result.Items.length === 0) {
+      return [];
+    }
+
+    return result.Items.map((item) => CardModel.parse(item));
+  }
+
+  async getCardsWithStatus(cardStatus: CardStatus): Promise<CardModel[]> {
+    const params = {
+      TableName: this.tableName,
+      IndexName: 'CardStatusIndex',
+      KeyConditionExpression: 'cardStatus = :cardStatus',
+      ExpressionAttributeValues: {
+        ':cardStatus': cardStatus,
+      },
+    };
+
+    const result = await this.dynamoDB.send(new QueryCommand(params));
+
     if (!result.Items || result.Items.length === 0) {
       return [];
     }

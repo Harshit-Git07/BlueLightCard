@@ -6,6 +6,7 @@ export function createProfilesTable(stack: Stack): Table {
       pk: 'string',
       sk: 'string',
       code: 'string',
+      cardStatus: 'string',
     },
     primaryIndex: {
       partitionKey: 'pk',
@@ -18,6 +19,10 @@ export function createProfilesTable(stack: Stack): Table {
       },
       PromoCodeIndex: {
         partitionKey: 'code',
+        sortKey: 'pk',
+      },
+      CardStatusIndex: {
+        partitionKey: 'cardStatus',
         sortKey: 'pk',
       },
     },

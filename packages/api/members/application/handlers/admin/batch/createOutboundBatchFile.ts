@@ -1,8 +1,12 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
-import { middleware } from '@blc-mono/members/application/middleware';
+import { datadog } from 'datadog-lambda-js';
+import { BatchService } from '@blc-mono/members/application/services/batchService';
 
-const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<void> => {
-  // TODO: Implement handler
+const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
+
+const batchService = new BatchService();
+
+const unwrappedHandler = async (): Promise<void> => {
+  await batchService.generateExternalBatchesFile();
 };
 
-export const handler = middleware(unwrappedHandler);
+export const handler = USE_DATADOG_AGENT === 'true' ? datadog(unwrappedHandler) : unwrappedHandler;

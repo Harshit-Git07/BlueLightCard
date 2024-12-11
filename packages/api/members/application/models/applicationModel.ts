@@ -14,7 +14,8 @@ export const ApplicationModel = createZodNamedType(
     eligibilityStatus: z.nativeEnum(EligibilityStatus).optional(),
     paymentStatus: z.nativeEnum(PaymentStatus).optional(),
     purchaseDate: z.string().datetime().optional(),
-    applicationReason: z.nativeEnum(ApplicationReason).optional(),
+    applicationReason: z.nativeEnum(ApplicationReason).nullable(),
+    verificationMethod: z.string().optional(),
     address1: z.string().optional(),
     address2: z.string().optional(),
     city: z.string().optional(),
@@ -31,6 +32,7 @@ export const ApplicationModel = createZodNamedType(
     nameChangeLastName: z.string().nullable().optional(),
     nameChangeDocType: z.string().nullable().optional(),
     rejectionReason: z.nativeEnum(RejectionReason).nullable().optional(),
+    cardNumber: z.string().optional(),
   }),
 );
 

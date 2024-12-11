@@ -11,6 +11,7 @@ export const APPLICATION = 'APPLICATION';
 export const CARD = 'CARD';
 export const NOTE = 'NOTE';
 export const PROMO_CODE = 'PROMO_CODE';
+export const BATCH = 'BATCH';
 
 export function organisationKey(organisationId: string): string {
   return `${ORGANISATION}#${organisationId}`;
@@ -42,6 +43,10 @@ export function idRequirementKey(idRequirementCode: string): string {
 
 export function promoCodeKey(promoCodeId: string): string {
   return `${PROMO_CODE}#${promoCodeId}`;
+}
+
+export function batchKey(batchId: string): string {
+  return `${BATCH}#${batchId}`;
 }
 
 export interface PartialUpdateProps<T> {

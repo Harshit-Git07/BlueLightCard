@@ -4,7 +4,6 @@ import { PromoCodesService } from '../promoCodesService';
 import { S3 } from 'aws-sdk';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { EligibilityStatus } from '../../models/enums/EligibilityStatus';
-import { v4 as uuidv4 } from 'uuid';
 import { CreateApplicationModel, UpdateApplicationModel } from '../../models/applicationModel';
 import { ApplicationReason } from '../../models/enums/ApplicationReason';
 import { ProfileService } from '../profileService';

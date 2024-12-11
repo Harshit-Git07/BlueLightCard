@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.3.0...bluelightcard/members-v1.3.1) (2024-12-11)
+
+
+### Other Changes
+
+* [None] Update readme to trigger release ([#3345](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3345)) ([4b16413](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4b16413c065737f5829beacdb79782dc64f885fb))
+
 ## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.2.1...bluelightcard/members-v1.3.0) (2024-12-10)
 
 

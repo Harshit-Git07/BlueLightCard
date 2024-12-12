@@ -24,6 +24,8 @@ jobs:
             cdnUrl: 'https://cdn.bluelightcard.co.uk'
             brand: BLC_UK
             stage: production
+            discoveryEventBusName: 'production-blc-mono-eventBus'
+            cmsAccount: '084375547292'
             userProfileEndpoint: https://identity.blcshine.io/user
             companyLocationDwhStream: 'production-dwh-blc-uk-company-location'
           - deployment: 'dds-uk-production'
@@ -34,6 +36,8 @@ jobs:
             cdnUrl: 'https://cdn.defencediscountservice.co.uk'
             brand: DDS_UK
             stage: production-dds
+            discoveryEventBusName: 'production-dds-blc-mono-eventBus'
+            cmsAccount: '084375547292'
             blcUkCognitoUserPoolId: 'eu-west-2_D3aAVuWHo'
             blcUkOldCognitoUserPoolId: 'eu-west-2_jrwTfFRgM'
             ddsCognitoUserPoolId: 'eu-west-2_3WlS5ZkAh'
@@ -49,6 +53,8 @@ jobs:
             cdnUrl: 'https://cdn.bluelightcard.com.au'
             brand: BLC_AU
             stage: production
+            discoveryEventBusName: 'production-blc-mono-eventBus'
+            cmsAccount: '084375547292'
             userProfileEndpoint: https://identity-au.blcshine.io/user
             companyLocationDwhStream: 'production-dwh-blc-au-company-location'
     env:
@@ -63,6 +69,8 @@ jobs:
       DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
       BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
       USER_PROFILE_ENDPOINT: ${{ matrix.userProfileEndpoint }}
+      OFFERS_DISCOVERY_EVENT_BUS_NAME: ${{ matrix.discoveryEventBusName }}
+      OFFERS_CMS_ACCOUNT: ${{ matrix.cmsAccount }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

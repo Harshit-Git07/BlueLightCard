@@ -1,7 +1,7 @@
 # Members
 
 The Members package contains all API's related to member admin functionality. It is built using API Gateway,
-Lambda and DynamoDB. Primary language is Typescript and SST is used for defining infrastructure.
+Lambda, Opensearch and DynamoDB. Primary language is Typescript and SST is used for defining infrastructure.
 
 ## Running locally
 

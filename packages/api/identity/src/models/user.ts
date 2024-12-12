@@ -20,6 +20,9 @@ export const UserModel = createZodNamedType(
       if (a === "" || a === undefined) {
         return 0;
       } else if (typeof a === 'string') {
+        if(a.trim() === "") {
+          return 0;
+        }
         return parseInt(a, 10);
       } else {
         return a;

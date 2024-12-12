@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.96.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.95.0...bluelightcard/web-v1.96.0) (2024-12-12)
+
+
+### Features
+
+* mer 447 add renewal modal to members home ([#3293](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3293)) ([fecb2a7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fecb2a77d1dc81909246011c78382a59cc8386aa))
+* My account ([#3215](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3215)) ([d8af4b7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d8af4b77d4adc4e482eb6a5b71a15fa05676dd67))
+* uploaded brand association files ([#3333](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3333)) ([dbdc02c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dbdc02c2baebfe6c716dbd5fe9c1ee315e0d6cb9))
+
 ## [1.95.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.94.0...bluelightcard/web-v1.95.0) (2024-12-09)
 
 

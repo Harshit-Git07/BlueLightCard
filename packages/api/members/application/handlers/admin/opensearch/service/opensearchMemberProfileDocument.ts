@@ -20,7 +20,9 @@ type MemberProfileBody = {
   emailAddress?: string;
   signupDate?: string;
   organisationId?: string;
+  organisationName?: string;
   employerId?: string;
+  employerName?: string;
   userStatus?: string;
   applicationId?: string;
   startDate?: string;
@@ -41,7 +43,9 @@ export const mapMemberDocumentToOpenSearchUpdateBody = (
     emailAddress: memberDocument.emailAddress,
     signupDate: memberDocument.signupDate,
     organisationId: memberDocument.organisationId,
+    organisationName: memberDocument.organisationName,
     employerId: memberDocument.employerId,
+    employerName: memberDocument.employerName,
     userStatus: memberDocument.userStatus,
     applicationId: memberDocument.applicationId,
     startDate: memberDocument.startDate,

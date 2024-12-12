@@ -12,6 +12,9 @@ import {
   createMemberProfileOpenSearchDocuments,
   OpenSearchBulkUpdateCommand,
 } from '@blc-mono/members/application/handlers/admin/opensearch/service/opensearchMemberProfileDocument';
+import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
+import { EmployerModel } from '@blc-mono/members/application/models/employerModel';
+import { OrganisationModel } from '@blc-mono/members/application/models/organisationModel';
 
 jest.mock(
   '@blc-mono/members/application/handlers/admin/opensearch/service/parseDocumentFromRecord',
@@ -20,6 +23,7 @@ jest.mock('@blc-mono/core/utils/getEnv');
 jest.mock(
   '@blc-mono/members/application/handlers/admin/opensearch/service/opensearchMemberProfileDocument',
 );
+jest.mock('@blc-mono/members/application/services/organisationService');
 
 const getDocumentFromProfileRecordMock = jest.mocked(getDocumentFromProfileRecord);
 const getDocumentFromApplicationRecordMock = jest.mocked(getDocumentFromApplicationRecord);
@@ -49,6 +53,12 @@ const memberDocument: MemberDocumentModel = {
 const openSearchBulkCommand: OpenSearchBulkUpdateCommand = {
   update: { _id: 'id' },
 };
+const organisation: OrganisationModel = {
+  name: 'Organisation1',
+} as OrganisationModel;
+const employer: EmployerModel = {
+  name: 'Employer1',
+} as EmployerModel;
 
 describe('memberProfileIndexer handler', () => {
   const context = {} as Context;
@@ -63,10 +73,17 @@ describe('memberProfileIndexer handler', () => {
     upsertDocumentsToIndexSpy = jest
       .spyOn(MembersOpenSearchService.prototype, 'upsertDocumentsToIndex')
       .mockResolvedValue(undefined);
+
+    OrganisationService.prototype.getEmployer = jest.fn().mockResolvedValue(employer);
+    OrganisationService.prototype.getOrganisation = jest.fn().mockResolvedValue(organisation);
   });
 
   it('should map profile record to document if sortKey is "Profile"', async () => {
-    getDocumentFromProfileRecordMock.mockReturnValue(memberDocument);
+    getDocumentFromProfileRecordMock.mockReturnValue({
+      memberDocument,
+      employerIdChanged: false,
+      organisationIdChanged: false,
+    });
     const event = buildSQSEventFor(PROFILE);
 
     await handler(event, context);
@@ -78,6 +95,50 @@ describe('memberProfileIndexer handler', () => {
         },
       },
     });
+  });
+
+  it('should enrich member profile document with employer and organisation details', async () => {
+    getDocumentFromProfileRecordMock.mockReturnValue({
+      memberDocument,
+      employerIdChanged: true,
+      organisationIdChanged: true,
+    });
+    const event = buildSQSEventFor(PROFILE);
+
+    await handler(event, context);
+
+    expect(createMemberProfileOpenSearchDocumentsMock).toHaveBeenCalledWith([
+      {
+        ...memberDocument,
+        employerName: 'Employer1',
+        organisationName: 'Organisation1',
+      },
+    ]);
+  });
+
+  it('should enrich member profile document with profile employer name if no employerId', async () => {
+    const memberDocumentWithoutEmployerId = {
+      ...memberDocument,
+      employerId: undefined,
+    };
+    getDocumentFromProfileRecordMock.mockReturnValue({
+      memberDocument: memberDocumentWithoutEmployerId,
+      employerIdChanged: true,
+      organisationIdChanged: true,
+      profileEmployerName: 'employerNameString',
+    });
+    const event = buildSQSEventFor(PROFILE);
+
+    await handler(event, context);
+
+    expect(createMemberProfileOpenSearchDocumentsMock).toHaveBeenCalledWith([
+      {
+        ...memberDocument,
+        employerName: 'employerNameString',
+        employerId: undefined,
+        organisationName: 'Organisation1',
+      },
+    ]);
   });
 
   it('should map application record to document if sortKey is "Application"', async () => {
@@ -123,7 +184,11 @@ describe('memberProfileIndexer handler', () => {
   });
 
   it('should call opensearch service with documents', async () => {
-    getDocumentFromProfileRecordMock.mockReturnValue(memberDocument);
+    getDocumentFromProfileRecordMock.mockReturnValue({
+      memberDocument,
+      organisationIdChanged: false,
+      employerIdChanged: false,
+    });
     createMemberProfileOpenSearchDocumentsMock.mockReturnValue([
       openSearchBulkCommand,
       openSearchBulkCommand,

@@ -14,10 +14,12 @@ import {
   getDocumentFromCardRecord,
   getDocumentFromProfileRecord,
 } from '@blc-mono/members/application/handlers/admin/opensearch/service/parseDocumentFromRecord';
+import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 
 type StreamRecordTypes = 'Profile' | 'Application' | 'Card';
 
 const openSearchService = new MembersOpenSearchService();
+const organisationService = new OrganisationService();
 
 const unwrappedHandler = async (event: SQSEvent) => {
   const memberProfileDocuments: MemberDocumentModel[] = [];
@@ -29,10 +31,22 @@ const unwrappedHandler = async (event: SQSEvent) => {
     const recordType = getStreamRecordType(sortKey);
 
     let memberProfileDocument: MemberDocumentModel | undefined;
+    let updateEmployer: boolean = false;
+    let updateOrganisation: boolean = false;
+    let profileEmployerName: string | undefined;
 
     switch (recordType) {
       case 'Profile':
-        memberProfileDocument = getDocumentFromProfileRecord(dynamoDBStreamRecord);
+        const {
+          memberDocument,
+          employerIdChanged,
+          organisationIdChanged,
+          profileEmployerName: employerName,
+        } = getDocumentFromProfileRecord(dynamoDBStreamRecord);
+        memberProfileDocument = memberDocument;
+        updateEmployer = employerIdChanged;
+        updateOrganisation = organisationIdChanged;
+        profileEmployerName = employerName;
         break;
       case 'Application':
         memberProfileDocument = getDocumentFromApplicationRecord(dynamoDBStreamRecord);
@@ -43,7 +57,13 @@ const unwrappedHandler = async (event: SQSEvent) => {
     }
 
     if (memberProfileDocument) {
-      memberProfileDocuments.push(memberProfileDocument);
+      const enrichedMemberProfileDocument = await enrichMemberProfileDocument(
+        memberProfileDocument,
+        updateEmployer,
+        updateOrganisation,
+        profileEmployerName,
+      );
+      memberProfileDocuments.push(enrichedMemberProfileDocument);
     }
   }
 
@@ -79,6 +99,49 @@ const getStreamRecordType = (sortKey: string | undefined): StreamRecordTypes => 
   }
 
   throw new Error(`Unknown sortKey prefix: ${sortKey}`);
+};
+
+const enrichMemberProfileDocument = async (
+  memberProfileDocument: MemberDocumentModel,
+  updateEmployer: boolean,
+  updateOrganisation: boolean,
+  profileEmployerName: string | undefined,
+) => {
+  return {
+    ...memberProfileDocument,
+    organisationName: await getOrganisationName(
+      updateOrganisation,
+      memberProfileDocument.organisationId,
+    ),
+    employerName: await getEmployerName(
+      updateEmployer,
+      memberProfileDocument.organisationId,
+      memberProfileDocument.employerId,
+      profileEmployerName,
+    ),
+  };
+};
+
+const getOrganisationName = async (
+  updateOrganisationId: boolean,
+  organisationId: string | undefined,
+): Promise<string | undefined> => {
+  if (!organisationId || !updateOrganisationId) return undefined;
+
+  return (await organisationService.getOrganisation(organisationId)).name;
+};
+
+const getEmployerName = async (
+  updateEmployer: boolean,
+  organisationId: string | undefined,
+  employerId: string | undefined,
+  profileEmployerName: string | undefined,
+): Promise<string | undefined> => {
+  if (profileEmployerName && !employerId) return profileEmployerName;
+
+  if (!organisationId || !employerId || !updateEmployer) return undefined;
+
+  return (await organisationService.getEmployer(organisationId, employerId)).name;
 };
 
 export const handler = sqsMiddleware(unwrappedHandler);

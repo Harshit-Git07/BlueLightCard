@@ -9,14 +9,25 @@ import { logger } from '@blc-mono/members/application/middleware';
 
 export const getDocumentFromProfileRecord = (
   record: DynamoDBRecord,
-): MemberDocumentModel | undefined => {
-  const { newImage: newProfile } = unmarshallStreamImages<ProfileModel>(record.dynamodb);
+): {
+  memberDocument: MemberDocumentModel | undefined;
+  employerIdChanged: boolean;
+  organisationIdChanged: boolean;
+  profileEmployerName?: string;
+} => {
+  const { oldImage: oldProfile, newImage: newProfile } = unmarshallStreamImages<ProfileModel>(
+    record.dynamodb,
+  );
 
   if (record.eventName !== 'INSERT' && record.eventName !== 'MODIFY') {
     logger.info(
       `Profile record event name is not INSERT or MODIFY: ${record.eventName}. Not processing record.`,
     );
-    return;
+    return {
+      memberDocument: undefined,
+      employerIdChanged: false,
+      organisationIdChanged: false,
+    };
   }
 
   if (!newProfile)
@@ -25,15 +36,24 @@ export const getDocumentFromProfileRecord = (
     );
 
   return {
-    memberId: newProfile.memberId,
-    firstName: newProfile.firstName,
-    lastName: newProfile.lastName,
-    emailAddress: newProfile.email,
-    signupDate: newProfile.signupDate,
-    organisationId: newProfile.organisationId,
-    employerId: newProfile.employerId,
-    userStatus: newProfile.status,
+    memberDocument: {
+      memberId: newProfile.memberId,
+      firstName: newProfile.firstName,
+      lastName: newProfile.lastName,
+      emailAddress: newProfile.email,
+      signupDate: newProfile.signupDate,
+      organisationId: newProfile.organisationId,
+      employerId: newProfile.employerId,
+      userStatus: newProfile.status,
+    },
+    employerIdChanged: hasChanged(newProfile.employerId, oldProfile?.employerId),
+    organisationIdChanged: hasChanged(newProfile.organisationId, oldProfile?.organisationId),
+    profileEmployerName: newProfile.employerName,
   };
+};
+
+const hasChanged = (newValue: string | undefined, oldValue: string | undefined): boolean => {
+  return newValue !== oldValue;
 };
 
 export const getDocumentFromApplicationRecord = (

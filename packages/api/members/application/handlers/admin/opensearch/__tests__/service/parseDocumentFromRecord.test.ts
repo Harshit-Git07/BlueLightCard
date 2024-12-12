@@ -47,7 +47,11 @@ describe('getDocumentFromProfileRecord', () => {
 
     const result = getDocumentFromProfileRecord(removeRecord);
 
-    expect(result).toBeUndefined();
+    expect(result).toEqual({
+      memberDocument: undefined,
+      employerIdChanged: false,
+      organisationIdChanged: false,
+    });
   });
 
   it('should include properties from new profile', () => {
@@ -55,18 +59,115 @@ describe('getDocumentFromProfileRecord', () => {
       oldImage: {
         memberId: '123',
         firstName: 'John',
+        employerId: 'employerId',
+        organisationId: 'organisationId',
       },
       newImage: {
         memberId: '123',
         firstName: 'Sam',
+        employerId: 'employerId',
+        organisationId: 'organisationId',
       },
     });
 
     const result = getDocumentFromProfileRecord(insertRecord);
 
     expect(result).toEqual({
-      memberId: '123',
-      firstName: 'Sam',
+      memberDocument: {
+        memberId: '123',
+        firstName: 'Sam',
+        employerId: 'employerId',
+        organisationId: 'organisationId',
+      },
+      employerIdChanged: false,
+      organisationIdChanged: false,
+      profileEmployerName: undefined,
+    });
+  });
+
+  it('should return organisation & employer as "changed" if no old record', () => {
+    unmarshallStreamImagesMock.mockReturnValue({
+      oldImage: undefined,
+      newImage: {
+        memberId: '123',
+        firstName: 'Sam',
+        employerId: 'employerId',
+        organisationId: 'organisationId',
+      },
+    });
+
+    const result = getDocumentFromProfileRecord(insertRecord);
+
+    expect(result).toEqual({
+      memberDocument: {
+        memberId: '123',
+        firstName: 'Sam',
+        employerId: 'employerId',
+        organisationId: 'organisationId',
+      },
+      employerIdChanged: true,
+      organisationIdChanged: true,
+      profileEmployerName: undefined,
+    });
+  });
+
+  it('should return organisation as "changed" if value changed', () => {
+    unmarshallStreamImagesMock.mockReturnValue({
+      oldImage: {
+        memberId: '123',
+        firstName: 'Sam',
+        employerId: 'employerId',
+        organisationId: 'organisationId1',
+      },
+      newImage: {
+        memberId: '123',
+        firstName: 'Sam',
+        employerId: 'employerId',
+        organisationId: 'organisationId2',
+      },
+    });
+
+    const result = getDocumentFromProfileRecord(insertRecord);
+
+    expect(result).toEqual({
+      memberDocument: {
+        memberId: '123',
+        firstName: 'Sam',
+        employerId: 'employerId',
+        organisationId: 'organisationId2',
+      },
+      employerIdChanged: false,
+      organisationIdChanged: true,
+      profileEmployerName: undefined,
+    });
+  });
+
+  it('should return include profileEmployerName if available', () => {
+    unmarshallStreamImagesMock.mockReturnValue({
+      oldImage: {
+        memberId: '123',
+        firstName: 'Sam',
+        organisationId: 'organisationId',
+      },
+      newImage: {
+        memberId: '123',
+        firstName: 'Sam',
+        organisationId: 'organisationId',
+        employerName: 'Free Text Employer',
+      },
+    });
+
+    const result = getDocumentFromProfileRecord(insertRecord);
+
+    expect(result).toEqual({
+      memberDocument: {
+        memberId: '123',
+        firstName: 'Sam',
+        organisationId: 'organisationId',
+      },
+      employerIdChanged: false,
+      organisationIdChanged: false,
+      profileEmployerName: 'Free Text Employer',
     });
   });
 });

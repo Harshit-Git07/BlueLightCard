@@ -105,7 +105,13 @@ export async function MembersStack({ app, stack }: StackContext) {
   });
 
   createMemberProfilesPipe(stack, profilesTable, memberProfilesTableEventQueue);
-  createMemberProfileIndexer(stack, vpc, memberProfilesTableEventQueue, SERVICE_NAME);
+  createMemberProfileIndexer(
+    stack,
+    vpc,
+    memberProfilesTableEventQueue,
+    organisationsTable,
+    SERVICE_NAME,
+  );
   createSeedOrganisations(stack, organisationsTable, SERVICE_NAME);
 
   return {

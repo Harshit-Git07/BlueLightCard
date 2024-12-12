@@ -1,5 +1,5 @@
 import { ServiceLayerOrganisation } from '@/root/src/member-eligibility/shared/types/ServiceLayerOrganisation';
-import { serviceLayerUrl } from '@bluelightcard/shared-ui/member-eligibility/constants/ServiceLayerUrl';
+import { serviceLayerUrl } from '@/root/src/member-eligibility/shared/constants/ServiceLayerUrl';
 
 export async function getOrganisations(): Promise<ServiceLayerOrganisation[] | undefined> {
   try {

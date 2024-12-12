@@ -1,5 +1,39 @@
 # Changelog
 
+## [1.42.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.41.0...bluelightcard/offers-v1.42.0) (2024-12-12)
+
+
+### Features
+
+* add blc prod campaign id ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* add gift card push notification ([#2819](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2819)) ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* force another release ([#3392](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3392)) ([762e13f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/762e13fc5a560cace07f664fe7a0538ea4359aea))
+* force release ([#3382](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3382)) ([cf313bb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cf313bbb51501ff5a933090091b10c145317c88f))
+* refactor ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* test ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+
+
+### Bug Fixes
+
+* Dummy change ([#2827](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2827)) ([96c2786](https://github.com/bluelightcard/BlueLightCard-2.0/commit/96c278602b43ec621b098e97d4b07bf3a13f58b0))
+* include service in offer query ([#2796](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2796)) ([1ce6b3f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1ce6b3f232117023dc196cd4bdbedb949c2c5903))
+* include service in offer query ([#2808](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2808)) ([16ba293](https://github.com/bluelightcard/BlueLightCard-2.0/commit/16ba2934822e26d82d29c17d697f7d390ca842a6))
+* include service revert ([#2803](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2803)) ([56e2e80](https://github.com/bluelightcard/BlueLightCard-2.0/commit/56e2e800f273bd7b5689ad793da45a73af480152))
+* Injected variables ([#2812](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2812)) ([53b24a6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/53b24a6c93908e05996a2095679e53dfaed8513d))
+* Manual version bump ([#2825](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2825)) ([644a096](https://github.com/bluelightcard/BlueLightCard-2.0/commit/644a0967a5c5932b072b532c693a5ca0af162a5e))
+* streamline CompanyOffersService and improve response handling in API routes ([#3067](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3067)) ([99abeaa](https://github.com/bluelightcard/BlueLightCard-2.0/commit/99abeaa1f4a1c1b62f48cd89fa2a1f3e4d1ed252))
+* tech debt - code duplication reduction ([#2903](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2903)) ([2da176b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2da176be4016869cd8ceb18dd8ea20ec970c815e))
+
+
+### Other Changes
+
+* **main:** release bluelightcard/offers 1.0.0 ([#2440](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2440)) ([220e9f3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/220e9f36b2697929e9e4020516fe716c459b4c2f))
+* **main:** release bluelightcard/offers 1.1.0 ([#2814](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2814)) ([bdfc4d6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bdfc4d6c3da8d3ce1bc584ee0dd1caaec8b388f4))
+* **main:** release bluelightcard/offers 1.2.0 ([#2815](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2815)) ([5e2429a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5e2429a956d6305a50e46aa3e1f119421440d71f))
+* **main:** release bluelightcard/offers 1.40.1 ([#2828](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2828)) ([171c851](https://github.com/bluelightcard/BlueLightCard-2.0/commit/171c851092d7b14c01d8ac621ff0941fde24fd94))
+* **main:** release bluelightcard/offers 1.40.2 ([#2910](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2910)) ([f2a32f0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f2a32f0ee09122af52124c10547d608a6851b7df))
+* **main:** release bluelightcard/offers 1.41.0 ([#3384](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3384)) ([cafbf4a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cafbf4a302add44a1989276205f7c60ceebd30b0))
+
 ## [1.41.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.40.2...bluelightcard/offers-v1.41.0) (2024-12-12)
 
 

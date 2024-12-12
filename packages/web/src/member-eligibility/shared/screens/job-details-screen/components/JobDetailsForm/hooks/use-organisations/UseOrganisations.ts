@@ -26,8 +26,11 @@ export function useOrganisations(
         serviceLayerOrganisations,
         employmentStatus
       );
-      const asEligibilityOrganisations =
-        filteredServiceLayerOrganisations.map(toEligibilityOrganisation);
+
+      const asEligibilityOrganisations = filteredServiceLayerOrganisations.map((organisation) =>
+        toEligibilityOrganisation(organisation, employmentStatus)
+      );
+
       setOrganisations([...asEligibilityOrganisations, ...fuzzyFrontendActionStubs]);
     });
   }, [employmentStatus]);

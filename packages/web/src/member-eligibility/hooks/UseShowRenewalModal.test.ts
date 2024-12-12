@@ -23,7 +23,7 @@ describe('useShowRenewalModal', () => {
     expect(result.current.ifCardExpiredMoreThan30Days).toBe(false);
   });
 
-  it('does not show modal when  member profile returns undefined is not provided', () => {
+  it('does not show modal when member profile returns undefined', () => {
     mockUseMemberProfile.mockReturnValue(undefined);
 
     const { result } = renderHook(() => useShowRenewalModal());
@@ -32,8 +32,8 @@ describe('useShowRenewalModal', () => {
     expect(result.current.ifCardExpiredMoreThan30Days).toBe(false);
   });
 
-  it('does not show modal when  member profile returns an empty object provided', () => {
-    mockUseMemberProfile.mockReturnValue({});
+  it('does not show modal when member profile returns an empty object', () => {
+    mockUseMemberProfile.mockReturnValue({ cards: [] });
 
     const { result } = renderHook(() => useShowRenewalModal());
 
@@ -41,8 +41,8 @@ describe('useShowRenewalModal', () => {
     expect(result.current.ifCardExpiredMoreThan30Days).toBe(false);
   });
 
-  it('does not show modal when  card expiryDate is not provided', () => {
-    mockUseMemberProfile.mockReturnValue({ card: {} });
+  it('does not show modal when cards array is empty', () => {
+    mockUseMemberProfile.mockReturnValue({ cards: [] });
 
     const { result } = renderHook(() => useShowRenewalModal());
 
@@ -50,11 +50,16 @@ describe('useShowRenewalModal', () => {
     expect(result.current.ifCardExpiredMoreThan30Days).toBe(false);
   });
 
-  it('shows modal when card is expired but within 15 days and returns ifCardExpiredMoreThan30Days as false (showing later button on modal, meaning user can delay).', () => {
+  it('shows modal when latest card is expired but within 15 days and returns ifCardExpiredMoreThan30Days as false', () => {
     const expiredDate = new Date();
     expiredDate.setDate(expiredDate.getDate() - 15);
 
-    mockUseMemberProfile.mockReturnValue({ card: { expiryDate: expiredDate.toISOString() } });
+    mockUseMemberProfile.mockReturnValue({
+      cards: [
+        { expiryDate: new Date('2020-01-01').toISOString() },
+        { expiryDate: expiredDate.toISOString() },
+      ],
+    });
 
     const { result } = renderHook(() => useShowRenewalModal());
 
@@ -62,11 +67,16 @@ describe('useShowRenewalModal', () => {
     expect(result.current.ifCardExpiredMoreThan30Days).toBe(false);
   });
 
-  it('shows modal when card is expired but within 29 days and returns ifCardExpiredMoreThan30Days as false (showing later button on modal, meaning user can delay).', () => {
+  it('shows modal when latest card is expired but within 29 days and returns ifCardExpiredMoreThan30Days as false', () => {
     const expiredDate = new Date();
     expiredDate.setDate(expiredDate.getDate() - 29);
 
-    mockUseMemberProfile.mockReturnValue({ card: { expiryDate: expiredDate.toISOString() } });
+    mockUseMemberProfile.mockReturnValue({
+      cards: [
+        { expiryDate: new Date('2020-01-01').toISOString() },
+        { expiryDate: expiredDate.toISOString() },
+      ],
+    });
 
     const { result } = renderHook(() => useShowRenewalModal());
 
@@ -74,12 +84,16 @@ describe('useShowRenewalModal', () => {
     expect(result.current.ifCardExpiredMoreThan30Days).toBe(false);
   });
 
-  it('shows modal when card is expired 30 days go and returns ifCardExpiredMoreThan30Days as false (showing later button on modal, meaning user can delay).', () => {
+  it('shows modal when latest card is expired 30 days ago and returns ifCardExpiredMoreThan30Days as false', () => {
     const expiredDate = new Date();
     expiredDate.setDate(expiredDate.getDate() - 30);
 
-    mockUseAmplitudeExperiment.mockReturnValue({ data: { variantName: 'on' } });
-    mockUseMemberProfile.mockReturnValue({ card: { expiryDate: expiredDate.toISOString() } });
+    mockUseMemberProfile.mockReturnValue({
+      cards: [
+        { expiryDate: new Date('2020-01-01').toISOString() },
+        { expiryDate: expiredDate.toISOString() },
+      ],
+    });
 
     const { result } = renderHook(() => useShowRenewalModal());
 
@@ -87,11 +101,16 @@ describe('useShowRenewalModal', () => {
     expect(result.current.ifCardExpiredMoreThan30Days).toBe(false);
   });
 
-  it('shows modal when card is expired 31 days ago and returns ifCardExpiredMoreThan30Days as true (hiding later button on modal, meaning user has no choice but to renew).', () => {
+  it('shows modal when latest card is expired 31 days ago and returns ifCardExpiredMoreThan30Days as true', () => {
     const expiredDate = new Date();
     expiredDate.setDate(expiredDate.getDate() - 31);
 
-    mockUseMemberProfile.mockReturnValue({ card: { expiryDate: expiredDate.toISOString() } });
+    mockUseMemberProfile.mockReturnValue({
+      cards: [
+        { expiryDate: new Date('2020-01-01').toISOString() },
+        { expiryDate: expiredDate.toISOString() },
+      ],
+    });
 
     const { result } = renderHook(() => useShowRenewalModal());
 
@@ -99,11 +118,16 @@ describe('useShowRenewalModal', () => {
     expect(result.current.ifCardExpiredMoreThan30Days).toBe(true);
   });
 
-  it('shows modal when card is expired 90 days ago and returns ifCardExpiredMoreThan30Days as true (hiding later button on modal, meaning user has no choice but to renew).', () => {
+  it('shows modal when latest card is expired 90 days ago and returns ifCardExpiredMoreThan30Days as true', () => {
     const expiredDate = new Date();
     expiredDate.setDate(expiredDate.getDate() - 90);
 
-    mockUseMemberProfile.mockReturnValue({ card: { expiryDate: expiredDate.toISOString() } });
+    mockUseMemberProfile.mockReturnValue({
+      cards: [
+        { expiryDate: new Date('2020-01-01').toISOString() },
+        { expiryDate: expiredDate.toISOString() },
+      ],
+    });
 
     const { result } = renderHook(() => useShowRenewalModal());
 
@@ -111,11 +135,16 @@ describe('useShowRenewalModal', () => {
     expect(result.current.ifCardExpiredMoreThan30Days).toBe(true);
   });
 
-  it('does not show modal when card is not expired and ', () => {
+  it('does not show modal when latest card is not expired', () => {
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + 15);
 
-    mockUseMemberProfile.mockReturnValue({ card: { expiryDate: futureDate.toISOString() } });
+    mockUseMemberProfile.mockReturnValue({
+      cards: [
+        { expiryDate: new Date('2020-01-01').toISOString() },
+        { expiryDate: futureDate.toISOString() },
+      ],
+    });
 
     const { result } = renderHook(() => useShowRenewalModal());
 
@@ -127,7 +156,12 @@ describe('useShowRenewalModal', () => {
     const expiredDate = new Date();
     expiredDate.setDate(expiredDate.getDate() - 15);
 
-    mockUseMemberProfile.mockReturnValue({ card: { expiryDate: expiredDate.toISOString() } });
+    mockUseMemberProfile.mockReturnValue({
+      cards: [
+        { expiryDate: new Date('2020-01-01').toISOString() },
+        { expiryDate: expiredDate.toISOString() },
+      ],
+    });
 
     const { result } = renderHook(() => useShowRenewalModal());
 

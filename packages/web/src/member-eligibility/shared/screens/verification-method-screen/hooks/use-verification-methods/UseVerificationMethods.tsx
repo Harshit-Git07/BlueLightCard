@@ -1,25 +1,29 @@
 import { useCallback, useMemo } from 'react';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
-import { useVerificationDescriptions } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/hooks/use-verification-methods/hooks/UseVerificationDescriptions';
 import { ListSelectorProps } from '@bluelightcard/shared-ui/components/ListSelector/types';
 import { useMobileMediaQuery } from '@bluelightcard/shared-ui/hooks/useMediaQuery';
 import { verificationMethodEvents } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/amplitude-events/VerificationMethodEvents';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 
-type VerificationMethod = Pick<
-  ListSelectorProps,
-  'title' | 'description' | 'tag' | 'onClick' | 'showTrailingIcon'
->;
+interface VerificationMethod
+  extends Pick<
+    ListSelectorProps,
+    'title' | 'description' | 'tag' | 'onClick' | 'showTrailingIcon'
+  > {
+  primary?: boolean;
+}
+
+type GroupedVerificationMethods = {
+  primaryMethod: VerificationMethod | undefined;
+  supportingMethods: VerificationMethod[];
+};
 
 export function useVerificationMethods(
   eligibilityDetailsState: EligibilityDetailsState
-): VerificationMethod[] {
+): GroupedVerificationMethods {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
-
   const logAnalyticsEvent = useLogAmplitudeEvent();
-
   const isMobile = useMobileMediaQuery();
-  const { getDescriptionByTitle } = useVerificationDescriptions();
 
   const handleWorkEmailVerification = useCallback(() => {
     logAnalyticsEvent(verificationMethodEvents.onMethodSelected(eligibilityDetails, 'Work Email'));
@@ -34,46 +38,54 @@ export function useVerificationMethods(
       logAnalyticsEvent(
         verificationMethodEvents.onMethodSelected(eligibilityDetails, verificationType)
       );
-      // TODO: This is just a hack to get the multi-id to work in regards to fuzzy frontend
-      if (eligibilityDetails.requireMultipleIds) {
-        setEligibilityDetails({
-          ...eligibilityDetails,
-          currentScreen: 'File Upload Verification Screen',
-          fileVerificationType: ['NHS Smart Card', verificationType],
-        });
-        return;
-      }
+
+      const primaryMethodTitle = eligibilityDetails.currentIdRequirementDetails?.find(
+        (requirement) => requirement.required
+      )?.title;
 
       setEligibilityDetails({
         ...eligibilityDetails,
         currentScreen: 'File Upload Verification Screen',
-        fileVerificationType: verificationType,
+        fileVerificationType: eligibilityDetails.requireMultipleIds
+          ? [primaryMethodTitle ?? verificationType, verificationType]
+          : verificationType,
       });
     },
     [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails]
   );
 
   return useMemo(() => {
-    const methodTitles = [
-      'Work Email',
-      'NHS Smart Card',
-      'Payslip',
-      'Work ID Card',
-      'SPPA Headed Letter',
-    ];
+    const idRequirements = eligibilityDetails.currentIdRequirementDetails ?? [];
 
-    return methodTitles.map((title) => {
-      const description = getDescriptionByTitle(title);
+    const methods = idRequirements.map((requirement): VerificationMethod => {
+      const title = requirement.title;
+      const description = requirement.description;
       const onClick =
-        title === 'Work Email'
+        requirement.type === 'email'
           ? handleWorkEmailVerification
           : () => handleFileUploadVerification(title);
+      const isPrimary = requirement.type !== 'email' ? requirement.required : undefined;
 
       return {
-        ...description,
-        onClick: onClick,
+        title,
+        description,
+        onClick,
         showTrailingIcon: !isMobile,
+        primary: isPrimary,
       };
     });
-  }, [getDescriptionByTitle, handleWorkEmailVerification, isMobile, handleFileUploadVerification]);
+
+    const primaryMethod = methods.find((method) => method.primary);
+    const supportingMethods = methods.filter((method) => !method.primary);
+
+    return {
+      primaryMethod,
+      supportingMethods,
+    };
+  }, [
+    eligibilityDetails.currentIdRequirementDetails,
+    handleWorkEmailVerification,
+    handleFileUploadVerification,
+    isMobile,
+  ]);
 }

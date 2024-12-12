@@ -17,6 +17,7 @@ export interface EligibilityDetails {
   emailVerification?: string;
   fileVerificationType?: string | [string, string];
   fileVerification?: Blob[];
+  currentIdRequirementDetails?: IdRequirementDetails[];
 }
 
 export type EligibilityScreen =
@@ -55,11 +56,23 @@ export interface AusAddress {
 export interface EligibilityOrganisation {
   id: string;
   label: string;
+  requireMultipleIds?: boolean;
+  idRequirements?: IdRequirementDetails[];
 }
 
 export interface EligibilityEmployer {
   id: string;
   label: string;
+  requireMultipleIds?: boolean;
+  idRequirements?: IdRequirementDetails[];
+}
+
+export interface IdRequirementDetails {
+  title: string;
+  description: string;
+  guidelines: string;
+  type: 'file upload' | 'email';
+  required: boolean;
 }
 
 export interface EligibilityJobDetailsAus {

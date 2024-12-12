@@ -8,7 +8,7 @@ import { colours, fonts } from '../../tailwind/theme';
 const ListSelector: FC<ListSelectorProps> = ({
   className = '',
   ariaLabel,
-  title,
+  title = '',
   state = ListSelectorState.Default,
   onClick,
   tag,

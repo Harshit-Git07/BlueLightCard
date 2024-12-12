@@ -1,6 +1,9 @@
 import * as target from './UseOnOrganisationChanged';
 import { useCallback } from 'react';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import {
+  EligibilityDetails,
+  EligibilityOrganisation,
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { organisationMultiIdStub } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/stubs/OrganisationStubs';
 
 jest.mock('react');
@@ -13,38 +16,50 @@ const eligibilityDetails: EligibilityDetails = {
   currentScreen: 'Job Details Screen',
 };
 
-type Result = ReturnType<typeof target.useOnOrganisationChanged>;
-let result: Result;
-
-beforeEach(() => {
+beforeAll(() => {
   useCallbackMock.mockImplementation((callback) => callback);
 });
 
-describe('given the organisation is changed', () => {
-  beforeEach(() => {
-    result = target.useOnOrganisationChanged([eligibilityDetails, setEligibilityDetailsStateMock]);
-    result({ id: '1', label: 'Test org' });
-  });
+beforeEach(() => {
+  jest.clearAllMocks();
+});
 
-  it('should return update eligibility details object', () => {
-    expect(setEligibilityDetailsStateMock).toHaveBeenCalledWith(<EligibilityDetails>{
-      ...eligibilityDetails,
-      organisation: { id: '1', label: 'Test org' },
-    });
+it('should update eligibility details correctly for standard organisation', () => {
+  const standardOrganisation: EligibilityOrganisation = {
+    id: '1',
+    label: 'Test org',
+    requireMultipleIds: false,
+  };
+
+  const result = target.useOnOrganisationChanged([
+    eligibilityDetails,
+    setEligibilityDetailsStateMock,
+  ]);
+  result(standardOrganisation);
+
+  expect(setEligibilityDetailsStateMock).toHaveBeenCalledWith({
+    ...eligibilityDetails,
+    employer: undefined,
+    jobTitle: undefined,
+    organisation: standardOrganisation,
+    requireMultipleIds: standardOrganisation.requireMultipleIds,
+    currentIdRequirementDetails: standardOrganisation.idRequirements,
   });
 });
 
-describe('given the organisation is changed to "Multi-ID stub"', () => {
-  beforeEach(() => {
-    result = target.useOnOrganisationChanged([eligibilityDetails, setEligibilityDetailsStateMock]);
-    result(organisationMultiIdStub);
-  });
+it('should update eligibility details correctly for multi-ID organisation', () => {
+  const result = target.useOnOrganisationChanged([
+    eligibilityDetails,
+    setEligibilityDetailsStateMock,
+  ]);
+  result(organisationMultiIdStub);
 
-  it('should return update eligibility details object', () => {
-    expect(setEligibilityDetailsStateMock).toHaveBeenCalledWith(<EligibilityDetails>{
-      ...eligibilityDetails,
-      requireMultipleIds: true,
-      organisation: organisationMultiIdStub,
-    });
+  expect(setEligibilityDetailsStateMock).toHaveBeenCalledWith({
+    ...eligibilityDetails,
+    employer: undefined,
+    jobTitle: undefined,
+    requireMultipleIds: true,
+    organisation: organisationMultiIdStub,
+    currentIdRequirementDetails: organisationMultiIdStub.idRequirements,
   });
 });

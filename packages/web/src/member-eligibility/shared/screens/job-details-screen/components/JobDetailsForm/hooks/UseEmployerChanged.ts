@@ -12,6 +12,9 @@ export function useEmployerChanged(eligibilityDetailsState: EligibilityDetailsSt
       setEligibilityDetailsState({
         ...eligibilityDetails,
         employer,
+        requireMultipleIds: employer.requireMultipleIds ?? eligibilityDetails.requireMultipleIds,
+        currentIdRequirementDetails:
+          employer.idRequirements ?? eligibilityDetails.currentIdRequirementDetails,
       });
     },
     [eligibilityDetails, setEligibilityDetailsState]

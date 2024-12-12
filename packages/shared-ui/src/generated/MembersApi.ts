@@ -4,6 +4,46 @@
  */
 
 export interface paths {
+  '/members/{memberId}/applications/{applicationId}/code': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          memberId: string;
+          applicationId: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description 204 response */
+        204: {
+          headers: {
+            'Access-Control-Allow-Origin'?: string;
+            'Access-Control-Allow-Methods'?: string;
+            'Access-Control-Allow-Credentials'?: string;
+            'Access-Control-Allow-Headers'?: string;
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/orgs/{organisationId}': {
     parameters: {
       query?: never;
@@ -128,45 +168,6 @@ export interface paths {
     trace?: never;
   };
   '/members/{memberId}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          memberId: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description 204 response */
-        204: {
-          headers: {
-            'Access-Control-Allow-Origin'?: string;
-            'Access-Control-Allow-Methods'?: string;
-            'Access-Control-Allow-Credentials'?: string;
-            'Access-Control-Allow-Headers'?: string;
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/members/marketing/preferences/{memberId}': {
     parameters: {
       query?: never;
       header?: never;
@@ -343,7 +344,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/members/marketing/braze/{memberId}': {
+  '/members/{memberId}/marketing': {
     parameters: {
       query?: never;
       header?: never;
@@ -352,7 +353,9 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    post: {
+    post?: never;
+    delete?: never;
+    options: {
       parameters: {
         query?: never;
         header?: never;
@@ -361,13 +364,120 @@ export interface paths {
         };
         cookie?: never;
       };
-      requestBody: {
-        content: {
-          'application/json': components['schemas']['BrazeAttributesModel'];
+      requestBody?: never;
+      responses: {
+        /** @description 204 response */
+        204: {
+          headers: {
+            'Access-Control-Allow-Origin'?: string;
+            'Access-Control-Allow-Methods'?: string;
+            'Access-Control-Allow-Credentials'?: string;
+            'Access-Control-Allow-Headers'?: string;
+            [name: string]: unknown;
+          };
+          content?: never;
         };
       };
-      responses: never;
     };
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/members/{memberId}/applications/{applicationId}/code/apply': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          memberId: string;
+          applicationId: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description 200 response */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['UpdateApplicationModel'];
+          };
+        };
+        /** @description 201 response */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 204 response */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 400 response */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['BadRequestModel'];
+          };
+        };
+        /** @description 401 response */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 403 response */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 404 response */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 500 response */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+      };
+    };
+    post?: never;
     delete?: never;
     options: {
       parameters: {
@@ -375,6 +485,7 @@ export interface paths {
         header?: never;
         path: {
           memberId: string;
+          applicationId: string;
         };
         cookie?: never;
       };
@@ -916,6 +1027,187 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/members/{memberId}/applications/{applicationId}/code/validate/{promoCode}': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          memberId: string;
+          applicationId: string;
+          promoCode: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description 200 response */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['PromoCodeResponseModel'];
+          };
+        };
+        /** @description 201 response */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 204 response */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 400 response */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['BadRequestModel'];
+          };
+        };
+        /** @description 401 response */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 403 response */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 404 response */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 500 response */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+      };
+    };
+    delete?: never;
+    options: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          memberId: string;
+          applicationId: string;
+          promoCode: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description 204 response */
+        204: {
+          headers: {
+            'Access-Control-Allow-Origin'?: string;
+            'Access-Control-Allow-Methods'?: string;
+            'Access-Control-Allow-Credentials'?: string;
+            'Access-Control-Allow-Headers'?: string;
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/members/{memberId}/marketing/braze': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          memberId: string;
+        };
+        cookie?: never;
+      };
+      requestBody: {
+        content: {
+          'application/json': components['schemas']['BrazeAttributesModel'];
+        };
+      };
+      responses: never;
+    };
+    delete?: never;
+    options: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          memberId: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description 204 response */
+        204: {
+          headers: {
+            'Access-Control-Allow-Origin'?: string;
+            'Access-Control-Allow-Methods'?: string;
+            'Access-Control-Allow-Credentials'?: string;
+            'Access-Control-Allow-Headers'?: string;
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/orgs/{organisationId}/employers': {
     parameters: {
       query?: never;
@@ -1039,14 +1331,99 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/members/marketing/preferences': {
+  '/members/{memberId}/marketing/preferences/{environment}': {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    get: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          memberId: string;
+          environment: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description 200 response */
+        200: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['MarketingPreferencesModel'];
+          };
+        };
+        /** @description 201 response */
+        201: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 204 response */
+        204: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 400 response */
+        400: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['BadRequestModel'];
+          };
+        };
+        /** @description 401 response */
+        401: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 403 response */
+        403: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 404 response */
+        404: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+        /** @description 500 response */
+        500: {
+          headers: {
+            [name: string]: unknown;
+          };
+          content: {
+            'application/json': components['schemas']['GenericModel'];
+          };
+        };
+      };
+    };
     put?: never;
     post?: never;
     delete?: never;
@@ -1054,7 +1431,10 @@ export interface paths {
       parameters: {
         query?: never;
         header?: never;
-        path?: never;
+        path: {
+          memberId: string;
+          environment: string;
+        };
         cookie?: never;
       };
       requestBody?: never;
@@ -1611,7 +1991,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/members/marketing': {
+  '/members/{memberId}/marketing/braze/update': {
     parameters: {
       query?: never;
       header?: never;
@@ -1620,181 +2000,60 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    post?: never;
-    delete?: never;
-    options: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description 204 response */
-        204: {
-          headers: {
-            'Access-Control-Allow-Origin'?: string;
-            'Access-Control-Allow-Methods'?: string;
-            'Access-Control-Allow-Credentials'?: string;
-            'Access-Control-Allow-Headers'?: string;
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/members/marketing/braze': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description 204 response */
-        204: {
-          headers: {
-            'Access-Control-Allow-Origin'?: string;
-            'Access-Control-Allow-Methods'?: string;
-            'Access-Control-Allow-Credentials'?: string;
-            'Access-Control-Allow-Headers'?: string;
-            [name: string]: unknown;
-          };
-          content?: never;
-        };
-      };
-    };
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/members/marketing/preferences/{memberId}/{environment}': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get: {
+    post: {
       parameters: {
         query?: never;
         header?: never;
         path: {
           memberId: string;
-          environment: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description 200 response */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['MarketingPreferencesModel'];
-          };
-        };
-        /** @description 201 response */
-        201: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['GenericModel'];
-          };
-        };
-        /** @description 204 response */
-        204: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['GenericModel'];
-          };
-        };
-        /** @description 400 response */
-        400: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['BadRequestModel'];
-          };
-        };
-        /** @description 401 response */
-        401: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['GenericModel'];
-          };
-        };
-        /** @description 403 response */
-        403: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['GenericModel'];
-          };
-        };
-        /** @description 404 response */
-        404: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['GenericModel'];
-          };
-        };
-        /** @description 500 response */
-        500: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            'application/json': components['schemas']['GenericModel'];
-          };
-        };
-      };
-    };
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          memberId: string;
-          environment: string;
         };
         cookie?: never;
       };
       requestBody: {
         content: {
-          'application/json': components['schemas']['MarketingPreferencesModel'];
+          'application/json': components['schemas']['BrazeUpdateModel'];
         };
       };
       responses: never;
     };
+    delete?: never;
+    options: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          memberId: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description 204 response */
+        204: {
+          headers: {
+            'Access-Control-Allow-Origin'?: string;
+            'Access-Control-Allow-Methods'?: string;
+            'Access-Control-Allow-Credentials'?: string;
+            'Access-Control-Allow-Headers'?: string;
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/members/{memberId}/marketing/preferences': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
     post?: never;
     delete?: never;
     options: {
@@ -1803,7 +2062,6 @@ export interface paths {
         header?: never;
         path: {
           memberId: string;
-          environment: string;
         };
         cookie?: never;
       };
@@ -1880,15 +2138,62 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/members/{memberId}/applications/{applicationId}/code/validate': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options: {
+      parameters: {
+        query?: never;
+        header?: never;
+        path: {
+          memberId: string;
+          applicationId: string;
+        };
+        cookie?: never;
+      };
+      requestBody?: never;
+      responses: {
+        /** @description 204 response */
+        204: {
+          headers: {
+            'Access-Control-Allow-Origin'?: string;
+            'Access-Control-Allow-Methods'?: string;
+            'Access-Control-Allow-Credentials'?: string;
+            'Access-Control-Allow-Headers'?: string;
+            [name: string]: unknown;
+          };
+          content?: never;
+        };
+      };
+    };
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
+
 export type webhooks = Record<string, never>;
+
 export interface components {
   schemas: {
     /** CreateApplicationModel */
     CreateApplicationModel: {
-      eligibilityStatus?: string;
+      /** @enum {string} */
+      eligibilityStatus?:
+        | 'INELIGIBLE'
+        | 'AWAITING_ID_APPROVAL'
+        | 'ASSIGNED_FOR_APPROVAL'
+        | 'ELIGIBLE';
       applicationReason: ('SIGNUP' | 'RENEWAL' | 'NAME_CHANGE' | 'LOST_CARD' | 'REPRINT') | never;
-      /** Format: date */
+      /** Format: date-time */
       startDate?: string;
     };
     /** CreateApplicationModelResponse */
@@ -1909,6 +2214,7 @@ export interface components {
       organisationId?: string;
       /** @enum {string} */
       gender?: 'MALE' | 'FEMALE' | 'OTHER' | 'PREFER_NOT_TO_SAY';
+      companyName?: string;
       jobTitle?: string;
       county?: string;
       employerName?: string;
@@ -1921,6 +2227,7 @@ export interface components {
       /** Format: uuid */
       employerId?: string;
       phoneNumber?: string;
+      companyNumber?: string;
       /** Format: email */
       spareEmail?: string;
       /** @default false */
@@ -1932,21 +2239,43 @@ export interface components {
     /** ApplicationModel */
     ApplicationModel: {
       country?: string;
-      address2?: string;
+      /** Format: date-time */
+      purchaseDate?: string;
       city?: string;
-      address1?: string;
       nameChangeLastName?: Record<string, never>;
-      postcode?: string;
-      eligibilityStatus?: string;
       nameChangeDocType?: Record<string, never>;
       nameChangeReason?: Record<string, never>;
-      trustedDomainValidated?: boolean;
-      nameChangeFirstName?: Record<string, never>;
       idS3LocationSecondary?: string;
       promoCode?: Record<string, never>;
+      verificationMethod?: string;
+      applicationReason: ('SIGNUP' | 'RENEWAL' | 'NAME_CHANGE' | 'LOST_CARD' | 'REPRINT') | never;
+      /** @enum {string} */
+      paymentStatus?:
+        | 'AWAITING_PAYMENT'
+        | 'PAID_CARD'
+        | 'PAID_PAYPAL'
+        | 'PAID_PROMO_CODE'
+        | 'PAID_CHEQUE'
+        | 'PAID_ADMIN'
+        | 'PENDING_REFUND'
+        | 'REFUNDED';
+      /** Format: uuid */
+      memberId: string;
+      idS3LocationPrimary?: string;
+      address2?: string;
+      address1?: string;
+      postcode?: string;
+      /** @enum {string} */
+      eligibilityStatus?:
+        | 'INELIGIBLE'
+        | 'AWAITING_ID_APPROVAL'
+        | 'ASSIGNED_FOR_APPROVAL'
+        | 'ELIGIBLE';
+      promoCodeApplied?: boolean;
+      trustedDomainValidated?: boolean;
+      nameChangeFirstName?: Record<string, never>;
       /** Format: uuid */
       applicationId: string;
-      verificationMethod?: string;
       rejectionReason?:
         | (
             | 'DECLINE_INCORRECT_ID'
@@ -1959,13 +2288,10 @@ export interface components {
             | 'DECLINE_NOT_ELIGIBLE'
           )
         | never;
-      applicationReason: ('SIGNUP' | 'RENEWAL' | 'NAME_CHANGE' | 'LOST_CARD' | 'REPRINT') | never;
-      /** Format: date */
+      /** Format: date-time */
       startDate?: string;
       trustedDomainEmail?: string;
-      /** Format: uuid */
-      memberId: string;
-      idS3LocationPrimary?: string;
+      cardNumber?: string;
     };
     /** EmployerModel */
     EmployerModel: {
@@ -1979,8 +2305,10 @@ export interface components {
         supportedDocuments: {
           idKey: string;
           guidelines: string;
+          description: string;
           /** @enum {string} */
           type: 'IMAGE_UPLOAD' | 'TRUSTED_DOMAIN';
+          title: string;
           /** @default false */
           required: boolean;
         }[];
@@ -1997,12 +2325,16 @@ export interface components {
         supportedDocuments: {
           idKey: string;
           guidelines: string;
+          description: string;
           /** @enum {string} */
           type: 'IMAGE_UPLOAD' | 'TRUSTED_DOMAIN';
+          title: string;
           /** @default false */
           required: boolean;
         }[];
       };
+      /** @default false */
+      isJobReferenceMandatory: boolean;
       lastUpdated?: string;
       /** Format: uuid */
       employerId: string;
@@ -2012,14 +2344,18 @@ export interface components {
         supportedDocuments: {
           idKey: string;
           guidelines: string;
+          description: string;
           /** @enum {string} */
           type: 'IMAGE_UPLOAD' | 'TRUSTED_DOMAIN';
+          title: string;
           /** @default false */
           required: boolean;
         }[];
       };
       /** @default false */
       bypassId: boolean;
+      /** @default true */
+      isJobTitleMandatory: boolean;
       name: string;
       /** @default [] */
       trustedDomains: string[];
@@ -2027,14 +2363,22 @@ export interface components {
     /** UpdateApplicationModel */
     UpdateApplicationModel: {
       country?: string;
+      /** Format: date-time */
+      purchaseDate?: string;
       address2?: string;
       city?: string;
       address1?: string;
       nameChangeLastName?: Record<string, never>;
       postcode?: string;
-      eligibilityStatus?: string;
+      /** @enum {string} */
+      eligibilityStatus?:
+        | 'INELIGIBLE'
+        | 'AWAITING_ID_APPROVAL'
+        | 'ASSIGNED_FOR_APPROVAL'
+        | 'ELIGIBLE';
       nameChangeDocType?: Record<string, never>;
       nameChangeReason?: Record<string, never>;
+      promoCodeApplied?: boolean;
       trustedDomainValidated?: boolean;
       nameChangeFirstName?: Record<string, never>;
       promoCode?: Record<string, never>;
@@ -2051,9 +2395,20 @@ export interface components {
             | 'DECLINE_NOT_ELIGIBLE'
           )
         | never;
-      /** Format: date */
+      /** Format: date-time */
       startDate?: string;
+      /** @enum {string} */
+      paymentStatus?:
+        | 'AWAITING_PAYMENT'
+        | 'PAID_CARD'
+        | 'PAID_PAYPAL'
+        | 'PAID_PROMO_CODE'
+        | 'PAID_CHEQUE'
+        | 'PAID_ADMIN'
+        | 'PENDING_REFUND'
+        | 'REFUNDED';
       trustedDomainEmail?: string;
+      cardNumber?: string;
     };
     /** OrganisationModel */
     OrganisationModel: {
@@ -2067,12 +2422,16 @@ export interface components {
         supportedDocuments: {
           idKey: string;
           guidelines: string;
+          description: string;
           /** @enum {string} */
           type: 'IMAGE_UPLOAD' | 'TRUSTED_DOMAIN';
+          title: string;
           /** @default false */
           required: boolean;
         }[];
       };
+      /** @default false */
+      isSelfEmployed: boolean;
       /** @default true */
       active: boolean;
       /** @default 0 */
@@ -2085,8 +2444,10 @@ export interface components {
         supportedDocuments: {
           idKey: string;
           guidelines: string;
+          description: string;
           /** @enum {string} */
           type: 'IMAGE_UPLOAD' | 'TRUSTED_DOMAIN';
+          title: string;
           /** @default false */
           required: boolean;
         }[];
@@ -2098,8 +2459,10 @@ export interface components {
         supportedDocuments: {
           idKey: string;
           guidelines: string;
+          description: string;
           /** @enum {string} */
           type: 'IMAGE_UPLOAD' | 'TRUSTED_DOMAIN';
+          title: string;
           /** @default false */
           required: boolean;
         }[];
@@ -2116,6 +2479,8 @@ export interface components {
       lastName: string;
       /** Format: date */
       dateOfBirth: string;
+      /** @enum {string} */
+      employmentStatus?: 'EMPLOYED' | 'RETIRED' | 'VOLUNTEER';
       /** Format: email */
       email: string;
     };
@@ -2140,6 +2505,17 @@ export interface components {
       email: string;
       currentPassword: string;
     };
+    /** PromoCodeResponseModel */
+    PromoCodeResponseModel: {
+      bypassPayment?: boolean;
+      bypassVerification?: boolean;
+    };
+    /** BrazeUpdateModel */
+    BrazeUpdateModel: {
+      attributes: {
+        [key: string]: Record<string, never>;
+      };
+    };
     /** BrazeAttributesModel */
     BrazeAttributesModel: {
       /** @default [] */
@@ -2162,13 +2538,60 @@ export interface components {
       lastLogin?: string;
       /** Format: uuid */
       organisationId?: string;
+      /** @default [] */
+      cards: {
+        /** Format: date-time */
+        purchaseDate?: string;
+        /** Format: date-time */
+        refundedDate?: string;
+        /** Format: date-time */
+        postedDate?: string;
+        /** Format: date-time */
+        expiryDate: string;
+        /** Format: date-time */
+        createdDate: string;
+        nameOnCard: string;
+        /** @enum {string} */
+        printingErrorStatus?:
+          | 'MISSING_ADDRESS'
+          | 'NAME_TOO_LONG'
+          | 'MISSING_ADDRESS AND NAME_TOO_LONG';
+        promoCode?: string;
+        updated?: string | never;
+        cardNumber: string;
+        /** @enum {string} */
+        cardStatus:
+          | 'AWAITING_BATCHING'
+          | 'ADDED_TO_BATCH'
+          | 'AWAITING_POSTAGE'
+          | 'PHYSICAL_CARD'
+          | 'VIRTUAL_CARD'
+          | 'CARD_LOST'
+          | 'DISABLED'
+          | 'CARD_EXPIRED';
+        /** @enum {string} */
+        paymentStatus?:
+          | 'AWAITING_PAYMENT'
+          | 'PAID_CARD'
+          | 'PAID_PAYPAL'
+          | 'PAID_PROMO_CODE'
+          | 'PAID_CHEQUE'
+          | 'PAID_ADMIN'
+          | 'PENDING_REFUND'
+          | 'REFUNDED';
+        /** Format: uuid */
+        memberId: string;
+        batchNumber?: string;
+      }[];
       /** @enum {string} */
       gender?: 'MALE' | 'FEMALE' | 'OTHER' | 'PREFER_NOT_TO_SAY';
+      companyName?: string;
       jobTitle?: string;
       county?: string;
       employerName?: string;
       /** @enum {string} */
       employmentStatus?: 'EMPLOYED' | 'RETIRED' | 'VOLUNTEER';
+      companyNumber?: string;
       /** Format: email */
       spareEmail?: string;
       /** Format: email */
@@ -2191,23 +2614,20 @@ export interface components {
       /** @default false */
       emailValidated: boolean;
       gaKey?: string;
-      card?: {
+      status?: string;
+      /** @default [] */
+      applications: {
+        country?: string;
         /** Format: date-time */
-        expiryDate?: string;
-        nameOnCard?: string;
-        /** Format: date-time */
-        purchaseTime?: string;
-        cardNumber: string;
-        /** @enum {string} */
-        cardStatus?:
-          | 'AWAITING_BATCHING'
-          | 'ADDED_TO_BATCH'
-          | 'AWAITING_POSTAGE'
-          | 'PHYSICAL_CARD'
-          | 'VIRTUAL_CARD'
-          | 'CARD_LOST'
-          | 'DISABLED'
-          | 'CARD_EXPIRED';
+        purchaseDate?: string;
+        city?: string;
+        nameChangeLastName?: Record<string, never>;
+        nameChangeDocType?: Record<string, never>;
+        nameChangeReason?: Record<string, never>;
+        idS3LocationSecondary?: string;
+        promoCode?: Record<string, never>;
+        verificationMethod?: string;
+        applicationReason: ('SIGNUP' | 'RENEWAL' | 'NAME_CHANGE' | 'LOST_CARD' | 'REPRINT') | never;
         /** @enum {string} */
         paymentStatus?:
           | 'AWAITING_PAYMENT'
@@ -2220,29 +2640,21 @@ export interface components {
           | 'REFUNDED';
         /** Format: uuid */
         memberId: string;
-        /** Format: date-time */
-        postedDate?: string;
-        batchNumber?: string;
-      };
-      status?: string;
-      /** @default [] */
-      applications: {
-        country?: string;
+        idS3LocationPrimary?: string;
         address2?: string;
-        city?: string;
         address1?: string;
-        nameChangeLastName?: Record<string, never>;
         postcode?: string;
-        eligibilityStatus?: string;
-        nameChangeDocType?: Record<string, never>;
-        nameChangeReason?: Record<string, never>;
+        /** @enum {string} */
+        eligibilityStatus?:
+          | 'INELIGIBLE'
+          | 'AWAITING_ID_APPROVAL'
+          | 'ASSIGNED_FOR_APPROVAL'
+          | 'ELIGIBLE';
+        promoCodeApplied?: boolean;
         trustedDomainValidated?: boolean;
         nameChangeFirstName?: Record<string, never>;
-        idS3LocationSecondary?: string;
-        promoCode?: Record<string, never>;
         /** Format: uuid */
         applicationId: string;
-        verificationMethod?: string;
         rejectionReason?:
           | (
               | 'DECLINE_INCORRECT_ID'
@@ -2255,13 +2667,10 @@ export interface components {
               | 'DECLINE_NOT_ELIGIBLE'
             )
           | never;
-        applicationReason: ('SIGNUP' | 'RENEWAL' | 'NAME_CHANGE' | 'LOST_CARD' | 'REPRINT') | never;
-        /** Format: date */
+        /** Format: date-time */
         startDate?: string;
         trustedDomainEmail?: string;
-        /** Format: uuid */
-        memberId: string;
-        idS3LocationPrimary?: string;
+        cardNumber?: string;
       }[];
     };
     /** EmailChangeModel */
@@ -2278,5 +2687,6 @@ export interface components {
   headers: never;
   pathItems: never;
 }
+
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;

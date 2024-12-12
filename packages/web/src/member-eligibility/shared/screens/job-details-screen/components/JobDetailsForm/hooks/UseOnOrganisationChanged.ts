@@ -20,6 +20,7 @@ export function useOnOrganisationChanged(
           jobTitle: undefined,
           requireMultipleIds: true,
           organisation,
+          currentIdRequirementDetails: organisation.idRequirements,
         });
         return;
       }
@@ -29,6 +30,8 @@ export function useOnOrganisationChanged(
         employer: undefined,
         jobTitle: undefined,
         organisation,
+        requireMultipleIds: organisation.requireMultipleIds,
+        currentIdRequirementDetails: organisation.idRequirements,
       });
     },
     [eligibilityDetails, setEligibilityDetailsState]

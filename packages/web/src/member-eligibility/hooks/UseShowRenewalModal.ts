@@ -3,6 +3,10 @@ import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentF
 import { useEffect, useState } from 'react';
 import { useMemberProfile } from '@/root/src/member-eligibility/service-layer/member-profile/UseGetMemberProfile';
 import { isBefore, differenceInDays, startOfDay } from 'date-fns';
+import {
+  ServiceLayerMemberProfile,
+  ServiceLayerMemberProfileCard,
+} from '@/root/src/member-eligibility/service-layer/member-profile/types/ServiceLayerMemberProfile';
 
 interface Result {
   shouldShowRenewalModal: boolean;
@@ -27,9 +31,12 @@ export function useShowRenewalModal(): Result {
 
   useEffect(() => {
     if (eligibilityEnabled.data?.variantName !== 'on') return;
-    if (!memberProfile?.card?.expiryDate) return;
+    if (!memberProfile) return;
 
-    const expiryDate = startOfDay(new Date(memberProfile.card.expiryDate));
+    const card = getLatestCard(memberProfile);
+    if (!card) return;
+
+    const expiryDate = startOfDay(new Date(card.expiryDate));
     const today = startOfDay(new Date());
 
     // Check if the card has expired
@@ -43,7 +50,17 @@ export function useShowRenewalModal(): Result {
     } else {
       setIfCardExpiredMoreThan30Days(false);
     }
-  }, [eligibilityEnabled, eligibilityEnabled.data?.variantName, memberProfile?.card?.expiryDate]);
+  }, [eligibilityEnabled, eligibilityEnabled.data?.variantName, memberProfile]);
 
-  return { shouldShowRenewalModal, onHideRenewalModal, ifCardExpiredMoreThan30Days };
+  return {
+    shouldShowRenewalModal,
+    onHideRenewalModal,
+    ifCardExpiredMoreThan30Days,
+  };
+}
+
+function getLatestCard(
+  memberProfile: ServiceLayerMemberProfile
+): ServiceLayerMemberProfileCard | undefined {
+  return memberProfile.cards.at(-1);
 }

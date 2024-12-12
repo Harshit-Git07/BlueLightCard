@@ -9,6 +9,7 @@ import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
 import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
 import { useFuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/hooks/FuzzyFrontendButtons';
+import { faCircleBolt } from '@fortawesome/pro-solid-svg-icons';
 import {
   defaultScreenTitle,
   verifyEligibilitySubTitle,
@@ -17,6 +18,7 @@ import { useVerificationMethods } from '@/root/src/member-eligibility/shared/scr
 import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
 import { verificationMethodEvents } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/amplitude-events/VerificationMethodEvents';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
+import Tag from '@bluelightcard/shared-ui/components/Tag';
 
 export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -27,7 +29,7 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   useLogAnalyticsPageView(eligibilityDetails);
 
   const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
-  const verificationMethods = useVerificationMethods(eligibilityDetailsState);
+  const { primaryMethod, supportingMethods } = useVerificationMethods(eligibilityDetailsState);
 
   const numberOfCompletedSteps = useMemo(() => {
     switch (eligibilityDetails.flow) {
@@ -55,15 +57,32 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
           numberOfCompletedSteps={numberOfCompletedSteps}
         />
 
-        <div className="flex flex-col gap-[12px]">
-          <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>
-            CHOOSE VERIFICATION METHOD
-          </p>
+        <div className="flex flex-col gap-[32px]">
+          {primaryMethod && (
+            <div className="flex flex-col gap-[12px]">
+              <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>
+                {`Upload your ${primaryMethod.title?.toLowerCase()} and choose one supporting document`}
+              </p>
 
-          <div className="flex flex-col gap-[16px]">
-            {verificationMethods.map((method) => (
-              <ListSelector key={method.title} {...method} />
-            ))}
+              <ListSelector
+                {...primaryMethod}
+                showTrailingIcon={false}
+                description=""
+                tag={<Tag state="Info" infoMessage="Primary document" iconLeft={faCircleBolt} />}
+              />
+            </div>
+          )}
+
+          <div className="flex flex-col gap-[12px]">
+            <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>
+              {primaryMethod ? 'CHOOSE A SUPPORTING DOCUMENT' : 'CHOOSE VERIFICATION METHOD'}
+            </p>
+
+            <div className="flex flex-col gap-[16px]">
+              {supportingMethods.map((method) => (
+                <ListSelector key={method.title} {...method} />
+              ))}
+            </div>
           </div>
         </div>
 

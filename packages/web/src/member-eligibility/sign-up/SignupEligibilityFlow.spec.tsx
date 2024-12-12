@@ -181,7 +181,10 @@ describe('given a signing up member that needs to prove their eligibility to use
 
                     describe('when they submit their payment details', () => {
                       beforeEach(async () => {
-                        fireEvent.keyDown(window, { key: '.', ctrlKey: true });
+                        fireEvent.keyDown(window, {
+                          key: '.',
+                          ctrlKey: true,
+                        });
                         const nextButton = screen.getByTestId('next-button-1');
                         act(() => nextButton.click());
                       });
@@ -280,7 +283,10 @@ describe('given a signing up member that needs to prove their eligibility to use
 
                   describe('when they submit their payment details', () => {
                     beforeEach(async () => {
-                      fireEvent.keyDown(window, { key: '.', ctrlKey: true });
+                      fireEvent.keyDown(window, {
+                        key: '.',
+                        ctrlKey: true,
+                      });
                       const nextButton = screen.getByTestId('next-button-1');
                       act(() => nextButton.click());
                     });
@@ -363,7 +369,10 @@ describe('given a signing up member that needs to prove their eligibility to use
 
                 describe('when they submit their payment details', () => {
                   beforeEach(async () => {
-                    fireEvent.keyDown(window, { key: '.', ctrlKey: true });
+                    fireEvent.keyDown(window, {
+                      key: '.',
+                      ctrlKey: true,
+                    });
                     const nextButton = screen.getByTestId('next-button-1');
                     act(() => nextButton.click());
                   });
@@ -419,7 +428,10 @@ describe('given a signing up member that needs to prove their eligibility to use
 
             describe('when they submit their payment details', () => {
               beforeEach(async () => {
-                fireEvent.keyDown(window, { key: '.', ctrlKey: true });
+                fireEvent.keyDown(window, {
+                  key: '.',
+                  ctrlKey: true,
+                });
                 const nextButton = screen.getByTestId('next-button-1');
                 act(() => nextButton.click());
               });

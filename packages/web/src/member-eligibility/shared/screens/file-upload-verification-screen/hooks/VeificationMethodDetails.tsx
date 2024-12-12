@@ -46,8 +46,8 @@ function useFirstVerificationMethodDetails(eligibilityDetails: EligibilityDetail
       return <>This must show your full name and organisation</>;
     }
 
-    return undefined;
-  }, [title]);
+    return getGuidelinesDescription(eligibilityDetails);
+  }, [eligibilityDetails, title]);
 
   const tag = useMemo(() => {
     if (title === 'SPPA Headed Letter') {
@@ -117,8 +117,8 @@ function useSecondVerificationMethodDetails(
       return 'Must show the social care department within the council\nMust show your full name';
     }
 
-    return undefined;
-  }, [eligibilityDetails.fileVerificationType, title]);
+    return getGuidelinesDescription(eligibilityDetails);
+  }, [eligibilityDetails, title]);
 
   const tag = useMemo(() => {
     return <VerificationMethodDetailsTag infoMessage="Supporting document" />;
@@ -136,6 +136,15 @@ function useSecondVerificationMethodDetails(
     tag,
     showTrailingIcon,
   };
+}
+
+function getGuidelinesDescription(eligibilityDetails: EligibilityDetails): string | undefined {
+  const matchedGuidelines = eligibilityDetails.currentIdRequirementDetails?.find(
+    (detail) => detail.title === eligibilityDetails.fileVerificationType
+  )?.guidelines;
+  if (!matchedGuidelines) return undefined;
+
+  return matchedGuidelines;
 }
 
 type VerificationMethodDetailsTagProps = Pick<TagProps, 'infoMessage'>;

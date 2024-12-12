@@ -306,7 +306,7 @@ jobs:
         run: npx sst types --stage staging
       - name: Copy associated file for brand
         working-directory: ./packages/web
-        run: cp ./assets/ios-assoc/apple-app-site-association-${{ matrix.brand }} ./public/.well-known
+        run: cp ./assets/ios-assoc/apple-app-site-association-${{ matrix.brand }} ./public/.well-known/apple-app-site-association
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
       - name: Publish

@@ -1,0 +1,156 @@
+{
+    "applinks": {
+        "details": [
+        {
+        "appIDs": [ "BBU5SL63GJ.com.bluelightcard.user" ],
+        "components": [
+        {
+        "#": "no_universal_links",
+        "exclude": true,
+        "comment": "Matches any URL whose fragment equals no_universal_links and instructs the system not to open it as a universal link"
+        },
+       {
+        "/": "/memhome*",
+       "comment": "Home page"
+       },
+{
+        "/": "/members-home*",
+       "comment": "Home page"
+       },
+{
+        "/": "/offerdetails*",
+        "?": { "cid": "*" },
+        "comment": "Matches any URL whose path starts with /offerdetails/ and which has a query item with name 'cid'"
+        },
+{
+        "/": "/offerdetails*",
+        "?": { "oid": "*" },
+        "comment": "Matches any URL whose path starts with /offerdetails/ and which has a query item with name 'oid'"
+},
+{
+        "/": "/offers*",
+        "?": {"type": "*"},
+        "comment": "Matches any URL whose path starts with /offers/ and which has a query item with name 'type'"
+
+},
+        {
+        "/": "/offers*",
+        "?": {"opensearch": "*"},
+        "comment": "Matches any URL whose path starts with /offers/ and which has a query item with name 'opensearch'"
+
+},
+        {
+        "/": "/offers*",
+        "?": {"search": "*"},
+        "comment": "Matches any URL whose path starts with /offers/ and which has a query item with name 'search'"
+
+},
+         {
+         "/": "/search*",
+          "?": {"q": "*"},
+          "comment": "Matches any URL whose path starts with /search/ and which has a query item with name 'q'"
+
+},
+{
+        "/": "/company*",
+        "?": {"cid": "*"},
+        "comment": "Matches any URL whose path starts with /company/ and which has a query item with name 'cid'"
+},
+{
+         "/": "/search*",
+         "?": {"q": "*"},
+         "comment": "Matches any URL whose path starts with /search/ and which has a query item with name 'q'"
+},
+{
+        "/": "/bluelightcardnewsdetails*",
+        "?": { "id": "*" },
+        "comment": "News"
+        },
+{
+        "/": "/notifications*",
+        "?": { "id": "*" },
+        "comment": "Notifications/Messages"
+        },
+{
+        "/": "/url*",
+        "?": { "url": "*" },
+        "comment": "URL"
+        },
+{
+        "/": "/flexible*",
+        "?": { "id": "*" },
+        "comment": "Flexible Menu"
+        },
+{
+        "/": "/category*",
+        "?": { "id": "*" },
+        "comment": "Category Menu"
+        },
+{
+        "/": "/vaultcodes*",
+        "comment": "Vault"
+        },
+{
+        "/": "/account*",
+        "comment": "Personal Information"
+        },
+{
+        "/": "/reportcodeleaks*",
+        "comment": "Code Leaks"
+        },
+{
+        "/": "/preferences*",
+        "?": { "type": "*" },
+        "comment": "Favourite, Subscribed and Hidden companies"
+        },
+{
+        "/": "/privacy_policy*",
+        "comment": "Privacy Notice"
+        },
+{
+        "/": "/privacy-notice*",
+        "comment": "Privacy Notice"
+        },
+{
+        "/": "/privacy_notice*",
+        "comment": "Privacy Notice"
+        },
+{
+        "/": "/privacy-policy*",
+        "comment": "Privacy Notice"
+        },
+{
+        "/": "/terms_and_conditions*",
+        "comment": "Terms and conditions"
+        },
+{
+        "/": "/terms-and-conditions*",
+        "comment": "Terms and conditions"
+        },
+{
+        "/": "/highstreetcard*",
+        "comment": "Card display/application"
+        },
+{
+         "/": "/map*",
+        "comment": "Map search"
+        },
+        {
+        "/":"/marketing*",
+        "comment":"Marketing Preference"
+        },
+        {
+        "/": "/help/website/*",
+        "exclude": true,
+        "comment": "Matches any URL whose path starts with /help/website/ and instructs the system not to open it as a universal link"
+        }
+        ]
+        }
+        ]
+    },
+    "webcredentials": {
+        "apps": [
+            "BBU5SL63GJ.com.bluelightcard.user"
+        ]
+    }
+}

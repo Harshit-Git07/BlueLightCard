@@ -682,6 +682,9 @@ jobs:
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{matrix.brand}}-${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+      - name: Copy associated file for brand
+        working-directory: ./packages/web
+        run: cp ./assets/ios-assoc/apple-app-site-association-${{ matrix.brand }} ./public/.well-known
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npx sst types --stage $PR_PREFIX && npm run build -w packages/web
         env:

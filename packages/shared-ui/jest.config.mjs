@@ -7,6 +7,7 @@ const config = {
     '^src/(.*)$': '<rootDir>/src/$1',
     '\\.(scss|sass|css)$': 'identity-obj-proxy',
     '^tokens/(.*)$': '<rootDir>/tokens/$1',
+    '\\.svg$': '<rootDir>/src/__mocks__/svgMock.js', // Mock SVG imports
   },
   testMatch: ['**/__tests__/**/*.(spec|test).[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
   testPathIgnorePatterns: ['dist'],

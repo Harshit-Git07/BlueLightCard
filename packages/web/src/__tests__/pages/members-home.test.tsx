@@ -17,7 +17,6 @@ import AmplitudeContext from '@/root/src/common/context/AmplitudeContext';
 import useFetchHomepageData from '@/hooks/useFetchHomepageData';
 import { BannerType, FeaturedOffersType, FlexibleMenuType } from '@/page-types/members-home';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui/adapters';
-import { useShowRenewalModal } from '@/root/src/member-eligibility/hooks/UseShowRenewalModal';
 
 jest.mock('@bluelightcard/shared-ui', () => {
   const eventBus = {
@@ -119,10 +118,6 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-jest.mock('@/root/src/member-eligibility/hooks/UseShowRenewalModal', () => ({
-  useShowRenewalModal: jest.fn(),
-}));
-
 const mockTrackHomepageCarouselClick = jest.fn();
 const mockTrackHomepageCarouselInteraction = jest.fn();
 const mockTrackTenancyClick = jest.fn();
@@ -200,51 +195,6 @@ describe('Members-Home Page', () => {
       ],
       hasLoaded: true,
       loadingError: false,
-    });
-  });
-
-  describe('Renewal modal', () => {
-    it('should render renewal modal - with the option to delay (Later button)', () => {
-      (useShowRenewalModal as jest.Mock).mockReturnValue({
-        shouldShowRenewalModal: true,
-        onHideRenewalModal: jest.fn(),
-        ifCardExpiredMoreThan30Days: false,
-      });
-      whenMembersHomePageIsRendered('on');
-
-      const renewalModal = screen.getByTestId('renewal-modal');
-      const laterButton = screen.getByTestId('delay-renewal-button');
-
-      expect(renewalModal).toBeInTheDocument();
-      expect(laterButton).toBeInTheDocument();
-    });
-
-    it('should render renewal modal - with No option to delay (Later button) ', () => {
-      (useShowRenewalModal as jest.Mock).mockReturnValue({
-        shouldShowRenewalModal: true,
-        onHideRenewalModal: jest.fn(),
-        ifCardExpiredMoreThan30Days: true,
-      });
-      whenMembersHomePageIsRendered('on');
-
-      const renewalModal = screen.getByTestId('renewal-modal');
-      const laterButton = screen.queryByTestId('delay-renewal-button');
-
-      expect(renewalModal).toBeInTheDocument();
-      expect(laterButton).not.toBeInTheDocument();
-    });
-
-    it('should not render renewal modal', () => {
-      (useShowRenewalModal as jest.Mock).mockReturnValue({
-        shouldShowRenewalModal: false,
-        onHideRenewalModal: jest.fn(),
-        ifCardExpiredMoreThan30Days: false,
-      });
-      whenMembersHomePageIsRendered('on');
-
-      const renewalModal = screen.queryByTestId('renewal-modal');
-
-      expect(renewalModal).not.toBeInTheDocument();
     });
   });
 

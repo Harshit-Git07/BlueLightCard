@@ -1,5 +1,5 @@
-import { serviceLayerUrl } from '@/root/src/member-eligibility/shared/constants/ServiceLayerUrl';
 import { ServiceLayerEmployer } from '@/root/src/member-eligibility/shared/types/ServiceLayerEmployer';
+import { serviceLayerUrl } from '@bluelightcard/shared-ui/member-eligibility/constants/ServiceLayerUrl';
 
 export async function getEmployers(
   organisationId: string

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.97.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.96.0...bluelightcard/web-v1.97.0) (2024-12-12)
+
+
+### Features
+
+* [MER-468] - Moving renewal modal to shared-ui ([#3344](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3344)) ([4349058](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4349058b3413e0db6143f74e1421b6ee2f0555d4))
+
 ## [1.96.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.95.0...bluelightcard/web-v1.96.0) (2024-12-12)
 
 

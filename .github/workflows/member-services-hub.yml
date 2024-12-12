@@ -166,39 +166,10 @@ jobs:
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created
-    name: Deploy Production
-    environment: Production
-    runs-on: ubuntu-latest
     needs:
       - install
       - test
       - changelog
       - staging
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup
-        uses: ./.github/actions/setup
-      - name: Build
-        run: npm run build -w packages/${{ env.PKG_NAME }}
-      - name: Publish
-        uses: cloudflare/pages-action@1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ env.PKG_NAME }}
-          branch: 'main'
-          directory: packages/${{ env.PKG_NAME }}/dist
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Record deployment with Oobeya
-        run: |
-          curl -XPOST -H 'Oobeya-API-Key: ${{ secrets.OOBEYA_API_KEY }}' -H "Content-type: application/json" -d '{
-            "analysisId": "${{ secrets.OOBEYA_ANALYSIS_ID }}",
-            "pipelineStartAt": "${{ github.event.push.pusher.date }}",
-            "lastCommitSha": "${{ github.sha }}",
-            "deploymentType": "RELEASE",
-            "deployedAt": "${{ github.event.push.pusher.date }}",
-            "author": "${{ github.actor }}",
-            "name": "${{ needs.changelog.outputs.tag_name }}",
-            "title": "${{ github.workflow }} ${{ needs.changelog.outputs.tag_name }}"
-          }' 'https://bluelightcard.oobeya.io/apis/v1/deployments'
+    uses: ./.github/workflows/production-deploy-member-services-hub.yml
+    secrets: inherit

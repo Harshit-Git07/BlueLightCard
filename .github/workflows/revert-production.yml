@@ -6,8 +6,6 @@ on:
       commit_hash_or_tag:
         description: The commit SHA that you wish to revert to
         required: true
-env:
-  prod_role_to_assume: arn:aws:iam::676719682338:role/github-action-role
 
 jobs:
   revert-identity:

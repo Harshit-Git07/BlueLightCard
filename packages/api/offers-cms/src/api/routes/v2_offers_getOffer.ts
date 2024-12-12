@@ -47,6 +47,10 @@ export const registerV2OffersGetOffer = (app: App) =>
       notFound();
     }
 
+    if (item.status !== 'live') {
+      notFound();
+    }
+
     invariant(item.name, 'Missing `offer.name`');
     invariant(item.offerDescription, 'Missing `offer.offerDescription`');
     invariant(item.offerType?.offerType, 'Missing `offer.offerType`');

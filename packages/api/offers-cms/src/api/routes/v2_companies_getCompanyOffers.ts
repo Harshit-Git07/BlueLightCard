@@ -60,7 +60,9 @@ export const registerV2CompaniesGetCompanyOffers = (app: App) =>
       notFound();
     }
 
-    const offers = items.map((offer) => {
+    const liveOffers = items.filter((offer) => offer.status === 'live');
+
+    const offers = liveOffers.map((offer) => {
       invariant(offer.name, 'Missing `offer.name`');
       invariant(offer.offerType?.offerType, 'Missing `offer.offerType`');
 

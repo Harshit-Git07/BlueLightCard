@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.41.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.40.2...bluelightcard/offers-v1.41.0) (2024-12-12)
+
+
+### Features
+
+* force release ([#3382](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3382)) ([cf313bb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cf313bbb51501ff5a933090091b10c145317c88f))
+
 ## [1.40.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.40.1...bluelightcard/offers-v1.40.2) (2024-12-03)
 
 

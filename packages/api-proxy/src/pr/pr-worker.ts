@@ -10,7 +10,7 @@ export async function handlePrRequest(request: Request, env: Env): Promise<Respo
 	let response = await handleRequest(request, env)
 
 	const origin = request.headers.get('Origin')
-	const pr_env_regex = /^https?:\/\/(pr-\d+|[a-f0-9]{8})\.(blc-uk|blc-au|dds-uk)\.pages\.dev$/
+	const pr_env_regex = /^https?:\/\/(pr-\d+|[a-f0-9]{8})\.(blc-uk|blc-au|blc-aus|dds-uk|dds-4j3)\.pages\.dev$/
 	if (origin && pr_env_regex.test(origin)) {
 		response = cloneResponseWithAlteredCorsHeader(response, origin)
 	}

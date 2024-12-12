@@ -686,9 +686,11 @@ jobs:
         working-directory: ./packages/web
         run: cp ./assets/ios-assoc/apple-app-site-association-${{ matrix.brand }} ./public/.well-known
       - name: Build
-        run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npx sst types --stage $PR_PREFIX && npm run build -w packages/web
+        run: npx sst types --stage $PR_PREFIX && npm run build -w packages/web
         env:
+          # BRAND env var is used for generating SST types, not sure if the types actually change per brand
           BRAND: BLC_UK
+          NEXT_PUBLIC_APP_BRAND: ${{matrix.brand}}
           NEXT_PUBLIC_IDENTITY_API_URL: ${{matrix.identity_api_url}}
           NEXT_PUBLIC_IDENTITY_API_KEY: ${{ secrets[matrix.identity_api_key] }}
           NEXT_PUBLIC_USER_PROFILE_ENDPOINT: /user
@@ -787,9 +789,11 @@ jobs:
           restore-keys: |
             ${{matrix.brand}}-${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
       - name: Build
-        run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npx sst types --stage $PR_PREFIX && npm run build -w packages/mobile-hybrid
+        run: npx sst types --stage $PR_PREFIX && npm run build -w packages/mobile-hybrid
         env:
+          # BRAND env var is used for generating SST types, not sure if the types actually change per brand
           BRAND: BLC_UK
+          NEXT_PUBLIC_APP_BRAND: ${{matrix.brand}}
       - name: Publish
         uses: cloudflare/pages-action@1
         id: cloudflare-publish

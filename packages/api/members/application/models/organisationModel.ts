@@ -56,6 +56,8 @@ export const OrganisationModel = createZodNamedType(
         ),
       })
       .optional(),
+    isSelfEmployed: z.boolean().default(false).optional(),
+    isCustomEmployerName: z.boolean().default(false).optional(),
     idUploadCount: z.number().default(0).optional(),
     trustedDomains: z.array(z.string()).default([]).optional(),
     bypassPayment: z.boolean().default(false).optional(),

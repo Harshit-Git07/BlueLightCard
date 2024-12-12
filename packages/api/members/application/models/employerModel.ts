@@ -57,6 +57,8 @@ export const EmployerModel = createZodNamedType(
         ),
       })
       .optional(),
+    isJobTitleMandatory: z.boolean().default(true).optional(),
+    isJobReferenceMandatory: z.boolean().default(false).optional(),
     idUploadCount: z.number().default(0).optional(),
     trustedDomains: z.array(z.string()).default([]).optional(),
     bypassPayment: z.boolean().default(false).optional(),

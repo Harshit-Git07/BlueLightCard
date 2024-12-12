@@ -134,14 +134,11 @@ export class ApplicationRepository extends Repository {
             sk: MEMBER,
           },
           KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
-          ConditionExpression: 'eligibilityStatus = :currentEligibilityStatus',
-          UpdateExpression:
-            'SET assignedTo = :adminId, assignedToName = :adminName, eligibilityStatus = :newEligibilityStatus',
+          UpdateExpression: 'SET assignedTo = :adminId, assignedToName = :adminName',
           ExpressionAttributeValues: {
             ':adminId': adminId,
             ':adminName': adminName,
-            ':currentEligibilityStatus': EligibilityStatus.AWAITING_ID_APPROVAL,
-            ':newEligibilityStatus': EligibilityStatus.ASSIGNED_FOR_APPROVAL,
+            ':eligibilityStatus': EligibilityStatus.ASSIGNED_FOR_APPROVAL,
           },
         },
       };
@@ -163,14 +160,11 @@ export class ApplicationRepository extends Repository {
             sk: MEMBER,
           },
           KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
-          ConditionExpression: 'eligibilityStatus = :currentEligibilityStatus',
-          UpdateExpression:
-            'SET assignedTo = :adminId, assignedToName = :adminName, eligibilityStatus = :newEligibilityStatus',
+          UpdateExpression: 'SET assignedTo = :adminId, assignedToName = :adminName',
           ExpressionAttributeValues: {
-            ':adminId': adminId,
+            ':adminId': null,
             ':adminName': null,
-            ':currentEligibilityStatus': EligibilityStatus.ASSIGNED_FOR_APPROVAL,
-            ':newEligibilityStatus': EligibilityStatus.AWAITING_ID_APPROVAL,
+            ':eligibilityStatus': EligibilityStatus.AWAITING_ID_APPROVAL,
           },
         },
       };

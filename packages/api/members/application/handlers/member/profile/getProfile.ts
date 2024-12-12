@@ -14,7 +14,11 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<ProfileMod
   }
 
   verifyMemberHasAccessToProfile(event, memberId);
-  return await service.getProfile(memberId);
+  const profile = await service.getProfile(memberId);
+  return {
+    ...profile,
+    cards: profile.cards && profile.cards.length > 0 ? [profile.cards[0]] : [],
+  };
 };
 
 export const handler = middleware(unwrappedHandler);

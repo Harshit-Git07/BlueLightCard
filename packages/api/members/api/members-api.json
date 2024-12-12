@@ -2,7 +2,7 @@
   "openapi" : "3.0.1",
   "info" : {
     "title" : "blc-mono-members-api",
-    "version" : "2024-12-02T13:47:24Z"
+    "version" : "2024-12-11T18:46:28Z"
   },
   "servers" : [ {
     "url" : "https://kbb684h8h8.execute-api.eu-west-2.amazonaws.com/{basePath}",
@@ -13,6 +13,53 @@
     }
   } ],
   "paths" : {
+    "/members/{memberId}/applications/{applicationId}/code" : {
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
     "/orgs/{organisationId}" : {
       "get" : {
         "parameters" : [ {
@@ -146,46 +193,6 @@
       }
     },
     "/members/{memberId}" : {
-      "options" : {
-        "parameters" : [ {
-          "name" : "memberId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "204" : {
-            "description" : "204 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              },
-              "Access-Control-Allow-Methods" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              },
-              "Access-Control-Allow-Credentials" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              },
-              "Access-Control-Allow-Headers" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            },
-            "content" : { }
-          }
-        }
-      }
-    },
-    "/members/marketing/preferences/{memberId}" : {
       "options" : {
         "parameters" : [ {
           "name" : "memberId",
@@ -377,8 +384,8 @@
         }
       }
     },
-    "/members/marketing/braze/{memberId}" : {
-      "post" : {
+    "/members/{memberId}/marketing" : {
+      "options" : {
         "parameters" : [ {
           "name" : "memberId",
           "in" : "path",
@@ -387,20 +394,146 @@
             "type" : "string"
           }
         } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/BrazeAttributesModel"
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/members/{memberId}/applications/{applicationId}/code/apply" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/UpdateApplicationModel"
+                }
               }
             }
           },
-          "required" : true
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
         }
       },
       "options" : {
         "parameters" : [ {
           "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
           "in" : "path",
           "required" : true,
           "schema" : {
@@ -1026,6 +1159,226 @@
         }
       }
     },
+    "/members/{memberId}/applications/{applicationId}/code/validate/{promoCode}" : {
+      "post" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "promoCode",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PromoCodeResponseModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "promoCode",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/members/{memberId}/marketing/braze" : {
+      "post" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/BrazeAttributesModel"
+              }
+            }
+          },
+          "required" : true
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
     "/orgs/{organisationId}/employers" : {
       "get" : {
         "parameters" : [ {
@@ -1158,8 +1511,122 @@
         }
       }
     },
-    "/members/marketing/preferences" : {
+    "/members/{memberId}/marketing/preferences/{environment}" : {
+      "get" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "environment",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MarketingPreferencesModel"
+                }
+              }
+            }
+          },
+          "201" : {
+            "description" : "201 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BadRequestModel"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "401 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "500 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "204" : {
+            "description" : "204 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "403" : {
+            "description" : "403 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GenericModel"
+                }
+              }
+            }
+          }
+        }
+      },
       "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "environment",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
         "responses" : {
           "204" : {
             "description" : "204 response",
@@ -1750,180 +2217,10 @@
         }
       }
     },
-    "/members/marketing" : {
-      "options" : {
-        "responses" : {
-          "204" : {
-            "description" : "204 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              },
-              "Access-Control-Allow-Methods" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              },
-              "Access-Control-Allow-Credentials" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              },
-              "Access-Control-Allow-Headers" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            },
-            "content" : { }
-          }
-        }
-      }
-    },
-    "/members/marketing/braze" : {
-      "options" : {
-        "responses" : {
-          "204" : {
-            "description" : "204 response",
-            "headers" : {
-              "Access-Control-Allow-Origin" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              },
-              "Access-Control-Allow-Methods" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              },
-              "Access-Control-Allow-Credentials" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              },
-              "Access-Control-Allow-Headers" : {
-                "schema" : {
-                  "type" : "string"
-                }
-              }
-            },
-            "content" : { }
-          }
-        }
-      }
-    },
-    "/members/marketing/preferences/{memberId}/{environment}" : {
-      "get" : {
+    "/members/{memberId}/marketing/braze/update" : {
+      "post" : {
         "parameters" : [ {
           "name" : "memberId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "environment",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/MarketingPreferencesModel"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "400 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BadRequestModel"
-                }
-              }
-            }
-          },
-          "401" : {
-            "description" : "401 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
-          "500" : {
-            "description" : "500 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
-          "403" : {
-            "description" : "403 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put" : {
-        "parameters" : [ {
-          "name" : "memberId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          }
-        }, {
-          "name" : "environment",
           "in" : "path",
           "required" : true,
           "schema" : {
@@ -1934,7 +2231,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/MarketingPreferencesModel"
+                "$ref" : "#/components/schemas/BrazeUpdateModel"
               }
             }
           },
@@ -1949,8 +2246,41 @@
           "schema" : {
             "type" : "string"
           }
-        }, {
-          "name" : "environment",
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
+    },
+    "/members/{memberId}/marketing/preferences" : {
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
           "in" : "path",
           "required" : true,
           "schema" : {
@@ -2046,6 +2376,53 @@
           }
         }
       }
+    },
+    "/members/{memberId}/applications/{applicationId}/code/validate" : {
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        }
+      }
     }
   },
   "components" : {
@@ -2056,7 +2433,8 @@
         "type" : "object",
         "properties" : {
           "eligibilityStatus" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "INELIGIBLE", "AWAITING_ID_APPROVAL", "ASSIGNED_FOR_APPROVAL", "ELIGIBLE" ]
           },
           "applicationReason" : {
             "anyOf" : [ {
@@ -2066,7 +2444,7 @@
           },
           "startDate" : {
             "type" : "string",
-            "format" : "date"
+            "format" : "date-time"
           }
         }
       },
@@ -2111,6 +2489,9 @@
             "type" : "string",
             "enum" : [ "MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY" ]
           },
+          "companyName" : {
+            "type" : "string"
+          },
           "jobTitle" : {
             "type" : "string"
           },
@@ -2141,6 +2522,9 @@
           "phoneNumber" : {
             "type" : "string"
           },
+          "companyNumber" : {
+            "type" : "string"
+          },
           "spareEmail" : {
             "type" : "string",
             "format" : "email"
@@ -2166,34 +2550,20 @@
           "country" : {
             "type" : "string"
           },
-          "address2" : {
-            "type" : "string"
+          "purchaseDate" : {
+            "type" : "string",
+            "format" : "date-time"
           },
           "city" : {
-            "type" : "string"
-          },
-          "address1" : {
             "type" : "string"
           },
           "nameChangeLastName" : {
             "type" : "object"
           },
-          "postcode" : {
-            "type" : "string"
-          },
-          "eligibilityStatus" : {
-            "type" : "string"
-          },
           "nameChangeDocType" : {
             "type" : "object"
           },
           "nameChangeReason" : {
-            "type" : "object"
-          },
-          "trustedDomainValidated" : {
-            "type" : "boolean"
-          },
-          "nameChangeFirstName" : {
             "type" : "object"
           },
           "idS3LocationSecondary" : {
@@ -2202,18 +2572,8 @@
           "promoCode" : {
             "type" : "object"
           },
-          "applicationId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
           "verificationMethod" : {
             "type" : "string"
-          },
-          "rejectionReason" : {
-            "anyOf" : [ {
-              "type" : "string",
-              "enum" : [ "DECLINE_INCORRECT_ID", "PICTURE_DECLINE_ID", "DL_PP_DECLINE_ID", "DATE_DECLINE_ID", "BLURRY_IMAGE_DECLINE_ID", "DIFFERENT_NAME_DECLINE_ID", "PASSWORD_PROTECTED_DECLINE_ID", "DECLINE_NOT_ELIGIBLE" ]
-            }, null ]
           },
           "applicationReason" : {
             "anyOf" : [ {
@@ -2221,18 +2581,57 @@
               "enum" : [ "SIGNUP", "RENEWAL", "NAME_CHANGE", "LOST_CARD", "REPRINT" ]
             }, null ]
           },
-          "startDate" : {
+          "paymentStatus" : {
             "type" : "string",
-            "format" : "date"
-          },
-          "trustedDomainEmail" : {
-            "type" : "string"
+            "enum" : [ "AWAITING_PAYMENT", "PAID_CARD", "PAID_PAYPAL", "PAID_PROMO_CODE", "PAID_CHEQUE", "PAID_ADMIN", "PENDING_REFUND", "REFUNDED" ]
           },
           "memberId" : {
             "type" : "string",
             "format" : "uuid"
           },
           "idS3LocationPrimary" : {
+            "type" : "string"
+          },
+          "address2" : {
+            "type" : "string"
+          },
+          "address1" : {
+            "type" : "string"
+          },
+          "postcode" : {
+            "type" : "string"
+          },
+          "eligibilityStatus" : {
+            "type" : "string",
+            "enum" : [ "INELIGIBLE", "AWAITING_ID_APPROVAL", "ASSIGNED_FOR_APPROVAL", "ELIGIBLE" ]
+          },
+          "promoCodeApplied" : {
+            "type" : "boolean"
+          },
+          "trustedDomainValidated" : {
+            "type" : "boolean"
+          },
+          "nameChangeFirstName" : {
+            "type" : "object"
+          },
+          "applicationId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "rejectionReason" : {
+            "anyOf" : [ {
+              "type" : "string",
+              "enum" : [ "DECLINE_INCORRECT_ID", "PICTURE_DECLINE_ID", "DL_PP_DECLINE_ID", "DATE_DECLINE_ID", "BLURRY_IMAGE_DECLINE_ID", "DIFFERENT_NAME_DECLINE_ID", "PASSWORD_PROTECTED_DECLINE_ID", "DECLINE_NOT_ELIGIBLE" ]
+            }, null ]
+          },
+          "startDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "trustedDomainEmail" : {
+            "type" : "string"
+          },
+          "cardNumber" : {
             "type" : "string"
           }
         }
@@ -2261,7 +2660,7 @@
               "supportedDocuments" : {
                 "type" : "array",
                 "items" : {
-                  "required" : [ "guidelines", "idKey", "type" ],
+                  "required" : [ "description", "guidelines", "idKey", "title", "type" ],
                   "type" : "object",
                   "properties" : {
                     "idKey" : {
@@ -2270,9 +2669,15 @@
                     "guidelines" : {
                       "type" : "string"
                     },
+                    "description" : {
+                      "type" : "string"
+                    },
                     "type" : {
                       "type" : "string",
                       "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "title" : {
+                      "type" : "string"
                     },
                     "required" : {
                       "type" : "boolean",
@@ -2314,7 +2719,7 @@
               "supportedDocuments" : {
                 "type" : "array",
                 "items" : {
-                  "required" : [ "guidelines", "idKey", "type" ],
+                  "required" : [ "description", "guidelines", "idKey", "title", "type" ],
                   "type" : "object",
                   "properties" : {
                     "idKey" : {
@@ -2323,9 +2728,15 @@
                     "guidelines" : {
                       "type" : "string"
                     },
+                    "description" : {
+                      "type" : "string"
+                    },
                     "type" : {
                       "type" : "string",
                       "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "title" : {
+                      "type" : "string"
                     },
                     "required" : {
                       "type" : "boolean",
@@ -2337,6 +2748,10 @@
               }
             },
             "additionalProperties" : false
+          },
+          "isJobReferenceMandatory" : {
+            "type" : "boolean",
+            "default" : false
           },
           "lastUpdated" : {
             "type" : "string"
@@ -2356,7 +2771,7 @@
               "supportedDocuments" : {
                 "type" : "array",
                 "items" : {
-                  "required" : [ "guidelines", "idKey", "type" ],
+                  "required" : [ "description", "guidelines", "idKey", "title", "type" ],
                   "type" : "object",
                   "properties" : {
                     "idKey" : {
@@ -2365,9 +2780,15 @@
                     "guidelines" : {
                       "type" : "string"
                     },
+                    "description" : {
+                      "type" : "string"
+                    },
                     "type" : {
                       "type" : "string",
                       "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "title" : {
+                      "type" : "string"
                     },
                     "required" : {
                       "type" : "boolean",
@@ -2383,6 +2804,10 @@
           "bypassId" : {
             "type" : "boolean",
             "default" : false
+          },
+          "isJobTitleMandatory" : {
+            "type" : "boolean",
+            "default" : true
           },
           "name" : {
             "type" : "string"
@@ -2403,6 +2828,10 @@
           "country" : {
             "type" : "string"
           },
+          "purchaseDate" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
           "address2" : {
             "type" : "string"
           },
@@ -2419,13 +2848,17 @@
             "type" : "string"
           },
           "eligibilityStatus" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "INELIGIBLE", "AWAITING_ID_APPROVAL", "ASSIGNED_FOR_APPROVAL", "ELIGIBLE" ]
           },
           "nameChangeDocType" : {
             "type" : "object"
           },
           "nameChangeReason" : {
             "type" : "object"
+          },
+          "promoCodeApplied" : {
+            "type" : "boolean"
           },
           "trustedDomainValidated" : {
             "type" : "boolean"
@@ -2447,9 +2880,16 @@
           },
           "startDate" : {
             "type" : "string",
-            "format" : "date"
+            "format" : "date-time"
+          },
+          "paymentStatus" : {
+            "type" : "string",
+            "enum" : [ "AWAITING_PAYMENT", "PAID_CARD", "PAID_PAYPAL", "PAID_PROMO_CODE", "PAID_CHEQUE", "PAID_ADMIN", "PENDING_REFUND", "REFUNDED" ]
           },
           "trustedDomainEmail" : {
+            "type" : "string"
+          },
+          "cardNumber" : {
             "type" : "string"
           }
         }
@@ -2478,7 +2918,7 @@
               "supportedDocuments" : {
                 "type" : "array",
                 "items" : {
-                  "required" : [ "guidelines", "idKey", "type" ],
+                  "required" : [ "description", "guidelines", "idKey", "title", "type" ],
                   "type" : "object",
                   "properties" : {
                     "idKey" : {
@@ -2487,9 +2927,15 @@
                     "guidelines" : {
                       "type" : "string"
                     },
+                    "description" : {
+                      "type" : "string"
+                    },
                     "type" : {
                       "type" : "string",
                       "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "title" : {
+                      "type" : "string"
                     },
                     "required" : {
                       "type" : "boolean",
@@ -2501,6 +2947,10 @@
               }
             },
             "additionalProperties" : false
+          },
+          "isSelfEmployed" : {
+            "type" : "boolean",
+            "default" : false
           },
           "active" : {
             "type" : "boolean",
@@ -2531,7 +2981,7 @@
               "supportedDocuments" : {
                 "type" : "array",
                 "items" : {
-                  "required" : [ "guidelines", "idKey", "type" ],
+                  "required" : [ "description", "guidelines", "idKey", "title", "type" ],
                   "type" : "object",
                   "properties" : {
                     "idKey" : {
@@ -2540,9 +2990,15 @@
                     "guidelines" : {
                       "type" : "string"
                     },
+                    "description" : {
+                      "type" : "string"
+                    },
                     "type" : {
                       "type" : "string",
                       "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "title" : {
+                      "type" : "string"
                     },
                     "required" : {
                       "type" : "boolean",
@@ -2569,7 +3025,7 @@
               "supportedDocuments" : {
                 "type" : "array",
                 "items" : {
-                  "required" : [ "guidelines", "idKey", "type" ],
+                  "required" : [ "description", "guidelines", "idKey", "title", "type" ],
                   "type" : "object",
                   "properties" : {
                     "idKey" : {
@@ -2578,9 +3034,15 @@
                     "guidelines" : {
                       "type" : "string"
                     },
+                    "description" : {
+                      "type" : "string"
+                    },
                     "type" : {
                       "type" : "string",
                       "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
+                    },
+                    "title" : {
+                      "type" : "string"
                     },
                     "required" : {
                       "type" : "boolean",
@@ -2623,6 +3085,10 @@
           "dateOfBirth" : {
             "type" : "string",
             "format" : "date"
+          },
+          "employmentStatus" : {
+            "type" : "string",
+            "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
           },
           "email" : {
             "type" : "string",
@@ -2678,6 +3144,31 @@
           },
           "currentPassword" : {
             "type" : "string"
+          }
+        }
+      },
+      "PromoCodeResponseModel" : {
+        "title" : "PromoCodeResponseModel",
+        "type" : "object",
+        "properties" : {
+          "bypassPayment" : {
+            "type" : "boolean"
+          },
+          "bypassVerification" : {
+            "type" : "boolean"
+          }
+        }
+      },
+      "BrazeUpdateModel" : {
+        "title" : "BrazeUpdateModel",
+        "required" : [ "attributes" ],
+        "type" : "object",
+        "properties" : {
+          "attributes" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "object"
+            }
           }
         }
       },
@@ -2746,9 +3237,77 @@
             "type" : "string",
             "format" : "uuid"
           },
+          "cards" : {
+            "type" : "array",
+            "items" : {
+              "required" : [ "cardNumber", "cardStatus", "createdDate", "expiryDate", "memberId", "nameOnCard" ],
+              "type" : "object",
+              "properties" : {
+                "purchaseDate" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                },
+                "refundedDate" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                },
+                "postedDate" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                },
+                "expiryDate" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                },
+                "createdDate" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                },
+                "nameOnCard" : {
+                  "type" : "string"
+                },
+                "printingErrorStatus" : {
+                  "type" : "string",
+                  "enum" : [ "MISSING_ADDRESS", "NAME_TOO_LONG", "MISSING_ADDRESS AND NAME_TOO_LONG" ]
+                },
+                "promoCode" : {
+                  "type" : "string"
+                },
+                "updated" : {
+                  "anyOf" : [ {
+                    "type" : "string",
+                    "format" : "date-time"
+                  }, null ]
+                },
+                "cardNumber" : {
+                  "type" : "string"
+                },
+                "cardStatus" : {
+                  "type" : "string",
+                  "enum" : [ "AWAITING_BATCHING", "ADDED_TO_BATCH", "AWAITING_POSTAGE", "PHYSICAL_CARD", "VIRTUAL_CARD", "CARD_LOST", "DISABLED", "CARD_EXPIRED" ]
+                },
+                "paymentStatus" : {
+                  "type" : "string",
+                  "enum" : [ "AWAITING_PAYMENT", "PAID_CARD", "PAID_PAYPAL", "PAID_PROMO_CODE", "PAID_CHEQUE", "PAID_ADMIN", "PENDING_REFUND", "REFUNDED" ]
+                },
+                "memberId" : {
+                  "type" : "string",
+                  "format" : "uuid"
+                },
+                "batchNumber" : {
+                  "type" : "string"
+                }
+              },
+              "additionalProperties" : false
+            },
+            "default" : [ ]
+          },
           "gender" : {
             "type" : "string",
             "enum" : [ "MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY" ]
+          },
+          "companyName" : {
+            "type" : "string"
           },
           "jobTitle" : {
             "type" : "string"
@@ -2762,6 +3321,9 @@
           "employmentStatus" : {
             "type" : "string",
             "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
+          },
+          "companyNumber" : {
+            "type" : "string"
           },
           "spareEmail" : {
             "type" : "string",
@@ -2813,46 +3375,6 @@
           "gaKey" : {
             "type" : "string"
           },
-          "card" : {
-            "required" : [ "cardNumber", "memberId" ],
-            "type" : "object",
-            "properties" : {
-              "expiryDate" : {
-                "type" : "string",
-                "format" : "date-time"
-              },
-              "nameOnCard" : {
-                "type" : "string"
-              },
-              "purchaseTime" : {
-                "type" : "string",
-                "format" : "date-time"
-              },
-              "cardNumber" : {
-                "type" : "string"
-              },
-              "cardStatus" : {
-                "type" : "string",
-                "enum" : [ "AWAITING_BATCHING", "ADDED_TO_BATCH", "AWAITING_POSTAGE", "PHYSICAL_CARD", "VIRTUAL_CARD", "CARD_LOST", "DISABLED", "CARD_EXPIRED" ]
-              },
-              "paymentStatus" : {
-                "type" : "string",
-                "enum" : [ "AWAITING_PAYMENT", "PAID_CARD", "PAID_PAYPAL", "PAID_PROMO_CODE", "PAID_CHEQUE", "PAID_ADMIN", "PENDING_REFUND", "REFUNDED" ]
-              },
-              "memberId" : {
-                "type" : "string",
-                "format" : "uuid"
-              },
-              "postedDate" : {
-                "type" : "string",
-                "format" : "date-time"
-              },
-              "batchNumber" : {
-                "type" : "string"
-              }
-            },
-            "additionalProperties" : false
-          },
           "status" : {
             "type" : "string"
           },
@@ -2865,34 +3387,20 @@
                 "country" : {
                   "type" : "string"
                 },
-                "address2" : {
-                  "type" : "string"
+                "purchaseDate" : {
+                  "type" : "string",
+                  "format" : "date-time"
                 },
                 "city" : {
-                  "type" : "string"
-                },
-                "address1" : {
                   "type" : "string"
                 },
                 "nameChangeLastName" : {
                   "type" : "object"
                 },
-                "postcode" : {
-                  "type" : "string"
-                },
-                "eligibilityStatus" : {
-                  "type" : "string"
-                },
                 "nameChangeDocType" : {
                   "type" : "object"
                 },
                 "nameChangeReason" : {
-                  "type" : "object"
-                },
-                "trustedDomainValidated" : {
-                  "type" : "boolean"
-                },
-                "nameChangeFirstName" : {
                   "type" : "object"
                 },
                 "idS3LocationSecondary" : {
@@ -2901,18 +3409,8 @@
                 "promoCode" : {
                   "type" : "object"
                 },
-                "applicationId" : {
-                  "type" : "string",
-                  "format" : "uuid"
-                },
                 "verificationMethod" : {
                   "type" : "string"
-                },
-                "rejectionReason" : {
-                  "anyOf" : [ {
-                    "type" : "string",
-                    "enum" : [ "DECLINE_INCORRECT_ID", "PICTURE_DECLINE_ID", "DL_PP_DECLINE_ID", "DATE_DECLINE_ID", "BLURRY_IMAGE_DECLINE_ID", "DIFFERENT_NAME_DECLINE_ID", "PASSWORD_PROTECTED_DECLINE_ID", "DECLINE_NOT_ELIGIBLE" ]
-                  }, null ]
                 },
                 "applicationReason" : {
                   "anyOf" : [ {
@@ -2920,18 +3418,57 @@
                     "enum" : [ "SIGNUP", "RENEWAL", "NAME_CHANGE", "LOST_CARD", "REPRINT" ]
                   }, null ]
                 },
-                "startDate" : {
+                "paymentStatus" : {
                   "type" : "string",
-                  "format" : "date"
-                },
-                "trustedDomainEmail" : {
-                  "type" : "string"
+                  "enum" : [ "AWAITING_PAYMENT", "PAID_CARD", "PAID_PAYPAL", "PAID_PROMO_CODE", "PAID_CHEQUE", "PAID_ADMIN", "PENDING_REFUND", "REFUNDED" ]
                 },
                 "memberId" : {
                   "type" : "string",
                   "format" : "uuid"
                 },
                 "idS3LocationPrimary" : {
+                  "type" : "string"
+                },
+                "address2" : {
+                  "type" : "string"
+                },
+                "address1" : {
+                  "type" : "string"
+                },
+                "postcode" : {
+                  "type" : "string"
+                },
+                "eligibilityStatus" : {
+                  "type" : "string",
+                  "enum" : [ "INELIGIBLE", "AWAITING_ID_APPROVAL", "ASSIGNED_FOR_APPROVAL", "ELIGIBLE" ]
+                },
+                "promoCodeApplied" : {
+                  "type" : "boolean"
+                },
+                "trustedDomainValidated" : {
+                  "type" : "boolean"
+                },
+                "nameChangeFirstName" : {
+                  "type" : "object"
+                },
+                "applicationId" : {
+                  "type" : "string",
+                  "format" : "uuid"
+                },
+                "rejectionReason" : {
+                  "anyOf" : [ {
+                    "type" : "string",
+                    "enum" : [ "DECLINE_INCORRECT_ID", "PICTURE_DECLINE_ID", "DL_PP_DECLINE_ID", "DATE_DECLINE_ID", "BLURRY_IMAGE_DECLINE_ID", "DIFFERENT_NAME_DECLINE_ID", "PASSWORD_PROTECTED_DECLINE_ID", "DECLINE_NOT_ELIGIBLE" ]
+                  }, null ]
+                },
+                "startDate" : {
+                  "type" : "string",
+                  "format" : "date-time"
+                },
+                "trustedDomainEmail" : {
+                  "type" : "string"
+                },
+                "cardNumber" : {
                   "type" : "string"
                 }
               },

@@ -23,6 +23,7 @@ export const ProfileModel = createZodNamedType(
           message: 'Date of birth must be before today',
         },
       ),
+    employmentStatus: z.nativeEnum(EmploymentStatus).optional(),
     gender: z.nativeEnum(Gender).optional(),
     phoneNumber: z.string().optional(),
     county: z.string().optional(),
@@ -30,10 +31,10 @@ export const ProfileModel = createZodNamedType(
     emailValidated: z.boolean().default(false).optional(),
     spareEmail: z.string().email().optional(),
     spareEmailValidated: z.boolean().default(false).optional(),
-    employmentStatus: z.nativeEnum(EmploymentStatus).optional(),
     organisationId: z.string().uuid().optional(),
     employerId: z.string().uuid().optional(),
     employerName: z.string().optional(),
+    companyNumber: z.string().optional(),
     jobTitle: z.string().optional(),
     jobReference: z.string().optional(),
     signupDate: z.string().datetime().optional(),
@@ -42,7 +43,7 @@ export const ProfileModel = createZodNamedType(
     lastLogin: z.string().optional(),
     lastIpAddress: z.string().optional(),
     idUploaded: z.boolean().optional(),
-    card: CardModel.optional(),
+    cards: z.array(CardModel).default([]).optional(),
     applications: z.array(ApplicationModel).default([]).optional(),
   }),
 );
@@ -55,6 +56,7 @@ export const CreateProfileModel = createZodNamedType(
     lastName: true,
     email: true,
     dateOfBirth: true,
+    employmentStatus: true,
   }),
 );
 export type CreateProfileModel = z.infer<typeof CreateProfileModel>;
@@ -76,7 +78,7 @@ export const UpdateProfileModel = createZodNamedType(
     lastLogin: true,
     lastIpAddress: true,
     idUploaded: true,
-    card: true,
+    cards: true,
     applications: true,
   }),
 );

@@ -25,6 +25,8 @@ async function batchWriteItems(items) {
             M: {
               idKey: { S: doc.idKey },
               type: { S: doc.type },
+              title: { S: doc.title },
+              description: { S: doc.description },
               guidelines: { S: doc.guidelines },
               required: { BOOL: doc.required },
             },

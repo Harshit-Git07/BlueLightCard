@@ -10,7 +10,7 @@ export const ApplicationModel = createZodNamedType(
   z.object({
     memberId: z.string().uuid(),
     applicationId: z.string().uuid(),
-    startDate: z.string().date().optional(),
+    startDate: z.string().datetime().optional(),
     eligibilityStatus: z.nativeEnum(EligibilityStatus).optional(),
     paymentStatus: z.nativeEnum(PaymentStatus).optional(),
     purchaseDate: z.string().datetime().optional(),

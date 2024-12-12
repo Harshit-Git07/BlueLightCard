@@ -97,7 +97,6 @@ describe('ProfileRepository', () => {
                 startDate: '2023-01-01T00:00:00.000Z',
                 eligibilityStatus: EligibilityStatus.INELIGIBLE,
                 applicationReason: ApplicationReason.SIGNUP,
-                verificationMethod: '',
               },
             },
           },
@@ -169,7 +168,9 @@ describe('ProfileRepository', () => {
         ],
       });
       const result = await repository.getProfile(memberId);
-      expect(result).toEqual(ProfileModel.parse({ ...profile, applications: [application] }));
+      expect(result).toEqual(
+        ProfileModel.parse({ ...profile, applications: [application], cards: [] }),
+      );
     });
   });
 

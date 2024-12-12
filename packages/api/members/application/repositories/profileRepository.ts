@@ -66,7 +66,6 @@ export class ProfileRepository extends Repository {
               startDate: new Date().toISOString(),
               eligibilityStatus: EligibilityStatus.INELIGIBLE,
               applicationReason: ApplicationReason.SIGNUP,
-              verificationMethod: '',
             },
           },
         },
@@ -78,7 +77,7 @@ export class ProfileRepository extends Repository {
   }
 
   async updateProfile(memberId: string, profile: Partial<ProfileModel>): Promise<void> {
-    const { applications, card, ...reducedProfile } = profile;
+    const { applications, cards, ...reducedProfile } = profile;
     await this.partialUpdate({
       tableName: this.tableName,
       pk: memberKey(memberId),
@@ -145,10 +144,9 @@ export class ProfileRepository extends Repository {
         if (b.expiryDate === null || b.expiryDate === undefined) return -1;
         return b.expiryDate.localeCompare(a.expiryDate);
       });
-
-      profile.card = cards[0];
     }
 
+    profile.cards = cards;
     profile.applications = applications;
 
     return profile;

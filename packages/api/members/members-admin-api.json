@@ -4082,9 +4082,6 @@
             "type" : "string",
             "format" : "uuid"
           },
-          "verificationMethod" : {
-            "type" : "string"
-          },
           "rejectionReason" : {
             "anyOf" : [ {
               "type" : "string",
@@ -4166,9 +4163,6 @@
           },
           "promoCode" : {
             "type" : "object"
-          },
-          "verificationMethod" : {
-            "type" : "string"
           },
           "rejectionReason" : {
             "anyOf" : [ {
@@ -5255,9 +5249,6 @@
                 "applicationId" : {
                   "type" : "string",
                   "format" : "uuid"
-                },
-                "verificationMethod" : {
-                  "type" : "string"
                 },
                 "rejectionReason" : {
                   "anyOf" : [ {

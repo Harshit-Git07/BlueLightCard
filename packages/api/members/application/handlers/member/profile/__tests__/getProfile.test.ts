@@ -14,6 +14,7 @@ describe('getProfile handler', () => {
     dateOfBirth: '1990-01-01',
     email: 'john.doe@example.com',
     applications: [],
+    cards: [],
   };
   const event = { pathParameters: { memberId } } as unknown as APIGatewayProxyEvent;
   const context = {} as Context;

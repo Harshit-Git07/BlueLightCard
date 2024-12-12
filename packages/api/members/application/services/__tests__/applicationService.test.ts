@@ -21,7 +21,7 @@ describe('ApplicationService', () => {
   const createApplication: CreateApplicationModel = {
     applicationReason: ApplicationReason.SIGNUP,
     eligibilityStatus: EligibilityStatus.ELIGIBLE,
-    startDate: '2024-01-01',
+    startDate: '2024-01-01T00:00:00Z',
   };
   const updateApplication: UpdateApplicationModel = {
     city: 'New York',

@@ -55,6 +55,7 @@ export class MemberStackConfigResolver {
         apiDefaultAllowedOrigins: [
           'https://www.develop.bluelightcard.com.au',
           'http://localhost:3000',
+          'https://pr-*.blc-aus.pages.dev',
         ],
       };
     }
@@ -63,6 +64,8 @@ export class MemberStackConfigResolver {
         'https://www.staging.bluelightcard.co.uk',
         'https://www.ddsstaging.bluelightcard.tech',
         'http://localhost:3000',
+        'https://pr-*.blc-uk.pages.dev',
+        'https://pr-*.dds-4j3.pages.dev',
       ],
     };
   }

@@ -25,10 +25,12 @@ async function batchWriteItems(items) {
       startDate: { S: item.startDate },
       eligibilityStatus: { S: item.eligibilityStatus },
       applicationReason: { S: item.applicationReason },
-      verificationMethod: { S: item.verificationMethod },
       updated: { S: item.updated },
     };
 
+    if (item.rejectionReason) {
+      sanitisedItem.rejectionReason = { S: item.rejectionReason };
+    }
     if (item.address1) {
       sanitisedItem.address1 = { S: item.address1 };
     }
@@ -47,12 +49,6 @@ async function batchWriteItems(items) {
     if (item.promoCode) {
       sanitisedItem.promoCode = { S: item.promoCode };
     }
-    if (item.idS3LocationPrimary) {
-      sanitisedItem.idS3LocationPrimary = { S: item.idS3LocationPrimary };
-    }
-    if (item.idS3LocationSecondary) {
-      sanitisedItem.idS3LocationSecondary = { S: item.idS3LocationSecondary };
-    }
     if (item.IdLastUploadDate) {
       sanitisedItem.IdLastUploadDate = { S: item.IdLastUploadDate };
     }
@@ -70,6 +66,9 @@ async function batchWriteItems(items) {
     }
     if (item.nameChangeFirstName) {
       sanitisedItem.nameChangeFirstName = { S: item.nameChangeFirstName };
+    }
+    if (item.nameChangeLastName) {
+      sanitisedItem.nameChangeLastName = { S: item.nameChangeLastName };
     }
 
     return { PutRequest: { Item: sanitisedItem } };

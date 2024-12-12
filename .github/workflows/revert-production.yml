@@ -7,6 +7,8 @@ on:
         description: The commit SHA that you wish to revert to
         required: true
 
+permissions: write-all
+
 jobs:
   revert-identity:
     name: Revert Identity

@@ -51,6 +51,10 @@ export const registerV2OffersGetOffer = (app: App) =>
       notFound();
     }
 
+    if (item.expires && new Date(item.expires) < new Date()) {
+      notFound();
+    }
+
     invariant(item.name, 'Missing `offer.name`');
     invariant(item.offerDescription, 'Missing `offer.offerDescription`');
     invariant(item.offerType?.offerType, 'Missing `offer.offerType`');

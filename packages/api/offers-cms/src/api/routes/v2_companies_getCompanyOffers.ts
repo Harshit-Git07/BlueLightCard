@@ -60,23 +60,24 @@ export const registerV2CompaniesGetCompanyOffers = (app: App) =>
       notFound();
     }
 
-    const liveOffers = items.filter((offer) => offer.status === 'live');
+    const offers = items
+      .filter((offer) => offer.status === 'live')
+      .filter((offer) => !offer.expires || new Date(offer.expires) > new Date())
+      .map((offer) => {
+        invariant(offer.name, 'Missing `offer.name`');
+        invariant(offer.offerType?.offerType, 'Missing `offer.offerType`');
 
-    const offers = liveOffers.map((offer) => {
-      invariant(offer.name, 'Missing `offer.name`');
-      invariant(offer.offerType?.offerType, 'Missing `offer.offerType`');
-
-      return {
-        id: offer._id,
-        name: offer.name,
-        description: offer.offerDescription ?? null,
-        type: offer.offerType.offerType,
-        expires: offer.expires ?? null,
-        termsAndConditions: offer.termsAndConditions || null,
-        image: offer.image?.default?.asset?.url ?? null,
-        companyId: offer.company?._id ?? null,
-      };
-    });
+        return {
+          id: offer._id,
+          name: offer.name,
+          description: offer.offerDescription ?? null,
+          type: offer.offerType.offerType,
+          expires: offer.expires ?? null,
+          termsAndConditions: offer.termsAndConditions || null,
+          image: offer.image?.default?.asset?.url ?? null,
+          companyId: offer.company?._id ?? null,
+        };
+      });
 
     return c.json(offers);
   });

@@ -9,6 +9,8 @@ import {
   ingestCompanyLocation,
   ingestOffer,
   ingestRawRecord,
+  purgeCmsRecord,
+  purgeOffer,
 } from '../src/cms/ingest';
 import { env } from '../src/lib/env';
 import type { SanityChangeEvent } from '../src/lib/events';
@@ -24,7 +26,12 @@ export async function handler(event: EventBridgeEvent<'SanityChangeEvent', Sanit
   await ingestRawRecord(record);
 
   if (record._type === 'offer') {
-    await ingestOffer(record, logger);
+    if (event.detail.headers['sanity-operation'] === 'delete') {
+      await purgeCmsRecord(record._id);
+      await purgeOffer(record._id);
+    } else {
+      await ingestOffer(record, logger);
+    }
   }
 
   if (record._type === 'company') {

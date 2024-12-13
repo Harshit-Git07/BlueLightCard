@@ -10,6 +10,24 @@ import { env } from '../lib/env';
 import { type Record, type SanityChangeEvent, type WebhookResultRecord } from '../lib/events';
 import { firehose } from '../lib/firehose';
 
+export async function purgeCmsRecord(recordId: string) {
+  await dynamo.delete({
+    TableName: Table.cmsAll.tableName,
+    Key: {
+      _id: recordId,
+    },
+  });
+}
+
+export async function purgeOffer(offerId: string) {
+  await dynamo.delete({
+    TableName: Table.cmsOffer.tableName,
+    Key: {
+      _id: offerId,
+    },
+  });
+}
+
 export async function ingestOffer(record: Record<'offer'>, logger: ILogger) {
   const brand = record.brands?.find((brand) => brand?.code === env.BRAND);
 

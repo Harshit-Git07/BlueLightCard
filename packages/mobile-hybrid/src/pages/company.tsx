@@ -96,7 +96,7 @@ const SheetHandler = ({ companyId }: { companyId: string }) => {
   }, [companyId, companyName, setSpinner]);
 
   useEffect(() => {
-    if (offerId && offerId !== 'null') {
+    if (offerId && offerId !== 'null' && offerId !== '0') {
       viewOffer({
         offerId,
         companyId,

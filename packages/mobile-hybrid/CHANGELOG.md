@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.50.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.49.1...bluelightcard/mobile-hybrid-v1.50.0) (2024-12-13)
+
+
+### Features
+
+* My account ([#3215](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3215)) ([d8af4b7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d8af4b77d4adc4e482eb6a5b71a15fa05676dd67))
+
+
+### Bug Fixes
+
+* readds logic to not open offersheet when oid is zero ([#3401](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3401)) ([80851d7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/80851d7e6ef4fcf1edbb9547c0462c012e9f60d2))
+
 ## [1.49.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.49.0...bluelightcard/mobile-hybrid-v1.49.1) (2024-12-11)
 
 

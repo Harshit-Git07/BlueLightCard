@@ -55,8 +55,8 @@ jobs:
         run: npm run test:coverage -w packages/api/redemptions
       - name: Test Cloud flare
         run: npm run test:cloudflare -w packages/api/redemptions
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@master
         if: github.actor != 'dependabot[bot]'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

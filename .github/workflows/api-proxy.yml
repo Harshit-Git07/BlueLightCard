@@ -43,8 +43,8 @@ jobs:
         uses: ./.github/actions/setup
       - name: Test
         run: npm run test:unit:coverage -w packages/api-proxy
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@master
         if: github.actor != 'dependabot[bot]'
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

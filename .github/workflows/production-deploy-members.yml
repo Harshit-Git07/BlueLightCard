@@ -14,7 +14,6 @@ jobs:
     environment: Production
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 1
       matrix:
         include:
           - deployment: 'blc-uk-production'

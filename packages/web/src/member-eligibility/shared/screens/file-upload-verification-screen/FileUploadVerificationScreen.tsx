@@ -24,6 +24,8 @@ import {
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
 import { fileUploadVerificationEvents } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/amplitude-events/FileUploadVerificationEvents';
+import { useUpdateMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/UseUpdateMemberProfile';
+import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 
 export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -36,6 +38,8 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   const { firstVerificationMethod, secondVerificationMethod } =
     useVerificationMethodDetails(eligibilityDetails);
   const privacyPolicyUrl = usePrivacyPolicyUrl();
+
+  const updateMemberProfile = useUpdateMemberProfile(eligibilityDetailsState);
 
   const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 
@@ -90,22 +94,18 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
     [eligibilityDetails, setEligibilityDetails]
   );
 
-  const onNext = useCallback(() => {
+  const onNext = useCallback(async () => {
     logAnalyticsEvent(fileUploadVerificationEvents.onSubmitClicked(eligibilityDetails));
 
-    if (eligibilityDetails.flow === 'Sign Up') {
-      setEligibilityDetails({
-        ...eligibilityDetails,
-        currentScreen: 'Delivery Address Screen',
-      });
-      return;
-    }
-
-    setEligibilityDetails({
+    const updatedEligibilityDetails: EligibilityDetails = {
       ...eligibilityDetails,
-      currentScreen: 'Payment Screen',
-    });
-  }, [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails]);
+      currentScreen:
+        eligibilityDetails.flow === 'Sign Up' ? 'Delivery Address Screen' : 'Payment Screen',
+    };
+
+    setEligibilityDetails(updatedEligibilityDetails);
+    await updateMemberProfile(updatedEligibilityDetails);
+  }, [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails, updateMemberProfile]);
 
   const onBack = useCallback(() => {
     logAnalyticsEvent(fileUploadVerificationEvents.onEditClicked(eligibilityDetails));

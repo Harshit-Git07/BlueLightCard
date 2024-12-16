@@ -2,7 +2,6 @@ import { useCallback, useMemo, useState } from 'react';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { uploadFileToServiceLayer } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/components/hooks/use-file-upload-state/service-layer/UploadFile';
 import { UploadStatus } from '@bluelightcard/shared-ui/components/FileUpload/types';
-import { useUpdateMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/UseUpdateMemberProfile';
 
 interface FileUploadState {
   selectedFiles: FileDetails[];
@@ -28,8 +27,6 @@ export function useFileUploadState(
 
   const [selectedFiles, setSelectedFiles] = useState<FileDetails[]>([]);
   const [fileSelectionError, setFileSelectionError] = useState<string | undefined>(undefined);
-
-  const updateMemberProfile = useUpdateMemberProfile(eligibilityDetailsState);
 
   const selectedFilesAsFiles = useMemo(() => {
     return selectedFiles.map((fileDetails) => fileDetails.file);
@@ -99,10 +96,9 @@ export function useFileUploadState(
         return;
       }
 
-      await updateMemberProfile();
       uploadNewFiles(newFilesSelectedForUpload);
     },
-    [maxNumberOfFiles, selectedFilesAsFiles, updateMemberProfile, uploadNewFiles]
+    [maxNumberOfFiles, selectedFilesAsFiles, uploadNewFiles]
   );
 
   const onFileRemoved: OnFileRemoved = useCallback((fileToRemove) => {

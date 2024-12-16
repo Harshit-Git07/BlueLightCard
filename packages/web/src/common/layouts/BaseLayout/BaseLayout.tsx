@@ -1,6 +1,7 @@
 // components/Layout.tsx
 import Footer from '@/components/Footer/Footer';
-import NavBar from '@/components/NavBar/NavBar';
+import NavBarV2 from '@/components/NavBarV2/NavBar';
+import NavBar from '../../components/NavBar/NavBar';
 import {
   logSearchCompanyEvent,
   logSearchCategoryEvent,
@@ -17,6 +18,8 @@ import AuthContext from '@/context/Auth/AuthContext';
 import MetaData from '@/components/MetaData/MetaData';
 import { ToastContainer, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment';
+import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
 
 const BaseLayout: React.FC<LayoutProps> = ({ seo, children, translationNamespace }) => {
   // Converts brand codes to text using the brand translation file
@@ -39,15 +42,29 @@ const BaseLayout: React.FC<LayoutProps> = ({ seo, children, translationNamespace
     window.location.href = getOffersBySearchTermUrl(searchTerm);
   };
 
+  const modernMyAccountFlag = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.MODERN_MY_ACCOUNT,
+    'off'
+  );
+
   return (
     <div>
       {seo && <MetaData seo={seo} translationNamespace={translationNamespace} />}
-      <NavBar
-        isAuthenticated={loggedIn}
-        onSearchCompanyChange={onSearchCompanyChange}
-        onSearchCategoryChange={onSearchCategoryChange}
-        onSearchTerm={onSearchTerm}
-      />
+      {modernMyAccountFlag.data?.variantName === 'on' ? (
+        <NavBar
+          isAuthenticated={loggedIn}
+          onSearchCategoryChange={onSearchCategoryChange}
+          onSearchCompanyChange={onSearchCompanyChange}
+          onSearchTerm={onSearchTerm}
+        />
+      ) : (
+        <NavBarV2
+          isAuthenticated={loggedIn}
+          onSearchCompanyChange={onSearchCompanyChange}
+          onSearchCategoryChange={onSearchCategoryChange}
+          onSearchTerm={onSearchTerm}
+        />
+      )}
       <div>{children}</div>
       <ToastContainer
         transition={Slide}

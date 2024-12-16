@@ -1,0 +1,177 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UnauthenticaedNavBar renders 1`] = `
+<div>
+  <div
+    data-testid="unauthenticated-navbar"
+  >
+    <div
+      class="dark:bg-NavBar-bg-colour-dark bg-NavBar-bg-colour text-NavBar-item-text-colour dark:text-NavBar-item-text-colour-dark "
+    >
+      <div
+        class="h-[72px] px-4 tablet:px-14 laptop:container laptop:mx-auto flex justify-between items-center"
+      >
+        <a
+          aria-label="Navigate Home"
+          class="h-[35px] tablet:h-[42px] laptop:h-[55px] hover:opacity-100"
+          data-testid="brandLogo"
+          href="/members-home"
+        >
+          <img
+            alt="Navigate Home"
+            class="fill-logo-colour dark:fill-logo-colour-dark h-full"
+          />
+        </a>
+        <div
+          class="flex gap-7 h-full items-center"
+        >
+          <div
+            class="hidden desktop:flex desktop:h-full"
+          >
+            <div
+              class="flex flex-1 gap-5 h-full justify-between"
+            >
+              <div
+                class="relative"
+                data-testid="navigation-dropdown-nav-one"
+              >
+                <button
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                  aria-label="Toggle dropdown"
+                  class="h-full w-full"
+                >
+                  <a
+                    class="flex h-full min-w-fit justify-center items-center gap-1 border-b border-transparent font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                    data-testid="anchor-link"
+                  >
+                    <p>
+                      Mock Navigation Item
+                    </p>
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-chevron-down "
+                      data-icon="chevron-down"
+                      data-prefix="fas"
+                      focusable="false"
+                      role="img"
+                      viewBox="0 0 512 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                  </a>
+                </button>
+              </div>
+              <div
+                class="font-['MuseoSans'] text-xs font-semibold cursor-pointer text-colour-primary dark:text-colour-primary-dark my-1"
+                data-testid="on-click-link"
+              >
+                Mock Navigation Item Two
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex gap-2 items-center"
+          >
+            <div
+              class="hidden tablet:flex tablet:gap-2 tablet:items-center"
+            >
+              <div
+                class="hidden tablet:flex desktop:hidden"
+              />
+              <button
+                class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                type="button"
+              >
+                Log in
+              </button>
+              <button
+                class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                type="button"
+              >
+                Sign up
+              </button>
+            </div>
+            <div
+              class="hidden desktop:flex"
+            />
+            <button
+              class="flex h-full justify-center items-center gap-1 cursor-pointer tablet:hidden text-NavBar-icon-colour dark:text-NavBar-icon-colour-dark"
+              data-testid="mobile-nav-toggle-button"
+            >
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-bars "
+                data-icon="bars"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 448 512"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"
+                  fill="currentColor"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div
+        class="h-[72px] hidden tablet:px-14 tablet:flex desktop:hidden desktop:mx-auto"
+      >
+        <div
+          class="flex flex-1 gap-5 h-full justify-between"
+        >
+          <div
+            class="relative"
+            data-testid="navigation-dropdown-nav-one"
+          >
+            <button
+              aria-expanded="false"
+              aria-haspopup="true"
+              aria-label="Toggle dropdown"
+              class="h-full w-full"
+            >
+              <a
+                class="flex h-full min-w-fit justify-center items-center gap-1 border-b border-transparent font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                data-testid="anchor-link"
+              >
+                <p>
+                  Mock Navigation Item
+                </p>
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-chevron-down "
+                  data-icon="chevron-down"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 512 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </a>
+            </button>
+          </div>
+          <div
+            class="font-['MuseoSans'] text-xs font-semibold cursor-pointer text-colour-primary dark:text-colour-primary-dark my-1"
+            data-testid="on-click-link"
+          >
+            Mock Navigation Item Two
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

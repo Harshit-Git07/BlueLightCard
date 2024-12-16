@@ -11,4 +11,5 @@ export enum AmplitudeExperimentFlags {
   MODERN_FLEXI_MENUS = 'modern-flexi-menus-web',
   MODERN_CATEGORIES = 'modern-category-pages-web',
   MODERN_ELIGIBILITY_ENABLED = 'modern-eligibility-enabled',
+  MODERN_MY_ACCOUNT = 'web-myaccount',
 }

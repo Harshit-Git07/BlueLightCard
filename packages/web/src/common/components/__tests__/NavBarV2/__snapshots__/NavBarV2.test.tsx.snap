@@ -1,0 +1,588 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Navbar renders the authenticatedNavBar correctly when isAuthenticated is true 1`] = `
+<div>
+  <header
+    class="sticky top-0 z-20"
+  >
+    <div
+      data-testid="authenticated-navbar"
+    >
+      <div
+        class="dark:bg-NavBar-bg-colour-dark bg-NavBar-bg-colour text-NavBar-item-text-colour dark:text-NavBar-item-text-colour-dark "
+      >
+        <div
+          class="h-[72px] px-4 tablet:px-14 laptop:container laptop:mx-auto flex justify-between items-center"
+        >
+          <a
+            aria-label="Navigate Home"
+            class="h-[35px] tablet:h-[42px] laptop:h-[55px] hover:opacity-100"
+            data-testid="brandLogo"
+            href="/members-home"
+          >
+            <img
+              alt="Navigate Home"
+              class="fill-logo-colour dark:fill-logo-colour-dark h-full"
+            />
+          </a>
+          <div
+            class="flex gap-7 h-full items-center"
+          >
+            <div
+              class="hidden desktop:flex desktop:h-full"
+            >
+              <div
+                class="flex flex-1 gap-5 h-full justify-between"
+              >
+                <div
+                  class="relative"
+                  data-testid="navigation-dropdown-offers"
+                >
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-label="Toggle dropdown"
+                    class="h-full w-full"
+                  >
+                    <a
+                      class="flex h-full min-w-fit justify-center items-center gap-1 border-b border-transparent font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                      data-testid="anchor-link"
+                    >
+                      <p>
+                        Offers
+                      </p>
+                      <svg
+                        aria-hidden="true"
+                        class="svg-inline--fa fa-chevron-down "
+                        data-icon="chevron-down"
+                        data-prefix="fas"
+                        focusable="false"
+                        role="img"
+                        viewBox="0 0 512 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </a>
+                  </button>
+                </div>
+                <div
+                  class="relative"
+                  data-testid="navigation-dropdown-discover-savings"
+                >
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-label="Toggle dropdown"
+                    class="h-full w-full"
+                  >
+                    <a
+                      class="flex h-full min-w-fit justify-center items-center gap-1 border-b border-transparent font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                      data-testid="anchor-link"
+                    >
+                      <p>
+                        Discover Savings
+                      </p>
+                      <svg
+                        aria-hidden="true"
+                        class="svg-inline--fa fa-chevron-down "
+                        data-icon="chevron-down"
+                        data-prefix="fas"
+                        focusable="false"
+                        role="img"
+                        viewBox="0 0 512 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </a>
+                  </button>
+                </div>
+                <a
+                  class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                  data-testid="navigationLink-my-card"
+                  href="/highstreetcard.php"
+                  tabindex="0"
+                >
+                  My Card
+                </a>
+                <a
+                  class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                  data-testid="navigationLink-my-account"
+                  href="/account.php"
+                  tabindex="0"
+                >
+                  My Account
+                </a>
+                <a
+                  class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                  data-testid="navigationLink-faq"
+                  href="/support.php#questions"
+                  tabindex="0"
+                >
+                  FAQ's
+                </a>
+                <a
+                  class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                  data-testid="navigationLink-sign-out"
+                  href="/logout.php"
+                  tabindex="0"
+                >
+                  Logout
+                </a>
+              </div>
+            </div>
+            <div
+              class="flex gap-5 items-center"
+            >
+              <div
+                class="hidden tablet:block tablet:w-[343px] w-full"
+              >
+                <form
+                  class="p-4 z-10 w-full"
+                >
+                  <div
+                    class="relative"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      class="svg-inline--fa fa-magnifying-glass fa-xl absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
+                      data-icon="magnifying-glass"
+                      data-prefix="fas"
+                      focusable="false"
+                      role="img"
+                      viewBox="0 0 512 512"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+                        fill="currentColor"
+                      />
+                    </svg>
+                    <input
+                      autocomplete="off"
+                      class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font border border-searchBar-outline-colour-light"
+                      enterkeyhint="search"
+                      id="searchInput"
+                      placeholder="Search for offers or companies"
+                      type="search"
+                      value=""
+                    />
+                  </div>
+                </form>
+              </div>
+              <button
+                class="flex h-full justify-center items-center gap-1 cursor-pointer tablet:hidden text-NavBar-icon-colour dark:text-NavBar-icon-colour-dark"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-window-frame-open "
+                  data-icon="window-frame-open"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 512 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M480 224V64c0-35.3-28.7-64-64-64H96C60.7 0 32 28.7 32 64V224v64H96 416h64V224zm-64 0H280V64H416V224zm-184 0H96V64H232V224zM96 448V320H32V448c-17.7 0-32 14.3-32 32s14.3 32 32 32H64 448h32c17.7 0 32-14.3 32-32s-14.3-32-32-32V320H416V448H96z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+              <button
+                class="flex h-full justify-center items-center gap-1 cursor-pointer tablet:hidden text-NavBar-icon-colour dark:text-NavBar-icon-colour-dark"
+                data-testid="mobile-nav-toggle-button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-bars "
+                  data-icon="bars"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 448 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          class="h-[72px] hidden tablet:px-14 tablet:flex desktop:hidden desktop:mx-auto"
+        >
+          <div
+            class="flex flex-1 gap-5 h-full justify-between"
+          >
+            <div
+              class="relative"
+              data-testid="navigation-dropdown-offers"
+            >
+              <button
+                aria-expanded="false"
+                aria-haspopup="true"
+                aria-label="Toggle dropdown"
+                class="h-full w-full"
+              >
+                <a
+                  class="flex h-full min-w-fit justify-center items-center gap-1 border-b border-transparent font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                  data-testid="anchor-link"
+                >
+                  <p>
+                    Offers
+                  </p>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-chevron-down "
+                    data-icon="chevron-down"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </a>
+              </button>
+            </div>
+            <div
+              class="relative"
+              data-testid="navigation-dropdown-discover-savings"
+            >
+              <button
+                aria-expanded="false"
+                aria-haspopup="true"
+                aria-label="Toggle dropdown"
+                class="h-full w-full"
+              >
+                <a
+                  class="flex h-full min-w-fit justify-center items-center gap-1 border-b border-transparent font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                  data-testid="anchor-link"
+                >
+                  <p>
+                    Discover Savings
+                  </p>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-chevron-down "
+                    data-icon="chevron-down"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </a>
+              </button>
+            </div>
+            <a
+              class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+              data-testid="navigationLink-my-card"
+              href="/highstreetcard.php"
+              tabindex="0"
+            >
+              My Card
+            </a>
+            <a
+              class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+              data-testid="navigationLink-my-account"
+              href="/account.php"
+              tabindex="0"
+            >
+              My Account
+            </a>
+            <a
+              class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+              data-testid="navigationLink-faq"
+              href="/support.php#questions"
+              tabindex="0"
+            >
+              FAQ's
+            </a>
+            <a
+              class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+              data-testid="navigationLink-sign-out"
+              href="/logout.php"
+              tabindex="0"
+            >
+              Logout
+            </a>
+          </div>
+        </div>
+      </div>
+      <div
+        class="tablet:hidden bg-colour-surface dark:bg-colour-surface-dark"
+      >
+        <form
+          class="p-4 z-10 w-full"
+        >
+          <div
+            class="relative"
+          >
+            <svg
+              aria-hidden="true"
+              class="svg-inline--fa fa-magnifying-glass fa-xl absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
+              data-icon="magnifying-glass"
+              data-prefix="fas"
+              focusable="false"
+              role="img"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+                fill="currentColor"
+              />
+            </svg>
+            <input
+              autocomplete="off"
+              class="search-bar text-ellipsis pl-14 pr-12 py-3 rounded-full w-full overflow-x-hidden bg-searchBar-bg-colour-light dark:bg-searchBar-bg-colour-dark focus:outline-none text-searchBar-label-colour-light dark:text-searchBar-label-colour-dark dark:border-searchBar-outline-colour-dark font-searchBar-label-font text-searchBar-label-font font-searchBar-label-font-weight tracking-searchBar-label-font leading-searchBar-label-font border border-searchBar-outline-colour-light"
+              enterkeyhint="search"
+              id="searchInput"
+              placeholder="Search for offers or companies"
+              type="search"
+              value=""
+            />
+          </div>
+        </form>
+      </div>
+    </div>
+  </header>
+</div>
+`;
+
+exports[`Navbar renders the unauthenticated header when isAuthenticated if false 1`] = `
+<div>
+  <header
+    class="sticky top-0 z-20"
+  >
+    <div
+      data-testid="unauthenticated-navbar"
+    >
+      <div
+        class="dark:bg-NavBar-bg-colour-dark bg-NavBar-bg-colour text-NavBar-item-text-colour dark:text-NavBar-item-text-colour-dark "
+      >
+        <div
+          class="h-[72px] px-4 tablet:px-14 laptop:container laptop:mx-auto flex justify-between items-center"
+        >
+          <a
+            aria-label="Navigate Home"
+            class="h-[35px] tablet:h-[42px] laptop:h-[55px] hover:opacity-100"
+            data-testid="brandLogo"
+            href="/members-home"
+          >
+            <img
+              alt="Navigate Home"
+              class="fill-logo-colour dark:fill-logo-colour-dark h-full"
+            />
+          </a>
+          <div
+            class="flex gap-7 h-full items-center"
+          >
+            <div
+              class="hidden desktop:flex desktop:h-full"
+            >
+              <div
+                class="flex flex-1 gap-5 h-full justify-between"
+              >
+                <div
+                  class="relative"
+                  data-testid="navigation-dropdown-discover-savings"
+                >
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-label="Toggle dropdown"
+                    class="h-full w-full"
+                  >
+                    <a
+                      class="flex h-full min-w-fit justify-center items-center gap-1 border-b border-transparent font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                      data-testid="anchor-link"
+                    >
+                      <p>
+                        Discover Savings
+                      </p>
+                      <svg
+                        aria-hidden="true"
+                        class="svg-inline--fa fa-chevron-down "
+                        data-icon="chevron-down"
+                        data-prefix="fas"
+                        focusable="false"
+                        role="img"
+                        viewBox="0 0 512 512"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </a>
+                  </button>
+                </div>
+                <a
+                  class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                  data-testid="navigationLink-add-your-business"
+                  href="/addaforcesdiscount.php"
+                  tabindex="0"
+                >
+                  Add your business
+                </a>
+                <a
+                  class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                  data-testid="navigationLink-about-us"
+                  href="/about_blue_light_card.php"
+                  tabindex="0"
+                >
+                  About us
+                </a>
+                <a
+                  class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                  data-testid="navigationLink-faq"
+                  href="/support.php#questions"
+                  tabindex="0"
+                >
+                  FAQ's
+                </a>
+              </div>
+            </div>
+            <div
+              class="flex gap-2 items-center"
+            >
+              <div
+                class="hidden tablet:flex tablet:gap-2 tablet:items-center"
+              >
+                <div
+                  class="hidden tablet:flex desktop:hidden"
+                />
+                <button
+                  class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                  type="button"
+                >
+                  Log in
+                </button>
+                <button
+                  class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                  type="button"
+                >
+                  Sign up
+                </button>
+              </div>
+              <div
+                class="hidden desktop:flex"
+              />
+              <button
+                class="flex h-full justify-center items-center gap-1 cursor-pointer tablet:hidden text-NavBar-icon-colour dark:text-NavBar-icon-colour-dark"
+                data-testid="mobile-nav-toggle-button"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="svg-inline--fa fa-bars "
+                  data-icon="bars"
+                  data-prefix="fas"
+                  focusable="false"
+                  role="img"
+                  viewBox="0 0 448 512"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          class="h-[72px] hidden tablet:px-14 tablet:flex desktop:hidden desktop:mx-auto"
+        >
+          <div
+            class="flex flex-1 gap-5 h-full justify-between"
+          >
+            <div
+              class="relative"
+              data-testid="navigation-dropdown-discover-savings"
+            >
+              <button
+                aria-expanded="false"
+                aria-haspopup="true"
+                aria-label="Toggle dropdown"
+                class="h-full w-full"
+              >
+                <a
+                  class="flex h-full min-w-fit justify-center items-center gap-1 border-b border-transparent font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                  data-testid="anchor-link"
+                >
+                  <p>
+                    Discover Savings
+                  </p>
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-chevron-down "
+                    data-icon="chevron-down"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </a>
+              </button>
+            </div>
+            <a
+              class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+              data-testid="navigationLink-add-your-business"
+              href="/addaforcesdiscount.php"
+              tabindex="0"
+            >
+              Add your business
+            </a>
+            <a
+              class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+              data-testid="navigationLink-about-us"
+              href="/about_blue_light_card.php"
+              tabindex="0"
+            >
+              About us
+            </a>
+            <a
+              class="flex justify-between min-w-fit items-center gap-1 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer border-b border-transparent hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+              data-testid="navigationLink-faq"
+              href="/support.php#questions"
+              tabindex="0"
+            >
+              FAQ's
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+</div>
+`;

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavigationMobileLink renders 1`] = `
+<div>
+  <a
+    class="flex w-full border border-dropDownItem-bg-colour font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font dark:border-dropDownItem-bg-colour-dark items-center px-5 h-10"
+    data-testid="next-link"
+    href="/mockUrl"
+  >
+    Label
+  </a>
+</div>
+`;

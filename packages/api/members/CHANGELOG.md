@@ -1,5 +1,34 @@
 # Changelog
 
+## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.3.1...bluelightcard/members-v1.4.0) (2024-12-16)
+
+
+### Features
+
+* [MM-105] Add employer name and organisation name to search ingestion ([#3388](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3388)) ([a06858b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a06858b5b71d9cdedd17483e9bbbe09da79dc3bc))
+* [None] Disable request model creation for members APIs ([#3425](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3425)) ([2a48af2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2a48af29f9b4150af54b76e244e40c826cac96ff))
+* Feature/mm 434 seed organisation data ([#3313](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3313)) ([2d11c76](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2d11c76549091cab9cb0b9838b10d82d26101fc6))
+* MM-252/MM-446 Create outbound batch file ([#3336](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3336)) ([67bd8e0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/67bd8e0fafd53cef35589280d31ced4c78391bb2))
+* MM-253 Parse inbound batch file  & process cards ([#3414](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3414)) ([168d182](https://github.com/bluelightcard/BlueLightCard-2.0/commit/168d18273f8eb702c3209cda7a15d53c1d961fcb))
+* MM-255 internal batches ([#3406](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3406)) ([47bbdc8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/47bbdc8842dc6d345762984175f3d2329674d196))
+* MM-447 Upload file for card printing ([#3409](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3409)) ([677b0b5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/677b0b5b11aecacd845e9c0c4dab74cf8112097e))
+* MM-461 Add variable for automatic batching ([#3349](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3349)) ([dbcf9a8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/dbcf9a8915b928bab18431fd2eff20bf8f98e3c1))
+* MM-461 Fix handler paths ([#3348](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3348)) ([2379103](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2379103d81230183c371c3d976a44f80f532ac62))
+
+
+### Bug Fixes
+
+* [MM-434] Fix required document parsing ([#3353](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3353)) ([ab371b9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ab371b92e0bc6f0416b6cb557c15bd1c4e300fc0))
+* [MM-434] Update mapping to use correct ID types, fix common ID requirements mapping for orgs ([#3363](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3363)) ([c737746](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c737746cc49a024afec2b754828fc382ca0ddc76))
+* [None] Disable response model creation for members APIs ([#3418](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3418)) ([cd56ce6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cd56ce6c91446f505db0a4eb60131c528f5d454c))
+* [None] fix trusted domain labels ([#3380](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3380)) ([7528f3a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7528f3a947dc4cdeec8d04d6dd46c059e919650f))
+
+
+### Other Changes
+
+* [None] Enable DDS Production deployment ([#3378](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3378)) ([4a062c5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4a062c536038f9434a82a387e8576d97065d08f2))
+* Service layer test data ([#3364](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3364)) ([4f2a91b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4f2a91b27610175b496b13e17e68415ea00fc19f))
+
 ## [1.3.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.3.0...bluelightcard/members-v1.3.1) (2024-12-11)
 
 

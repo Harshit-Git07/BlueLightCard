@@ -14,6 +14,9 @@ import { useSharedUIConfig } from '../../../../providers';
 import decodeEntities from '../../../../utils/decodeEntities';
 import { usePlatformAdapter } from '../../../../adapters';
 
+import moment from 'moment';
+import DealsTimer from '../../../DealsTimer';
+
 export type Props = {
   showOfferDescription?: boolean;
   showShareFavorite?: boolean;
@@ -30,7 +33,7 @@ const OfferTopDetailsHeader: FC<Props> = ({
   const adapter = usePlatformAdapter();
   const config = useSharedUIConfig();
   const { offerDetails: offerData, offerMeta, qrCodeValue } = useAtomValue(offerSheetAtom);
-  const [imageSource, setImageSource] = useState<string | null>(null);
+  const [imageSource, setImageSource] = useState<string | undefined>();
   const [expanded, setExpanded] = useState(false);
   // TODO CDN URL could be replaced with global var?
   const finalFallbackImage = `${config.globalConfig.cdnUrl}/misc/Logo_coming_soon.jpg`;
@@ -53,6 +56,10 @@ const OfferTopDetailsHeader: FC<Props> = ({
       setImageSource(imageUrl);
     }
   }, [offerData?.image, offerData.companyId, config.globalConfig.cdnUrl]);
+
+  const expiryDate = moment(offerData.expires);
+  const currentDate = moment();
+  const remainingDays = expiryDate.diff(currentDate, 'days');
 
   return (
     <div className="flex flex-col text-center text-wrap space-y-2 p-[24px_24px_14px_24px] pt-0 bg-colour-surface-light dark:bg-colour-surface-dark">
@@ -80,6 +87,11 @@ const OfferTopDetailsHeader: FC<Props> = ({
         >
           {decodeEntities(offerData.name || '')}
         </Heading>
+
+        {adapter.getAmplitudeFeatureFlag('conv-blc-8-0-deals-timer') &&
+          adapter.getAmplitudeFeatureFlag('conv-blc-8-0-deals-timer') === 'treatment' &&
+          remainingDays <= 14 &&
+          offerData.expires && <DealsTimer expiry={offerData.expires}></DealsTimer>}
 
         {/* Offer description */}
         {showOfferDescription &&

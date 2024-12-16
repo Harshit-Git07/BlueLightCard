@@ -21,6 +21,7 @@ import type { RedemptionType } from '../../types';
 import OfferDetailsErrorPage from '../OfferDetailsErrorPage';
 import { useQuery } from '@tanstack/react-query';
 import { userQuery } from '../../../../api/identity';
+import moment from 'moment';
 
 const OfferSheetDetailsPage: FC = () => {
   const {
@@ -248,6 +249,24 @@ const OfferSheetDetailsPage: FC = () => {
     return primaryButtonTextValue;
   };
 
+  const hasDealExpired = (expiry?: string | null) => {
+    // ****
+    //  Determines whether or not the deal has expired to set the state of the deal button
+    // ****
+    if (
+      platformAdapter.getAmplitudeFeatureFlag('conv-blc-8-0-deals-timer') &&
+      platformAdapter.getAmplitudeFeatureFlag('conv-blc-8-0-deals-timer') !== 'treatment'
+    ) {
+      return false;
+    }
+
+    const currentDate = moment();
+    const expiryDate = moment(expiry);
+    const timeDiff = expiryDate.diff(currentDate);
+
+    return timeDiff < 0;
+  };
+
   const mobileHybridButtonText = (redemptionType?: RedemptionType) => {
     // ****
     //  Sets the text for the magic button that is displayed on mobile hybrid, based on the redemption type
@@ -325,7 +344,11 @@ const OfferSheetDetailsPage: FC = () => {
 
   const primaryButton = (
     <MagicButton
-      variant={user.data?.canRedeemOffer ? MagicBtnVariant.Primary : MagicBtnVariant.Disabled}
+      variant={
+        user.data?.canRedeemOffer && !hasDealExpired(offerData.expires)
+          ? MagicBtnVariant.Primary
+          : MagicBtnVariant.Disabled
+      }
       className="w-full"
       onClick={async () => {
         if (platformAdapter.platform === PlatformVariant.MobileHybrid) {
@@ -349,7 +372,7 @@ const OfferSheetDetailsPage: FC = () => {
         // For showCard redemption type, there is no magic button displayed after the click
         if (redemptionType !== 'showCard') setButtonClicked(true);
       }}
-      label={primaryButtonText(redemptionType)}
+      label={hasDealExpired(offerData.expires) ? 'Deal expired' : primaryButtonText(redemptionType)}
     />
   );
 

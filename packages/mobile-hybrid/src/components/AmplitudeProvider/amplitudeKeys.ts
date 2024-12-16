@@ -20,6 +20,7 @@ export enum Experiments {
   OFFER_SHEET_NON_VAULT = 'offer-sheet-redeem-non-vault-app',
   SEARCH_V5 = 'search_v5',
   USP_BANNER_HOMEPAGE = 'usp-banner-homepage',
+  DEALS_TIMER = 'conv-blc-8-0-deals-timer',
   NEW_COMPANY_PAGE = 'app-new-company-page',
   SEARCH_UI_CONTRAST = 'conv-blc-5-0-search-ui',
 }

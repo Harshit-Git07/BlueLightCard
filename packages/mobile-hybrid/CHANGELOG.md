@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.51.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.50.0...bluelightcard/mobile-hybrid-v1.51.0) (2024-12-16)
+
+
+### Features
+
+* conv blc 2.3 popular brands stacked circles experiment ([#3212](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3212)) ([6bb9d83](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6bb9d8301a0760c47696d075653c0cc416c164ed))
+* conv blc 8.0 deals timer ([#2829](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2829)) ([cc146d8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cc146d862a89d7615fcfa0517f93365037a8710f))
+
 ## [1.50.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.49.1...bluelightcard/mobile-hybrid-v1.50.0) (2024-12-13)
 
 

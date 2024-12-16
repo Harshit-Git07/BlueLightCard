@@ -1,6 +1,9 @@
 import { BatchRepository } from '@blc-mono/members/application/repositories/batchRepository';
 import { logger } from '@blc-mono/members/application/middleware';
-import { CreateBatchModel } from '@blc-mono/members/application/models/batchModel';
+import {
+  CreateBatchModel,
+  UpdateBatchModel,
+} from '@blc-mono/members/application/models/batchModel';
 import { BatchEntryModel } from '@blc-mono/members/application/models/batchEntryModel';
 import { CardModel } from '@blc-mono/members/application/models/cardModel';
 import { PrintingErrorStatus } from '@blc-mono/members/application/models/enums/PrintingErrorStatus';
@@ -17,6 +20,9 @@ import { formatDateDDMMYYYY } from 'client/src/common/utils/dates';
 import { getBrandFromEnv, isBlcAuBrand, isBlcUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { MAP_BRAND } from '@blc-mono/core/constants/common';
 import { S3 } from 'aws-sdk';
+import { S3EventRecord } from 'aws-lambda';
+import { Client } from 'basic-ftp';
+import path from 'path';
 
 const MAX_NAME_ON_CARD_CHARACTER_LIMIT = 25;
 const EXTERNAL_BATCH_SIZE_LIMIT = 500;
@@ -46,6 +52,15 @@ export class BatchService {
     } catch (error) {
       logger.error({ message: 'Error creating batch entry', error });
       throw error;
+    }
+  }
+
+  async updateBatch(batchId: string, batchUpdateModel: UpdateBatchModel): Promise<void> {
+    try {
+      logger.debug({ message: 'Updating batch' });
+      return await this.repository.updateBatch(batchId, batchUpdateModel);
+    } catch (error) {
+      logger.error({ message: 'Error updating batch', error });
     }
   }
 
@@ -147,6 +162,90 @@ export class BatchService {
       logger.error({ message: 'Error creating external batches', error });
       throw error;
     }
+  }
+
+  async uploadBatchFile(s3Record: S3EventRecord): Promise<void> {
+    try {
+      logger.debug({ message: 'Uploading batch file' });
+      const key = s3Record.s3.object.key;
+      const bucketName = Bucket.batchFilesBucket.bucketName;
+      const file = await this.downloadFileFromS3(bucketName, key);
+
+      await this.uploadFileToSftpServer(file, key);
+
+      const fileName = path.basename(key);
+      const batchId = fileName.substring(0, fileName.lastIndexOf('.'));
+      await this.updateBatch(batchId, { sentDate: new Date().toISOString() });
+
+      await this.deleteFileFromS3(bucketName, key);
+    } catch (error) {
+      logger.error({ message: 'Error uploading batch file', error });
+      throw error;
+    }
+  }
+
+  private async downloadFileFromS3(bucketName: string, key: string): Promise<S3.GetObjectOutput> {
+    try {
+      logger.debug({ message: 'Downloading batch file', key });
+      return await this.s3Client
+        .getObject({
+          Bucket: bucketName,
+          Key: key,
+        })
+        .promise();
+    } catch (error) {
+      logger.error({ message: 'Error downloading file from S3', error });
+      throw error;
+    }
+  }
+
+  private async deleteFileFromS3(bucketName: string, key: string): Promise<void> {
+    try {
+      logger.debug({ message: 'Deleting batch file', key });
+      await this.s3Client
+        .deleteObject({
+          Bucket: bucketName,
+          Key: key,
+        })
+        .promise();
+    } catch (error) {
+      logger.error({ message: 'Error deleting file from S3', error });
+      throw error;
+    }
+  }
+
+  private async uploadFileToSftpServer(file: S3.GetObjectOutput, key: string): Promise<void> {
+    try {
+      logger.debug({ message: 'Uploading batch file to SFTP server' });
+      if (Buffer.isBuffer(file.Body)) {
+        const fileAsString = this.convertBufferToString(file.Body);
+
+        const sftpClient = new Client();
+        sftpClient.ftp.verbose = true;
+
+        await sftpClient.access({
+          host: process.env.SFTP_HOST,
+          user: process.env.SFTP_USER,
+          password: process.env.SFTP_PASSWORD,
+          secure: true,
+        });
+
+        const fileName = path.basename(key);
+        const remotePath = `${process.env.SFTP_PATH_SEND_BATCH_FILE}${fileName}`;
+
+        await sftpClient.uploadFrom(fileAsString, remotePath);
+        await sftpClient.close();
+      } else {
+        throw new Error('Unexpected file type');
+      }
+    } catch (error) {
+      logger.error({ message: 'Error uploading file to SFTP server', error });
+      throw error;
+    }
+  }
+
+  private convertBufferToString(buffer: Buffer): string {
+    return buffer.toString('utf-8');
   }
 
   private async batchCardsValidForPrinting(cards: CardModel[]): Promise<Array<Array<CardModel>>> {

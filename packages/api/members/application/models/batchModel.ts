@@ -30,6 +30,17 @@ export const CreateBatchModel = createZodNamedType(
 
 export type CreateBatchModel = z.infer<typeof CreateBatchModel>;
 
+export const UpdateBatchModel = createZodNamedType(
+  'UpdateBatchModel',
+  BatchModel.omit({
+    batchId: true,
+    name: true,
+    type: true,
+    createdDate: true,
+    count: true,
+  }),
+);
+export type UpdateBatchModel = z.infer<typeof UpdateBatchModel>;
 export const CreateInternalBatchModel = createZodNamedType(
   'CreateInternalBatchModelRequest',
   z.object({

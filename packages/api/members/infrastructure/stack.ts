@@ -36,7 +36,7 @@ import { adminProfileRoutes } from './routes/admin/AdminProfileRoutes';
 import { DocumentUpload } from './s3/DocumentUploadBucket';
 import { ResponseType } from 'aws-cdk-lib/aws-apigateway';
 import { DefaultRouteProps } from './routes/route';
-import { isStaging, isProduction } from '@blc-mono/core/utils/checkEnvironment';
+import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getBrandFromEnv, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import { createOutboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/createOutboundBatchFileCron';
@@ -44,6 +44,9 @@ import { processInboundBatchFileCron } from '@blc-mono/members/infrastructure/cr
 import { createMemberProfilesPipe } from '@blc-mono/members/infrastructure/eventbridge/MemberProfilesPipe';
 import { createMemberProfileIndexer } from '@blc-mono/members/infrastructure/lambdas/createMemberProfileIndexer';
 import { createSeedOrganisations } from '@blc-mono/members/infrastructure/lambdas/createSeedOrganisations';
+import { MAP_BRAND } from '@blc-mono/core/constants/common';
+import { SSTFunction } from '@blc-mono/redemptions/infrastructure/constructs/SSTFunction';
+import { createUploadBatchFileFunction } from '@blc-mono/members/infrastructure/lambdas/createUploadBatchFileFunction';
 
 const SERVICE_NAME = 'members';
 
@@ -54,6 +57,13 @@ export async function MembersStack({ app, stack }: StackContext) {
   stack.setDefaultFunctionProps({
     environment: {
       BRAND: getBrandFromEnv(),
+      SFTP_HOST: getEnvOrDefault(MemberStackEnvironmentKeys.SFTP_HOST, ''),
+      SFTP_USER: getEnvOrDefault(MemberStackEnvironmentKeys.SFTP_USER, ''),
+      SFTP_PASSWORD: getEnvOrDefault(MemberStackEnvironmentKeys.SFTP_PASSWORD, ''),
+      SFTP_PATH_SEND_BATCH_FILE: getEnvOrDefault(
+        MemberStackEnvironmentKeys.SFTP_PATH_SEND_BATCH_FILE,
+        '',
+      ),
     },
   });
 
@@ -92,6 +102,14 @@ export async function MembersStack({ app, stack }: StackContext) {
       batchFilesBucket,
     );
     processInboundBatchFileCron(stack, adminTable);
+    createUploadBatchFileFunction(
+      stack,
+      adminTable,
+      profilesTable,
+      organisationsTable,
+      documentUpload.bucket,
+      batchFilesBucket,
+    );
   }
 
   const memberProfilesTableEventQueue: Queue = new Queue(stack, 'MemberProfilesTableEventQueue', {

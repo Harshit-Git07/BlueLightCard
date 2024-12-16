@@ -1,7 +1,10 @@
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { BatchRepository } from '@blc-mono/members/application/repositories/batchRepository';
 import { v4 as uuidv4 } from 'uuid';
-import { CreateBatchModel } from '@blc-mono/members/application/models/batchModel';
+import {
+  CreateBatchModel,
+  UpdateBatchModel,
+} from '@blc-mono/members/application/models/batchModel';
 import { BatchType } from '@blc-mono/members/application/models/enums/BatchType';
 import { BATCH, batchKey, cardKey } from '@blc-mono/members/application/repositories/repository';
 import { BatchStatus } from '@blc-mono/members/application/models/enums/BatchStatus';
@@ -19,6 +22,7 @@ let dynamoDBMock = {
   send: jest.fn(),
 };
 const putCommandMock = PutCommand as jest.MockedClass<typeof PutCommand>;
+const updateCommandMock = UpdateCommand as jest.MockedClass<typeof UpdateCommand>;
 
 describe('BatchRepository', () => {
   beforeEach(() => {
@@ -85,6 +89,32 @@ describe('BatchRepository', () => {
           applicationId: applicationId,
         },
         TableName: 'memberAdmin',
+      });
+    });
+  });
+
+  describe('updateBatch', () => {
+    it('should update an existing batch', async () => {
+      const updateBatchModel: UpdateBatchModel = {
+        sentDate: '2023-01-01T00:00:00.000Z',
+      };
+      dynamoDBMock.send.mockResolvedValue({});
+      await repository.updateBatch(batchId, updateBatchModel);
+
+      expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(UpdateCommand));
+      expect(updateCommandMock).toHaveBeenCalledWith({
+        TableName: 'memberAdmin',
+        Key: {
+          pk: batchKey(batchId),
+          sk: BATCH,
+        },
+        ExpressionAttributeNames: {
+          '#sentDate': 'sentDate',
+        },
+        ExpressionAttributeValues: {
+          ':sentDate': '2023-01-01T00:00:00.000Z',
+        },
+        UpdateExpression: 'SET #sentDate = :sentDate ',
       });
     });
   });

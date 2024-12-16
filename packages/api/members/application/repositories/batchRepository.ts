@@ -1,18 +1,28 @@
 import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { defaultDynamoDbClient } from '@blc-mono/members/application/repositories/dynamoClient';
 import { Table } from 'sst/node/table';
-import { BATCH, batchKey, cardKey } from '@blc-mono/members/application/repositories/repository';
-import { CreateBatchModel } from '@blc-mono/members/application/models/batchModel';
+import {
+  BATCH,
+  batchKey,
+  cardKey,
+  Repository,
+} from '@blc-mono/members/application/repositories/repository';
+import {
+  CreateBatchModel,
+  UpdateBatchModel,
+} from '@blc-mono/members/application/models/batchModel';
 import { v4 as uuidv4 } from 'uuid';
 import { BatchStatus } from '@blc-mono/members/application/models/enums/BatchStatus';
 import { BatchEntryModel } from '@blc-mono/members/application/models/batchEntryModel';
 
-export class BatchRepository {
+export class BatchRepository extends Repository {
   constructor(
-    private readonly dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
+    dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
     // @ts-ignore
     private readonly tableName: string = Table.memberAdmin.tableName,
-  ) {}
+  ) {
+    super(dynamoDB);
+  }
 
   async createBatch(batch: CreateBatchModel): Promise<string> {
     const batchId = uuidv4();
@@ -44,5 +54,16 @@ export class BatchRepository {
     await this.dynamoDB.send(new PutCommand(params));
 
     return batchEntry.batchId;
+  }
+
+  async updateBatch(batchId: string, updateBatchModel: UpdateBatchModel): Promise<void> {
+    await this.partialUpdate({
+      tableName: this.tableName,
+      pk: batchKey(batchId),
+      sk: BATCH,
+      data: {
+        ...updateBatchModel,
+      },
+    });
   }
 }

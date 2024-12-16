@@ -141,21 +141,29 @@ jobs:
             brand: 'BLC_UK'
             stage: staging
             brazeSecret: BLC_UK_BRAZE_SERVICE_JSON
-            # auth0_domain: BLC_UK_SERVICE_LAYER_AUTH0_DOMAIN
-            # auth0_api_client_id: BLC_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
-            # auth0_api_client_secret: BLC_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
-            # auth0_password_validation_client_id: BLC_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
-            # auth0_password_validation_client_secret: BLC_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+            # auth0Domain: BLC_UK_SERVICE_LAYER_AUTH0_DOMAIN
+            # auth0ApiClientId: BLC_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+            # auth0ApiClientSecret: BLC_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+            # auth0PasswordValidationClientId: BLC_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+            # auth0PasswordValidationClientSecret: BLC_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+            # sftpHost: BLC_UK_SFTP_HOST
+            # sftpUser: BLC_UK_SFTP_USER
+            # sftpPassword: BLC_UK_SFTP_PASSWORD
+            # sftpPathSendBatchFile:
           - deployment: 'blc-au-staging'
             region: 'ap-southeast-2'
             brand: 'BLC_AU'
             stage: staging
             brazeSecret: BLC_AU_BRAZE_SERVICE_JSON
-            # auth0_domain: BLC_AU_SERVICE_LAYER_AUTH0_DOMAIN
-            # auth0_api_client_id: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_ID
-            # auth0_api_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
-            # auth0_password_validation_client_id: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
-            # auth0_password_validation_client_secret: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+            # auth0Domain: BLC_AU_SERVICE_LAYER_AUTH0_DOMAIN
+            # auth0ApiClientId: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+            # auth0ApiClientSecret: BLC_AU_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+            # auth0PasswordValidationClientId: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+            # auth0PasswordValidationClientSecret: BLC_AU_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+            # sftpHost: BLC_AU_SFTP_HOST
+            # sftpUser: BLC_AU_SFTP_USER
+            # sftpPassword: BLC_AU_SFTP_PASSWORD
+            # sftpPathSendBatchFile:
           - deployment: 'dds-uk-staging'
             region: 'eu-west-2'
             brand: 'DDS_UK'
@@ -166,11 +174,11 @@ jobs:
             ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
             ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
             blcUkIdentityApiId: 'tr1afrar24'
-            # auth0_domain: DDS_UK_SERVICE_LAYER_AUTH0_DOMAIN
-            # auth0_api_client_id: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
-            # auth0_api_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
-            # auth0_password_validation_client_id: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
-            # auth0_password_validation_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
+            # auth0Domain: DDS_UK_SERVICE_LAYER_AUTH0_DOMAIN
+            # auth0ApiClientId: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
+            # auth0ApiClientSecret: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
+            # auth0PasswordValidationClientId: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID
+            # auth0PasswordValidationClientSecret: DDS_UK_SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET
     needs:
       - install
       - test
@@ -210,11 +218,15 @@ jobs:
           DDS_COGNITO_USER_POOL_ID: ${{ matrix.ddsCognitoUserPoolId }}
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
-          # SERVICE_LAYER_AUTH0_DOMAIN: ${{ secrets[matrix.auth0_domain] }}
-          # SERVICE_LAYER_AUTH0_API_CLIENT_ID: ${{ secrets[matrix.auth0_api_client_id] }}
-          # SERVICE_LAYER_AUTH0_API_CLIENT_SECRET: ${{ secrets[matrix.auth0_api_client_secret] }}
-          # SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID: ${{ secrets[matrix.auth0_password_validation_client_id] }}
-          # SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET: ${{ secrets[matrix.auth0_password_validation_client_secret] }}
+          # SERVICE_LAYER_AUTH0_DOMAIN: ${{ secrets[matrix.auth0Domain] }}
+          # SERVICE_LAYER_AUTH0_API_CLIENT_ID: ${{ secrets[matrix.auth0ApiClientId] }}
+          # SERVICE_LAYER_AUTH0_API_CLIENT_SECRET: ${{ secrets[matrix.auth0ApiClientSecret] }}
+          # SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_ID: ${{ secrets[matrix.auth0PasswordValidationClientId] }}
+          # SERVICE_LAYER_AUTH0_PASSWORD_VALIDATION_CLIENT_SECRET: ${{ secrets[matrix.auth0PasswordValidationClientSecret] }}
+          # SFTP_HOST: ${{ secrets[matrix.sftpHost] }}
+          # SFTP_USER: ${{ secrets[matrix.sftpUser] }}
+          # SFTP_PASSWORD: ${{ secrets[matrix.sftpPassword] }}
+          # SFTP_PATH_SEND_BATCH_FILE: ${{ matrix.sftpPathSendBatchFile }}
         run: npx sst deploy global --stage ${{ matrix.stage }} --region ${{ matrix.region }} && npx sst deploy members members-api members-admin-api --stage ${{ matrix.stage }} --region ${{ matrix.region }}
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog

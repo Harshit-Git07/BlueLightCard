@@ -1,6 +1,9 @@
 import { BatchService } from '@blc-mono/members/application/services/batchService';
 import { BatchRepository } from '@blc-mono/members/application/repositories/batchRepository';
-import { CreateBatchModel } from '@blc-mono/members/application/models/batchModel';
+import {
+  CreateBatchModel,
+  UpdateBatchModel,
+} from '@blc-mono/members/application/models/batchModel';
 import { BatchType } from '@blc-mono/members/application/models/enums/BatchType';
 import { BatchEntryModel } from '@blc-mono/members/application/models/batchEntryModel';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
@@ -13,8 +16,11 @@ import { ProfileModel } from '@blc-mono/members/application/models/profileModel'
 import { ApplicationModel } from '@blc-mono/members/application/models/applicationModel';
 import { ApplicationReason } from '@blc-mono/members/application/models/enums/ApplicationReason';
 import { PrintingErrorStatus } from '@blc-mono/members/application/models/enums/PrintingErrorStatus';
-import { isBlcUkBrand, getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
+import { getBrandFromEnv, isBlcUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { BLC_UK_BRAND } from '@blc-mono/core/constants/common';
+import { S3EventRecord } from 'aws-lambda';
+import { Client } from 'basic-ftp';
+import { BatchStatus } from '@blc-mono/members/application/models/enums/BatchStatus';
 
 jest.mock('../../repositories/batchRepository');
 jest.mock('../profileService');
@@ -113,6 +119,8 @@ beforeEach(() => {
 });
 
 describe('BatchService', () => {
+  const bucketName = 'batchFileBucketMock';
+  const key = `blc-uk/outbound/${batchId}.csv`;
   describe('createBatch', () => {
     it('should throw error if creating batch fails', async () => {
       repositoryMock.createBatch.mockRejectedValue(new Error('Error creating batch'));
@@ -143,6 +151,18 @@ describe('BatchService', () => {
       repositoryMock.createBatchEntry.mockResolvedValue(batchId);
       const result = await batchService.createBatchEntry(batchEntryModel);
       expect(result).toEqual(batchId);
+    });
+  });
+
+  describe('updateBatchFile', () => {
+    const updateBatchModel: UpdateBatchModel = {
+      status: BatchStatus.BATCH_COMPLETE,
+    };
+
+    it('should update batch successfully', async () => {
+      await batchService.updateBatch(batchId, updateBatchModel);
+
+      expect(repositoryMock.updateBatch).toHaveBeenCalledWith(batchId, updateBatchModel);
     });
   });
 
@@ -220,6 +240,114 @@ describe('BatchService', () => {
         Key: `blc-uk/outbound/${batchId}.csv`,
         Body: expectedBody,
         ContentType: 'text/csv',
+      });
+    });
+  });
+
+  describe('uploadBatchFile', () => {
+    const record = {
+      s3: {
+        bucket: {
+          name: 'bucketName',
+        },
+        object: {
+          key: key,
+        },
+      },
+    } as S3EventRecord;
+
+    beforeEach(() => {
+      process.env.SFTP_HOST = 'testHost.co.uk';
+      process.env.SFTP_USER = 'testUser';
+      process.env.SFTP_PASSWORD = 'testPassword';
+      process.env.SFTP_PATH_SEND_BATCH_FILE = '/testDirectory/';
+    });
+
+    it('should throw error if downloading file from s3 fails', async () => {
+      S3.prototype.getObject = jest.fn().mockImplementation(() => ({
+        promise: jest.fn().mockRejectedValue(new Error('Error downloading file from S3')),
+      }));
+
+      await expect(batchService.uploadBatchFile(record)).rejects.toThrow(
+        'Error downloading file from S3',
+      );
+    });
+
+    it('should throw error if file is unexpected type', async () => {
+      const nonBufferFileType = { Body: {} } as S3.GetObjectOutput;
+      S3.prototype.getObject = jest.fn().mockImplementation(() => ({
+        promise: jest.fn().mockResolvedValue(nonBufferFileType),
+      }));
+
+      await expect(batchService.uploadBatchFile(record)).rejects.toThrow('Unexpected file type');
+    });
+
+    it('should throw error if sftp connection fails', async () => {
+      const fileContent = 'test data';
+      const s3File = { Body: Buffer.from(fileContent) } as S3.GetObjectOutput;
+      S3.prototype.getObject = jest.fn().mockImplementation(() => ({
+        promise: jest.fn().mockResolvedValue(s3File),
+      }));
+      Client.prototype.access = jest
+        .fn()
+        .mockRejectedValue(new Error('Error uploading file to SFTP server'));
+
+      await expect(batchService.uploadBatchFile(record)).rejects.toThrow(
+        'Error uploading file to SFTP server',
+      );
+    });
+
+    it('should throw error if deleting file from s3 fails', async () => {
+      const fileContent = 'test data';
+      const s3File = { Body: Buffer.from(fileContent) } as S3.GetObjectOutput;
+      S3.prototype.getObject = jest.fn().mockImplementation(() => ({
+        promise: jest.fn().mockResolvedValue(s3File),
+      }));
+      Client.prototype.access = jest.fn().mockResolvedValue('Successful login');
+      Client.prototype.uploadFrom = jest.fn().mockResolvedValue('Successful upload');
+      Client.prototype.close = jest.fn().mockResolvedValue('Closed connection');
+      S3.prototype.deleteObject = jest.fn().mockImplementation(() => ({
+        promise: jest.fn().mockRejectedValue(new Error('Error deleting file from S3')),
+      }));
+
+      await expect(batchService.uploadBatchFile(record)).rejects.toThrow(
+        'Error deleting file from S3',
+      );
+    });
+
+    it('should successfully upload file to server and delete from s3', async () => {
+      const fileContent = 'test data';
+      const s3File = { Body: Buffer.from(fileContent) } as S3.GetObjectOutput;
+      S3.prototype.getObject = jest.fn().mockImplementation(() => ({
+        promise: jest.fn().mockResolvedValue(s3File),
+      }));
+      Client.prototype.access = jest.fn().mockResolvedValue('Successful login');
+      Client.prototype.uploadFrom = jest.fn().mockResolvedValue('Successful upload');
+      Client.prototype.close = jest.fn().mockResolvedValue('Closed connection');
+      BatchService.prototype.updateBatch = jest.fn();
+      S3.prototype.deleteObject = jest.fn().mockImplementation(() => ({
+        promise: jest.fn().mockResolvedValue('Deleted object'),
+      }));
+
+      await batchService.uploadBatchFile(record);
+
+      expect(Client.prototype.access).toHaveBeenCalledWith({
+        host: 'testHost.co.uk',
+        user: 'testUser',
+        password: 'testPassword',
+        secure: true,
+      });
+      expect(Client.prototype.uploadFrom).toHaveBeenCalledWith(
+        fileContent,
+        `/testDirectory/${batchId}.csv`,
+      );
+      expect(Client.prototype.close).toHaveBeenCalled();
+      expect(batchService.updateBatch).toHaveBeenCalledWith(batchId, {
+        sentDate: '2023-01-01T00:00:00.000Z',
+      });
+      expect(S3.prototype.deleteObject).toHaveBeenCalledWith({
+        Bucket: bucketName,
+        Key: key,
       });
     });
   });

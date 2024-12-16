@@ -2,8 +2,10 @@ import { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   AccountDetails,
-  useGetCustomerProfile,
   CardVerificationAlerts,
+  Drawer,
+  Toaster,
+  useGetCustomerProfile,
 } from '@bluelightcard/shared-ui';
 import { BRAND } from '@/global-vars';
 import NavBar from '../../components/NavBar/NavBar';
@@ -57,6 +59,9 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
   return (
     <div className={`flex flex-col ${isOpen ? 'h-screen overflow-hidden' : 'min-h-screen'}`}>
       <MyAccountDebugToolsLazily />
+      <Drawer />
+      <Toaster />
+
       <NavBar
         isAuthenticated
         onSearchCompanyChange={onSearchCompanyChange}

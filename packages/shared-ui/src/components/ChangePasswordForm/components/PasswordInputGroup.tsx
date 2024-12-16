@@ -1,52 +1,51 @@
-import { FC } from 'react';
+import { ChangeEvent, FC } from 'react';
 import PasswordInput from '../../PasswordInput';
 import { CurrentFormState, PasswordField } from '../types';
 import copy from '../copy';
+import { PasswordFields } from '../constants';
 
 export type PasswordInputGroupProps = {
   formState: CurrentFormState;
   updatePasswordValue: (updatedValue: string, fieldToUpdate: PasswordField) => void;
-  onBlur: (field: PasswordField) => void;
 };
 export const PasswordInputGroup: FC<PasswordInputGroupProps> = ({
   formState,
   updatePasswordValue,
-  onBlur,
 }) => {
-  const fieldIsValid = (field: PasswordField) =>
-    !formState[field].value ? undefined : !formState[field].error;
+  const onChange = (field: PasswordField) => (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    updatePasswordValue(newValue, field);
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <PasswordInput
-        password={formState.currentPassword.value}
-        onChange={(newVal) => updatePasswordValue(newVal, 'currentPassword')}
-        onBlur={() => onBlur('currentPassword')}
-        isValid={fieldIsValid('currentPassword')}
+        id={PasswordFields.currentPassword}
+        value={formState.currentPassword.value}
+        onChange={onChange(PasswordFields.currentPassword)}
+        isValid={!formState.currentPassword.error}
         label={copy.currentPasswordInput.label}
-        placeholderText={copy.currentPasswordInput.placeholder}
-        infoMessage={formState.currentPassword.error}
-        showIcon={false}
+        placeholder={copy.currentPasswordInput.placeholder}
+        validationMessage={formState.currentPassword.error}
         hideRequirements
       />
       <PasswordInput
-        password={formState.newPassword.value}
-        onChange={(newVal) => updatePasswordValue(newVal, 'newPassword')}
-        onBlur={() => onBlur('newPassword')}
-        isValid={fieldIsValid('newPassword')}
+        id={PasswordFields.newPassword}
+        value={formState.newPassword.value}
+        onChange={onChange(PasswordFields.newPassword)}
+        isValid={!formState.newPassword.error}
         label={copy.newPasswordInput.label}
-        placeholderText={copy.newPasswordInput.placeholder}
-        infoMessage={formState.newPassword.error}
-        showIcon={false}
+        placeholder={copy.newPasswordInput.placeholder}
+        validationMessage={formState.newPassword.error}
       />
       <PasswordInput
-        password={formState.newPasswordConfirm.value}
-        onChange={(newVal) => updatePasswordValue(newVal, 'newPasswordConfirm')}
-        onBlur={() => onBlur('newPasswordConfirm')}
-        isValid={fieldIsValid('newPasswordConfirm')}
+        id={PasswordFields.newPasswordConfirm}
+        value={formState.newPasswordConfirm.value}
+        onChange={onChange(PasswordFields.newPasswordConfirm)}
+        isValid={!formState.newPasswordConfirm.error}
         label={copy.newPasswordConfirmInput.label}
-        placeholderText={copy.newPasswordConfirmInput.placeholder}
-        infoMessage={formState.newPasswordConfirm.error}
-        showIcon={false}
+        placeholder={copy.newPasswordConfirmInput.placeholder}
+        validationMessage={formState.newPasswordConfirm.error}
         hideRequirements
       />
     </div>

@@ -9,8 +9,8 @@ import Toast from '../Toast';
 import { ToastPosition, ToastStatus } from '../Toast/ToastTypes';
 import { Button, ThemeVariant } from '../../index';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { safeJsonParse } from './useChangePasswordPut';
 import { UpdatePasswordPayload } from './types';
+import { jsonOrNull } from '../../utils/jsonUtils';
 
 const componentMeta: Meta<typeof ChangePasswordForm> = {
   title: 'Organisms/Change Password Form',
@@ -18,7 +18,7 @@ const componentMeta: Meta<typeof ChangePasswordForm> = {
 };
 
 const errorUsedPassword = { errors: [{ code: '401', detail: '' }] };
-const errorUnusual = { errors: [{ code: '400', detail: 'Some crazy error dude' }] };
+const errorUnusual = { errors: [{ code: '400', detail: 'Unexpected error' }] };
 
 const DefaultTemplate: StoryFn<typeof ChangePasswordForm> = (args) => {
   const { open } = useDrawer();
@@ -39,7 +39,7 @@ const DefaultTemplate: StoryFn<typeof ChangePasswordForm> = (args) => {
   };
   adapter.invokeV5Api = async (_, options) => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    const formBody = safeJsonParse<UpdatePasswordPayload>(options.body);
+    const formBody = jsonOrNull<UpdatePasswordPayload>(options.body!);
 
     if (formBody?.currentPassword.includes('0')) {
       return Promise.resolve({ status: 401, data: JSON.stringify(errorUsedPassword) });

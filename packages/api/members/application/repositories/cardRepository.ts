@@ -81,6 +81,26 @@ export class CardRepository {
     return CardModel.parse(result.Item);
   }
 
+  async getCardById(cardNumber: string): Promise<CardModel> {
+    const params: QueryCommandInput = {
+      TableName: this.tableName,
+      IndexName: 'gsi1',
+      KeyConditionExpression: 'sk = :sk',
+      ExpressionAttributeValues: {
+        ':sk': cardKey(cardNumber),
+      },
+      Limit: 1,
+    };
+
+    const result = await this.dynamoDB.send(new QueryCommand(params));
+
+    if (!result.Items || result.Items.length === 0) {
+      throw new NotFoundError('Card not found');
+    }
+
+    return CardModel.parse(result.Items[0]);
+  }
+
   async upsertCard({
     memberId,
     cardNumber,

@@ -1,0 +1,18 @@
+meta {
+  name: createInternalBatch
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{apiBaseUrl}}/admin/batches/internal
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Blue Light Card",
+    "cardNumbers": ["card1", "card2"]
+  }
+}

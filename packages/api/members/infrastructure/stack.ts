@@ -27,6 +27,7 @@ import { memberApplicationRoutes } from '@blc-mono/members/infrastructure/routes
 import { memberOrganisationsRoutes } from '@blc-mono/members/infrastructure/routes/member/MemberOrganisationsRoutes';
 import { memberMarketingRoutes } from './routes/member/MemberMarketingRoutes';
 import { adminMarketingRoutes } from './routes/admin/AdminMarketingRoutes';
+import { adminBatchRoutes } from './routes/admin/AdminBatchRoutes';
 import { adminApplicationRoutes } from './routes/admin/AdminApplicationRoutes';
 import { adminOrganisationsRoutes } from './routes/admin/AdminOrganisationsRoutes';
 import { adminCardRoutes } from './routes/admin/AdminCardRoutes';
@@ -211,6 +212,10 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
       bind: [organisationsTable],
     }),
     ...adminCardRoutes({
+      ...defaultRouteProps,
+      bind: [profilesTable, adminTable],
+    }),
+    ...adminBatchRoutes({
       ...defaultRouteProps,
       bind: [profilesTable, adminTable],
     }),

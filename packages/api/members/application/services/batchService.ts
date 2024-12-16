@@ -6,6 +6,7 @@ import { CardModel } from '@blc-mono/members/application/models/cardModel';
 import { PrintingErrorStatus } from '@blc-mono/members/application/models/enums/PrintingErrorStatus';
 import { CardService } from '@blc-mono/members/application/services/cardService';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
+import { CreateInternalBatchModelResponse } from '@blc-mono/members/application/models/batchModel';
 import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
 import { ExternalCardPrintingDataModel } from '@blc-mono/members/application/models/ExternalCardPrintingDataModel';
 import { Bucket } from 'sst/node/bucket';
@@ -44,6 +45,50 @@ export class BatchService {
       return await this.repository.createBatchEntry(batchEntry);
     } catch (error) {
       logger.error({ message: 'Error creating batch entry', error });
+      throw error;
+    }
+  }
+
+  async createInternalBatch(
+    name: string,
+    cards: string[],
+  ): Promise<CreateInternalBatchModelResponse> {
+    try {
+      logger.debug({ message: 'Creating internal batch' });
+      const parsedCards: CardModel[] = await Promise.all(
+        cards.map((cardId) => this.cardService.getCardById(cardId)),
+      );
+      const areCardsValidForBatch = await Promise.all(
+        parsedCards.map((card) => this.cardIsValidForBatch(card)),
+      );
+      const validCards = parsedCards.filter((_, index) => areCardsValidForBatch[index]);
+
+      const batchAttributes: CreateBatchModel = CreateBatchModel.parse({
+        name: name,
+        type: BatchType.INTERNAL,
+        count: validCards.length,
+      });
+      const batchId = await this.repository.createBatch(batchAttributes);
+
+      for (const card of validCards) {
+        let [profile, application] = await this.getProfileAndApplication(card);
+        if (application) {
+          const batchAttributes: BatchEntryModel = BatchEntryModel.parse({
+            batchId: batchId,
+            cardNumber: card.cardNumber,
+            memberId: card.memberId,
+            applicationId: application.applicationId,
+          });
+          await this.repository.createBatchEntry(batchAttributes);
+
+          await this.cardService.updateCard(card.memberId, card.cardNumber, {
+            cardStatus: CardStatus.ADDED_TO_BATCH,
+          });
+        }
+      }
+      return { batchId };
+    } catch (error) {
+      logger.error({ message: 'Error creating internal batch', error });
       throw error;
     }
   }
@@ -91,7 +136,6 @@ export class BatchService {
         }
 
         const csvContent = this.convertToCSV(externalCardPrintingData);
-
         await this.uploadToS3(
           csvContent,
           Bucket.batchFilesBucket.bucketName,

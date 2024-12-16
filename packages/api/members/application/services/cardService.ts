@@ -36,6 +36,16 @@ export class CardService {
     }
   }
 
+  async getCardById(cardNumber: string): Promise<CardModel> {
+    try {
+      logger.debug({ message: 'Fetching card by id', cardNumber });
+      return await this.repository.getCardById(cardNumber);
+    } catch (error) {
+      logger.error({ message: 'Error fetching card by id', error });
+      throw error;
+    }
+  }
+
   async updateCard(memberId: string, cardNumber: string, card: UpdateCardModel): Promise<void> {
     try {
       logger.debug({ message: 'Updating card', memberId, card });

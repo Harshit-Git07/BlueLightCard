@@ -27,4 +27,24 @@ export const CreateBatchModel = createZodNamedType(
     count: true,
   }),
 );
+
 export type CreateBatchModel = z.infer<typeof CreateBatchModel>;
+
+export const CreateInternalBatchModel = createZodNamedType(
+  'CreateInternalBatchModelRequest',
+  z.object({
+    name: z.string(),
+    cardNumbers: z.string().array(),
+  }),
+);
+
+export type CreateInternalBatchModel = z.infer<typeof CreateInternalBatchModel>;
+
+export const CreateInternalBatchModelResponse = createZodNamedType(
+  'CreateInternalBatchModelResponse',
+  BatchModel.pick({
+    batchId: true,
+  }),
+);
+
+export type CreateInternalBatchModelResponse = z.infer<typeof CreateInternalBatchModelResponse>;

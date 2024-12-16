@@ -2,9 +2,13 @@ import { logger } from '../middleware';
 import { CardModel, UpdateCardModel } from '../models/cardModel';
 import { CardRepository } from '../repositories/cardRepository';
 import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
+import { ProfileService } from '@blc-mono/members/application/services/profileService';
 
 export class CardService {
-  constructor(private readonly repository: CardRepository = new CardRepository()) {}
+  constructor(
+    private readonly repository: CardRepository = new CardRepository(),
+    private readonly profileService: ProfileService = new ProfileService(),
+  ) {}
 
   async getCards(memberId: string): Promise<CardModel[]> {
     try {
@@ -59,5 +63,26 @@ export class CardService {
       logger.error({ message: 'Error updating card', error });
       throw error;
     }
+  }
+
+  async processPrintedCard(
+    memberId: string,
+    cardNumber: string,
+    timePrinted: string,
+    timePosted: string,
+  ): Promise<void> {
+    await this.updateCard(memberId, cardNumber, {
+      printedDate: timePrinted,
+      postedDate: timePosted,
+      cardStatus: CardStatus.PHYSICAL_CARD,
+    });
+
+    // TODO: delete application for card and any remaining ID files if present
+
+    const profile = await this.profileService.getProfile(memberId);
+    const firstName = profile.firstName;
+    const lastName = profile.lastName;
+    const email = profile.email;
+    // TODO: email user with card_posted template
   }
 }

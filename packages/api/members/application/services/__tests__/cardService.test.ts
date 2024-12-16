@@ -1,9 +1,10 @@
 import { CardService } from '../../services/cardService';
 import { CardRepository } from '../../repositories/cardRepository';
-import { logger } from '../../middleware';
 import { CardModel, UpdateCardModel } from '../../models/cardModel';
 import { v4 as uuidv4 } from 'uuid';
 import { CardStatus } from '../../models/enums/CardStatus';
+import { ProfileService } from '@blc-mono/members/application/services/profileService';
+import { ProfileModel } from '@blc-mono/members/application/models/profileModel';
 
 jest.mock('../../repositories/cardRepository');
 
@@ -72,6 +73,43 @@ describe('CardService', () => {
         card: updateCard,
         isInsert: false,
       });
+    });
+  });
+
+  describe('processPrintedCard', () => {
+    it('should throw error if update card fails', async () => {
+      repositoryMock.upsertCard.mockRejectedValue(new Error('Fetch error'));
+      await expect(
+        cardService.processPrintedCard(
+          memberId,
+          cardNumber,
+          '2023-01-01T00:00:00.000Z',
+          '2023-01-02T00:00:00.000Z',
+        ),
+      ).rejects.toThrow('Fetch error');
+    });
+
+    it('should process printed cards successfully', async () => {
+      const profile: ProfileModel = {
+        memberId,
+        firstName: 'John',
+        lastName: 'Doe',
+        dateOfBirth: '1990-01-01',
+        email: 'john.doe@example.com',
+        applications: [],
+        cards: [],
+      };
+      ProfileService.prototype.getProfile = jest.fn().mockResolvedValue(profile);
+
+      await cardService.processPrintedCard(
+        memberId,
+        cardNumber,
+        '2023-01-01T00:00:00.000Z',
+        '2023-01-02T00:00:00.000Z',
+      );
+
+      expect(repositoryMock.upsertCard).toHaveBeenCalled();
+      expect(ProfileService.prototype.getProfile).toHaveBeenCalledWith(memberId);
     });
   });
 });

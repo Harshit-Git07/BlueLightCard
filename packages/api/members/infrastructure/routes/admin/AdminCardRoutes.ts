@@ -2,6 +2,7 @@ import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/route
 import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Api';
 import { CardPrintBatchModel } from '@blc-mono/members/application/models/cardPrintBatchModel';
 import { CardModel, UpdateCardModel } from '@blc-mono/members/application/models/cardModel';
+import { FixBatchModelRequest } from '@blc-mono/members/application/models/batchModel';
 
 export function adminCardRoutes(
   defaultRouteProps: DefaultRouteProps,
@@ -48,6 +49,12 @@ export function adminCardRoutes(
       name: 'AdminUpdateCardPrintBatch',
       handler: 'packages/api/members/application/handlers/admin/batch/updateCardPrintBatch.handler',
       requestModelType: CardPrintBatchModel,
+    }),
+    'POST /admin/cards/batches/{batchId}/fix': Route.createRoute({
+      ...defaultRouteProps,
+      name: 'AdminFixCardPrintBatch',
+      handler: 'packages/api/members/application/handlers/admin/batch/fixBatch.handler',
+      requestModelType: FixBatchModelRequest,
     }),
   };
 }

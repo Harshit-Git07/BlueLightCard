@@ -22,6 +22,10 @@ import { MAP_BRAND } from '@blc-mono/core/constants/common';
 import { S3 } from 'aws-sdk';
 import { S3EventRecord } from 'aws-lambda';
 import { Client } from 'basic-ftp';
+import { InboundBatchFileCardDataResponseModel } from '@blc-mono/members/application/models/InboundBatchFileCardDataResponseModel';
+import csvParser from 'csv-parser';
+import { Readable } from 'stream';
+import { BatchStatus } from '@blc-mono/members/application/models/enums/BatchStatus';
 import path from 'path';
 
 const MAX_NAME_ON_CARD_CHARACTER_LIMIT = 25;
@@ -61,6 +65,17 @@ export class BatchService {
       return await this.repository.updateBatch(batchId, batchUpdateModel);
     } catch (error) {
       logger.error({ message: 'Error updating batch', error });
+      throw error;
+    }
+  }
+
+  async getBatchEntries(batchId: string): Promise<BatchEntryModel[]> {
+    try {
+      logger.debug({ message: 'Find card IDs for batch', batchId });
+      return await this.repository.getBatchEntries(batchId);
+    } catch (error) {
+      logger.error({ message: 'Error finding card IDs for batch', error });
+      throw error;
     }
   }
 
@@ -154,7 +169,7 @@ export class BatchService {
         await this.uploadToS3(
           csvContent,
           Bucket.batchFilesBucket.bucketName,
-          this.getS3Key(currentBatchId),
+          this.getOutboundS3Key(currentBatchId),
           currentBatchId,
         );
       }
@@ -246,6 +261,132 @@ export class BatchService {
 
   private convertBufferToString(buffer: Buffer): string {
     return buffer.toString('utf-8');
+  }
+
+  async processInboundBatchFile(s3Record: S3EventRecord): Promise<void> {
+    try {
+      logger.debug({ message: 'Processing inbound batch file' });
+      const key = s3Record.s3.object.key;
+      const bucketName = Bucket.batchFilesBucket.bucketName;
+      const file = await this.downloadFileFromS3(bucketName, key);
+
+      if (Buffer.isBuffer(file.Body)) {
+        const cardDataResponse = await this.parseInboundBatchCSV(file.Body);
+        const batchIds: string[] = [];
+
+        for (const card of cardDataResponse) {
+          await this.cardService.processPrintedCard(
+            card.memberId,
+            card.cardNumber,
+            card.timePrinted,
+            card.timePosted,
+          );
+
+          // Multiple batches can be included in one response file
+          if (!batchIds.includes(card.batchId)) {
+            batchIds.push(card.batchId);
+          }
+        }
+
+        for (const batchId of batchIds) {
+          await this.updateBatch(batchId, {
+            receivedDate: new Date().toISOString(),
+            status: BatchStatus.BATCH_COMPLETE,
+            closedDate: new Date().toISOString(),
+          });
+        }
+
+        // TODO: Archive internal batch file
+      } else {
+        throw new Error('Unexpected file type');
+      }
+    } catch (error) {
+      logger.error({ message: 'Error uploading batch file', error });
+      throw error;
+    }
+  }
+
+  async fixBatch(batchId: string): Promise<void> {
+    const batchEntries = await this.getBatchEntries(batchId);
+
+    for (const batchEntry of batchEntries) {
+      const card: CardModel = await this.cardService.getCard(
+        batchEntry.memberId,
+        batchEntry.cardNumber,
+      );
+
+      const validCardStatuses = [
+        CardStatus.AWAITING_BATCHING,
+        CardStatus.ADDED_TO_BATCH,
+        CardStatus.AWAITING_POSTAGE,
+      ];
+
+      if (validCardStatuses.includes(card.cardStatus)) {
+        const timePosted = new Date().toISOString();
+        const currentDate = new Date();
+        currentDate.setDate(currentDate.getDate() - 1);
+        const timePrinted = currentDate.toISOString();
+
+        await this.cardService.processPrintedCard(
+          card.memberId,
+          card.cardNumber,
+          timePrinted,
+          timePosted,
+        );
+      }
+    }
+
+    await this.updateBatch(batchId, {
+      status: BatchStatus.BATCH_COMPLETE,
+      closedDate: new Date().toISOString(),
+    });
+  }
+
+  private async parseInboundBatchCSV(
+    csvData: string | Buffer,
+  ): Promise<Array<InboundBatchFileCardDataResponseModel>> {
+    try {
+      logger.debug({ message: 'Parsing inbound batch file' });
+      return new Promise((resolve, reject) => {
+        const inboundCardDataResponse: InboundBatchFileCardDataResponseModel[] = [];
+
+        const bufferStream = Readable.from(csvData.toString());
+        bufferStream
+          .pipe(
+            csvParser({
+              separator: '|',
+              headers: false,
+              quote: '"',
+            }),
+          )
+          .on('data', (cardData) => {
+            const inboundCardData: InboundBatchFileCardDataResponseModel =
+              InboundBatchFileCardDataResponseModel.parse({
+                memberId: cardData[0],
+                cardNumber: cardData[1],
+                timePrinted: this.transformDDMMYYYYDateToIso(cardData[2]), //dd/MM/yyyy
+                timePosted: this.transformDDMMYYYYDateToIso(cardData[3]), //dd/MM/yyyy
+                batchId: cardData[4],
+              });
+
+            inboundCardDataResponse.push(inboundCardData);
+          })
+          .on('end', () => {
+            resolve(inboundCardDataResponse);
+          })
+          .on('error', (error) => {
+            reject(error);
+          });
+      });
+    } catch (error) {
+      logger.error({ message: 'Error parsing inbound batch file', error });
+      throw error;
+    }
+  }
+
+  private transformDDMMYYYYDateToIso(dateString: string) {
+    const [day, month, year] = dateString.split('/');
+    return new Date(Number(year), Number(month) - 1, Number(day)).toISOString();
   }
 
   private async batchCardsValidForPrinting(cards: CardModel[]): Promise<Array<Array<CardModel>>> {
@@ -344,7 +485,7 @@ export class BatchService {
     return csvLine.join('\r\n');
   }
 
-  private getS3Key(batchId: string) {
+  private getOutboundS3Key(batchId: string) {
     const fileName = `${batchId}.csv`;
     const mappedBrand = MAP_BRAND[getBrandFromEnv()];
     return `${mappedBrand}/outbound/${fileName}`;

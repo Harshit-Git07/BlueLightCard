@@ -40,13 +40,12 @@ import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getBrandFromEnv, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import { createOutboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/createOutboundBatchFileCron';
-import { processInboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/processInboundBatchFileCron';
+import { retrieveInboundBatchFilesCron } from '@blc-mono/members/infrastructure/crons/retrieveInboundBatchFilesCron';
 import { createMemberProfilesPipe } from '@blc-mono/members/infrastructure/eventbridge/MemberProfilesPipe';
 import { createMemberProfileIndexer } from '@blc-mono/members/infrastructure/lambdas/createMemberProfileIndexer';
 import { createSeedOrganisations } from '@blc-mono/members/infrastructure/lambdas/createSeedOrganisations';
-import { MAP_BRAND } from '@blc-mono/core/constants/common';
-import { SSTFunction } from '@blc-mono/redemptions/infrastructure/constructs/SSTFunction';
 import { createUploadBatchFileFunction } from '@blc-mono/members/infrastructure/lambdas/createUploadBatchFileFunction';
+import { createProcessInboundBatchFileFunction } from '@blc-mono/members/infrastructure/lambdas/createProcessInboundBatchFileFunction';
 
 const SERVICE_NAME = 'members';
 
@@ -101,7 +100,15 @@ export async function MembersStack({ app, stack }: StackContext) {
       documentUpload.bucket,
       batchFilesBucket,
     );
-    processInboundBatchFileCron(stack, adminTable);
+    retrieveInboundBatchFilesCron(stack, adminTable);
+    createProcessInboundBatchFileFunction(
+      stack,
+      adminTable,
+      profilesTable,
+      organisationsTable,
+      documentUpload.bucket,
+      batchFilesBucket,
+    );
     createUploadBatchFileFunction(
       stack,
       adminTable,
@@ -231,7 +238,7 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
     }),
     ...adminCardRoutes({
       ...defaultRouteProps,
-      bind: [profilesTable, adminTable],
+      bind: [profilesTable, adminTable, organisationsTable],
     }),
     ...adminBatchRoutes({
       ...defaultRouteProps,

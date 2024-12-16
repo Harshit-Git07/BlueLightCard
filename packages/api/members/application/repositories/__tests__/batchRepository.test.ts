@@ -1,4 +1,9 @@
-import { DynamoDBDocumentClient, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  PutCommand,
+  QueryCommand,
+  UpdateCommand,
+} from '@aws-sdk/lib-dynamodb';
 import { BatchRepository } from '@blc-mono/members/application/repositories/batchRepository';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -6,7 +11,12 @@ import {
   UpdateBatchModel,
 } from '@blc-mono/members/application/models/batchModel';
 import { BatchType } from '@blc-mono/members/application/models/enums/BatchType';
-import { BATCH, batchKey, cardKey } from '@blc-mono/members/application/repositories/repository';
+import {
+  BATCH,
+  batchKey,
+  CARD,
+  cardKey,
+} from '@blc-mono/members/application/repositories/repository';
 import { BatchStatus } from '@blc-mono/members/application/models/enums/BatchStatus';
 import { BatchEntryModel } from '@blc-mono/members/application/models/batchEntryModel';
 
@@ -23,6 +33,7 @@ let dynamoDBMock = {
 };
 const putCommandMock = PutCommand as jest.MockedClass<typeof PutCommand>;
 const updateCommandMock = UpdateCommand as jest.MockedClass<typeof UpdateCommand>;
+const queryCommandMock = QueryCommand as jest.MockedClass<typeof QueryCommand>;
 
 describe('BatchRepository', () => {
   beforeEach(() => {
@@ -115,6 +126,23 @@ describe('BatchRepository', () => {
           ':sentDate': '2023-01-01T00:00:00.000Z',
         },
         UpdateExpression: 'SET #sentDate = :sentDate ',
+      });
+    });
+  });
+
+  describe('getBatchEntries', () => {
+    it('should get batch entries', async () => {
+      dynamoDBMock.send.mockResolvedValue({});
+      await repository.getBatchEntries(batchId);
+
+      expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(QueryCommand));
+      expect(queryCommandMock).toHaveBeenCalledWith({
+        TableName: 'memberAdmin',
+        KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
+        ExpressionAttributeValues: {
+          ':pk': batchKey(batchId),
+          ':sk': CARD,
+        },
       });
     });
   });

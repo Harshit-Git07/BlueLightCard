@@ -121,6 +121,16 @@ beforeEach(() => {
 describe('BatchService', () => {
   const bucketName = 'batchFileBucketMock';
   const key = `blc-uk/outbound/${batchId}.csv`;
+  const record = {
+    s3: {
+      bucket: {
+        name: bucketName,
+      },
+      object: {
+        key: key,
+      },
+    },
+  } as S3EventRecord;
   describe('createBatch', () => {
     it('should throw error if creating batch fails', async () => {
       repositoryMock.createBatch.mockRejectedValue(new Error('Error creating batch'));
@@ -163,6 +173,107 @@ describe('BatchService', () => {
       await batchService.updateBatch(batchId, updateBatchModel);
 
       expect(repositoryMock.updateBatch).toHaveBeenCalledWith(batchId, updateBatchModel);
+    });
+  });
+
+  describe('getBatchEntries', () => {
+    it('should throw error if getting batch entries fails', async () => {
+      repositoryMock.getBatchEntries.mockRejectedValue(new Error('Error getting batch entries'));
+
+      await expect(batchService.getBatchEntries(batchId)).rejects.toThrow(
+        'Error getting batch entries',
+      );
+    });
+
+    it('should get batch entries successfully', async () => {
+      const batchEntry: BatchEntryModel = {
+        batchId: batchId,
+        cardNumber: cardNumber,
+        memberId: memberId,
+        applicationId: applicationId,
+      };
+      repositoryMock.getBatchEntries.mockResolvedValue([batchEntry]);
+
+      const result = await batchService.getBatchEntries(batchId);
+
+      expect(result).toEqual([batchEntry]);
+    });
+  });
+
+  describe('fixBatch', () => {
+    it('should throw error if getting batch entries fails', async () => {
+      repositoryMock.getBatchEntries.mockRejectedValue(new Error('Error getting batch entries'));
+
+      await expect(batchService.getBatchEntries(batchId)).rejects.toThrow(
+        'Error getting batch entries',
+      );
+    });
+
+    it('should skip processing card if cards in batch are not a valid status', async () => {
+      const batchEntry: BatchEntryModel = {
+        batchId: batchId,
+        cardNumber: cardNumber,
+        memberId: memberId,
+        applicationId: applicationId,
+      };
+      const card: CardModel = {
+        cardStatus: CardStatus.PHYSICAL_CARD,
+        createdDate: '2023-01-01T00:00:00.000Z',
+        nameOnCard: 'John Doe',
+        purchaseDate: '2023-01-01T00:00:00.000Z',
+        memberId,
+        cardNumber,
+        expiryDate: '2024-01-01',
+      };
+      repositoryMock.getBatchEntries.mockResolvedValue([batchEntry, batchEntry]);
+      cardServiceMock.getCard.mockResolvedValue(card);
+
+      await batchService.fixBatch(batchId);
+
+      expect(repositoryMock.getBatchEntries).toHaveBeenCalled();
+      expect(cardServiceMock.getCard).toHaveBeenCalledWith(
+        batchEntry.memberId,
+        batchEntry.cardNumber,
+      );
+      expect(cardServiceMock.processPrintedCard).not.toHaveBeenCalled();
+    });
+
+    it('should fix batch successfully', async () => {
+      const batchEntry: BatchEntryModel = {
+        batchId: batchId,
+        cardNumber: cardNumber,
+        memberId: memberId,
+        applicationId: applicationId,
+      };
+      const card: CardModel = {
+        cardStatus: CardStatus.ADDED_TO_BATCH,
+        createdDate: '2023-01-01T00:00:00.000Z',
+        nameOnCard: 'John Doe',
+        purchaseDate: '2023-01-01T00:00:00.000Z',
+        memberId,
+        cardNumber,
+        expiryDate: '2024-01-01',
+      };
+      repositoryMock.getBatchEntries.mockResolvedValue([batchEntry, batchEntry]);
+      cardServiceMock.getCard.mockResolvedValue(card);
+
+      await batchService.fixBatch(batchId);
+
+      expect(repositoryMock.getBatchEntries).toHaveBeenCalled();
+      expect(cardServiceMock.getCard).toHaveBeenCalledWith(
+        batchEntry.memberId,
+        batchEntry.cardNumber,
+      );
+      expect(cardServiceMock.processPrintedCard).toHaveBeenCalledWith(
+        card.memberId,
+        card.cardNumber,
+        '2022-12-31T00:00:00.000Z',
+        '2023-01-01T00:00:00.000Z',
+      );
+      expect(repositoryMock.updateBatch).toHaveBeenCalledWith(batchId, {
+        status: BatchStatus.BATCH_COMPLETE,
+        closedDate: '2023-01-01T00:00:00.000Z',
+      });
     });
   });
 
@@ -240,6 +351,59 @@ describe('BatchService', () => {
         Key: `blc-uk/outbound/${batchId}.csv`,
         Body: expectedBody,
         ContentType: 'text/csv',
+      });
+    });
+  });
+
+  describe('processInboundBatchFile', () => {
+    it('should throw error if downloading file from s3 fails', async () => {
+      S3.prototype.getObject = jest.fn().mockImplementation(() => ({
+        promise: jest.fn().mockRejectedValue(new Error('Error downloading file from S3')),
+      }));
+
+      await expect(batchService.processInboundBatchFile(record)).rejects.toThrow(
+        'Error downloading file from S3',
+      );
+    });
+
+    it('should throw error if file is unexpected type', async () => {
+      const nonBufferFileType = { Body: {} } as S3.GetObjectOutput;
+      S3.prototype.getObject = jest.fn().mockImplementation(() => ({
+        promise: jest.fn().mockResolvedValue(nonBufferFileType),
+      }));
+
+      await expect(batchService.processInboundBatchFile(record)).rejects.toThrow(
+        'Unexpected file type',
+      );
+    });
+
+    it('should successfully parse csv and process cards and batches', async () => {
+      const fileContent =
+        `b607a45c-60e2-4935-8c35-dd2c582d58bb|BLC0879245|12/03/2026|13/03/2026|${batchId}\n` +
+        `385c10cf-ca9b-4494-b1ce-3fcf787bad99|BLC0918746|12/03/2026|13/03/2026|${batchId}`;
+      const s3File = { Body: Buffer.from(fileContent) } as S3.GetObjectOutput;
+      S3.prototype.getObject = jest.fn().mockImplementation(() => ({
+        promise: jest.fn().mockResolvedValue(s3File),
+      }));
+
+      await batchService.processInboundBatchFile(record);
+
+      expect(cardServiceMock.processPrintedCard).toHaveBeenCalledWith(
+        'b607a45c-60e2-4935-8c35-dd2c582d58bb',
+        'BLC0879245',
+        '2026-03-12T00:00:00.000Z',
+        '2026-03-13T00:00:00.000Z',
+      );
+      expect(cardServiceMock.processPrintedCard).toHaveBeenCalledWith(
+        '385c10cf-ca9b-4494-b1ce-3fcf787bad99',
+        'BLC0918746',
+        '2026-03-12T00:00:00.000Z',
+        '2026-03-13T00:00:00.000Z',
+      );
+      expect(repositoryMock.updateBatch).toHaveBeenCalledWith(batchId, {
+        status: BatchStatus.BATCH_COMPLETE,
+        receivedDate: '2023-01-01T00:00:00.000Z',
+        closedDate: '2023-01-01T00:00:00.000Z',
       });
     });
   });

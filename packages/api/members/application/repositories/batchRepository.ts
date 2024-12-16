@@ -1,9 +1,10 @@
-import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import { defaultDynamoDbClient } from '@blc-mono/members/application/repositories/dynamoClient';
 import { Table } from 'sst/node/table';
 import {
   BATCH,
   batchKey,
+  CARD,
   cardKey,
   Repository,
 } from '@blc-mono/members/application/repositories/repository';
@@ -65,5 +66,23 @@ export class BatchRepository extends Repository {
         ...updateBatchModel,
       },
     });
+  }
+
+  async getBatchEntries(batchId: string): Promise<BatchEntryModel[]> {
+    const queryParams = {
+      TableName: this.tableName,
+      KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
+      ExpressionAttributeValues: {
+        ':pk': batchKey(batchId),
+        ':sk': CARD,
+      },
+    };
+    const result = await this.dynamoDB.send(new QueryCommand(queryParams));
+
+    if (!result.Items || result.Items.length === 0) {
+      return [];
+    }
+
+    return result.Items.map((employer) => BatchEntryModel.parse(employer));
   }
 }

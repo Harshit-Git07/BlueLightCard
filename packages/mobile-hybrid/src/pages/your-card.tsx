@@ -2,6 +2,7 @@ import { NextPage } from 'next';
 import { BRAND } from '@/globals';
 import {
   ButtonV2 as Button,
+  CardVerificationAlerts,
   CopyButton,
   fonts,
   NoCardImage,
@@ -53,6 +54,8 @@ const MyCardPage: NextPage = () => {
             />
           </div>
         </div>
+
+        <CardVerificationAlerts memberUuid={memberUuid} />
 
         {hasGenerated ? (
           <div className={`absolute bottom-0 pb-[24px] flex flex-col items-center w-full`}>

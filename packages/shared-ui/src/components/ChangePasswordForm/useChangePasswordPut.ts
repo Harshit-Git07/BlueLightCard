@@ -1,7 +1,7 @@
 import { usePlatformAdapter } from '../../adapters';
 import { useMutation } from '@tanstack/react-query';
-import { V5_API_URL } from 'client/src/common/globals/apiUrl';
 import { UpdatePasswordPayload, UpdatePasswordResponse } from './types';
+import { V5_API_URL } from '../../constants';
 
 export type ApiMessage = {
   code: string;

@@ -1,6 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AccountDetails, useGetCustomerProfile } from '@bluelightcard/shared-ui';
+import {
+  AccountDetails,
+  useGetCustomerProfile,
+  CardVerificationAlerts,
+} from '@bluelightcard/shared-ui';
 import { BRAND } from '@/global-vars';
 import NavBar from '../../components/NavBar/NavBar';
 import { LayoutProps } from './types';
@@ -59,7 +63,9 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
         onToggleMobileSideBar={toggleDrawer}
       />
 
-      <div className="pl-4 mt-16 flex flex-col hidden tablet:block desktop:container mx-5 desktop:mx-auto">
+      <CardVerificationAlerts memberUuid={memberUuid} />
+
+      <div className="pl-[16px] mt-[32px] flex flex-col hidden tablet:block desktop:container mx-[20px] desktop:mx-auto">
         <AccountDetails
           accountNumber={customerProfile?.card.cardNumber}
           firstName="Name"

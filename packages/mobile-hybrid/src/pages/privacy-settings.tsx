@@ -1,10 +1,18 @@
 import { NextPage } from 'next';
 import useRouterReady from '@/hooks/useRouterReady';
+import { CardVerificationAlerts } from '@bluelightcard/shared-ui';
 
 const PrivacySettingsPage: NextPage = () => {
   useRouterReady();
 
-  return <div>Privacy settings page</div>;
+  const memberUuid = 'test';
+
+  return (
+    <>
+      <CardVerificationAlerts memberUuid={memberUuid} />
+      <div>Privacy settings page</div>
+    </>
+  );
 };
 
 export default PrivacySettingsPage;

@@ -1,6 +1,7 @@
 export { default as AmplitudeEvents } from './utils/amplitude/events';
 export { default as Button } from './components/Button';
 export { default as ButtonV2 } from './components/Button-V2';
+export { default as CardVerificationAlerts } from './components/CardVerificationAlerts';
 export { default as Drawer } from './components/Drawer';
 export { default as Search } from './components/Search';
 export { default as SearchBar } from './components/SearchBar';

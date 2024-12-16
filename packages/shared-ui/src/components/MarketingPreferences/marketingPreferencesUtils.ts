@@ -9,8 +9,8 @@ import {
   preferenceDefinitions,
 } from './MarketingPreferencesTypes';
 import { jsonOrNull } from '../../utils/jsonUtils';
-import { V5_API_URL } from 'client/src/common/globals/apiUrl';
 import { compareStringsAlphabetically } from '../../utils/compareStringsWithLocale';
+import { V5_API_URL } from '../../constants';
 
 export const marketingPreferencesQueryKey = 'members/preferences/memberUuid';
 

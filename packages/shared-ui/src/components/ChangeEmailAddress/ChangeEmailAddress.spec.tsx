@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import userEvent from '@testing-library/user-event';
 import { act } from 'react';
 import changeEmailAddressText from './ChangeEmailAddressText';
+import { V5_API_URL } from '@/constants';
 
 const createTestQueryClient = () =>
   new QueryClient({
@@ -27,9 +28,9 @@ const testHarness = (status = 200, data = {}) => {
       </QueryClientProvider>
     </PlatformAdapterProvider>,
   );
-  const currentEmail = screen.getByLabelText(changeEmailAddressText.currentEmail.label, {});
-  const newEmail = screen.getByLabelText(changeEmailAddressText.newEmail.label, {});
-  const confirmEmail = screen.getByLabelText(changeEmailAddressText.confirmEmail.label, {});
+  const currentEmail = screen.getAllByLabelText(changeEmailAddressText.currentEmail.label, {})[0];
+  const newEmail = screen.getAllByLabelText(changeEmailAddressText.newEmail.label, {})[0];
+  const confirmEmail = screen.getAllByLabelText(changeEmailAddressText.confirmEmail.label, {})[0];
   const saveBtn = screen.getByText('Save', { exact: true });
   const cancelBtn = screen.getByText('Cancel', { exact: true });
   return {
@@ -78,14 +79,15 @@ describe('ChangeEmailAddress component', () => {
 
       // calls the API
       await waitFor(async () => {
-        expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith('/api/v1/email/update', {
-          method: 'PUT',
-          body: JSON.stringify({
-            email: 'foo@bar.com',
-            memberUuid: 'abcd-1234',
-            action: 'change',
-          }),
-        });
+        expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(
+          `${V5_API_URL.Profile('abcd-1234')}/email`,
+          {
+            method: 'PUT',
+            body: JSON.stringify({
+              newEmail: 'foo@bar.com',
+            }),
+          },
+        );
       });
 
       // should be on the verification screen

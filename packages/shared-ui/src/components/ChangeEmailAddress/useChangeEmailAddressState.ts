@@ -40,12 +40,11 @@ const useChangeEmailAddressState = (email: string, memberUuid: string) => {
     }
   };
 
-  const onSubmit = (action: 'change' | 'resend') => async () => {
+  const onSubmit = () => async () => {
     if (isPending) return;
     setGenericError('');
     const { status, data } = await mutateAsync({
       email: newEmail,
-      action,
     });
 
     if (status >= 400) {

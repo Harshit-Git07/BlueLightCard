@@ -27,7 +27,7 @@ const ChangeEmailAddressForm: FC<ChangeEmailAddressFormProps> = ({
   confirmEmailError,
 }) => {
   return (
-    <form onSubmit={onSubmit}>
+    <form className="h-full" onSubmit={onSubmit}>
       <AccountDrawer
         primaryButtonLabel={'Save'}
         primaryButtonOnClick={onSubmit}

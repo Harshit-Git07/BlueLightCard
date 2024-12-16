@@ -27,7 +27,7 @@ const ChangeEmailAddress: FC<ChangeEmailAddressFormProps> = ({ email, memberUuid
     return (
       <ChangeEmailAddressVerification
         newEmail={newEmail}
-        onResend={onSubmit('resend')}
+        onResend={onSubmit()}
         isDisabled={isDisabled}
       />
     );
@@ -42,7 +42,7 @@ const ChangeEmailAddress: FC<ChangeEmailAddressFormProps> = ({ email, memberUuid
       confirmEmail={confirmEmail}
       confirmEmailError={confirmEmailError}
       isDisabled={isDisabled}
-      onSubmit={onSubmit('change')}
+      onSubmit={onSubmit()}
       close={close}
     />
   );

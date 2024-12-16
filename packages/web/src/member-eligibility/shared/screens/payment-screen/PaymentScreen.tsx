@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import LoadingSpinner from '@bluelightcard/shared-ui/components/LoadingSpinner';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
@@ -16,6 +16,7 @@ import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/scree
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
 import { paymentEvents } from '@/root/src/member-eligibility/shared/screens/payment-screen/ampltitude-events/PaymentEvents';
+import { computeValue } from '@/root/src/member-eligibility/shared/utils/ComputeValue';
 
 export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDetailsState }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
@@ -25,33 +26,34 @@ export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDet
 
   const getClientSecretResult = useClientSecret();
 
-  const clientSecret = useMemo(() => {
+  const clientSecret = computeValue(() => {
     if (isSuccessResult(getClientSecretResult)) {
       return getClientSecretResult.clientSecret;
     }
 
     return undefined;
-  }, [getClientSecretResult]);
+  });
 
-  const clientSecretResultError = useMemo(() => {
+  const clientSecretResultError = computeValue(() => {
     if (isSuccessResult(getClientSecretResult)) return undefined;
 
     return getClientSecretResult?.error;
-  }, [getClientSecretResult]);
+  });
 
-  const showLoadingSpinner = useMemo(() => {
+  const showLoadingSpinner = computeValue(() => {
     return getClientSecretResult === undefined;
-  }, [getClientSecretResult]);
+  });
 
-  const subtitle = useMemo(() => {
+  const subtitle = computeValue(() => {
     const currencySymbol = process.env.NEXT_PUBLIC_CURRENCY_SYMBOL ?? '';
     const price = process.env.NEXT_PUBLIC_MEMBERSHIP_PRICE ?? '';
 
     return `Unlock two years of exclusive access for just ${currencySymbol}${price}`;
-  }, []);
+  });
 
-  const onBack = useMemo(() => {
+  const onBack = computeValue(() => {
     logAnalyticsEvent(paymentEvents.onBackCLicked(eligibilityDetails));
+
     if (eligibilityDetails.flow === 'Sign Up') {
       return () => {
         setEligibilityDetails({
@@ -61,15 +63,22 @@ export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDet
       };
     }
 
-    if (eligibilityDetails.fileVerification === undefined) return undefined;
+    if (eligibilityDetails.hasJumpedStraightToPayment) {
+      return () => {
+        setEligibilityDetails({
+          ...eligibilityDetails,
+          currentScreen: 'Interstitial Screen',
+        });
+      };
+    }
 
     return () => {
       setEligibilityDetails({
         ...eligibilityDetails,
-        currentScreen: 'File Upload Verification Screen',
+        currentScreen: 'Verification Method Screen',
       });
     };
-  }, [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails]);
+  });
 
   const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 
@@ -98,7 +107,12 @@ export const PaymentScreen: FC<VerifyEligibilityScreenProps> = ({ eligibilityDet
             <div className="flex flex-col gap-2">
               <div>{clientSecretResultError}</div>
 
-              <Button onClick={onBack} size="Large" variant={ThemeVariant.Secondary}>
+              <Button
+                data-testid="back-button"
+                onClick={onBack}
+                size="Large"
+                variant={ThemeVariant.Secondary}
+              >
                 Back
               </Button>
             </div>

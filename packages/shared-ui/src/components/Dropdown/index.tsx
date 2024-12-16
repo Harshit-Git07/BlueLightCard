@@ -36,6 +36,8 @@ const Dropdown: FC<DropdownProps> = ({
   error = false,
   selectedValue,
   maxItemsShown,
+  required,
+  ...props
 }) => {
   const [selectedOption, setSelectedOption] = useState(getSelectedOption(options, selectedValue));
   const [isListboxOpen, setIsListboxOpen] = useState(false);
@@ -248,7 +250,11 @@ const Dropdown: FC<DropdownProps> = ({
   }, [error]);
 
   return (
-    <div className={`${className} group relative inline-block w-full`} ref={dropdownRef}>
+    <div
+      className={`${className} group relative inline-block w-full`}
+      ref={dropdownRef}
+      data-testid={props['data-testid']}
+    >
       {label && (
         <DropdownLabel
           labelId={labelId}
@@ -289,6 +295,7 @@ const Dropdown: FC<DropdownProps> = ({
           onKeyDown={onComboboxKeyDown}
           value={inputValue}
           data-testid="combobox"
+          required={required}
         />
 
         <span id={dropdownPlaceholderId} className={placeholderClassName}>

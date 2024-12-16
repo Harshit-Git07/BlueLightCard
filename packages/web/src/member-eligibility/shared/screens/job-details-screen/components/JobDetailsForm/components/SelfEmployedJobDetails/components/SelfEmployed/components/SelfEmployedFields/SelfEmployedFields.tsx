@@ -22,6 +22,7 @@ export const SelfEmployedFields: FC<Props> = ({ eligibilityDetailsState, onJobTi
     return (
       <div className="flex flex-col w-full gap-[16px]">
         <TextInput
+          data-testid="abn-input"
           placeholder="ABN"
           onChange={onAbnChange}
           value={eligibilityDetails.jobDetailsAus?.australianBusinessNumber}
@@ -33,12 +34,14 @@ export const SelfEmployedFields: FC<Props> = ({ eligibilityDetailsState, onJobTi
   return (
     <div className="flex flex-col w-full gap-[16px]">
       <TextInput
+        data-testid="employer-input"
         placeholder="Employer"
         onChange={onEmployerChange}
         value={eligibilityDetails.jobDetailsAus?.employerAus}
       />
 
       <TextInput
+        data-testid="job-title"
         placeholder="Job title"
         onChange={onJobTitleChange}
         value={eligibilityDetails.jobTitle}

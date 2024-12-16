@@ -39,6 +39,7 @@ export const NormalJobDetails: FC<NormalJobDetailsProps> = ({
   return (
     <div className="flex flex-col w-full gap-[16px]">
       <Dropdown
+        data-testid="organisation-dropdown"
         placeholder="Select your organisation"
         options={organisations}
         maxItemsShown={4}
@@ -50,6 +51,7 @@ export const NormalJobDetails: FC<NormalJobDetailsProps> = ({
 
       {employers !== undefined && employers.length !== 0 && (
         <Dropdown
+          data-testid="employer-dropdown"
           placeholder="Select your employer"
           options={employers}
           maxItemsShown={4}
@@ -62,6 +64,7 @@ export const NormalJobDetails: FC<NormalJobDetailsProps> = ({
       {(employers?.length === 0 || eligibilityDetails.employer) && (
         <div className="w-full flex flex-col gap-[16px]">
           <TextInput
+            data-testid="job-title"
             placeholder="Enter job title"
             onChange={onJobTitleChange}
             value={eligibilityDetails.jobTitle}

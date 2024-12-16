@@ -25,6 +25,7 @@ const TextInput: FC<TextInputProps> = ({
   tooltipText,
   message,
   helpText,
+  ...props
 }) => {
   const remainingChars = maxLength - (value?.length ?? 0);
 
@@ -82,6 +83,7 @@ const TextInput: FC<TextInputProps> = ({
             aria-invalid={!isValid}
             aria-required={required}
             aria-describedby={getAriaDescribedBy()}
+            data-testid={props['data-testid']}
           />
           <FloatingPlaceholder htmlFor={elementId} hasValue={hasValue} isDisabled={isDisabled}>
             {placeholder}

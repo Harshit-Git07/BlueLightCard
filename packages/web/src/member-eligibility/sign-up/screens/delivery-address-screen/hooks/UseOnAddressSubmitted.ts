@@ -1,5 +1,9 @@
 import { useCallback } from 'react';
-import { EligibilityDetailsAddress } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import {
+  EligibilityDetails,
+  EligibilityDetailsAddress,
+  EligibilityScreen,
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import { deliveryAddressEvents } from '@/root/src/member-eligibility/sign-up/screens/delivery-address-screen/amplitude-events/DeliveryAddress';
@@ -28,7 +32,7 @@ export function useOnAddressSubmitted(eligibilityDetailsState: EligibilityDetail
     updateMemberProfile().then(() => {
       setEligibilityDetails({
         ...eligibilityDetails,
-        currentScreen: 'Payment Screen',
+        currentScreen: getNextScreen(eligibilityDetails),
         address: updatedAddress,
       });
     });
@@ -39,4 +43,12 @@ export function useOnAddressSubmitted(eligibilityDetailsState: EligibilityDetail
     updateMemberProfile,
     setEligibilityDetails,
   ]);
+}
+
+function getNextScreen(eligibilityDetails: EligibilityDetails): EligibilityScreen {
+  if (eligibilityDetails.canSkipPayment) {
+    return 'Success Screen';
+  }
+
+  return 'Payment Screen';
 }

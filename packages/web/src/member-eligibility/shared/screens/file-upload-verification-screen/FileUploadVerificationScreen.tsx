@@ -117,7 +117,7 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails]);
 
   return (
-    <EligibilityScreen>
+    <EligibilityScreen data-testid="file-upload-screen">
       <EligibilityBody>
         <div className="flex flex-col gap-[24px]">
           <EligibilityHeading
@@ -133,6 +133,7 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
             <ListSelector
               {...firstVerificationMethod}
+              data-testid="verification-method-1"
               className={`${
                 firstVerificationMethod.showTrailingIcon ? 'cursor-pointer' : 'cursor-default'
               }`}
@@ -146,6 +147,7 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
                 <ListSelector
                   {...secondVerificationMethod}
+                  data-testid="verification-method-2"
                   className={`${
                     secondVerificationMethod.showTrailingIcon ? 'cursor-pointer' : 'cursor-default'
                   }`}

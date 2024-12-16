@@ -1,6 +1,7 @@
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 export type DropdownProps = {
+  className?: string;
   options: DropdownOptions;
   placeholder: string;
   disabled?: boolean;
@@ -17,7 +18,8 @@ export type DropdownProps = {
   error?: boolean;
   selectedValue?: string;
   maxItemsShown?: number;
-  className?: string;
+  required?: boolean;
+  'data-testid'?: string;
 };
 
 export type DropdownOptions = DropdownOption[];

@@ -14,6 +14,7 @@ const ListSelector: FC<ListSelectorProps> = ({
   tag,
   description,
   showTrailingIcon = true,
+  ...props
 }) => {
   const [currentState, setCurrentState] = useState(state);
 
@@ -72,6 +73,7 @@ const ListSelector: FC<ListSelectorProps> = ({
       onKeyDown={handleKeyDown}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      data-testid={props['data-testid']}
     >
       <div className="flex flex-col gap-[4px] items-start w-full text-left">
         <div className="flex flex-row items-center flex-wrap gap-[8px] w-full">

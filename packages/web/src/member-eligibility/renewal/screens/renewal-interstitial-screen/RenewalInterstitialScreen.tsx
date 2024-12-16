@@ -67,7 +67,7 @@ export const RenewalInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
       title={title}
       eligibilityDetails={eligibilityDetails}
       fuzzyFrontEndButtons={fuzzyFrontEndButtons}
-      data-testid="Renewal Intersititial Screen"
+      data-testid="renewal-interstitial-screen"
     >
       {showReviewAccountDetailsCard && (
         <Card
@@ -111,6 +111,7 @@ export const RenewalInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
           setEligibilityDetails({
             ...eligibilityDetails,
             currentScreen: 'Payment Screen',
+            hasJumpedStraightToPayment: true,
           });
         }}
         {...skipToPaymentCardProps}

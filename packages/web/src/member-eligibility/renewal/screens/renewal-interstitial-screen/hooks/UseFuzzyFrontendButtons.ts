@@ -22,7 +22,6 @@ export function useFuzzyFrontendButtons(
         onClick: () => {
           setEligibilityDetails({
             ...eligibilityDetails,
-            skipAccountDetails: true,
             currentScreen: 'Employment Status Screen',
           });
         },

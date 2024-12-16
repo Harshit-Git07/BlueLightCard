@@ -26,7 +26,7 @@ describe('given the layout is rendered on a desktop or tablet', () => {
   });
 
   it('then it renders successfully', () => {
-    const interstitialScreen = screen.getByTestId('SignupInterstitialScreen');
+    const interstitialScreen = screen.getByTestId('signup-interstitial-screen');
     expect(interstitialScreen).toBeTruthy();
   });
 });
@@ -41,7 +41,7 @@ describe('given the layout is rendered on mobile', () => {
   });
 
   it('then it renders successfully', () => {
-    const interstitialScreen = screen.getByTestId('SignupInterstitialScreen');
+    const interstitialScreen = screen.getByTestId('signup-interstitial-screen');
     expect(interstitialScreen).toBeTruthy();
   });
 });

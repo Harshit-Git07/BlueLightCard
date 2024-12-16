@@ -59,6 +59,7 @@ export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
           We’ve sent an email to <b>{eligibilityDetails.emailVerification}</b> with a link to
           confirm your eligibility.{' '}
           <button
+            data-testid="edit-email-button"
             className={`${fonts.body} ${colours.textPrimary} underline cursor-pointer bg-transparent border-none`}
             aria-label="Edit email"
             type="button"

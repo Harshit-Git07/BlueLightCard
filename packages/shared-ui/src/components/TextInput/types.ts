@@ -19,4 +19,5 @@ export interface TextInputProps {
   tooltipText?: string;
   message?: string;
   helpText?: string;
+  'data-testid'?: string;
 }

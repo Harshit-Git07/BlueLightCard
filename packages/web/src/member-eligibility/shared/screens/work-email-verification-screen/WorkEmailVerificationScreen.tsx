@@ -57,7 +57,12 @@ export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
           <div className="flex flex-col gap-[12px]">
             <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>VERIFICATION METHOD</p>
 
-            <ListSelector title="Work Email" state={ListSelectorState.Selected} onClick={onBack} />
+            <ListSelector
+              data-testid="verification-method"
+              title="Work Email"
+              state={ListSelectorState.Selected}
+              onClick={onBack}
+            />
           </div>
 
           <TextInput

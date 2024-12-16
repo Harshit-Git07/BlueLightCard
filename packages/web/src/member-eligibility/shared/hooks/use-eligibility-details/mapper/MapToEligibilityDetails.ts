@@ -31,7 +31,6 @@ export async function mapToEligibilityDetails(
     employer: await getEmployer(memberProfile),
     jobTitle: memberProfile.jobTitle,
     promoCode: getPromoCode(memberProfile),
-    skipAccountDetails: false, // TODO: Find out how to extract this
     requireMultipleIds: false, // TODO: Find out how to extract this
     canSkipIdVerification: false, // TODO: Find out how to extract this
     canSkipPayment: false, // TODO: Find out how to extract this

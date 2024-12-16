@@ -35,7 +35,7 @@ export const RenewalAccountDetailsScreen: FC<VerifyEligibilityScreenProps> = ({
   const fuzzyFrontendButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 
   return (
-    <EligibilityScreen>
+    <EligibilityScreen data-testid="account-details-screen">
       <EligibilityBody className="gap-[24px]">
         <EligibilityHeading
           title="Review Account Details"
@@ -81,11 +81,17 @@ export const RenewalAccountDetailsScreen: FC<VerifyEligibilityScreenProps> = ({
         </div>
 
         <div className="flex flex-row items-center justify-between w-full gap-[8px]">
-          <Button variant={ThemeVariant.Secondary} size="Large" onClick={handleBack}>
+          <Button
+            data-testid="back-button"
+            variant={ThemeVariant.Secondary}
+            size="Large"
+            onClick={handleBack}
+          >
             Back
           </Button>
 
           <Button
+            data-testid="next-button"
             size="Large"
             className="flex-1"
             onClick={handleNext}

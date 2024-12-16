@@ -72,9 +72,10 @@ const PaymentForm: FC<Props> = ({
 
       {errorMessage && <p className={`${colours.textError} mt-[6px]`}>{errorMessage}</p>}
 
-      <div className="flex flex-row gap-2 mt-[24px]">
+      <div className="flex flex-row gap-[8px] mt-[24px]">
         {onBackButtonClicked && (
           <Button
+            data-testid="back-button"
             disabled={buttonsDisabled}
             onClick={onBackButtonClicked}
             size="Large"

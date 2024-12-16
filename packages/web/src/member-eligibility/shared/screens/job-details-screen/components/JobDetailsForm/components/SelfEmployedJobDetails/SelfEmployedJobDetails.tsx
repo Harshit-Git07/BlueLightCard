@@ -20,6 +20,7 @@ export const SelfEmployedJobDetails: FC<Props> = ({ eligibilityDetailsState }) =
   return (
     <div className="flex flex-col w-full gap-[16px]">
       <Dropdown
+        data-testid="organisation-dropdown"
         placeholder="Select your organisation"
         options={organisations}
         maxItemsShown={4}

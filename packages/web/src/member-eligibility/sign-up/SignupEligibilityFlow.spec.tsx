@@ -1,10 +1,17 @@
 import '@testing-library/jest-dom';
-import { act, fireEvent, screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { SignupEligibilityFlow } from './SignupEligibilityFlow';
 import { uploadFileToServiceLayer } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/components/hooks/use-file-upload-state/service-layer/UploadFile';
 import { useUpdateMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/UseUpdateMemberProfile';
 import { renderWithMockedPlatformAdapter } from '../shared/testing/MockedPlatformAdaptor';
+import { mockStripe } from '@/root/src/member-eligibility/shared/testing/MockStripe';
+import { useOrganisations } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/UseOrganisations';
+import { useEmployers } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-employers/UseEmployers';
+import { IdRequirementDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import { givenPaymentIsSubmitted } from '@/root/src/member-eligibility/shared/testing/end-to-end-test-helpers/PaymentSubmission';
+import { givenJobDetailsAreFilledIn } from '@/root/src/member-eligibility/shared/testing/end-to-end-test-helpers/JobDetailsSubmission';
+import { givenAddressIsSubmitted } from '@/root/src/member-eligibility/shared/testing/end-to-end-test-helpers/AddressSubmission';
 
 jest.mock('react-use');
 jest.mock('next/navigation', () => ({
@@ -16,6 +23,17 @@ jest.mock(
 jest.mock(
   '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/UseUpdateMemberProfile'
 );
+jest.mock('@/root/src/member-eligibility/shared/screens/payment-screen/hooks/UseClientSecret');
+jest.mock('@/root/src/member-eligibility/shared/screens/payment-screen/providers/Stripe');
+jest.mock('@stripe/react-stripe-js');
+jest.mock(
+  '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/UseOrganisations'
+);
+jest.mock(
+  '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-employers/UseEmployers'
+);
+
+mockStripe();
 
 const pngFile = new File(['(⌐□_□)'], 'test.png', { type: 'image/png' });
 const pdfFile = new File(['(⌐□_□)'], 'test.pdf', { type: 'application/pdf' });
@@ -24,24 +42,106 @@ const uploadFileToServiceLayerMock = jest.mocked(uploadFileToServiceLayer);
 const useUpdateMemberProfileMock = jest.mocked(useUpdateMemberProfile);
 
 const updateMemberProfileMock = jest.fn();
+const useOrganisationsMock = jest.mocked(useOrganisations);
+const useEmployersMock = jest.mocked(useEmployers);
 
 beforeEach(() => {
   uploadFileToServiceLayerMock.mockResolvedValue(Promise.resolve());
   useUpdateMemberProfileMock.mockReturnValue(updateMemberProfileMock);
   updateMemberProfileMock.mockResolvedValue(Promise.resolve());
+
+  const singleIdRequirements: IdRequirementDetails[] = [
+    {
+      type: 'email',
+      title: 'Email',
+      description: '',
+      guidelines: '',
+      required: false,
+    },
+    {
+      type: 'file upload',
+      title: 'File',
+      description: '',
+      guidelines: '',
+      required: false,
+    },
+  ];
+  const multiIdRequirements: IdRequirementDetails[] = [
+    {
+      type: 'file upload',
+      title: 'Required file',
+      description: '',
+      guidelines: '',
+      required: true,
+    },
+    {
+      type: 'file upload',
+      title: 'Optional file 1',
+      description: '',
+      guidelines: '',
+      required: false,
+    },
+    {
+      type: 'file upload',
+      title: 'Optional file 2',
+      description: '',
+      guidelines: '',
+      required: false,
+    },
+  ];
+  useOrganisationsMock.mockReturnValue([
+    {
+      id: 'single-id-org',
+      label: 'Single ID Org',
+      idRequirements: singleIdRequirements,
+    },
+    {
+      id: 'multi-id-org',
+      label: 'Multi-ID Org',
+      idRequirements: multiIdRequirements,
+      requireMultipleIds: true,
+    },
+    {
+      id: 'skip-id-org',
+      label: 'Skip ID Org',
+    },
+    {
+      id: 'skip-payment-org',
+      label: 'Skip Payment Org',
+    },
+  ]);
+  useEmployersMock.mockReturnValue([
+    {
+      id: 'single-id-employer',
+      label: 'Single ID Employer',
+      idRequirements: singleIdRequirements,
+    },
+    {
+      id: 'multi-id-employer',
+      label: 'Multi-ID Employer',
+      idRequirements: multiIdRequirements,
+      requireMultipleIds: true,
+    },
+    {
+      id: 'skip-id-employer',
+      label: 'Skip ID Employer',
+    },
+    {
+      id: 'skip-payment-employer',
+      label: 'Skip Payment Employer',
+    },
+  ]);
 });
 
-// TODO: Test back button behaviour too
 describe('given a signing up member that needs to prove their eligibility to use the service', () => {
-  // TODO: Will need another flow here for providing the "skip to address / payment flow"
   describe("given they haven't submitted enough details to skip straight to delivery address", () => {
     beforeEach(() => {
       renderWithMockedPlatformAdapter(<SignupEligibilityFlow />);
     });
 
     it('should start with the interstitial page with the verify eligibility card', () => {
-      const interstitialPagePaymentCard = screen.getByTestId('verify-eligibility-card');
-      expect(interstitialPagePaymentCard).toBeInTheDocument();
+      const signupInterstitialScreen = screen.getByTestId('signup-interstitial-screen');
+      expect(signupInterstitialScreen).toBeInTheDocument();
     });
 
     describe('when the start button is pressed', () => {
@@ -51,31 +151,19 @@ describe('given a signing up member that needs to prove their eligibility to use
       });
 
       it('should navigate to the employment status screen', () => {
-        const title = screen.getByText('Verify Eligibility');
-        expect(title).toBeInTheDocument();
+        const employmentStatusScreen = screen.getByTestId('employment-status-screen');
+        expect(employmentStatusScreen).toBeInTheDocument();
       });
 
-      describe('when selecting Volunteer as employment status', () => {
+      describe('when the back button is pressed', () => {
         beforeEach(async () => {
-          const volunteerButton = screen.getByText('Volunteer');
-          act(() => volunteerButton.click());
+          const backButton = screen.getByTestId('back-button');
+          act(() => backButton.click());
         });
 
-        it('should navigate to the job details screen', () => {
-          const jobDetailsScreen = screen.getByTestId('job-details-screen');
-          expect(jobDetailsScreen).toBeInTheDocument();
-        });
-      });
-
-      describe('when selecting Retired as employment status', () => {
-        beforeEach(async () => {
-          const retiredButton = screen.getByText('Retired or Bereaved');
-          act(() => retiredButton.click());
-        });
-
-        it('should navigate to the job details screen', () => {
-          const jobDetailsScreen = screen.getByTestId('job-details-screen');
-          expect(jobDetailsScreen).toBeInTheDocument();
+        it('should navigate back to the interstitial screen', () => {
+          const interstitialPagePaymentCard = screen.getByTestId('verify-eligibility-card');
+          expect(interstitialPagePaymentCard).toBeInTheDocument();
         });
       });
 
@@ -90,32 +178,62 @@ describe('given a signing up member that needs to prove their eligibility to use
           expect(jobDetailsScreen).toBeInTheDocument();
         });
 
-        describe('when the job details screen is completed, and single id verification is required', () => {
-          // TODO: Fill this in with real behaviour once end to end flow is implemented
+        describe('when the employment status is edited', () => {
           beforeEach(async () => {
-            fireEvent.keyDown(window, {
-              key: '.',
-              ctrlKey: true,
-            });
-            const nextButton = screen.getByTestId('next-button-1');
-            act(() => nextButton.click());
+            const employmentStatus = screen.getByTestId('employment-status');
+            act(() => employmentStatus.click());
           });
 
-          it('should navigate to the verify eligibility screen', () => {
-            const title = screen.getByText('Verify Eligibility');
-            expect(title).toBeInTheDocument();
+          it('should navigate back to the employment status screen', () => {
+            const employmentStatusScreen = screen.getByTestId('employment-status-screen');
+            expect(employmentStatusScreen).toBeInTheDocument();
+          });
+        });
+
+        describe('when the job details screen is completed, and single id verification is required', () => {
+          beforeEach(async () => {
+            await givenJobDetailsAreFilledIn();
+          });
+
+          it('should navigate to the verification method screen', () => {
+            const verificationMethodScreen = screen.getByTestId('verification-method-screen');
+            expect(verificationMethodScreen).toBeInTheDocument();
+          });
+
+          describe('when the back button is pressed', () => {
+            beforeEach(async () => {
+              const backButton = screen.getByTestId('back-button');
+              act(() => backButton.click());
+            });
+
+            it('should navigate back to the job details screen', () => {
+              const jobDetailsScreen = screen.getByTestId('job-details-screen');
+              expect(jobDetailsScreen).toBeInTheDocument();
+            });
           });
 
           describe('given the signing-up member wants to verify via email', () => {
             describe('when they select the email verification method', () => {
               beforeEach(async () => {
-                const workEmailButton = screen.getByText('Work Email');
+                const workEmailButton = screen.getByText('Email');
                 act(() => workEmailButton.click());
               });
 
               it('should navigate to the verify email screen', () => {
                 const workEmailScreen = screen.getByTestId('work-email-verification-screen');
                 expect(workEmailScreen).toBeInTheDocument();
+              });
+
+              describe('when the verification method is edited', () => {
+                beforeEach(async () => {
+                  const verificationMethod = screen.getByTestId('verification-method');
+                  act(() => verificationMethod.click());
+                });
+
+                it('should navigate back to the verification method screen', () => {
+                  const employmentStatusScreen = screen.getByTestId('verification-method-screen');
+                  expect(employmentStatusScreen).toBeInTheDocument();
+                });
               });
 
               describe('when they submit an email', () => {
@@ -127,6 +245,7 @@ describe('given a signing up member that needs to prove their eligibility to use
                   act(() => nextButton.click());
                 });
 
+                // You cannot proceed past this point
                 it('should navigate to the resend email screen', async () => {
                   await waitFor(() => {
                     const emailRetryScreen = screen.getByTestId('work-email-retry-screen');
@@ -134,66 +253,20 @@ describe('given a signing up member that needs to prove their eligibility to use
                   });
                 });
 
-                // TODO: This will require probably a new render with state injected in
-                describe('when they click the verification link on the email', () => {
+                describe('when the email is edited', () => {
                   beforeEach(async () => {
                     await waitFor(() => {
                       const emailRetryScreen = screen.getByTestId('work-email-retry-screen');
                       expect(emailRetryScreen).toBeInTheDocument();
                     });
 
-                    fireEvent.keyDown(window, {
-                      key: '.',
-                      ctrlKey: true,
-                    });
-                    const nextButton = screen.getByTestId('next-button-1');
-
-                    act(() => nextButton.click());
+                    const editEmailButton = screen.getByTestId('edit-email-button');
+                    act(() => editEmailButton.click());
                   });
 
-                  it('should navigate to the delivery address screen', () => {
-                    const deliveryAddressScreen = screen.getByTestId('delivery-address-screen');
-                    expect(deliveryAddressScreen).toBeInTheDocument();
-                  });
-
-                  describe('when they submit their address', () => {
-                    beforeEach(async () => {
-                      fireEvent.change(screen.getByLabelText('Address line 1'), {
-                        target: { value: '123 Test Street' },
-                      });
-                      fireEvent.change(screen.getByLabelText('Town/City'), {
-                        target: { value: 'Test City' },
-                      });
-                      fireEvent.change(screen.getByLabelText('Postcode'), {
-                        target: { value: 'TE12 3ST' },
-                      });
-
-                      const nextButton = screen.getByText('Next');
-                      await act(async () => {
-                        fireEvent.click(nextButton);
-                      });
-                    });
-
-                    it('should navigate to the payment screen', () => {
-                      const title = screen.getByTestId('eligibility-heading-title');
-                      expect(title.textContent).toEqual('Payment');
-                    });
-
-                    describe('when they submit their payment details', () => {
-                      beforeEach(async () => {
-                        fireEvent.keyDown(window, {
-                          key: '.',
-                          ctrlKey: true,
-                        });
-                        const nextButton = screen.getByTestId('next-button-1');
-                        act(() => nextButton.click());
-                      });
-
-                      it('should navigate to the success screen', () => {
-                        const title = screen.getByTestId('sign-up-success-screen');
-                        expect(title).toBeInTheDocument();
-                      });
-                    });
+                  it('should navigate back to the verify email screen', () => {
+                    const workEmailScreen = screen.getByTestId('work-email-verification-screen');
+                    expect(workEmailScreen).toBeInTheDocument();
                   });
                 });
               });
@@ -201,47 +274,27 @@ describe('given a signing up member that needs to prove their eligibility to use
           });
 
           describe('given the signing-up member wants to verify via file upload', () => {
-            describe('when they select the file verification method', () => {
+            describe('when they select the File verification method', () => {
               beforeEach(async () => {
-                const payslipButton = screen.getByText('Payslip');
-                act(() => payslipButton.click());
+                const fileVerificationMethodButton = screen.getByText('File');
+                act(() => fileVerificationMethodButton.click());
               });
 
               it('should navigate to the file upload screen', () => {
-                const subTitle = screen.getByText(
-                  'Upload the required ID to verify your eligibility'
-                );
-                expect(subTitle).toBeInTheDocument();
-              });
-            });
-          });
-
-          describe('given the signing-up member wants to verify via file upload', () => {
-            describe('when they select the Work ID Card verification method', () => {
-              beforeEach(async () => {
-                const workIdButton = screen.getByText('Work ID Card');
-                act(() => workIdButton.click());
+                const fileUploadScreen = screen.getByTestId('file-upload-screen');
+                expect(fileUploadScreen).toBeInTheDocument();
               });
 
-              it('should navigate to the file upload screen', () => {
-                const subTitle = screen.getByText(
-                  'Upload the required ID to verify your eligibility'
-                );
-                expect(subTitle).toBeInTheDocument();
-              });
-            });
-          });
+              describe('when the verification method is edited', () => {
+                beforeEach(async () => {
+                  const verificationMethod = screen.getByTestId('verification-method-1');
+                  act(() => verificationMethod.click());
+                });
 
-          describe('given the signing-up member wants to verify via file upload', () => {
-            describe('when they select the NHS Smart Card verification method', () => {
-              beforeEach(async () => {
-                const nhsSmartButton = screen.getByText('NHS Smart Card');
-                act(() => nhsSmartButton.click());
-              });
-
-              it('should navigate to the file upload screen', () => {
-                const title = screen.getByText('Upload the required ID to verify your eligibility');
-                expect(title).toBeInTheDocument();
+                it('should navigate back to the verification method screen', () => {
+                  const employmentStatusScreen = screen.getByTestId('verification-method-screen');
+                  expect(employmentStatusScreen).toBeInTheDocument();
+                });
               });
 
               describe('when they upload a file', () => {
@@ -258,22 +311,21 @@ describe('given a signing up member that needs to prove their eligibility to use
                   expect(deliveryAddressScreen).toBeInTheDocument();
                 });
 
+                describe('when the back button is pressed', () => {
+                  beforeEach(async () => {
+                    const backButton = screen.getByTestId('back-button');
+                    act(() => backButton.click());
+                  });
+
+                  it('should navigate back to the verification method screen', () => {
+                    const fileUploadScreen = screen.getByTestId('verification-method-screen');
+                    expect(fileUploadScreen).toBeInTheDocument();
+                  });
+                });
+
                 describe('when they submit their address', () => {
                   beforeEach(async () => {
-                    fireEvent.change(screen.getByLabelText('Address line 1'), {
-                      target: { value: '123 Test Street' },
-                    });
-                    fireEvent.change(screen.getByLabelText('Town/City'), {
-                      target: { value: 'Test City' },
-                    });
-                    fireEvent.change(screen.getByLabelText('Postcode'), {
-                      target: { value: 'TE12 3ST' },
-                    });
-
-                    const nextButton = screen.getByText('Next');
-                    await act(async () => {
-                      fireEvent.click(nextButton);
-                    });
+                    await givenAddressIsSubmitted();
                   });
 
                   it('should navigate to the payment screen', () => {
@@ -281,14 +333,23 @@ describe('given a signing up member that needs to prove their eligibility to use
                     expect(title.textContent).toEqual('Payment');
                   });
 
+                  describe('when the back button is pressed', () => {
+                    beforeEach(async () => {
+                      await waitFor(() => {
+                        const backButton = screen.getByTestId('back-button');
+                        act(() => backButton.click());
+                      });
+                    });
+
+                    it('should navigate back to the delivery address screen', () => {
+                      const fileUploadScreen = screen.getByTestId('delivery-address-screen');
+                      expect(fileUploadScreen).toBeInTheDocument();
+                    });
+                  });
+
                   describe('when they submit their payment details', () => {
                     beforeEach(async () => {
-                      fireEvent.keyDown(window, {
-                        key: '.',
-                        ctrlKey: true,
-                      });
-                      const nextButton = screen.getByTestId('next-button-1');
-                      act(() => nextButton.click());
+                      await givenPaymentIsSubmitted();
                     });
 
                     it('should navigate to the success screen', () => {
@@ -304,28 +365,47 @@ describe('given a signing up member that needs to prove their eligibility to use
 
         describe('when the job details screen is completed, and multi-id verification is required', () => {
           beforeEach(async () => {
-            fireEvent.keyDown(window, {
-              key: '.',
-              ctrlKey: true,
-            });
-            const nextButton = screen.getByTestId('next-button-2');
-            act(() => nextButton.click());
+            await givenJobDetailsAreFilledIn('multi-id');
           });
 
-          it('should navigate to the method selection screen', () => {
-            const subTitle = screen.getByText('Verify your eligibility by providing a valid ID');
-            expect(subTitle).toBeInTheDocument();
+          it('should navigate to the verification method screen', () => {
+            const verificationMethodScreen = screen.getByTestId('verification-method-screen');
+            expect(verificationMethodScreen).toBeInTheDocument();
+          });
+
+          describe('when the back button is pressed', () => {
+            beforeEach(async () => {
+              const backButton = screen.getByTestId('back-button');
+              act(() => backButton.click());
+            });
+
+            it('should navigate back to the job details screen', () => {
+              const jobDetailsScreen = screen.getByTestId('job-details-screen');
+              expect(jobDetailsScreen).toBeInTheDocument();
+            });
           });
 
           describe('given the signing-up member has selected a secondary file verification method', () => {
             beforeEach(async () => {
-              const nhsSmartButton = screen.getByText('NHS Smart Card');
-              act(() => nhsSmartButton.click());
+              const fileVerificationMethodButton = screen.getByText('Optional file 1');
+              act(() => fileVerificationMethodButton.click());
             });
 
             it('should navigate to the file upload screen', () => {
-              const title = screen.getByText('Upload the required ID to verify your eligibility');
-              expect(title).toBeInTheDocument();
+              const fileUploadScreen = screen.getByTestId('file-upload-screen');
+              expect(fileUploadScreen).toBeInTheDocument();
+            });
+
+            describe('when the verification method is edited', () => {
+              beforeEach(async () => {
+                const verificationMethod = screen.getByTestId('verification-method-2');
+                act(() => verificationMethod.click());
+              });
+
+              it('should navigate back to the verification method screen', () => {
+                const employmentStatusScreen = screen.getByTestId('verification-method-screen');
+                expect(employmentStatusScreen).toBeInTheDocument();
+              });
             });
 
             describe('when they upload a file', () => {
@@ -344,22 +424,21 @@ describe('given a signing up member that needs to prove their eligibility to use
                 expect(deliveryAddressScreen).toBeInTheDocument();
               });
 
+              describe('when the back button is pressed', () => {
+                beforeEach(async () => {
+                  const backButton = screen.getByTestId('back-button');
+                  act(() => backButton.click());
+                });
+
+                it('should navigate back to the verification method screen', () => {
+                  const fileUploadScreen = screen.getByTestId('verification-method-screen');
+                  expect(fileUploadScreen).toBeInTheDocument();
+                });
+              });
+
               describe('when they submit their address', () => {
                 beforeEach(async () => {
-                  fireEvent.change(screen.getByLabelText('Address line 1'), {
-                    target: { value: '123 Test Street' },
-                  });
-                  fireEvent.change(screen.getByLabelText('Town/City'), {
-                    target: { value: 'Test City' },
-                  });
-                  fireEvent.change(screen.getByLabelText('Postcode'), {
-                    target: { value: 'TE12 3ST' },
-                  });
-
-                  const nextButton = screen.getByText('Next');
-                  await act(async () => {
-                    fireEvent.click(nextButton);
-                  });
+                  await givenAddressIsSubmitted();
                 });
 
                 it('should navigate to the payment screen', () => {
@@ -367,14 +446,23 @@ describe('given a signing up member that needs to prove their eligibility to use
                   expect(title.textContent).toEqual('Payment');
                 });
 
+                describe('when the back button is pressed', () => {
+                  beforeEach(async () => {
+                    await waitFor(() => {
+                      const backButton = screen.getByTestId('back-button');
+                      act(() => backButton.click());
+                    });
+                  });
+
+                  it('should navigate back to the delivery address screen', () => {
+                    const fileUploadScreen = screen.getByTestId('delivery-address-screen');
+                    expect(fileUploadScreen).toBeInTheDocument();
+                  });
+                });
+
                 describe('when they submit their payment details', () => {
                   beforeEach(async () => {
-                    fireEvent.keyDown(window, {
-                      key: '.',
-                      ctrlKey: true,
-                    });
-                    const nextButton = screen.getByTestId('next-button-1');
-                    act(() => nextButton.click());
+                    await givenPaymentIsSubmitted();
                   });
 
                   it('should navigate to the success screen', () => {
@@ -388,14 +476,8 @@ describe('given a signing up member that needs to prove their eligibility to use
         });
 
         describe('when the job details screen is completed, and no id is required', () => {
-          // TODO: Fill this in with real behaviour once end to end flow is implemented
           beforeEach(async () => {
-            fireEvent.keyDown(window, {
-              key: '.',
-              ctrlKey: true,
-            });
-            const nextButton = screen.getByTestId('next-button-3');
-            act(() => nextButton.click());
+            await givenJobDetailsAreFilledIn('id-verification-skipped');
           });
 
           it('should navigate to the delivery address screen', () => {
@@ -403,22 +485,21 @@ describe('given a signing up member that needs to prove their eligibility to use
             expect(deliveryAddressScreen).toBeInTheDocument();
           });
 
+          describe('when the back button is pressed', () => {
+            beforeEach(async () => {
+              const backButton = screen.getByTestId('back-button');
+              act(() => backButton.click());
+            });
+
+            it('should navigate back to the job details screen', () => {
+              const fileUploadScreen = screen.getByTestId('job-details-screen');
+              expect(fileUploadScreen).toBeInTheDocument();
+            });
+          });
+
           describe('when they submit their address', () => {
             beforeEach(async () => {
-              fireEvent.change(screen.getByLabelText('Address line 1'), {
-                target: { value: '123 Test Street' },
-              });
-              fireEvent.change(screen.getByLabelText('Town/City'), {
-                target: { value: 'Test City' },
-              });
-              fireEvent.change(screen.getByLabelText('Postcode'), {
-                target: { value: 'TE12 3ST' },
-              });
-
-              const nextButton = screen.getByText('Next');
-              await act(async () => {
-                fireEvent.click(nextButton);
-              });
+              await givenAddressIsSubmitted();
             });
 
             it('should navigate to the payment screen', () => {
@@ -426,14 +507,23 @@ describe('given a signing up member that needs to prove their eligibility to use
               expect(title.textContent).toEqual('Payment');
             });
 
+            describe('when the back button is pressed', () => {
+              beforeEach(async () => {
+                await waitFor(() => {
+                  const backButton = screen.getByTestId('back-button');
+                  act(() => backButton.click());
+                });
+              });
+
+              it('should navigate back to the delivery address screen', () => {
+                const fileUploadScreen = screen.getByTestId('delivery-address-screen');
+                expect(fileUploadScreen).toBeInTheDocument();
+              });
+            });
+
             describe('when they submit their payment details', () => {
               beforeEach(async () => {
-                fireEvent.keyDown(window, {
-                  key: '.',
-                  ctrlKey: true,
-                });
-                const nextButton = screen.getByTestId('next-button-1');
-                act(() => nextButton.click());
+                await givenPaymentIsSubmitted();
               });
 
               it('should navigate to the success screen', () => {
@@ -445,14 +535,8 @@ describe('given a signing up member that needs to prove their eligibility to use
         });
 
         describe('when the job details screen is completed, and no id or payment is required', () => {
-          // TODO: Fill this in with real behaviour once end to end flow is implemented
           beforeEach(async () => {
-            fireEvent.keyDown(window, {
-              key: '.',
-              ctrlKey: true,
-            });
-            const nextButton = screen.getByTestId('next-button-4');
-            act(() => nextButton.click());
+            await givenJobDetailsAreFilledIn('payment-skipped');
           });
 
           it('should navigate to the delivery address screen', () => {
@@ -460,20 +544,132 @@ describe('given a signing up member that needs to prove their eligibility to use
             expect(deliveryAddressScreen).toBeInTheDocument();
           });
 
+          describe('when the back button is pressed', () => {
+            beforeEach(async () => {
+              const backButton = screen.getByTestId('back-button');
+              act(() => backButton.click());
+            });
+
+            it('should navigate back to the job details screen', () => {
+              const fileUploadScreen = screen.getByTestId('job-details-screen');
+              expect(fileUploadScreen).toBeInTheDocument();
+            });
+          });
+
           describe('when they submit their address', () => {
             beforeEach(async () => {
-              fireEvent.keyDown(window, {
-                key: '.',
-                ctrlKey: true,
-              });
-              const nextButton = screen.getByTestId('next-button-1');
-              act(() => nextButton.click());
+              await givenAddressIsSubmitted();
             });
 
             it('should navigate to the success screen', () => {
               const title = screen.getByTestId('sign-up-success-screen');
               expect(title).toBeInTheDocument();
             });
+          });
+        });
+      });
+
+      describe('when selecting Retired as employment status', () => {
+        beforeEach(async () => {
+          const retiredButton = screen.getByText('Retired or Bereaved');
+          act(() => retiredButton.click());
+        });
+
+        // We can presume that this flow is fine if it gets as far as job details
+        it('should navigate to the job details screen', () => {
+          const jobDetailsScreen = screen.getByTestId('job-details-screen');
+          expect(jobDetailsScreen).toBeInTheDocument();
+        });
+      });
+
+      describe('when selecting Volunteer as employment status', () => {
+        beforeEach(async () => {
+          const volunteerButton = screen.getByText('Volunteer');
+          act(() => volunteerButton.click());
+        });
+
+        // We can presume that this flow is fine if it gets as far as job details
+        it('should navigate to the job details screen', () => {
+          const jobDetailsScreen = screen.getByTestId('job-details-screen');
+          expect(jobDetailsScreen).toBeInTheDocument();
+        });
+      });
+    });
+  });
+
+  describe('given they have provided enough details already so can skip straight to delivery address', () => {
+    beforeEach(() => {
+      renderWithMockedPlatformAdapter(
+        <SignupEligibilityFlow
+          initialState={{
+            flow: 'Sign Up',
+            currentScreen: 'Interstitial Screen',
+            emailVerification: 'test@test.com',
+          }}
+        />
+      );
+    });
+
+    it('should start with the interstitial page without the verify eligibility card', () => {
+      const interstitialPagePaymentCard = screen.queryByTestId('verify-eligibility-card');
+      expect(interstitialPagePaymentCard).not.toBeInTheDocument();
+    });
+
+    describe('when they click the skip to payment button', () => {
+      beforeEach(() => {
+        const startButton = screen.getByRole('button', { name: 'Start' });
+        act(() => startButton.click());
+      });
+
+      it('should navigate to the delivery address screen', () => {
+        const deliveryAddressScreen = screen.getByTestId('delivery-address-screen');
+        expect(deliveryAddressScreen).toBeInTheDocument();
+      });
+
+      describe('when the back button is pressed', () => {
+        beforeEach(async () => {
+          const backButton = screen.getByTestId('back-button');
+          act(() => backButton.click());
+        });
+
+        it('should navigate back to the interstitial screen', () => {
+          const fileUploadScreen = screen.getByTestId('signup-interstitial-screen');
+          expect(fileUploadScreen).toBeInTheDocument();
+        });
+      });
+
+      describe('when they submit their address', () => {
+        beforeEach(async () => {
+          await givenAddressIsSubmitted();
+        });
+
+        it('should navigate to the payment screen', () => {
+          const title = screen.getByTestId('eligibility-heading-title');
+          expect(title.textContent).toEqual('Payment');
+        });
+
+        describe('when the back button is pressed', () => {
+          beforeEach(async () => {
+            await waitFor(() => {
+              const backButton = screen.getByTestId('back-button');
+              act(() => backButton.click());
+            });
+          });
+
+          it('should navigate back to the delivery address screen', () => {
+            const fileUploadScreen = screen.getByTestId('delivery-address-screen');
+            expect(fileUploadScreen).toBeInTheDocument();
+          });
+        });
+
+        describe('when they submit their payment details', () => {
+          beforeEach(async () => {
+            await givenPaymentIsSubmitted();
+          });
+
+          it('should navigate to the success screen', () => {
+            const title = screen.getByTestId('sign-up-success-screen');
+            expect(title).toBeInTheDocument();
           });
         });
       });

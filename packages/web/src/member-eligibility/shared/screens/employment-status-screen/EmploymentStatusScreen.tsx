@@ -62,14 +62,6 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
       return;
     }
 
-    if (eligibilityDetails.skipAccountDetails) {
-      setEligibilityDetails({
-        ...eligibilityDetails,
-        currentScreen: 'Interstitial Screen',
-      });
-      return;
-    }
-
     setEligibilityDetails({
       ...eligibilityDetails,
       currentScreen: 'Renewal Account Details Screen',
@@ -77,7 +69,7 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails]);
 
   return (
-    <EligibilityScreen>
+    <EligibilityScreen data-testid="employment-status-screen">
       <EligibilityBody>
         <EligibilityHeading
           title={defaultScreenTitle(eligibilityDetails.flow)}
@@ -88,7 +80,11 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
         <div className="flex flex-col gap-[16px] w-full">
           <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>EMPLOYMENT STATUS</p>
 
-          <ListSelector title="Employed" onClick={() => onEmploymentStatusSelect('Employed')} />
+          <ListSelector
+            data-testid="employment-status"
+            title="Employed"
+            onClick={() => onEmploymentStatusSelect('Employed')}
+          />
 
           <ListSelector
             title="Retired or Bereaved"
@@ -99,6 +95,7 @@ export const EmploymentStatusScreen: FC<VerifyEligibilityScreenProps> = ({
         </div>
 
         <Button
+          data-testid="back-button"
           className="w-fit self-start"
           variant={ThemeVariant.Secondary}
           size="Large"

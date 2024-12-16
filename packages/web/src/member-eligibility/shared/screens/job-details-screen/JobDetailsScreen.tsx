@@ -44,6 +44,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
 
   const onBack = useCallback(() => {
     logAnalyticsEvent(jobDetailsEvents.onBackClicked(eligibilityDetails));
+
     setEligibilityDetails({
       ...eligibilityDetails,
       currentScreen: 'Employment Status Screen',
@@ -62,8 +63,9 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
         <div className="flex flex-col items-start w-full gap-[12px]">
           <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>EMPLOYMENT STATUS</p>
 
-          <div className="flex flex-col gap-[16px]">
+          <div className="flex flex-col gap-[16px] w-full">
             <ListSelector
+              data-testid="employment-status"
               title={eligibilityDetails.employmentStatus}
               state={ListSelectorState.Selected}
               onClick={onBack}
@@ -81,6 +83,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
         <div className="flex w-full gap-[8px]">
           {isRenewalFlow && (
             <Button
+              data-testid="back-button"
               className="w-1/5"
               size="Large"
               variant={ThemeVariant.Secondary}
@@ -97,6 +100,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
           )}
 
           <Button
+            data-testid="job-details-next-button"
             className={isRenewalFlow ? 'w-4/5 ml-auto' : 'w-full'}
             size="Large"
             disabled={isNextButtonDisabled}

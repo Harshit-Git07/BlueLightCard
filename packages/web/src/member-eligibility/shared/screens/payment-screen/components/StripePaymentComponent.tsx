@@ -20,7 +20,9 @@ export const StripePaymentComponent: FC<Props> = ({
   onBack,
 }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
+
   const logAnalyticsEvent = useLogAmplitudeEvent();
+
   const stripeClient = useStripeClient();
 
   const onPaymentResult = useCallback(

@@ -58,6 +58,7 @@ export const RegionAddressFields: FC<RegionAddressFieldsProps> = ({
       />
 
       <Dropdown
+        data-testid="county-dropdown"
         onSelect={(option) => {
           onAddressFieldChanged('county', option.label);
         }}

@@ -38,11 +38,22 @@ export const DeliveryAddressScreen: FC<VerifyEligibilityScreenProps> = ({
         <ManualAddressForm eligibilityDetailsState={eligibilityDetailsState} />
 
         <div className="flex flex-row items-center justify-between w-full gap-[8px]">
-          <Button variant={ThemeVariant.Secondary} size="Large" onClick={handleBack}>
+          <Button
+            data-testid="back-button"
+            variant={ThemeVariant.Secondary}
+            size="Large"
+            onClick={handleBack}
+          >
             Back
           </Button>
 
-          <Button size="Large" className="flex-1" onClick={handleNext} disabled={!isValid}>
+          <Button
+            data-testid="next-button"
+            size="Large"
+            className="flex-1"
+            onClick={handleNext}
+            disabled={!isValid}
+          >
             Next
           </Button>
         </div>

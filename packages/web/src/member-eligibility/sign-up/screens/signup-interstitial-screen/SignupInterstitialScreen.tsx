@@ -47,7 +47,7 @@ export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
     <InterstitialScreen
       title={title}
       eligibilityDetails={eligibilityDetails}
-      data-testid="SignupInterstitialScreen"
+      data-testid="signup-interstitial-screen"
     >
       {showVerifyEligibilityCard && (
         <Card
@@ -67,6 +67,7 @@ export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
       )}
 
       <Card
+        data-testid="skip-to-payment-card"
         cardTitle="Make a payment"
         description={paymentCardDescription}
         onClick={() => {
@@ -74,7 +75,8 @@ export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
 
           setEligibilityDetails({
             ...eligibilityDetails,
-            currentScreen: 'Payment Screen',
+            currentScreen: 'Delivery Address Screen',
+            hasJumpedStraightToPayment: true,
           });
         }}
         {...skipToPaymentCardProps}

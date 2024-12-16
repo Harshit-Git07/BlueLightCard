@@ -15,4 +15,5 @@ export interface ListSelectorProps {
   description?: ReactNode;
   showTrailingIcon?: boolean;
   className?: string;
+  'data-testid'?: string;
 }

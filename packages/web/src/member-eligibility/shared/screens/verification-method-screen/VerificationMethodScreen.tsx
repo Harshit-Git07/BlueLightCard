@@ -49,7 +49,7 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails]);
 
   return (
-    <EligibilityScreen>
+    <EligibilityScreen data-testid="verification-method-screen">
       <EligibilityBody>
         <EligibilityHeading
           title={defaultScreenTitle(eligibilityDetails.flow)}
@@ -87,6 +87,7 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
         </div>
 
         <Button
+          data-testid="back-button"
           className="w-fit self-start"
           variant={ThemeVariant.Secondary}
           size="Large"

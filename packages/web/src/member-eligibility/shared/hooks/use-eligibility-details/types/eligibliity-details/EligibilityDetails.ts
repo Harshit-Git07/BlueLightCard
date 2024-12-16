@@ -1,7 +1,8 @@
 export interface EligibilityDetails {
   flow: 'Sign Up' | 'Renewal';
   currentScreen: EligibilityScreen;
-  skipAccountDetails?: boolean;
+  hasJumpedStraightToPayment?: boolean;
+  hasSkippedAccountDetails?: boolean;
   accountDetailsChanged?: boolean;
   member?: EligibilityDetailsMember;
   address?: EligibilityDetailsAddress;

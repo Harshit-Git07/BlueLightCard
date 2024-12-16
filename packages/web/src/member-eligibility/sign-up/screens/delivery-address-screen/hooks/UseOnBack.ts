@@ -11,6 +11,14 @@ export function useOnBack(eligibilityDetailsState: EligibilityDetailsState): OnB
 
   return useCallback(() => {
     logAnalyticsEvent(deliveryAddressEvents.onBackClicked(eligibilityDetails));
+    if (eligibilityDetails.hasJumpedStraightToPayment) {
+      setEligibilityDetails({
+        ...eligibilityDetails,
+        currentScreen: 'Interstitial Screen',
+      });
+      return;
+    }
+
     if (eligibilityDetails.canSkipIdVerification) {
       setEligibilityDetails({
         ...eligibilityDetails,

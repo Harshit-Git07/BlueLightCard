@@ -55,19 +55,28 @@ export class Route {
 
     let methodResponses;
     if (responseModelType) {
-      const responseModel = apiGatewayModelGenerator.generateModel(responseModelType);
-      methodResponses = MethodResponses.toMethodResponses(
-        [
-          new ResponseModel('200', responseModel),
-          new ResponseModel('201', apiGatewayModelGenerator.generateGenericModel()),
-          new ResponseModel('204', apiGatewayModelGenerator.generateGenericModel()),
-          apiGatewayModelGenerator.getError400(),
-          apiGatewayModelGenerator.getError401(),
-          apiGatewayModelGenerator.getError403(),
-          apiGatewayModelGenerator.getError404(),
-          apiGatewayModelGenerator.getError500(),
-        ].filter(Boolean),
-      );
+      const commonErrorResponseModels = [
+        apiGatewayModelGenerator.getError400(),
+        apiGatewayModelGenerator.getError401(),
+        apiGatewayModelGenerator.getError403(),
+        apiGatewayModelGenerator.getError404(),
+        apiGatewayModelGenerator.getError500(),
+      ];
+      if (Route.responseModelsEnabled()) {
+        const responseModel = apiGatewayModelGenerator.generateModel(responseModelType);
+        methodResponses = MethodResponses.toMethodResponses(
+          [
+            new ResponseModel('200', responseModel),
+            new ResponseModel('201', apiGatewayModelGenerator.generateGenericModel()),
+            new ResponseModel('204', apiGatewayModelGenerator.generateGenericModel()),
+            ...commonErrorResponseModels,
+          ].filter(Boolean),
+        );
+      } else {
+        methodResponses = MethodResponses.toMethodResponses(
+          [...commonErrorResponseModels].filter(Boolean),
+        );
+      }
     }
 
     return {
@@ -91,5 +100,9 @@ export class Route {
         },
       },
     };
+  }
+
+  private static responseModelsEnabled(): boolean {
+    return process.env.RESPONSE_MODELS_ENABLED === 'true';
   }
 }

@@ -36,6 +36,8 @@ export { default as PaginationControls } from './components/PaginationControls';
 export { default as EventBus } from './lib/eventBus';
 export { default as LoadingSpinner } from './components/LoadingSpinner';
 export { default as useDrawer } from './components/Drawer/useDrawer';
+export { default as MyAccountDebugTools } from './components/MyAccountDebugTools';
+export { getBrandStrapline } from './components/YourCard/text';
 
 export { default as NoCardImage } from './components/svgs/NoCardImage';
 

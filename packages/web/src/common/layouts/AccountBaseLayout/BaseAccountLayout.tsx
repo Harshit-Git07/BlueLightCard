@@ -11,6 +11,7 @@ import { LayoutProps } from './types';
 import Footer from '../../../common/components/Footer/Footer';
 import { useMedia } from 'react-use';
 import LeftNavigation from './LeftNavigation';
+import MyAccountDebugToolsLazily from '@/layouts/AccountBaseLayout/MyAccountToolsLazily';
 
 const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
@@ -55,6 +56,7 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className={`flex flex-col ${isOpen ? 'h-screen overflow-hidden' : 'min-h-screen'}`}>
+      <MyAccountDebugToolsLazily />
       <NavBar
         isAuthenticated
         onSearchCompanyChange={onSearchCompanyChange}

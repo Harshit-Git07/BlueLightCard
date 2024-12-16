@@ -3,17 +3,18 @@ import { NextPage } from 'next';
 import {
   ButtonV2 as Button,
   CopyButton,
+  fonts,
+  getBrandStrapline,
   NoCardImage,
   ThemeVariant,
   Typography,
   useGetCustomerProfile,
   YourCard,
 } from '@bluelightcard/shared-ui';
-import { fonts } from '@bluelightcard/shared-ui/tailwind/theme';
+
 import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
 import { BRAND } from '@/global-vars';
 import withAccountLayout from '../common/layouts/AccountBaseLayout/withAccountLayout';
-import { getBrandStrapline } from '@bluelightcard/shared-ui/components/YourCard/text';
 
 const MyCardPage: NextPage = () => {
   const memberUuid = 'member-uuid';

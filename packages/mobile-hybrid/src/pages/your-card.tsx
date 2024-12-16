@@ -5,6 +5,7 @@ import {
   CardVerificationAlerts,
   CopyButton,
   fonts,
+  getBrandStrapline,
   NoCardImage,
   ThemeVariant,
   useGetCustomerProfile,
@@ -13,7 +14,6 @@ import {
 import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
 import useRouterReady from '@/hooks/useRouterReady';
 import { SyntheticEvent } from 'react';
-import { getBrandStrapline } from '@bluelightcard/shared-ui/components/YourCard/text';
 
 const MyCardPage: NextPage = () => {
   const memberUuid = 'member-uuid';

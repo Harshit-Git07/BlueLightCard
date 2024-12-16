@@ -49,8 +49,10 @@ export class Route {
   }: RouteProps<Request, Response>): ApiGatewayV1ApiFunctionRouteProps<never> {
     let requestModels;
     if (requestModelType) {
-      const requestModel = apiGatewayModelGenerator.generateModel(requestModelType);
-      requestModels = { 'application/json': requestModel.getModel() };
+      if (Route.requestModelsEnabled()) {
+        const requestModel = apiGatewayModelGenerator.generateModel(requestModelType);
+        requestModels = { 'application/json': requestModel.getModel() };
+      }
     }
 
     let methodResponses;
@@ -104,5 +106,9 @@ export class Route {
 
   private static responseModelsEnabled(): boolean {
     return process.env.RESPONSE_MODELS_ENABLED === 'true';
+  }
+
+  private static requestModelsEnabled(): boolean {
+    return process.env.REQUEST_MODELS_ENABLED === 'true';
   }
 }

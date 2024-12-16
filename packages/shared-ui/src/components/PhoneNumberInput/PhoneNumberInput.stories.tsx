@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import PhoneNumberInput from './';
+import { useState } from 'react';
 
 const componentMeta: Meta<typeof PhoneNumberInput> = {
   title: 'Component System/PhoneNumberInput',
@@ -13,21 +14,6 @@ const componentMeta: Meta<typeof PhoneNumberInput> = {
     showErrors: {
       control: 'boolean',
       description: '`boolean`: Whether to show validation errors. (default: `false`)',
-    },
-    defaultCountry: {
-      control: 'text',
-      description:
-        '`string`: The default country code. (default: `gb or ua depending on local but to add more countries needs to be updated`)',
-    },
-    emptyErrorMessage: {
-      control: 'text',
-      description:
-        '`string`: Message displayed when input is empty. (default: `Please enter a phone number`)',
-    },
-    invalidErrorMessage: {
-      control: 'text',
-      description:
-        '`string`: Message displayed for invalid phone numbers. (default: `Please enter a valid phone number`)',
     },
     label: {
       control: 'text',
@@ -52,7 +38,10 @@ const componentMeta: Meta<typeof PhoneNumberInput> = {
   },
 };
 
-const DefaultTemplate: StoryFn<typeof PhoneNumberInput> = (args) => <PhoneNumberInput {...args} />;
+const DefaultTemplate: StoryFn<typeof PhoneNumberInput> = (args) => {
+  const [phoneNumber, setPhoneNumber] = useState('');
+  return <PhoneNumberInput {...args} value={phoneNumber} onChange={setPhoneNumber} />;
+};
 
 export const Default = DefaultTemplate.bind({});
 Default.args = {};

@@ -14,7 +14,7 @@ exports[`ClickableFlag component matches open and closed snapshots: ClickableFla
   >
     <img
       alt=""
-      class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+      class="react-international-phone-flag-emoji h-full w-[32px] rounded-sm"
       data-country="gb"
       draggable="false"
       loading="lazy"
@@ -53,7 +53,7 @@ exports[`ClickableFlag component matches open and closed snapshots: ClickableFla
   >
     <img
       alt=""
-      class="react-international-phone-flag-emoji h-full w-8 rounded-sm"
+      class="react-international-phone-flag-emoji h-full w-[32px] rounded-sm"
       data-country="gb"
       draggable="false"
       loading="lazy"

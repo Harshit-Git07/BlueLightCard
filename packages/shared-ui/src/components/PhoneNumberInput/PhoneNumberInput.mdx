@@ -1,7 +1,7 @@
-import { Meta, Canvas, Controls } from '@storybook/blocks';
+import {Canvas, Controls, Meta} from '@storybook/blocks';
 import * as PhoneNumberInput from './PhoneNumberInput.stories';
 
-<Meta of={PhoneNumberInput} />
+<Meta of={PhoneNumberInput}/>
 
 # PhoneNumberInput
 
@@ -18,7 +18,7 @@ The PhoneNumberInput component allows users to enter their phone number along wi
 
 ## Props
 
-<Controls />
+<Controls/>
 
 ## Validation
 
@@ -42,7 +42,7 @@ The PhoneNumberInput component can have the following states by changing the pho
 
 ### Default State
 
-<Canvas of={PhoneNumberInput.Default} />
+<Canvas of={PhoneNumberInput.Default}/>
 
 ### Error State
 
@@ -54,7 +54,7 @@ The `PhoneNumberInput` component provides a clear and user-friendly way to handl
 
 You can customise both messages to suit your application's requirements, enhancing the user experience and ensuring clarity in form interactions.
 
-<Canvas of={PhoneNumberInput.Validation} />
+<Canvas of={PhoneNumberInput.Validation}/>
 
 ## Disabled State
 
@@ -67,7 +67,7 @@ The helpText, label, and helpIcon are hidden to reduce visual clutter for disabl
 The user cannot change the dial code, country, or input a phone number, making the component read-only in this mode.
 This is useful when a form or field is conditionally non-editable, ensuring users are guided through the correct form behavior.
 
-<Canvas of={PhoneNumberInput.Disabled} />
+<Canvas of={PhoneNumberInput.Disabled}/>
 
 ## Country Selection (isSelectable)
 
@@ -77,7 +77,7 @@ Enabled Dropdown: Users can toggle a dropdown to see a list of countries and the
 Non-Selectable: If isSelectable is false, the country and dial code are fixed, preventing users from changing them. This is useful in cases where the country is pre-defined or should not be editable.
 The dropdown feature is helpful for forms that support international numbers, offering flexibility in selecting different countries while ensuring correct formatting.
 
-<Canvas of={PhoneNumberInput.ClickableDropdown} />
+<Canvas of={PhoneNumberInput.ClickableDropdown}/>
 
 ### Additional Information Display
 
@@ -93,7 +93,7 @@ The `PhoneNumberInput` component provides several props to enhance the user expe
 
 These props work together to make the form more user-friendly by providing contextual help and feedback, improving clarity and usability for the input field.
 
-<Canvas of={PhoneNumberInput.HelpTextWithMessage} />
+<Canvas of={PhoneNumberInput.HelpTextWithMessage}/>
 
 ## Implementation
 
@@ -101,7 +101,7 @@ Usage example using jsx
 
 ```jsx
 import React, { useState } from 'react';
-import PhoneNumberInput from './PhoneNumberInput';
+import PhoneNumberInputElements from '@bluelightcard/shared-ui/src/components/PhoneNumberInput/PhoneNumberInputElements';
 
 const PhoneNumberForm = () => {
   const [formData, setFormData] = useState({
@@ -127,7 +127,7 @@ const PhoneNumberForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <PhoneNumberInput
+      <PhoneNumberInputElements
         disabled={false}
         showErrors={true}
         defaultCountry="us"

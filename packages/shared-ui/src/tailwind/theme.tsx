@@ -58,6 +58,8 @@ export const fonts = {
   titleSmall:
     'font-typography-title-small font-typography-title-small-weight text-typography-title-small leading-typography-title-small tracking-typography-title-small',
   body: 'font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body',
+  bodyLarge:
+    'font-typography-body-large font-typography-body-large-weight text-typography-body-large leading-typography-body-large tracking-typography-body-large',
   bodyLight:
     'font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light tracking-typography-body-light',
   bodySemiBold:

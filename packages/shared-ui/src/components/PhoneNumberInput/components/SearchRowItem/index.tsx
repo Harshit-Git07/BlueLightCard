@@ -17,9 +17,13 @@ const placeholderStyles =
 const SearchRowItem: FC<Props> = ({ iso2, placeholderName, dialCode, searchText, onChange }) => {
   return (
     <span
-      className={`py-2 px-5 flex gap-2 items-center bg-colour-surface-container-light dark:bg-colour-surface-container-dark ${fontStyles} group`}
+      className={`py-2 px-[20px] flex gap-2 items-center bg-colour-surface-container-light dark:bg-colour-surface-container-dark ${fontStyles} group`}
     >
-      <FlagImage iso2={iso2} alt={`Flag of ${placeholderName}`} className="h-full w-8 rounded-sm" />
+      <FlagImage
+        iso2={iso2}
+        alt={`Flag of ${placeholderName}`}
+        className="h-full w-[32px] rounded-sm"
+      />
       <input
         autoFocus
         type="search"

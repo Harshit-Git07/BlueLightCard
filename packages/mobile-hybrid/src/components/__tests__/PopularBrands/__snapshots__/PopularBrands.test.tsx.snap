@@ -1,0 +1,131 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PopularBrands renders the component 1`] = `
+<div>
+  <div
+    class="mb-6"
+  >
+    <div
+      class="flex w-full content-center my-2 px-4"
+    >
+      <h2
+        class="font-heading-font font-heading-font-weight text-heading-font tracking-heading-font leading-heading-font flex-1 text-heading-colour-light dark:text-heading-colour-dark"
+      >
+        Popular brands test
+      </h2>
+    </div>
+    <p
+      class="px-4 mb-4 dark:text-neutral-white"
+    >
+      Some of your favourite brands
+    </p>
+    <div
+      class="ml-2 flex overflow-x-auto items-center h-[100px]"
+    >
+      <div
+        class="flex"
+      >
+        <button
+          class="popular-brands mx-2 inline-block relative h-[74px] overflow-hidden shadow-md rounded w-[144px]"
+        >
+          <img
+            alt="Gym King"
+            blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+            class="object-contain dark:border object-cover rounded"
+            placeholder="blur"
+            src="/images/image.jpg"
+          />
+        </button>
+        <button
+          class="popular-brands mx-2 inline-block relative h-[74px] overflow-hidden shadow-md rounded w-[144px]"
+        >
+          <img
+            alt="M&S"
+            blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+            class="object-contain dark:border object-cover rounded"
+            placeholder="blur"
+            src="/images/image.jpg"
+          />
+        </button>
+        <button
+          class="popular-brands mx-2 inline-block relative h-[74px] overflow-hidden shadow-md rounded w-[144px]"
+        >
+          <img
+            alt="Asda"
+            blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+            class="object-contain dark:border object-cover rounded"
+            placeholder="blur"
+            src="/images/image.jpg"
+          />
+        </button>
+        <button
+          class="popular-brands mx-2 inline-block relative h-[74px] overflow-hidden shadow-md rounded w-[144px]"
+        >
+          <img
+            alt="Burger King"
+            blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+            class="object-contain dark:border object-cover rounded"
+            placeholder="blur"
+            src="/images/image.jpg"
+          />
+        </button>
+        <button
+          class="popular-brands mx-2 inline-block relative h-[74px] overflow-hidden shadow-md rounded w-[144px]"
+        >
+          <img
+            alt="Toyota"
+            blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+            class="object-contain dark:border object-cover rounded"
+            placeholder="blur"
+            src="/images/image.jpg"
+          />
+        </button>
+        <button
+          class="popular-brands mx-2 inline-block relative h-[74px] overflow-hidden shadow-md rounded w-[144px]"
+        >
+          <img
+            alt="McDonalds"
+            blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+            class="object-contain dark:border object-cover rounded"
+            placeholder="blur"
+            src="/images/image.jpg"
+          />
+        </button>
+        <button
+          class="popular-brands mx-2 inline-block relative h-[74px] overflow-hidden shadow-md rounded w-[144px]"
+        >
+          <img
+            alt="Superdry"
+            blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+            class="object-contain dark:border object-cover rounded"
+            placeholder="blur"
+            src="/images/image.jpg"
+          />
+        </button>
+        <button
+          class="popular-brands mx-2 inline-block relative h-[74px] overflow-hidden shadow-md rounded w-[144px]"
+        >
+          <img
+            alt="Sainsburys"
+            blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+            class="object-contain dark:border object-cover rounded"
+            placeholder="blur"
+            src="/images/image.jpg"
+          />
+        </button>
+        <button
+          class="popular-brands mx-2 inline-block relative h-[74px] overflow-hidden shadow-md rounded w-[144px]"
+        >
+          <img
+            alt="David Lloyd"
+            blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+            class="object-contain dark:border object-cover rounded"
+            placeholder="blur"
+            src="/images/image.jpg"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

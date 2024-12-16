@@ -1,6 +1,6 @@
-import { serviceLayerUrl } from '@/root/src/member-eligibility/shared/constants/ServiceLayerUrl';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
+import { serviceLayerUrl } from '@bluelightcard/shared-ui/member-eligibility/constants/ServiceLayerUrl';
 
 type Request = components['schemas']['UpdateApplicationModel'];
 

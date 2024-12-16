@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { mapToEligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/mapper/MapToEligibilityDetails';
 import AuthContext from '@/context/Auth/AuthContext';
-import { useGetMemberProfile } from '@/root/src/member-eligibility/service-layer/member-profile/UseGetMemberProfile';
+import { useGetMemberProfile } from '@bluelightcard/shared-ui/member-eligibility/service-layer/member-profile/UseGetMemberProfile';
 
 export type EligibilityDetailsState = [
   EligibilityDetails,

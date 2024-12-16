@@ -1,0 +1,683 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot test renders a the desktop renewal modal 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="flex flex-col justify-center items-center fixed h-[100vh] w-[100vw] z-50 inset-0 bg-black bg-opacity-[78%] backdrop-blur-sm"
+        data-testid="renewal-modal"
+      >
+        <div
+          class="flex-row flex justify-center align-stretch p-[48px] gap-[48px] w-[90vw] h-[90vh] bg-white rounded-lg overflow-y-hidden"
+        >
+          <div
+            class="grow basis-full h-full flex"
+          >
+            <img
+              alt="Example of physical card"
+              class="w-full h-full object-center object-cover rounded-3xl"
+              data-nimg="1"
+              decoding="async"
+              height="0"
+              loading="lazy"
+              src="assets/uk-modal-banner.svg"
+              style="color: transparent;"
+              width="0"
+            />
+          </div>
+          <div
+            class=" gap-[60px] flex flex-col items-center justify-center grow basis-full"
+          >
+            <div
+              class="flex flex-col gap-[24px]"
+            >
+              <div
+                class="flex flex-col justify-center align-center gap-[24px]"
+              >
+                <div
+                  class="flex flex-col justify-center align-center gap-[4px]"
+                >
+                  <p
+                    class="font-typography-display-small font-typography-display-small-weight text-typography-display-small leading-typography-display-small tracking-typography-display-small text-colour-onSurface dark:text-colour-onSurface-dark wrap text-center leading-relaxed"
+                  >
+                    Your Blue Light Card has expired
+                  </p>
+                  <p
+                    class="font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body text-colour-onSurface dark:text-colour-onSurface-dark text-center leading-relaxed"
+                  >
+                    Renew now to continue accessing exclusive discounts.
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flex flex-col gap-[48px]"
+              >
+                <div
+                  class="flex flex-wrap items-center justify-center gap-[8px]"
+                >
+                  <div
+                    class="flex flex-row gap-[8px]"
+                  >
+                    <div
+                      class="flex flex-col items-start gap-[16px] bg-neutral-50 px-[16px] pt-[20px] rounded-lg"
+                    >
+                      <svg-mock
+                        classname=""
+                      />
+                      <div
+                        class="font-typography-title-medium-semibold font-typography-title-medium-semibold-weight text-typography-title-medium-semibold leading-typography-title-medium-semibold tracking-typography-title-medium-semibold pb-[8px]"
+                      >
+                        Join our community of members.
+                         
+                        <span
+                          class="text-colour-onSurface-subtle"
+                        >
+                           Connect, share & thrive.
+                        </span>
+                      </div>
+                    </div>
+                    <div
+                      class="flex flex-col items-start gap-[16px] bg-neutral-50 px-[16px] pt-[20px] rounded-lg"
+                    >
+                      <svg-mock
+                        classname=""
+                      />
+                      <div
+                        class="font-typography-title-medium-semibold font-typography-title-medium-semibold-weight text-typography-title-medium-semibold leading-typography-title-medium-semibold tracking-typography-title-medium-semibold pb-[8px]"
+                      >
+                        <span
+                          class="text-colour-onSurface-subtle"
+                        >
+                           Benefit from 
+                        </span>
+                        thousands of discounts from holidays to dining out.
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="flex flex-row gap-[8px]"
+                  >
+                    <div
+                      class="flex flex-col items-start gap-[16px] bg-neutral-50 px-[16px] pt-[20px] rounded-lg"
+                    >
+                      <svg-mock
+                        classname=""
+                      />
+                      <div
+                        class="font-typography-title-medium-semibold font-typography-title-medium-semibold-weight text-typography-title-medium-semibold leading-typography-title-medium-semibold tracking-typography-title-medium-semibold pb-[8px]"
+                      >
+                        <span
+                          class="text-colour-onSurface-subtle"
+                        >
+                           Save anytime, anywhere 
+                        </span>
+                        on web & app, online & in person.
+                      </div>
+                    </div>
+                    <div
+                      class="flex flex-col items-start gap-[16px] bg-neutral-50 px-[16px] pt-[20px] rounded-lg"
+                    >
+                      <svg-mock
+                        classname=""
+                      />
+                      <div
+                        class="font-typography-title-medium-semibold font-typography-title-medium-semibold-weight text-typography-title-medium-semibold leading-typography-title-medium-semibold tracking-typography-title-medium-semibold pb-[8px]"
+                      >
+                        <span
+                          class="text-colour-onSurface-subtle"
+                        >
+                           Get access to exclusive 
+                        </span>
+                        offers, freebies and amazing experiences.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="flex w-full max-w-[1200px] mx-auto gap-[8px]"
+                >
+                  <button
+                    class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark w-1/5 text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                    data-testid="delay-renewal-button"
+                    type="button"
+                  >
+                    Later
+                  </button>
+                  <button
+                    class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none w-4/5 ml-auto text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                    data-testid="renewal-button"
+                    type="button"
+                  >
+                    Renew membership
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="flex flex-col justify-center items-center fixed h-[100vh] w-[100vw] z-50 inset-0 bg-black bg-opacity-[78%] backdrop-blur-sm"
+      data-testid="renewal-modal"
+    >
+      <div
+        class="flex-row flex justify-center align-stretch p-[48px] gap-[48px] w-[90vw] h-[90vh] bg-white rounded-lg overflow-y-hidden"
+      >
+        <div
+          class="grow basis-full h-full flex"
+        >
+          <img
+            alt="Example of physical card"
+            class="w-full h-full object-center object-cover rounded-3xl"
+            data-nimg="1"
+            decoding="async"
+            height="0"
+            loading="lazy"
+            src="assets/uk-modal-banner.svg"
+            style="color: transparent;"
+            width="0"
+          />
+        </div>
+        <div
+          class=" gap-[60px] flex flex-col items-center justify-center grow basis-full"
+        >
+          <div
+            class="flex flex-col gap-[24px]"
+          >
+            <div
+              class="flex flex-col justify-center align-center gap-[24px]"
+            >
+              <div
+                class="flex flex-col justify-center align-center gap-[4px]"
+              >
+                <p
+                  class="font-typography-display-small font-typography-display-small-weight text-typography-display-small leading-typography-display-small tracking-typography-display-small text-colour-onSurface dark:text-colour-onSurface-dark wrap text-center leading-relaxed"
+                >
+                  Your Blue Light Card has expired
+                </p>
+                <p
+                  class="font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body text-colour-onSurface dark:text-colour-onSurface-dark text-center leading-relaxed"
+                >
+                  Renew now to continue accessing exclusive discounts.
+                </p>
+              </div>
+            </div>
+            <div
+              class="flex flex-col gap-[48px]"
+            >
+              <div
+                class="flex flex-wrap items-center justify-center gap-[8px]"
+              >
+                <div
+                  class="flex flex-row gap-[8px]"
+                >
+                  <div
+                    class="flex flex-col items-start gap-[16px] bg-neutral-50 px-[16px] pt-[20px] rounded-lg"
+                  >
+                    <svg-mock
+                      classname=""
+                    />
+                    <div
+                      class="font-typography-title-medium-semibold font-typography-title-medium-semibold-weight text-typography-title-medium-semibold leading-typography-title-medium-semibold tracking-typography-title-medium-semibold pb-[8px]"
+                    >
+                      Join our community of members.
+                       
+                      <span
+                        class="text-colour-onSurface-subtle"
+                      >
+                         Connect, share & thrive.
+                      </span>
+                    </div>
+                  </div>
+                  <div
+                    class="flex flex-col items-start gap-[16px] bg-neutral-50 px-[16px] pt-[20px] rounded-lg"
+                  >
+                    <svg-mock
+                      classname=""
+                    />
+                    <div
+                      class="font-typography-title-medium-semibold font-typography-title-medium-semibold-weight text-typography-title-medium-semibold leading-typography-title-medium-semibold tracking-typography-title-medium-semibold pb-[8px]"
+                    >
+                      <span
+                        class="text-colour-onSurface-subtle"
+                      >
+                         Benefit from 
+                      </span>
+                      thousands of discounts from holidays to dining out.
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="flex flex-row gap-[8px]"
+                >
+                  <div
+                    class="flex flex-col items-start gap-[16px] bg-neutral-50 px-[16px] pt-[20px] rounded-lg"
+                  >
+                    <svg-mock
+                      classname=""
+                    />
+                    <div
+                      class="font-typography-title-medium-semibold font-typography-title-medium-semibold-weight text-typography-title-medium-semibold leading-typography-title-medium-semibold tracking-typography-title-medium-semibold pb-[8px]"
+                    >
+                      <span
+                        class="text-colour-onSurface-subtle"
+                      >
+                         Save anytime, anywhere 
+                      </span>
+                      on web & app, online & in person.
+                    </div>
+                  </div>
+                  <div
+                    class="flex flex-col items-start gap-[16px] bg-neutral-50 px-[16px] pt-[20px] rounded-lg"
+                  >
+                    <svg-mock
+                      classname=""
+                    />
+                    <div
+                      class="font-typography-title-medium-semibold font-typography-title-medium-semibold-weight text-typography-title-medium-semibold leading-typography-title-medium-semibold tracking-typography-title-medium-semibold pb-[8px]"
+                    >
+                      <span
+                        class="text-colour-onSurface-subtle"
+                      >
+                         Get access to exclusive 
+                      </span>
+                      offers, freebies and amazing experiences.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="flex w-full max-w-[1200px] mx-auto gap-[8px]"
+              >
+                <button
+                  class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark w-1/5 text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                  data-testid="delay-renewal-button"
+                  type="button"
+                >
+                  Later
+                </button>
+                <button
+                  class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none w-4/5 ml-auto text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                  data-testid="renewal-button"
+                  type="button"
+                >
+                  Renew membership
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
+
+exports[`snapshot test renders a the mobile renewal modal 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="flex flex-col justify-start items-center gap-[24px] fixed top-0 left-0 h-[100vh] w-[100vw] z-50 p-[18px] bg-white overflow-y-scroll"
+        data-testid="sign-up-success-screen"
+      >
+        <div
+          class=" flex flex-col justify-center align-center gap-[24px] grow"
+        >
+          <div
+            class="flex flex-col justify-center align-center gap-[4px]"
+          >
+            <p
+              class="font-typography-headline-bold font-typography-headline-bold-weight text-typography-headline-bold leading-typography-headline-bold tracking-typography-headline-bold text-colour-onSurface dark:text-colour-onSurface-dark text-center leading-relaxed"
+            >
+              Your Blue Light Card has expired
+            </p>
+            <p
+              class="font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body text-colour-onSurface dark:text-colour-onSurface-dark text-center leading-relaxed"
+            >
+              Renew now to continue accessing exclusive discounts.
+            </p>
+          </div>
+          <div
+            class="flex flex-col justify-center align-center gap-[8px]"
+          >
+            <div
+              class="grow flex items-center gap-[16px] bg-neutral-50 px-[16px] py-[20px] rounded-lg"
+            >
+              <svg-mock
+                classname="w-[64px] h-[48px]"
+              />
+              <div
+                class="font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold pb-[8px]"
+              >
+                Join our community of members.
+                 
+                <span
+                  class="text-colour-onSurface-subtle"
+                >
+                   Connect, share & thrive.
+                </span>
+              </div>
+            </div>
+            <div
+              class="grow flex items-center gap-[16px] bg-neutral-50 px-[16px] py-[20px] rounded-lg"
+            >
+              <svg-mock
+                classname="w-[64px] h-[48px]"
+              />
+              <div
+                class="font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold pb-[8px]"
+              >
+                <span
+                  class="text-colour-onSurface-subtle"
+                >
+                   Benefit from 
+                </span>
+                thousands of discounts from holidays to dining out.
+              </div>
+            </div>
+            <div
+              class="grow flex items-center gap-[16px] bg-neutral-50 px-[16px] py-[20px] rounded-lg"
+            >
+              <svg-mock
+                classname="w-[64px] h-[48px]"
+              />
+              <div
+                class="font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold pb-[8px]"
+              >
+                <span
+                  class="text-colour-onSurface-subtle"
+                >
+                   Save anytime, anywhere 
+                </span>
+                on web & app, online & in person.
+              </div>
+            </div>
+            <div
+              class="grow flex items-center gap-[16px] bg-neutral-50 px-[16px] py-[20px] rounded-lg"
+            >
+              <svg-mock
+                classname="w-[64px] h-[48px]"
+              />
+              <div
+                class="font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold pb-[8px]"
+              >
+                <span
+                  class="text-colour-onSurface-subtle"
+                >
+                   Get access to exclusive 
+                </span>
+                offers, freebies and amazing experiences.
+              </div>
+            </div>
+            <div
+              class="flex w-full gap-[8px]"
+            >
+              <button
+                class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark w-1/5 text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                data-testid="delay-renewal-button-mobile"
+                type="button"
+              >
+                Later
+              </button>
+              <button
+                class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none w-4/5 ml-auto text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+                data-testid="renewal-button-mobile"
+                type="button"
+              >
+                Renew membership
+              </button>
+            </div>
+          </div>
+        </div>
+        <img
+          alt="Example of physical card"
+          class="w-full h-auto shrink object-center object-cover rounded-3xl"
+          data-nimg="1"
+          decoding="async"
+          height="0"
+          loading="lazy"
+          src="assets/uk-modal-banner.svg"
+          style="color: transparent;"
+          width="0"
+        />
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="flex flex-col justify-start items-center gap-[24px] fixed top-0 left-0 h-[100vh] w-[100vw] z-50 p-[18px] bg-white overflow-y-scroll"
+      data-testid="sign-up-success-screen"
+    >
+      <div
+        class=" flex flex-col justify-center align-center gap-[24px] grow"
+      >
+        <div
+          class="flex flex-col justify-center align-center gap-[4px]"
+        >
+          <p
+            class="font-typography-headline-bold font-typography-headline-bold-weight text-typography-headline-bold leading-typography-headline-bold tracking-typography-headline-bold text-colour-onSurface dark:text-colour-onSurface-dark text-center leading-relaxed"
+          >
+            Your Blue Light Card has expired
+          </p>
+          <p
+            class="font-typography-body font-typography-body-weight text-typography-body leading-typography-body tracking-typography-body text-colour-onSurface dark:text-colour-onSurface-dark text-center leading-relaxed"
+          >
+            Renew now to continue accessing exclusive discounts.
+          </p>
+        </div>
+        <div
+          class="flex flex-col justify-center align-center gap-[8px]"
+        >
+          <div
+            class="grow flex items-center gap-[16px] bg-neutral-50 px-[16px] py-[20px] rounded-lg"
+          >
+            <svg-mock
+              classname="w-[64px] h-[48px]"
+            />
+            <div
+              class="font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold pb-[8px]"
+            >
+              Join our community of members.
+               
+              <span
+                class="text-colour-onSurface-subtle"
+              >
+                 Connect, share & thrive.
+              </span>
+            </div>
+          </div>
+          <div
+            class="grow flex items-center gap-[16px] bg-neutral-50 px-[16px] py-[20px] rounded-lg"
+          >
+            <svg-mock
+              classname="w-[64px] h-[48px]"
+            />
+            <div
+              class="font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold pb-[8px]"
+            >
+              <span
+                class="text-colour-onSurface-subtle"
+              >
+                 Benefit from 
+              </span>
+              thousands of discounts from holidays to dining out.
+            </div>
+          </div>
+          <div
+            class="grow flex items-center gap-[16px] bg-neutral-50 px-[16px] py-[20px] rounded-lg"
+          >
+            <svg-mock
+              classname="w-[64px] h-[48px]"
+            />
+            <div
+              class="font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold pb-[8px]"
+            >
+              <span
+                class="text-colour-onSurface-subtle"
+              >
+                 Save anytime, anywhere 
+              </span>
+              on web & app, online & in person.
+            </div>
+          </div>
+          <div
+            class="grow flex items-center gap-[16px] bg-neutral-50 px-[16px] py-[20px] rounded-lg"
+          >
+            <svg-mock
+              classname="w-[64px] h-[48px]"
+            />
+            <div
+              class="font-typography-body-semibold font-typography-body-semibold-weight text-typography-body-semibold leading-typography-body-semibold tracking-typography-body-semibold pb-[8px]"
+            >
+              <span
+                class="text-colour-onSurface-subtle"
+              >
+                 Get access to exclusive 
+              </span>
+              offers, freebies and amazing experiences.
+            </div>
+          </div>
+          <div
+            class="flex w-full gap-[8px]"
+          >
+            <button
+              class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark w-1/5 text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              data-testid="delay-renewal-button-mobile"
+              type="button"
+            >
+              Later
+            </button>
+            <button
+              class="rounded transition border-1 py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none w-4/5 ml-auto text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              data-testid="renewal-button-mobile"
+              type="button"
+            >
+              Renew membership
+            </button>
+          </div>
+        </div>
+      </div>
+      <img
+        alt="Example of physical card"
+        class="w-full h-auto shrink object-center object-cover rounded-3xl"
+        data-nimg="1"
+        decoding="async"
+        height="0"
+        loading="lazy"
+        src="assets/uk-modal-banner.svg"
+        style="color: transparent;"
+        width="0"
+      />
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

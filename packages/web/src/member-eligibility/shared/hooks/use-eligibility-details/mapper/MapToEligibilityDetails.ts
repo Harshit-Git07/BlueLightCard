@@ -16,7 +16,7 @@ import { BRAND } from '@/root/global-vars';
 import {
   ServiceLayerApplication,
   ServiceLayerMemberProfile,
-} from '@/root/src/member-eligibility/service-layer/member-profile/types/ServiceLayerMemberProfile';
+} from '@bluelightcard/shared-ui/member-eligibility/service-layer/member-profile/types/ServiceLayerMemberProfile';
 
 type EligibilityDetailsWithoutFlowAndScreen = Omit<EligibilityDetails, 'flow' | 'currentScreen'>;
 

@@ -5,6 +5,7 @@ declare module '*.md?raw' {
 
 // Handles svg imports
 declare module '*.svg' {
-  const content: unknown;
-  return content;
+  import React from 'react';
+  const ReactComponent: React.FC<React.SVGProps<SVGSVGElement>>;
+  export default ReactComponent;
 }

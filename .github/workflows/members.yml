@@ -218,6 +218,7 @@ jobs:
           DDS_COGNITO_USER_POOL_ID: ${{ matrix.ddsCognitoUserPoolId }}
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
+          MEMBERS_OPENSEARCH_CREATE_NEW_DOMAIN: ${{ github.event.label.name == 'membersCreateNewOpenSearchDomain' && 'true' || 'false' }}
           # SERVICE_LAYER_AUTH0_DOMAIN: ${{ secrets[matrix.auth0Domain] }}
           # SERVICE_LAYER_AUTH0_API_CLIENT_ID: ${{ secrets[matrix.auth0ApiClientId] }}
           # SERVICE_LAYER_AUTH0_API_CLIENT_SECRET: ${{ secrets[matrix.auth0ApiClientSecret] }}

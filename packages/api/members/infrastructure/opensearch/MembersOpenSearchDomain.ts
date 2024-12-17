@@ -1,4 +1,4 @@
-import { EbsDeviceVolumeType, IVpc, Port } from 'aws-cdk-lib/aws-ec2';
+import { EbsDeviceVolumeType, IVpc, Port, SubnetType } from 'aws-cdk-lib/aws-ec2';
 import { PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { Domain, EngineVersion, TLSSecurityPolicy } from 'aws-cdk-lib/aws-opensearchservice';
 import { Stack } from 'sst/constructs';
@@ -53,6 +53,11 @@ export class MembersOpenSearchDomain {
         dataNodeInstanceType: 'r7g.medium.search',
       },
       vpc: this.vpc,
+      vpcSubnets: [
+        this.vpc.selectSubnets({
+          availabilityZones: ['eu-west-2a', 'ap-southeast-2a'],
+        }),
+      ],
       removalPolicy:
         isProduction(this.stack.stage) || isStaging(this.stack.stage)
           ? RemovalPolicy.RETAIN_ON_UPDATE_OR_DELETE

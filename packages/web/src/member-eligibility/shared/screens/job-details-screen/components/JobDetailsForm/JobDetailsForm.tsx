@@ -1,15 +1,14 @@
 import React, { FC } from 'react';
-import { NormalJobDetails } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/NormalJobDetails/NormalJobDetails';
-import { SelfEmployedJobDetails } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/SelfEmployedJobDetails/SelfEmployedJobDetails';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { useIsAusBrand } from '@/root/src/member-eligibility/shared/hooks/use-is-aus-brand/UseIsAusBrand';
+import { SelfEmployedJobDetails } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/self-employed-job-details/SelfEmployedJobDetails';
+import { NormalJobDetails } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/NormalJobDetails';
 
 interface Props {
   eligibilityDetailsState: EligibilityDetailsState;
-  isNextButtonDisabled: boolean;
 }
 
-export const JobDetailsForm: FC<Props> = ({ eligibilityDetailsState, isNextButtonDisabled }) => {
+export const JobDetailsForm: FC<Props> = ({ eligibilityDetailsState }) => {
   const [eligibilityDetails] = eligibilityDetailsState;
 
   const isAus = useIsAusBrand();
@@ -20,10 +19,5 @@ export const JobDetailsForm: FC<Props> = ({ eligibilityDetailsState, isNextButto
     return <SelfEmployedJobDetails eligibilityDetailsState={eligibilityDetailsState} />;
   }
 
-  return (
-    <NormalJobDetails
-      eligibilityDetailsState={eligibilityDetailsState}
-      isNextButtonDisabled={isNextButtonDisabled}
-    />
-  );
+  return <NormalJobDetails eligibilityDetailsState={eligibilityDetailsState} />;
 };

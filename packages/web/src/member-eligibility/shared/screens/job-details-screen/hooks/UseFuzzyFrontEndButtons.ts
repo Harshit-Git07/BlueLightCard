@@ -78,7 +78,6 @@ export function useFuzzyFrontendButtons(eligibilityDetailsState: EligibilityDeta
           setEligibilityDetailsState({
             ...eligibilityDetails,
             currentScreen: 'Verification Method Screen',
-            requireMultipleIds: true,
             currentIdRequirementDetails: multiIdRequirementsStub,
           });
         },

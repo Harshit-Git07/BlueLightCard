@@ -1,6 +1,11 @@
 import { ChangeEventHandler, KeyboardEventHandler } from 'react';
 
-export type PromoCodeVariant = 'default' | 'open' | 'error' | 'success';
+export type PromoCodeVariant =
+  | 'default'
+  | 'open'
+  | 'error'
+  | 'success-skip-id'
+  | 'success-skip-payment';
 
 export interface PromoCodeProps {
   name?: string;

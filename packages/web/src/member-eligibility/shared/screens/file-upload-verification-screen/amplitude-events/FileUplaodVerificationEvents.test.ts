@@ -6,7 +6,6 @@ describe('fileUploadVerificationEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Sign Up',
       currentScreen: 'File Upload Verification Screen',
-      canSkipIdVerification: false,
     };
     expect(fileUploadVerificationEvents.onEditClicked(eligibilityDetails)).toEqual({
       event: 'signup_click',
@@ -21,7 +20,6 @@ describe('fileUploadVerificationEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Renewal',
       currentScreen: 'File Upload Verification Screen',
-      canSkipIdVerification: false,
     };
     expect(fileUploadVerificationEvents.onEditClicked(eligibilityDetails)).toEqual({
       event: 'renewal_click',
@@ -36,7 +34,6 @@ describe('fileUploadVerificationEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Sign Up',
       currentScreen: 'File Upload Verification Screen',
-      canSkipIdVerification: false,
     };
     expect(fileUploadVerificationEvents.onSubmitClicked(eligibilityDetails)).toEqual({
       event: 'signup_click',
@@ -51,7 +48,6 @@ describe('fileUploadVerificationEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Renewal',
       currentScreen: 'File Upload Verification Screen',
-      canSkipIdVerification: false,
     };
     expect(fileUploadVerificationEvents.onSubmitClicked(eligibilityDetails)).toEqual({
       event: 'renewal_click',
@@ -66,7 +62,6 @@ describe('fileUploadVerificationEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Sign Up',
       currentScreen: 'File Upload Verification Screen',
-      canSkipIdVerification: false,
     };
     expect(fileUploadVerificationEvents.onChooseFileClicked(eligibilityDetails)).toEqual({
       event: 'signup_click',
@@ -81,7 +76,6 @@ describe('fileUploadVerificationEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Renewal',
       currentScreen: 'File Upload Verification Screen',
-      canSkipIdVerification: false,
     };
     expect(fileUploadVerificationEvents.onChooseFileClicked(eligibilityDetails)).toEqual({
       event: 'renewal_click',
@@ -96,7 +90,6 @@ describe('fileUploadVerificationEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Sign Up',
       currentScreen: 'File Upload Verification Screen',
-      canSkipIdVerification: false,
     };
     expect(fileUploadVerificationEvents.onRemoveFileClicked(eligibilityDetails)).toEqual({
       event: 'signup_click',
@@ -111,7 +104,6 @@ describe('fileUploadVerificationEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Renewal',
       currentScreen: 'File Upload Verification Screen',
-      canSkipIdVerification: false,
     };
     expect(fileUploadVerificationEvents.onRemoveFileClicked(eligibilityDetails)).toEqual({
       event: 'renewal_click',

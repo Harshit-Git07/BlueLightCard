@@ -142,7 +142,7 @@ function getGuidelinesDescription(eligibilityDetails: EligibilityDetails): strin
   const matchedGuidelines = eligibilityDetails.currentIdRequirementDetails?.find(
     (detail) => detail.title === eligibilityDetails.fileVerificationType
   )?.guidelines;
-  if (!matchedGuidelines) return undefined;
+  if (matchedGuidelines === undefined) return undefined;
 
   return matchedGuidelines;
 }

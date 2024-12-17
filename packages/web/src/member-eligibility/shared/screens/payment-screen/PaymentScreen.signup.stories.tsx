@@ -25,8 +25,13 @@ const ScreenTemplate: StoryFn<typeof PaymentScreen> = () => {
   const eligibilityDetailsState = useSignupEligibilityDetails({
     currentScreen: 'Payment Screen',
     employmentStatus: 'Employed',
-    organisation: { id: '1', label: 'NHS' },
-    employer: { id: '1', label: 'Abbey Hospitals' },
+    organisation: { id: '1', label: 'NHS', requiresJobTitle: true, requiresJobReference: false },
+    employer: {
+      id: '1',
+      label: 'Abbey Hospitals',
+      requiresJobTitle: true,
+      requiresJobReference: false,
+    },
     jobTitle: 'Nurse',
     emailVerification: 'test@nhs.com',
     address: {

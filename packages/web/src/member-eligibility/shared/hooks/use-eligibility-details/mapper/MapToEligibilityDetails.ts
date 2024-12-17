@@ -5,6 +5,7 @@ import {
   EligibilityDetailsApplication,
   EligibilityDetailsMember,
   EligibilityEmployer,
+  EligibilityJobDetailsAus,
   EligibilityOrganisation,
   EmploymentStatus,
   UkAddress,
@@ -13,6 +14,8 @@ import { getEmployerFromServiceLayer } from '@/root/src/member-eligibility/share
 import { getOrganisationFromServiceLayer } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/mapper/service-layer/GetOrganisation';
 import { BRANDS } from '@/types/brands.enum';
 import { BRAND } from '@/root/global-vars';
+import { toEligibilityEmployer } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/mapper/mapper/ToEligibilityEmployer';
+import { toEligibilityOrganisation } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/mapper/mapper/ToEligibilityOrganisation';
 import {
   ServiceLayerApplication,
   ServiceLayerMemberProfile,
@@ -23,17 +26,24 @@ type EligibilityDetailsWithoutFlowAndScreen = Omit<EligibilityDetails, 'flow' | 
 export async function mapToEligibilityDetails(
   memberProfile: ServiceLayerMemberProfile
 ): Promise<EligibilityDetailsWithoutFlowAndScreen> {
+  const employmentStatus = getEmploymentStatus(memberProfile);
+
+  const organisation = await getOrganisation(memberProfile, employmentStatus);
+  const employer = await getEmployer(memberProfile);
+  const promoCode = getPromoCode(memberProfile);
+
   return {
     member: getMemberDetails(memberProfile),
     address: getAddressDetails(memberProfile),
-    employmentStatus: getEmploymentStatus(memberProfile),
-    organisation: await getOrganisation(memberProfile),
-    employer: await getEmployer(memberProfile),
+    employmentStatus,
+    organisation,
+    employer,
     jobTitle: memberProfile.jobTitle,
-    promoCode: getPromoCode(memberProfile),
-    requireMultipleIds: false, // TODO: Find out how to extract this
-    canSkipIdVerification: false, // TODO: Find out how to extract this
-    canSkipPayment: false, // TODO: Find out how to extract this
+    jobReference: memberProfile.jobReference,
+    promoCode,
+    jobDetailsAus: getJobDetailsAus(memberProfile),
+    canSkipIdVerification: getCanSkipIdVerification(organisation, employer, promoCode),
+    canSkipPayment: getCanSkipPaymentVerification(organisation, employer, promoCode),
   };
 }
 
@@ -118,7 +128,6 @@ function getUkAddressDetails(
 function getEmploymentStatus(
   memberProfile: ServiceLayerMemberProfile
 ): EmploymentStatus | undefined {
-  // TODO: Find out what these actually resolve to
   switch (memberProfile.employmentStatus) {
     case 'EMPLOYED':
       return 'Employed';
@@ -130,7 +139,8 @@ function getEmploymentStatus(
 }
 
 async function getOrganisation(
-  memberProfile: ServiceLayerMemberProfile
+  memberProfile: ServiceLayerMemberProfile,
+  employmentStatus: EmploymentStatus | undefined
 ): Promise<EligibilityOrganisation | undefined> {
   if (!memberProfile.organisationId) return undefined;
 
@@ -139,10 +149,7 @@ async function getOrganisation(
   );
   if (!serviceLayerOrganisation) return undefined;
 
-  return {
-    id: serviceLayerOrganisation.organisationId,
-    label: serviceLayerOrganisation.name,
-  };
+  return toEligibilityOrganisation(serviceLayerOrganisation, employmentStatus);
 }
 
 async function getEmployer(
@@ -156,10 +163,7 @@ async function getEmployer(
   );
   if (!serviceLayerEmployer) return undefined;
 
-  return {
-    id: serviceLayerEmployer.employerId,
-    label: serviceLayerEmployer.name,
-  };
+  return toEligibilityEmployer(serviceLayerEmployer);
 }
 
 function getPromoCode(memberProfile: ServiceLayerMemberProfile): string | undefined {
@@ -168,4 +172,51 @@ function getPromoCode(memberProfile: ServiceLayerMemberProfile): string | undefi
 
   // TODO: Find out the promo code structure
   return undefined;
+}
+
+function getJobDetailsAus(
+  memberProfile: ServiceLayerMemberProfile
+): EligibilityJobDetailsAus | undefined {
+  const employerName = memberProfile.employerName;
+  if (!employerName) return undefined;
+
+  return {
+    employerAus: employerName,
+  };
+}
+
+function getCanSkipIdVerification(
+  organisation: EligibilityOrganisation | undefined,
+  employer: EligibilityEmployer | undefined,
+  promoCode: string | undefined
+): boolean {
+  if (!promoCode) return false;
+
+  if (employer) {
+    return employer.promoCodeEffect === 'Bypass ID';
+  }
+
+  if (organisation) {
+    return organisation.promoCodeEffect === 'Bypass ID';
+  }
+
+  return false;
+}
+
+function getCanSkipPaymentVerification(
+  organisation: EligibilityOrganisation | undefined,
+  employer: EligibilityEmployer | undefined,
+  promoCode: string | undefined
+): boolean {
+  if (!promoCode) return false;
+
+  if (employer) {
+    return employer.promoCodeEffect === 'Bypass Payment';
+  }
+
+  if (organisation) {
+    return organisation.promoCodeEffect === 'Bypass Payment';
+  }
+
+  return false;
 }

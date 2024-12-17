@@ -1,3 +1,5 @@
+import { DropdownOption } from '@bluelightcard/shared-ui/components/Dropdown/types';
+
 export interface EligibilityDetails {
   flow: 'Sign Up' | 'Renewal';
   currentScreen: EligibilityScreen;
@@ -10,6 +12,7 @@ export interface EligibilityDetails {
   organisation?: EligibilityOrganisation;
   employer?: EligibilityEmployer;
   jobTitle?: string;
+  jobReference?: string;
   jobDetailsAus?: EligibilityJobDetailsAus;
   promoCode?: string;
   requireMultipleIds?: boolean;
@@ -54,17 +57,17 @@ export interface AusAddress {
   postcode: string;
 }
 
-export interface EligibilityOrganisation {
-  id: string;
-  label: string;
-  requireMultipleIds?: boolean;
+export interface EligibilityOrganisation extends DropdownOption {
+  requiresJobTitle: boolean;
+  requiresJobReference: boolean;
+  promoCodeEffect?: PromoCodeEffect;
   idRequirements?: IdRequirementDetails[];
 }
 
-export interface EligibilityEmployer {
-  id: string;
-  label: string;
-  requireMultipleIds?: boolean;
+export interface EligibilityEmployer extends DropdownOption {
+  requiresJobTitle: boolean;
+  requiresJobReference: boolean;
+  promoCodeEffect?: PromoCodeEffect;
   idRequirements?: IdRequirementDetails[];
 }
 
@@ -95,3 +98,4 @@ export interface EligibilityDetailsApplication {
 }
 
 export type EligibilityDetailsWithoutFlow = Omit<EligibilityDetails, 'flow'>;
+export type PromoCodeEffect = 'Bypass ID' | 'Bypass Payment';

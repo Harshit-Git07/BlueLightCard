@@ -27,7 +27,7 @@ export async function updateServiceLayerProfile(
       employerId: eligibilityDetails.employer?.id,
       employerName: undefined, // TODO: Add AUS specific employer name here?
       jobTitle: eligibilityDetails.jobTitle,
-      jobReference: undefined, // TODO: What do we put here?
+      jobReference: eligibilityDetails.jobReference,
     };
     const result = await fetch(
       `${serviceLayerUrl}/members/${eligibilityDetails.member.id}/profile`,

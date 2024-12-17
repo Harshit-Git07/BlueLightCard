@@ -6,7 +6,6 @@ describe('employmentStatusEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       currentScreen: 'Employment Status Screen',
       flow: 'Sign Up',
-      canSkipIdVerification: false,
     };
     expect(employmentStatusEvents.onBackClicked(eligibilityDetails)).toEqual({
       event: 'signup_click',
@@ -21,7 +20,6 @@ describe('employmentStatusEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Renewal',
       currentScreen: 'Employment Status Screen',
-      canSkipIdVerification: false,
     };
     expect(employmentStatusEvents.onBackClicked(eligibilityDetails)).toEqual({
       event: 'renewal_click',
@@ -36,7 +34,6 @@ describe('employmentStatusEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Sign Up',
       currentScreen: 'Employment Status Screen',
-      canSkipIdVerification: false,
       employmentStatus: 'Employed',
     };
     expect(employmentStatusEvents.onForwardClicked(eligibilityDetails)).toEqual({
@@ -54,7 +51,6 @@ describe('employmentStatusEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Renewal',
       currentScreen: 'Employment Status Screen',
-      canSkipIdVerification: false,
       employmentStatus: 'Volunteer',
     };
     expect(employmentStatusEvents.onForwardClicked(eligibilityDetails)).toEqual({

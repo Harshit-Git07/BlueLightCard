@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import { PromoCodeProps, PromoCodeVariant } from './types';
 import PromoCodeSuccess from './components/PromoCodeSuccess';
 import PromoCodeEntry from './components/PromoCodeEntry';
@@ -30,13 +30,17 @@ const PromoCode: FC<PromoCodeProps> = ({
     }
   }, [variant]);
 
-  const togglePromoCodeTextEntryVisbility = () => {
-    if (currentVariant !== 'success') {
-      setIsOpen(!isOpen);
-      const newVariant = !isOpen ? 'open' : 'default';
-      setCurrentVariant(newVariant);
-      onStateChange?.(newVariant);
-    }
+  const isInSuccessState = useMemo(() => {
+    return currentVariant === 'success-skip-id' || currentVariant === 'success-skip-payment';
+  }, []);
+
+  const togglePromoCodeTextEntryVisability = () => {
+    if (isInSuccessState) return;
+
+    setIsOpen(!isOpen);
+    const newVariant = !isOpen ? 'open' : 'default';
+    setCurrentVariant(newVariant);
+    onStateChange?.(newVariant);
   };
 
   const handleRemove = () => {
@@ -56,14 +60,15 @@ const PromoCode: FC<PromoCodeProps> = ({
         return `${baseClasses} border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark`;
       case 'error':
         return `${baseClasses} bg-colour-surface-container dark:bg-colour-surface-container-dark border-colour-error dark:border-colour-error-dark`;
-      case 'success':
+      case 'success-skip-id':
+      case 'success-skip-payment':
         return `${baseClasses} bg-colour-success-bright dark:bg-colour-success-bright-dark border-colour-success dark:border-colour-success-dark`;
     }
   };
 
   return (
     <div className={`${getOuterDivClasses(currentVariant)} ${className}`}>
-      {currentVariant !== 'success' && (
+      {!isInSuccessState && (
         <PromoCodeEntry
           name={name}
           value={value}
@@ -78,11 +83,13 @@ const PromoCode: FC<PromoCodeProps> = ({
           icon={icon}
           isOpen={isOpen}
           currentVariant={currentVariant}
-          onToggle={togglePromoCodeTextEntryVisbility}
+          onToggle={togglePromoCodeTextEntryVisability}
         />
       )}
 
-      {currentVariant === 'success' && <PromoCodeSuccess value={value} onRemove={handleRemove} />}
+      {isInSuccessState && (
+        <PromoCodeSuccess value={value} onRemove={handleRemove} variant={variant} />
+      )}
     </div>
   );
 };

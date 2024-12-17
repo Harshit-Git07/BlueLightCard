@@ -30,7 +30,22 @@ const MultiIdTemplate: StoryFn<typeof FileUploadVerificationScreen> = () => {
   const eligibilityDetailsState = useRenewalEligibilityDetails({
     ...renewalEligibilityDetailsStub,
     currentScreen: 'File Upload Verification Screen',
-    requireMultipleIds: true,
+    currentIdRequirementDetails: [
+      {
+        title: 'Required',
+        description: 'An required file method',
+        guidelines: 'Take a picture of the thing you want verified',
+        type: 'file upload',
+        required: true,
+      },
+      {
+        title: 'Optional',
+        description: 'An optional file method',
+        guidelines: 'Take a picture of this optional thing you want verified',
+        type: 'file upload',
+        required: true,
+      },
+    ],
     fileVerificationType: ['Work Contract', 'Bank Statement'],
   });
 

@@ -15,10 +15,14 @@ export const renewalEligibilityDetailsStub: EligibilityDetails = {
   organisation: {
     id: '43a3ef4f-3c18-41a5-8d0f-8343eca9b6f5',
     label: 'Police',
+    requiresJobTitle: true,
+    requiresJobReference: false,
   },
   employer: {
     id: '06cfa39f-e87d-463a-a954-ef1e3f5f176d',
     label: 'The Port of Tilbury',
+    requiresJobTitle: true,
+    requiresJobReference: false,
   },
   jobTitle: 'Officer',
   member: {

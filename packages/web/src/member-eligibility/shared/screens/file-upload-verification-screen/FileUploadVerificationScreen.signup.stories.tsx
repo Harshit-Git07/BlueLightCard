@@ -16,8 +16,13 @@ const SingleIdTemplate: StoryFn<typeof FileUploadVerificationScreen> = () => {
   const eligibilityDetailsState = useSignupEligibilityDetails({
     currentScreen: 'File Upload Verification Screen',
     employmentStatus: 'Employed',
-    organisation: { id: '1', label: 'NHS' },
-    employer: { id: '1', label: 'Abbey Hospitals' },
+    organisation: { id: '1', label: 'NHS', requiresJobTitle: true, requiresJobReference: false },
+    employer: {
+      id: '1',
+      label: 'Abbey Hospitals',
+      requiresJobTitle: true,
+      requiresJobReference: false,
+    },
     jobTitle: 'Nurse',
     fileVerificationType: 'Work Contract',
   });
@@ -30,10 +35,30 @@ const MultiIdTemplate: StoryFn<typeof FileUploadVerificationScreen> = () => {
   const eligibilityDetailsState = useSignupEligibilityDetails({
     currentScreen: 'File Upload Verification Screen',
     employmentStatus: 'Employed',
-    organisation: { id: '1', label: 'NHS' },
-    employer: { id: '1', label: 'Abbey Hospitals' },
+    organisation: { id: '1', label: 'NHS', requiresJobTitle: true, requiresJobReference: false },
+    employer: {
+      id: '1',
+      label: 'Abbey Hospitals',
+      requiresJobTitle: true,
+      requiresJobReference: false,
+    },
     jobTitle: 'Nurse',
-    requireMultipleIds: true,
+    currentIdRequirementDetails: [
+      {
+        title: 'Required',
+        description: 'An required file method',
+        guidelines: 'Take a picture of the thing you want verified',
+        type: 'file upload',
+        required: true,
+      },
+      {
+        title: 'Optional',
+        description: 'An optional file method',
+        guidelines: 'Take a picture of this optional thing you want verified',
+        type: 'file upload',
+        required: true,
+      },
+    ],
     fileVerificationType: ['Work Contract', 'Bank Statement'],
   });
 

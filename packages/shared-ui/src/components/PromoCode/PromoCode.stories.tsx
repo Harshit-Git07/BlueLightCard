@@ -38,7 +38,7 @@ const Template: StoryFn<typeof PromoCode> = (args) => {
       setVariant('error');
       setErrorMessage('The code has expired.');
     } else {
-      setVariant('success');
+      setVariant('success-skip-id');
       setErrorMessage('');
     }
   };
@@ -101,7 +101,7 @@ Error.args = {
 export const Success = Template.bind({});
 Success.args = {
   ...Default.args,
-  variant: 'success',
+  variant: 'success-skip-id',
   value: 'VALID123',
 };
 

@@ -6,12 +6,12 @@ import { uploadFileToServiceLayer } from '@/root/src/member-eligibility/shared/s
 import { useUpdateMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/UseUpdateMemberProfile';
 import { renderWithMockedPlatformAdapter } from '../shared/testing/MockedPlatformAdaptor';
 import { mockStripe } from '@/root/src/member-eligibility/shared/testing/MockStripe';
-import { useOrganisations } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/UseOrganisations';
-import { useEmployers } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-employers/UseEmployers';
 import { IdRequirementDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { givenPaymentIsSubmitted } from '@/root/src/member-eligibility/shared/testing/end-to-end-test-helpers/PaymentSubmission';
 import { givenJobDetailsAreFilledIn } from '@/root/src/member-eligibility/shared/testing/end-to-end-test-helpers/JobDetailsSubmission';
 import { givenAddressIsSubmitted } from '@/root/src/member-eligibility/shared/testing/end-to-end-test-helpers/AddressSubmission';
+import { useOrganisations } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/hooks/use-organisations/UseOrganisations';
+import { useEmployers } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/hooks/use-employers/UseEmployers';
 
 jest.mock('react-use');
 jest.mock('next/navigation', () => ({
@@ -27,10 +27,10 @@ jest.mock('@/root/src/member-eligibility/shared/screens/payment-screen/hooks/Use
 jest.mock('@/root/src/member-eligibility/shared/screens/payment-screen/providers/Stripe');
 jest.mock('@stripe/react-stripe-js');
 jest.mock(
-  '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-organisations/UseOrganisations'
+  '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/hooks/use-organisations/UseOrganisations'
 );
 jest.mock(
-  '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/hooks/use-employers/UseEmployers'
+  '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/hooks/use-employers/UseEmployers'
 );
 
 mockStripe();
@@ -94,20 +94,29 @@ beforeEach(() => {
       id: 'single-id-org',
       label: 'Single ID Org',
       idRequirements: singleIdRequirements,
+      requiresJobTitle: true,
+      requiresJobReference: false,
     },
     {
       id: 'multi-id-org',
       label: 'Multi-ID Org',
       idRequirements: multiIdRequirements,
-      requireMultipleIds: true,
+      requiresJobTitle: true,
+      requiresJobReference: false,
     },
     {
       id: 'skip-id-org',
       label: 'Skip ID Org',
+      promoCodeEffect: 'Bypass ID',
+      requiresJobTitle: true,
+      requiresJobReference: false,
     },
     {
       id: 'skip-payment-org',
       label: 'Skip Payment Org',
+      promoCodeEffect: 'Bypass Payment',
+      requiresJobTitle: true,
+      requiresJobReference: false,
     },
   ]);
   useEmployersMock.mockReturnValue([
@@ -115,20 +124,29 @@ beforeEach(() => {
       id: 'single-id-employer',
       label: 'Single ID Employer',
       idRequirements: singleIdRequirements,
+      requiresJobTitle: true,
+      requiresJobReference: false,
     },
     {
       id: 'multi-id-employer',
       label: 'Multi-ID Employer',
       idRequirements: multiIdRequirements,
-      requireMultipleIds: true,
+      requiresJobTitle: true,
+      requiresJobReference: false,
     },
     {
       id: 'skip-id-employer',
       label: 'Skip ID Employer',
+      promoCodeEffect: 'Bypass ID',
+      requiresJobTitle: true,
+      requiresJobReference: false,
     },
     {
       id: 'skip-payment-employer',
       label: 'Skip Payment Employer',
+      promoCodeEffect: 'Bypass Payment',
+      requiresJobTitle: true,
+      requiresJobReference: false,
     },
   ]);
 });

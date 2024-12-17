@@ -8,7 +8,7 @@ import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import { FuzzyFrontendButtons } from '@/root/src/member-eligibility/shared/screens/shared/components/fuzzy-frontend/components/fuzzy-frontend-buttons/FuzzyFrontendButtons';
 import { EligibilityHeading } from '@/root/src/member-eligibility/shared/screens/shared/components/heading/EligibilityHeading';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
-import { useIsNextButtonDisabled } from './hooks/UseIsButtonDisabled';
+import { useIsNextButtonEnabled } from './hooks/UseIsButtonEnabled';
 import { useFuzzyFrontendButtons } from './hooks/UseFuzzyFrontEndButtons';
 import {
   employmentDetailsSubTitle,
@@ -27,7 +27,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
   const logAnalyticsEvent = useLogAmplitudeEvent();
   useLogAnalyticsPageView(eligibilityDetails);
 
-  const isNextButtonDisabled = useIsNextButtonDisabled(eligibilityDetails);
+  const isNextButtonEnabled = useIsNextButtonEnabled(eligibilityDetails);
   const isRenewalFlow = eligibilityDetails.flow === 'Renewal';
 
   const fuzzyFrontEndButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
@@ -74,10 +74,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
             <p className={`${fonts.bodySemiBold} ${colours.textOnSurface}`}>JOB DETAILS</p>
           </div>
 
-          <JobDetailsForm
-            eligibilityDetailsState={eligibilityDetailsState}
-            isNextButtonDisabled={isNextButtonDisabled}
-          />
+          <JobDetailsForm eligibilityDetailsState={eligibilityDetailsState} />
         </div>
 
         <div className="flex w-full gap-[8px]">
@@ -103,7 +100,7 @@ export const JobDetailsScreen: FC<VerifyEligibilityScreenProps> = ({ eligibility
             data-testid="job-details-next-button"
             className={isRenewalFlow ? 'w-4/5 ml-auto' : 'w-full'}
             size="Large"
-            disabled={isNextButtonDisabled}
+            disabled={!isNextButtonEnabled}
             onClick={onNext}
           >
             Next

@@ -26,6 +26,7 @@ import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/ho
 import { fileUploadVerificationEvents } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/amplitude-events/FileUploadVerificationEvents';
 import { useUpdateMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/UseUpdateMemberProfile';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import { requiresMultipleIds } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/utils/RequiresMultipleIds';
 
 export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -76,10 +77,10 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails.fileVerificationType, selectedFiles.length]);
 
   const verificationMethodsHeader = useMemo(() => {
-    const optionalPlural = eligibilityDetails.requireMultipleIds ? 'S' : '';
+    const optionalPlural = requiresMultipleIds(eligibilityDetails) ? 'S' : '';
 
     return `UPLOAD THE FOLLOWING DOCUMENT${optionalPlural}`;
-  }, [eligibilityDetails.requireMultipleIds]);
+  }, [eligibilityDetails]);
 
   const onFilesChanged: OnFilesChanged = useCallback(
     (files) => {

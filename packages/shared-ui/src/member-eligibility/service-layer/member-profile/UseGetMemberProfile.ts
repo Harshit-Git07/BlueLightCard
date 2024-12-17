@@ -11,6 +11,7 @@ export function useGetMemberProfile(): Callback {
       // TODO: This needs to be updated to use platform adapter when used in mobile hybrid.
       // TODO: We avoided doing this as the initial team as we had no experience with it and this was added in 2 days before we rolled off
       const result = await fetch(`${serviceLayerUrl}/members/profile`);
+      // const result = await fetch(`${serviceLayerUrl}/members/d838d443-662e-4ae0-b2f9-da15a95249a3/profile`); // TODO: Remove this later, just here to test real profiles
       const body = JSON.parse(await result.text());
 
       if (result.status !== 200) {

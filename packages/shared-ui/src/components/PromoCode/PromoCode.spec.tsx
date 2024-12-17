@@ -90,7 +90,7 @@ describe('given is rendered in default state', () => {
 
 describe('given is rendered in the success state and has a value', () => {
   beforeEach(() => {
-    render(<WithPromoCodeState {...defaultProps} variant="success" value="TEST123" />);
+    render(<WithPromoCodeState {...defaultProps} variant="success-skip-id" value="TEST123" />);
   });
 
   it('should show id upload skipped message', () => {

@@ -4,6 +4,7 @@ import { ListSelectorProps } from '@bluelightcard/shared-ui/components/ListSelec
 import { useMobileMediaQuery } from '@bluelightcard/shared-ui/hooks/useMediaQuery';
 import { verificationMethodEvents } from '@/root/src/member-eligibility/shared/screens/verification-method-screen/amplitude-events/VerificationMethodEvents';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
+import { requiresMultipleIds } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/utils/RequiresMultipleIds';
 
 interface VerificationMethod
   extends Pick<
@@ -46,7 +47,7 @@ export function useVerificationMethods(
       setEligibilityDetails({
         ...eligibilityDetails,
         currentScreen: 'File Upload Verification Screen',
-        fileVerificationType: eligibilityDetails.requireMultipleIds
+        fileVerificationType: requiresMultipleIds(eligibilityDetails)
           ? [primaryMethodTitle ?? verificationType, verificationType]
           : verificationType,
       });

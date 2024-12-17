@@ -16,8 +16,13 @@ const componentMeta: Meta<typeof SuccessScreen> = {
 const initialState: EligibilityDetailsWithoutFlow = {
   currentScreen: 'Success Screen',
   employmentStatus: 'Employed',
-  organisation: { id: '1', label: 'NHS' },
-  employer: { id: '1', label: 'Abbey Hospitals' },
+  organisation: { id: '1', label: 'NHS', requiresJobTitle: true, requiresJobReference: false },
+  employer: {
+    id: '1',
+    label: 'Abbey Hospitals',
+    requiresJobTitle: true,
+    requiresJobReference: false,
+  },
   jobTitle: 'Nurse',
   emailVerification: 'test@nhs.com',
   address: {

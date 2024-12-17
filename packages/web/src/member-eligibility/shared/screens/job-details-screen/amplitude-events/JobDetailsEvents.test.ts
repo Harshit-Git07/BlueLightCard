@@ -6,7 +6,12 @@ describe('jobDetailsEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Sign Up',
       currentScreen: 'Job Details Screen',
-      organisation: { id: '123', label: 'Organisation A' },
+      organisation: {
+        id: '123',
+        label: 'Organisation A',
+        requiresJobTitle: true,
+        requiresJobReference: false,
+      },
     };
     expect(jobDetailsEvents.onOrganisationSelected(eligibilityDetails)).toEqual({
       event: 'signup_select',
@@ -23,7 +28,12 @@ describe('jobDetailsEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Renewal',
       currentScreen: 'Job Details Screen',
-      organisation: { id: '123', label: 'Organisation B' },
+      organisation: {
+        id: '123',
+        label: 'Organisation B',
+        requiresJobTitle: true,
+        requiresJobReference: false,
+      },
     };
     expect(jobDetailsEvents.onOrganisationSelected(eligibilityDetails)).toEqual({
       event: 'renewal_select',
@@ -40,7 +50,12 @@ describe('jobDetailsEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Sign Up',
       currentScreen: 'Job Details Screen',
-      employer: { id: '123', label: 'Employer A' },
+      employer: {
+        id: '123',
+        label: 'Employer A',
+        requiresJobTitle: true,
+        requiresJobReference: false,
+      },
     };
     expect(jobDetailsEvents.onEmployerSelected(eligibilityDetails)).toEqual({
       event: 'signup_select',
@@ -57,7 +72,12 @@ describe('jobDetailsEvents', () => {
     const eligibilityDetails: EligibilityDetails = {
       flow: 'Renewal',
       currentScreen: 'Job Details Screen',
-      employer: { id: '123', label: 'Employer B' },
+      employer: {
+        id: '123',
+        label: 'Employer B',
+        requiresJobTitle: true,
+        requiresJobReference: false,
+      },
     };
     expect(jobDetailsEvents.onEmployerSelected(eligibilityDetails)).toEqual({
       event: 'renewal_select',

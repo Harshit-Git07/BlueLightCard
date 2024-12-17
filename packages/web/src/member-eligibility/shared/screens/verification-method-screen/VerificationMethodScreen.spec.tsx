@@ -63,7 +63,6 @@ describe('VerificationMethodScreen', () => {
       const state: EligibilityDetails = {
         flow: 'Sign Up',
         currentScreen: 'Verification Method Screen',
-        requireMultipleIds: true,
         currentIdRequirementDetails: [
           {
             title: 'NHS Smart Card',

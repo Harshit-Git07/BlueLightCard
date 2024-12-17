@@ -40,7 +40,7 @@ export const getDocumentFromProfileRecord = (
       memberId: newProfile.memberId,
       firstName: newProfile.firstName,
       lastName: newProfile.lastName,
-      emailAddress: newProfile.email,
+      email: newProfile.email,
       signupDate: newProfile.signupDate,
       organisationId: newProfile.organisationId,
       employerId: newProfile.employerId,

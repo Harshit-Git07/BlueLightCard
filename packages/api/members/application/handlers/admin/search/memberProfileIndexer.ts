@@ -7,13 +7,13 @@ import {
 } from 'aws-lambda/trigger/dynamodb-stream';
 import { APPLICATION, CARD, PROFILE } from '@blc-mono/members/application/repositories/repository';
 import { MemberDocumentModel } from '@blc-mono/members/application/models/memberDocument';
-import { MembersOpenSearchService } from '@blc-mono/members/application/handlers/admin/opensearch/service/membersOpenSearchService';
-import { createMemberProfileOpenSearchDocuments } from '@blc-mono/members/application/handlers/admin/opensearch/service/opensearchMemberProfileDocument';
+import { MembersOpenSearchService } from '@blc-mono/members/application/handlers/admin/search/service/membersOpenSearchService';
+import { createMemberProfileOpenSearchDocuments } from '@blc-mono/members/application/handlers/admin/search/service/opensearchMemberProfileDocument';
 import {
   getDocumentFromApplicationRecord,
   getDocumentFromCardRecord,
   getDocumentFromProfileRecord,
-} from '@blc-mono/members/application/handlers/admin/opensearch/service/parseDocumentFromRecord';
+} from '@blc-mono/members/application/handlers/admin/search/service/parseDocumentFromRecord';
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 
 type StreamRecordTypes = 'Profile' | 'Application' | 'Card';

@@ -1,0 +1,18 @@
+meta {
+  name: MemberSearch
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{apiBaseUrl}}/admin/members/search
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "pageIndex": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+  }

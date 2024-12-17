@@ -9,28 +9,8 @@ type UpdateCommand = {
 };
 
 type UpdateBody = {
-  doc: MemberProfileBody;
+  doc: MemberDocumentModel;
   doc_as_upsert: boolean;
-};
-
-type MemberProfileBody = {
-  memberId: string;
-  firstName?: string;
-  lastName?: string;
-  emailAddress?: string;
-  signupDate?: string;
-  organisationId?: string;
-  organisationName?: string;
-  employerId?: string;
-  employerName?: string;
-  userStatus?: string;
-  applicationId?: string;
-  startDate?: string;
-  eligibilityStatus?: string;
-  paymentStatus?: string;
-  cardNumber?: string;
-  expiryDate?: string;
-  cardStatus?: string;
 };
 
 export const mapMemberDocumentToOpenSearchUpdateBody = (
@@ -40,7 +20,7 @@ export const mapMemberDocumentToOpenSearchUpdateBody = (
     memberId: memberDocument.memberId,
     firstName: memberDocument.firstName,
     lastName: memberDocument.lastName,
-    emailAddress: memberDocument.emailAddress,
+    email: memberDocument.email,
     signupDate: memberDocument.signupDate,
     organisationId: memberDocument.organisationId,
     organisationName: memberDocument.organisationName,

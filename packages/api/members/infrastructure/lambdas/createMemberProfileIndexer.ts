@@ -5,6 +5,7 @@ import {
   MemberStackConfigResolver,
   MemberStackRegion,
 } from '@blc-mono/members/infrastructure/config/config';
+import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 
 export function createMemberProfileIndexer(
   stack: Stack,
@@ -17,10 +18,10 @@ export function createMemberProfileIndexer(
   const config = MemberStackConfigResolver.for(stack, stack.region as MemberStackRegion);
 
   const memberProfileIndexer = new Function(stack, 'MemberProfileIndexer', {
-    handler:
-      'packages/api/members/application/handlers/admin/opensearch/memberProfileIndexer.handler',
+    handler: 'packages/api/members/application/handlers/admin/search/memberProfileIndexer.handler',
     environment: {
-      OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomainEndpoint,
+      [MemberStackEnvironmentKeys.MEMBERS_OPENSEARCH_DOMAIN_ENDPOINT]:
+        config.openSearchDomainEndpoint ?? openSearchDomainEndpoint,
       STAGE: stack.stage ?? '',
       SERVICE: service,
     },
@@ -34,8 +35,6 @@ export function createMemberProfileIndexer(
     new SqsEventSource(memberProfilesTableEventQueue.cdk.queue, {
       batchSize: 10,
       maxConcurrency: 50,
-      // TODO: Enable once initial data ingestion is complete
-      enabled: false,
     }),
   );
 

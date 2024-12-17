@@ -43,6 +43,7 @@ import { createOutboundBatchFileCron } from '@blc-mono/members/infrastructure/cr
 import { retrieveInboundBatchFilesCron } from '@blc-mono/members/infrastructure/crons/retrieveInboundBatchFilesCron';
 import { createMemberProfilesPipe } from '@blc-mono/members/infrastructure/eventbridge/MemberProfilesPipe';
 import { createMemberProfileIndexer } from '@blc-mono/members/infrastructure/lambdas/createMemberProfileIndexer';
+import { adminSearchRoutes } from '@blc-mono/members/infrastructure/routes/admin/AdminSearchRoutes';
 import { createSeedOrganisations } from '@blc-mono/members/infrastructure/lambdas/createSeedOrganisations';
 import { createUploadBatchFileFunction } from '@blc-mono/members/infrastructure/lambdas/createUploadBatchFileFunction';
 import { createProcessInboundBatchFileFunction } from '@blc-mono/members/infrastructure/lambdas/createProcessInboundBatchFileFunction';
@@ -149,6 +150,7 @@ export async function MembersStack({ app, stack }: StackContext) {
     adminTable,
     documentUploadBucket: documentUpload.bucket,
     batchFilesBucket: batchFilesBucket,
+    openSearchDomain,
   };
 }
 
@@ -202,8 +204,9 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
 
   dependsOn(MembersApiStack);
 
-  const { profilesTable, organisationsTable, adminTable, documentUploadBucket } = use(MembersStack);
-  const { certificateArn } = use(Shared);
+  const { profilesTable, organisationsTable, adminTable, documentUploadBucket, openSearchDomain } =
+    use(MembersStack);
+  const { certificateArn, vpc } = use(Shared);
 
   const { api, requestValidator, config } = createRestApi(
     app,
@@ -230,6 +233,17 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
       ...defaultRouteProps,
       bind: [profilesTable, organisationsTable],
     }),
+    ...adminSearchRoutes(
+      {
+        ...defaultRouteProps,
+        environment: {
+          [MemberStackEnvironmentKeys.STAGE]: stack.stage,
+          [MemberStackEnvironmentKeys.MEMBERS_OPENSEARCH_DOMAIN_ENDPOINT]:
+            config.openSearchDomainEndpoint ?? openSearchDomain,
+        },
+      },
+      vpc,
+    ),
     ...adminMarketingRoutes(defaultRouteProps),
     ...adminApplicationRoutes({
       ...defaultRouteProps,

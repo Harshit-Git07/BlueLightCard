@@ -4,24 +4,25 @@ import {
   getDocumentFromApplicationRecord,
   getDocumentFromCardRecord,
   getDocumentFromProfileRecord,
-} from '@blc-mono/members/application/handlers/admin/opensearch/service/parseDocumentFromRecord';
+} from '@blc-mono/members/application/handlers/admin/search/service/parseDocumentFromRecord';
 import { APPLICATION, CARD, PROFILE } from '@blc-mono/members/application/repositories/repository';
-import { MembersOpenSearchService } from '@blc-mono/members/application/handlers/admin/opensearch/service/membersOpenSearchService';
+import { MembersOpenSearchService } from '@blc-mono/members/application/handlers/admin/search/service/membersOpenSearchService';
 import { MemberDocumentModel } from '@blc-mono/members/application/models/memberDocument';
 import {
   createMemberProfileOpenSearchDocuments,
   OpenSearchBulkUpdateCommand,
-} from '@blc-mono/members/application/handlers/admin/opensearch/service/opensearchMemberProfileDocument';
+} from '@blc-mono/members/application/handlers/admin/search/service/opensearchMemberProfileDocument';
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 import { EmployerModel } from '@blc-mono/members/application/models/employerModel';
 import { OrganisationModel } from '@blc-mono/members/application/models/organisationModel';
+import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
+import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
+import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
 
-jest.mock(
-  '@blc-mono/members/application/handlers/admin/opensearch/service/parseDocumentFromRecord',
-);
+jest.mock('@blc-mono/members/application/handlers/admin/search/service/parseDocumentFromRecord');
 jest.mock('@blc-mono/core/utils/getEnv');
 jest.mock(
-  '@blc-mono/members/application/handlers/admin/opensearch/service/opensearchMemberProfileDocument',
+  '@blc-mono/members/application/handlers/admin/search/service/opensearchMemberProfileDocument',
 );
 jest.mock('@blc-mono/members/application/services/organisationService');
 
@@ -37,18 +38,18 @@ const memberDocument: MemberDocumentModel = {
   memberId: 'id',
   firstName: 'firstName',
   lastName: 'lastName',
-  emailAddress: 'email',
+  email: 'email',
   signupDate: 'signupDate',
   organisationId: 'organisationId',
   employerId: 'employerId',
   userStatus: 'userStatus',
   applicationId: 'applicationId',
   startDate: 'startDate',
-  eligibilityStatus: 'eligibilityStatus',
-  paymentStatus: 'paymentStatus',
+  eligibilityStatus: EligibilityStatus.ELIGIBLE,
+  paymentStatus: PaymentStatus.AWAITING_PAYMENT,
   cardNumber: 'cardNumber',
   expiryDate: 'expiryDate',
-  cardStatus: 'cardStatus',
+  cardStatus: CardStatus.VIRTUAL_CARD,
 };
 const openSearchBulkCommand: OpenSearchBulkUpdateCommand = {
   update: { _id: 'id' },

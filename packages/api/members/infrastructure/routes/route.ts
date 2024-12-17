@@ -11,6 +11,7 @@ import {
 import { MemberStackEnvironmentKeys } from '../constants/environment';
 import { NamedZodType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import { z } from 'zod';
+import { IVpc } from 'aws-cdk-lib/aws-ec2';
 
 export type RouteProps<Request extends z.AnyZodObject, Response extends z.AnyZodObject> = {
   stack: Stack;
@@ -25,11 +26,17 @@ export type RouteProps<Request extends z.AnyZodObject, Response extends z.AnyZod
   defaultAllowedOrigins: string[];
   permissions?: Permissions;
   apiKeyRequired?: boolean;
+  vpc?: IVpc;
 };
 
 export type DefaultRouteProps = Pick<
   RouteProps<never, never>,
-  'stack' | 'apiGatewayModelGenerator' | 'requestValidator' | 'bind' | 'defaultAllowedOrigins'
+  | 'stack'
+  | 'apiGatewayModelGenerator'
+  | 'requestValidator'
+  | 'bind'
+  | 'defaultAllowedOrigins'
+  | 'environment'
 >;
 
 export class Route {
@@ -46,6 +53,7 @@ export class Route {
     defaultAllowedOrigins,
     permissions,
     apiKeyRequired,
+    vpc,
   }: RouteProps<Request, Response>): ApiGatewayV1ApiFunctionRouteProps<never> {
     let requestModels;
     if (requestModelType) {
@@ -88,11 +96,12 @@ export class Route {
           permissions,
           handler,
           environment: {
-            SERVICE: 'member',
+            [MemberStackEnvironmentKeys.SERVICE]: 'members',
             ...environment,
             [MemberStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS]:
               JSON.stringify(defaultAllowedOrigins),
           },
+          vpc,
         }),
         method: {
           apiKeyRequired: apiKeyRequired,

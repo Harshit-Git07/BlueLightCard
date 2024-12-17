@@ -4,15 +4,9 @@ import { CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/sc
 import { getEnv, getEnvValidated } from '@blc-mono/core/utils/getEnv';
 
 import { MemberStackEnvironmentKeys } from '../constants/environment';
-import { PR_STAGE_REGEX, PRODUCTION_STAGE, STAGING_STAGE } from '../constants/sst';
 import { isEphemeral, isPr, isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 
 export type MemberStackRegion = 'eu-west-2' | 'ap-southeast-2';
-
-export enum MemberStackSearchBrand {
-  BLC_UK = '1',
-  DDS = '2',
-}
 
 export type MemberStackConfig = {
   apiDefaultAllowedOrigins: string[];
@@ -82,7 +76,9 @@ export class MemberStackConfigResolver {
         MemberStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS,
         JsonStringSchema.pipe(CORS_ALLOWED_ORIGINS_SCHEMA),
       ),
-      openSearchDomainEndpoint: getEnv(MemberStackEnvironmentKeys.OPENSEARCH_DOMAIN_ENDPOINT),
+      openSearchDomainEndpoint: getEnv(
+        MemberStackEnvironmentKeys.MEMBERS_OPENSEARCH_DOMAIN_ENDPOINT,
+      ),
     };
   }
 }

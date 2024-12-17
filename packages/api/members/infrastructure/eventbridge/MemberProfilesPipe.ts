@@ -60,7 +60,5 @@ export function createMemberProfilesPipe(
     },
     target: memberProfilesTableEventQueue.cdk.queue.queueArn,
     roleArn: pipeTargetRole.attrArn,
-    // TODO: Enable once initial data ingestion is complete
-    desiredState: 'STOPPED',
   });
 }

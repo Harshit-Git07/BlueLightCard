@@ -5,9 +5,10 @@ import {
   CardVerificationAlerts,
   Drawer,
   Toaster,
-  useGetCustomerProfile,
+  useMemberCard,
+  useMemberId,
+  useMemberProfileGet,
 } from '@bluelightcard/shared-ui';
-import { BRAND } from '@/global-vars';
 import NavBar from '../../components/NavBar/NavBar';
 import { LayoutProps } from './types';
 import Footer from '../../../common/components/Footer/Footer';
@@ -19,9 +20,10 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const isMobile = useMedia('(max-width: 767px)');
 
-  const memberUuid = 'member-uuid';
+  const memberId = useMemberId();
 
-  const { data: customerProfile } = useGetCustomerProfile(BRAND, memberUuid);
+  const { memberProfile } = useMemberProfileGet(memberId);
+  const { card } = useMemberCard(memberId);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -70,13 +72,13 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
         onToggleMobileSideBar={toggleDrawer}
       />
 
-      <CardVerificationAlerts memberUuid={memberUuid} />
+      <CardVerificationAlerts memberUuid={memberId} />
 
       <div className="pl-[16px] mt-[32px] flex flex-col hidden tablet:block desktop:container mx-[20px] desktop:mx-auto">
         <AccountDetails
-          accountNumber={customerProfile?.card.cardNumber}
-          firstName="Name"
-          lastName="Last-name"
+          accountNumber={card?.cardNumber}
+          firstName={memberProfile?.firstName ?? ''}
+          lastName={memberProfile?.lastName ?? ''}
         />
       </div>
 
@@ -84,8 +86,10 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
         className={`mt-6 relative grow pb-16 flex gap-2 h-full desktop:container desktop:mx-auto tablet:mx-5`}
       >
         <LeftNavigation
+          firstName={memberProfile?.firstName ?? ''}
+          lastName={memberProfile?.lastName ?? ''}
           isOpen={isOpen}
-          accountNumber={customerProfile?.card.cardNumber}
+          accountNumber={card?.cardNumber}
           onLinkSelection={linkSelectionHandler}
           onCloseDrawer={toggleDrawer}
         />

@@ -1,5 +1,24 @@
 import { sleep } from '../../../utils/sleep';
-import { ApplicationSchema, ProfileSchema } from '../../CardVerificationAlerts/types';
+import { ApplicationSchema, CardSchema, ProfileSchema } from '../../CardVerificationAlerts/types';
+
+export const mockCard: CardSchema = {
+  expiryDate: '2024-11-27T08:55:46.030Z',
+  nameOnCard: 'string',
+  purchaseDate: '2023-11-27T08:55:46.030Z',
+  cardNumber: '1234567890',
+  cardStatus: 'AWAITING_BATCHING',
+  paymentStatus: 'AWAITING_PAYMENT',
+  memberId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+  postedDate: '2024-11-27T08:55:46.030Z',
+  batchNumber: 'string',
+  createdDate: '',
+};
+
+export const mockApplication: ApplicationSchema = {
+  applicationId: '12345678-1234-1234-12345678',
+  applicationReason: 'LOST_CARD',
+  memberId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+};
 
 export const mockMemberProfileResponse: Required<ProfileSchema> = {
   firstName: 'Bat',
@@ -25,35 +44,10 @@ export const mockMemberProfileResponse: Required<ProfileSchema> = {
   emailValidated: false,
   gaKey: 'string',
   status: 'string',
-  applications: [
-    {
-      applicationId: '12345678-1234-1234-12345678',
-      applicationReason: 'LOST_CARD',
-      memberId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-    },
-  ],
+  applications: [{ ...mockApplication }],
   companyName: '',
   companyNumber: '',
-  cards: [
-    {
-      expiryDate: '2024-11-27T08:55:46.030Z',
-      nameOnCard: 'string',
-      purchaseDate: '2023-11-27T08:55:46.030Z',
-      cardNumber: '1234567890',
-      cardStatus: 'AWAITING_BATCHING',
-      paymentStatus: 'AWAITING_PAYMENT',
-      memberId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      postedDate: '2024-11-27T08:55:46.030Z',
-      batchNumber: 'string',
-      createdDate: '',
-    },
-  ],
-};
-
-export const mockApplication: ApplicationSchema = {
-  applicationId: '12345678-1234-1234-12345678',
-  applicationReason: 'LOST_CARD',
-  memberId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+  cards: [{ ...mockCard }],
 };
 
 export const mockMemberProfileGetResponse = async () => {

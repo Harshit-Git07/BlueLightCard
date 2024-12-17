@@ -6,6 +6,8 @@ export type ApplicationSchema = ProfileSchema['applications'][number] & {
   county?: string;
 };
 
+export type CardSchema = ProfileSchema['cards'][number];
+
 export type ApplicationReasonSchema = ApplicationSchema['applicationReason'];
 export const allowedApplicationReasonValues: Array<ApplicationReasonSchema> = [
   'SIGNUP',

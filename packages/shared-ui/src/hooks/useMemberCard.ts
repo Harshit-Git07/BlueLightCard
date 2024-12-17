@@ -12,6 +12,7 @@ const useMemberCard = (memberId: string) => {
   const insideReprintPeriod = cardAge < reprintPeriodInDays;
   const firstName = memberProfile?.firstName ?? '';
   const lastName = memberProfile?.lastName ?? '';
+
   return {
     isLoading,
     card,

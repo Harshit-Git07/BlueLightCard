@@ -1,25 +1,24 @@
 import '@testing-library/jest-dom/extend-expect';
 import { NextRouter } from 'next/router';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import { useMedia } from 'react-use';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, within } from '@testing-library/react';
-import { Factory } from 'fishery';
-import _noop from 'lodash/noop';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
-import UserContext, { UserContextType } from '@/context/User/UserContext';
 import {
   PlatformAdapterProvider,
   useMockPlatformAdapter,
 } from '../../../../shared-ui/src/adapters';
 import MyCardPage from '@/pages/your-card';
-import {
-  customerProfileCardGeneratedMock,
-  customerProfileCardNotGeneratedMock,
-  customerProfileNoCardMock,
-} from '../../../../shared-ui/src/mocks';
+
 import { formatDateDDMMYYYY } from '../../../../shared-ui/src/utils/dates';
 
 import * as globals from '@/global-vars';
+import { mockMemberProfileResponse } from '@bluelightcard/shared-ui/components/MyAccountDebugTools/mocks/mockMemberProfileGet';
+
+const mockProfileNoCard = { ...mockMemberProfileResponse };
+mockProfileNoCard.cards = [];
+
+const mockProfileNoCardNoApplication = { ...mockProfileNoCard };
+mockProfileNoCardNoApplication.applications = [];
 
 const mockGlobals = globals as { BRAND: string };
 jest.mock('@/global-vars', () => ({
@@ -33,66 +32,34 @@ const mockRouter: Partial<NextRouter> = {
   isReady: true,
 };
 
-const userContextTypeFactory = Factory.define<UserContextType>(() => ({
-  dislikes: [],
-  error: undefined,
-  isAgeGated: false,
-  setUser: _noop,
-  user: {
-    companies_follows: [],
-    legacyId: 'mock-legacy-id',
-    profile: {
-      dob: 'mock-dob',
-      organisation: 'mock-organisation',
-    },
-    uuid: 'mock-uuid',
-  },
-}));
-
-const userContext = userContextTypeFactory.build();
-
-jest.mock('@tanstack/react-query', () => {
-  const actualReactQuery = jest.requireActual('@tanstack/react-query');
-  return {
-    ...actualReactQuery,
-    useQuery: jest.fn(),
-  };
-});
-
 jest.mock('react-use', () => ({
   useMedia: jest.fn(),
 }));
 
 describe('MyCard Page', () => {
-  const mockPlatformAdapter = useMockPlatformAdapter();
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  const whenPageIsRendered = async (platformAdapter = mockPlatformAdapter) => {
-    return render(
+  const whenPageIsRendered = async (data?: any) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const mockPlatformAdapter = useMockPlatformAdapter(200, data);
+    render(
       <QueryClientProvider client={new QueryClient()}>
-        <PlatformAdapterProvider adapter={platformAdapter}>
-          <UserContext.Provider value={userContext}>
-            <RouterContext.Provider value={mockRouter as NextRouter}>
-              <UserContext.Provider value={userContext}>
-                <MyCardPage />
-              </UserContext.Provider>
-            </RouterContext.Provider>
-          </UserContext.Provider>
+        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+          <RouterContext.Provider value={mockRouter as NextRouter}>
+            <MyCardPage />
+          </RouterContext.Provider>
         </PlatformAdapterProvider>
       </QueryClientProvider>
     );
+    return mockPlatformAdapter;
   };
 
   test('displays generated card page', async () => {
-    (useQuery as jest.Mock).mockReturnValue({
-      isSuccess: true,
-      data: customerProfileCardGeneratedMock,
-    });
+    await whenPageIsRendered(mockMemberProfileResponse);
 
-    (useMedia as jest.Mock).mockReturnValue(false);
-
-    whenPageIsRendered();
-
-    const pageTitle = screen.getByText('Your card');
+    const pageTitle = await screen.findByText('Your card');
     expect(pageTitle).toBeInTheDocument();
 
     const requestNewCardBtn = within(pageTitle!.parentElement!).getByRole('button', {
@@ -101,33 +68,24 @@ describe('MyCard Page', () => {
     expect(requestNewCardBtn).toBeInTheDocument();
 
     const name = await screen.findByText(
-      `${customerProfileCardGeneratedMock.firstName} ${customerProfileCardGeneratedMock.lastName}`
+      `${mockMemberProfileResponse.firstName} ${mockMemberProfileResponse.lastName}`
     );
     expect(name).toBeInTheDocument();
 
-    const accNo = await screen.findByText(customerProfileCardGeneratedMock.card!.cardNumber!);
+    const accNo = await screen.findByText(mockMemberProfileResponse.cards[0].cardNumber!);
     expect(accNo).toBeInTheDocument();
 
     const formattedDate = formatDateDDMMYYYY(
-      new Date(customerProfileCardGeneratedMock.card!.cardExpiry!).toString()
+      new Date(mockMemberProfileResponse.cards[0].expiryDate!).toString()
     );
     const date = screen.queryByText(formattedDate!);
     expect(date).toBeInTheDocument();
-
-    jest.clearAllMocks();
   });
 
   test('displays NOT generated card page', async () => {
-    (useQuery as jest.Mock).mockReturnValue({
-      isSuccess: true,
-      data: customerProfileCardNotGeneratedMock,
-    });
+    await whenPageIsRendered(mockProfileNoCard);
 
-    (useMedia as jest.Mock).mockReturnValue(false);
-
-    whenPageIsRendered();
-
-    const pageTitle = screen.getByText('Your card');
+    const pageTitle = await screen.findByText('Your card');
     expect(pageTitle).toBeInTheDocument();
 
     const defaultAccNo = screen.getByText('BLC0000000');
@@ -144,23 +102,12 @@ describe('MyCard Page', () => {
 
     const requestNewCardBtn = screen.queryByRole('button', { name: 'Request new card' });
     expect(requestNewCardBtn).not.toBeInTheDocument();
-
-    jest.clearAllMocks();
   });
 
   test('displays No card present page', async () => {
-    (useQuery as jest.Mock).mockReturnValue({
-      isSuccess: true,
-      data: customerProfileNoCardMock,
-    });
+    await whenPageIsRendered(mockProfileNoCardNoApplication);
 
-    (useMedia as jest.Mock).mockReturnValue(false);
-
-    whenPageIsRendered();
-
-    const name = screen.queryByText(
-      `${customerProfileNoCardMock.firstName} ${customerProfileNoCardMock.lastName}`
-    );
+    const name = screen.queryByText(`${mockProfileNoCard.firstName} ${mockProfileNoCard.lastName}`);
     expect(name).not.toBeInTheDocument();
 
     const copyBtn = screen.queryByRole('button', { name: 'copy' });
@@ -169,13 +116,12 @@ describe('MyCard Page', () => {
     const requestNewCardBtn = screen.queryByRole('button', { name: 'Request new card' });
     expect(requestNewCardBtn).not.toBeInTheDocument();
 
-    expect(screen.getByText("You don't have a card yet")).toBeInTheDocument();
+    const youDontHaveACard = await screen.findByText("You don't have a card yet");
+    expect(youDontHaveACard).toBeInTheDocument();
 
     const btn = screen.getByRole('button');
     expect(btn).toBeInTheDocument();
     expect(btn.textContent).toEqual('Get your card');
-
-    jest.clearAllMocks();
   });
 
   describe.each([
@@ -192,22 +138,14 @@ describe('MyCard Page', () => {
       'Access every exclusive offer for the next 5 years. Get your Defence Discount Service card for £4.99.',
     ],
   ])('`No card present message', (brand, message) => {
-    afterAll(() => {
-      jest.clearAllMocks();
-    });
-
-    (useQuery as jest.Mock).mockReturnValue({
-      isSuccess: true,
-      data: customerProfileNoCardMock,
-    });
-
     describe(`when the brand is '${brand}'`, () => {
-      it(`should display: ${message}`, () => {
+      it(`should display: ${message}`, async () => {
         mockGlobals.BRAND = brand;
 
-        whenPageIsRendered();
+        await whenPageIsRendered(mockProfileNoCardNoApplication);
 
-        expect(screen.getByText(message)).toBeInTheDocument();
+        const messageElement = await screen.findByText(message);
+        expect(messageElement).toBeInTheDocument();
       });
     });
   });

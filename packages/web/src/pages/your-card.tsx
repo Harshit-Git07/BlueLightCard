@@ -8,25 +8,28 @@ import {
   NoCardImage,
   ThemeVariant,
   Typography,
-  useGetCustomerProfile,
+  useMemberCard,
+  useMemberId,
+  useMemberProfileGet,
   YourCard,
 } from '@bluelightcard/shared-ui';
 
 import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
 import { BRAND } from '@/global-vars';
-import withAccountLayout from '../common/layouts/AccountBaseLayout/withAccountLayout';
+import withAccountLayout from '@/layouts/AccountBaseLayout/withAccountLayout';
 
-const MyCardPage: NextPage = () => {
-  const memberUuid = 'member-uuid';
+const YourCardPage: NextPage = () => {
+  const memberId = useMemberId();
+  const { card } = useMemberCard(memberId);
+  const { isFetching, memberProfile } = useMemberProfileGet(memberId);
 
-  const { isFetching, data: customerProfile } = useGetCustomerProfile(BRAND, memberUuid);
   if (isFetching) {
     return null;
   }
   const strapline = getBrandStrapline(BRAND);
 
-  const hasGenerated = !!customerProfile?.card.cardNumber;
-  const hasNotGenerated = !hasGenerated && customerProfile?.applications.length;
+  const hasGenerated = !!card?.cardNumber;
+  const hasNotGenerated = !hasGenerated && memberProfile?.applications.length;
   const hasNoCard = !hasGenerated && !hasNotGenerated;
 
   return (
@@ -53,10 +56,10 @@ const MyCardPage: NextPage = () => {
           <div className="flex justify-center mt-5 tablet-xl:mt-3">
             <YourCard
               brand={BRAND}
-              firstName={customerProfile?.firstName ?? ''}
-              lastName={customerProfile?.lastName ?? ''}
-              accountNumber={customerProfile?.card.cardNumber}
-              expiryDate={customerProfile?.card?.cardExpiry}
+              firstName={memberProfile?.firstName ?? ''}
+              lastName={memberProfile?.lastName ?? ''}
+              accountNumber={card?.cardNumber}
+              expiryDate={card?.expiryDate}
             />
           </div>
 
@@ -68,7 +71,7 @@ const MyCardPage: NextPage = () => {
                     variant={ThemeVariant.Primary}
                     label="Copy card number"
                     size="Large"
-                    copyText={customerProfile?.card.cardNumber ?? ''}
+                    copyText={card?.cardNumber ?? ''}
                     fullWidth={true}
                   />
 
@@ -117,4 +120,4 @@ const MyCardPage: NextPage = () => {
   );
 };
 
-export default withAccountLayout(MyCardPage, {});
+export default withAccountLayout(YourCardPage, {});

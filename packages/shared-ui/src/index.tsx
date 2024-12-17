@@ -42,13 +42,15 @@ export { default as Toaster } from './components/Toast/Toaster';
 export { default as Toast } from './components/Toast';
 
 export { default as NoCardImage } from './components/svgs/NoCardImage';
+export { default as useMemberProfileGet } from './hooks/useMemberProfileGet';
+export { default as useMemberId } from './hooks/useMemberId';
+export { default as useMemberCard } from './hooks/useMemberCard';
 
 export * from './adapters';
 export * from './api';
 export * from './components/OfferDetails';
 export * from './hooks/useCSS';
 export * from './hooks/useQueryCustomHook';
-export * from './hooks/useGetCustomerProfile';
 export * from './hooks/useMenusData';
 export * from './services/apiRequestService';
 export * from './hooks/useMediaQuery';

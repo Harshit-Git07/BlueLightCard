@@ -22,6 +22,7 @@ async function batchWriteItems(items) {
       sk: { S: item.sk },
       memberId: { S: item.memberId },
       cardNumber: { S: item.cardNumber },
+      nameOnCard: { S: item.nameOnCard },
       createdDate: { S: item.createdDate },
       expiryDate: { S: item.expiryDate },
       purchaseDate: { S: item.purchaseDate },

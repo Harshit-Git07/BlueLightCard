@@ -251,40 +251,38 @@ jobs:
           title: ":test_tube: Staging deployment for Members was successful!"
 
 
-  # e2e-test-staging:
-  #   name: End to End Test Staging
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       include:
-  #         - deployment: 'blc-uk-staging'
-  #           brand: BLC_UK
-  #           region: eu-west-2
-  #           stage: staging
-  #           e2e_test_password: E2E_TESTS_PASSWORD_BLC_UK
-  #   needs:
-  #     - install
-  #     - test
-  #     - build
-  #     - changelog
-  #     - staging
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-  #     - name: Setup
-  #       uses: ./.github/actions/setup
-  #     - name: Configure Non Prod AWS Credentials
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
-  #         aws-region: ${{ matrix.region }}
-  #     - name: Run E2E tests
-  #       working-directory: packages/api/members
-  #       env:
-  #         BRAND: ${{ matrix.brand }}
-  #         REGION : ${{ matrix.region }}
-  #         E2E_TESTS_PASSWORD: ${{ secrets[matrix.e2e_test_password] }}
-  #       run: npx sst bind --stage ${{ matrix.stage }} --region ${{ matrix.region }} vitest e2e
+  e2e-test-staging:
+    name: End to End Test Staging
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - deployment: 'blc-uk-staging'
+            brand: BLC_UK
+            region: eu-west-2
+            stage: staging
+    needs:
+      - install
+      - test
+      - build
+      - changelog
+      - staging
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup
+        uses: ./.github/actions/setup
+      - name: Configure Non Prod AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::314658777488:role/github-actions-role
+          aws-region: ${{ matrix.region }}
+      - name: Run E2E tests
+        working-directory: packages/api/members
+        env:
+          BRAND: ${{ matrix.brand }}
+          REGION : ${{ matrix.region }}
+        run: npx sst bind --stage ${{ matrix.stage }} --region ${{ matrix.region }} vitest e2e
 
   release:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changelog.outputs.releases_created

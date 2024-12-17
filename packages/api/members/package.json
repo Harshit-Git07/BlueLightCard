@@ -9,6 +9,7 @@
     "test": "npm run test:unit",
     "test:coverage": "npm run test:unit -- --coverage",
     "test:unit": "jest --runInBand",
+    "e2e:members": "dotenv -e ../../../.env -- npx sst bind vitest e2e",
     "typecheck": "tsc -noEmit",
     "dev": "sst dev"
   },

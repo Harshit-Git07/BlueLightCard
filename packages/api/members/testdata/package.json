@@ -1,13 +1,20 @@
 {
   "type": "module",
   "scripts": {
-    "load": "npm run load:id_docs && npm run load:orgs && npm run load:employers && npm run load:profiles && npm run load:cards && npm run load:applications", 
+    "load": "npm run load:id_docs && npm run load:orgs && npm run load:employers && npm run load:profiles && npm run load:cards && npm run load:applications",
     "load:orgs": "SST_STAGE=$(cat ../../../../.sst/stage) node load_organisations.js",
     "load:employers": "SST_STAGE=$(cat ../../../../.sst/stage) node load_employers.js",
     "load:profiles": "SST_STAGE=$(cat ../../../../.sst/stage) node load_profiles.js",
     "load:cards": "SST_STAGE=$(cat ../../../../.sst/stage) node load_cards.js",
     "load:applications": "SST_STAGE=$(cat ../../../../.sst/stage) node load_applications.js",
-    "load:id_docs": "SST_STAGE=$(cat ../../../../.sst/stage) node load_id_requirement_docs.js"
+    "load:id_docs": "SST_STAGE=$(cat ../../../../.sst/stage) node load_id_requirement_docs.js",
+    "load:ci": "npm run load:id_docs_ci && npm run load:orgs_ci && npm run load:employers_ci && npm run load:profiles_ci && npm run load:cards_ci && npm run load:applications_ci",
+    "load:orgs_ci": "node load_organisations.js",
+    "load:employers_ci": "node load_employers.js",
+    "load:profiles_ci": "node load_profiles.js",
+    "load:cards_ci": "node load_cards.js",
+    "load:applications_ci": "node load_applications.js",
+    "load:id_docs_ci": "node load_id_requirement_docs.js"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.665.0",

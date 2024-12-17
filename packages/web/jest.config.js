@@ -1,3 +1,5 @@
+const { pathsToModuleNameMapper } = require('ts-jest');
+const tsconfig = require('./tsconfig.json');
 const nextJest = require('next/jest');
 
 const createJestConfig = nextJest({
@@ -11,18 +13,7 @@ const createJestConfig = nextJest({
 const customJestConfig = {
   setupFiles: ['<rootDir>/test-setup.ts'],
   moduleNameMapper: {
-    '^@/root/(.*)$': '<rootDir>/$1',
-    '^@/global-vars': '<rootDir>/global-vars.js',
-    '^@/globals/(.*)$': '<rootDir>/src/common/globals/$1',
-    '^@/services/(.*)$': '<rootDir>/src/services/$1',
-    '^@/components/(.*)$': '<rootDir>/src/common/components/$1',
-    '^@/pages/(.*)$': '<rootDir>/src/pages/$1',
-    '^@/hoc/(.*)$': '<rootDir>/src/common/hoc/$1',
-    '^@/hooks/(.*)$': '<rootDir>/src/common/hooks/$1',
-    '^@/utils/(.*)$': '<rootDir>/src/common/utils/$1',
-    '^@/types/(.*)$': '<rootDir>/src/common/types/$1',
-    '^@/context/(.*)$': '<rootDir>/src/common/context/$1',
-    '^@core/(.*)$': '<rootDir>/../api/core/src/$1',
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, { prefix: '<rootDir>/' }),
     '^src/(.*)$': '<rootDir>/src/$1',
     '^.+\\.(svg)$': '<rootDir>/src/__mocks__/SvgrMock.js',
     '\\.(scss|sass|css)$': 'identity-obj-proxy',

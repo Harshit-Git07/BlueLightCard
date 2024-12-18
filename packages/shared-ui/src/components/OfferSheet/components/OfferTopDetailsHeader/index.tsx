@@ -13,6 +13,8 @@ import amplitudeEvents from '../../../../utils/amplitude/events';
 import { useSharedUIConfig } from '../../../../providers';
 import decodeEntities from '../../../../utils/decodeEntities';
 import { usePlatformAdapter } from '../../../../adapters';
+import { Offer, Event } from '../../../../../../api/offers-cms/src/api/schema';
+import { formatDateDDMMMYYYY_12HourTime } from '../../../../utils/dates';
 
 import moment from 'moment';
 import DealsTimer from '../../../DealsTimer';
@@ -21,25 +23,46 @@ export type Props = {
   showOfferDescription?: boolean;
   showShareFavorite?: boolean;
   showTerms?: boolean;
-  showExclusions?: boolean;
 };
 
+type OfferData = Offer | Event;
+
+const isEvent = (data: OfferData): data is Event => {
+  return data.type === 'ticket';
+};
+
+export const getShareButtonTargetPage = (offer: OfferData) => {
+  if (!isEvent(offer)) {
+    return `/company?cid=${offer.companyId}&oid=${offer.id}`;
+  } else {
+    return `share for event is not implemented yet`;
+  }
+};
 const OfferTopDetailsHeader: FC<Props> = ({
   showOfferDescription = true,
   showShareFavorite = true,
   showTerms = true,
-  showExclusions = true,
 }) => {
   const adapter = usePlatformAdapter();
   const config = useSharedUIConfig();
-  const { offerDetails: offerData, offerMeta, qrCodeValue } = useAtomValue(offerSheetAtom);
+  const {
+    offerDetails: offerData,
+    eventDetails: eventData,
+    offerMeta,
+    qrCodeValue,
+    redemptionType,
+  } = useAtomValue(offerSheetAtom);
   const [imageSource, setImageSource] = useState<string | undefined>();
   const [expanded, setExpanded] = useState(false);
   // TODO CDN URL could be replaced with global var?
   const finalFallbackImage = `${config.globalConfig.cdnUrl}/misc/Logo_coming_soon.jpg`;
+
+  const offer = redemptionType === 'ballot' && eventData ? eventData : offerData;
+  const description = offer.description;
   const isDescriptionLong =
-    offerData.description &&
-    toPlainText(offerData.description.content as unknown as PortableTextBlock).length > 300;
+    description && toPlainText(description.content as unknown as PortableTextBlock).length > 300;
+
+  if (isEvent(offer)) showShareFavorite = false;
 
   const hostname = adapter.getBrandURL();
 
@@ -48,14 +71,14 @@ const OfferTopDetailsHeader: FC<Props> = ({
   };
 
   useEffect(() => {
-    const urlContainsImage = /\.(jpe?g|png|gif|bmp)$/i.test(offerData.image ?? '');
-    if (offerData.image && urlContainsImage) {
-      setImageSource(offerData.image);
-    } else if (offerData.companyId) {
-      const imageUrl = `${config.globalConfig.cdnUrl}/companyimages/complarge/retina/${offerData.companyId}.jpg`;
+    const urlContainsImage = /\.(jpe?g|png|gif|bmp)$/i.test(offer.image ?? '');
+    if (offer.image && urlContainsImage) {
+      setImageSource(offer.image);
+    } else if (!isEvent(offer) && offer.companyId) {
+      const imageUrl = `${config.globalConfig.cdnUrl}/companyimages/complarge/retina/${offer.companyId}.jpg`;
       setImageSource(imageUrl);
     }
-  }, [offerData?.image, offerData.companyId, config.globalConfig.cdnUrl]);
+  }, [offer?.image, offerData.companyId, config.globalConfig.cdnUrl]);
 
   const expiryDate = moment(offerData.expires);
   const currentDate = moment();
@@ -78,40 +101,56 @@ const OfferTopDetailsHeader: FC<Props> = ({
             />
           )}
         </div>
-        {/* Offer Name */}
+        {/* Offer/Event Name */}
         <Heading
           headingLevel={'h2'}
           className={
             'mt-4 text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-title-large font-typography-title-large-weight text-typography-title-large tracking-typography-title-large leading-typography-title-large'
           }
         >
-          {decodeEntities(offerData.name || '')}
+          {decodeEntities(offer.name || '')}
         </Heading>
 
-        {adapter.getAmplitudeFeatureFlag('conv-blc-8-0-deals-timer') &&
+        {/* Event Date */}
+        {isEvent(offer) && (
+          <div className="mt-2 font-bold text-colour-onSurface-light dark:text-colour-onSurface-dark">
+            {offer.startDate && <p>{formatDateDDMMMYYYY_12HourTime(offer.startDate)}</p>}
+          </div>
+        )}
+
+        {/* Event Venue */}
+        {isEvent(offer) && offer.venueName && (
+          <div className="mt-2 font-light text-colour-onSurface-light">
+            <p>{offer.venueName}</p>
+          </div>
+        )}
+
+        {!isEvent(offer) &&
+          adapter.getAmplitudeFeatureFlag('conv-blc-8-0-deals-timer') &&
           adapter.getAmplitudeFeatureFlag('conv-blc-8-0-deals-timer') === 'treatment' &&
           remainingDays <= 14 &&
-          offerData.expires && <DealsTimer expiry={offerData.expires}></DealsTimer>}
+          offer.expires && <DealsTimer expiry={offer.expires}></DealsTimer>}
 
-        {/* Offer description */}
-        {showOfferDescription &&
-          offerData.description &&
+        {/* Offer Description */}
+        {!isEvent(offer) &&
+          showOfferDescription &&
+          description &&
           !(adapter.platform === PlatformVariant.MobileHybrid && qrCodeValue) && (
             <>
               <div
-                className={`mt-2 text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body-light font-typography-body-light-weight text-typography-body-light tracking-typography-body-light leading-typography-body-light ${
-                  isDescriptionLong && !expanded
-                    ? 'mobile:line-clamp-3 tablet:line-clamp-4 desktop:line-clamp-5'
-                    : ''
-                }`}
+                className={`mt-2 text-colour-onSurface-light dark:text-colour-onSurface-dark font-typography-body-light
+            font-typography-body-light-weight text-typography-body-light tracking-typography-body-light
+            leading-typography-body-light ${
+              isDescriptionLong && !expanded
+                ? 'mobile:line-clamp-3 tablet:line-clamp-4 desktop:line-clamp-5'
+                : ''
+            }`}
               >
-                <PortableText
-                  value={offerData.description?.content as unknown as PortableTextBlock}
-                />
+                <PortableText value={description.content as unknown as PortableTextBlock} />
               </div>
 
               {/* Show more/less button for description */}
-              {offerData.description && isDescriptionLong && (
+              {offer.description && isDescriptionLong && (
                 <Button
                   variant={ThemeVariant.Tertiary}
                   slim
@@ -133,22 +172,22 @@ const OfferTopDetailsHeader: FC<Props> = ({
               <ShareButton
                 {...{
                   shareDetails: {
-                    name: offerData.name,
-                    description: offerData.description as PortableTextBlock,
+                    name: offer.name,
+                    description: offer.description as PortableTextBlock,
                     url: `${
                       typeof window !== 'undefined'
                         ? `${window.location.protocol}//${hostname}`
                         : ''
-                    }/company?cid=${offerData.companyId}&oid=${offerData.id}`,
+                    }${getShareButtonTargetPage(offer)}`,
                   },
-                  shareLabel: 'Share offer',
+                  shareLabel: 'Share',
                   amplitudeDetails: {
                     event: amplitudeEvents.OFFER_SHARE_CLICKED,
                     params: {
                       company_id: String(offerMeta.companyId),
                       company_name: offerMeta.companyName,
                       offer_id: String(offerMeta.offerId),
-                      offer_name: offerData.name,
+                      offer_name: offer.name,
                       brand: config.globalConfig.brand,
                     },
                   },
@@ -157,41 +196,47 @@ const OfferTopDetailsHeader: FC<Props> = ({
             </div>
           )}
 
+        {/* About this event */}
+        {isEvent(offer) && description && (
+          <div className="w-full text-left mt-4">
+            <Accordion title="About this event">
+              <PortableText value={description.content as unknown as PortableTextBlock} />
+            </Accordion>
+          </div>
+        )}
+
+        {/* Event How It Works */}
+        {isEvent(offer) && offer.howItWorks && (
+          <div className="w-full text-left mt-4">
+            <Accordion title="How It Works">
+              <PortableText value={offer.howItWorks.content as unknown as PortableTextBlock} />
+            </Accordion>
+          </div>
+        )}
+
         {/* Exclusions */}
         {/* --- Uncomment when Exclusions API is ready --- */}
         {/* TODO add check on API integration do only display this block if exclusions exist in the offer*/}
         {/* {showExclusions && (
-            <div className="w-full text-left mt-4">
-              <Accordion title="Exclusions">
-                <IconListItem
-                  iconSrc="/assets/box-open-light-slash.svg"
-                  title="Not valid on certain item(s)"
-                  link="View details"
-                  onClickLink={() => setOpenExclusionsDetails('items')}
+        <div className="w-full text-left mt-4">
+          <Accordion title="Exclusions">
+            <IconListItem iconSrc="/assets/box-open-light-slash.svg" title="Not valid on certain item(s)"
+              link="View details" onClickLink={()=> setOpenExclusionsDetails('items')}
+              />
+              <IconListItem iconSrc="/assets/store-light-slash.svg" title="Not valid in certain store(s)"
+                link="View details" onClickLink={()=> setOpenExclusionsDetails('store')}
                 />
-                <IconListItem
-                  iconSrc="/assets/store-light-slash.svg"
-                  title="Not valid in certain store(s)"
-                  link="View details"
-                  onClickLink={() => setOpenExclusionsDetails('store')}
-                />
-                <IconListItem
-                  iconSrc="/assets/tags-light-slash.svg"
-                  title="Not valid with other promotions"
-                />
-                <IconListItem
-                  iconSrc="/assets/circle-sterling-light.svg"
-                  title="Only valid on full price items"
-                />
-              </Accordion>
-            </div>
-          )} */}
+                <IconListItem iconSrc="/assets/tags-light-slash.svg" title="Not valid with other promotions" />
+                <IconListItem iconSrc="/assets/circle-sterling-light.svg" title="Only valid on full price items" />
+          </Accordion>
+        </div>
+        )} */}
 
         {/* Offer Terms & Conditions */}
         {showTerms &&
-          offerData.termsAndConditions &&
+          offer.termsAndConditions &&
           !(adapter.platform === PlatformVariant.MobileHybrid && qrCodeValue) && (
-            <div className={`w-full text-left ${showExclusions ? '' : 'mt-4'}`}>
+            <div className="w-full text-left mt-4">
               <Accordion
                 title="Terms & Conditions"
                 amplitudeDetails={{
@@ -200,13 +245,13 @@ const OfferTopDetailsHeader: FC<Props> = ({
                     company_id: String(offerMeta.companyId),
                     company_name: offerMeta.companyName,
                     offer_id: String(offerMeta.offerId),
-                    offer_name: offerData.name,
+                    offer_name: offer.name,
                     brand: config.globalConfig.brand,
                   },
                 }}
               >
                 <PortableText
-                  value={offerData.termsAndConditions?.content as unknown as PortableTextBlock}
+                  value={offer.termsAndConditions?.content as unknown as PortableTextBlock}
                 />
               </Accordion>
             </div>
@@ -225,14 +270,13 @@ const OfferTopDetailsHeader: FC<Props> = ({
       )}
 
       {/* --- Uncomment when Exclusions API is ready ---
-        <OfferExclusions
-          navigateBack={() => setOpenExclusionsDetails(null)}
-          openExclusionsDetails={!!openExclusionsDetails}
-          exclusionsArr={
-            openExclusionsDetails ? exclusionsParser[openExclusionsDetails].exclusionsArray : []
-          }
-          iconSrc={openExclusionsDetails ? exclusionsParser[openExclusionsDetails].iconSrc : ''}
-          text={openExclusionsDetails ? exclusionsParser[openExclusionsDetails].text : ''}
+      <OfferExclusions navigateBack={()=> setOpenExclusionsDetails(null)}
+        openExclusionsDetails={!!openExclusionsDetails}
+        exclusionsArr={
+        openExclusionsDetails ? exclusionsParser[openExclusionsDetails].exclusionsArray : []
+        }
+        iconSrc={openExclusionsDetails ? exclusionsParser[openExclusionsDetails].iconSrc : ''}
+        text={openExclusionsDetails ? exclusionsParser[openExclusionsDetails].text : ''}
         /> */}
     </div>
   );

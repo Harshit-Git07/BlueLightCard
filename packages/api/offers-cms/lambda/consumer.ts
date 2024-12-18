@@ -4,9 +4,10 @@ import { LambdaLogger } from '@blc-mono/core/utils/logger';
 
 import { publishToEventBus } from '../src/cms/emit';
 import {
-  extractEvent,
+  extractRecord,
   ingestCompany,
   ingestCompanyLocation,
+  ingestEvent,
   ingestOffer,
   ingestRawRecord,
   purgeCmsRecord,
@@ -21,9 +22,13 @@ const logger = new LambdaLogger({ serviceName: 'offers-cms-consumer' });
 
 export async function handler(event: EventBridgeEvent<'SanityChangeEvent', SanityChangeEvent>) {
   logger.info({ message: 'Received request:', body: event });
-  const record = extractEvent(event.detail);
+  const record = extractRecord(event.detail);
 
   await ingestRawRecord(record);
+
+  if (record._type === 'event') {
+    await ingestEvent(record);
+  }
 
   if (record._type === 'offer') {
     if (event.detail.headers['sanity-operation'] === 'delete') {

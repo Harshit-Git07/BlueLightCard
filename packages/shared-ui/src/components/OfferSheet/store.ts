@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import type { V2ApisGetOfferResponse } from '@blc-mono/offers-cms/api';
+import type { V2ApisGetOfferResponse, V2ApisGetEventResponse } from '@blc-mono/offers-cms/api';
 import { type AmplitudeEvent, PlatformVariant } from '../../types';
 import type { OfferMeta, RedemptionType } from './types';
 
@@ -9,6 +9,7 @@ export const initializeOfferSheetAtom = () => {
     onClose: () => {},
     offerMeta: {} as OfferMeta,
     offerDetails: {} as V2ApisGetOfferResponse,
+    eventDetails: {} as V2ApisGetEventResponse,
     platform: PlatformVariant.MobileHybrid,
     showRedemptionPage: false,
     // TODO: Remove this (use platform adapter directly)

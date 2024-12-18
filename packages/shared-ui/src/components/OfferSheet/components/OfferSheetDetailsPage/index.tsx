@@ -23,9 +23,16 @@ import { useQuery } from '@tanstack/react-query';
 import { userQuery } from '../../../../api/identity';
 import moment from 'moment';
 
+enum BallotRedeemError {
+  ALREADY_ENTERED = 'ballot_already_entered',
+  UNAUTHORISED = 'ballot_unauthorised',
+  EXPIRED = 'ballot_expired',
+}
+
 const OfferSheetDetailsPage: FC = () => {
   const {
     offerDetails: offerData,
+    eventDetails: eventData,
     offerMeta,
     redemptionType,
     amplitudeEvent,
@@ -37,11 +44,13 @@ const OfferSheetDetailsPage: FC = () => {
   const [showErrorPage, setShowErrorPage] = useState(false);
   const [webRedeemData, setWebRedeemData] = useState<any | null>(null);
   const [maxPerUserReached, setMaxPerUserReached] = useState(false);
+  const [ballotRedeemError, setBallotRedeemError] = useState<BallotRedeemError | null>(null);
+  const [redeemLoading, setRedeemLoading] = useState(false);
 
   const user = useQuery(userQuery());
+  const offer = redemptionType === 'ballot' ? eventData : offerData;
 
-  const labels = useLabels(offerData);
-
+  const labels = useLabels(offer);
   const dynCss = useCSSConditional({
     'w-full': platformAdapter.platform === PlatformVariant.Web,
   });
@@ -56,8 +65,8 @@ const OfferSheetDetailsPage: FC = () => {
       params: {
         company_id: String(offerMeta.companyId),
         company_name: String(offerMeta.companyName),
-        offer_id: String(offerData.id),
-        offer_name: String(offerData.name),
+        offer_id: String(offer.id),
+        offer_name: String(offer.name),
         source: 'sheet',
         origin: platformAdapter.platform,
         design_type: 'modal_popup',
@@ -67,19 +76,34 @@ const OfferSheetDetailsPage: FC = () => {
   };
 
   const getRedemptionData = async () => {
+    setRedeemLoading(true);
     const result = await platformAdapter.invokeV5Api(
       `${getBrandedRedemptionsPath()}/member/redeem`,
       {
         method: 'POST',
         body: JSON.stringify({
-          offerId: offerData.id,
+          offerId: offer.id,
           companyName: offerMeta?.companyName || '',
-          offerName: offerData.name || '',
+          offerName: offer.name || '',
         }),
       },
     );
 
+    setRedeemLoading(false);
     return JSON.parse(result.data);
+  };
+
+  const handleBallotError = (statusCode: number) => {
+    setButtonClicked(false);
+    if (statusCode === 409) {
+      setBallotRedeemError(BallotRedeemError.ALREADY_ENTERED);
+    } else if (statusCode === 403) {
+      setBallotRedeemError(BallotRedeemError.UNAUTHORISED);
+    } else if (statusCode === 404) {
+      setBallotRedeemError(BallotRedeemError.EXPIRED);
+    } else {
+      setShowErrorPage(true);
+    }
   };
 
   // ----- Mobile Hybrid single button click handler
@@ -122,13 +146,18 @@ const OfferSheetDetailsPage: FC = () => {
             ...v,
             qrCodeValue: redeemData.data.redemptionDetails.code,
           }));
+          break;
 
+        case 'ballot':
+          logCodeClicked(events.REQUEST_CODE_CLICKED);
           break;
         default:
           return <></>;
       }
     } else if (redeemData?.data?.kind === RedeemResultKind.MaxPerUserReached) {
       setMaxPerUserReached(true);
+    } else if (redemptionType === 'ballot') {
+      handleBallotError(redeemData.statusCode);
     } else {
       setShowErrorPage(true);
     }
@@ -162,6 +191,8 @@ const OfferSheetDetailsPage: FC = () => {
       }
     } else if (redeemData?.data?.kind === RedeemResultKind.MaxPerUserReached) {
       setMaxPerUserReached(true);
+    } else if (redemptionType === 'ballot') {
+      handleBallotError(redeemData.statusCode);
     } else {
       setShowErrorPage(true);
     }
@@ -179,11 +210,9 @@ const OfferSheetDetailsPage: FC = () => {
         return;
       }
 
-      if (redemptionType === 'vault') {
-        logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
-      } else {
-        logCodeClicked(events.USE_CODE_CLICKED);
-      }
+      logCodeClicked(
+        redemptionType === 'vault' ? events.VAULT_CODE_USE_CODE_CLICKED : events.USE_CODE_CLICKED,
+      );
 
       if (!isRedeemDataErrorResponse(webRedeemData.data)) {
         if (redemptionType !== 'preApplied' && webRedeemData.data.redemptionDetails.code)
@@ -191,6 +220,8 @@ const OfferSheetDetailsPage: FC = () => {
         if (webRedeemData.data.redemptionDetails.url)
           handleRedirect(webRedeemData.data.redemptionDetails.url);
       }
+    } else if (redemptionType === 'ballot') {
+      logCodeClicked(events.USE_CODE_CLICKED);
     }
   };
 
@@ -241,6 +272,9 @@ const OfferSheetDetailsPage: FC = () => {
         break;
       case 'vaultQR':
         primaryButtonTextValue = 'Get QR code';
+        break;
+      case 'ballot':
+        primaryButtonTextValue = 'Enter ballot';
         break;
       default:
         primaryButtonTextValue = 'Get discount';
@@ -299,6 +333,10 @@ const OfferSheetDetailsPage: FC = () => {
         secondaryButtonTextValue = 'QR code ready';
         secondaryButtonSubtextValue = 'Show the above code to get discount';
         break;
+      case 'ballot':
+        secondaryButtonTextValue = 'Entry received';
+        secondaryButtonSubtextValue = 'We’ll let you know if you’ve won via email';
+        break;
       default:
         secondaryButtonTextValue = 'Continue to partner website';
         secondaryButtonSubtextValue = 'Code will be copied - paste it at checkout';
@@ -331,6 +369,10 @@ const OfferSheetDetailsPage: FC = () => {
         webSecondaryButtonTextValue = 'QR code ready';
         webSecondaryButtonSubtextValue = 'Show the above code to get discount';
         break;
+      case 'ballot':
+        webSecondaryButtonTextValue = 'Entry received';
+        webSecondaryButtonSubtextValue = 'We’ll let you know if you’ve won via email';
+        break;
       default:
         webSecondaryButtonTextValue = 'Continue to partner website';
         webSecondaryButtonSubtextValue = 'Code will be copied - paste it at checkout';
@@ -345,7 +387,10 @@ const OfferSheetDetailsPage: FC = () => {
   const primaryButton = (
     <MagicButton
       variant={
-        user.data?.canRedeemOffer && !hasDealExpired(offerData.expires)
+        user.data?.canRedeemOffer &&
+        !hasDealExpired(offer.expires) &&
+        !ballotRedeemError &&
+        !redeemLoading
           ? MagicBtnVariant.Primary
           : MagicBtnVariant.Disabled
       }
@@ -361,6 +406,7 @@ const OfferSheetDetailsPage: FC = () => {
             case 'generic':
             case 'preApplied':
             case 'vaultQR':
+            case 'ballot':
             case 'showCard':
               logCodeClicked(events.REQUEST_CODE_CLICKED);
               break;
@@ -408,21 +454,48 @@ const OfferSheetDetailsPage: FC = () => {
   );
 
   const renderButton = () => {
-    if (buttonClicked) {
+    if (buttonClicked && !ballotRedeemError) {
       if (maxPerUserReached) return maxPerUserReachedSecondaryButton;
       if (platformAdapter.platform === PlatformVariant.MobileHybrid)
         return mobileHybridSecondaryButton;
       if (platformAdapter.platform === PlatformVariant.Web) return webSecondaryButton;
     }
+
     return (
       <div>
         {primaryButton}
-        {!user.data?.canRedeemOffer && (
+        {!user.data?.canRedeemOffer ? (
           <center>
             <span className="text-colour-onSurface-subtle font-body-light text-body-light font-body-light-weight leading-body-light tracking-body-light">
               This offer is for active card holders only. Please check the status of your account.
             </span>
           </center>
+        ) : (
+          <>
+            {ballotRedeemError === BallotRedeemError.UNAUTHORISED && (
+              <center>
+                <span className="text-colour-onSurface-subtle font-body-light text-body-light font-body-light-weight leading-body-light tracking-body-light">
+                  This competition is for active card holders only. Please check the status of your
+                  account.
+                </span>
+              </center>
+            )}
+            {ballotRedeemError === BallotRedeemError.EXPIRED && (
+              <center>
+                <span className="text-colour-onSurface-subtle font-body-light text-body-light font-body-light-weight leading-body-light tracking-body-light">
+                  Entry date to this competition has expired
+                </span>
+              </center>
+            )}
+            {ballotRedeemError === BallotRedeemError.ALREADY_ENTERED && (
+              <center>
+                <span className="text-colour-onSurface-subtle font-body-light text-body-light font-body-light-weight leading-body-light tracking-body-light">
+                  It looks like you’ve already entered this ballot! We’ll let you know if you’ve won
+                  via email.
+                </span>
+              </center>
+            )}
+          </>
         )}
       </div>
     );

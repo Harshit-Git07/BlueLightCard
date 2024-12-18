@@ -8,7 +8,6 @@ const props: Props = {
   showOfferDescription: true,
   showShareFavorite: true,
   showTerms: true,
-  showExclusions: true,
 };
 
 const meta: Meta<typeof OfferTopDetailsHeaderComponent> = {

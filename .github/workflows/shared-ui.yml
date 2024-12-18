@@ -45,15 +45,14 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
       - run: npm run test:coverage -w packages/shared-ui
-#      - name: SonarQube Scan
-#        uses: SonarSource/sonarqube-scan-action@master
-#        if: github.actor != 'dependabot[bot]'
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          projectBaseDir: packages/shared-ui
-
+  #      - name: SonarQube Scan
+  #        uses: SonarSource/sonarqube-scan-action@master
+  #        if: github.actor != 'dependabot[bot]'
+  #        env:
+  #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #        with:
+  #          projectBaseDir: packages/shared-ui
 
   lint:
     name: Linting
@@ -66,7 +65,12 @@ jobs:
           node-version: 18
       - name: Setup
         uses: ./.github/actions/setup
-      - run: npm run lint -w packages/shared-ui
+      - name: Generate SST Types
+        env:
+          BRAND: BLC_UK
+        run: npx sst types --stage staging
+      - name: linter
+        run: npm run lint -w packages/shared-ui
 
   typecheck:
     name: Check Types

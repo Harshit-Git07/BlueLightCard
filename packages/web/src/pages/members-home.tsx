@@ -19,7 +19,13 @@ import {
 import PromoBannerPlaceholder from '@/offers/components/PromoBanner/PromoBannerPlaceholder';
 import AlertBox from '@/components/AlertBox/AlertBox';
 import Container from '@/components/Container/Container';
-import { PlatformVariant, SwiperCarousel, useOfferDetails } from '@bluelightcard/shared-ui';
+import {
+  Button,
+  PlatformVariant,
+  SwiperCarousel,
+  useOfferDetails,
+  usePlatformAdapter,
+} from '@bluelightcard/shared-ui';
 import { NextPage } from 'next';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 import inTimePeriod from '@/utils/inTimePeriod';
@@ -239,6 +245,17 @@ const HomePage: NextPage<any> = () => {
         <Container className="py-5" data-testid="braze-tenancy-banner" addBottomHorizontalLine>
           <TenancyBanner title="homepage_sponsor_banner" variant="large" />
         </Container>
+      )}
+
+      {usePlatformAdapter().getAmplitudeFeatureFlag(AmplitudeExperimentFlags.BLT_TICKET_SHEET) ===
+        'on' && (
+        <Button
+          onClick={async () => {
+            await onSelectOffer('cb0db35f-c3b3-44bf-bb67-4295bd0c11a7', '', 'Ticket');
+          }}
+        >
+          BLT Test
+        </Button>
       )}
 
       {/* Deals of the week carousel */}

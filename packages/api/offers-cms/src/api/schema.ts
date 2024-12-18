@@ -45,24 +45,58 @@ export const OfferSchema = z.object({
     example: '123456',
   }),
   name: z.string().openapi({
-    description: 'Company Name',
+    description: 'Offer Name',
     example: '20% off all Fortnite skins',
   }),
   description: richtextModule,
-  type: z.enum(['gift-card', 'in-store', 'local', 'online', 'ticket', 'other']).openapi({
-    description: 'Type of offer',
-    example: 'gift-card',
-  }),
   expires: z.string().nullable().openapi({
-    description: 'Date the offer expires ',
+    description: 'Date the offer expires',
   }),
   termsAndConditions: richtextModule,
   image: z.string().nullable().openapi({
     description: 'Offer image',
+  }),
+  type: z.enum(['gift-card', 'in-store', 'local', 'online', 'ticket', 'other']).openapi({
+    description: 'Type of offer',
+    example: 'gift-card',
   }),
   companyId: z.string().nullable().openapi({
     description: 'Company ID',
   }),
 });
 
+export const EventSchema = z.object({
+  id: z.string().openapi({
+    description: 'Event ID',
+    example: '123456',
+  }),
+  name: z.string().openapi({
+    description: 'Event Name',
+    example: '20% off all Fortnite skins or Jimmy Carr being a funny man',
+  }),
+  description: richtextModule,
+  expires: z.string().nullable().openapi({
+    description: 'Date the guestlist to an event is closed',
+  }),
+  termsAndConditions: richtextModule,
+  image: z.string().nullable().openapi({
+    description: 'Event image',
+  }),
+  type: z.enum(['ticket']).openapi({
+    description: 'Type of offer',
+    example: 'ticket',
+  }),
+  startDate: z.string().nullable().openapi({
+    description: 'Start date of the event',
+  }),
+  endDate: z.string().nullable().openapi({
+    description: 'End date of the event',
+  }),
+  venueName: z.string().nullable().openapi({
+    description: 'name of venue',
+  }),
+  howItWorks: richtextModule,
+});
+
 export type Offer = z.infer<typeof OfferSchema>;
+export type Event = z.infer<typeof EventSchema>;

@@ -48,6 +48,16 @@ export async function ingestOffer(record: Record<'offer'>, logger: ILogger) {
   });
 }
 
+export async function ingestEvent(record: Record<'event'>) {
+  await dynamo.put({
+    TableName: Table.cmsEvent.tableName,
+    Item: {
+      ...record,
+      venueId: record.venue?._id,
+    },
+  });
+}
+
 export async function ingestCompany(record: Record<'company'>, logger: ILogger) {
   const brand = record.brandCompanyDetails?.find((company) => company.brand?.code === env.BRAND);
 
@@ -74,7 +84,7 @@ export async function ingestRawRecord(record: WebhookResultRecord) {
   });
 }
 
-export function extractEvent(event: SanityChangeEvent) {
+export function extractRecord(event: SanityChangeEvent) {
   // TODO: Remove following if clause once JSON format has been fully cutover
   if (typeof event.body === 'string') {
     return JSON.parse(event.body) as WebhookResultRecord;

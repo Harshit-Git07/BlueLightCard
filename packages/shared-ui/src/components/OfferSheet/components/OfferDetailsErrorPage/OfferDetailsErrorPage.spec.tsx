@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PlatformAdapterProvider, useMockPlatformAdapter } from 'src/adapters';
 import OfferDetailsErrorPage from '.';
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { useHydrateAtoms } from 'jotai/utils';
 import { Provider } from 'jotai';
 import { offerSheetAtom } from '../../store';
@@ -81,5 +81,27 @@ describe('smoke test', () => {
 
     expect(mockPlatformAdapter.navigate).toHaveBeenCalledTimes(1);
     expect(mockPlatformAdapter.navigate).toHaveBeenCalledWith(`/company?cid=${mockCompanyId}`);
+  });
+
+  it('should only render error message for redemption type ballot', () => {
+    const mockPlatformAdapter = useMockPlatformAdapter();
+    const { getByRole } = render(
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <TestProvider
+          initialValues={[
+            [offerSheetAtom, { offerMeta: { companyId: mockCompanyId }, redemptionType: 'ballot' }],
+          ]}
+        >
+          <OfferDetailsErrorPage />
+        </TestProvider>
+      </PlatformAdapterProvider>,
+    );
+    expect(
+      getByRole('heading', { name: /sorry, we couldn’t load your event at the moment\./i }),
+    ).toBeTruthy();
+
+    const button = screen.queryByRole('button');
+
+    expect(button).toBeNull();
   });
 });

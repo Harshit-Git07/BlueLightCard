@@ -24,11 +24,11 @@ export function OffersCMS({ stack }: StackContext) {
 
   const discoveryBusName = env.OFFERS_DISCOVERY_EVENT_BUS_NAME || '';
 
-  const { rawDataTable, offersDataTable, companyDataTable } = createTables(stack);
+  const { rawDataTable, offersDataTable, companyDataTable, eventsDataTable } = createTables(stack);
 
   const consumerFunction = new Function(stack, CONSUMER_FUNCTION_NAME, {
     handler: 'packages/api/offers-cms/lambda/consumer.handler',
-    bind: [rawDataTable, offersDataTable, companyDataTable],
+    bind: [rawDataTable, offersDataTable, companyDataTable, eventsDataTable],
     environment: env,
   });
   consumerFunction.attachPermissions([
@@ -73,7 +73,7 @@ export function OffersCMS({ stack }: StackContext) {
 
   const hono = new Function(stack, 'OffersApi', {
     handler: 'packages/api/offers-cms/lambda/api.handler',
-    bind: [offersDataTable, companyDataTable],
+    bind: [offersDataTable, companyDataTable, eventsDataTable],
     environment: env,
   });
 

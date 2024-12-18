@@ -1,4 +1,5 @@
 import type {
+  V2ApisGetEventResponse,
   V2ApisGetOfferResponse,
   V2CompaniesGetCompanyOffersResponse,
   V2CompaniesGetCompanyResponse,
@@ -16,6 +17,18 @@ export async function cms_GetOffer(adapter: IPlatformAdapter, offerId: string) {
   }
 
   return JSON.parse(result.data) as V2ApisGetOfferResponse;
+}
+
+export async function cms_GetEvent(adapter: IPlatformAdapter, eventId: string) {
+  const result = await adapter.invokeV5Api(`${getBrandedOffersPath(true)}/events/${eventId}`, {
+    method: 'GET',
+  });
+
+  if (result.status !== 200) {
+    throw new Error(result.status === 404 ? 'Event not found' : 'Unable to retrieve Event details');
+  }
+
+  return JSON.parse(result.data) as V2ApisGetEventResponse;
 }
 
 export async function cms_GetCompany(adapter: IPlatformAdapter, companyId: string) {

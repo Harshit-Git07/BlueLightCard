@@ -45,6 +45,9 @@ jest.mock('@bluelightcard/shared-ui', () => {
         <button data-testid="mock-slide-button" onClick={() => onSlideChange?.()} />
       </div>
     ),
+    usePlatformAdapter: () => ({
+      getAmplitudeFeatureFlag: jest.fn(),
+    }),
     useOfferDetails: () => ({
       viewOffer: jest.fn(),
     }),

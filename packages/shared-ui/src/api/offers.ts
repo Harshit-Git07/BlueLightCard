@@ -1,6 +1,6 @@
 import { type IPlatformAdapter, usePlatformAdapter } from '../adapters';
 import { queryOptions } from '@tanstack/react-query';
-import { cms_GetCompany, cms_GetOffer, cms_GetOffersByCompany } from './offers_cms';
+import { cms_GetCompany, cms_GetOffer, cms_GetEvent, cms_GetOffersByCompany } from './offers_cms';
 import { legacy_GetCompany, legacy_GetOffer, legacy_GetOffersByCompany } from './offers_legacy';
 
 export function getOffer(
@@ -16,6 +16,14 @@ export function getOffer(
   }
 
   return cms_GetOffer(adapter, id);
+}
+
+export function getEvent(adapter: IPlatformAdapter, id: string | undefined | null) {
+  if (!id) {
+    throw new Error('Missing id');
+  }
+
+  return cms_GetEvent(adapter, id);
 }
 
 export function getCompany(
@@ -48,6 +56,16 @@ export function getOffersByCompany(
   }
 
   return cms_GetOffersByCompany(adapter, id);
+}
+
+export function getEventQuery(id: string | undefined | null, isEnabled = true) {
+  const adapter = usePlatformAdapter();
+
+  return queryOptions({
+    enabled: !!id && isEnabled,
+    queryKey: ['event', id],
+    queryFn: () => getEvent(adapter, id),
+  });
 }
 
 export function getOfferQuery(id: string | undefined | null, useCms: boolean, isEnabled = true) {

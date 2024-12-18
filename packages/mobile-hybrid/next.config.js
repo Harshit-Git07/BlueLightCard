@@ -9,7 +9,7 @@ const nextConfig = {
     unoptimized: true,
   },
   experimental: {
-    swcPlugins: [['@swc-jotai/react-refresh', {}]],
+    swcPlugins: process.env.NODE_ENV === 'development' ? [['@swc-jotai/react-refresh', {}]] : [],
   },
   webpack: (config) => {
     config.plugins.push(

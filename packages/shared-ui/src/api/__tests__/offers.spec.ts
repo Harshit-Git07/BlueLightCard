@@ -1,4 +1,4 @@
-import { getCompany, getOffer, getOffersByCompany } from '../offers';
+import { getCompany, getOffer, getEvent, getOffersByCompany } from '../offers';
 import { useMockPlatformAdapter } from 'src/adapters';
 import { convertStringToRichtextModule } from 'src/utils/rich-text-utils';
 import { createFactoryMethod } from 'src/utils/createFactoryMethod';
@@ -24,6 +24,20 @@ const createModernOffer = createFactoryMethod({
   type: 'gift-card',
   image: 'companyimages/complarge/retina/',
   companyId: '101',
+});
+
+const createEvent = createFactoryMethod({
+  id: '200',
+  description: convertStringToRichtextModule('Test event description'),
+  expires: '2025-01-01',
+  startDate: '2025-01-01T19:00:00Z',
+  endDate: '2025-02-01T19:00:00Z',
+  name: 'Test Event',
+  termsAndConditions: convertStringToRichtextModule('Test event terms and conditions'),
+  howItWorks: convertStringToRichtextModule('Test event how it works'),
+  type: 'ticket',
+  image: 'eventimages/complarge/retina/',
+  venueName: 'The O2 Arena',
 });
 
 const createLegacyOfferDescription = (description: string) => ({
@@ -311,5 +325,55 @@ describe('getOffer', () => {
         expect(result).toEqual(response);
       },
     );
+  });
+
+  describe('getEvent', () => {
+    test('getEvent throws an error if the id is missing', async () => {
+      const mockPlatformAdapter = useMockPlatformAdapter(200);
+
+      expect.assertions(1);
+      try {
+        await getEvent(mockPlatformAdapter, undefined);
+      } catch (error) {
+        expect(error).toEqual(new Error('Missing id'));
+      }
+    });
+
+    test('getEvent throws with "Event not found" when event is not found', async () => {
+      const mockPlatformAdapter = useMockPlatformAdapter(404);
+
+      expect.assertions(1);
+      try {
+        await await getEvent(mockPlatformAdapter, 'id');
+      } catch (error) {
+        expect(error).toEqual(new Error('Event not found'));
+      }
+    });
+
+    test('getEvent throws with generic message for failures', async () => {
+      const mockPlatformAdapter = useMockPlatformAdapter(500);
+
+      expect.assertions(1);
+      try {
+        await await getEvent(mockPlatformAdapter, 'id');
+      } catch (error) {
+        expect(error).toEqual(new Error('Unable to retrieve Event details'));
+      }
+    });
+
+    test('getEvent calls the event endpoint', async () => {
+      const mockEvent = createEvent();
+      const mockPlatformAdapter = useMockPlatformAdapter(200, mockEvent);
+
+      const result = await getEvent(mockPlatformAdapter, mockEvent.id);
+
+      expect(result).toEqual(mockEvent);
+      expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(
+        `/eu/offers/v2/v2/events/${mockEvent.id.toString()}`,
+        {
+          method: 'GET',
+        },
+      );
+    });
   });
 });

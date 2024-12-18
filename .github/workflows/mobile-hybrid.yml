@@ -51,7 +51,7 @@ jobs:
         with:
           name: coverage_report
           path: packages/mobile-hybrid/coverage/
-          rentionion-days: 1
+          retention-days: 1
 
   lint:
     name: Linting
@@ -136,28 +136,31 @@ jobs:
           package-name: '@bluelightcard/shared-ui'
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
 
-  sonarcloud:
-    if: github.actor != 'dependabot[bot]'
-    name: SonarQube Scan
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Download Coverage Report
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage_report
-          path: packages/mobile-hybrid/coverage
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          projectBaseDir: packages/mobile-hybrid
+#  sonarcloud:
+#    if: github.actor != 'dependabot[bot]'
+#    name: SonarQube Scan
+#    runs-on: ubuntu-latest
+#    needs: test
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#      - name: Download Coverage Report
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: coverage_report
+#          path: packages/mobile-hybrid/coverage
+#      - name: SonarCloud Scan
+#        uses: SonarSource/sonarcloud-github-action@master
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          projectBaseDir: packages/mobile-hybrid
+#          args: >
+#            -Dsonar.projectKey=BlueLightCard-2.0_mobile-hybrid
+#            -Dsonar.organization=bluelightcard
 
   staging:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

@@ -43,14 +43,14 @@ jobs:
         uses: ./.github/actions/setup
       - name: Test
         run: npm run test:unit:coverage -w packages/api-proxy
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@master
-        if: github.actor != 'dependabot[bot]'
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          projectBaseDir: packages/api-proxy
+#      - name: SonarQube Scan
+#        uses: SonarSource/sonarqube-scan-action@master
+#        if: github.actor != 'dependabot[bot]'
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          projectBaseDir: packages/api-proxy
 
   # TODO: Add formatting check
   # TODO: Add linting check

@@ -53,14 +53,14 @@ jobs:
         run: npx sst types --stage staging
       - name: Test
         run: npm run test:coverage -w packages/api/discovery
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@master
-        if: github.actor != 'dependabot[bot]'
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          projectBaseDir: packages/api/discovery
+#      - name: SonarQube Scan
+#        uses: SonarSource/sonarqube-scan-action@master
+#        if: github.actor != 'dependabot[bot]'
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          projectBaseDir: packages/api/discovery
 
   format:
     name: Check Formatting

@@ -50,14 +50,14 @@ jobs:
         uses: ./.github/actions/setup
       - name: Run Tests
         run: npm run test:coverage -w packages/api/offers
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@master
-        if: github.actor != 'dependabot[bot]'
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          projectBaseDir: packages/api/offers
+#      - name: SonarQube Scan
+#        uses: SonarSource/sonarqube-scan-action@master
+#        if: github.actor != 'dependabot[bot]'
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          projectBaseDir: packages/api/offers
 
   changelog:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'

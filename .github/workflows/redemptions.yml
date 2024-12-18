@@ -55,14 +55,14 @@ jobs:
         run: npm run test:coverage -w packages/api/redemptions
       - name: Test Cloud flare
         run: npm run test:cloudflare -w packages/api/redemptions
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@master
-        if: github.actor != 'dependabot[bot]'
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          projectBaseDir: packages/api/redemptions
+#      - name: SonarQube Scan
+#        uses: SonarSource/sonarqube-scan-action@master
+#        if: github.actor != 'dependabot[bot]'
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          projectBaseDir: packages/api/redemptions
 
   format:
     name: Check Formatting

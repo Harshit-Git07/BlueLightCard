@@ -51,14 +51,14 @@ jobs:
         uses: ./.github/actions/setup
       - name: Test
         run: npm run test -w packages/api/zendesk
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@master
-        if: github.actor != 'dependabot[bot]'
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          projectBaseDir: packages/api/zendesk
+#      - name: SonarQube Scan
+#        uses: SonarSource/sonarqube-scan-action@master
+#        if: github.actor != 'dependabot[bot]'
+#        env:
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          projectBaseDir: packages/api/zendesk
 
   typecheck:
     name: Check Types

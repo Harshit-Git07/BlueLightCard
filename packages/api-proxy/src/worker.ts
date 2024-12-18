@@ -36,6 +36,12 @@ export interface Env {
 	DISCOVERY_API_BLC_UK: string;
 	DISCOVERY_API_BLC_AU: string;
 	DISCOVERY_API_DDS_UK: string;
+	MEMBERS_API_BLC_UK: string;
+	MEMBERS_API_BLC_AU: string;
+	MEMBERS_API_DDS_UK: string;
+	MEMBERS_ADMIN_API_BLC_UK: string;
+	MEMBERS_ADMIN_API_BLC_AU: string;
+	MEMBERS_ADMIN_API_DDS_UK: string;
 }
 
 type brand = (typeof brands)[number];
@@ -60,6 +66,8 @@ const getUrlByBrand = (url: URL, env: Env, brand: string): URL => {
 		'/redemptions': { BLC_UK: env.REDEMPTIONS_API_BLC_UK, BLC_AU: env.REDEMPTIONS_API_BLC_AU, DDS_UK: env.REDEMPTIONS_API_DDS_UK },
 		'/orders': { BLC_UK: env.ORDERS_API_BLC_UK, BLC_AU: env.ORDERS_API_BLC_AU, DDS_UK: env.ORDERS_API_DDS_UK },
 		'/discovery': { BLC_UK: env.DISCOVERY_API_BLC_UK, BLC_AU: env.DISCOVERY_API_BLC_AU, DDS_UK: env.DISCOVERY_API_DDS_UK },
+		'/members': { BLC_UK: env.MEMBERS_API_BLC_UK, BLC_AU: env.MEMBERS_API_BLC_AU, DDS_UK: env.MEMBERS_API_DDS_UK },
+		'/admin': { BLC_UK: env.MEMBERS_ADMIN_API_BLC_UK, BLC_AU: env.MEMBERS_ADMIN_API_BLC_AU, DDS_UK: env.MEMBERS_ADMIN_API_DDS_UK },
 	};
 
 	const params = searchParams.size > 0 ? `?${searchParams}` : '';
@@ -98,6 +106,12 @@ const getUrlByPrefix = (url: URL, env: Env): URL => {
 		'/eu/discovery/dds': env.DISCOVERY_API_DDS_UK,
 		'/eu/discovery': env.DISCOVERY_API_BLC_UK,
 		'/au/discovery': env.DISCOVERY_API_BLC_AU,
+		'/eu/members/dds': env.MEMBERS_API_DDS_UK,
+		'/eu/members': env.MEMBERS_API_BLC_UK,
+		'/au/members': env.MEMBERS_API_BLC_AU,
+		'/eu/admin/dds': env.MEMBERS_ADMIN_API_DDS_UK,
+		'/eu/admin': env.MEMBERS_ADMIN_API_BLC_UK,
+		'/au/admin': env.MEMBERS_ADMIN_API_BLC_AU,
 	};
 
 	const params = searchParams.size > 0 ? `?${searchParams}` : '';

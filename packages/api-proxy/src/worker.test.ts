@@ -26,6 +26,12 @@ export const testEnv: Env = {
 	DISCOVERY_API_BLC_UK: 'https://discovery.blc.uk',
 	DISCOVERY_API_BLC_AU: 'https://discovery.blc.au',
 	DISCOVERY_API_DDS_UK: 'https://discovery.dds.uk',
+	MEMBERS_API_BLC_UK: 'https://members.blc.uk',
+	MEMBERS_API_BLC_AU: 'https://members.blc.au',
+	MEMBERS_API_DDS_UK: 'https://members.dds.uk',
+	MEMBERS_ADMIN_API_BLC_UK: 'https://admin.blc.uk',
+	MEMBERS_ADMIN_API_BLC_AU: 'https://admin.blc.au',
+	MEMBERS_ADMIN_API_DDS_UK: 'https://admin.dds.uk',
 };
 
 describe('worker', () => {
@@ -174,6 +180,42 @@ describe('worker', () => {
 				expectedDomain: 'https://offers-cms.dds.uk',
 				brandHeader: 'DDS_UK',
 				expectedPath: '/offers-endpoint',
+			},
+			{
+				route: '/members/orgs',
+				expectedDomain: 'https://members.blc.uk',
+				brandHeader: 'BLC_UK',
+				expectedPath: '/orgs',
+			},
+			{
+				route: '/members/orgs',
+				expectedDomain: 'https://members.blc.au',
+				brandHeader: 'BLC_AU',
+				expectedPath: '/orgs',
+			},
+			{
+				route: '/members/orgs',
+				expectedDomain: 'https://members.dds.uk',
+				brandHeader: 'DDS_UK',
+				expectedPath: '/orgs',
+			},
+			{
+				route: '/admin/orgs',
+				expectedDomain: 'https://admin.blc.uk',
+				brandHeader: 'BLC_UK',
+				expectedPath: '/orgs',
+			},
+			{
+				route: '/admin/orgs',
+				expectedDomain: 'https://admin.blc.au',
+				brandHeader: 'BLC_AU',
+				expectedPath: '/orgs',
+			},
+			{
+				route: '/admin/orgs',
+				expectedDomain: 'https://admin.dds.uk',
+				brandHeader: 'DDS_UK',
+				expectedPath: '/orgs',
 			},
 		])('maps request to brand environment: $brandHeader for route: $route', async (testParams) => {
 			nock(testParams.expectedDomain).post(testParams.expectedPath).reply(200);

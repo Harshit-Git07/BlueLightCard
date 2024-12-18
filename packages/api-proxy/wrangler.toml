@@ -29,6 +29,14 @@ DISCOVERY_API_BLC_UK = "https://staging-discovery.blcshine.io"
 DISCOVERY_API_BLC_AU = "https://staging-discovery-blc-au.blcshine.io"
 DISCOVERY_API_DDS_UK = "https://staging-discovery-dds-uk.blcshine.io"
 
+MEMBERS_API_BLC_UK = "https://staging-members-api.blcshine.io"
+MEMBERS_API_BLC_AU = "https://staging-members-api-au.blcshine.io"
+MEMBERS_API_DDS_UK = "https://staging-members-api-dds.blcshine.io"
+
+MEMBERS_ADMIN_API_BLC_UK = "https://staging-members-admin-api.blcshine.io"
+MEMBERS_ADMIN_API_BLC_AU = "https://staging-members-admin-api-au.blcshine.io"
+MEMBERS_ADMIN_API_DDS_UK = "https://staging-members-admin-api-dds.blcshine.io"
+
 [env.pr.vars]
 ENVIRONMENT = "pr"
 AUTH_API_BLC_UK = "https://staging-auth.blcshine.io"
@@ -52,6 +60,14 @@ ORDERS_API_DDS_UK = "https://staging-orders-dds-uk.blcshine.io"
 DISCOVERY_API_BLC_UK = "https://staging-discovery.blcshine.io"
 DISCOVERY_API_BLC_AU = "https://staging-discovery-blc-au.blcshine.io"
 DISCOVERY_API_DDS_UK = "https://staging-discovery-dds-uk.blcshine.io"
+
+MEMBERS_API_BLC_UK = "https://staging-members-api.blcshine.io"
+MEMBERS_API_BLC_AU = "https://staging-members-api-au.blcshine.io"
+MEMBERS_API_DDS_UK = "https://staging-members-api-dds.blcshine.io"
+
+MEMBERS_ADMIN_API_BLC_UK = "https://staging-members-admin-api.blcshine.io"
+MEMBERS_ADMIN_API_BLC_AU = "https://staging-members-admin-api-au.blcshine.io"
+MEMBERS_ADMIN_API_DDS_UK = "https://staging-members-admin-api-dds.blcshine.io"
 
 [env.staging.vars]
 ENVIRONMENT = "staging"
@@ -78,6 +94,14 @@ DISCOVERY_API_BLC_UK = "https://staging-discovery.blcshine.io"
 DISCOVERY_API_BLC_AU = "https://staging-discovery-blc-au.blcshine.io"
 DISCOVERY_API_DDS_UK = "https://staging-discovery-dds-uk.blcshine.io"
 
+MEMBERS_API_BLC_UK = "https://staging-members-api.blcshine.io"
+MEMBERS_API_BLC_AU = "https://staging-members-api-au.blcshine.io"
+MEMBERS_API_DDS_UK = "https://staging-members-api-dds.blcshine.io"
+
+MEMBERS_ADMIN_API_BLC_UK = "https://staging-members-admin-api.blcshine.io"
+MEMBERS_ADMIN_API_BLC_AU = "https://staging-members-admin-api-au.blcshine.io"
+MEMBERS_ADMIN_API_DDS_UK = "https://staging-members-admin-api-dds.blcshine.io"
+
 [env.production.vars]
 ENVIRONMENT = "production"
 # Naming convention <domain>_API_<brand> or <region>
@@ -103,6 +127,14 @@ ORDERS_API_DDS_UK = "https://orders-dds-uk.blcshine.io"
 DISCOVERY_API_BLC_UK = "https://discovery.blcshine.io"
 DISCOVERY_API_BLC_AU = "https://discovery-blc-au.blcshine.io"
 DISCOVERY_API_DDS_UK = "https://discovery-dds-uk.blcshine.io"
+
+MEMBERS_API_BLC_UK = "https://members-api.blcshine.io"
+MEMBERS_API_BLC_AU = "https://members-api-au.blcshine.io"
+MEMBERS_API_DDS_UK = "https://members-api-dds.blcshine.io"
+
+MEMBERS_ADMIN_API_BLC_UK = "https://members-admin-api.blcshine.io"
+MEMBERS_ADMIN_API_BLC_AU = "https://members-admin-api-au.blcshine.io"
+MEMBERS_ADMIN_API_DDS_UK = "https://members-admin-api-dds.blcshine.io"
 
 [env.pr]
 name = "pr-api"

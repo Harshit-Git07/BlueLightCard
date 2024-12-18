@@ -7,8 +7,11 @@ import { z } from 'zod';
 
 import { LambdaLogger } from '@blc-mono/core/utils/logger';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
+import { MenuWithSubMenus } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
+import { isValidOffer } from '@blc-mono/discovery/application/utils/isValidOffer';
 
+import { MenuWithOffers } from '../../models/Menu';
 import { mapMenusAndOffersToMenuResponse } from '../../repositories/Menu/service/mapper/MenuMapper';
 import { getMenusByMenuType, getMenusByMenuTypes } from '../../repositories/Menu/service/MenuService';
 
@@ -22,17 +25,31 @@ const querySchema = z.object({
 
 const handlerUnwrapped = async (event: APIGatewayEvent) => {
   try {
-    const { menusRequested } = getQueryParams(event);
+    const { menusRequested, dob, organisation } = getQueryParams(event);
 
-    const menusAndOffers =
-      menusRequested.length === 1
-        ? await getMenusByMenuType(menusRequested[0])
-        : await getMenusByMenuTypes(menusRequested);
+    if (dob && organisation) {
+      const menusAndOffers =
+        menusRequested.length === 1
+          ? await getMenusByMenuType(menusRequested[0])
+          : await getMenusByMenuTypes(menusRequested);
 
-    return Response.OK({ message: `successful`, data: mapMenusAndOffersToMenuResponse(menusAndOffers) });
+      const filteredMenusAndOffers = filterInvalidOffers(menusAndOffers, dob, organisation);
+
+      return Response.OK({
+        message: `successful`,
+        data: mapMenusAndOffersToMenuResponse(filteredMenusAndOffers),
+      });
+    } else {
+      return Response.BadRequest({
+        message: `Missing query parameter on request - organisation: ${organisation}, dob: ${dob}`,
+      });
+    }
   } catch (error) {
     logger.error({ message: `Error querying getMenus: ${JSON.stringify(error)}` });
-    return Response.BadRequest({ message: `error`, data: 'Error querying getMenus' });
+    return Response.BadRequest({
+      message: `error`,
+      data: 'Error querying getMenus',
+    });
   }
 };
 
@@ -42,6 +59,8 @@ const getQueryParams = (event: APIGatewayEvent) => {
   const queryParams = event.queryStringParameters as APIGatewayProxyEventQueryStringParameters;
   let menusRequested: MenuType[] = [];
   const idList = queryParams?.id ?? '';
+  const dob = queryParams?.dob;
+  const organisation = queryParams?.organisation;
   if (idList.length > 0) {
     menusRequested = decodeURIComponent(idList)
       .split(',')
@@ -54,5 +73,35 @@ const getQueryParams = (event: APIGatewayEvent) => {
   }
   const authToken = event.headers.Authorization as string;
 
-  return { menusRequested, authToken };
+  return {
+    menusRequested,
+    dob,
+    organisation,
+    authToken,
+  };
+};
+
+const filterInvalidOffers = (
+  menusAndOffers: Partial<Record<MenuType, MenuWithOffers[] | MenuWithSubMenus[]>>,
+  dob: string,
+  organisation: string,
+): Partial<Record<MenuType, MenuWithOffers[] | MenuWithSubMenus[]>> => {
+  const filteredMenusAndOffers = { ...menusAndOffers };
+
+  Object.keys(filteredMenusAndOffers).forEach((menuType) => {
+    const type = menuType as MenuType;
+
+    if (type === MenuType.FLEXIBLE) return;
+
+    if (Array.isArray(filteredMenusAndOffers[type])) {
+      filteredMenusAndOffers[type] = (filteredMenusAndOffers[type] as MenuWithOffers[])
+        .map((menu) => ({
+          ...menu,
+          offers: menu.offers.filter((offer) => isValidOffer(offer, dob, organisation)),
+        }))
+        .filter((menu) => menu.offers.length > 0);
+    }
+  });
+
+  return filteredMenusAndOffers;
 };

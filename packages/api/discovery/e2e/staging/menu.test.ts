@@ -34,6 +34,8 @@ describe('Menu', async () => {
         'A valid request is sent',
         {
           id: 'dealsOfTheWeek',
+          dob: '2001-01-01',
+          organisation: 'DEN',
         },
         { Authorization: `Bearer ${testUserTokens.idToken}` },
       ],
@@ -52,7 +54,22 @@ describe('Menu', async () => {
         { id: 'dealsOfTheWeek,featured' },
         { Authorization: `Bearer invalidToken` },
       ],
-      [200, "No menu id's provided", {}, { Authorization: `Bearer ${testUserTokens.idToken}` }],
+      [400, 'No dob is provided', { organisation: 'DEN' }, { Authorization: `Bearer ${testUserTokens.idToken}` }],
+      [
+        400,
+        'No organisation is provided',
+        { dob: '2001-01-01' },
+        { Authorization: `Bearer ${testUserTokens.idToken}` },
+      ],
+      [
+        200,
+        "No menu id's provided",
+        {
+          dob: '2001-01-01',
+          organisation: 'DEN',
+        },
+        { Authorization: `Bearer ${testUserTokens.idToken}` },
+      ],
     ])('should return with response code %s when %s', async (statusCode, _description, params, headers) => {
       const result = await whenMenuIsCalledWith(params, headers);
       expect(result.status).toBe(statusCode);

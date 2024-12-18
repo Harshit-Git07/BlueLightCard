@@ -4,7 +4,7 @@ import {
   Offer as SanityOffer,
 } from '@bluelightcard/sanity-types';
 
-import { Offer, OfferType } from '../../application/models/Offer';
+import { Offer, OfferStatus, OfferType } from '../../application/models/Offer';
 
 import { mapSanityOfferToOffer } from './mapSanityOfferToOffer';
 
@@ -14,7 +14,7 @@ describe('mapSanityOfferToOffer', () => {
       id: '1',
       legacyOfferId: 123,
       name: 'Test Offer',
-      status: 'live',
+      status: OfferStatus.LIVE,
       offerType: OfferType.ONLINE,
       offerDescription: 'This is a heading↵ This is a paragraph.↵ ',
       image: 'https://example.com/image.jpg',

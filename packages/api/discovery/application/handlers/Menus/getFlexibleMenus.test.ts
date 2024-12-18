@@ -1,6 +1,7 @@
 import { APIGatewayEvent } from 'aws-lambda';
 
 import { Response } from '@blc-mono/core/utils/restResponse/response';
+import { isValidOffer } from '@blc-mono/discovery/application/utils/isValidOffer';
 
 import { offerFactory } from '../../factories/OfferFactory';
 import { subMenuFactory } from '../../factories/SubMenuFactory';
@@ -11,8 +12,10 @@ import { getThemedMenuAndOffersBySubMenuId } from '../../repositories/Menu/servi
 import { handler } from './getFlexibleMenus';
 
 jest.mock('../../repositories/Menu/service/MenuService');
+jest.mock('@blc-mono/discovery/application/utils/isValidOffer');
 
 const getThemedMenuAndOffersBySubMenuIdMock = jest.mocked(getThemedMenuAndOffersBySubMenuId);
+const isValidOfferMock = jest.mocked(isValidOffer);
 
 const subMenu = subMenuFactory.build();
 const offers = offerFactory.buildList(2);
@@ -22,24 +25,51 @@ const mockGetFlexibleMenusResponse: ThemedSubMenuWithOffers = { ...subMenu, offe
 describe('getFlexibleMenus handler', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    isValidOfferMock.mockReturnValue(true);
   });
 
-  it('should return the response when a valid id is provided and the menu is found', async () => {
-    getThemedMenuAndOffersBySubMenuIdMock.mockResolvedValue(mockGetFlexibleMenusResponse);
+  describe('and menu is found', () => {
+    beforeEach(() => {
+      getThemedMenuAndOffersBySubMenuIdMock.mockResolvedValue(mockGetFlexibleMenusResponse);
+    });
 
     const event: Partial<APIGatewayEvent> = {
       pathParameters: {
         id: 'id',
       },
+      queryStringParameters: {
+        dob: 'dob',
+        organisation: 'organisation',
+      },
     };
-    const result = await handler(event as APIGatewayEvent);
-    const expectedResponse = Response.OK({
-      message: 'successful',
-      data: mapThemedSubMenuWithOffersToFlexibleMenuResponse(mockGetFlexibleMenusResponse),
+
+    it('should return the response when a valid id is provided and the menu is found', async () => {
+      const result = await handler(event as APIGatewayEvent);
+
+      const expectedResponse = Response.OK({
+        message: 'successful',
+        data: mapThemedSubMenuWithOffersToFlexibleMenuResponse(mockGetFlexibleMenusResponse),
+      });
+      expect(result).toEqual(expectedResponse);
+      expect(getThemedMenuAndOffersBySubMenuIdMock).toHaveBeenCalled();
     });
 
-    expect(result).toEqual(expectedResponse);
-    expect(getThemedMenuAndOffersBySubMenuIdMock).toHaveBeenCalled();
+    it('should filter out invalid offers', async () => {
+      isValidOfferMock.mockReturnValueOnce(false);
+      isValidOfferMock.mockReturnValue(true);
+
+      const result = await handler(event as APIGatewayEvent);
+
+      const expectedResponse = Response.OK({
+        message: 'successful',
+        data: mapThemedSubMenuWithOffersToFlexibleMenuResponse({
+          ...mockGetFlexibleMenusResponse,
+          offers: [offers[1]],
+        }),
+      });
+      expect(result).toEqual(expectedResponse);
+      expect(isValidOfferMock).toHaveBeenCalledTimes(2);
+    });
   });
 
   it('should return a not found response when a valid id is provided and the menu is not found', async () => {
@@ -48,9 +78,45 @@ describe('getFlexibleMenus handler', () => {
       pathParameters: {
         id: 'id',
       },
+      queryStringParameters: {
+        dob: 'dob',
+        organisation: 'organisation',
+      },
     };
     const result = await handler(event as APIGatewayEvent);
     const expectedResponse = Response.NotFound({ message: `No flexible menu found with id: id` });
+    expect(result).toEqual(expectedResponse);
+  });
+
+  it('should return a bad request response when no dob query parameter provided', async () => {
+    const event: Partial<APIGatewayEvent> = {
+      pathParameters: {
+        id: 'id',
+      },
+      queryStringParameters: {
+        organisation: 'organisation',
+      },
+    };
+    const result = await handler(event as APIGatewayEvent);
+    const expectedResponse = Response.BadRequest({
+      message: `Missing query parameter on request - organisation: organisation, dob: ${undefined}`,
+    });
+    expect(result).toEqual(expectedResponse);
+  });
+
+  it('should return a bad request response when no organisation query parameter provided', async () => {
+    const event: Partial<APIGatewayEvent> = {
+      pathParameters: {
+        id: 'id',
+      },
+      queryStringParameters: {
+        dob: 'dob',
+      },
+    };
+    const result = await handler(event as APIGatewayEvent);
+    const expectedResponse = Response.BadRequest({
+      message: `Missing query parameter on request - organisation: ${undefined}, dob: dob`,
+    });
     expect(result).toEqual(expectedResponse);
   });
 
@@ -68,6 +134,10 @@ describe('getFlexibleMenus handler', () => {
     const event: Partial<APIGatewayEvent> = {
       pathParameters: {
         id: 'id',
+      },
+      queryStringParameters: {
+        dob: 'dob',
+        organisation: 'organisation',
       },
     };
     const result = await handler(event as APIGatewayEvent);

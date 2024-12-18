@@ -1,5 +1,5 @@
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
-import { Offer, OfferType } from '@blc-mono/discovery/application/models/Offer';
+import { Offer, OfferStatus, OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { MenuOfferEntity } from '@blc-mono/discovery/application/repositories/schemas/MenuOfferEntity';
 
 import { mapMenuOfferEntityToOffer, mapOfferToMenuOfferEntity } from './MenuOfferMapper';
@@ -8,7 +8,7 @@ const offer: Offer = {
   id: 'offer1',
   legacyOfferId: 1,
   name: 'Test Offer',
-  status: 'active',
+  status: OfferStatus.LIVE,
   offerType: OfferType.ONLINE,
   offerDescription: 'Test Description',
   image: 'image_url',

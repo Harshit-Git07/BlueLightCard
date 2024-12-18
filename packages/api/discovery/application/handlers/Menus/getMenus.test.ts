@@ -1,6 +1,7 @@
 import { APIGatewayEvent } from 'aws-lambda';
 
 import { Response } from '@blc-mono/core/utils/restResponse/response';
+import { isValidOffer } from '@blc-mono/discovery/application/utils/isValidOffer';
 
 import { menuFactory } from '../../factories/MenuFactory';
 import { offerFactory } from '../../factories/OfferFactory';
@@ -12,11 +13,13 @@ import { getMenusByMenuType, getMenusByMenuTypes } from '../../repositories/Menu
 import { handler } from './getMenus';
 
 jest.mock('../../repositories/Menu/service/MenuService');
+jest.mock('@blc-mono/discovery/application/utils/isValidOffer');
 
 const getMenusByMenuTypeMock = jest.mocked(getMenusByMenuType);
 const getMenusByMenuTypesMock = jest.mocked(getMenusByMenuTypes);
+const isValidOfferMock = jest.mocked(isValidOffer);
 
-const mockgetMenusResponse = {
+const mockGetMenusResponse = {
   dealsOfTheWeek: [
     {
       ...menuFactory.build({ menuType: MenuType.DEALS_OF_THE_WEEK }),
@@ -33,16 +36,26 @@ const mockgetMenusResponse = {
     { ...menuFactory.build({ menuType: MenuType.FLEXIBLE }), subMenus: subMenuFactory.buildList(2) },
   ],
 };
+const mockDealsOfTheWeekResponse = {
+  ...mockGetMenusResponse,
+  featured: [],
+  marketplace: [],
+  flexible: [],
+};
 
 describe('getMenus handler', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    isValidOfferMock.mockReturnValue(true);
   });
   it('should call the getMenusByMenuTypes when no ids are provided', async () => {
-    getMenusByMenuTypesMock.mockResolvedValue(mockgetMenusResponse);
+    getMenusByMenuTypesMock.mockResolvedValue(mockGetMenusResponse);
 
     const event: Partial<APIGatewayEvent> = {
-      queryStringParameters: {},
+      queryStringParameters: {
+        dob: 'dob',
+        organisation: 'organisation',
+      },
       headers: {
         Authorization: 'idToken',
       },
@@ -52,7 +65,7 @@ describe('getMenus handler', () => {
 
     const expectedResponse = Response.OK({
       message: 'successful',
-      data: mapMenusAndOffersToMenuResponse(mockgetMenusResponse),
+      data: mapMenusAndOffersToMenuResponse(mockGetMenusResponse),
     });
 
     expect(result).toEqual(expectedResponse);
@@ -60,10 +73,63 @@ describe('getMenus handler', () => {
     expect(getMenusByMenuTypeMock).not.toHaveBeenCalled();
   });
 
+  describe('and menus are found', () => {
+    beforeEach(() => {
+      getMenusByMenuTypesMock.mockResolvedValue(mockDealsOfTheWeekResponse);
+    });
+
+    const event: Partial<APIGatewayEvent> = {
+      queryStringParameters: {
+        dob: 'dob',
+        organisation: 'organisation',
+      },
+      headers: {
+        Authorization: 'idToken',
+      },
+    };
+
+    it('should filter out the menu if no valid offers', async () => {
+      isValidOfferMock.mockReturnValue(false);
+
+      const result = await handler(event as APIGatewayEvent);
+
+      const expectedResponse = Response.OK({
+        message: 'successful',
+        data: mapMenusAndOffersToMenuResponse({
+          ...mockDealsOfTheWeekResponse,
+          dealsOfTheWeek: [],
+        }),
+      });
+      expect(result).toEqual(expectedResponse);
+    });
+
+    it('should filter out invalid offers', async () => {
+      isValidOfferMock.mockReturnValueOnce(false);
+      isValidOfferMock.mockReturnValue(true);
+
+      const result = await handler(event as APIGatewayEvent);
+
+      const expectedResponse = Response.OK({
+        message: 'successful',
+        data: mapMenusAndOffersToMenuResponse({
+          ...mockDealsOfTheWeekResponse,
+          dealsOfTheWeek: [
+            {
+              ...mockGetMenusResponse.dealsOfTheWeek[0],
+              offers: [mockGetMenusResponse.dealsOfTheWeek[0].offers[1]],
+            },
+          ],
+        }),
+      });
+      expect(result).toEqual(expectedResponse);
+      expect(isValidOfferMock).toHaveBeenCalledTimes(2);
+    });
+  });
+
   it('should call the getMenusByMenuTypes when more than one id is provided', async () => {
     const filteredMenuReponse = {
-      dealsOfTheWeek: mockgetMenusResponse.dealsOfTheWeek,
-      featured: mockgetMenusResponse.featured,
+      dealsOfTheWeek: mockGetMenusResponse.dealsOfTheWeek,
+      featured: mockGetMenusResponse.featured,
     };
 
     getMenusByMenuTypesMock.mockResolvedValue(filteredMenuReponse);
@@ -71,6 +137,8 @@ describe('getMenus handler', () => {
     const event: Partial<APIGatewayEvent> = {
       queryStringParameters: {
         id: 'dealsOfTheWeek,featured',
+        dob: 'dob',
+        organisation: 'organisation',
       },
       headers: {
         Authorization: 'idToken',
@@ -91,12 +159,14 @@ describe('getMenus handler', () => {
 
   it('should call the getMenusByMenuType if only one id is provided', async () => {
     const filteredMenuReponse = {
-      dealsOfTheWeek: mockgetMenusResponse.dealsOfTheWeek,
+      dealsOfTheWeek: mockGetMenusResponse.dealsOfTheWeek,
     };
     getMenusByMenuTypeMock.mockResolvedValue(filteredMenuReponse);
     const event: Partial<APIGatewayEvent> = {
       queryStringParameters: {
         id: 'dealsOfTheWeek',
+        dob: 'dob',
+        organisation: 'organisation',
       },
       headers: {
         Authorization: 'idToken',
@@ -113,10 +183,46 @@ describe('getMenus handler', () => {
     expect(result).toEqual(expectedResponse);
   });
 
+  it('should return a bad request response when no dob query parameter provided', async () => {
+    const event: Partial<APIGatewayEvent> = {
+      queryStringParameters: {
+        id: 'dealsOfTheWeek',
+        organisation: 'organisation',
+      },
+      headers: {
+        Authorization: 'idToken',
+      },
+    };
+    const result = await handler(event as APIGatewayEvent);
+    const expectedResponse = Response.BadRequest({
+      message: `Missing query parameter on request - organisation: organisation, dob: ${undefined}`,
+    });
+    expect(result).toEqual(expectedResponse);
+  });
+
+  it('should return a bad request response when no organisation query parameter provided', async () => {
+    const event: Partial<APIGatewayEvent> = {
+      queryStringParameters: {
+        id: 'dealsOfTheWeek',
+        dob: 'dob',
+      },
+      headers: {
+        Authorization: 'idToken',
+      },
+    };
+    const result = await handler(event as APIGatewayEvent);
+    const expectedResponse = Response.BadRequest({
+      message: `Missing query parameter on request - organisation: ${undefined}, dob: dob`,
+    });
+    expect(result).toEqual(expectedResponse);
+  });
+
   it('should return error when no matching ids are provided', async () => {
     const event: Partial<APIGatewayEvent> = {
       queryStringParameters: {
         id: 'nonExistentMenu',
+        dob: 'dob',
+        organisation: 'organisation',
       },
       headers: {
         Authorization: 'idToken',

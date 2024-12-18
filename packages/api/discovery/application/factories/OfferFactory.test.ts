@@ -1,3 +1,5 @@
+import { OfferStatus } from '@blc-mono/discovery/application/models/Offer';
+
 import { offerFactory } from './OfferFactory';
 
 describe('Offer Factory', () => {
@@ -7,7 +9,7 @@ describe('Offer Factory', () => {
       id: '1',
       legacyOfferId: 101,
       name: 'Sample Offer',
-      status: 'active',
+      status: OfferStatus.LIVE,
       offerType: 'online',
       offerDescription: 'Sample offer description',
       image: 'https://cdn.bluelightcard.co.uk/offerimages/1724052659175.jpg',

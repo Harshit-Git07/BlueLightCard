@@ -12,11 +12,17 @@ export enum OfferType {
   OTHER = 'other',
 }
 
+export enum OfferStatus {
+  LIVE = 'live',
+  EXPIRED = 'expired',
+  DEACTIVATED = 'deactivated',
+}
+
 export type Offer = {
   id: string;
   legacyOfferId?: number;
   name: string;
-  status: string;
+  status: OfferStatus;
   offerType: OfferType;
   offerDescription: string;
   image: string;

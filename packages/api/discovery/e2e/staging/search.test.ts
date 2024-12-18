@@ -8,7 +8,6 @@ import { SearchResult } from '@blc-mono/discovery/application/services/opensearc
 import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
 import { ENDPOINTS } from '@blc-mono/discovery/infrastructure/constants/environment';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
-import { buildTestSanityCompany } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityCompany';
 import { buildTestSanityOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityOffer';
 import { sendTestEvents } from '@blc-mono/discovery/testScripts/helpers/sendTestEvents';
 
@@ -74,9 +73,9 @@ describe('Search E2E Event Handling', async () => {
   const generatedCompanyUUID = `test-company-${randomUUID().toString()}`;
 
   const activeOfferUUID = `test-${randomUUID().toString()}`;
+  const evergreenOfferUUID = `test-${randomUUID().toString()}`;
   const expiryDateReachedOfferUUID = `test-${randomUUID().toString()}`;
   const futureStartDateOfferUUID = `test-${randomUUID().toString()}`;
-  const evergreenOfferUUID = `test-${randomUUID().toString()}`;
   const statusExpiredOfferUUID = `test-${randomUUID().toString()}`;
   const invalidStartDateOfferNoExpiryDateUUID = `test-${randomUUID().toString()}`;
   const invalidExpiryDateOfferNoStartDateUUID = `test-${randomUUID().toString()}`;
@@ -85,7 +84,7 @@ describe('Search E2E Event Handling', async () => {
 
   const offers: SanityOffer[] = [
     {
-      ...buildTestSanityOffer({ _id: activeOfferUUID, company: buildTestSanityCompany({ _id: generatedCompanyUUID }) }),
+      ...buildTestSanityOffer({ id: activeOfferUUID, companyId: generatedCompanyUUID }),
       name: activeOfferUUID,
       start: subMonths(new Date(), 1).toISOString(),
       expires: addMonths(new Date(), 1).toISOString(),
@@ -93,8 +92,8 @@ describe('Search E2E Event Handling', async () => {
     },
     {
       ...buildTestSanityOffer({
-        _id: expiryDateReachedOfferUUID,
-        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+        id: expiryDateReachedOfferUUID,
+        companyId: generatedCompanyUUID,
       }),
       name: expiryDateReachedOfferUUID,
       start: subMonths(new Date(), 2).toISOString(),
@@ -102,8 +101,8 @@ describe('Search E2E Event Handling', async () => {
     },
     {
       ...buildTestSanityOffer({
-        _id: futureStartDateOfferUUID,
-        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+        id: futureStartDateOfferUUID,
+        companyId: generatedCompanyUUID,
       }),
       name: futureStartDateOfferUUID,
       start: addMonths(new Date(), 1).toISOString(),
@@ -111,18 +110,29 @@ describe('Search E2E Event Handling', async () => {
     },
     {
       ...buildTestSanityOffer({
-        _id: evergreenOfferUUID,
-        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+        id: evergreenOfferUUID,
+        companyId: generatedCompanyUUID,
+        startDate: new Date(Date.now()).toISOString(),
+        endDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30).toISOString(),
       }),
       name: evergreenOfferUUID,
       start: undefined,
       evergreen: true,
+    },
+    {
+      ...buildTestSanityOffer({
+        id: evergreenOfferUUID,
+        companyId: generatedCompanyUUID,
+        name: evergreenOfferUUID,
+        startDate: new Date(Date.now()).toISOString(),
+        evergreen: true,
+      }),
       expires: undefined,
     },
     {
       ...buildTestSanityOffer({
-        _id: statusExpiredOfferUUID,
-        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+        id: statusExpiredOfferUUID,
+        companyId: generatedCompanyUUID,
       }),
       name: statusExpiredOfferUUID,
       start: subMonths(new Date(), 1).toISOString(),
@@ -131,8 +141,8 @@ describe('Search E2E Event Handling', async () => {
     },
     {
       ...buildTestSanityOffer({
-        _id: invalidStartDateOfferNoExpiryDateUUID,
-        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+        id: invalidStartDateOfferNoExpiryDateUUID,
+        companyId: generatedCompanyUUID,
       }),
       name: invalidStartDateOfferNoExpiryDateUUID,
       start: addMonths(new Date(), 1).toISOString(),
@@ -140,8 +150,8 @@ describe('Search E2E Event Handling', async () => {
     },
     {
       ...buildTestSanityOffer({
-        _id: invalidExpiryDateOfferNoStartDateUUID,
-        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+        id: invalidExpiryDateOfferNoStartDateUUID,
+        companyId: generatedCompanyUUID,
       }),
       name: invalidExpiryDateOfferNoStartDateUUID,
       start: undefined,
@@ -149,8 +159,8 @@ describe('Search E2E Event Handling', async () => {
     },
     {
       ...buildTestSanityOffer({
-        _id: validStartDateOfferNoExpiryDateUUID,
-        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+        id: validStartDateOfferNoExpiryDateUUID,
+        companyId: generatedCompanyUUID,
       }),
       name: validStartDateOfferNoExpiryDateUUID,
       start: subMonths(new Date(), 1).toISOString(),
@@ -158,8 +168,8 @@ describe('Search E2E Event Handling', async () => {
     },
     {
       ...buildTestSanityOffer({
-        _id: validExpiryDateOfferNoStartDateUUID,
-        company: buildTestSanityCompany({ _id: generatedCompanyUUID }),
+        id: validExpiryDateOfferNoStartDateUUID,
+        companyId: generatedCompanyUUID,
       }),
 
       name: validExpiryDateOfferNoStartDateUUID,

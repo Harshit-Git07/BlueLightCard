@@ -10,14 +10,16 @@ describe.skip('Nearest Offers', () => {
   // To Be unskipped in following ticket
   const updatedAtTimeStamp = new Date().toISOString();
   const generatedCompanyUUID = `test-company-${v4().toString()}`;
-  const company = buildTestSanityCompany({ _updatedAt: updatedAtTimeStamp, _id: generatedCompanyUUID });
 
   beforeAll(async () => {
     await sendTestEvents({
       source: Events.COMPANY_CREATED,
       events: [buildTestSanityCompany({ _updatedAt: updatedAtTimeStamp, _id: generatedCompanyUUID })],
     });
-    await sendTestEvents({ source: Events.OFFER_CREATED, events: [buildTestSanityOffer({ company })] });
+    await sendTestEvents({
+      source: Events.OFFER_CREATED,
+      events: [buildTestSanityOffer({ companyId: generatedCompanyUUID })],
+    });
     await sendTestEvents({
       source: Events.COMPANY_LOCATION_BATCH_CREATED,
       events: [

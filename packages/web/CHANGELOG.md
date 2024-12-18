@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.99.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.98.0...bluelightcard/web-v1.99.0) (2024-12-18)
+
+
+### Features
+
+* Update cms blt ([#3206](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3206)) ([3a00213](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3a0021330748f74eecc23873ab41752b38966922))
+
 ## [1.98.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.97.0...bluelightcard/web-v1.98.0) (2024-12-18)
 
 

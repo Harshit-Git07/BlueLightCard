@@ -7,6 +7,11 @@ const jestConfig: JestConfigWithTsJest = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/', '<rootDir>/e2e/'],
+  globals: {
+    'ts-jest': {
+      isolatedModules: true,
+    },
+  },
   moduleNameMapper: pathsToModuleNameMapper(tsConfig.compilerOptions.paths, { prefix: '<rootDir>/' }),
 };
 

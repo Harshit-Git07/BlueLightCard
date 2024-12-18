@@ -3,5 +3,10 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
-  setupFiles: ['./jest.setup.js']
+  setupFiles: ['./jest.setup.js'],
+  globals: {
+    'ts-jest': {
+      isolatedModules: true,
+    },
+  },
 }

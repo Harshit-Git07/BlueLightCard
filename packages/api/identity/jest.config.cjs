@@ -8,5 +8,10 @@ module.exports = {
   setupFiles: ['<rootDir>/.jest/setEnvVars.js'],
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
   modulePaths: [compilerOptions.baseUrl],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' })
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
+  globals: {
+    'ts-jest': {
+      isolatedModules: true,
+    },
+  },
 }

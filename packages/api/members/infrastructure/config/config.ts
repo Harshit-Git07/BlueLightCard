@@ -44,24 +44,26 @@ export class MemberStackConfigResolver {
   }
 
   public static forStagingStage(region: MemberStackRegion): MemberStackConfig {
-    if (region === 'ap-southeast-2') {
-      return {
-        apiDefaultAllowedOrigins: [
-          'https://www.develop.bluelightcard.com.au',
-          'http://localhost:3000',
-          'https://pr-*.blc-aus.pages.dev',
-        ],
-      };
-    }
     return {
-      apiDefaultAllowedOrigins: [
-        'https://www.staging.bluelightcard.co.uk',
-        'https://www.ddsstaging.bluelightcard.tech',
-        'http://localhost:3000',
-        'https://pr-*.blc-uk.pages.dev',
-        'https://pr-*.dds-4j3.pages.dev',
-      ],
+      apiDefaultAllowedOrigins: ['*'],
     };
+
+    // Temporary CORS configuration for staging until we release API proxy updates
+    // if (region === 'ap-southeast-2') {
+    //   return {
+    //     apiDefaultAllowedOrigins: [
+    //       'https://www.develop.bluelightcard.com.au',
+    //       'http://localhost:3000',
+    //     ],
+    //   };
+    // }
+    // return {
+    //   apiDefaultAllowedOrigins: [
+    //     'https://www.staging.bluelightcard.co.uk',
+    //     'https://www.ddsstaging.bluelightcard.tech',
+    //     'http://localhost:3000',
+    //   ],
+    // };
   }
 
   public static forPrStage(): MemberStackConfig {

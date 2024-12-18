@@ -1,5 +1,26 @@
 # Changelog
 
+## [1.98.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.97.0...bluelightcard/web-v1.98.0) (2024-12-18)
+
+
+### Features
+
+* [MER-46] choose verification method multiple ids ([#3294](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3294)) ([eb61270](https://github.com/bluelightcard/BlueLightCard-2.0/commit/eb6127049f90102d25f909ba9d8352470bc209ee))
+* [MER-48] Update profile on apply promocode ([#3300](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3300)) ([c7cbf45](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c7cbf457e145f2c2ff9b0e5192e998ae12c6ba03))
+* [MER] - move renewal modal to shared-ui ([#3394](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3394)) ([67a380c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/67a380c935f7bc2246c268b1fd4adc3a922ceaf3))
+* disco 1349 ([#3368](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3368)) ([1102658](https://github.com/bluelightcard/BlueLightCard-2.0/commit/110265894ae590f0317d11b1bd949f33a9afe862))
+* mama 146 card verification alerts with debug ([#3399](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3399)) ([bdc688a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bdc688a4fe9ed55c3cf08e01201682ac15cbe3c4))
+* MAMA-146 - CardVerificationAlerts component from my-account ([#3396](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3396)) ([8b01e28](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8b01e28e08aa04e810295b97ceaccf3afa3c4281))
+* MAMA-24: Your card pages ([#3432](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3432)) ([a3d415f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a3d415f8f988927c77754b25b36180628f56f1b4))
+* MAMA-32: Change password form ([#3410](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3410)) ([7444e3a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7444e3a59a9efeadd863014b5dc36fde50d4d5db))
+* Update member profile on clicking next button on file upload screen ([#3339](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3339)) ([675f128](https://github.com/bluelightcard/BlueLightCard-2.0/commit/675f1282e68bfd55205625069fe0e9722d2d86dc))
+
+
+### Bug Fixes
+
+* Make eligibility end to end tests more real by reducing use of fuzzy frontend buttons ([#3411](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3411)) ([87e1880](https://github.com/bluelightcard/BlueLightCard-2.0/commit/87e18803db2cbe620ba7fce88c592968330e67e7))
+* Make web's jest config always match the module mapper in tsconfig ([#3427](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3427)) ([cf18119](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cf1811931049555ce6e5ab5c494232beaa217e33))
+
 ## [1.97.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.96.0...bluelightcard/web-v1.97.0) (2024-12-12)
 
 

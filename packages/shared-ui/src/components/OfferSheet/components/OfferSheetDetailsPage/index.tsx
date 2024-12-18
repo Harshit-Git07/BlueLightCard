@@ -45,7 +45,6 @@ const OfferSheetDetailsPage: FC = () => {
   const [webRedeemData, setWebRedeemData] = useState<any | null>(null);
   const [maxPerUserReached, setMaxPerUserReached] = useState(false);
   const [ballotRedeemError, setBallotRedeemError] = useState<BallotRedeemError | null>(null);
-  const [redeemLoading, setRedeemLoading] = useState(false);
 
   const user = useQuery(userQuery());
   const offer = redemptionType === 'ballot' ? eventData : offerData;
@@ -76,7 +75,6 @@ const OfferSheetDetailsPage: FC = () => {
   };
 
   const getRedemptionData = async () => {
-    setRedeemLoading(true);
     const result = await platformAdapter.invokeV5Api(
       `${getBrandedRedemptionsPath()}/member/redeem`,
       {
@@ -89,7 +87,6 @@ const OfferSheetDetailsPage: FC = () => {
       },
     );
 
-    setRedeemLoading(false);
     return JSON.parse(result.data);
   };
 
@@ -387,10 +384,7 @@ const OfferSheetDetailsPage: FC = () => {
   const primaryButton = (
     <MagicButton
       variant={
-        user.data?.canRedeemOffer &&
-        !hasDealExpired(offer.expires) &&
-        !ballotRedeemError &&
-        !redeemLoading
+        user.data?.canRedeemOffer && !hasDealExpired(offer.expires) && !ballotRedeemError
           ? MagicBtnVariant.Primary
           : MagicBtnVariant.Disabled
       }

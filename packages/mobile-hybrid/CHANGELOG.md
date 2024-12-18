@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.52.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.51.0...bluelightcard/mobile-hybrid-v1.52.0) (2024-12-18)
+
+
+### Features
+
+* mama 146 card verification alerts with debug ([#3399](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3399)) ([bdc688a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bdc688a4fe9ed55c3cf08e01201682ac15cbe3c4))
+* MAMA-146 - CardVerificationAlerts component from my-account ([#3396](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3396)) ([8b01e28](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8b01e28e08aa04e810295b97ceaccf3afa3c4281))
+* MAMA-24: Your card pages ([#3432](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3432)) ([a3d415f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a3d415f8f988927c77754b25b36180628f56f1b4))
+
+
+### Other Changes
+
+* remove sonarcloud ([#3454](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3454)) ([bc88d47](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bc88d47b17b08e0dc58e435da707527adea22147))
+
 ## [1.51.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.50.0...bluelightcard/mobile-hybrid-v1.51.0) (2024-12-16)
 
 

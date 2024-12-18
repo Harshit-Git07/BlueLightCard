@@ -50,7 +50,7 @@ describe('Account Page', () => {
 
     const links = await screen.findAllByRole('link');
 
-    expect(links[0]).toHaveAttribute('href', '/personal-details');
+    expect(links[0]).toHaveAttribute('href', '/personal-information');
     expect(links[1]).toHaveAttribute('href', '/privacy-settings');
     expect(links[2]).toHaveAttribute('href', '/preferences');
     expect(links[3]).toHaveAttribute('href', '/help');

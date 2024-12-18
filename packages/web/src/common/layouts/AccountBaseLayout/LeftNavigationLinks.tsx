@@ -12,14 +12,14 @@ const items: VerticalMenuItemProps[] = [
   {
     label: 'Personal information',
     selected: false,
-    href: '/personal-details',
+    href: '/personal-information',
     isExternalLink: false,
   },
   { label: 'Privacy', selected: false, href: '/privacy-settings', isExternalLink: false },
   {
     label: 'Marketing preferences',
     selected: false,
-    href: '/marketing-preferences',
+    href: '/preferences',
     isExternalLink: false,
   },
   {

@@ -2,7 +2,7 @@ import AmplitudeContext from '@/root/src/common/context/AmplitudeContext';
 import UserContext, { UserContextType } from '@/root/src/common/context/User/UserContext';
 import { Amplitude } from '@/root/src/common/utils/amplitude/amplitude';
 import { act, renderHook } from '@testing-library/react';
-import { useNavigationTracking } from '../../../NavBarV2/hooks/useNavigationTracking';
+import { useNavigationTracking } from '../../../Navigation/NavBarV2/hooks/useNavigationTracking';
 import * as amplitude from '@amplitude/analytics-browser';
 
 describe('useNavigationTracking', () => {

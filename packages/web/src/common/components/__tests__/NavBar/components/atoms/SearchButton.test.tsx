@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import SearchButton from '../../../../NavBar/components/atoms/SearchButton';
+import SearchButton from '../../../../Navigation/NavBar/components/atoms/SearchButton';
 import userEvent from '@testing-library/user-event';
 
 describe('SearchButton', () => {

@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import MobileNavToggleButton from '../../../../NavBarV2/components/atoms/MobileNavToggleButton';
+import MobileNavToggleButton from '../../../../Navigation/NavBarV2/components/atoms/MobileNavToggleButton';
 
 describe('MobileNavToggleButton', () => {
   it('renders', () => {

@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
-import AuthenticatedNavBar from '../../../../NavBar/components/organisms/AuthenticatedNavBar';
-import { NavigationItem } from '../../../../NavBar/types';
+import AuthenticatedNavBar from '../../../../Navigation/NavBar/components/organisms/AuthenticatedNavBar';
+import { NavigationItem } from '../../../../Navigation/NavBar/types';
 import userEvent from '@testing-library/user-event';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
 import { ExperimentClient } from '@amplitude/experiment-js-client';

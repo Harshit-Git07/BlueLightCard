@@ -1,12 +1,12 @@
-jest.mock('../../../../NavBarV2/hooks/useNavigationTracking', () => ({
+jest.mock('../../../../Navigation/NavBarV2/hooks/useNavigationTracking', () => ({
   useNavigationTracking: jest.fn(),
 }));
 
-import * as navigationHook from '../../../../NavBarV2/hooks/useNavigationTracking';
+import * as navigationHook from '../../../../Navigation/NavBarV2/hooks/useNavigationTracking';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import NavigationLink from '../../../../NavBarV2/components/atoms/NavigationLink';
-import { NavigationItem } from '../../../../NavBarV2/types';
+import NavigationLink from '../../../../Navigation/NavBarV2/components/atoms/NavigationLink';
+import { NavigationItem } from '../../../../Navigation/NavBarV2/types';
 
 describe('NavigationLink', () => {
   beforeEach(() => {

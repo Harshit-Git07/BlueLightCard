@@ -2,16 +2,16 @@ import { BRANDS } from '@/root/src/common/types/brands.enum';
 import {
   AUTHENTICATED_NAVIGATION_UK,
   UNAUTHENTICATED_NAVIGATION_UK,
-} from '../../../NavBarV2/constants/ukNavigation';
+} from '../../../Navigation/NavBarV2/constants/ukNavigation';
 import {
   AUTHENTICATED_NAVIGATION_AUS,
   UNAUTHENTICATED_NAVIGATION_AUS,
-} from '../../../NavBarV2/constants/ausNavigation';
+} from '../../../Navigation/NavBarV2/constants/ausNavigation';
 import {
   AUTHENTICATED_NAVIGATION_DDS,
   UNAUTHENTICATED_NAVIGATION_DDS,
-} from '../../../NavBarV2/constants/ddsNavigation';
-import { getNavigationItems } from '../../../NavBarV2/helpers/getNavigationItems';
+} from '../../../Navigation/NavBarV2/constants/ddsNavigation';
+import { getNavigationItems } from '../../../Navigation/NavBarV2/helpers/getNavigationItems';
 
 jest.mock('@/global-vars', () => ({
   AUTH0_LOGIN_URL: '/auth0/login',

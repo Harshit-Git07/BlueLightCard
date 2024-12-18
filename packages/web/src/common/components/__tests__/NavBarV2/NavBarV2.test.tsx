@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
-import NavBar from '../../NavBarV2/NavBar';
+import NavBar from '../../Navigation/NavBarV2/NavBar';
 import '@testing-library/jest-dom';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui/adapters';
 
-jest.mock('../../NavBar/helpers/getNavigationItems', () => {
+jest.mock('../../Navigation/NavBar/helpers/getNavigationItems', () => {
   return {
     getNavigationItems: () => [{ id: 'mockNavItem', label: 'Mock Label' }],
   };

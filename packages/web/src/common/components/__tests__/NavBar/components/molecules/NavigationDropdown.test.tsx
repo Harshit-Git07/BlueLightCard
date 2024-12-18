@@ -1,12 +1,12 @@
-jest.mock('../../../../NavBar/hooks/useNavigationTracking', () => ({
+jest.mock('../../../../Navigation/NavBar/hooks/useNavigationTracking', () => ({
   useNavigationTracking: jest.fn(),
 }));
 
 import { render, screen } from '@testing-library/react';
-import { NavigationItem } from '../../../../NavBar/types';
-import NavigationDropdown from '../../../../NavBar/components/molecules/NavigationDropdown';
+import { NavigationItem } from '../../../../Navigation/NavBar/types';
+import NavigationDropdown from '../../../../Navigation/NavBar/components/molecules/NavigationDropdown';
 import userEvent from '@testing-library/user-event';
-import * as navigationHook from '../../../../NavBar/hooks/useNavigationTracking';
+import * as navigationHook from '../../../../Navigation/NavBar/hooks/useNavigationTracking';
 
 describe('NavigationDropdown', () => {
   beforeEach(() => {

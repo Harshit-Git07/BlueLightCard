@@ -9,12 +9,13 @@ import {
   useMemberId,
   useMemberProfileGet,
 } from '@bluelightcard/shared-ui';
-import NavBar from '../../components/NavBar/NavBar';
+
 import { LayoutProps } from './types';
 import Footer from '../../../common/components/Footer/Footer';
 import { useMedia } from 'react-use';
 import LeftNavigation from './LeftNavigation';
 import MyAccountDebugToolsLazily from '@/layouts/AccountBaseLayout/MyAccountToolsLazily';
+import Navigation from '../../components/Navigation/Navigation';
 
 const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
@@ -43,35 +44,12 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
     router.push(href);
   };
 
-  const onSearchCompanyChange = async () => {
-    // await logSearchCompanyEvent(companyId, company);
-    // window.location.href = getCompanyOfferDetailsUrl(companyId);
-  };
-
-  const onSearchCategoryChange = async () => {
-    // await logSearchCategoryEvent(categoryId, categoryName);
-    // window.location.href = getOffersByCategoryUrl(categoryId);
-  };
-
-  const onSearchTerm = async () => {
-    // await logSearchTermEvent(searchTerm);
-    // window.location.href = getOffersBySearchTermUrl(searchTerm);
-  };
-
   return (
     <div className={`flex flex-col ${isOpen ? 'h-screen overflow-hidden' : 'min-h-screen'}`}>
       <MyAccountDebugToolsLazily />
       <Drawer />
       <Toaster />
-
-      <NavBar
-        isAuthenticated
-        onSearchCompanyChange={onSearchCompanyChange}
-        onSearchCategoryChange={onSearchCategoryChange}
-        onSearchTerm={onSearchTerm}
-        onToggleMobileSideBar={toggleDrawer}
-      />
-
+      <Navigation />
       <CardVerificationAlerts memberUuid={memberId} />
 
       <div className="pl-[16px] mt-[32px] flex flex-col hidden tablet:block desktop:container mx-[20px] desktop:mx-auto">

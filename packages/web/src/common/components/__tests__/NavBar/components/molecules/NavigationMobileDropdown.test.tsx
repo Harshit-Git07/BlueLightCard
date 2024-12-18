@@ -1,12 +1,12 @@
-jest.mock('../../../../NavBar/hooks/useNavigationTracking', () => ({
+jest.mock('../../../../Navigation/NavBar/hooks/useNavigationTracking', () => ({
   useNavigationTracking: jest.fn(),
 }));
 
 import { render, screen } from '@testing-library/react';
-import { NavigationItem } from '../../../../NavBar/types';
-import NavigationMobileDropdown from '../../../../NavBar/components/molecules/NavigationMobileDropdown';
+import { NavigationItem } from '../../../../Navigation/NavBar/types';
+import NavigationMobileDropdown from '../../../../Navigation/NavBar/components/molecules/NavigationMobileDropdown';
 import userEvent from '@testing-library/user-event';
-import * as navigationHook from '../../../../NavBar/hooks/useNavigationTracking';
+import * as navigationHook from '../../../../Navigation/NavBar/hooks/useNavigationTracking';
 
 const clickDropdownOpen = async (container: HTMLElement) => {
   const dropdownTriggerButton = await container.querySelector('button');

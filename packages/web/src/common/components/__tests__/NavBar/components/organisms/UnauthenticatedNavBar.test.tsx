@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import UnauthenticatedNavBar from '../../../../NavBar/components/organisms/UnauthenticatedNavBar';
+import UnauthenticatedNavBar from '../../../../Navigation/NavBar/components/organisms/UnauthenticatedNavBar';
 
 describe('UnauthenticaedNavBar', () => {
   it('renders', () => {

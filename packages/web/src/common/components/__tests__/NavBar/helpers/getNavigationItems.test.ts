@@ -2,18 +2,18 @@ import { BRANDS } from '@/root/src/common/types/brands.enum';
 import {
   AUTHENTICATED_NAVIGATION_UK,
   UNAUTHENTICATED_NAVIGATION_UK,
-} from '../../../NavBar/constants/ukNavigation';
+} from '../../../Navigation/NavBar/constants/ukNavigation';
 import {
   AUTHENTICATED_NAVIGATION_AUS,
   UNAUTHENTICATED_NAVIGATION_AUS,
-} from '../../../NavBar/constants/ausNavigation';
+} from '../../../Navigation/NavBar/constants/ausNavigation';
 import {
   AUTHENTICATED_NAVIGATION_DDS,
   UNAUTHENTICATED_NAVIGATION_DDS,
-} from '../../../NavBar/constants/ddsNavigation';
+} from '../../../Navigation/NavBar/constants/ddsNavigation';
 import { COGNITO_LOGOUT_URL } from '@/root/global-vars';
-import { getNavigationItems } from '../../../NavBar/helpers/getNavigationItems';
-import { NavigationItem } from '@/components/NavBar/types';
+import { getNavigationItems } from '../../../Navigation/NavBar/helpers/getNavigationItems';
+import { NavigationItem } from '@/root/src/common/components/Navigation/NavBar/types';
 
 const isZendeskV1BlcUkEnabled = true;
 const isCognitoUIEnabled = true;
@@ -234,28 +234,8 @@ describe('getNavigationItems', () => {
             url: 'https://motoring-discounts.bluelightcard.co.uk',
           },
         ],
-        id: 'discover-more',
-        label: 'Discover More',
-      },
-      {
-        id: 'my-card',
-        label: 'My Card',
-        url: '/highstreetcard.php',
-      },
-      {
-        id: 'my-account',
-        label: 'My Account',
-        url: '/account.php',
-      },
-      {
-        id: 'faq',
-        label: "FAQ's",
-        url: 'https://bluelightcard.zendesk.com/hc/en-gb/signin',
-      },
-      {
-        id: 'sign-out',
-        label: 'Logout',
-        url: '/logout.php',
+        id: 'discover-savings',
+        label: 'Discover Savings',
       },
     ];
     const results = getNavigationItems(BRANDS.BLC_UK, true, false, {

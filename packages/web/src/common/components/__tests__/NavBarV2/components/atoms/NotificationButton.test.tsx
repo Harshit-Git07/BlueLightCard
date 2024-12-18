@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import NotificationButton from '../../../../NavBarV2/components/atoms/NotificationButton';
+import NotificationButton from '../../../../Navigation/NavBarV2/components/atoms/NotificationButton';
 
 describe('NotificationButton', () => {
   it('renders', () => {

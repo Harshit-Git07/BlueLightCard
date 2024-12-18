@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
-import UnauthenticatedNavBar from '../../../../NavBarV2/components/organisms/UnauthenticatedNavBar';
-import { NavigationItem } from '../../../../NavBar/types';
+import UnauthenticatedNavBar from '../../../../Navigation/NavBarV2/components/organisms/UnauthenticatedNavBar';
+import { NavigationItem } from '../../../../Navigation/NavBar/types';
 
 describe('UnauthenticaedNavBar', () => {
   it('renders', () => {

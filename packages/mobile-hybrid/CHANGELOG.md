@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.53.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.52.0...bluelightcard/mobile-hybrid-v1.53.0) (2024-12-18)
+
+
+### Features
+
+* Update cms blt ([#3206](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3206)) ([3a00213](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3a0021330748f74eecc23873ab41752b38966922))
+
 ## [1.52.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.51.0...bluelightcard/mobile-hybrid-v1.52.0) (2024-12-18)
 
 

@@ -61,6 +61,9 @@ const employer: EmployerModel = {
   name: 'Employer1',
 } as EmployerModel;
 
+const getOrganisationMock = jest.spyOn(OrganisationService.prototype, 'getOrganisation');
+const getEmployerMock = jest.spyOn(OrganisationService.prototype, 'getEmployer');
+
 describe('memberProfileIndexer handler', () => {
   const context = {} as Context;
   let upsertDocumentsToIndexSpy: jest.SpyInstance;
@@ -75,8 +78,8 @@ describe('memberProfileIndexer handler', () => {
       .spyOn(MembersOpenSearchService.prototype, 'upsertDocumentsToIndex')
       .mockResolvedValue(undefined);
 
-    OrganisationService.prototype.getEmployer = jest.fn().mockResolvedValue(employer);
-    OrganisationService.prototype.getOrganisation = jest.fn().mockResolvedValue(organisation);
+    getOrganisationMock.mockResolvedValue(organisation);
+    getEmployerMock.mockResolvedValue(employer);
   });
 
   it('should map profile record to document if sortKey is "Profile"', async () => {
@@ -113,6 +116,44 @@ describe('memberProfileIndexer handler', () => {
         ...memberDocument,
         employerName: 'Employer1',
         organisationName: 'Organisation1',
+      },
+    ]);
+  });
+
+  it('should set "employerName" as undefined if no employer found', async () => {
+    getDocumentFromProfileRecordMock.mockReturnValue({
+      memberDocument,
+      employerIdChanged: true,
+      organisationIdChanged: false,
+    });
+    getEmployerMock.mockRejectedValue(new Error('Employer not found'));
+    const event = buildSQSEventFor(PROFILE);
+
+    await handler(event, context);
+
+    expect(createMemberProfileOpenSearchDocumentsMock).toHaveBeenCalledWith([
+      {
+        ...memberDocument,
+        employerName: undefined,
+      },
+    ]);
+  });
+
+  it('should set "organisationName" as undefined if no organisation found', async () => {
+    getDocumentFromProfileRecordMock.mockReturnValue({
+      memberDocument,
+      employerIdChanged: false,
+      organisationIdChanged: true,
+    });
+    getOrganisationMock.mockRejectedValue(new Error('Employer not found'));
+    const event = buildSQSEventFor(PROFILE);
+
+    await handler(event, context);
+
+    expect(createMemberProfileOpenSearchDocumentsMock).toHaveBeenCalledWith([
+      {
+        ...memberDocument,
+        organisationName: undefined,
       },
     ]);
   });

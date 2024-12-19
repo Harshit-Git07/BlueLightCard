@@ -1,5 +1,5 @@
 import { SQSEvent } from 'aws-lambda';
-import { sqsMiddleware } from '../../../middleware';
+import { logger, sqsMiddleware } from '../../../middleware';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import {
   AttributeValue as StreamAttributeValue,
@@ -76,7 +76,7 @@ const unwrappedHandler = async (event: SQSEvent) => {
       );
     }
   } catch (error) {
-    console.error('Error upserting records in index', JSON.stringify(error));
+    logger.error(`Error upserting records in index : ${error}`);
     throw error;
   }
 };
@@ -128,7 +128,12 @@ const getOrganisationName = async (
 ): Promise<string | undefined> => {
   if (!organisationId || !updateOrganisationId) return undefined;
 
-  return (await organisationService.getOrganisation(organisationId)).name;
+  try {
+    return (await organisationService.getOrganisation(organisationId)).name;
+  } catch (error) {
+    logger.debug(`Error fetching organisation with ID: ${organisationId}.`);
+    return undefined;
+  }
 };
 
 const getEmployerName = async (
@@ -141,7 +146,12 @@ const getEmployerName = async (
 
   if (!organisationId || !employerId || !updateEmployer) return undefined;
 
-  return (await organisationService.getEmployer(organisationId, employerId)).name;
+  try {
+    return (await organisationService.getEmployer(organisationId, employerId)).name;
+  } catch (error) {
+    logger.debug(`Error fetching employer with ID: ${employerId}.`);
+    return undefined;
+  }
 };
 
 export const handler = sqsMiddleware(unwrappedHandler);

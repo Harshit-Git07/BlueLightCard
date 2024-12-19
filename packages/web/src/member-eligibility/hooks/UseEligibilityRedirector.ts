@@ -2,7 +2,7 @@ import { useRouter } from 'next/navigation';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 import { useEffect } from 'react';
-import { useMemberProfile } from '@bluelightcard/shared-ui/member-eligibility/service-layer/member-profile/UseGetMemberProfile';
+import { useMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-member-profile/UseGetMemberProfile';
 
 export function useEligibilityRedirector(): void {
   const router = useRouter();

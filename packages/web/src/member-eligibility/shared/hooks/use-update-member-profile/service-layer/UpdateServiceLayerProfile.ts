@@ -1,7 +1,7 @@
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { isAusAddress } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/utils/IsAusAddress';
 import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
-import { serviceLayerUrl } from '@bluelightcard/shared-ui/member-eligibility/constants/ServiceLayerUrl';
+import { serviceLayerUrl } from '@/root/src/member-eligibility/constants/ServiceLayerUrl';
 
 type Request = Omit<
   components['schemas']['UpdateProfileModel'],

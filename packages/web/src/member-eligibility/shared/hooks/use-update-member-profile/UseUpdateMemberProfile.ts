@@ -4,7 +4,7 @@ import { updateServiceLayerApplication } from '@/root/src/member-eligibility/sha
 import { updateServiceLayerProfile } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/service-layer/UpdateServiceLayerProfile';
 import { mapToEligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/mapper/MapToEligibilityDetails';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
-import { useGetMemberProfile } from '@bluelightcard/shared-ui/member-eligibility/service-layer/member-profile/UseGetMemberProfile';
+import { useGetMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-member-profile/UseGetMemberProfile';
 
 type Callback = (eligibilityDetailsOverrides?: EligibilityDetails) => Promise<void>;
 

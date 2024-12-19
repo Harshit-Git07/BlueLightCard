@@ -19,7 +19,7 @@ import { toEligibilityOrganisation } from '@/root/src/member-eligibility/shared/
 import {
   ServiceLayerApplication,
   ServiceLayerMemberProfile,
-} from '@bluelightcard/shared-ui/member-eligibility/service-layer/member-profile/types/ServiceLayerMemberProfile';
+} from '@/root/src/member-eligibility/shared/hooks/use-member-profile/types/ServiceLayerMemberProfile';
 
 type EligibilityDetailsWithoutFlowAndScreen = Omit<EligibilityDetails, 'flow' | 'currentScreen'>;
 

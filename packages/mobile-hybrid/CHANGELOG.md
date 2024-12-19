@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.54.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.53.0...bluelightcard/mobile-hybrid-v1.54.0) (2024-12-19)
+
+
+### Features
+
+* DISCO-771 Hybrid CMS Categories ([#3441](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3441)) ([fbf478d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fbf478d3acd573db267dda8dc63fe2bb8fe9773c))
+
 ## [1.53.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.52.0...bluelightcard/mobile-hybrid-v1.53.0) (2024-12-18)
 
 

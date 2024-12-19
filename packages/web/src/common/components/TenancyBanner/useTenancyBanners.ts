@@ -87,7 +87,7 @@ const useTenancyBanners = () => {
         .filter((card) => !card.isControl && card.extras?.destination === 'bottom-banner')
         .map(mapContentCards),
       large: contentCards
-        .filter((card) => !card.isControl && card.extras?.destination === 'takeover-banner')
+        .filter((card) => !card.isControl && card.extras?.destination === 'homepage-sponsor')
         .map(mapContentCards),
     };
 

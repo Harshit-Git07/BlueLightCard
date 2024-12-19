@@ -28,7 +28,7 @@ jest.mock('@/hooks/useBrazeContentCards', () => ({
       url: 'test-link-1',
       title: 'Test Braze Card 1',
       isControl: false,
-      extras: { destination: 'takeover-banner' },
+      extras: { destination: 'homepage-sponsor' },
       logClick: jest.fn(),
     },
     {
@@ -52,7 +52,7 @@ jest.mock('@/hooks/useBrazeContentCards', () => ({
       url: 'test-link-4',
       title: 'Test Braze Card 4 (Control)',
       isControl: true,
-      extras: { destination: 'takeover-banner' },
+      extras: { destination: 'homepage-sponsor' },
       logClick: jest.fn(),
     },
     {

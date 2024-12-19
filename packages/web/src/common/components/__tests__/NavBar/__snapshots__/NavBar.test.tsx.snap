@@ -85,7 +85,7 @@ exports[`Navbar renders the authenticatedNavBar correctly when isAuthenticated i
             >
               <button
                 aria-label="My account"
-                class="tablet:hidden"
+                class="hidden"
               >
                 <svg
                   aria-hidden="true"
@@ -105,7 +105,7 @@ exports[`Navbar renders the authenticatedNavBar correctly when isAuthenticated i
               </button>
               <a
                 aria-label="My account"
-                class="hidden tablet:inline hover:text-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark"
+                class=" hover:text-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark"
                 data-testid="anchor-link"
                 href="/your-card"
               >

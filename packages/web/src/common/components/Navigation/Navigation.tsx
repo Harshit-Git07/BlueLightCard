@@ -15,7 +15,11 @@ import {
   getOffersBySearchTermUrl,
 } from '../../utils/externalPageUrls';
 
-const Navigation: React.FC = () => {
+type NavigationProps = {
+  onToggleMobileSideBar?: () => void;
+};
+
+const Navigation: React.FC<NavigationProps> = ({ onToggleMobileSideBar }) => {
   const authContext = useContext(AuthContext);
   const loggedIn = authContext.isUserAuthenticated();
 
@@ -46,6 +50,7 @@ const Navigation: React.FC = () => {
           onSearchCategoryChange={onSearchCategoryChange}
           onSearchCompanyChange={onSearchCompanyChange}
           onSearchTerm={onSearchTerm}
+          onToggleMobileSideBar={onToggleMobileSideBar}
         />
       ) : (
         <NavBarV2

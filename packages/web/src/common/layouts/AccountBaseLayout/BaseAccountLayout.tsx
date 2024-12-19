@@ -1,5 +1,5 @@
-import { FC, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { FC, useContext, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import {
   AccountDetails,
   CardVerificationAlerts,
@@ -16,10 +16,15 @@ import { useMedia } from 'react-use';
 import LeftNavigation from './LeftNavigation';
 import MyAccountDebugToolsLazily from '@/layouts/AccountBaseLayout/MyAccountToolsLazily';
 import Navigation from '../../components/Navigation/Navigation';
+import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment';
+import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
+import AuthContext from '../../context/Auth/AuthContext';
 
 const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const isMobile = useMedia('(max-width: 767px)');
+  const authContext = useContext(AuthContext);
+  const loggedIn = authContext.isUserAuthenticated();
 
   const memberId = useMemberId();
 
@@ -44,12 +49,30 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
     router.push(href);
   };
 
+  const { status, data: accountFlag } = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.MODERN_MY_ACCOUNT,
+    'off'
+  );
+
+  useEffect(() => {
+    if (
+      authContext.isReady &&
+      (!loggedIn || (status !== 'pending' && accountFlag?.variantName !== 'on' && router.isReady))
+    ) {
+      router.push('/');
+    }
+  }, [accountFlag, router, status, loggedIn, authContext]);
+
+  if (accountFlag?.variantName !== 'on') {
+    return null;
+  }
+
   return (
     <div className={`flex flex-col ${isOpen ? 'h-screen overflow-hidden' : 'min-h-screen'}`}>
       <MyAccountDebugToolsLazily />
       <Drawer />
       <Toaster />
-      <Navigation />
+      <Navigation onToggleMobileSideBar={toggleDrawer} />
       <CardVerificationAlerts memberUuid={memberId} />
 
       <div className="pl-[16px] mt-[32px] flex flex-col hidden tablet:block desktop:container mx-[20px] desktop:mx-auto">

@@ -41,13 +41,15 @@ import { getBrandFromEnv, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { RemovalPolicy } from 'aws-cdk-lib';
 import { createOutboundBatchFileCron } from '@blc-mono/members/infrastructure/crons/createOutboundBatchFileCron';
 import { retrieveInboundBatchFilesCron } from '@blc-mono/members/infrastructure/crons/retrieveInboundBatchFilesCron';
-import { createMemberProfilesPipe } from '@blc-mono/members/infrastructure/eventbridge/MemberProfilesPipe';
+import { createMemberProfileChangeEventPipes } from '@blc-mono/members/infrastructure/eventbridge/MemberProfileChangeEventPipes';
 import { createMemberProfileIndexer } from '@blc-mono/members/infrastructure/lambdas/createMemberProfileIndexer';
 import { adminSearchRoutes } from '@blc-mono/members/infrastructure/routes/admin/AdminSearchRoutes';
 import { createSeedOrganisations } from '@blc-mono/members/infrastructure/lambdas/createSeedOrganisations';
 import { createUploadBatchFileFunction } from '@blc-mono/members/infrastructure/lambdas/createUploadBatchFileFunction';
 import { createProcessInboundBatchFileFunction } from '@blc-mono/members/infrastructure/lambdas/createProcessInboundBatchFileFunction';
 import { MembersOpenSearchDomain } from './opensearch/MembersOpenSearchDomain';
+import { createProfilesSeedSearchIndexPipeline } from '@blc-mono/members/infrastructure/lambdas/createProfilesSeedSearchIndexPipeline';
+import { createProfilesSeedSearchIndexTable } from '@blc-mono/members/infrastructure/dynamodb/createProfilesSeedSearchIndexTable';
 
 const SERVICE_NAME = 'members';
 
@@ -58,6 +60,8 @@ export async function MembersStack({ app, stack }: StackContext) {
   stack.setDefaultFunctionProps({
     environment: {
       BRAND: getBrandFromEnv(),
+      REGION: stack.region,
+      SERVICE: SERVICE_NAME,
       SFTP_HOST: getEnvOrDefault(MemberStackEnvironmentKeys.SFTP_HOST, ''),
       SFTP_USER: getEnvOrDefault(MemberStackEnvironmentKeys.SFTP_USER, ''),
       SFTP_PASSWORD: getEnvOrDefault(MemberStackEnvironmentKeys.SFTP_PASSWORD, ''),
@@ -72,6 +76,7 @@ export async function MembersStack({ app, stack }: StackContext) {
   // Orgs tables - orgs, employers, ID requirements, trusted domains
   // Admin table - batches, allocations
   const profilesTable = createProfilesTable(stack);
+  const profilesSeedSearchIndexTable = createProfilesSeedSearchIndexTable(stack);
   const organisationsTable = createOrganisationsTable(stack);
   const adminTable = createAdminTable(stack);
 
@@ -121,7 +126,7 @@ export async function MembersStack({ app, stack }: StackContext) {
     );
   }
 
-  const memberProfilesTableEventQueue: Queue = new Queue(stack, 'MemberProfilesTableEventQueue', {
+  const memberProfilesChangeEventQueue: Queue = new Queue(stack, 'MemberProfilesTableEventQueue', {
     cdk: {
       queue: {
         deadLetterQueue: {
@@ -133,16 +138,22 @@ export async function MembersStack({ app, stack }: StackContext) {
   });
 
   const openSearchDomain = await new MembersOpenSearchDomain(stack, vpc).setup();
-  createMemberProfilesPipe(stack, profilesTable, memberProfilesTableEventQueue);
+  createMemberProfileChangeEventPipes(
+    stack,
+    profilesTable,
+    profilesSeedSearchIndexTable,
+    memberProfilesChangeEventQueue,
+  );
   createMemberProfileIndexer(
     stack,
     vpc,
-    memberProfilesTableEventQueue,
+    memberProfilesChangeEventQueue,
     openSearchDomain,
     organisationsTable,
     SERVICE_NAME,
   );
   createSeedOrganisations(stack, organisationsTable, SERVICE_NAME);
+  createProfilesSeedSearchIndexPipeline(stack, profilesTable, profilesSeedSearchIndexTable);
 
   return {
     profilesTable,

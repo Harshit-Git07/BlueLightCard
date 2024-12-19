@@ -3,10 +3,12 @@ import {
   BatchWriteCommandInput,
   BatchWriteCommandOutput,
   DynamoDBDocumentClient,
+  ScanCommand,
+  ScanCommandInput,
+  ScanCommandOutput,
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { defaultDynamoDbClient } from './dynamoClient';
-import { ApplyPromoCodeApplicationModel } from '@blc-mono/members/application/models/applicationModel';
 
 export const ORGANISATION = 'ORGANISATION';
 export const EMPLOYER = 'EMPLOYER';
@@ -69,13 +71,27 @@ const MAX_BASE_DELAY = 1000;
 export class Repository {
   constructor(readonly dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient) {}
 
+  async scan(params: ScanCommandInput): Promise<ScanCommandOutput> {
+    try {
+      const scanCommand = new ScanCommand(params);
+
+      return this.dynamoDB.send(scanCommand);
+    } catch (error) {
+      const message = 'Error trying to scan record using DynamoDB service';
+      throw new Error(`${message}: [${error}]`);
+    }
+  }
+
   async partialUpdate<T>({ tableName, pk, sk, data }: PartialUpdateProps<T>): Promise<void> {
     let [updateExpression, expressionAttributeNames, expressionAttributeValues] =
       this.getPartialUpdateExpressionValues(data);
 
     const params = {
       TableName: tableName,
-      Key: { pk, sk },
+      Key: {
+        pk,
+        sk,
+      },
       UpdateExpression: `SET ${updateExpression.join(', ')} `,
       ExpressionAttributeNames: expressionAttributeNames,
       ExpressionAttributeValues: expressionAttributeValues,

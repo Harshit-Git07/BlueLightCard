@@ -31,6 +31,14 @@ npm run format
 
 OpenSearch is used for storing member data to allow searching from the admin panel via multiple filters.
 
-There is a pipeline in place for ingesting changes from the Member Profile DynamoDB table into OpenSearch. The diagram below details the pipeline:
+There is a pipeline in place for ingesting changes from the Member Profile DynamoDB table into OpenSearch. Additionally, a full re-seed of all member data can be executed if required. 
+
+The diagram below details the pipeline:
 
 ![members-opensearch-diagram.png](docs/members-opensearch-diagram.png)
+
+### Re-seeding OpenSearch index
+
+To re-seed the OpenSearch index with all records currently in the `memberProfiles` table you need to trigger the following lambda via the console:
+
+- `{stage}-blc-mono-MemberProfileTableReader` lambda

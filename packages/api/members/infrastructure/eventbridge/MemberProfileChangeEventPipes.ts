@@ -16,15 +16,38 @@ const assumeRolePolicyDocument = {
   ],
 };
 
-export function createMemberProfilesPipe(
+export function createMemberProfileChangeEventPipes(
   stack: Stack,
   memberProfilesTable: Table,
-  memberProfilesTableEventQueue: Queue,
-): CfnPipe {
+  memberProfilesSeedSearchIndexTable: Table,
+  memberProfilesChangeEventQueue: Queue,
+) {
+  createPipeToMemberProfilesChangeEventQueue(
+    stack,
+    'MemberProfilesTable',
+    memberProfilesTable,
+    memberProfilesChangeEventQueue,
+  );
+  createPipeToMemberProfilesChangeEventQueue(
+    stack,
+    'MemberProfilesSeedSearchIndexTable',
+    memberProfilesSeedSearchIndexTable,
+    memberProfilesChangeEventQueue,
+  );
+
+  return;
+}
+
+const createPipeToMemberProfilesChangeEventQueue = (
+  stack: Stack,
+  name: string,
+  table: Table,
+  queue: Queue,
+) => {
   const allowSqsSendMessageStatement = {
     Effect: 'Allow',
     Action: 'sqs:SendMessage',
-    Resource: memberProfilesTableEventQueue.cdk.queue.queueArn,
+    Resource: queue.cdk.queue.queueArn,
   };
   const allowDynamoDbStreamStatement = {
     Effect: 'Allow',
@@ -34,14 +57,14 @@ export function createMemberProfilesPipe(
       'dynamodb:GetShardIterator',
       'dynamodb:ListStreams',
     ],
-    Resource: memberProfilesTable.cdk.table.tableStreamArn,
+    Resource: table.cdk.table.tableStreamArn,
   };
 
-  const pipeTargetRole = new CfnRole(stack, 'MemberProfilesTableEventPipeRole', {
+  const pipeTargetRole = new CfnRole(stack, `${name}StreamEventPipeRole`, {
     assumeRolePolicyDocument,
     policies: [
       {
-        policyName: 'MemberProfilesTableEventPipePolicy',
+        policyName: `${name}EventPipePolicy`,
         policyDocument: {
           Version: '2012-10-17',
           Statement: [allowSqsSendMessageStatement, allowDynamoDbStreamStatement],
@@ -50,15 +73,15 @@ export function createMemberProfilesPipe(
     ],
   });
 
-  return new CfnPipe(stack, 'MemberProfilesTableEventPipe', {
-    source: memberProfilesTable.cdk.table.tableStreamArn ?? '',
+  return new CfnPipe(stack, `${name}TableEventPipe`, {
+    source: table.cdk.table.tableStreamArn ?? '',
     sourceParameters: {
       dynamoDbStreamParameters: {
         startingPosition: 'LATEST',
         batchSize: 1,
       },
     },
-    target: memberProfilesTableEventQueue.cdk.queue.queueArn,
+    target: queue.cdk.queue.queueArn,
     roleArn: pipeTargetRole.attrArn,
   });
-}
+};

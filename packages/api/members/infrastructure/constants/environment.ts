@@ -41,4 +41,7 @@ export enum MemberStackEnvironmentKeys {
   SFTP_USER = 'SFTP_USER',
   SFTP_PASSWORD = 'SFTP_PASSWORD',
   SFTP_PATH_SEND_BATCH_FILE = 'SFTP_PATH_SEND_BATCH_FILE',
+
+  // Region
+  REGION = 'REGION',
 }

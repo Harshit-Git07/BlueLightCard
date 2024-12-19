@@ -5,6 +5,7 @@ import {
   getDocumentFromProfileRecord,
 } from '../../service/parseDocumentFromRecord';
 import { DynamoDBRecord, StreamRecord } from 'aws-lambda/trigger/dynamodb-stream';
+import { subDays } from 'date-fns';
 
 jest.mock('@blc-mono/members/application/utils/dynamoDb/unmarshallStreamImages');
 
@@ -137,6 +138,39 @@ describe('getDocumentFromProfileRecord', () => {
         organisationId: 'organisationId2',
       },
       employerIdChanged: false,
+      organisationIdChanged: true,
+      profileEmployerName: undefined,
+    });
+  });
+
+  it('should return organisation as "changed" if full ingestion triggered', () => {
+    unmarshallStreamImagesMock.mockReturnValue({
+      oldImage: {
+        memberId: '123',
+        firstName: 'Sam',
+        employerId: 'employerId',
+        organisationId: 'organisationId',
+        ingestionLastTriggered: subDays(new Date(), 2).toISOString(),
+      },
+      newImage: {
+        memberId: '123',
+        firstName: 'Sam',
+        employerId: 'employerId',
+        organisationId: 'organisationId',
+        ingestionLastTriggered: new Date().toISOString(),
+      },
+    });
+
+    const result = getDocumentFromProfileRecord(insertRecord);
+
+    expect(result).toEqual({
+      memberDocument: {
+        memberId: '123',
+        firstName: 'Sam',
+        employerId: 'employerId',
+        organisationId: 'organisationId',
+      },
+      employerIdChanged: true,
       organisationIdChanged: true,
       profileEmployerName: undefined,
     });

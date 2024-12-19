@@ -33,6 +33,7 @@ export const ApplicationModel = createZodNamedType(
     nameChangeDocType: z.string().nullable().optional(),
     rejectionReason: z.nativeEnum(RejectionReason).nullable().optional(),
     cardNumber: z.string().optional(),
+    ingestionLastTriggered: z.string().datetime().optional(),
   }),
 );
 

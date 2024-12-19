@@ -45,6 +45,7 @@ export const ProfileModel = createZodNamedType(
     idUploaded: z.boolean().optional(),
     cards: z.array(CardModel).default([]).optional(),
     applications: z.array(ApplicationModel).default([]).optional(),
+    ingestionLastTriggered: z.string().datetime().optional(),
   }),
 );
 export type ProfileModel = z.infer<typeof ProfileModel>;

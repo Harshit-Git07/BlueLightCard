@@ -157,3 +157,36 @@ export function sqsMiddleware(handler: SQSHandler): SQSHandler {
     }
   };
 }
+
+type LambdaHandler = (context: Context) => Promise<void>;
+
+export function lambdaMiddleware(handler: LambdaHandler): LambdaHandler {
+  return async (context: Context): Promise<void> => {
+    logger.addContext(context);
+
+    try {
+      auditLogger.info({
+        message: 'Event start',
+      });
+
+      await handler(context);
+
+      auditLogger.info({
+        message: 'Event success',
+      });
+    } catch (error: Error | any) {
+      logger.error({ message: 'Error occurred', error });
+
+      auditLogger.info({
+        message: 'Request failed',
+        error: error.message,
+      });
+
+      if (error instanceof ValidationError || error instanceof ZodError) {
+        logger.warn('Validation error', error.message);
+      }
+
+      throw error;
+    }
+  };
+}

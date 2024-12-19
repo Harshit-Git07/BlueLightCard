@@ -6,6 +6,7 @@ import { ApplicationModel } from '@blc-mono/members/application/models/applicati
 import { CardModel } from '@blc-mono/members/application/models/cardModel';
 import { unmarshallStreamImages } from '@blc-mono/members/application/utils/dynamoDb/unmarshallStreamImages';
 import { logger } from '@blc-mono/members/application/middleware';
+import { isAfter } from 'date-fns';
 
 export const getDocumentFromProfileRecord = (
   record: DynamoDBRecord,
@@ -30,10 +31,11 @@ export const getDocumentFromProfileRecord = (
     };
   }
 
-  if (!newProfile)
+  if (!newProfile) {
     throw new ValidationError(
       `New profile image not found in stream record: ${record.dynamodb?.Keys?.pk.S}`,
     );
+  }
 
   return {
     memberDocument: {
@@ -46,10 +48,21 @@ export const getDocumentFromProfileRecord = (
       employerId: newProfile.employerId,
       userStatus: newProfile.status,
     },
-    employerIdChanged: hasChanged(newProfile.employerId, oldProfile?.employerId),
-    organisationIdChanged: hasChanged(newProfile.organisationId, oldProfile?.organisationId),
+    employerIdChanged:
+      isNewer(newProfile.ingestionLastTriggered, oldProfile?.ingestionLastTriggered) ||
+      hasChanged(newProfile.employerId, oldProfile?.employerId),
+    organisationIdChanged:
+      isNewer(newProfile.ingestionLastTriggered, oldProfile?.ingestionLastTriggered) ||
+      hasChanged(newProfile.organisationId, oldProfile?.organisationId),
     profileEmployerName: newProfile.employerName,
   };
+};
+
+const isNewer = (newValue: string | undefined, oldValue: string | undefined): boolean => {
+  return (
+    newValue !== undefined &&
+    (oldValue === undefined || isAfter(new Date(newValue), new Date(oldValue)))
+  );
 };
 
 const hasChanged = (newValue: string | undefined, oldValue: string | undefined): boolean => {
@@ -63,10 +76,11 @@ export const getDocumentFromApplicationRecord = (
     unmarshallStreamImages<ApplicationModel>(record.dynamodb);
 
   if (record.eventName === 'REMOVE') {
-    if (!oldApplication)
+    if (!oldApplication) {
       throw new ValidationError(
         `Old application not found in stream record: ${record.dynamodb?.Keys?.pk.S}`,
       );
+    }
     return {
       memberId: oldApplication.memberId,
       applicationId: '',
@@ -80,10 +94,11 @@ export const getDocumentFromApplicationRecord = (
     return;
   }
 
-  if (!newApplication)
+  if (!newApplication) {
     throw new ValidationError(
       `New application image not found in stream record: ${record.dynamodb?.Keys?.pk.S}`,
     );
+  }
 
   return {
     memberId: newApplication.memberId,
@@ -105,10 +120,11 @@ export const getDocumentFromCardRecord = (
     return;
   }
 
-  if (!newCard)
+  if (!newCard) {
     throw new ValidationError(
       `New card image not found in stream record: ${record.dynamodb?.Keys?.pk.S}`,
     );
+  }
 
   return {
     memberId: newCard.memberId,

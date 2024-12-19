@@ -11,6 +11,7 @@ import {
   useMemberCard,
   useMemberId,
   useMemberProfileGet,
+  usePlatformAdapter,
   YourCard,
 } from '@bluelightcard/shared-ui';
 
@@ -20,6 +21,7 @@ import withAccountLayout from '@/layouts/AccountBaseLayout/withAccountLayout';
 
 const YourCardPage: NextPage = () => {
   const memberId = useMemberId();
+  const adapter = usePlatformAdapter();
   const { card } = useMemberCard(memberId);
   const { isFetching, memberProfile } = useMemberProfileGet(memberId);
 
@@ -109,7 +111,7 @@ const YourCardPage: NextPage = () => {
               iconRight={faCreditCardBlank}
               type="button"
               size="Large"
-              onClick={() => {}}
+              onClick={() => adapter.navigate('/eligibility')}
             >
               Get your card
             </Button>

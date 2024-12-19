@@ -1,5 +1,3 @@
-import 'dd-trace/init';
-
 import { AsyncLocalStorage } from 'node:async_hooks';
 
 import { datadog } from 'datadog-lambda-js';

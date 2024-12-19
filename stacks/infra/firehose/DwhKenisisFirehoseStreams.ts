@@ -37,7 +37,7 @@ const callbackVaultRedemptionStreamNames = {
 	// This one doesn't have dds in the name because the stage is "staging-dds" or "production-dds"
 	[DDS_UK_BRAND]: 'uk-vaultIntegrationCallback'
 }
- 
+
 let redshiftSecret: ISecret;
 const getRedshiftSecret = (stack: Stack) => {
   if (!redshiftSecret) {
@@ -66,6 +66,7 @@ export class DwhKenisisFirehoseStreams {
   public readonly companyLocationStream: IFirehoseStreamAdapter;
   public readonly redemptionStream: IFirehoseStreamAdapter;
   public readonly vaultIntegrationStream: IFirehoseStreamAdapter;
+  public readonly vaultStockStream: IFirehoseStreamAdapter;
 
   constructor(stack: Stack) {
     // Creates Firehose stream references. Mocked in Production environments if present within `UNMANAGED_STREAMS` list.
@@ -99,6 +100,9 @@ export class DwhKenisisFirehoseStreams {
     }).setup();
     this.vaultIntegrationStream = new KenisisFirehoseStream(stack, 'dwh-vaultIntegration', `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultIntegration`, {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.vault_integration` : undefined)
+    }).setup();
+    this.vaultStockStream = new KenisisFirehoseStream(stack, 'dwh-vaultStock', `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultStock`, {
+      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.vault_stock` : undefined)
     }).setup();
   }
 }

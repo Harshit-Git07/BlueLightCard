@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.101.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.100.0...bluelightcard/web-v1.101.0) (2024-12-19)
+
+
+### Features
+
+* DISCO-1381 Updated large braze tenancy banner destination to homepage sponsor ([#3403](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3403)) ([cfefa65](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cfefa6518a0bcf801698ea870b3deb31dc782f89))
+
 ## [1.100.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.99.0...bluelightcard/web-v1.100.0) (2024-12-18)
 
 

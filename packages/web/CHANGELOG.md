@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.100.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.99.0...bluelightcard/web-v1.100.0) (2024-12-18)
+
+
+### Features
+
+* Added Account Authenticated Navbar ([#3464](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3464)) ([e759093](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e7590939c730413df85236bb81ed102202983cb7))
+
+
+### Bug Fixes
+
+* removed redundant snapshot test ([#3475](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3475)) ([1612f4b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1612f4bd08b20f5d6ab17a591ffd563c87d5a960))
+
 ## [1.99.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.98.0...bluelightcard/web-v1.99.0) (2024-12-18)
 
 

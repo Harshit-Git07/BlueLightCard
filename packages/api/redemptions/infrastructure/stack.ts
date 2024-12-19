@@ -21,6 +21,7 @@ import { RedemptionsStackConfigResolver } from './config/config';
 import { productionDomainNames, stagingDomainNames } from './constants/domains';
 import { RedemptionsStackEnvironmentKeys } from './constants/environment';
 import { checkBallotsCron } from './cron/checkBallots';
+import { vaultStockCron } from './cron/getVaultStock';
 import { RedemptionsDatabase } from './database/database';
 import { createDomainEmailIdentity } from './email/createDomainEmailIdentity';
 import { EventBridge } from './eventBridge/eventBridge';
@@ -147,6 +148,9 @@ async function RedemptionsStack({ app, stack }: StackContext) {
 
   // Create cron jobs for checking ballots
   checkBallotsCron(stack, database, bus.eventBusName);
+
+  // Create cron jobs for vault stock DWH
+  vaultStockCron(stack);
 
   // Create permissions
   // TODO: Specify the resource for the secrets manager from Secret.fromSecretCompleteArn (It was not getting the final 6 characters as expected, need to investigate further)

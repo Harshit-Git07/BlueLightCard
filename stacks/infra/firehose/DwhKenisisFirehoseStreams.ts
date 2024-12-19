@@ -67,6 +67,7 @@ export class DwhKenisisFirehoseStreams {
   public readonly redemptionStream: IFirehoseStreamAdapter;
   public readonly vaultIntegrationStream: IFirehoseStreamAdapter;
   public readonly vaultStockStream: IFirehoseStreamAdapter;
+  public readonly vaultBatchStockStream: IFirehoseStreamAdapter;
 
   constructor(stack: Stack) {
     // Creates Firehose stream references. Mocked in Production environments if present within `UNMANAGED_STREAMS` list.
@@ -103,6 +104,9 @@ export class DwhKenisisFirehoseStreams {
     }).setup();
     this.vaultStockStream = new KenisisFirehoseStream(stack, 'dwh-vaultStock', `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultStock`, {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.vault_stock` : undefined)
+    }).setup();
+    this.vaultBatchStockStream = new KenisisFirehoseStream(stack, 'dwh-vaultBatchStock', `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultBatchStock`, {
+      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.vault_stock_batch` : undefined)
     }).setup();
   }
 }

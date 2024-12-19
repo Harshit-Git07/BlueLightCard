@@ -1,78 +1,44 @@
 import { z } from 'zod';
 
+import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
+
 export type IntegrationType = 'uniqodo' | 'eagleeye';
 
-// We use this to ensure that all fields are required but allow for any type
-const anyRequired = z.any().superRefine((data, ctx) => {
-  if (data === undefined) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: 'Field cannot be undefined',
-    });
-  }
-});
+export const UniqodoModel = createZodNamedType(
+  'UniqodoModel',
+  z.object({
+    integrationType: z.literal('uniqodo'),
+    code: z.string(),
+    offer_id: z.string(),
+    order_value: z.string(),
+    currency: z.string(),
+    redeemed_at: z.string(),
+    member_id: z.string().nullable().optional(),
+    merchant_id: z.string().nullable().optional(),
+  }),
+);
 
-export const UniqodoModelSchema = z.object({
-  integrationType: z.literal('uniqodo'),
-  claim: z.object({
-    expiresAt: anyRequired,
-    code: anyRequired,
-    createdAt: anyRequired,
-    deactivatedAt: anyRequired,
-    linkedUniqueReference: anyRequired,
-    promotionId: anyRequired,
+export const EagleEyeModel = createZodNamedType(
+  'EagleEyeModel',
+  z.object({
+    integrationType: z.literal('eagleeye'),
+    tokenId: z.string(), //token as per php code
+    accountTransactionId: z.string(),
+    parentUnitId: z.number(),
+    location: z.object({
+      unitId: z.number().nullable().optional(),
+      outgoingIdentifier: z.string().nullable().optional(),
+      incomingIdentifier: z.string().nullable().optional(),
+    }), //location.incomingIdentifier
+    eventTime: z.string(),
+    memberId: z.string().nullable().optional(),
+    consumerId: z.string().nullable().optional(),
   }),
-  promotion: z.object({
-    id: anyRequired,
-    status: anyRequired,
-    codeType: anyRequired,
-    timezone: anyRequired,
-    redemptionsPerCode: anyRequired,
-    title: anyRequired,
-    rewardType: anyRequired,
-    reward: z.object({
-      type: anyRequired,
-      amount: anyRequired,
-      discountType: anyRequired,
-      upToMaximumOf: anyRequired,
-      productExclusionRule: anyRequired,
-    }),
-    availableToClaim: anyRequired,
-    availableToRedeem: anyRequired,
-    startDate: anyRequired,
-    endDate: anyRequired,
-    terms: anyRequired,
-    codeExpiry: anyRequired,
-    codeExpiryUnit: anyRequired,
-  }),
-  customer: anyRequired,
-});
+);
 
-export const EagleEyeModelSchema = z.object({
-  integrationType: z.literal('eagleeye'),
-  accountId: anyRequired,
-  accountStatus: anyRequired,
-  accountTypeId: anyRequired,
-  accountTransactionId: anyRequired,
-  accountType: anyRequired,
-  accountSubType: anyRequired,
-  balances: z.object({
-    available: anyRequired,
-    refundable: anyRequired,
-  }),
-  issuerId: anyRequired,
-  resourceId: anyRequired,
-  resourceType: anyRequired,
-  token: anyRequired,
-  tokenDates: z.object({
-    start: anyRequired,
-    end: anyRequired,
-  }),
-  tokenId: anyRequired,
-  tokenStatus: anyRequired,
-  consumerId: anyRequired,
-});
-
-export type UniqodoModel = z.infer<typeof UniqodoModelSchema>;
-export type EagleEyeModel = z.infer<typeof EagleEyeModelSchema>;
-export const PostCallbackModel = z.discriminatedUnion('integrationType', [UniqodoModelSchema, EagleEyeModelSchema]);
+export const PostCallbackModel = createZodNamedType(
+  'PostCallbackModel',
+  z.discriminatedUnion('integrationType', [UniqodoModel, EagleEyeModel]),
+);
+export type EagleEyeModel = z.infer<typeof EagleEyeModel>;
+export type UniqodoModel = z.infer<typeof UniqodoModel>;

@@ -65,6 +65,7 @@ export class DwhKenisisFirehoseStreams {
 	public readonly callbackVaultRedemptionStream: IFirehoseStreamAdapter;
   public readonly companyLocationStream: IFirehoseStreamAdapter;
   public readonly redemptionStream: IFirehoseStreamAdapter;
+  public readonly vaultIntegrationStream: IFirehoseStreamAdapter;
 
   constructor(stack: Stack) {
     // Creates Firehose stream references. Mocked in Production environments if present within `UNMANAGED_STREAMS` list.
@@ -96,7 +97,9 @@ export class DwhKenisisFirehoseStreams {
     this.redemptionStream = new KenisisFirehoseStream(stack, 'dwh-redemptions', `dwh-${MAP_BRAND[getBrandFromEnv()]}-redemptions`, {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.redemption` : undefined)
     }).setup();
-
+    this.vaultIntegrationStream = new KenisisFirehoseStream(stack, 'dwh-vaultIntegration', `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultIntegration`, {
+      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.vault_integration` : undefined)
+    }).setup();
   }
 }
 

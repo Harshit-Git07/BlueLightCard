@@ -26,6 +26,8 @@ describe('DwhRepository', () => {
     delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STREAM_NAME];
     delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_REDEMPTIONS_STREAM_NAME];
     delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME];
+    delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_INTEGRATION_STREAM_NAME];
+    delete process.env.BRAND;
   });
 
   describe('logOfferView', () => {
@@ -415,7 +417,8 @@ describe('DwhRepository', () => {
 
     it('should send the correct data to the callback stream', async () => {
       // Arrange
-      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME] = testStreamName;
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_INTEGRATION_STREAM_NAME] = testStreamName;
+      process.env.BRAND = 'BLC_UK';
       mockFirehoseClient.on(PutRecordCommand);
       const dwhRepository = new DwhRepository();
 
@@ -429,33 +432,22 @@ describe('DwhRepository', () => {
       expect(putCommand.input.DeliveryStreamName).toBe(testStreamName);
       const data = new TextDecoder().decode(putCommand.input.Record!.Data);
       expect(JSON.parse(data)).toStrictEqual({
-        account_id: testEagleEyeData.accountId,
-        account_status: testEagleEyeData.accountStatus,
-        account_type_id: testEagleEyeData.accountTypeId,
-        account_transaction_id: testEagleEyeData.accountTransactionId,
-        account_type: testEagleEyeData.accountType,
-        account_sub_type: testEagleEyeData.accountSubType,
-        balances: {
-          available: testEagleEyeData.balances.available,
-          refundable: testEagleEyeData.balances.refundable,
-        },
-        issuer_id: testEagleEyeData.issuerId,
-        resource_id: testEagleEyeData.resourceId,
-        resource_type: testEagleEyeData.resourceType,
-        token: testEagleEyeData.token,
-        token_dates: {
-          start: testEagleEyeData.tokenDates.start,
-          end: testEagleEyeData.tokenDates.end,
-        },
-        token_id: testEagleEyeData.tokenId,
-        token_status: testEagleEyeData.tokenStatus,
-        consumer_id: testEagleEyeData.consumerId,
+        offer_id: testEagleEyeData.accountTransactionId,
+        company_id: testEagleEyeData.consumerId,
+        brand: process.env.BRAND,
+        member_id: testEagleEyeData.memberId,
+        code: testEagleEyeData.tokenId,
+        order_value: testEagleEyeData.parentUnitId.toString(),
+        event_time: testEagleEyeData.eventTime,
+        currency: testEagleEyeData.location.incomingIdentifier,
+        integration_type: 'eagleeye',
       });
     });
 
     it('should bubble exceptions from the firehose client to the caller unable to reach vault stream', async () => {
       // Arrange
-      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME] = testStreamName;
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_INTEGRATION_STREAM_NAME] = testStreamName;
+      process.env.BRAND = 'BLC_UK';
       const dwhRepository = new DwhRepository();
 
       mockFirehoseClient.on(PutRecordCommand).rejects('reject stream');
@@ -474,7 +466,8 @@ describe('DwhRepository', () => {
 
     it('should send the correct data to the callback stream', async () => {
       // Arrange
-      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME] = testStreamName;
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_INTEGRATION_STREAM_NAME] = testStreamName;
+      process.env.BRAND = 'DDS_UK';
       mockFirehoseClient.on(PutRecordCommand);
       const dwhRepository = new DwhRepository();
 
@@ -488,44 +481,21 @@ describe('DwhRepository', () => {
       expect(putCommand.input.DeliveryStreamName).toBe(testStreamName);
       const data = new TextDecoder().decode(putCommand.input.Record!.Data);
       expect(JSON.parse(data)).toStrictEqual({
-        claim: {
-          expires_at: testUniqodoData.claim.expiresAt,
-          code: testUniqodoData.claim.code,
-          created_at: testUniqodoData.claim.createdAt,
-          deactivated_at: testUniqodoData.claim.deactivatedAt,
-          linked_unique_reference: testUniqodoData.claim.linkedUniqueReference,
-          promotion_id: testUniqodoData.claim.promotionId,
-        },
-        promotion: {
-          id: testUniqodoData.promotion.id,
-          status: testUniqodoData.promotion.status,
-          code_type: testUniqodoData.promotion.codeType,
-          timezone: testUniqodoData.promotion.timezone,
-          redemptions_per_code: testUniqodoData.promotion.redemptionsPerCode,
-          title: testUniqodoData.promotion.title,
-          reward_type: testUniqodoData.promotion.rewardType,
-          reward: {
-            type: testUniqodoData.promotion.reward.type,
-            amount: testUniqodoData.promotion.reward.amount,
-            discount_type: testUniqodoData.promotion.reward.discountType,
-            up_to_maximum_of: testUniqodoData.promotion.reward.upToMaximumOf,
-            product_exclusion_rule: testUniqodoData.promotion.reward.productExclusionRule,
-          },
-          available_to_claim: testUniqodoData.promotion.availableToClaim,
-          available_to_redeem: testUniqodoData.promotion.availableToRedeem,
-          start_date: testUniqodoData.promotion.startDate,
-          end_date: testUniqodoData.promotion.endDate,
-          terms: testUniqodoData.promotion.terms,
-          code_expiry: testUniqodoData.promotion.codeExpiry,
-          code_expiry_unit: testUniqodoData.promotion.codeExpiryUnit,
-        },
-        customer: testUniqodoData.customer,
+        offer_id: testUniqodoData.offer_id,
+        company_id: testUniqodoData.merchant_id,
+        brand: process.env.BRAND,
+        member_id: testUniqodoData.member_id,
+        code: testUniqodoData.code,
+        order_value: testUniqodoData.order_value,
+        event_time: testUniqodoData.redeemed_at,
+        integration_type: 'uniqodo',
       });
     });
 
     it('should bubble exceptions from the firehose client to the caller unable to reach vault stream', async () => {
       // Arrange
       process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME] = testStreamName;
+      process.env.BRAND = 'DDS_UK';
       const dwhRepository = new DwhRepository();
 
       mockFirehoseClient.on(PutRecordCommand).rejects('reject stream');

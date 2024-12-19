@@ -201,19 +201,14 @@ export function createAdminApi(
       handler:
         './packages/api/redemptions/application/handlers/adminApiGateway/redemptionConfig/getRedemptionConfigHandler.handler',
     }),
-    'POST /vault/webhook': AdminRoute.createRoute({
-      apiGatewayModelGenerator: adminApiGatewayModelGenerator,
-      stack,
-      functionName: 'CallbackHandler',
-      restApi: restAdminApi,
-      database,
+    'POST /vault/webhook': routeFactory({
+      name: 'CallbackHandler',
       handler: './packages/api/redemptions/application/handlers/adminApiGateway/callback/postCallbackHandler.handler',
-      requestValidatorName: 'CallbackValidator',
       environment: {
-        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME]:
-          dwhKenisisFirehoseStreams.callbackVaultRedemptionStream.getStreamName(),
         [RedemptionsStackEnvironmentKeys.INTEGRATION_PROVIDER_SECRETS_MANAGER_NAME]:
           config.integrationProviderConfig.secretsManagerConfig.name,
+        [RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_INTEGRATION_STREAM_NAME]:
+          dwhKenisisFirehoseStreams.vaultIntegrationStream.getStreamName(),
       },
       permissions: [firehosePutRecord, secretsManagerGetSecretValue],
     }),

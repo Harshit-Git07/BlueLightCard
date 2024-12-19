@@ -1,6 +1,7 @@
 import { FirehoseClient, PutRecordCommand } from '@aws-sdk/client-firehose';
 
 import { ClientType } from '@blc-mono/core/schemas/domain';
+import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { exhaustiveCheck } from '@blc-mono/core/utils/exhaustiveCheck';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { MemberRedemptionParamsDto } from '@blc-mono/redemptions/application/services/DWH/dwhLoggingService';
@@ -181,31 +182,19 @@ export class DwhRepository implements IDwhRepository {
 
   async logCallbackEagleEyeVaultRedemption(data: EagleEyeModel): Promise<void> {
     const command = new PutRecordCommand({
-      DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME),
+      DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_INTEGRATION_STREAM_NAME),
       Record: {
         Data: Buffer.from(
           JSON.stringify({
-            account_id: data.accountId,
-            account_status: data.accountStatus,
-            account_type_id: data.accountTypeId,
-            account_transaction_id: data.accountTransactionId,
-            account_type: data.accountType,
-            account_sub_type: data.accountSubType,
-            balances: {
-              available: data.balances.available,
-              refundable: data.balances.refundable,
-            },
-            issuer_id: data.issuerId,
-            resource_id: data.resourceId,
-            resource_type: data.resourceType,
-            token: data.token,
-            token_dates: {
-              start: data.tokenDates.start,
-              end: data.tokenDates.end,
-            },
-            token_id: data.tokenId,
-            token_status: data.tokenStatus,
-            consumer_id: data.consumerId,
+            offer_id: data.accountTransactionId,
+            company_id: data.consumerId?.toString(),
+            brand: getBrandFromEnv(),
+            member_id: data.memberId?.toString(),
+            code: data.tokenId,
+            order_value: data.parentUnitId.toString(),
+            currency: data.location.incomingIdentifier?.toString(),
+            event_time: data.eventTime,
+            integration_type: 'eagleeye',
           }),
         ),
       },
@@ -215,42 +204,18 @@ export class DwhRepository implements IDwhRepository {
 
   async logCallbackUniqodoVaultRedemption(data: UniqodoModel): Promise<void> {
     const command = new PutRecordCommand({
-      DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME),
+      DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_INTEGRATION_STREAM_NAME),
       Record: {
         Data: Buffer.from(
           JSON.stringify({
-            claim: {
-              expires_at: data.claim.expiresAt,
-              code: data.claim.code,
-              created_at: data.claim.createdAt,
-              deactivated_at: data.claim.deactivatedAt,
-              linked_unique_reference: data.claim.linkedUniqueReference,
-              promotion_id: data.claim.promotionId,
-            },
-            promotion: {
-              id: data.promotion.id,
-              status: data.promotion.status,
-              code_type: data.promotion.codeType,
-              timezone: data.promotion.timezone,
-              redemptions_per_code: data.promotion.redemptionsPerCode,
-              title: data.promotion.title,
-              reward_type: data.promotion.rewardType,
-              reward: {
-                type: data.promotion.reward.type,
-                amount: data.promotion.reward.amount,
-                discount_type: data.promotion.reward.discountType,
-                up_to_maximum_of: data.promotion.reward.upToMaximumOf,
-                product_exclusion_rule: data.promotion.reward.productExclusionRule,
-              },
-              available_to_claim: data.promotion.availableToClaim,
-              available_to_redeem: data.promotion.availableToRedeem,
-              start_date: data.promotion.startDate,
-              end_date: data.promotion.endDate,
-              terms: data.promotion.terms,
-              code_expiry: data.promotion.codeExpiry,
-              code_expiry_unit: data.promotion.codeExpiryUnit,
-            },
-            customer: data.customer,
+            offer_id: data.offer_id,
+            company_id: data.merchant_id?.toString(),
+            brand: getBrandFromEnv(),
+            member_id: data.member_id?.toString(),
+            code: data.code,
+            order_value: data.order_value,
+            event_time: data.redeemed_at,
+            integration_type: 'uniqodo',
           }),
         ),
       },

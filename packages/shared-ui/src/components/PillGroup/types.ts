@@ -6,7 +6,7 @@ export type PillGroupProps = {
 
 // This might need to be adapt in future when we know the result coming from the API
 export interface PillProps {
-  id: number;
+  id: number | string;
   label: string;
   selected: boolean;
 }

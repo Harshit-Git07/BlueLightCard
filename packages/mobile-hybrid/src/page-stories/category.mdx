@@ -1,0 +1,69 @@
+import { Canvas, Controls, Meta, Story, DocsContext } from '@storybook/blocks';
+import { AmplitudeEvents } from '@bluelightcard/shared-ui';
+import ComponentStatus from '@bluelightcard/shared-ui/storybook-config/blocks/ComponentStatus';
+import FigmaEmbed from '@bluelightcard/shared-ui/storybook-config/blocks/FigmaEmbed';
+import * as Category from './category.stories';
+
+<Meta title="Pages/Category" of={Category} />
+
+# Category
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Analytics](#analytics)
+- [Design](#design)
+
+## Status
+
+<ComponentStatus />
+
+## Overview
+
+- This page renders the content for a single category on the path of `/category?id=[categoryId]`
+- The page includes different visual states for: loading, error, and success
+- The page is responsive and will scale to fit mobile, tablet, and desktop
+- The page is accessible so each offer in the list can be focused and read by screen readers
+- The page is tokenised according to the design system
+
+## Props
+
+<Controls />
+
+## State
+
+The page uses Suspense and React Query to manage all of the data fetching and related state. It manages no specific state of its own.
+
+## Analytics
+
+The page logs two analytics events to Amplitude:
+
+- <code>{AmplitudeEvents.CATEGORY.PAGE_VIEWED}</code> is logged once after the page has successfully
+  loaded data
+- <code>{AmplitudeEvents.CATEGORY.CARD_CLICKED}</code> is logged every time a user clicks on an offer
+  card
+
+## Design
+
+<FigmaEmbed />
+
+## Variants
+
+List of variants can be shown below here.
+
+### Success
+
+<Canvas of={Category.Success} />
+
+### With Pagination
+
+<Canvas of={Category.WithPagination} />
+
+### Loading
+
+<Canvas of={Category.Loading} />
+
+### Error
+
+<Canvas of={Category.Error} />

@@ -1,8 +1,7 @@
 import BrowseCategories from '@/components/BrowseCategories/BrowseCategories';
 import InvokeNativeNavigation from '@/invoke/navigation';
-import BrowseCategoriesData from '@/data/BrowseCategories';
 import { NextPage } from 'next';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { faLocationDot, faTag } from '@fortawesome/pro-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
@@ -13,11 +12,13 @@ import { useRouter } from 'next/router';
 import useDeeplinkRedirect from '@/hooks/useDeeplinkRedirect';
 import Amplitude from '@/components/Amplitude/Amplitude';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { SimpleCategoryData, usePlatformAdapter } from '@bluelightcard/shared-ui';
 
 const navigation = new InvokeNativeNavigation();
 
 const SearchPage: NextPage = () => {
   const router = useRouter();
+  const platformAdapter = usePlatformAdapter();
   const setSpinner = useSetAtom(spinner);
 
   useDeeplinkRedirect();
@@ -28,15 +29,8 @@ const SearchPage: NextPage = () => {
     }
   }, [router.isReady, router.query?.deeplink, setSpinner]);
 
-  const browseCategories = useMemo(() => {
-    return BrowseCategoriesData.map((category) => ({
-      id: category.id,
-      text: category.text,
-    }));
-  }, []);
-
-  const onCategoryClick = (categoryId: number) => {
-    router.push(`/categories?category=${categoryId}`);
+  const onCategoryClick = (category: SimpleCategoryData) => {
+    platformAdapter.navigate(`/category?id=${category.id}`);
   };
 
   return (
@@ -72,8 +66,8 @@ const SearchPage: NextPage = () => {
           </Link>
         </Amplitude>
       </div>
-      <Amplitude keyName={FeatureFlags.SEARCH_START_PAGE_CATEGORIES_LINKS} value="on">
-        <BrowseCategories categories={browseCategories} onCategoryClick={onCategoryClick} />
+      <Amplitude keyName={FeatureFlags.MODERN_CATEGORIES_HYBRID} value="on">
+        <BrowseCategories onCategoryClick={onCategoryClick} />
       </Amplitude>
     </div>
   );

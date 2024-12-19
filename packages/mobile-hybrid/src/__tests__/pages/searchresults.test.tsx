@@ -1,6 +1,7 @@
 import SearchResultsPage from '@/pages/searchresults';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { NextRouter } from 'next/router';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
@@ -10,12 +11,15 @@ import InvokeNativeAPICall from '@/invoke/apiCall';
 import { APIUrl, V5_API_URL } from '@/globals';
 import { FC, PropsWithChildren } from 'react';
 import Spinner from '@/modules/Spinner';
-import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
+import {
+  PlatformAdapterProvider,
+  categoriesMock,
+  useMockPlatformAdapter,
+} from '@bluelightcard/shared-ui';
 import { SearchResultsV5 } from '@/modules/SearchResults/types';
 import { searchResultV5Factory } from '@/modules/List/__mocks__/factory';
 import { userProfile } from '@/components/UserProfileProvider/store';
 
-jest.mock('@/invoke/apiCall');
 jest.mock('@/invoke/analytics');
 
 let searchValue = '';
@@ -47,29 +51,34 @@ jest.mock('swiper/css/pagination', () => jest.fn());
 jest.mock('swiper/css/navigation', () => jest.fn());
 
 describe('Search Results', () => {
-  const mockPlatformAdapter = useMockPlatformAdapter();
+  const mockPlatformAdapter = useMockPlatformAdapter(200, { data: categoriesMock });
 
   describe('Feature Flags', () => {
     it('should show browse categories when feature enabled', async () => {
       await whenPageIsRenderedWithFlags({
-        [FeatureFlags.SEARCH_RESULTS_PAGE_CATEGORIES_LINKS]: 'on',
+        [FeatureFlags.MODERN_CATEGORIES_HYBRID]: 'on',
       });
 
-      expect(screen.queryByText('Browse Categories')).toBeInTheDocument();
+      const categoryName = await screen.findByText(categoriesMock[0].name);
+      expect(categoryName).toBeInTheDocument();
     });
 
     it('should not show browse categories when feature disabled', async () => {
       await whenPageIsRenderedWithFlags({
-        [FeatureFlags.SEARCH_RESULTS_PAGE_CATEGORIES_LINKS]: 'off',
+        [FeatureFlags.MODERN_CATEGORIES_HYBRID]: 'off',
       });
 
-      expect(screen.queryByText('Browse Categories')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByText('Browse Categories')).not.toBeInTheDocument();
+      });
     });
 
     it('should not show browse categories when feature flag not found', async () => {
       await whenPageIsRenderedWithFlags({});
 
-      expect(screen.queryByText('Browse Categories')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByText('Browse Categories')).not.toBeInTheDocument();
+      });
     });
   });
 
@@ -171,23 +180,25 @@ describe('Search Results', () => {
   ) => {
     await act(() =>
       render(
-        <PlatformAdapterProvider adapter={platformAdapter}>
-          <RouterContext.Provider value={mockRouter as NextRouter}>
-            <JotaiTestProvider
-              initialValues={[
-                [experimentsAndFeatureFlags, featureFlags],
-                [
-                  userProfile,
-                  { service: 'test-organisation', isAgeGated: true, dob: '1990-01-01' },
-                ],
-              ]}
-            >
-              <WithSpinner>
-                <SearchResultsPage />
-              </WithSpinner>
-            </JotaiTestProvider>
-          </RouterContext.Provider>
-        </PlatformAdapterProvider>,
+        <QueryClientProvider client={new QueryClient()}>
+          <PlatformAdapterProvider adapter={platformAdapter}>
+            <RouterContext.Provider value={mockRouter as NextRouter}>
+              <JotaiTestProvider
+                initialValues={[
+                  [experimentsAndFeatureFlags, featureFlags],
+                  [
+                    userProfile,
+                    { service: 'test-organisation', isAgeGated: true, dob: '1990-01-01' },
+                  ],
+                ]}
+              >
+                <WithSpinner>
+                  <SearchResultsPage />
+                </WithSpinner>
+              </JotaiTestProvider>
+            </RouterContext.Provider>
+          </PlatformAdapterProvider>
+        </QueryClientProvider>,
       ),
     );
   };

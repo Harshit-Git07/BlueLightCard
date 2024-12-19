@@ -37,7 +37,7 @@ Default.args = {};
 const CategoriesLinkFeatureTemplate: StoryFn<typeof SearchResultsPage> = (args) => {
   const setExperimentsAndFeatureFlags = useSetAtom(experimentsAndFeatureFlags);
   useEffect(() => {
-    setExperimentsAndFeatureFlags({ [FeatureFlags.SEARCH_RESULTS_PAGE_CATEGORIES_LINKS]: 'on' });
+    setExperimentsAndFeatureFlags({ [FeatureFlags.MODERN_CATEGORIES_HYBRID]: 'on' });
   }, [setExperimentsAndFeatureFlags]);
 
   return <SearchResultsPage {...args} />;

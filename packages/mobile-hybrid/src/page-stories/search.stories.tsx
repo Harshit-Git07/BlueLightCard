@@ -54,7 +54,7 @@ SearchForBrandsLinkEnabled.args = {};
 const CategoriesLinksFeatureTemplate: StoryFn<typeof SearchPage> = (args) => {
   const setExperimentsAndFeatureFlags = useSetAtom(experimentsAndFeatureFlags);
   useEffect(() => {
-    setExperimentsAndFeatureFlags({ [FeatureFlags.SEARCH_START_PAGE_CATEGORIES_LINKS]: 'on' });
+    setExperimentsAndFeatureFlags({ [FeatureFlags.MODERN_CATEGORIES_HYBRID]: 'on' });
   }, [setExperimentsAndFeatureFlags]);
 
   return <SearchPage {...args} />;
@@ -67,7 +67,7 @@ const AllFeaturesTemplate: StoryFn<typeof SearchPage> = (args) => {
   const setExperimentsAndFeatureFlags = useSetAtom(experimentsAndFeatureFlags);
   useEffect(() => {
     setExperimentsAndFeatureFlags({
-      [FeatureFlags.SEARCH_START_PAGE_CATEGORIES_LINKS]: 'on',
+      [FeatureFlags.MODERN_CATEGORIES_HYBRID]: 'on',
       [FeatureFlags.SEARCH_START_PAGE_BRANDS_LINK]: 'on',
       [FeatureFlags.SEARCH_START_PAGE_OFFERS_NEAR_YOU_LINK]: 'on',
     });

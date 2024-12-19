@@ -36,7 +36,9 @@ export async function withClientSidePagination<RawDataType, PaginatedDataType>(
 ) {
   // If paginated data already exists in the cache, return it
   const cachedData = queryClient.getQueryData(queryKey);
-  if (cachedData) return cachedData as PaginatedDataType;
+  if (cachedData) {
+    return cachedData as PaginatedDataType;
+  }
 
   // Execute query and build cache
   const response = await queryFn();

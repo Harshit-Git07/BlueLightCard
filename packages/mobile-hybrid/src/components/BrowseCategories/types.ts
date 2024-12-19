@@ -1,9 +1,5 @@
-export interface BrowseCategoriesProps {
-  categories: Category[];
-  onCategoryClick: (data: number) => void;
-}
+import type { SimpleCategoryData } from '@bluelightcard/shared-ui';
 
-export interface Category {
-  id: number;
-  text: string;
+export interface BrowseCategoriesProps {
+  onCategoryClick: (category: SimpleCategoryData) => void;
 }

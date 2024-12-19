@@ -200,7 +200,7 @@ export const TokenisedSearch: NextPage = () => {
     'control'
   );
 
-  const changeCategoryHandler = (category: { id: number; label: string }) => {
+  const changeCategoryHandler = (category: { id: number | string; label: string }) => {
     if (!category) return;
     onSearchCategoryChange(category.id.toString(), category.label);
   };

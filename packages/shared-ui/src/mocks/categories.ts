@@ -1,4 +1,11 @@
-import type { CategoryData } from '../types';
+import type { CategoriesData, CategoryData } from '../types';
+
+export const categoriesMock: CategoriesData = [
+  {
+    id: 'category1',
+    name: 'Fashion',
+  },
+];
 
 export const categoryMock: CategoryData = {
   id: 'category1',

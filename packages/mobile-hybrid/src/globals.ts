@@ -1,4 +1,5 @@
 export const PAGE_SIZE = 20;
+export const CATEGORY_PAGE_SIZE = 10;
 
 export enum Channels {
   API_RESPONSE = 'nativeAPIResponse',
@@ -23,6 +24,7 @@ export const NAVIGATE_NEWS_URL =
     : '/bluelightcardnewsdetails.php';
 
 export const V5_API_URL = {
+  Categories: `/${V5_REGION}/discovery/categories`,
   Search: `/${V5_REGION}/discovery/search`,
   CampaignEvents: `/${V5_REGION}/discovery/campaigns`,
   User: `/${V5_REGION}/identity/user`,

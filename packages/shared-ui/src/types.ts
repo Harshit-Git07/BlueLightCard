@@ -86,11 +86,16 @@ export type FlexibleOfferData = {
   offers: Offer[];
 };
 
-export type CategoryData = {
+export type SimpleCategoryData = {
   id: string;
   name: string;
+};
+
+export type CategoryData = SimpleCategoryData & {
   data: Offer[];
 };
+
+export type CategoriesData = SimpleCategoryData[];
 
 export type PaginatedCategoryData = CategoryData & PaginatedData;
 

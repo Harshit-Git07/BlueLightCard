@@ -1,13 +1,12 @@
 export enum FeatureFlags {
-  SEARCH_RESULTS_PAGE_CATEGORIES_LINKS = 'search-results-page-categories-links',
   SEARCH_START_PAGE_BRANDS_LINK = 'search-start-page-brands-link',
-  SEARCH_START_PAGE_CATEGORIES_LINKS = 'search-start-page-categories-links',
   SEARCH_START_PAGE_OFFERS_NEAR_YOU_LINK = 'search-start-page-offers-near-you-link',
   SEARCH_RECENT_SEARCHES = 'search-recent-searches',
   V5_API_INTEGRATION = 'v5-api-integration',
   CMS_OFFERS = 'cms-offers',
   SEARCH_V5_ENABLED = 'search_v5',
   MODERN_FLEXI_MENU_HYBRID = 'modern-flexi-menu-hybrid',
+  MODERN_CATEGORIES_HYBRID = 'modern-category-pages-hybrid',
 }
 
 export enum Experiments {

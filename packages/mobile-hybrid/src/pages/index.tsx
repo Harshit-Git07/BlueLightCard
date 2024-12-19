@@ -12,7 +12,7 @@ import CampaignBanner from '@/components/CampaignBanner';
 import type { CampaignEvent } from '@/components/CampaignBanner/types';
 import PromoBanner from '@/modules/promobanner';
 import InvokeNativeNavigation from '@/invoke/navigation';
-import { SearchBar, usePlatformAdapter } from '@bluelightcard/shared-ui';
+import { Button, SearchBar, usePlatformAdapter } from '@bluelightcard/shared-ui';
 import PopularBrandsSlider from '@/modules/popularbrands';
 import { useOnResume } from '@/hooks/useAppLifecycle';
 import { APIUrl, BRAND } from '@/globals';

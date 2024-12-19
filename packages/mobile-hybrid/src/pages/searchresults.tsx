@@ -1,16 +1,16 @@
 import { useSetAtom } from 'jotai';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import SearchResults from '@/modules/SearchResults';
 import BrowseCategories from '@/components/BrowseCategories/BrowseCategories';
-import BrowseCategoriesData from '@/data/BrowseCategories';
 import SearchModule from '@/modules/search';
 import Amplitude from '@/components/Amplitude/Amplitude';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { spinner } from '@/modules/Spinner/store';
 import useSearch from '@/hooks/useSearch';
 import { usePlatformAdapter } from '../../../shared-ui/src/adapters';
+import { SimpleCategoryData } from '@bluelightcard/shared-ui/types';
 
 const SearchResultsPage: NextPage = () => {
   const router = useRouter();
@@ -18,17 +18,10 @@ const SearchResultsPage: NextPage = () => {
   const setSpinner = useSetAtom(spinner);
 
   const platformAdapter = usePlatformAdapter();
-  const { doSearch } = useSearch(platformAdapter);
+  const { doSearch, searchResults, status } = useSearch(platformAdapter);
 
-  const browseCategories = useMemo(() => {
-    return BrowseCategoriesData.map((category) => ({
-      id: category.id,
-      text: category.text,
-    }));
-  }, []);
-
-  const onCategoryClick = (categoryId: number) => {
-    router.push(`/categories?category=${categoryId}`);
+  const onCategoryClick = (category: SimpleCategoryData) => {
+    platformAdapter.navigate(`/category?id=${category.id}`);
   };
 
   useEffect(() => {
@@ -47,8 +40,9 @@ const SearchResultsPage: NextPage = () => {
     <div>
       <SearchModule placeholder="Search for an offer" />
       <SearchResults />
-      <Amplitude keyName={FeatureFlags.SEARCH_RESULTS_PAGE_CATEGORIES_LINKS} value="on">
-        <BrowseCategories categories={browseCategories} onCategoryClick={onCategoryClick} />
+
+      <Amplitude keyName={FeatureFlags.MODERN_CATEGORIES_HYBRID} value="on">
+        <BrowseCategories onCategoryClick={onCategoryClick} />
       </Amplitude>
     </div>
   );

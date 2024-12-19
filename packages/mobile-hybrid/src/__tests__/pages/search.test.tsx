@@ -1,6 +1,7 @@
 import { NextRouter } from 'next/router';
 import { render, screen } from '@testing-library/react';
 import SearchPage from '@/pages/search';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
@@ -8,8 +9,9 @@ import '@testing-library/jest-dom/extend-expect';
 import {
   IPlatformAdapter,
   PlatformAdapterProvider,
+  categoriesMock,
   useMockPlatformAdapter,
-} from '../../../../shared-ui/src/adapters';
+} from '@bluelightcard/shared-ui';
 
 let mockRouter: Partial<NextRouter>;
 
@@ -124,19 +126,20 @@ describe('Search', () => {
   });
 
   describe('Categories links', () => {
-    it('should show categories links when feature enabled', () => {
-      const mockPlatformAdapter = useMockPlatformAdapter();
+    it('should show categories links when feature enabled', async () => {
+      const mockPlatformAdapter = useMockPlatformAdapter(200, { data: categoriesMock });
       whenSearchPageIsRenderedWithFlags(mockPlatformAdapter, {
-        [FeatureFlags.SEARCH_START_PAGE_CATEGORIES_LINKS]: 'on',
+        [FeatureFlags.MODERN_CATEGORIES_HYBRID]: 'on',
       });
 
-      expect(screen.queryByText('Browse Categories')).toBeInTheDocument();
+      const categoryName = await screen.findByText(categoriesMock[0].name);
+      expect(categoryName).toBeInTheDocument();
     });
 
     it('should not show categories links when feature disabled', () => {
       const mockPlatformAdapter = useMockPlatformAdapter();
       whenSearchPageIsRenderedWithFlags(mockPlatformAdapter, {
-        [FeatureFlags.SEARCH_START_PAGE_CATEGORIES_LINKS]: 'off',
+        [FeatureFlags.MODERN_CATEGORIES_HYBRID]: 'off',
       });
 
       expect(screen.queryByText('Browse Categories')).not.toBeInTheDocument();
@@ -202,11 +205,13 @@ const whenSearchPageIsRenderedWithFlags = (
   featureFlags: any,
 ) => {
   render(
-    <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-      <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
-        <SearchPage />
-      </JotaiTestProvider>
-      ,
-    </PlatformAdapterProvider>,
+    <QueryClientProvider client={new QueryClient()}>
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <JotaiTestProvider initialValues={[[experimentsAndFeatureFlags, featureFlags]]}>
+          <SearchPage />
+        </JotaiTestProvider>
+        ,
+      </PlatformAdapterProvider>
+    </QueryClientProvider>,
   );
 };

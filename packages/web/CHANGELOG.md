@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.103.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.102.0...bluelightcard/web-v1.103.0) (2024-12-19)
+
+
+### Features
+
+* [MAMA] - Added feature-flag url-redirect for My Account and added sidebar toggle for modern Authed Navbar ([#3488](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3488)) ([46bb9c5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/46bb9c5849949f76291c0284e8de36fea17dabb2))
+* Update get member profile request with auth ([#3469](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3469)) ([4edbfc1](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4edbfc1791c4954f73512ea9c08a1e6e00d767f8))
+
 ## [1.102.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.101.0...bluelightcard/web-v1.102.0) (2024-12-19)
 
 

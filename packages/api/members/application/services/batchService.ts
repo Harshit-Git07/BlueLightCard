@@ -3,6 +3,8 @@ import { logger } from '@blc-mono/members/application/middleware';
 import {
   CreateBatchModel,
   UpdateBatchModel,
+  ExtendedBatchModel,
+  BatchModel,
 } from '@blc-mono/members/application/models/batchModel';
 import { BatchEntryModel } from '@blc-mono/members/application/models/batchEntryModel';
 import { CardModel } from '@blc-mono/members/application/models/cardModel';
@@ -79,46 +81,131 @@ export class BatchService {
     }
   }
 
+  private async getValidCards(cards: string[]): Promise<CardModel[]> {
+    const parsedCards: CardModel[] = await Promise.all(
+      cards.map((cardId) => this.cardService.getCardById(cardId)),
+    );
+
+    const areCardsValidForBatch = await Promise.all(
+      parsedCards.map((card) => this.cardIsValidForBatch(card)),
+    );
+
+    const validCards = parsedCards.filter((_, index) => areCardsValidForBatch[index]);
+
+    return validCards;
+  }
+
+  private async processValidCards(batchId: string, validCards: CardModel[]): Promise<void> {
+    for (const card of validCards) {
+      const [profile, application] = await this.getProfileAndApplication(card);
+
+      if (application) {
+        const batchEntryAttributes: BatchEntryModel = BatchEntryModel.parse({
+          batchId: batchId,
+          cardNumber: card.cardNumber,
+          memberId: card.memberId,
+          applicationId: application.applicationId,
+        });
+
+        await this.repository.createBatchEntry(batchEntryAttributes);
+
+        await this.cardService.updateCard(card.memberId, card.cardNumber, {
+          cardStatus: CardStatus.ADDED_TO_BATCH,
+        });
+      }
+    }
+  }
+
   async createInternalBatch(
     name: string,
     cards: string[],
   ): Promise<CreateInternalBatchModelResponse> {
     try {
       logger.debug({ message: 'Creating internal batch' });
-      const parsedCards: CardModel[] = await Promise.all(
-        cards.map((cardId) => this.cardService.getCardById(cardId)),
-      );
-      const areCardsValidForBatch = await Promise.all(
-        parsedCards.map((card) => this.cardIsValidForBatch(card)),
-      );
-      const validCards = parsedCards.filter((_, index) => areCardsValidForBatch[index]);
+      const validCards = await this.getValidCards(cards);
 
       const batchAttributes: CreateBatchModel = CreateBatchModel.parse({
-        name: name,
+        name,
         type: BatchType.INTERNAL,
         count: validCards.length,
       });
+
       const batchId = await this.repository.createBatch(batchAttributes);
 
-      for (const card of validCards) {
-        let [profile, application] = await this.getProfileAndApplication(card);
-        if (application) {
-          const batchAttributes: BatchEntryModel = BatchEntryModel.parse({
-            batchId: batchId,
-            cardNumber: card.cardNumber,
-            memberId: card.memberId,
-            applicationId: application.applicationId,
-          });
-          await this.repository.createBatchEntry(batchAttributes);
+      await this.processValidCards(batchId, validCards);
 
-          await this.cardService.updateCard(card.memberId, card.cardNumber, {
-            cardStatus: CardStatus.ADDED_TO_BATCH,
-          });
-        }
-      }
       return { batchId };
     } catch (error) {
       logger.error({ message: 'Error creating internal batch', error });
+      throw error;
+    }
+  }
+
+  async updateInternalBatch(
+    batchId: string,
+    cards: string[],
+  ): Promise<CreateInternalBatchModelResponse> {
+    try {
+      logger.debug({ message: 'Updating internal batch' });
+
+      const validCards = await this.getValidCards(cards);
+
+      await this.processValidCards(batchId, validCards);
+
+      return { batchId };
+    } catch (error) {
+      logger.error({ message: 'Error updating internal batch', error });
+      throw error;
+    }
+  }
+
+  async getCardsProcessedByBatchId(batchId: string): Promise<number> {
+    try {
+      logger.debug({ message: 'Getting cards processed by batch ID' });
+      const batchEntries = await this.getBatchEntries(batchId);
+      let processed = 0;
+      for (const batch of batchEntries) {
+        const card = await this.cardService.getCard(batch.memberId, batch.cardNumber);
+        if (card.cardStatus === CardStatus.PHYSICAL_CARD) {
+          processed++;
+        }
+      }
+      return processed;
+    } catch (error) {
+      logger.error({ message: 'Error finding cards processed by batch ID', error });
+      throw error;
+    }
+  }
+
+  async getBatches(): Promise<ExtendedBatchModel[]> {
+    try {
+      logger.debug({ message: 'Getting all batches' });
+      const batches = await this.repository.getBatches();
+      const extendedBatches = await Promise.all(
+        batches.map(async (batch) => ({
+          ...batch,
+          processed: await this.getCardsProcessedByBatchId(batch.batchId),
+        })),
+      );
+
+      return extendedBatches;
+    } catch (error) {
+      logger.error({ message: 'Error finding any batch', error });
+      throw error;
+    }
+  }
+
+  async openInternalBatches(): Promise<BatchModel[]> {
+    try {
+      logger.debug({ message: 'Getting all internal open batches' });
+      const batches = await this.repository.getBatches();
+      const filteredBatches = batches.filter(
+        (batch) => batch.status === BatchStatus.BATCH_OPEN && batch.type === BatchType.INTERNAL,
+      );
+
+      return filteredBatches;
+    } catch (error) {
+      logger.error({ message: 'Error finding any batch', error });
       throw error;
     }
   }

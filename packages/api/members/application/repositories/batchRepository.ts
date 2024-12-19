@@ -1,4 +1,9 @@
-import { DynamoDBDocumentClient, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
+import {
+  DynamoDBDocumentClient,
+  PutCommand,
+  QueryCommand,
+  QueryCommandInput,
+} from '@aws-sdk/lib-dynamodb';
 import { defaultDynamoDbClient } from '@blc-mono/members/application/repositories/dynamoClient';
 import { Table } from 'sst/node/table';
 import {
@@ -11,10 +16,12 @@ import {
 import {
   CreateBatchModel,
   UpdateBatchModel,
+  BatchModel,
 } from '@blc-mono/members/application/models/batchModel';
 import { v4 as uuidv4 } from 'uuid';
 import { BatchStatus } from '@blc-mono/members/application/models/enums/BatchStatus';
 import { BatchEntryModel } from '@blc-mono/members/application/models/batchEntryModel';
+import { NotFoundError } from '../errors/NotFoundError';
 
 export class BatchRepository extends Repository {
   constructor(
@@ -84,5 +91,24 @@ export class BatchRepository extends Repository {
     }
 
     return result.Items.map((employer) => BatchEntryModel.parse(employer));
+  }
+
+  async getBatches(): Promise<BatchModel[]> {
+    const params: QueryCommandInput = {
+      TableName: this.tableName,
+      IndexName: 'gsi1',
+      KeyConditionExpression: 'sk = :sk',
+      ExpressionAttributeValues: {
+        ':sk': BATCH,
+      },
+    };
+
+    const result = await this.dynamoDB.send(new QueryCommand(params));
+
+    if (!result.Items || result.Items.length === 0) {
+      throw new NotFoundError('No batch found');
+    }
+
+    return result.Items.map((batch) => BatchModel.parse(batch));
   }
 }

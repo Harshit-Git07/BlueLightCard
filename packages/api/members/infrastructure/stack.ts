@@ -270,7 +270,7 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
     }),
     ...adminBatchRoutes({
       ...defaultRouteProps,
-      bind: [profilesTable, adminTable],
+      bind: [profilesTable, adminTable, organisationsTable],
     }),
     ...adminPaymentRoutes({
       ...defaultRouteProps,

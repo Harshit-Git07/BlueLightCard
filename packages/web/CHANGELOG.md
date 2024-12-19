@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.102.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.101.0...bluelightcard/web-v1.102.0) (2024-12-19)
+
+
+### Features
+
+* DISCO-771 Hybrid CMS Categories ([#3441](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3441)) ([fbf478d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fbf478d3acd573db267dda8dc63fe2bb8fe9773c))
+
 ## [1.101.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.100.0...bluelightcard/web-v1.101.0) (2024-12-19)
 
 

@@ -55,6 +55,7 @@ export type MemberRedemptionParams = MemberRedemptionBaseParams &
         integration?: never;
         integrationId?: never;
         vaultId?: never;
+        ballotId?: never;
       }
     | {
         redemptionType: typeof VAULT | typeof VAULTQR;
@@ -62,19 +63,23 @@ export type MemberRedemptionParams = MemberRedemptionBaseParams &
         integration: string | null | undefined;
         integrationId: string | null | undefined;
         vaultId: string | null | undefined;
+        ballotId?: never;
       }
     | {
-        redemptionType:
-          | typeof GIFTCARD
-          | typeof PREAPPLIED
-          | typeof SHOWCARD
-          | typeof BALLOT
-          | typeof COMPARE
-          | typeof VERIFY;
+        redemptionType: typeof BALLOT;
+        ballotId: string | null | undefined;
         code?: never;
         integration?: never;
         integrationId?: never;
         vaultId?: never;
+      }
+    | {
+        redemptionType: typeof GIFTCARD | typeof PREAPPLIED | typeof SHOWCARD | typeof COMPARE | typeof VERIFY;
+        code?: never;
+        integration?: never;
+        integrationId?: never;
+        vaultId?: never;
+        ballotId?: never;
       }
   );
 
@@ -122,6 +127,7 @@ export class MemberRedemptionParamsDto {
         return new MemberRedemptionParamsDto({
           ...baseParams,
           redemptionType: redemptionDetails.redemptionType,
+          ballotId: redemptionDetails.ballotDetails?.id,
         });
       default:
         exhaustiveCheck(redemptionDetails, 'Unhandled redemption type');

@@ -2,11 +2,12 @@ import { faker } from '@faker-js/faker';
 
 import { MemberRedemptionEventDetail } from '@blc-mono/core/schemas/redemptions';
 import { RedemptionConfigEntity } from '@blc-mono/redemptions/application/repositories/RedemptionConfigRepository';
+import { ballotDetailsFactory } from '@blc-mono/redemptions/libs/test/factories/ballotDetails.factory';
 import { redeemParamsFactory } from '@blc-mono/redemptions/libs/test/factories/redeemParams.factory';
 import { redemptionConfigEntityFactory } from '@blc-mono/redemptions/libs/test/factories/redemptionConfigEntity.factory';
 import { vaultDetailsFactory } from '@blc-mono/redemptions/libs/test/factories/vaultDetails.factory';
 
-import { RedeemParams, VaultDetails } from './IRedeemStrategy';
+import { BallotDetails, RedeemParams, VaultDetails } from './IRedeemStrategy';
 import { MemberRedemptionEventDetailBuilder } from './MemberRedemptionEventDetailBuilder';
 
 const memberRedemptionEventDetailBuilder: MemberRedemptionEventDetailBuilder = new MemberRedemptionEventDetailBuilder();
@@ -15,6 +16,7 @@ const params: RedeemParams = redeemParamsFactory.build();
 const url: string = faker.internet.url();
 const code: string = faker.string.alphanumeric(10);
 const vaultDetails: VaultDetails = vaultDetailsFactory.build();
+const ballotDetails: BallotDetails = ballotDetailsFactory.build();
 
 describe('buildMemberRedemptionEventDetail', () => {
   it('throws an error if redemptionType is vaultQR and there is no code', () => {
@@ -291,6 +293,7 @@ describe('buildMemberRedemptionEventDetail', () => {
       memberRedemptionEventDetailBuilder.buildMemberRedemptionEventDetail({
         redemptionConfigEntity,
         params,
+        ballotDetails,
       });
 
     const expectedMemberRedemptionEventDetail: MemberRedemptionEventDetail = {
@@ -308,6 +311,13 @@ describe('buildMemberRedemptionEventDetail', () => {
         offerName: params.offerName,
         affiliate: redemptionConfigEntity.affiliate,
         clientType: params.clientType,
+        ballotDetails: {
+          id: ballotDetails.id,
+          drawDate: ballotDetails.drawDate.toISOString(),
+          eventDate: ballotDetails.eventDate.toISOString(),
+          totalTickets: ballotDetails.totalTickets,
+          offerName: ballotDetails.offerName,
+        },
       },
     };
 

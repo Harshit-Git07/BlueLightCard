@@ -45,10 +45,16 @@ export class MemberRedemptionEventDetailBuilder {
         memberRedemptionEventDetail = {
           memberDetails,
           redemptionDetails: {
+            ...baseRedemptionDetails,
             redemptionType: 'ballot',
             url: url ?? '',
-            ...baseRedemptionDetails,
-            ...ballotDetails,
+            ballotDetails: {
+              id: ballotDetails?.id ?? '',
+              offerName: ballotDetails?.offerName ?? '',
+              totalTickets: ballotDetails?.totalTickets ?? 0,
+              eventDate: ballotDetails?.eventDate.toISOString() ?? '',
+              drawDate: ballotDetails?.drawDate.toISOString() ?? '',
+            },
           },
         };
         return memberRedemptionEventDetail;

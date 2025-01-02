@@ -51,6 +51,7 @@ export type RedeemShowCardStrategyResult = {
 };
 
 export type BallotDetails = {
+  id: string;
   drawDate: Date;
   eventDate: Date;
   totalTickets: number;

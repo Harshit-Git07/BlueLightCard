@@ -149,6 +149,7 @@ export class DwhRepository implements IDwhRepository {
             integration: dto.data.integration,
             integration_id: dto.data.integrationId,
             origin: 'new stack',
+            ballot_id: dto.data.ballotId,
           }),
         ),
       },

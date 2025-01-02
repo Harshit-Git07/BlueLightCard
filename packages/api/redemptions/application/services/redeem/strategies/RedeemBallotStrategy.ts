@@ -101,6 +101,7 @@ export class RedeemBallotStrategy implements IRedeemStrategy {
         redemptionConfigEntity,
         params,
         ballotDetails: {
+          id: ballot.id,
           drawDate: ballot.drawDate,
           eventDate: ballot.eventDate,
           totalTickets: ballot.totalTickets,
@@ -120,6 +121,7 @@ export class RedeemBallotStrategy implements IRedeemStrategy {
       redemptionType: 'ballot',
       redemptionDetails: {
         ballotDetails: {
+          id: ballot.id,
           drawDate: ballot.drawDate,
           eventDate: ballot.eventDate,
           totalTickets: ballot.totalTickets,

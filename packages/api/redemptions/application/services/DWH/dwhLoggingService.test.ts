@@ -256,5 +256,35 @@ describe('DwhLoggingService', () => {
         expect(dto.data.eventTime).toBe(event.time);
       },
     );
+
+    it('allows creation of a DTO from a ballot redemption event', () => {
+      process.env.BRAND = 'BLC_UK';
+
+      const event = memberRedemptionEventFactory.build({
+        detail: {
+          redemptionDetails: {
+            redemptionType: 'ballot',
+            ballotDetails: {
+              id: '123',
+              totalTickets: 1,
+              eventDate: '2024-01-01',
+              drawDate: '2024-01-01',
+              offerName: 'Test Offer',
+            },
+          },
+        },
+      });
+      const dto = MemberRedemptionParamsDto.fromMemberRedemptionEvent(event);
+
+      const redemptionDetails = event.detail.redemptionDetails;
+      expect(dto.data.redemptionType).toBe('ballot');
+      expect(dto.data.clientType).toBe(redemptionDetails.clientType);
+      expect(dto.data.companyId).toBe(redemptionDetails.companyId);
+      expect(dto.data.offerId).toBe(redemptionDetails.offerId);
+      expect(dto.data.memberId).toBe(event.detail.memberDetails.memberId);
+      expect(dto.data.brand).toBe(process.env.BRAND);
+      expect(dto.data.eventTime).toBe(event.time);
+      expect(dto.data.ballotId).toBe('123');
+    });
   });
 });

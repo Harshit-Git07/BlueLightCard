@@ -625,7 +625,15 @@ describe('POST /member/redeem', () => {
       data: {
         kind: 'Ok',
         redemptionType: 'ballot',
-        redemptionDetails: {},
+        redemptionDetails: {
+          ballotDetails: {
+            eventDate: ballotTestHooks.ballot.eventDate.toISOString(),
+            drawDate: ballotTestHooks.ballot.drawDate.toISOString(),
+            id: ballotTestHooks.ballot.id,
+            offerName: ballotTestHooks.ballot.offerName,
+            totalTickets: ballotTestHooks.ballot.totalTickets,
+          },
+        },
       },
       statusCode: 200,
     });

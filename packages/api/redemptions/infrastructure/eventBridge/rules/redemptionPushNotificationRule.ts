@@ -52,6 +52,8 @@ export function createRedemptionPushNotificationRule(stack: Stack, config: Redem
         config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionGiftCardPushNotificationCampaignId,
       [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VERIFY_PUSH_NOTIFICATION_CAMPAIGN_ID]:
         config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionVerifyPushNotificationCampaignId,
+      [RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_BALLOT_PUSH_NOTIFICATION_CAMPAIGN_ID]:
+        config.brazePushNotificationRedemptionCampaignsConfig.brazeRedemptionBallotPushNotificationCampaignId,
     },
     permissions: [getSecretValueSecretsManager],
   });

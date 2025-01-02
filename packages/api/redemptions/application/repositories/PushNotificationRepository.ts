@@ -29,7 +29,7 @@ export class PushNotificationRepository implements IPushNotificationRepository {
     preApplied: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_PRE_APPLIED_PUSH_NOTIFICATION_CAMPAIGN_ID),
     generic: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GENERIC_PUSH_NOTIFICATION_CAMPAIGN_ID),
     showCard: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID),
-    ballot: '',
+    ballot: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_BALLOT_PUSH_NOTIFICATION_CAMPAIGN_ID),
     giftCard: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID),
     compare: '',
     verify: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VERIFY_PUSH_NOTIFICATION_CAMPAIGN_ID),

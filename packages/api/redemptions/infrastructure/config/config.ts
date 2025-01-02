@@ -65,6 +65,7 @@ type BrazePushNotificationRedemptionCampaignsConfig = {
   brazeRedemptionShowCardPushNotificationCampaignId: string;
   brazeRedemptionGiftCardPushNotificationCampaignId: string;
   brazeRedemptionVerifyPushNotificationCampaignId: string;
+  brazeRedemptionBallotPushNotificationCampaignId: string;
 };
 
 type SESConfig = {
@@ -179,6 +180,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionShowCardPushNotificationCampaignId: '90df7afd-5d1d-48d5-a4a5-a71c9279c1d0',
           brazeRedemptionGiftCardPushNotificationCampaignId: '656a2dc3-7350-48cd-b492-eaa91c59e6e4',
           brazeRedemptionVerifyPushNotificationCampaignId: '62072665-5906-4bfd-b432-3e7bd15f1729',
+          brazeRedemptionBallotPushNotificationCampaignId: '',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
@@ -235,6 +237,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionShowCardPushNotificationCampaignId: 'a291d19f-6720-4975-8ca8-88bed8ad7783',
           brazeRedemptionGiftCardPushNotificationCampaignId: '3b5982f8-3f64-45ad-8796-98aa8b636e6c',
           brazeRedemptionVerifyPushNotificationCampaignId: '93f213a3-4ec5-418e-9334-95078fb3da27',
+          brazeRedemptionBallotPushNotificationCampaignId: '',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk', // Add email config per brand later
@@ -291,6 +294,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionShowCardPushNotificationCampaignId: '2fe74877-e587-4853-a66f-33a2e0cb6461',
           brazeRedemptionGiftCardPushNotificationCampaignId: 'd5cfc6f1-1059-42aa-820b-41ff706adead',
           brazeRedemptionVerifyPushNotificationCampaignId: '4f9a1882-3822-4021-bfea-33b41eb92471',
+          brazeRedemptionBallotPushNotificationCampaignId: '',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk', // Add email config per brand later
@@ -361,6 +365,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionShowCardPushNotificationCampaignId: '2ca64df5-3768-40bc-8ad6-2735b9e3de45',
           brazeRedemptionGiftCardPushNotificationCampaignId: '758714b3-8913-4ce7-aa76-16f82c835399',
           brazeRedemptionVerifyPushNotificationCampaignId: 'f0bafd20-3381-4cef-a2c8-68610274a823',
+          brazeRedemptionBallotPushNotificationCampaignId: '91e2e276-739a-4e93-b1c7-df9e7351259c',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
@@ -422,6 +427,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionShowCardPushNotificationCampaignId: 'af41d99b-4003-4344-a69d-2a403bb45090',
           brazeRedemptionGiftCardPushNotificationCampaignId: '4c63b04f-b707-4f26-9e93-94be58392980',
           brazeRedemptionVerifyPushNotificationCampaignId: '98a17573-6a3f-44ab-b509-824f3924087f',
+          brazeRedemptionBallotPushNotificationCampaignId: '',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk', // Add email config per brand later
@@ -482,6 +488,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionShowCardPushNotificationCampaignId: 'fca683b8-ceff-4663-9b9c-2d8a79553a82',
           brazeRedemptionGiftCardPushNotificationCampaignId: 'c218976e-4181-4fa0-8a8c-8ec06b5bb302',
           brazeRedemptionVerifyPushNotificationCampaignId: 'd48b793d-ab28-40df-a73f-58a69a790dbf',
+          brazeRedemptionBallotPushNotificationCampaignId: '',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk', // Add email config per brand later
@@ -544,6 +551,7 @@ export class RedemptionsStackConfigResolver {
         brazeRedemptionShowCardPushNotificationCampaignId: '2ca64df5-3768-40bc-8ad6-2735b9e3de45',
         brazeRedemptionGiftCardPushNotificationCampaignId: '758714b3-8913-4ce7-aa76-16f82c835399',
         brazeRedemptionVerifyPushNotificationCampaignId: 'f0bafd20-3381-4cef-a2c8-68610274a823',
+        brazeRedemptionBallotPushNotificationCampaignId: '91e2e276-739a-4e93-b1c7-df9e7351259c',
       },
       sesConfig: {
         redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
@@ -653,6 +661,9 @@ export class RedemptionsStackConfigResolver {
         brazeRedemptionVerifyPushNotificationCampaignId: getEnvOrDefault(
           RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VERIFY_PUSH_NOTIFICATION_CAMPAIGN_ID,
           'f0bafd20-3381-4cef-a2c8-68610274a823',
+        ),
+        brazeRedemptionBallotPushNotificationCampaignId: getEnv(
+          RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_BALLOT_PUSH_NOTIFICATION_CAMPAIGN_ID,
         ),
       },
       sesConfig: {

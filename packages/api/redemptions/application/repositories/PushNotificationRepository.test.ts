@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 import {
+  BALLOT,
   GENERIC,
   GIFTCARD,
   PREAPPLIED,
@@ -31,6 +32,7 @@ beforeEach(() => {
   process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID] =
     'giftCard_env_val';
   process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VERIFY_PUSH_NOTIFICATION_CAMPAIGN_ID] = 'verify_env_val';
+  process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_BALLOT_PUSH_NOTIFICATION_CAMPAIGN_ID] = 'ballot_env_val';
 });
 
 afterEach(() => {
@@ -42,6 +44,7 @@ afterEach(() => {
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_SHOW_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID];
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_GIFT_CARD_PUSH_NOTIFICATION_CAMPAIGN_ID];
   delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_VERIFY_PUSH_NOTIFICATION_CAMPAIGN_ID];
+  delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_REDEMPTION_BALLOT_PUSH_NOTIFICATION_CAMPAIGN_ID];
 });
 
 describe('PushNotificationRepository', () => {
@@ -57,6 +60,7 @@ describe('PushNotificationRepository', () => {
       [SHOWCARD, 'showCard_env_val'],
       [GIFTCARD, 'giftCard_env_val'],
       [VERIFY, 'verify_env_val'],
+      [BALLOT, 'ballot_env_val'],
     ])('should send push notification with redemptionType %s', async (redemptionType, campaignEnvVar) => {
       // Arrange
       const logger = createTestLogger();

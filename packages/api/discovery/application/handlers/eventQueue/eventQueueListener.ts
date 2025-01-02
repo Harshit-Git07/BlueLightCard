@@ -1,7 +1,9 @@
 import { Logger } from '@aws-lambda-powertools/logger';
 import {
   Company as SanityCompany,
+  Event as SanityEvent,
   MenuOffer as SanityMenuOffer,
+  MenuThemedEvent as SanityEventThemedMenu,
   MenuThemedOffer as SanityThemedMenu,
   Offer as SanityOffer,
   Site as SanitySite,
@@ -9,6 +11,14 @@ import {
 import { EventBridgeEvent, SQSEvent } from 'aws-lambda';
 
 import { handleCompanyUpdated } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/CompanyEventHandler';
+import {
+  handleEventMenuThemedDeleted,
+  handleEventMenuThemedUpdated,
+} from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/EventMenuThemedEventHandler';
+import {
+  handleEventOfferDeleted,
+  handleEventOfferUpdated,
+} from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/EventOfferEventHandler';
 import {
   handleOfferDeleted,
   handleOfferUpdated,
@@ -18,6 +28,8 @@ import {
   SanityCompanyLocationEventBody,
 } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyLocationToCompanyLocation';
 import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany';
+import { mapSanityEventThemedMenuToEventThemedMenu } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityEventThemedMenuToEventThemedMenu';
+import { mapSanityEventToEventOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityEventToEvent';
 import { mapSanityMenuOfferToMenuOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
 import { mapSanitySiteToSite } from '@blc-mono/discovery/helpers/sanityMappers/mapSanitySiteToSite';
@@ -40,6 +52,13 @@ const unwrappedHandler = async (event: SQSEvent) => {
         case Events.OFFER_CREATED:
         case Events.OFFER_UPDATED:
           await handleOfferUpdated(mapSanityOfferToOffer(body.detail as SanityOffer));
+          break;
+        case Events.EVENT_CREATED:
+        case Events.EVENT_UPDATED:
+          await handleEventOfferUpdated(mapSanityEventToEventOffer(body.detail as SanityEvent));
+          break;
+        case Events.EVENT_DELETED:
+          await handleEventOfferDeleted(mapSanityEventToEventOffer(body.detail as SanityEvent));
           break;
         case Events.OFFER_DELETED:
           await handleOfferDeleted(mapSanityOfferToOffer(body.detail as SanityOffer));
@@ -77,8 +96,21 @@ const unwrappedHandler = async (event: SQSEvent) => {
           await handleMenuThemedUpdated(mapSanityThemedMenuToThemedMenu(body.detail as SanityThemedMenu));
           break;
         }
+        case Events.MENU_THEMED_EVENT_CREATED:
+        case Events.MENU_THEMED_EVENT_UPDATED: {
+          await handleEventMenuThemedUpdated(
+            mapSanityEventThemedMenuToEventThemedMenu(body.detail as SanityEventThemedMenu),
+          );
+          break;
+        }
         case Events.MENU_THEMED_OFFER_DELETED: {
           await handleMenuThemedDeleted(mapSanityThemedMenuToThemedMenu(body.detail as SanityThemedMenu));
+          break;
+        }
+        case Events.MENU_THEMED_EVENT_DELETED: {
+          await handleEventMenuThemedDeleted(
+            mapSanityEventThemedMenuToEventThemedMenu(body.detail as SanityEventThemedMenu),
+          );
           break;
         }
         default:

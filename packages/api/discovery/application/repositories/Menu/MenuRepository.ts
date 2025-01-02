@@ -4,17 +4,22 @@ import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructur
 import { MenuType } from '../../models/MenuResponse';
 import { DynamoDBService } from '../../services/DynamoDbService';
 import { GSI1_NAME, GSI2_NAME, GSI3_NAME } from '../constants/DynamoDBConstants';
-import { MENU_PREFIX, OFFER_PREFIX, SUB_MENU_PREFIX } from '../constants/PrimaryKeyPrefixes';
+import { EVENT_PREFIX, MENU_PREFIX, OFFER_PREFIX, SUB_MENU_PREFIX } from '../constants/PrimaryKeyPrefixes';
 import {
   MenuEntity,
   MenuEntityWithOfferEntities,
   MenuEntityWithSubMenuEntities,
   MenuKeyBuilders,
 } from '../schemas/MenuEntity';
-import { MenuOfferEntity, MenuOfferKeyBuilders } from '../schemas/MenuOfferEntity';
+import {
+  MenuEventEntity,
+  MenuEventKeyBuilders,
+  MenuOfferEntity,
+  MenuOfferKeyBuilders,
+} from '../schemas/MenuOfferEntity';
 import { SubMenuEntity, SubMenuEntityWithOfferEntities } from '../schemas/SubMenuEntity';
 
-type MenuRepositoryEntity = MenuEntity | MenuOfferEntity | SubMenuEntity;
+type MenuRepositoryEntity = MenuEntity | MenuOfferEntity | SubMenuEntity | MenuEventEntity;
 
 export class MenuRepository {
   private readonly tableName: string;
@@ -31,6 +36,7 @@ export class MenuRepository {
   }
 
   async batchInsert(items: MenuRepositoryEntity[]): Promise<void> {
+    // @ts-expect-error Typescript doesn't like the nested venue object as its not a top level type on MenuOfferEntity
     await DynamoDBService.batchInsert(items, this.tableName);
   }
 
@@ -143,7 +149,7 @@ export class MenuRepository {
       },
       IndexName: GSI2_NAME,
       TableName: this.tableName,
-    })) as (SubMenuEntity | MenuOfferEntity)[];
+    })) as (SubMenuEntity | MenuOfferEntity | MenuEventEntity)[];
     if (!subMenuWithOffers || subMenuWithOffers.length === 0) {
       return undefined;
     }
@@ -214,6 +220,18 @@ export class MenuRepository {
     })) as MenuOfferEntity[];
   }
 
+  async getEventInMenusByEventId(eventId: string): Promise<MenuEventEntity[]> {
+    return (await DynamoDBService.query({
+      TableName: this.tableName,
+      KeyConditionExpression: 'gsi3PartitionKey = :event_id and begins_with(gsi3SortKey, :menu_prefix)',
+      IndexName: GSI3_NAME,
+      ExpressionAttributeValues: {
+        ':event_id': MenuEventKeyBuilders.buildGsi3PartitionKey(eventId),
+        ':menu_prefix': MENU_PREFIX,
+      },
+    })) as MenuEventEntity[];
+  }
+
   async updateMenuOffer(menuOfferEntity: MenuOfferEntity): Promise<void> {
     await DynamoDBService.put({
       TableName: this.tableName,
@@ -274,10 +292,10 @@ export const groupMenusWithTopLevelData = (
 };
 
 export const groupThemedMenuWithOffers = (
-  themedMenuWithOffers: (SubMenuEntity | MenuOfferEntity)[],
+  themedMenuWithOffers: (SubMenuEntity | MenuOfferEntity | MenuEventEntity)[],
 ): SubMenuEntityWithOfferEntities[] => {
   const menuAndOffersGrouped = {} as {
-    [gsi2PartitionKey: string]: { subMenu?: SubMenuEntity; offers: MenuOfferEntity[] };
+    [gsi2PartitionKey: string]: { subMenu?: SubMenuEntity; offers: MenuOfferEntity[]; events: MenuEventEntity[] };
   };
   themedMenuWithOffers.forEach((item) => {
     if (!item.gsi2PartitionKey || !item.gsi2SortKey) {
@@ -285,10 +303,13 @@ export const groupThemedMenuWithOffers = (
     }
     if (!menuAndOffersGrouped[item.gsi2PartitionKey]) {
       if (item.gsi2SortKey.startsWith(SUB_MENU_PREFIX)) {
-        menuAndOffersGrouped[item.gsi2PartitionKey] = { subMenu: item as SubMenuEntity, offers: [] };
+        menuAndOffersGrouped[item.gsi2PartitionKey] = { subMenu: item as SubMenuEntity, offers: [], events: [] };
       }
       if (item.gsi2SortKey.startsWith(OFFER_PREFIX)) {
-        menuAndOffersGrouped[item.gsi2PartitionKey] = { offers: [item as MenuOfferEntity] };
+        menuAndOffersGrouped[item.gsi2PartitionKey] = { offers: [item as MenuOfferEntity], events: [] };
+      }
+      if (item.gsi2SortKey.startsWith(EVENT_PREFIX)) {
+        menuAndOffersGrouped[item.gsi2PartitionKey] = { offers: [], events: [item as MenuEventEntity] };
       }
     } else {
       if (item.gsi2SortKey.startsWith(SUB_MENU_PREFIX)) {
@@ -297,11 +318,18 @@ export const groupThemedMenuWithOffers = (
       if (item.gsi2SortKey.startsWith(OFFER_PREFIX)) {
         menuAndOffersGrouped[item.gsi2PartitionKey].offers.push(item as MenuOfferEntity);
       }
+      if (item.gsi2SortKey.startsWith(EVENT_PREFIX)) {
+        menuAndOffersGrouped[item.gsi2PartitionKey].events.push(item as MenuEventEntity);
+      }
     }
   });
   const menuAndOffersArr = Object.values(menuAndOffersGrouped);
   if (menuAndOffersArr.find((item) => !item.subMenu)) {
     throw new Error('Offers have been returned without a themed menu');
   }
-  return menuAndOffersArr.map(({ offers, subMenu }) => ({ ...subMenu, offers })) as SubMenuEntityWithOfferEntities[];
+  return menuAndOffersArr.map(({ offers, events, subMenu }) => ({
+    ...subMenu,
+    events,
+    offers,
+  })) as SubMenuEntityWithOfferEntities[];
 };

@@ -1,6 +1,6 @@
 import { isAfter, isBefore, isWithinInterval } from 'date-fns';
 
-import { Offer } from '@blc-mono/discovery/application/models/Offer';
+import { EventOffer, Offer } from '@blc-mono/discovery/application/models/Offer';
 
 export const isActiveOffer = (offer: Offer): boolean => {
   if (offer.status !== 'live') {
@@ -26,6 +26,27 @@ export const isActiveOffer = (offer: Offer): boolean => {
 
   if (endDate) {
     return isBefore(now, endDate);
+  }
+
+  return true;
+};
+
+export const isActiveEventOffer = (event: EventOffer): boolean => {
+  if (event.status !== 'live') {
+    return false;
+  }
+
+  const startDate = event.offerStart ? new Date(event.offerStart) : undefined;
+  const guestlistCompleteByDate = event.guestlistCompleteByDate ? new Date(event.guestlistCompleteByDate) : undefined;
+
+  const now = new Date();
+
+  if (guestlistCompleteByDate && isAfter(now, guestlistCompleteByDate)) {
+    return false;
+  }
+
+  if (startDate && isAfter(now, startDate)) {
+    return false;
   }
 
   return true;

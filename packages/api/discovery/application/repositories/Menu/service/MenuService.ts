@@ -1,14 +1,15 @@
 import { LambdaLogger } from '@blc-mono/core/utils/logger';
 import { Menu, MenuWithOffers, MenuWithSubMenus } from '@blc-mono/discovery/application/models/Menu';
 import { AVAILABLE_MENU_TYPES, MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
-import { Offer } from '@blc-mono/discovery/application/models/Offer';
+import { EventOffer, Offer } from '@blc-mono/discovery/application/models/Offer';
 import { SubMenu, ThemedSubMenuWithOffers } from '@blc-mono/discovery/application/models/ThemedMenu';
 
 import { buildErrorMessage } from '../../Company/service/utils/ErrorMessageBuilder';
 import { MenuEntityWithOfferEntities, MenuEntityWithSubMenuEntities } from '../../schemas/MenuEntity';
-import { MenuOfferEntity } from '../../schemas/MenuOfferEntity';
+import { MenuEventEntity, MenuOfferEntity } from '../../schemas/MenuOfferEntity';
 import { groupMenusWithTopLevelData, MenuRepository } from '../MenuRepository';
 
+import { mapEventToMenuEventEntity, mapMenuEventEntityToEvent } from './mapper/MenuEventMapper';
 import {
   mapMenuEntityToMenu,
   mapMenuEntityWithOfferEntitiesToMenuWithOffers,
@@ -65,6 +66,33 @@ export async function insertThemedMenuWithSubMenusAndOffers(
   }
 }
 
+export async function insertThemedMenuWithSubMenusAndEvents(
+  menu: Menu,
+  subMenus: SubMenu[],
+  menuEvents: { subMenuId: string; event: EventOffer }[],
+): Promise<void> {
+  const menuEntity = mapMenuToMenuEntity(menu);
+  const subMenuEntities = subMenus.map((subMenu) => mapSubMenuToSubMenuEntity(menu.id, subMenu));
+  const eventEntities = menuEvents.map(({ event, subMenuId }) =>
+    mapEventToMenuEventEntity(event, menu.id, menu.menuType, subMenuId),
+  );
+  const itemsToInsert = [menuEntity, ...subMenuEntities, ...eventEntities];
+  try {
+    await new MenuRepository().batchInsert(itemsToInsert);
+    logger.info({
+      message: `Inserted themed menu with sub menus and events as batch, amount: [${itemsToInsert.length}]`,
+    });
+  } catch (error) {
+    throw new Error(
+      buildErrorMessage(
+        logger,
+        error,
+        `Error occurred inserting themed menu with sub menus events as batch, amount: [${itemsToInsert.length}]`,
+      ),
+    );
+  }
+}
+
 export async function deleteMenuWithSubMenusAndOffers(menuId: string): Promise<void> {
   try {
     await new MenuRepository().deleteMenuWithSubMenuAndOffers(menuId);
@@ -103,8 +131,12 @@ export async function getThemedMenuAndOffersBySubMenuId(
   try {
     const result = await new MenuRepository().retrieveThemedMenuWithOffers(subMenuId);
     if (!result) return;
-    const { offers, ...menu } = result;
-    return { ...mapSubMenuEntityToSubMenu(menu), offers: offers.map(mapMenuOfferEntityToOffer) };
+    const { offers, events, ...menu } = result;
+    return {
+      ...mapSubMenuEntityToSubMenu(menu),
+      offers: offers.map(mapMenuOfferEntityToOffer),
+      events: events.map(mapMenuEventEntityToEvent),
+    };
   } catch (error) {
     throw new Error(
       buildErrorMessage(
@@ -139,6 +171,34 @@ export async function updateOfferInMenus(newOfferRecord: Offer): Promise<void> {
         logger,
         error,
         `Error occurred updating offers in menu for offer with id: [${newOfferRecord.id}]`,
+      ),
+    );
+  }
+}
+
+export async function updateEventInMenus(newEventRecord: EventOffer): Promise<void> {
+  try {
+    const menuEvents = await new MenuRepository().getEventInMenusByEventId(newEventRecord.id);
+    if (menuEvents.length === 0) {
+      logger.info({
+        message: `Event with id: [${newEventRecord.id}] does not exist in any menu, so no updated needed.`,
+      });
+      return;
+    }
+    const newEntities = updateMenuEventEntities(menuEvents, newEventRecord);
+    if (newEntities.length > 1) {
+      await new MenuRepository().batchInsert(newEntities);
+      logger.info({ message: `Batch updated events in menus with event id: [${newEventRecord.id}]` });
+      return;
+    }
+    await new MenuRepository().insert(newEntities[0]);
+    logger.info({ message: `Updated event in menu for offer with id: [${newEventRecord.id}]` });
+  } catch (error) {
+    throw new Error(
+      buildErrorMessage(
+        logger,
+        error,
+        `Error occurred updating events in menu for offer with id: [${newEventRecord.id}]`,
       ),
     );
   }
@@ -210,6 +270,31 @@ export function updateMenuOfferEntities(menuOffers: MenuOfferEntity[], newOfferR
       gsi3PartitionKey,
       gsi3SortKey,
       ...newOfferRecord,
+    }),
+  );
+}
+
+export function updateMenuEventEntities(menuEvents: MenuEventEntity[], newEventRecord: EventOffer): MenuEventEntity[] {
+  return menuEvents.map(
+    ({
+      partitionKey,
+      sortKey,
+      gsi1PartitionKey,
+      gsi1SortKey,
+      gsi2PartitionKey,
+      gsi2SortKey,
+      gsi3PartitionKey,
+      gsi3SortKey,
+    }) => ({
+      partitionKey,
+      sortKey,
+      gsi1PartitionKey,
+      gsi1SortKey,
+      gsi2PartitionKey,
+      gsi2SortKey,
+      gsi3PartitionKey,
+      gsi3SortKey,
+      ...newEventRecord,
     }),
   );
 }

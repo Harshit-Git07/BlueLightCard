@@ -5,6 +5,7 @@ import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { SearchResult } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
 
 import { handler } from '../../../application/handlers/search/getSearch';
+import { OfferType } from '../../models/Offer';
 import { DiscoveryOpenSearchService } from '../../services/opensearch/DiscoveryOpenSearchService';
 
 jest.mock('../../services/opensearch/DiscoveryOpenSearchService');
@@ -18,7 +19,7 @@ describe('getSearch Handler', () => {
       offerimg: 'Image',
       CompID: '1',
       CompanyName: 'Company1',
-      OfferType: '1',
+      OfferType: OfferType.IN_STORE,
     },
   ];
 

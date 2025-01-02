@@ -1,7 +1,7 @@
 import { SubMenu } from '../../models/ThemedMenu';
 import { MENU_PREFIX, MENU_TYPE_PREFIX, SUB_MENU_PREFIX } from '../constants/PrimaryKeyPrefixes';
 
-import { MenuOfferEntity } from './MenuOfferEntity';
+import { MenuEventEntity, MenuOfferEntity } from './MenuOfferEntity';
 
 export type SubMenuEntity = SubMenu & {
   partitionKey: string;
@@ -14,6 +14,7 @@ export type SubMenuEntity = SubMenu & {
 
 export type SubMenuEntityWithOfferEntities = SubMenuEntity & {
   offers: MenuOfferEntity[];
+  events: MenuEventEntity[];
 };
 
 export class SubMenuKeyBuilders {

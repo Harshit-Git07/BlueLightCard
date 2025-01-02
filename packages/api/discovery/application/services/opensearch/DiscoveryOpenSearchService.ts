@@ -132,6 +132,26 @@ export class DiscoveryOpenSearchService extends OpenSearchService {
     );
   }
 
+  public async queryByEventCategory(
+    indexName: string,
+    dob: string,
+    organisation: string,
+    categoryId: string,
+  ): Promise<SearchResult[]> {
+    const MAX_RESULTS_PER_CATEGORY = 1000;
+    const searchRequest = new OpenSearchSearchRequests(indexName, dob).buildEventCategorySearch(categoryId);
+    const searchResults = await this.openSearchClient.search({
+      index: indexName,
+      body: searchRequest.body,
+    });
+    const mappedSearchResults = mapSearchResults(searchResults.body as SearchResponse);
+
+    return this.buildUniqueSearchResults(
+      mappedSearchResults.filter((result) => isValidTrust(organisation, result.IncludedTrusts, result.ExcludedTrusts)),
+      MAX_RESULTS_PER_CATEGORY,
+    );
+  }
+
   private buildUniqueSearchResults(allSearchResults: InternalSearchResult[], maxResults = 40): SearchResult[] {
     const uniqueSearchResults: SearchResult[] = [];
 

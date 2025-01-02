@@ -4,6 +4,7 @@ import { Offer as SanityOffer } from '@bluelightcard/sanity-types';
 import { addMonths, subMonths } from 'date-fns';
 import { ApiGatewayV1Api } from 'sst/node/api';
 
+import { OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { SearchResult } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
 import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
 import { ENDPOINTS } from '@blc-mono/discovery/infrastructure/constants/environment';
@@ -198,7 +199,7 @@ describe('Search E2E Event Handling', async () => {
     const expectedSearchResult: SearchResult = {
       ID: activeOfferUUID,
       OfferName: activeOfferUUID,
-      OfferType: 'online',
+      OfferType: OfferType.ONLINE,
       offerimg: 'https://testimage.com',
       CompID: generatedCompanyUUID,
       LegacyID: 1,
@@ -227,7 +228,7 @@ describe('Search E2E Event Handling', async () => {
       {
         ID: evergreenOfferUUID,
         OfferName: evergreenOfferUUID,
-        OfferType: 'online',
+        OfferType: OfferType.ONLINE,
         offerimg: 'https://testimage.com',
         CompID: companyId.toString(),
         LegacyID: 1,
@@ -256,7 +257,7 @@ describe('Search E2E Event Handling', async () => {
       {
         ID: validStartDateOfferNoExpiryDateUUID,
         OfferName: validStartDateOfferNoExpiryDateUUID,
-        OfferType: 'online',
+        OfferType: OfferType.ONLINE,
         offerimg: 'https://testimage.com',
         CompID: companyId.toString(),
         LegacyID: 1,
@@ -285,7 +286,7 @@ describe('Search E2E Event Handling', async () => {
       {
         ID: validExpiryDateOfferNoStartDateUUID,
         OfferName: validExpiryDateOfferNoStartDateUUID,
-        OfferType: 'online',
+        OfferType: OfferType.ONLINE,
         offerimg: 'https://testimage.com',
         CompID: companyId.toString(),
         LegacyID: 1,

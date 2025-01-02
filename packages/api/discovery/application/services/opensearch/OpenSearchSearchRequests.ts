@@ -7,6 +7,7 @@ import {
   companyNameFuzzyQuery,
   companyNameInCompaniesAllQuery,
   companyNameQuery,
+  eventOfferIsLiveQuery,
   offerIsLiveQuery,
   offerNameQuery,
   offerTagQuery,
@@ -42,6 +43,10 @@ export class OpenSearchSearchRequests {
 
   public buildAllCompaniesRequest(): SearchRequest {
     return this.buildAllCompaniesSearch();
+  }
+
+  public buildEventCategorySearch(categoryId: string): SearchRequest {
+    return this.buildEventCategoryIdSearch(categoryId);
   }
 
   public buildCategorySearch(categoryId: string): SearchRequest {
@@ -178,6 +183,24 @@ export class OpenSearchSearchRequests {
     if (this.offerType) {
       mustQueries.unshift(offerTypeQuery(this.offerType));
     }
+    return {
+      ...this.buildBaseSearch(),
+      body: {
+        query: {
+          bool: {
+            must: mustQueries,
+          },
+        },
+      },
+    };
+  }
+
+  private buildEventCategoryIdSearch(categoryId: string): SearchRequest {
+    const mustQueries = [
+      ageRestrictionsQuery(this.ageRestrictions),
+      eventOfferIsLiveQuery(),
+      categoryIdQuery(categoryId),
+    ];
     return {
       ...this.buildBaseSearch(),
       body: {

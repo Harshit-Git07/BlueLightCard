@@ -1,15 +1,23 @@
 import { addMonths, subMonths } from 'date-fns';
 
-import { offerFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
-import { OfferStatus } from '@blc-mono/discovery/application/models/Offer';
+import { eventFactory, offerFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
+import { EventStatus, OfferStatus } from '@blc-mono/discovery/application/models/Offer';
 
-import { isActiveOffer } from './activeOfferRules';
+import { isActiveEventOffer, isActiveOffer } from './activeOfferRules';
 
 describe('isActiveOffer', () => {
   it('should return false if offer status is not "live"', () => {
     const offer = offerFactory.build({ status: OfferStatus.EXPIRED });
 
     const result = isActiveOffer(offer);
+
+    expect(result).toEqual(false);
+  });
+
+  it('should return false if event offer status is not "live"', () => {
+    const event = eventFactory.build({ status: EventStatus.EXPIRED });
+
+    const result = isActiveEventOffer(event);
 
     expect(result).toEqual(false);
   });
@@ -35,6 +43,39 @@ describe('isActiveOffer', () => {
         const result = isActiveOffer(offer);
 
         expect(result).toEqual(true);
+      });
+
+      it('should return true if event offer guestlist completed by date and start date is in the future', () => {
+        const event = eventFactory.build({
+          guestlistCompleteByDate: addMonths(new Date(), 1).toISOString(),
+          offerStart: addMonths(new Date(), 2).toISOString(),
+        });
+
+        const result = isActiveEventOffer(event);
+
+        expect(result).toEqual(true);
+      });
+
+      it('should return false if event offer guestlist completed by date is in the past', () => {
+        const event = eventFactory.build({
+          guestlistCompleteByDate: subMonths(new Date(), 1).toISOString(),
+          offerStart: addMonths(new Date(), 2).toISOString(),
+        });
+
+        const result = isActiveEventOffer(event);
+
+        expect(result).toEqual(false);
+      });
+
+      it('should return false if event offer starte date is in the past', () => {
+        const event = eventFactory.build({
+          guestlistCompleteByDate: addMonths(new Date(), 1).toISOString(),
+          offerStart: subMonths(new Date(), 1).toISOString(),
+        });
+
+        const result = isActiveEventOffer(event);
+
+        expect(result).toEqual(false);
       });
 
       it('should return true if offer is start date in the past and end date in the future', () => {

@@ -150,7 +150,6 @@ export function buildTestSanityOffer(testOfferConfig?: TestOfferConfig): SanityO
     },
   };
 }
-
 const buildTestSanityTrusts = (trusts: string[]): SanityTrust[] => {
   return trusts.map((trust) => ({
     _id: v4(),

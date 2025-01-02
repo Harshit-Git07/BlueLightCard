@@ -3,11 +3,13 @@ import { AggregationsTermsAggregate, SearchHit, SearchResponse } from '@opensear
 import { CompanySummary } from '@blc-mono/discovery/application/models/CompaniesResponse';
 import { OpenSearchBody } from '@blc-mono/discovery/application/models/OpenSearchType';
 
-export interface SearchResult {
+import { EventType, OfferType } from '../../models/Offer';
+
+export interface OfferSearchResult {
   ID: string;
   LegacyID?: number;
   OfferName: string;
-  OfferType: string;
+  OfferType: OfferType;
   offerimg: string;
   OfferDescription?: string;
   CompID: string;
@@ -15,10 +17,48 @@ export interface SearchResult {
   CompanyName: string;
 }
 
+export interface EventSearchResult {
+  ID: string;
+  eventName: string;
+  OfferType: EventType;
+  eventImg: string;
+  eventDescription?: string;
+  venueID: string;
+  venueName: string;
+}
+
+export type SearchResult = OfferSearchResult | EventSearchResult;
+
 export type InternalSearchResult = SearchResult & {
   IncludedTrusts: string[];
   ExcludedTrusts: string[];
 };
+
+const mapSearchHitToEventInternalSearchResult = (hit: SearchHit<OpenSearchBody>): InternalSearchResult => ({
+  ID: hit._source?.offer_id ?? '',
+  eventName: hit._source?.offer_name ?? '',
+  OfferType: hit._source?.offer_type as EventType,
+  eventImg: hit._source?.offer_image ?? '',
+  eventDescription: hit._source?.offer_description ?? '',
+  venueID: hit._source?.venue_id ?? '',
+  venueName: hit._source?.venue_name ?? '',
+  IncludedTrusts: hit._source?.included_trusts ?? [],
+  ExcludedTrusts: hit._source?.excluded_trusts ?? [],
+});
+
+const mapSearchHitToOfferInternalSearchResult = (hit: SearchHit<OpenSearchBody>): InternalSearchResult => ({
+  ID: hit._source?.offer_id ?? '',
+  LegacyID: hit._source?.legacy_offer_id,
+  OfferName: hit._source?.offer_name ?? '',
+  OfferType: hit._source?.offer_type as OfferType,
+  OfferDescription: hit._source?.offer_description ?? '',
+  offerimg: hit._source?.offer_image ?? '',
+  CompID: hit._source?.company_id ?? '',
+  LegacyCompanyID: hit._source?.legacy_company_id,
+  CompanyName: hit._source?.company_name ?? '',
+  IncludedTrusts: hit._source?.included_trusts ?? [],
+  ExcludedTrusts: hit._source?.excluded_trusts ?? [],
+});
 
 export const mapSearchResults = (result: SearchResponse): InternalSearchResult[] => {
   let mappedResults: InternalSearchResult[] = [];
@@ -26,19 +66,11 @@ export const mapSearchResults = (result: SearchResponse): InternalSearchResult[]
     const uniqueSearchResults = new Set<InternalSearchResult>();
     result.hits.hits.forEach((searchHit) => {
       const hit = searchHit as SearchHit<OpenSearchBody>;
-      uniqueSearchResults.add({
-        ID: hit._source?.offer_id ?? '',
-        LegacyID: hit._source?.legacy_offer_id,
-        OfferName: hit._source?.offer_name ?? '',
-        OfferType: hit._source?.offer_type ?? '',
-        OfferDescription: hit._source?.offer_description ?? '',
-        offerimg: hit._source?.offer_image ?? '',
-        CompID: hit._source?.company_id ?? '',
-        LegacyCompanyID: hit._source?.legacy_company_id,
-        CompanyName: hit._source?.company_name ?? '',
-        IncludedTrusts: hit._source?.included_trusts ?? [],
-        ExcludedTrusts: hit._source?.excluded_trusts ?? [],
-      });
+      if (Object.values(EventType).includes(hit._source?.offer_type as EventType)) {
+        uniqueSearchResults.add(mapSearchHitToEventInternalSearchResult(hit));
+      } else {
+        uniqueSearchResults.add(mapSearchHitToOfferInternalSearchResult(hit));
+      }
     });
 
     mappedResults = [...uniqueSearchResults];
@@ -48,17 +80,8 @@ export const mapSearchResults = (result: SearchResponse): InternalSearchResult[]
 };
 
 export const mapInternalSearchResult = (internalSearchResult: InternalSearchResult): SearchResult => {
-  return {
-    ID: internalSearchResult.ID,
-    LegacyID: internalSearchResult.LegacyID,
-    OfferName: internalSearchResult.OfferName,
-    OfferType: internalSearchResult.OfferType,
-    offerimg: internalSearchResult.offerimg,
-    OfferDescription: internalSearchResult.OfferDescription,
-    CompID: internalSearchResult.CompID,
-    LegacyCompanyID: internalSearchResult.LegacyCompanyID,
-    CompanyName: internalSearchResult.CompanyName,
-  };
+  const { IncludedTrusts, ExcludedTrusts, ...rest } = internalSearchResult;
+  return rest;
 };
 
 interface AggregateCompanyResult {

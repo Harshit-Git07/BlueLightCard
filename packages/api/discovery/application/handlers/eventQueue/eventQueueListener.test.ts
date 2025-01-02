@@ -2,11 +2,21 @@ import { SQSRecord } from 'aws-lambda';
 
 import { handleCompanyUpdated } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/CompanyEventHandler';
 import {
+  handleEventMenuThemedDeleted,
+  handleEventMenuThemedUpdated,
+} from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/EventMenuThemedEventHandler';
+import {
+  handleEventOfferDeleted,
+  handleEventOfferUpdated,
+} from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/EventOfferEventHandler';
+import {
   handleOfferDeleted,
   handleOfferUpdated,
 } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/OfferEventHandler';
 import { mapSanityCompanyLocationToCompanyLocationEvent } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyLocationToCompanyLocation';
 import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany';
+import { mapSanityEventThemedMenuToEventThemedMenu } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityEventThemedMenuToEventThemedMenu';
+import { mapSanityEventToEventOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityEventToEvent';
 import { mapSanityMenuOfferToMenuOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
 import { mapSanitySiteToSite } from '@blc-mono/discovery/helpers/sanityMappers/mapSanitySiteToSite';
@@ -26,20 +36,26 @@ import { handleSiteDeleted, handleSiteUpdated } from './eventHandlers/SiteEventH
 import { handler } from './eventQueueListener';
 
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/OfferEventHandler');
+jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/EventOfferEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/CompanyEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/CompanyLocationEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/MenusEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/MenuThemedEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/SiteEventHandler');
+jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/EventMenuThemedEventHandler');
 
+jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityEventThemedMenuToEventThemedMenu');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanitySiteToSite');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityThemedMenuToThemedMenu');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyLocationToCompanyLocation');
+jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityEventToEvent');
 
 const handleOfferUpdatedMock = jest.mocked(handleOfferUpdated);
+const handleEventOfferUpdatedMock = jest.mocked(handleEventOfferUpdated);
+const handleEventOfferDeletedMock = jest.mocked(handleEventOfferDeleted);
 const handleOfferDeletedMock = jest.mocked(handleOfferDeleted);
 const handleCompanyUpdatedMock = jest.mocked(handleCompanyUpdated);
 const handleCompanyLocationsUpdatedMock = jest.mocked(handleCompanyLocationsUpdated);
@@ -49,13 +65,18 @@ const handleSiteUpdatedMock = jest.mocked(handleSiteUpdated);
 const handleSiteDeletedMock = jest.mocked(handleSiteDeleted);
 const handleMenuThemedUpdatedMock = jest.mocked(handleMenuThemedUpdated);
 const handleMenuThemedDeletedMock = jest.mocked(handleMenuThemedDeleted);
+const handleEventMenuThemedUpdatedMock = jest.mocked(handleEventMenuThemedUpdated);
+const handleEventMenuThemedDeletedMock = jest.mocked(handleEventMenuThemedDeleted);
 
 const mapSanityOfferToOfferMock = jest.mocked(mapSanityOfferToOffer);
+const mapSanityEventToEventMock = jest.mocked(mapSanityEventToEventOffer);
+
 const mapSanityCompanyToCompanyMock = jest.mocked(mapSanityCompanyToCompany);
 const mapSanityMenuOfferToMenuOfferMock = jest.mocked(mapSanityMenuOfferToMenuOffer);
 const mapSanitySiteToSiteMock = jest.mocked(mapSanitySiteToSite);
 const mapSanityThemedMenuToThemedMenuMock = jest.mocked(mapSanityThemedMenuToThemedMenu);
 const mapSanityCompanyLocationToCompanyLocationEventMock = jest.mocked(mapSanityCompanyLocationToCompanyLocationEvent);
+const mapSanityEventThemedMenuToEventThemedMenuMock = jest.mocked(mapSanityEventThemedMenuToEventThemedMenu);
 
 describe('eventQueueListener', () => {
   it.each([Events.OFFER_CREATED, Events.OFFER_UPDATED])('should handle %s event', async (event) => {
@@ -67,6 +88,15 @@ describe('eventQueueListener', () => {
     expect(handleOfferUpdatedMock).toHaveBeenCalled();
   });
 
+  it.each([Events.EVENT_CREATED, Events.EVENT_UPDATED])('should handle %s event', async (event) => {
+    const record = buildSQSRecord(event);
+
+    await handler({ Records: [record] });
+
+    expect(mapSanityEventToEventMock).toHaveBeenCalledWith('body');
+    expect(handleEventOfferUpdatedMock).toHaveBeenCalled();
+  });
+
   it('should handle "offer.deleted" event', async () => {
     const offerDeletedRecord = buildSQSRecord(Events.OFFER_DELETED);
 
@@ -74,6 +104,36 @@ describe('eventQueueListener', () => {
 
     expect(mapSanityOfferToOfferMock).toHaveBeenCalledWith('body');
     expect(handleOfferDeletedMock).toHaveBeenCalled();
+  });
+
+  it('should handle "event.deleted" event', async () => {
+    const eventDeletedRecord = buildSQSRecord(Events.EVENT_DELETED);
+
+    await handler({ Records: [eventDeletedRecord] });
+
+    expect(mapSanityEventToEventMock).toHaveBeenCalledWith('body');
+    expect(handleEventOfferDeletedMock).toHaveBeenCalled();
+  });
+
+  it.each([Events.MENU_THEMED_EVENT_CREATED, Events.MENU_THEMED_EVENT_UPDATED])(
+    'should handle %s event',
+    async (event) => {
+      const record = buildSQSRecord(event);
+
+      await handler({ Records: [record] });
+
+      expect(mapSanityEventThemedMenuToEventThemedMenuMock).toHaveBeenCalledWith('body');
+      expect(handleEventMenuThemedUpdatedMock).toHaveBeenCalled();
+    },
+  );
+
+  it('should handle "menu.themed.event" deleted event', async () => {
+    const record = buildSQSRecord(Events.MENU_THEMED_EVENT_DELETED);
+
+    await handler({ Records: [record] });
+
+    expect(mapSanityEventThemedMenuToEventThemedMenuMock).toHaveBeenCalledWith('body');
+    expect(handleEventMenuThemedDeletedMock).toHaveBeenCalled();
   });
 
   it.each([Events.COMPANY_CREATED, Events.COMPANY_UPDATED])('should handle %s event', async () => {

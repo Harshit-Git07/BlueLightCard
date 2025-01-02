@@ -1,17 +1,23 @@
 import { Logger } from '@aws-lambda-powertools/logger';
 
 import * as getEnv from '@blc-mono/core/utils/getEnv';
-import { mapOfferToOpenSearchBody, OpenSearchBody } from '@blc-mono/discovery/application/models/OpenSearchType';
+import {
+  mapEventToOpenSearchBody,
+  mapOfferToOpenSearchBody,
+  OpenSearchBody,
+} from '@blc-mono/discovery/application/models/OpenSearchType';
+import * as EventService from '@blc-mono/discovery/application/repositories/Offer/service/EventService';
 import * as OffersService from '@blc-mono/discovery/application/repositories/Offer/service/OfferService';
 import { DiscoveryOpenSearchService } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
 import { offerFactory } from '../../factories/OfferFactory';
-import { Offer, OfferStatus, OfferType } from '../../models/Offer';
+import { EventOffer, EventStatus, EventType, Offer, OfferStatus, OfferType } from '../../models/Offer';
 
 import { handler } from './populateSearchIndex';
 
 jest.mock('@blc-mono/discovery/application/repositories/Offer/service/OfferService');
+jest.mock('@blc-mono/discovery/application/repositories/Offer/service/EventService');
 jest.mock('@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService');
 jest.mock('@aws-lambda-powertools/logger');
 jest.mock('@blc-mono/core/utils/getEnv');
@@ -32,12 +38,13 @@ describe('populateSearchIndex', () => {
     });
   });
 
-  it('should log an error if no offers are found', async () => {
+  it('should log an error if no offers or events are found', async () => {
     const loggerError = jest.spyOn(Logger.prototype, 'error');
     jest.spyOn(OffersService, 'getNonLocalOffers').mockResolvedValue([]);
+    jest.spyOn(EventService, 'getAllEvents').mockResolvedValue([]);
 
     await handler();
-    expect(loggerError).toHaveBeenCalledWith('No offers or companies found in dynamoDB');
+    expect(loggerError).toHaveBeenCalledWith('No offers, companies or events found in dynamoDB');
   });
 
   describe('and offers are found', () => {
@@ -46,6 +53,7 @@ describe('populateSearchIndex', () => {
 
     beforeEach(() => {
       const mockOffers = offerFactory.buildList(1);
+      jest.spyOn(EventService, 'getAllEvents').mockResolvedValue([]);
       jest.spyOn(OffersService, 'getNonLocalOffers').mockResolvedValue(mockOffers);
 
       loggerErrorSpy = jest.spyOn(Logger.prototype, 'error');
@@ -75,7 +83,7 @@ describe('populateSearchIndex', () => {
         jest.spyOn(DiscoveryOpenSearchService.prototype, 'createIndex').mockResolvedValue(undefined);
       });
 
-      it('should convert offers to OpenSearch format and add to index', async () => {
+      it('should convert offers or events to OpenSearch format and add to index', async () => {
         const addMultipleDocumentsToIndex = jest
           .spyOn(DiscoveryOpenSearchService.prototype, 'addDocumentsToIndex')
           .mockResolvedValue(undefined);
@@ -179,6 +187,84 @@ describe('populateSearchIndex', () => {
         };
 
         const result = mapOfferToOpenSearchBody(offer);
+
+        expect(result).toStrictEqual(expectedOpenSearchType);
+      });
+
+      it('should map an event to OpenSearchType correctly', () => {
+        const TODAY = new Date().toISOString();
+        const TOMORROW = new Date(Date.now() + 86400000).toISOString();
+
+        const event: EventOffer = {
+          id: 'event-1',
+          name: 'Event 1',
+          status: EventStatus.LIVE,
+          offerType: EventType.TICKET,
+          eventDescription: 'Description for event 1',
+          image: 'http://example.com/image1.jpg',
+          offerStart: TODAY,
+          offerEnd: TOMORROW,
+          guestlistCompleteByDate: TOMORROW,
+          includedTrusts: ['NHS', 'DEN'],
+          excludedTrusts: [],
+          ageRestrictions: '18+',
+          ticketFaceValue: '£10',
+          venue: {
+            id: 'venue-1',
+            name: 'Venue 1',
+            logo: 'http://example.com/image1.jpg',
+            categories: [],
+            updatedAt: '',
+            venueDescription: 'Description for venue 1',
+            location: {
+              latitude: 2,
+              longitude: 1,
+            },
+          },
+          categories: [
+            {
+              id: 1,
+              name: 'Category 1',
+              parentCategoryIds: [2],
+              level: 1,
+              updatedAt: TODAY,
+            },
+          ],
+          redemption: {
+            drawDate: '',
+            numberOfWinners: 10,
+            type: 'Ballot',
+          },
+          updatedAt: TODAY,
+        };
+
+        const expectedOpenSearchType: OpenSearchBody = {
+          offer_id: 'event-1',
+          offer_name: 'Event 1',
+          offer_status: OfferStatus.LIVE,
+          offer_type: EventType.TICKET,
+          offer_description: 'Description for event 1',
+          offer_description_stripped: 'Description for event 1',
+          offer_image: 'http://example.com/image1.jpg',
+          offer_start: event.offerStart ?? '',
+          offer_expires: event.offerEnd ?? '',
+          offer_tags: [],
+          company_id: '',
+          company_name: '',
+          company_name_stripped: '',
+          company_small_logo: '',
+          company_tags: [],
+          age_restrictions: '18+',
+          included_trusts: ['NHS', 'DEN'],
+          excluded_trusts: [],
+          category_name: 'Category 1',
+          category_id: 1,
+          date_offer_last_updated: event.updatedAt,
+          venue_id: 'venue-1',
+          venue_name: 'Venue 1',
+        };
+
+        const result = mapEventToOpenSearchBody(event);
 
         expect(result).toStrictEqual(expectedOpenSearchType);
       });

@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { LambdaLogger } from '@blc-mono/core/utils/logger';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { ThemedSubMenuWithOffers } from '@blc-mono/discovery/application/models/ThemedMenu';
-import { isValidOffer } from '@blc-mono/discovery/application/utils/isValidOffer';
+import { isValidEvent, isValidOffer } from '@blc-mono/discovery/application/utils/isValidOffer';
 
 import { mapThemedSubMenuWithOffersToFlexibleMenuResponse } from '../../repositories/Menu/service/mapper/FlexibleMenuMapper';
 import { getThemedMenuAndOffersBySubMenuId } from '../../repositories/Menu/service/MenuService';
@@ -82,9 +82,11 @@ const filterInvalidOffers = (
   organisation: string,
 ): ThemedSubMenuWithOffers => {
   const filteredOffers = submenuWithOffers.offers.filter((offer) => isValidOffer(offer, dob, organisation));
+  const filteredEvents = submenuWithOffers.events.filter((event) => isValidEvent(event, dob, organisation));
 
   return {
     ...submenuWithOffers,
     offers: filteredOffers,
+    events: filteredEvents,
   };
 };

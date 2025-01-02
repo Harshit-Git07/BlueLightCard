@@ -3,6 +3,8 @@ import { Company } from '@blc-mono/discovery/application/models/Company';
 import { Boost } from './Boost';
 import { Category } from './Category';
 import { Discount } from './Discount';
+import { Redemption } from './Redemption';
+import { Venue } from './Venue';
 
 export enum OfferType {
   GIFT_CARD = 'gift-card',
@@ -18,25 +20,48 @@ export enum OfferStatus {
   DEACTIVATED = 'deactivated',
 }
 
-export type Offer = {
+export enum EventStatus {
+  LIVE = 'live',
+  EXPIRED = 'expired',
+}
+
+export enum EventType {
+  TICKET = 'ticket',
+}
+
+type CommonOffer = {
   id: string;
-  legacyOfferId?: number;
   name: string;
-  status: OfferStatus;
-  offerType: OfferType;
-  offerDescription: string;
   image: string;
   offerStart?: string;
   offerEnd?: string;
-  evergreen: boolean;
-  tags: string[];
   includedTrusts: string[];
   excludedTrusts: string[];
-  company: Company;
   categories: Category[];
+  updatedAt: string;
+};
+
+export type DiscountOffer = CommonOffer & { offerType: OfferType } & {
+  offerDescription: string;
+  legacyOfferId?: number;
+  evergreen: boolean;
+  status: OfferStatus;
+  tags: string[];
+  company: Company;
   local: boolean;
   discount?: Discount;
   commonExclusions: string[];
   boost?: Boost;
-  updatedAt: string;
+};
+
+export type Offer = DiscountOffer;
+
+export type EventOffer = CommonOffer & { offerType: EventType } & {
+  eventDescription: string;
+  venue: Venue;
+  status: EventStatus;
+  redemption?: Redemption;
+  ticketFaceValue: string;
+  guestlistCompleteByDate: string;
+  ageRestrictions: string;
 };

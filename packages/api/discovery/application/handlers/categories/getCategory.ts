@@ -10,10 +10,13 @@ import { datadog } from 'datadog-lambda-js';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { categories } from '@blc-mono/discovery/application/handlers/categories/getCategories';
-import { OfferType } from '@blc-mono/discovery/application/models/Offer';
+import { EventType, OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
 import { DiscoveryOpenSearchService } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
 import { SearchResult } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
+
+import { EventResponse } from '../../models/EventResponse';
+
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const logger = new LambdaLogger({ serviceName: 'categories-get' });
@@ -26,18 +29,36 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
   logger.info({ message: `Getting category for id ${categoryId}` });
 
   if (isValidCategory(categoryId)) {
-    const results = await openSearchService.queryByCategory(
-      await openSearchService.getLatestIndexName(),
-      dob,
-      organisation,
-      categoryId,
-    );
+    const results: SearchResult[] = [];
+
+    const categoryName = getCategoryName(categoryId);
+
+    if (categoryName === 'Events') {
+      results.push(
+        ...(await openSearchService.queryByEventCategory(
+          await openSearchService.getLatestIndexName(),
+          dob,
+          organisation,
+          categoryId,
+        )),
+      );
+    } else {
+      results.push(
+        ...(await openSearchService.queryByCategory(
+          await openSearchService.getLatestIndexName(),
+          dob,
+          organisation,
+          categoryId,
+        )),
+      );
+    }
+
     const mappedResults = results.map((result) => mapSearchResultToOfferResponse(result));
     return Response.OK({
       message: 'Success',
       data: {
         id: categoryId,
-        name: getCategoryName(categoryId),
+        name: categoryName,
         data: mappedResults,
       },
     });
@@ -60,7 +81,19 @@ const getQueryParams = (event: APIGatewayEvent) => {
   return { dob: dob ?? '', organisation: organisation ?? '' };
 };
 
-const mapSearchResultToOfferResponse = (result: SearchResult): OfferResponse => {
+const mapSearchResultToOfferResponse = (result: SearchResult): OfferResponse | EventResponse => {
+  if (result.OfferType === EventType.TICKET) {
+    return {
+      offerType: EventType.TICKET,
+      eventID: result.ID,
+      eventName: result.eventName,
+      eventDescription: result.eventDescription ?? '',
+      imageURL: result.eventImg,
+      venueID: result.venueID,
+      venueName: result.venueName,
+    };
+  }
+
   return {
     offerID: result.ID,
     legacyOfferID: result.LegacyID,

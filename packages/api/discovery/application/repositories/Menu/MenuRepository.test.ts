@@ -1,14 +1,15 @@
 import { DynamoDBService } from '@blc-mono/discovery/application/services/DynamoDbService';
 
 import { menuEntityFactory } from '../../factories/MenuEntityFactory';
+import { menuEventEntityFactory } from '../../factories/MenuEventEntityFactory';
 import { menuOfferEntityFactory } from '../../factories/MenuOfferEntityFactory';
 import { subMenuEntityFactory } from '../../factories/SubMenuEntityFactory';
 import { MenuType } from '../../models/MenuResponse';
 import { DYNAMODB_MAX_BATCH_WRITE_SIZE, GSI1_NAME, GSI2_NAME, GSI3_NAME } from '../constants/DynamoDBConstants';
 import { MENU_PREFIX, OFFER_PREFIX } from '../constants/PrimaryKeyPrefixes';
 import { MenuKeyBuilders } from '../schemas/MenuEntity';
-import { MenuOfferEntity, MenuOfferKeyBuilders } from '../schemas/MenuOfferEntity';
-import { SubMenuEntity } from '../schemas/SubMenuEntity';
+import { MenuEventKeyBuilders, MenuOfferEntity, MenuOfferKeyBuilders } from '../schemas/MenuOfferEntity';
+import { SubMenuEntity, SubMenuKeyBuilders } from '../schemas/SubMenuEntity';
 
 import { groupMenusWithTopLevelData, groupThemedMenuWithOffers, MenuRepository } from './MenuRepository';
 
@@ -35,6 +36,7 @@ const menuEntity = menuEntityFactory.build();
 const subMenuEntity = subMenuEntityFactory.build();
 const subMenuEntities = subMenuEntityFactory.buildList(3);
 const menuOfferEntity = menuOfferEntityFactory.build();
+const menuEventEntity = menuEventEntityFactory.build();
 const menuOfferEntities = menuOfferEntityFactory.buildList(3);
 const flexibleMenuEntity = { ...menuEntity, menuType: MenuType.FLEXIBLE };
 
@@ -291,7 +293,7 @@ describe('Menu Repository', () => {
         TableName: 'menus-table',
         IndexName: GSI2_NAME,
       });
-      expect(result).toEqual({ ...subMenuEntity, offers: [menuOfferEntity] });
+      expect(result).toEqual({ ...subMenuEntity, offers: [menuOfferEntity], events: [] });
     });
 
     it('should return an empty array if no data is returned', async () => {
@@ -457,6 +459,26 @@ describe('Menu Repository', () => {
     });
   });
 
+  describe('getEventInMenusByEventId', () => {
+    it('should call "Query" method with correct parameters', async () => {
+      DynamoDBService.query = mockQuery;
+      mockQuery.mockResolvedValue([menuEventEntity]);
+
+      const result = await new MenuRepository().getEventInMenusByEventId(menuEventEntity.id);
+
+      expect(mockQuery).toHaveBeenCalledWith({
+        TableName: 'menus-table',
+        IndexName: GSI3_NAME,
+        KeyConditionExpression: 'gsi3PartitionKey = :event_id and begins_with(gsi3SortKey, :menu_prefix)',
+        ExpressionAttributeValues: {
+          ':event_id': MenuEventKeyBuilders.buildGsi3PartitionKey(menuEventEntity.id),
+          ':menu_prefix': MENU_PREFIX,
+        },
+      });
+      expect(result).toEqual([menuEventEntity]);
+    });
+  });
+
   describe('updateMenuOffer', () => {
     DynamoDBService.put = mockSave;
     it('should call "Put" method with correct parameters', async () => {
@@ -562,29 +584,47 @@ describe('Menu Repository', () => {
     const secondSubMenuEntity = subMenuEntityFactory.build({
       partitionKey: MenuOfferKeyBuilders.buildGsi2PartitionKey('2'),
     });
+
+    const eventSubMenuEntity = subMenuEntityFactory.build({
+      gsi2PartitionKey: SubMenuKeyBuilders.buildGsi2PartitionKey('2'),
+    });
+    const eventsInsecondSubMenuEntity = menuEventEntityFactory.build({
+      gsi2PartitionKey: MenuEventKeyBuilders.buildGsi2PartitionKey('2'),
+    });
     const testCases = [
       {
         menusAndItems: [subMenuEntity, menuOfferEntity],
-        expected: [{ ...subMenuEntity, offers: [menuOfferEntity] }],
+        expected: [{ ...subMenuEntity, offers: [menuOfferEntity], events: [] }],
+      },
+      {
+        menusAndItems: [subMenuEntity, menuEventEntity],
+        expected: [{ ...subMenuEntity, events: [menuEventEntity], offers: [] }],
       },
       {
         menusAndItems: [subMenuEntity, menuOfferEntity, menuOfferEntity],
-        expected: [{ ...subMenuEntity, offers: [menuOfferEntity, menuOfferEntity] }],
+        expected: [{ ...subMenuEntity, offers: [menuOfferEntity, menuOfferEntity], events: [] }],
       },
       {
         menusAndItems: [menuOfferEntity, subMenuEntity],
-        expected: [{ ...subMenuEntity, offers: [menuOfferEntity] }],
+        expected: [{ ...subMenuEntity, offers: [menuOfferEntity], events: [] }],
       },
       {
-        menusAndItems: [subMenuEntity, secondSubMenuEntity, menuOfferEntity],
+        menusAndItems: [
+          subMenuEntity,
+          secondSubMenuEntity,
+          menuOfferEntity,
+          eventsInsecondSubMenuEntity,
+          eventSubMenuEntity,
+        ],
         expected: [
-          { ...subMenuEntity, offers: [menuOfferEntity] },
-          { ...secondSubMenuEntity, offers: [] },
+          { ...subMenuEntity, offers: [menuOfferEntity], events: [] },
+          { ...secondSubMenuEntity, events: [], offers: [] },
+          { ...eventSubMenuEntity, events: [eventsInsecondSubMenuEntity], offers: [] },
         ],
       },
       {
         menusAndItems: [subMenuEntity],
-        expected: [{ ...subMenuEntity, offers: [] }],
+        expected: [{ ...subMenuEntity, offers: [], events: [] }],
       },
       {
         menusAndItems: [],

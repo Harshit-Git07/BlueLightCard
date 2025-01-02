@@ -1,7 +1,10 @@
 export enum Events {
   OFFER_CREATED = 'offer.created',
   OFFER_UPDATED = 'offer.updated',
+  EVENT_CREATED = 'event.created',
+  EVENT_UPDATED = 'event.updated',
   OFFER_DELETED = 'offer.deleted',
+  EVENT_DELETED = 'event.deleted',
   SITE_CREATED = 'site.created',
   SITE_UPDATED = 'site.updated',
   SITE_DELETED = 'site.deleted',
@@ -22,6 +25,9 @@ export enum Events {
   MENU_THEMED_OFFER_CREATED = 'menu.themed.offer.created',
   MENU_THEMED_OFFER_UPDATED = 'menu.themed.offer.updated',
   MENU_THEMED_OFFER_DELETED = 'menu.themed.offer.deleted',
+  MENU_THEMED_EVENT_CREATED = 'menu.themed.event.created',
+  MENU_THEMED_EVENT_UPDATED = 'menu.themed.event.updated',
+  MENU_THEMED_EVENT_DELETED = 'menu.themed.event.deleted',
   OPENSEARCH_POPULATE_INDEX = 'opensearch.populate.index',
 }
 

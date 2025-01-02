@@ -37,6 +37,7 @@ function getCategories(): SimpleCategory[] {
     buildSimpleCategory('3', 'Pets'),
     buildSimpleCategory('9', 'Phones'),
     buildSimpleCategory('14', 'Sports and Fitness'),
+    buildSimpleCategory('19', 'Events'),
   ];
 }
 

@@ -1,7 +1,7 @@
 // Also known as Flexible menu
 
 import { MenuType } from './MenuResponse';
-import { Offer } from './Offer';
+import { EventOffer, Offer } from './Offer';
 
 export type SubMenu = {
   id: string;
@@ -20,9 +20,20 @@ export type ThemedSubMenuOffer = SubMenu & {
   }[];
 };
 
+// Expected ingestion type from the CMS events
+export type ThemedSubMenuEvent = SubMenu & {
+  events: {
+    id: string;
+    venue: {
+      id: string;
+    };
+  }[];
+};
+
 // Expected internal type
 export type ThemedSubMenuWithOffers = SubMenu & {
   offers: Offer[];
+  events: EventOffer[];
 };
 
 type ThemedMenu = {
@@ -36,4 +47,8 @@ type ThemedMenu = {
 
 export type ThemedMenuOffer = ThemedMenu & {
   themedMenusOffers: ThemedSubMenuOffer[];
+};
+
+export type ThemedMenuEvent = ThemedMenu & {
+  themedMenusEvents: ThemedSubMenuEvent[];
 };

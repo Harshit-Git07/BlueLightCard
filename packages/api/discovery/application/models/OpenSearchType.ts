@@ -1,4 +1,4 @@
-import { Offer } from '@blc-mono/discovery/application/models/Offer';
+import { EventOffer, Offer } from '@blc-mono/discovery/application/models/Offer';
 
 export type OpenSearchBulkCommand = OpenSearchCommand | OpenSearchBody;
 
@@ -30,6 +30,8 @@ export type OpenSearchBody = {
   category_name: string;
   category_id: number;
   date_offer_last_updated: string;
+  venue_id?: string;
+  venue_name?: string;
 };
 
 export const mapOfferToOpenSearchBody = (offer: Offer): OpenSearchBody => ({
@@ -56,4 +58,30 @@ export const mapOfferToOpenSearchBody = (offer: Offer): OpenSearchBody => ({
   category_name: offer.categories.length > 0 ? offer.categories[0].name : '',
   category_id: offer.categories.length > 0 ? offer.categories[0].id : 0,
   date_offer_last_updated: offer.updatedAt,
+});
+
+export const mapEventToOpenSearchBody = (event: EventOffer): OpenSearchBody => ({
+  offer_id: event.id,
+  offer_name: event.name.trim(),
+  offer_status: event.status,
+  offer_type: event.offerType,
+  offer_description: event.eventDescription.trim(),
+  offer_description_stripped: event.eventDescription.trim().replace(/<[^<>]*>/g, ''),
+  offer_image: event.image.trim(),
+  offer_expires: event.guestlistCompleteByDate,
+  offer_start: event.offerStart,
+  offer_tags: [],
+  company_id: '',
+  company_name: '',
+  company_name_stripped: '',
+  company_small_logo: '',
+  company_tags: [],
+  age_restrictions: event.ageRestrictions,
+  included_trusts: event.includedTrusts,
+  excluded_trusts: event.excludedTrusts,
+  category_name: event.categories.length > 0 ? event.categories[0].name : '',
+  category_id: event.categories.length > 0 ? event.categories[0].id : 0,
+  date_offer_last_updated: event.updatedAt,
+  venue_id: event.venue.id,
+  venue_name: event.venue.name,
 });

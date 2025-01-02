@@ -1,3 +1,4 @@
+import { EventResponse } from './EventResponse';
 import { OfferResponse } from './OfferResponse';
 
 export type FlexibleMenuResponse = {
@@ -6,4 +7,5 @@ export type FlexibleMenuResponse = {
   description: string;
   imageURL: string;
   offers: OfferResponse[];
+  events: EventResponse[];
 };

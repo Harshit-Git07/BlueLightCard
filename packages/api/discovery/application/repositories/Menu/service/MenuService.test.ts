@@ -1,5 +1,5 @@
 import { menuFactory } from '@blc-mono/discovery/application/factories/MenuFactory';
-import { offerFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
+import { eventFactory, offerFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
 import { subMenuFactory } from '@blc-mono/discovery/application/factories/SubMenuFactory';
 import { MenuWithOffers } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
@@ -7,6 +7,7 @@ import * as MenuRepositoryFile from '@blc-mono/discovery/application/repositorie
 
 import { MenuEntity, MenuEntityWithOfferEntities } from '../../schemas/MenuEntity';
 
+import { mapEventToMenuEventEntity } from './mapper/MenuEventMapper';
 import { mapMenuToMenuEntity } from './mapper/MenuMapper';
 import { mapOfferToMenuOfferEntity } from './mapper/MenuOfferMapper';
 import { mapSubMenuToSubMenuEntity } from './mapper/SubMenuMapper';
@@ -16,8 +17,10 @@ jest.mock('@blc-mono/discovery/application/repositories/Menu/MenuRepository');
 
 const menu = menuFactory.build();
 const offer = offerFactory.build();
+const event = eventFactory.build();
 const menuEntity = mapMenuToMenuEntity(menu);
 const menuOfferEntity = mapOfferToMenuOfferEntity(offer, menu.id, menu.menuType);
+const menuEventEntity = mapEventToMenuEventEntity(event, menu.id, menu.menuType);
 const featuredMenu = { ...menu, menuType: MenuType.FEATURED, id: '1234' };
 const featuredMenuEntity = mapMenuToMenuEntity(featuredMenu);
 const featuredOfferEntity = mapOfferToMenuOfferEntity(offer, featuredMenu.id, featuredMenu.menuType);
@@ -28,6 +31,12 @@ const flexibleSubMenu = subMenuFactory.build();
 const flexibleSubMenuEntity = mapSubMenuToSubMenuEntity(flexibleMenu.id, flexibleSubMenu);
 const flexibleSubMenuOfferEntity = mapOfferToMenuOfferEntity(
   offer,
+  flexibleMenu.id,
+  MenuType.FLEXIBLE,
+  flexibleSubMenu.id,
+);
+const flexibleSubMenuEventEntity = mapEventToMenuEventEntity(
+  event,
   flexibleMenu.id,
   MenuType.FLEXIBLE,
   flexibleSubMenu.id,
@@ -93,6 +102,29 @@ describe('Menu Service', () => {
           [{ subMenuId: flexibleSubMenu.id, offer }],
         ),
       ).rejects.toThrow(`Error occurred inserting themed menu with sub menus offers as batch, amount: [3]`);
+    });
+  });
+
+  describe('insertThemedMenuWithSubMenusAndEvents', () => {
+    it('should insert themed menu with sub menus and events successfully', async () => {
+      const mockInsert = jest.spyOn(MenuRepositoryFile.MenuRepository.prototype, 'batchInsert').mockResolvedValue();
+      await target.insertThemedMenuWithSubMenusAndEvents(
+        flexibleMenu,
+        [flexibleSubMenu],
+        [{ subMenuId: flexibleSubMenu.id, event }],
+      );
+      expect(mockInsert).toHaveBeenCalledWith([flexibleMenuEntity, flexibleSubMenuEntity, flexibleSubMenuEventEntity]);
+    });
+
+    it('should throw error when themed menu with sub menus and events failed to insert', async () => {
+      givenMenuOfferRepositoryThrowsAnError('batchInsert');
+      await expect(
+        target.insertThemedMenuWithSubMenusAndEvents(
+          flexibleMenu,
+          [flexibleSubMenu],
+          [{ subMenuId: flexibleSubMenu.id, event }],
+        ),
+      ).rejects.toThrow(`Error occurred inserting themed menu with sub menus events as batch, amount: [3]`);
     });
   });
 
@@ -172,10 +204,14 @@ describe('Menu Service', () => {
     it('should get themed menu and its offers by sub menu id successfully', async () => {
       const mockRetrieveMenuWithOffers = jest
         .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'retrieveThemedMenuWithOffers')
-        .mockResolvedValue({ ...flexibleSubMenuEntity, offers: [flexibleSubMenuOfferEntity] });
+        .mockResolvedValue({
+          ...flexibleSubMenuEntity,
+          offers: [flexibleSubMenuOfferEntity],
+          events: [flexibleSubMenuEventEntity],
+        });
       const result = await target.getThemedMenuAndOffersBySubMenuId(flexibleSubMenu.id);
       expect(mockRetrieveMenuWithOffers).toHaveBeenCalledWith(flexibleSubMenu.id);
-      expect(result).toStrictEqual({ ...flexibleSubMenu, offers: [offer] });
+      expect(result).toStrictEqual({ ...flexibleSubMenu, offers: [offer], events: [event] });
     });
 
     it('should return undefined if no themed menu with offers is found', async () => {
@@ -268,6 +304,83 @@ describe('Menu Service', () => {
       givenMenuOfferRepositoryThrowsAnError('insert');
       await expect(target.updateOfferInMenus(offer)).rejects.toThrow(
         `Error occurred updating offers in menu for offer with id: [${offer.id}]: [Error: DynamoDB error]`,
+      );
+    });
+  });
+
+  describe('updateEventInMenus', () => {
+    it('should successfully update an event if in one menu', async () => {
+      const mockGetOfferInMenusByEventId = jest
+        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'getEventInMenusByEventId')
+        .mockResolvedValue([menuEventEntity]);
+
+      const mockInsert = jest.spyOn(MenuRepositoryFile.MenuRepository.prototype, 'insert').mockResolvedValue();
+      const mockBatchInsert = jest
+        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'batchInsert')
+        .mockResolvedValue();
+      await target.updateEventInMenus(event);
+
+      expect(mockGetOfferInMenusByEventId).toHaveBeenCalledWith(event.id);
+      expect(mockInsert).toHaveBeenCalledWith(menuEventEntity);
+      expect(mockBatchInsert).not.toHaveBeenCalled();
+    });
+
+    it('should successfully update an event in more than one menu', async () => {
+      const mockGetOfferInMenusByEventId = jest
+        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'getEventInMenusByEventId')
+        .mockResolvedValue([menuEventEntity, menuEventEntity]);
+
+      const mockInsert = jest.spyOn(MenuRepositoryFile.MenuRepository.prototype, 'insert').mockResolvedValue();
+      const mockBatchInsert = jest
+        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'batchInsert')
+        .mockResolvedValue();
+      await target.updateEventInMenus(event);
+
+      expect(mockGetOfferInMenusByEventId).toHaveBeenCalledWith(event.id);
+      expect(mockInsert).not.toHaveBeenCalled();
+      expect(mockBatchInsert).toHaveBeenCalledWith([menuEventEntity, menuEventEntity]);
+    });
+
+    it('should ignore updating an event if it does not exist in any menu', async () => {
+      const mockGetOfferInMenusByEventId = jest
+        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'getEventInMenusByEventId')
+        .mockResolvedValue([]);
+
+      const mockInsert = jest.spyOn(MenuRepositoryFile.MenuRepository.prototype, 'insert').mockResolvedValue();
+      const mockBatchInsert = jest
+        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'batchInsert')
+        .mockResolvedValue();
+      await target.updateEventInMenus(event);
+
+      expect(mockGetOfferInMenusByEventId).toHaveBeenCalledWith(offer.id);
+      expect(mockInsert).not.toHaveBeenCalled();
+      expect(mockBatchInsert).not.toHaveBeenCalled();
+    });
+
+    it('should throw an error if an error occurs whilst getting offers by event id', async () => {
+      givenMenuOfferRepositoryThrowsAnError('getEventInMenusByEventId');
+      await expect(target.updateEventInMenus(event)).rejects.toThrow(
+        `Error occurred updating events in menu for offer with id: [${event.id}]: [Error: DynamoDB error]`,
+      );
+    });
+
+    it('should throw an error if an error occurs whilst batch inserting', async () => {
+      jest
+        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'getEventInMenusByEventId')
+        .mockResolvedValue([menuEventEntity, menuEventEntity]);
+      givenMenuOfferRepositoryThrowsAnError('batchInsert');
+      await expect(target.updateEventInMenus(event)).rejects.toThrow(
+        `Error occurred updating events in menu for offer with id: [${event.id}]: [Error: DynamoDB error]`,
+      );
+    });
+
+    it('should throw an error if an error occurs whilst performing a single insert', async () => {
+      jest
+        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'getEventInMenusByEventId')
+        .mockResolvedValue([menuEventEntity]);
+      givenMenuOfferRepositoryThrowsAnError('insert');
+      await expect(target.updateEventInMenus(event)).rejects.toThrow(
+        `Error occurred updating events in menu for offer with id: [${event.id}]: [Error: DynamoDB error]`,
       );
     });
   });

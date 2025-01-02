@@ -1,9 +1,9 @@
 import { APIGatewayEvent } from 'aws-lambda';
 
 import { Response } from '@blc-mono/core/utils/restResponse/response';
-import { isValidOffer } from '@blc-mono/discovery/application/utils/isValidOffer';
+import { isValidEvent, isValidOffer } from '@blc-mono/discovery/application/utils/isValidOffer';
 
-import { offerFactory } from '../../factories/OfferFactory';
+import { eventFactory, offerFactory } from '../../factories/OfferFactory';
 import { subMenuFactory } from '../../factories/SubMenuFactory';
 import { ThemedSubMenuWithOffers } from '../../models/ThemedMenu';
 import { mapThemedSubMenuWithOffersToFlexibleMenuResponse } from '../../repositories/Menu/service/mapper/FlexibleMenuMapper';
@@ -16,23 +16,23 @@ jest.mock('@blc-mono/discovery/application/utils/isValidOffer');
 
 const getThemedMenuAndOffersBySubMenuIdMock = jest.mocked(getThemedMenuAndOffersBySubMenuId);
 const isValidOfferMock = jest.mocked(isValidOffer);
+const isValidEventMock = jest.mocked(isValidEvent);
 
 const subMenu = subMenuFactory.build();
 const offers = offerFactory.buildList(2);
+const events = eventFactory.buildList(2);
 
-const mockGetFlexibleMenusResponse: ThemedSubMenuWithOffers = { ...subMenu, offers };
+const mockGetOfferFlexibleMenusResponse: ThemedSubMenuWithOffers = { ...subMenu, offers, events: [] };
+const mockGetEventFlexibleMenusResponse: ThemedSubMenuWithOffers = { ...subMenu, offers: [], events };
 
 describe('getFlexibleMenus handler', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     isValidOfferMock.mockReturnValue(true);
+    isValidEventMock.mockReturnValue(true);
   });
 
   describe('and menu is found', () => {
-    beforeEach(() => {
-      getThemedMenuAndOffersBySubMenuIdMock.mockResolvedValue(mockGetFlexibleMenusResponse);
-    });
-
     const event: Partial<APIGatewayEvent> = {
       pathParameters: {
         id: 'id',
@@ -44,17 +44,53 @@ describe('getFlexibleMenus handler', () => {
     };
 
     it('should return the response when a valid id is provided and the menu is found', async () => {
+      getThemedMenuAndOffersBySubMenuIdMock.mockResolvedValue(mockGetOfferFlexibleMenusResponse);
+
       const result = await handler(event as APIGatewayEvent);
 
       const expectedResponse = Response.OK({
         message: 'successful',
-        data: mapThemedSubMenuWithOffersToFlexibleMenuResponse(mockGetFlexibleMenusResponse),
+        data: mapThemedSubMenuWithOffersToFlexibleMenuResponse(mockGetOfferFlexibleMenusResponse),
       });
       expect(result).toEqual(expectedResponse);
       expect(getThemedMenuAndOffersBySubMenuIdMock).toHaveBeenCalled();
     });
 
+    it('should return the response event menu when a valid id is provided and the menu is found', async () => {
+      getThemedMenuAndOffersBySubMenuIdMock.mockResolvedValue(mockGetEventFlexibleMenusResponse);
+
+      const result = await handler(event as APIGatewayEvent);
+      const expectedResponse = Response.OK({
+        message: 'successful',
+        data: mapThemedSubMenuWithOffersToFlexibleMenuResponse(mockGetEventFlexibleMenusResponse),
+      });
+
+      expect(result).toEqual(expectedResponse);
+      expect(getThemedMenuAndOffersBySubMenuIdMock).toHaveBeenCalled();
+    });
+
+    it('should filter out invalid events', async () => {
+      getThemedMenuAndOffersBySubMenuIdMock.mockResolvedValue(mockGetEventFlexibleMenusResponse);
+
+      isValidEventMock.mockReturnValueOnce(false);
+      isValidEventMock.mockReturnValue(true);
+
+      const result = await handler(event as APIGatewayEvent);
+
+      const expectedResponse = Response.OK({
+        message: 'successful',
+        data: mapThemedSubMenuWithOffersToFlexibleMenuResponse({
+          ...mockGetEventFlexibleMenusResponse,
+          events: [events[1]],
+        }),
+      });
+      expect(result).toEqual(expectedResponse);
+      expect(isValidEventMock).toHaveBeenCalledTimes(2);
+    });
+
     it('should filter out invalid offers', async () => {
+      getThemedMenuAndOffersBySubMenuIdMock.mockResolvedValue(mockGetOfferFlexibleMenusResponse);
+
       isValidOfferMock.mockReturnValueOnce(false);
       isValidOfferMock.mockReturnValue(true);
 
@@ -63,7 +99,7 @@ describe('getFlexibleMenus handler', () => {
       const expectedResponse = Response.OK({
         message: 'successful',
         data: mapThemedSubMenuWithOffersToFlexibleMenuResponse({
-          ...mockGetFlexibleMenusResponse,
+          ...mockGetOfferFlexibleMenusResponse,
           offers: [offers[1]],
         }),
       });

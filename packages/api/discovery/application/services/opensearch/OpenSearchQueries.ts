@@ -108,6 +108,22 @@ export const offerIsLiveQuery = (): QueryDslQueryContainer => {
   };
 };
 
+export const eventOfferIsLiveQuery = (): QueryDslQueryContainer => {
+  return {
+    bool: {
+      must: [offerStatusLiveQuery(), eventOfferNotExpired()],
+    },
+  };
+};
+
+const eventOfferNotExpired = (): QueryDslQueryContainer => {
+  return {
+    bool: {
+      must: [offerNotExpired()],
+    },
+  };
+};
+
 export const offerNotExpiredAndEvergreenQuery = (): QueryDslQueryContainer => {
   return {
     bool: {
@@ -128,6 +144,22 @@ export const offerEvergreenQuery = (): QueryDslQueryContainer => {
         {
           exists: {
             field: 'offer_start',
+          },
+        },
+      ],
+    },
+  };
+};
+
+export const offerNotExpired = (): QueryDslQueryContainer => {
+  return {
+    bool: {
+      filter: [
+        {
+          range: {
+            offer_expires: {
+              gte: 'now',
+            },
           },
         },
       ],

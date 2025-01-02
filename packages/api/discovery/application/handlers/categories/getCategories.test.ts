@@ -63,6 +63,10 @@ describe('getCategories Handler', () => {
         id: '14',
         name: 'Sports and Fitness',
       },
+      {
+        id: '19',
+        name: 'Events',
+      },
     ];
     const expectedResponse = {
       body: JSON.stringify({ message: 'Success', data: expectedCategories }),

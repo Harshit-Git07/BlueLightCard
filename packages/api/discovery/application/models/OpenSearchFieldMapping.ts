@@ -44,4 +44,6 @@ export const openSearchFieldMapping: OpenSearchFieldMapping = {
   category_name: { type: 'text' },
   category_id: { type: 'text' },
   date_offer_last_updated: { type: 'date' },
+  venue_id: { type: 'text' },
+  venue_name: { type: 'text' },
 };

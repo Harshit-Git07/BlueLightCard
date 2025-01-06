@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.103.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.103.0...bluelightcard/web-v1.103.1) (2025-01-06)
+
+
+### Bug Fixes
+
+* [MAMA-308] - Added branded help links to Account SideNav and Logout ([#3495](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3495)) ([8e553c3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8e553c33f5dcda1044191cd21ae5ed0e4d3fb911))
+
 ## [1.103.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.102.0...bluelightcard/web-v1.103.0) (2024-12-19)
 
 

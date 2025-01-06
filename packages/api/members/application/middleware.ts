@@ -3,6 +3,8 @@ import {
   APIGatewayProxyEvent,
   APIGatewayProxyResult,
   Context,
+  DynamoDBStreamEvent,
+  EventBridgeEvent,
   S3Event,
   SQSEvent,
 } from 'aws-lambda';
@@ -146,6 +148,76 @@ export function sqsMiddleware(handler: SQSHandler): SQSHandler {
       auditLogger.info({
         message: 'Request failed',
         numberOfRecords: event.Records.length,
+        error: error.message,
+      });
+
+      if (error instanceof ValidationError || error instanceof ZodError) {
+        logger.warn('Validation error', error.message);
+      }
+
+      throw error;
+    }
+  };
+}
+
+type DynamoDBHandler = (event: DynamoDBStreamEvent, context: Context) => Promise<void>;
+
+export function dynamoDBMiddleware(handler: DynamoDBHandler): DynamoDBHandler {
+  return async (event: DynamoDBStreamEvent, context: Context): Promise<void> => {
+    logger.addContext(context);
+
+    try {
+      auditLogger.info({
+        message: 'Event start',
+        event: event.Records[0]?.eventName,
+      });
+
+      await handler(event, context);
+
+      auditLogger.info({
+        message: 'Event success',
+        event: event.Records[0]?.eventName,
+      });
+    } catch (error: Error | any) {
+      logger.error({ message: 'Error occurred', error });
+
+      auditLogger.info({
+        message: 'Request failed',
+        event: event.Records[0]?.eventName,
+      });
+
+      if (error instanceof ValidationError || error instanceof ZodError) {
+        logger.warn('Validation error', error.message);
+      }
+    }
+  };
+}
+
+type EventBusHandler = (event: EventBridgeEvent<any, any>, context: Context) => Promise<void>;
+
+export function eventBusMiddleware(handler: EventBusHandler): EventBusHandler {
+  return async (event: EventBridgeEvent<any, any>, context: Context): Promise<void> => {
+    logger.addContext(context);
+
+    try {
+      auditLogger.info({
+        message: 'Event start',
+        eventDetail: event.detail,
+        eventDetailType: event['detail-type'],
+      });
+
+      await handler(event, context);
+
+      auditLogger.info({
+        message: 'Event success',
+      });
+    } catch (error: Error | any) {
+      logger.error({ message: 'Error occurred', error });
+
+      auditLogger.info({
+        message: 'Request failed',
+        eventDetail: event.detail,
+        eventDetailType: event['detail-type'],
         error: error.message,
       });
 

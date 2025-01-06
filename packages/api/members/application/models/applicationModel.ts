@@ -3,7 +3,7 @@ import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtensio
 import { ApplicationReason } from './enums/ApplicationReason';
 import { RejectionReason } from './enums/RejectionReason';
 import { EligibilityStatus } from './enums/EligibilityStatus';
-import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
+import { PaymentStatus } from './enums/PaymentStatus';
 
 export const ApplicationModel = createZodNamedType(
   'ApplicationModel',

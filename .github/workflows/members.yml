@@ -219,6 +219,25 @@ jobs:
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
           MEMBERS_OPENSEARCH_CREATE_NEW_DOMAIN: ${{ github.event.label.name == 'membersCreateNewOpenSearchDomain' && 'true' || 'false' }}
+          SERVICE_LAYER_EMAIL_FROM: 'noreply@bluelightcard.co.uk'
+          SERVICE_LAYER_BRAZE_SQS_QUEUE: 'https://sqs.eu-west-2.amazonaws.com/361769569967/Braze-Push-develop-queue'
+          SERVICE_LAYER_DWH_STREAM_PRIVCARDSACTIONS: 'dwh-blc-p2-develop-privcardsActions'
+          SERVICE_LAYER_DWH_STREAM_USERCHANGES: 'dwh-blc-misc-userChanges-develop'
+          SERVICE_LAYER_DWH_STREAM_USERSCONFIRMED: 'dwh-blc-p2-develop-usersConfirmed'
+          SERVICE_LAYER_DWH_STREAM_USERSCOUNTY: 'dwh-blc-p2-develop-usersCounty'
+          SERVICE_LAYER_DWH_STREAM_USERSEMAIL: 'dwh-blc-p2ext-develop-usersEmail'
+          SERVICE_LAYER_DWH_STREAM_USERPROFILES: 'dwh-blc-p2-develop-userProfiles'
+          SERVICE_LAYER_DWH_STREAM_USERSNEW: 'dwh-blc-p2-develop-usersNew'
+          SERVICE_LAYER_DWH_STREAM_USERSSERVICEMEMBER: 'dwh-blc-p2-develop-usersServiceMember'
+          SERVICE_LAYER_DWH_STREAM_USERSTRUSTMEMBER: 'dwh-blc-p2-develop-usersTrustMember'
+          SERVICE_LAYER_DWH_STREAM_USERUUID: 'dwh-blc-userUuid-develop'
+          SERVICE_LAYER_DWH_STREAM_USERSVALIDATED: 'dwh-blc-p2-develop-usersValidated'
+          SERVICE_LAYER_EVENTS_ENABLED_GLOBAL: 'false'
+          SERVICE_LAYER_EVENTS_ENABLED_BRAZE: 'false'
+          SERVICE_LAYER_EVENTS_ENABLED_DWH: 'false'
+          SERVICE_LAYER_EVENTS_ENABLED_EMAIL: 'false'
+          SERVICE_LAYER_EVENTS_ENABLED_LEGACY: 'false'
+          SERVICE_LAYER_EVENTS_ENABLED_SYSTEM: 'false'
           # SERVICE_LAYER_AUTH0_DOMAIN: ${{ secrets[matrix.auth0Domain] }}
           # SERVICE_LAYER_AUTH0_API_CLIENT_ID: ${{ secrets[matrix.auth0ApiClientId] }}
           # SERVICE_LAYER_AUTH0_API_CLIENT_SECRET: ${{ secrets[matrix.auth0ApiClientSecret] }}

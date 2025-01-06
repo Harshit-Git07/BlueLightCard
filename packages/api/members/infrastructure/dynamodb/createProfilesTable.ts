@@ -26,6 +26,15 @@ export function createProfilesTable(stack: Stack): Table {
         sortKey: 'pk',
       },
     },
-    stream: true,
+    stream: 'new_and_old_images',
+    consumers: {
+      consumer: {
+        function: {
+          handler: 'packages/api/members/application/handlers/dynamodb/eventDispatcher.handler',
+          timeout: 10,
+          permissions: ['events:PutEvents'],
+        },
+      },
+    },
   });
 }

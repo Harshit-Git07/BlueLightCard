@@ -12,7 +12,7 @@ exports[`MinimalFooter renders a blc-au footer 1`] = `
       className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light tracking-typography-body-light text-base text-center tracking-tight whitespace-nowrap"
       role="contentinfo"
     >
-      ©Blue Light Card 2008 - 2024
+      ©Blue Light Card 2008 - 2025
     </p>
     <div
       className="flex flex-wrap justify-center w-full lg:justify-end gap-[16px]"
@@ -82,7 +82,7 @@ exports[`MinimalFooter renders a dds-uk footer 1`] = `
         className="flex flex-col md:flex-row md:gap-[4px] lg:flex-col"
       >
         <span>
-          © Defence Discount Service 2012 - 2024
+          © Defence Discount Service 2012 - 2025
         </span>
         <span>
           Operated by Blue Light Card Ltd
@@ -153,7 +153,7 @@ exports[`MinimalFooter snapshot Test renders a blc-uk footer 1`] = `
       className="text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light tracking-typography-body-light text-base text-center tracking-tight whitespace-nowrap"
       role="contentinfo"
     >
-      ©Blue Light Card 2008 - 2024
+      ©Blue Light Card 2008 - 2025
     </p>
     <div
       className="flex flex-wrap justify-center w-full lg:justify-end gap-[16px]"

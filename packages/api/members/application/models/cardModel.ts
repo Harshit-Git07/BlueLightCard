@@ -21,7 +21,6 @@ export const CardModel = createZodNamedType(
     batchNumber: z.string().optional(),
     printingErrorStatus: z.nativeEnum(PrintingErrorStatus).optional(),
     promoCode: z.string().optional(),
-    updated: z.string().datetime().nullable().optional(),
     ingestionLastTriggered: z.string().datetime().optional(),
   }),
 );

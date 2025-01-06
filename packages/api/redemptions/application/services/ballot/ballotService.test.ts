@@ -5,7 +5,7 @@ import {
   DatabaseTransactionOperator,
   TransactionManager,
 } from '@blc-mono/redemptions/infrastructure/database/TransactionManager';
-import { createTestLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
+import { createSilentLogger } from '@blc-mono/redemptions/libs/test/helpers/logger';
 
 import { ballotEntryStatusEnum } from '../../../libs/database/schema';
 import { BallotEntriesEntity, IBallotEntriesRepository } from '../../repositories/BallotEntriesRepository';
@@ -85,7 +85,7 @@ describe('BallotService', () => {
     it('should publish event for each ballot id', async () => {
       const dateRange = mockDateRange();
       const ballots = [{ id: 'ballotId1' }, { id: 'ballotId1' }];
-      const mockedLogger = createTestLogger();
+      const mockedLogger = createSilentLogger();
       const ballotsRepository = mockBallotsRepository(ballots);
       const eventsRepository = mockRedemptionsEventsRepository();
       const ballotsEntriesRepository = mockBallotsEntriesRepository([]);
@@ -115,7 +115,7 @@ describe('BallotService', () => {
     it('should not publish any events', async () => {
       const dateRange = mockDateRange();
       const ballots = [] as { id: string }[];
-      const mockedLogger = createTestLogger();
+      const mockedLogger = createSilentLogger();
       const ballotsRepository = mockBallotsRepository(ballots);
       const eventsRepository = mockRedemptionsEventsRepository();
       const ballotsEntriesRepository = mockBallotsEntriesRepository([]);
@@ -143,7 +143,7 @@ describe('BallotService', () => {
     it('should continue to publish events for other ballots', async () => {
       const dateRange = mockDateRange();
       const ballots = [{ id: 'ballotId1' }, { id: 'ballotId1' }];
-      const mockedLogger = createTestLogger();
+      const mockedLogger = createSilentLogger();
       const ballotsRepository = mockBallotsRepository(ballots);
       const eventsRepository = mockRedemptionsEventsRepository();
       const ballotsEntriesRepository = mockBallotsEntriesRepository([]);
@@ -170,7 +170,7 @@ describe('BallotService', () => {
   describe('when running ballot for a single ballot and ballot not found', () => {
     it('should throw an error, ballot not found', async () => {
       const dateOfRun = new Date();
-      const mockedLogger = createTestLogger();
+      const mockedLogger = createSilentLogger();
       const ballotsRepository = mockBallotsRepository(undefined);
       const ballotsEntriesRepository = mockBallotsEntriesRepository([]);
       const eventsRepository = mockRedemptionsEventsRepository();
@@ -194,7 +194,7 @@ describe('BallotService', () => {
       const dateOfRun = new Date();
       ballot.status = 'drawing';
 
-      const mockedLogger = createTestLogger();
+      const mockedLogger = createSilentLogger();
       const ballotsRepository = mockBallotsRepository([ballot]);
       const ballotsEntriesRepository = mockBallotsEntriesRepository([]);
       const eventsRepository = mockRedemptionsEventsRepository();
@@ -222,7 +222,7 @@ describe('BallotService', () => {
       ballot.drawDate = drawDate;
       ballot.status = 'pending';
 
-      const mockedLogger = createTestLogger();
+      const mockedLogger = createSilentLogger();
       const ballotsRepository = mockBallotsRepository([ballot]);
       const ballotsEntriesRepository = mockBallotsEntriesRepository([]);
       const eventsRepository = mockRedemptionsEventsRepository();
@@ -250,7 +250,7 @@ describe('BallotService', () => {
       ballot.drawDate = drawDate;
       ballot.status = 'pending';
 
-      const mockedLogger = createTestLogger();
+      const mockedLogger = createSilentLogger();
       const ballotsRepository = mockBallotsRepository([ballot]);
       const ballotsEntriesRepository = mockBallotsEntriesRepository([]);
       const eventsRepository = mockRedemptionsEventsRepository();
@@ -285,7 +285,7 @@ describe('BallotService', () => {
         memberId: 'memberId1',
       };
 
-      const mockedLogger = createTestLogger();
+      const mockedLogger = createSilentLogger();
       const ballotsRepository = mockBallotsRepository([ballot]);
       const ballotsEntriesRepository = mockBallotsEntriesRepository([ballotEntry]);
       ballotsEntriesRepository.withTransaction = jest.fn().mockReturnValue(ballotsEntriesRepository);
@@ -330,7 +330,7 @@ describe('BallotService', () => {
         },
       ];
 
-      const mockedLogger = createTestLogger();
+      const mockedLogger = createSilentLogger();
       const ballotsRepository = mockBallotsRepository([ballot]);
       const ballotsEntriesRepository = mockBallotsEntriesRepository(ballotEntries);
       ballotsEntriesRepository.withTransaction = jest.fn().mockReturnValue(ballotsEntriesRepository);

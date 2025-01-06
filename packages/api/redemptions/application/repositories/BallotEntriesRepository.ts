@@ -9,12 +9,13 @@ import { Repository } from './Repository';
 export type BallotEntriesEntity = typeof ballotEntriesTable.$inferSelect;
 export type NewBallotEntriesEntity = typeof ballotEntriesTable.$inferInsert;
 export type BallotEntriesEntityWithMemberId = { memberId: (typeof ballotEntriesTable.$inferSelect)['memberId'] };
+export type BallotEntriesEntityWithId = { id: (typeof ballotEntriesTable.$inferSelect)['id'] };
 
 export interface IBallotEntriesRepository {
   create(ballotEntryEntity: NewBallotEntriesEntity): Promise<Pick<BallotEntriesEntity, 'id'>>;
   findOneById(id: string): Promise<BallotEntriesEntity | null>;
   findOneByBallotAndMemberId(memberId: string, ballotId: string): Promise<BallotEntriesEntity | null>;
-  findByBallotIdAndStatus(ballotId: string, status: BallotEntryStatus): Promise<BallotEntriesEntity[]>;
+  findByBallotIdAndStatus(ballotId: string, status: BallotEntryStatus): Promise<BallotEntriesEntityWithId[]>;
   findMemberIdsByBallotIdAndStatusWithLimitAndOffset(
     ballotId: string,
     status: BallotEntryStatus,
@@ -64,9 +65,12 @@ export class BallotEntriesRepository extends Repository implements IBallotEntrie
     return this.atMostOne(result);
   }
 
-  public async findByBallotIdAndStatus(ballotId: string, status: BallotEntryStatus): Promise<BallotEntriesEntity[]> {
+  public async findByBallotIdAndStatus(
+    ballotId: string,
+    status: BallotEntryStatus,
+  ): Promise<BallotEntriesEntityWithId[]> {
     return await this.connection.db
-      .select()
+      .select({ id: ballotEntriesTable.id })
       .from(ballotEntriesTable)
       .where(and(eq(ballotEntriesTable.ballotId, ballotId), eq(ballotEntriesTable.status, status)))
       .execute();

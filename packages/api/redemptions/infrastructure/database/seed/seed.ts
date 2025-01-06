@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import { NewGenericEntity } from '@blc-mono/redemptions/application/repositories/GenericsRepository';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import {
@@ -198,73 +200,24 @@ export async function seed({ db }: DatabaseConnection): Promise<void> {
     {
       id: `${ballotsPrefix}-e9bb4f9a-1d76-4aea-9b08-e1511441e448`,
       redemptionId: redemptionsData[4].id,
-      drawDate: new Date('2025-01-02T14:48:00.000Z'),
-      totalTickets: 2,
-      eventDate: new Date('2025-01-01T14:48:00.000Z'),
+      drawDate: new Date(Date.now()),
+      totalTickets: 100,
+      eventDate: new Date(Date.now()),
       offerName: 'Eagle eye offer',
-      created: new Date('2025-01-15T13:48:00.000Z'),
+      created: new Date(Date.now()),
       status: ballotStatusEnum.enumValues[0],
     },
   ] satisfies (typeof ballotsTable.$inferInsert)[];
   await db.insert(ballotsTable).values(ballotsData).onConflictDoNothing();
 
-  const ballotsEntriesData = [
-    {
-      id: `${ballotEntriesPrefix}-82c819c7-df10-4e63-ae0b-0ae945a1dbd1`,
-      ballotId: ballotsData[0].id,
-      entryDate: new Date('2025-01-02T14:48:00.000Z'),
-      memberId: '1',
-      status: ballotEntryStatusEnum.enumValues[0],
-      created: new Date('2025-01-15T13:48:00.000Z'),
-    },
-    {
-      id: `${ballotEntriesPrefix}-82c819c7-df10-4e63-ae0b-0ae945a1dbd2`,
-      ballotId: ballotsData[0].id,
-      entryDate: new Date('2025-01-02T14:48:00.000Z'),
-      memberId: '2',
-      status: ballotEntryStatusEnum.enumValues[0],
-      created: new Date('2025-01-15T13:48:00.000Z'),
-    },
-    {
-      id: `${ballotEntriesPrefix}-82c819c7-df10-4e63-ae0b-0ae945a1dbd3`,
-      ballotId: ballotsData[0].id,
-      entryDate: new Date('2025-01-02T14:48:00.000Z'),
-      memberId: '3',
-      status: ballotEntryStatusEnum.enumValues[0],
-      created: new Date('2025-01-15T13:48:00.000Z'),
-    },
-    {
-      id: `${ballotEntriesPrefix}-82c819c7-df10-4e63-ae0b-0ae945a1dbd4`,
-      ballotId: ballotsData[0].id,
-      entryDate: new Date('2025-01-02T14:48:00.000Z'),
-      memberId: '4',
-      status: ballotEntryStatusEnum.enumValues[0],
-      created: new Date('2025-01-15T13:48:00.000Z'),
-    },
-    {
-      id: `${ballotEntriesPrefix}-82c819c7-df10-4e63-ae0b-0ae945a1dbd7`,
-      ballotId: ballotsData[0].id,
-      entryDate: new Date('2025-01-02T14:48:00.000Z'),
-      memberId: '5',
-      status: ballotEntryStatusEnum.enumValues[0],
-      created: new Date('2025-01-15T13:48:00.000Z'),
-    },
-    {
-      id: `${ballotEntriesPrefix}-c82d931e-6fd7-4d4b-bcc6-c2cfc872947f`,
-      ballotId: ballotsData[0].id,
-      entryDate: new Date('2025-01-02T15:48:00.000Z'),
-      memberId: '6',
-      status: ballotEntryStatusEnum.enumValues[2],
-      created: new Date('2025-01-15T13:48:00.000Z'),
-    },
-    {
-      id: `${ballotEntriesPrefix}-0f235608-d9f5-45a0-9c9a-be87db1388fa`,
-      ballotId: ballotsData[0].id,
-      entryDate: new Date('2025-01-02T16:48:00.000Z'),
-      memberId: '7',
-      status: ballotEntryStatusEnum.enumValues[3],
-      created: new Date('2025-01-15T13:48:00.000Z'),
-    },
-  ] satisfies (typeof ballotEntriesTable.$inferInsert)[];
+  const ballotsEntriesData = Array.from({ length: 10 }, (_, i) => ({
+    id: `${ballotEntriesPrefix}-${uuidv4()}`,
+    ballotId: ballotsData[0].id,
+    entryDate: new Date(Date.now()),
+    memberId: i.toString(),
+    status: ballotEntryStatusEnum.enumValues[0],
+    created: new Date(Date.now()),
+  })) satisfies (typeof ballotEntriesTable.$inferInsert)[];
+
   await db.insert(ballotEntriesTable).values(ballotsEntriesData).onConflictDoNothing();
 }

@@ -137,7 +137,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
       vaultBatchCreatedRule: createVaultBatchCreatedRule(stack, config, database),
       vaultThresholdEmailRule: createVaultThresholdEmailRule(stack, config, database),
       redemptionPushNotificationRule: createRedemptionPushNotificationRule(stack, config),
-      runBallotRule: runBallotRule(stack, database, bus.eventBusName),
+      runBallotRule: runBallotRule(stack, database, bus.eventBusName, config),
       runSuccessfulBallotRule: runSuccessfulBallotRule(stack, database, config),
       runUnsuccessfulBallotRule: runUnsuccessfulBallotRule(stack, database, config),
     },
@@ -147,7 +147,7 @@ async function RedemptionsStack({ app, stack }: StackContext) {
   );
 
   // Create cron jobs for checking ballots
-  checkBallotsCron(stack, database, bus.eventBusName);
+  checkBallotsCron(stack, database, bus.eventBusName, config);
 
   // Create cron jobs for vault stock DWH
   vaultStockCron(stack);

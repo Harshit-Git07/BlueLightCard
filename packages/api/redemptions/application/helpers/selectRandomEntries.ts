@@ -1,8 +1,9 @@
 import crypto from 'crypto';
 
 export function selectRandomEntries<T extends { id: string }>(items: T[], count: number): T[] {
-  if (count > items.length) {
-    return [];
+  // If the count is greater than or equal to the number of items, return all items
+  if (count >= items.length) {
+    return items;
   }
 
   const shuffled = [...items];

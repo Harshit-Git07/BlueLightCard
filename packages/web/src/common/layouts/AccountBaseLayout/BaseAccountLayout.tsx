@@ -1,5 +1,6 @@
 import { FC, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { ENVIRONMENT } from '@/root/global-vars';
 import {
   AccountDetails,
   CardVerificationAlerts,
@@ -55,15 +56,19 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
   );
 
   useEffect(() => {
+    if (ENVIRONMENT === 'local') {
+      return;
+    }
+
     if (
       authContext.isReady &&
       (!loggedIn || (status !== 'pending' && accountFlag?.variantName !== 'on' && router.isReady))
     ) {
       router.push('/');
     }
-  }, [accountFlag, router, status, loggedIn, authContext]);
+  }, [accountFlag, router, status, loggedIn, authContext, ENVIRONMENT]);
 
-  if (accountFlag?.variantName !== 'on') {
+  if (ENVIRONMENT !== 'local' && accountFlag?.variantName !== 'on') {
     return null;
   }
 

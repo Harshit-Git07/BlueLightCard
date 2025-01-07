@@ -85,6 +85,8 @@ export class BallotService implements IBallotService {
       throw new Error(`${message} (ballotId="${ballotId}")`);
     }
 
+    this.logger.info({ message: `Ballot ${ballotId} found on draw date ${dateOfRun}` });
+
     if (ballot.status !== 'pending') {
       const message = 'Ballot is not in a pending state';
       this.logger.error({
@@ -97,6 +99,8 @@ export class BallotService implements IBallotService {
       throw new Error(`${message} (ballotId="${ballotId}")`);
     }
 
+    this.logger.info({ message: `Ballot ${ballotId} is in a pending state` });
+
     if (!isBallotReadyToRun(ballot.drawDate, dateOfRun)) {
       const message = 'This ballot is not ready to run, the current date is not the draw date or not after 10pm';
       this.logger.error({
@@ -108,6 +112,8 @@ export class BallotService implements IBallotService {
       });
       throw new Error(`${message} (ballotId="${ballotId}")`);
     }
+
+    this.logger.info({ message: `Ballot ${ballotId} is ready to run` });
 
     const ballotEntries = await this.ballotsEntriesRepository.findByBallotIdAndStatus(ballotId, 'pending');
     if (ballotEntries.length === 0) {
@@ -122,23 +128,37 @@ export class BallotService implements IBallotService {
       throw new Error(`${message} (ballotId="${ballotId}")`);
     }
 
+    this.logger.info({ message: `Ballot ${ballotId} has ${ballotEntries.length} pending entries` });
+
     const selectedEntries = selectRandomEntries(ballotEntries, ballot.totalTickets);
     const ids = selectedEntries.map((entry) => entry.id);
+
+    this.logger.info({ message: `Ballot ${ballotId} has ${ids.length} entries selected` });
 
     await this.transactionManager.withTransaction(async (transaction) => {
       const transactionConnection = { db: transaction };
       const repository = this.ballotsEntriesRepository.withTransaction(transactionConnection);
 
       await this.ballotsRepository.updateBallotStatus(ballotId, 'drawing');
+      this.logger.info({ message: `Ballot ${ballotId} has been updated to drawing` });
 
       await repository.updateManyBatchEntriesInArray(ballotId, ids, 'unconfirmed');
+      this.logger.info({ message: `Successful ballot entries for ${ballotId} have been updated to unconfirmed` });
+
       await repository.updateManyBatchEntriesNotInArray(ballotId, ids, 'unsuccessful');
+      this.logger.info({ message: `Unsuccessful ballot entries for ${ballotId} have been updated to unsuccessful` });
 
       this.redemptionsEventsRepository.publishSuccessfulBallotEvent({ ballotId });
+      this.logger.info({ message: `Ballot events for ${ballotId} have been published to successful queue` });
+
       this.redemptionsEventsRepository.publishUnsuccessfulBallotEvent({ ballotId });
+      this.logger.info({ message: `Ballot events for ${ballotId} have been published to unsuccessful queue` });
 
       await this.ballotsRepository.updateBallotStatus(ballotId, 'drawn');
+      this.logger.info({ message: `Ballot ${ballotId} has been updated to drawn` });
     });
+
+    this.logger.info({ message: `Ballot ${ballotId} has been drawn and is now complete` });
   }
 
   public async notifyEntriesOfBallotOutcome(ballotId: string, ballotEntryStatus: BallotEntryStatus): Promise<void> {

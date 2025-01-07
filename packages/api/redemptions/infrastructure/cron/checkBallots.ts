@@ -33,6 +33,7 @@ export function checkBallotsCron(
     deadLetterQueueEnabled: true,
     deadLetterQueue: queue.cdk.queue,
     permissions: [putEventsPolicy],
+    timeout: '15 minutes',
     environment: {
       [RedemptionsStackEnvironmentKeys.REDEMPTIONS_EVENT_BUS_NAME]: eventBusName,
       [RedemptionsStackEnvironmentKeys.BRAZE_API_URL]: config.brazeConfig.brazeApiUrl,

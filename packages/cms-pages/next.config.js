@@ -1,6 +1,8 @@
 const { createClient } = require('next-sanity');
 const groq = require('groq');
 
+const CopyPlugin = require('copy-webpack-plugin');
+
 const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET_NAME,
@@ -20,7 +22,14 @@ const nextConfig = {
   },
   swcMinify: true,
   transpilePackages: ['@bluelightcard/shared-ui'],
-
+  webpack(config) {
+    config.plugins.push(
+      new CopyPlugin({
+        patterns: [{ from: '../shared-ui/fonts', to: 'static/fonts' }],
+      }),
+    );
+    return config;
+  },
   async redirects() {
     return await client.fetch(groq`*[_type == 'redirect']{
 			source,
@@ -28,12 +37,6 @@ const nextConfig = {
 			permanent
 		}`);
   },
-
-  // logging: {
-  // 	fetches: {
-  // 		fullUrl: true,
-  // 	},
-  // },
 };
 
 module.exports = nextConfig;

@@ -29,7 +29,7 @@ export default async function LogoList({
         {allLogos.map((logo, key) => (
           <Img
             className="max-h-[7em] max-w-[200px] object-contain"
-            image={logo.image[logoType] as Sanity.Image}
+            image={logo.image?.[logoType] as Sanity.Image}
             imageWidth={400}
             key={key}
           />

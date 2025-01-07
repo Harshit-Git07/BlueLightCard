@@ -1,0 +1,50 @@
+import { Canvas, Controls, Meta, Story, DocsContext } from '@storybook/blocks';
+import ComponentStatus from '@bluelightcard/shared-ui/storybook-config/blocks/ComponentStatus';
+import FigmaEmbed from '@bluelightcard/shared-ui/storybook-config/blocks/FigmaEmbed';
+import * as AccordionList from './AccordionList.stories';
+
+<Meta title="Modules/Accordion List" of={AccordionList} />
+
+# Accordion List
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Design](#design)
+
+## Status
+
+<ComponentStatus />
+
+## Overview
+
+Accordion lists are commonly used for things like FAQ's where the title exposes the description in an expanding menu fashion
+
+## Props
+
+<Controls />
+
+## State
+
+This component does not manage any state of its own.
+
+## Design
+
+<FigmaEmbed />
+
+## Variants
+
+List of variants can be shown below here.
+
+### Default
+
+<Canvas of={AccordionList.Default} />
+
+### Horizontal
+
+<Canvas of={AccordionList.Horizontal} />
+
+### Vertical
+
+<Canvas of={AccordionList.Vertical} />

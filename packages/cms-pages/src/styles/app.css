@@ -44,6 +44,10 @@
     --primary-foreground: #0f172a;
   }
 
+  body {
+    @apply font-typography-body font-typography-body-weight;
+  }
+
   label {
     cursor: pointer;
   }
@@ -244,7 +248,7 @@
     }
 
     &[open] summary::after {
-      rotate: 135deg;
+      content: '-';
     }
   }
 

@@ -1,0 +1,319 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Accordion List Default should match snapshot 1`] = `
+<div>
+  <section
+    class="section space-y-8"
+    itemscope=""
+    itemtype="https://schema.org/FAQPage"
+  >
+    <header
+      class="richtext font-typography-body-light-weight leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark text-center"
+    >
+      <h2>
+        Accordion Intro
+      </h2>
+    </header>
+    <div
+      class="mx-auto w-full max-w-screen-md grid gap-4"
+    >
+      <details
+        class="accordion"
+        itemprop="mainEntity"
+        itemscope=""
+        itemtype="https://schema.org/Question"
+      >
+        <summary
+          class="py-[10px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark border-b border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+          itemprop="name"
+        >
+          Question 1
+        </summary>
+        <div
+          class="anim-fade-to-b mt-2"
+          itemprop="acceptedAnswer"
+          itemscope=""
+          itemtype="https://schema.org/Answer"
+        >
+          <div
+            class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            itemprop="text"
+          >
+            <p>
+              Content for Question 1
+            </p>
+          </div>
+        </div>
+      </details>
+      <details
+        class="accordion"
+        itemprop="mainEntity"
+        itemscope=""
+        itemtype="https://schema.org/Question"
+      >
+        <summary
+          class="py-[10px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark border-b border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+          itemprop="name"
+        >
+          Question 2
+        </summary>
+        <div
+          class="anim-fade-to-b mt-2"
+          itemprop="acceptedAnswer"
+          itemscope=""
+          itemtype="https://schema.org/Answer"
+        >
+          <div
+            class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            itemprop="text"
+          >
+            <p>
+              Content for Question 2
+            </p>
+          </div>
+        </div>
+      </details>
+      <details
+        class="accordion"
+        itemprop="mainEntity"
+        itemscope=""
+        itemtype="https://schema.org/Question"
+      >
+        <summary
+          class="py-[10px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark border-b border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+          itemprop="name"
+        >
+          Question 3
+        </summary>
+        <div
+          class="anim-fade-to-b mt-2"
+          itemprop="acceptedAnswer"
+          itemscope=""
+          itemtype="https://schema.org/Answer"
+        >
+          <div
+            class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            itemprop="text"
+          >
+            <p>
+              Content for Question 3
+            </p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Accordion List Horizontal should match snapshot 1`] = `
+<div>
+  <section
+    class="section grid gap-8 md:grid-cols-2"
+    itemscope=""
+    itemtype="https://schema.org/FAQPage"
+  >
+    <header
+      class="richtext font-typography-body-light-weight leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark md:sticky-below-header self-start [--offset:1rem]"
+    >
+      <h2>
+        Accordion Intro
+      </h2>
+    </header>
+    <div
+      class="mx-auto w-full max-w-screen-md grid gap-4"
+    >
+      <details
+        class="accordion"
+        itemprop="mainEntity"
+        itemscope=""
+        itemtype="https://schema.org/Question"
+      >
+        <summary
+          class="py-[10px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark border-b border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+          itemprop="name"
+        >
+          Question 1
+        </summary>
+        <div
+          class="anim-fade-to-b mt-2"
+          itemprop="acceptedAnswer"
+          itemscope=""
+          itemtype="https://schema.org/Answer"
+        >
+          <div
+            class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            itemprop="text"
+          >
+            <p>
+              Content for Question 1
+            </p>
+          </div>
+        </div>
+      </details>
+      <details
+        class="accordion"
+        itemprop="mainEntity"
+        itemscope=""
+        itemtype="https://schema.org/Question"
+      >
+        <summary
+          class="py-[10px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark border-b border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+          itemprop="name"
+        >
+          Question 2
+        </summary>
+        <div
+          class="anim-fade-to-b mt-2"
+          itemprop="acceptedAnswer"
+          itemscope=""
+          itemtype="https://schema.org/Answer"
+        >
+          <div
+            class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            itemprop="text"
+          >
+            <p>
+              Content for Question 2
+            </p>
+          </div>
+        </div>
+      </details>
+      <details
+        class="accordion"
+        itemprop="mainEntity"
+        itemscope=""
+        itemtype="https://schema.org/Question"
+      >
+        <summary
+          class="py-[10px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark border-b border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+          itemprop="name"
+        >
+          Question 3
+        </summary>
+        <div
+          class="anim-fade-to-b mt-2"
+          itemprop="acceptedAnswer"
+          itemscope=""
+          itemtype="https://schema.org/Answer"
+        >
+          <div
+            class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            itemprop="text"
+          >
+            <p>
+              Content for Question 3
+            </p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Accordion List Vertical should match snapshot 1`] = `
+<div>
+  <section
+    class="section space-y-8"
+    itemscope=""
+    itemtype="https://schema.org/FAQPage"
+  >
+    <header
+      class="richtext font-typography-body-light-weight leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark text-center"
+    >
+      <h2>
+        Accordion Intro
+      </h2>
+    </header>
+    <div
+      class="mx-auto w-full max-w-screen-md grid gap-4"
+    >
+      <details
+        class="accordion"
+        itemprop="mainEntity"
+        itemscope=""
+        itemtype="https://schema.org/Question"
+      >
+        <summary
+          class="py-[10px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark border-b border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+          itemprop="name"
+        >
+          Question 1
+        </summary>
+        <div
+          class="anim-fade-to-b mt-2"
+          itemprop="acceptedAnswer"
+          itemscope=""
+          itemtype="https://schema.org/Answer"
+        >
+          <div
+            class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            itemprop="text"
+          >
+            <p>
+              Content for Question 1
+            </p>
+          </div>
+        </div>
+      </details>
+      <details
+        class="accordion"
+        itemprop="mainEntity"
+        itemscope=""
+        itemtype="https://schema.org/Question"
+      >
+        <summary
+          class="py-[10px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark border-b border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+          itemprop="name"
+        >
+          Question 2
+        </summary>
+        <div
+          class="anim-fade-to-b mt-2"
+          itemprop="acceptedAnswer"
+          itemscope=""
+          itemtype="https://schema.org/Answer"
+        >
+          <div
+            class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            itemprop="text"
+          >
+            <p>
+              Content for Question 2
+            </p>
+          </div>
+        </div>
+      </details>
+      <details
+        class="accordion"
+        itemprop="mainEntity"
+        itemscope=""
+        itemtype="https://schema.org/Question"
+      >
+        <summary
+          class="py-[10px] font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark border-b border-colour-onSurface-outline-light dark:border-colour-onSurface-outline-dark"
+          itemprop="name"
+        >
+          Question 3
+        </summary>
+        <div
+          class="anim-fade-to-b mt-2"
+          itemprop="acceptedAnswer"
+          itemscope=""
+          itemtype="https://schema.org/Answer"
+        >
+          <div
+            class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            itemprop="text"
+          >
+            <p>
+              Content for Question 3
+            </p>
+          </div>
+        </div>
+      </details>
+    </div>
+  </section>
+</div>
+`;

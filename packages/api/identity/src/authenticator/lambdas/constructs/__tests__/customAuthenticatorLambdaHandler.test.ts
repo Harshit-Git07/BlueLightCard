@@ -6,12 +6,14 @@ import { PolicyDocument } from "aws-lambda";
 
 const auth0Issuer = 'https://staging-access.blcshine.io/';
 const auth0ExtraIssuer = 'https://staging-access-dds.blcshine.io/';
+const auth0TestIssuer = 'https://blc-uk-staging.uk.auth0.com/';
 process.env.OLD_USER_POOL_ID = 'eu-west-2_rNmQEiFS4';
 process.env.OLD_USER_POOL_ID_DDS = 'eu-west-2_jbLX0JEdN';
 process.env.USER_POOL_ID = 'eu-west-2_E8RFhXXZY';
 process.env.USER_POOL_ID_DDS = 'eu-west-2_YQNcmfl2l';
 process.env.AUTH0_ISSUER = auth0Issuer;
 process.env.AUTH0_EXTRA_ISSUER = auth0ExtraIssuer;
+process.env.AUTH0_TEST_ISSUER = auth0TestIssuer;
 
 jest.mock('../auth0/auth0TokenVerification');
 const auth0TokenVerificationMock = jest.mocked(authenticateAuth0Token);
@@ -129,6 +131,34 @@ describe('customAuthenticatorLambdaHandler', () => {
       },
     });
     expect(auth0TokenVerificationMock).toHaveBeenCalledWith(apiGatewayEvent, auth0ExtraIssuer)
+  });
+
+  it('should return the expected response for valid auth0 authToken for test issuer', async () => {
+    const policyDocument: PolicyDocument = {
+      Version: '2012-10-17',
+      Statement: [{
+        Action: 'execute-api:Invoke',
+        Effect: 'Allow',
+        Resource: 'resource',
+      }]
+    }
+    const auth0Sub = 'auth0|some-id';
+    const apiGatewayEvent = buildApiGatewayEventWithToken('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhdXRoMHwxMjM0NTY3ODkwIiwiaXNzIjoiaHR0cHM6Ly9ibGMtdWstc3RhZ2luZy51ay5hdXRoMC5jb20vIiwiaWF0IjoxNTE2MjM5MDIyfQ.2IZ1YMt6Hel9K8W9LOg4bXzo6a9a1Rk7NhF_cwOutE8');
+    auth0TokenVerificationMock.mockResolvedValue({
+      principalId: auth0Sub,
+      policyDocument
+    });
+
+    const result = await handler(apiGatewayEvent);
+
+    expect(result).toEqual({
+      principalId: auth0Sub,
+      policyDocument: {
+        Version: policyDocument.Version,
+        Statement: policyDocument.Statement,
+      },
+    });
+    expect(auth0TokenVerificationMock).toHaveBeenCalledWith(apiGatewayEvent, auth0TestIssuer)
   });
 
   const buildApiGatewayEventWithToken = (token: string) => ({

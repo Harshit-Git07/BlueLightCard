@@ -5,7 +5,7 @@ import { RefundModel } from '@blc-mono/members/application/models/refundModel';
 
 export function adminPaymentRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
   return {
     'POST /admin/payments/initiate': Route.createRoute({
       ...defaultRouteProps,

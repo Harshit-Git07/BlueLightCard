@@ -38,6 +38,9 @@ export const authenticateAuth0Token = async (params: APIGatewayRequestAuthorizer
     return {
       principalId: verifiedToken.sub,
       policyDocument,
+      context: {
+        memberId: verifiedToken.memberUuid
+      }
     };
   } catch (error) {
     logger.error('Error verifying auth0 token');

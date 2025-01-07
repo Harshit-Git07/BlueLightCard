@@ -11,6 +11,7 @@ import { IdentityStackEnvironmentKeys } from "../utils/identityStackEnvironmentK
 type LambdaAuthorizerConfig = {
   auth0Issuer: string;
   auth0ExtraIssuer?: string;
+  auth0TestIssuer?: string;
 };
 
 type GraphQlConfig = {
@@ -72,6 +73,7 @@ export class IdentityStackConfigResolver {
         lambdaAuthorizerConfig: {
           auth0Issuer: 'https://staging-access.blcshine.io/',
           auth0ExtraIssuer: 'https://staging-access-dds.blcshine.io/',
+          auth0TestIssuer: 'https://blc-uk-staging.uk.auth0.com/',
         },
         graphQlConfig: {
           auth0OidcProvider: 'https://staging-access.blcshine.io/',

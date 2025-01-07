@@ -9,7 +9,7 @@ import { IVpc } from 'aws-cdk-lib/aws-ec2';
 export function adminSearchRoutes(
   defaultRouteProps: DefaultRouteProps,
   vpc: IVpc,
-): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
   return {
     'GET /admin/members/search': Route.createRoute({
       ...defaultRouteProps,

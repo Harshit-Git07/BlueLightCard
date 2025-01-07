@@ -6,7 +6,7 @@ import { BrazeUpdateModel } from '@blc-mono/members/application/models/brazeUpda
 
 export function memberMarketingRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
   const defaultRouteParams = {
     ...defaultRouteProps,
     environment: {

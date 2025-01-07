@@ -11,7 +11,7 @@ import {
 
 export function memberProfileRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
   return {
     'GET /members/profile': Route.createRoute({
       ...defaultRouteProps,

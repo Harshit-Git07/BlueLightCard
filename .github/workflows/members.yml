@@ -301,6 +301,9 @@ jobs:
         env:
           BRAND: ${{ matrix.brand }}
           REGION : ${{ matrix.region }}
+          E2E_TESTS_CLIENT_ID: ${{ secrets.E2E_TESTS_CLIENT_ID_BLC_UK }}
+          E2E_TESTS_CLIENT_SECRET: ${{ secrets.E2E_TESTS_CLIENT_SECRET_BLC_UK }}
+          E2E_TESTS_DOMAIN: https://blc-uk-staging.uk.auth0.com
         run: npx sst bind --stage ${{ matrix.stage }} --region ${{ matrix.region }} vitest e2e
 
   release:

@@ -17,7 +17,7 @@ export default {
   config(_input) {
     return {
       name: 'blc-mono',
-      region: 'eu-west-2',
+      region: 'eu-west-2'
     };
   },
 

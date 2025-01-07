@@ -1,4 +1,4 @@
-import { IdentityStackConfigResolver } from '../config';
+import { IdentityStackConfig, IdentityStackConfigResolver } from '../config';
 import { BLC_AU_BRAND, BLC_UK_BRAND, DDS_UK_BRAND } from '@blc-mono/core/constants/common';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { isDevelopment, isEphemeral, isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
@@ -32,7 +32,7 @@ describe('IdentityStackConfigResolver', () => {
 
     const config = IdentityStackConfigResolver.for(stack);
 
-    expect(config).toEqual({
+    expect(config).toEqual(<IdentityStackConfig>{
       lambdaAuthorizerConfig: {
         auth0Issuer: 'https://access.blcshine.io/',
         auth0ExtraIssuer: 'https://access-dds.blcshine.io/',
@@ -52,7 +52,7 @@ describe('IdentityStackConfigResolver', () => {
 
     const config = IdentityStackConfigResolver.for(stack);
 
-    expect(config).toEqual({
+    expect(config).toEqual(<IdentityStackConfig>{
       lambdaAuthorizerConfig: {
         auth0Issuer: 'https://staging-access-au.blcshine.io/',
       },
@@ -71,10 +71,11 @@ describe('IdentityStackConfigResolver', () => {
 
     const config = IdentityStackConfigResolver.for(stack);
 
-    expect(config).toEqual({
+    expect(config).toEqual(<IdentityStackConfig>{
       lambdaAuthorizerConfig: {
         auth0Issuer: 'https://staging-access.blcshine.io/',
         auth0ExtraIssuer: 'https://staging-access-dds.blcshine.io/',
+        auth0TestIssuer: "https://blc-uk-staging.uk.auth0.com/",
       },
       graphQlConfig: {
         auth0OidcProvider: 'https://staging-access.blcshine.io/'
@@ -91,7 +92,7 @@ describe('IdentityStackConfigResolver', () => {
 
     const config = IdentityStackConfigResolver.for(stack);
 
-    expect(config).toEqual({
+    expect(config).toEqual(<IdentityStackConfig>{
       lambdaAuthorizerConfig: {
         auth0Issuer: 'https://staging-access-dds.blcshine.io/',
       },
@@ -115,7 +116,7 @@ describe('IdentityStackConfigResolver', () => {
 
     const config = IdentityStackConfigResolver.for(stack);
 
-    expect(config).toEqual({
+    expect(config).toEqual(<IdentityStackConfig>{
       lambdaAuthorizerConfig: {
         auth0Issuer: 'https://custom-env-domain.com/',
         auth0ExtraIssuer: 'https://custom-dds-env-domain.com/',

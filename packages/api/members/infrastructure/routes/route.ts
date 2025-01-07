@@ -54,7 +54,7 @@ export class Route {
     permissions,
     apiKeyRequired,
     vpc,
-  }: RouteProps<Request, Response>): ApiGatewayV1ApiFunctionRouteProps<never> {
+  }: RouteProps<Request, Response>): ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'> {
     let requestModels;
     if (requestModelType) {
       if (Route.requestModelsEnabled()) {

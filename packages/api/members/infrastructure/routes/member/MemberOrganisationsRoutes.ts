@@ -5,7 +5,7 @@ import { EmployerModel } from '@blc-mono/members/application/models/employerMode
 
 export function memberOrganisationsRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
   return {
     'GET /orgs': Route.createRoute({
       ...defaultRouteProps,

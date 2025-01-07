@@ -6,7 +6,7 @@ import { FixBatchModelRequest } from '@blc-mono/members/application/models/batch
 
 export function adminCardRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
   return {
     'GET /admin/members/{memberId}/cards': Route.createRoute({
       ...defaultRouteProps,

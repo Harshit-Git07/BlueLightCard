@@ -260,6 +260,7 @@ export function Identity({ stack }: StackContext) {
         USER_POOL_ID_DDS: cognito_dds.userPoolId,
         [IdentityStackEnvironmentKeys.AUTH0_ISSUER]: identityConfig.lambdaAuthorizerConfig.auth0Issuer,
         [IdentityStackEnvironmentKeys.AUTH0_EXTRA_ISSUER]: identityConfig.lambdaAuthorizerConfig.auth0ExtraIssuer ?? '',
+        [IdentityStackEnvironmentKeys.AUTH0_TEST_ISSUER]: identityConfig.lambdaAuthorizerConfig.auth0TestIssuer ?? '',
       },
     });
 

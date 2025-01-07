@@ -38,6 +38,7 @@ const handlerUnwrapped = async function (
   const USER_POOL_ID_DDS = getEnv(IdentityStackEnvironmentKeys.USER_POOL_ID_DDS);
   const auth0Issuer = getEnv(IdentityStackEnvironmentKeys.AUTH0_ISSUER);
   const auth0ExtraIssuer = getEnvOrDefault(IdentityStackEnvironmentKeys.AUTH0_EXTRA_ISSUER, '');
+  const auth0TestIssuer = getEnvOrDefault(IdentityStackEnvironmentKeys.AUTH0_TEST_ISSUER, '');
 
   logger.debug(`event => ${JSON.stringify(event)}`);
 
@@ -49,13 +50,14 @@ const handlerUnwrapped = async function (
 
     const mainIssuerMatch = decodedToken?.iss === auth0Issuer;
     const extraIssuerMatch = auth0ExtraIssuer && decodedToken?.iss === auth0ExtraIssuer;
+    const testIssuerMatch = auth0TestIssuer && decodedToken?.iss === auth0TestIssuer;
 
     logger.info(
       'Custom authorizer called',
       { methodArn: event.methodArn, issuer: decodedToken.iss, clientId: decodedToken.aud }
     );
 
-    if (mainIssuerMatch || extraIssuerMatch) {
+    if (mainIssuerMatch || extraIssuerMatch || testIssuerMatch) {
       return await authenticateAuth0Token(event, decodedToken.iss);
     }
 

@@ -16,7 +16,7 @@ import { IdRequirementModel } from '@blc-mono/members/application/models/idRequi
 
 export function adminOrganisationsRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
   return {
     'GET /admin/id-requirement-docs': Route.createRoute({
       ...defaultRouteProps,

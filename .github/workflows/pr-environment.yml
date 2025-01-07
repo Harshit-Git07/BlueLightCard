@@ -1170,6 +1170,9 @@ jobs:
         env:
           BRAND: BLC_UK
           REGION: eu-west-2
+          E2E_TESTS_CLIENT_ID: ${{ secrets.E2E_TESTS_CLIENT_ID_BLC_UK }}
+          E2E_TESTS_CLIENT_SECRET: ${{ secrets.E2E_TESTS_CLIENT_SECRET_BLC_UK }}
+          E2E_TESTS_DOMAIN: https://blc-uk-staging.uk.auth0.com
         run: npx sst bind --stage $PR_PREFIX vitest e2e
 
   # Lighthouse Audit of Web frontend

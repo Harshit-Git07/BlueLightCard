@@ -9,7 +9,7 @@ import {
 
 export function adminBatchRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
   return {
     'POST /admin/batches/internal': Route.createRoute({
       ...defaultRouteProps,

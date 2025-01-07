@@ -1,4 +1,4 @@
-import { APIGatewayRequestAuthorizerEvent } from "aws-lambda";
+import { APIGatewayAuthorizerResult, APIGatewayRequestAuthorizerEvent } from 'aws-lambda';
 import { authenticateAuth0Token } from "../../auth0/auth0TokenVerification";
 import { decode, verify, JwtPayload } from 'jsonwebtoken';
 import { getJwksPublicKey } from "../../auth0/JwksClient";
@@ -126,11 +126,12 @@ describe('auth0TokenVerification', () => {
     const signingKey = 'signing key';
     const auth0SubClaim = 'auth0|1234567890';
     const methodArn = "arn:aws:execute-api:api-id/stage-name/GET/resource-path";
+    const memberUuid = 'member-id-stub';
 
     beforeEach(() => {
       decodeMock.mockReturnValueOnce({ header: { kid } });
       getJwksPublicKeyMock.mockResolvedValue(signingKey);
-      verifyMock.mockImplementation(() => ({ sub: auth0SubClaim } as JwtPayload));
+      verifyMock.mockImplementation(() => ({ sub: auth0SubClaim, memberUuid } as JwtPayload));
     });
 
     it('should return a valid API Gateway Authorizer Result', async () => {
@@ -141,7 +142,7 @@ describe('auth0TokenVerification', () => {
 
       const result = await authenticateAuth0Token(event, auth0Issuer);
 
-      expect(result).toEqual({
+      expect(result).toEqual(<APIGatewayAuthorizerResult>{
         principalId: auth0SubClaim,
         policyDocument: {
           Version: '2012-10-17',
@@ -152,6 +153,9 @@ describe('auth0TokenVerification', () => {
               Resource: methodArn
             }
           ]
+        },
+        context: {
+          memberId: 'member-id-stub',
         }
       });
       expect(decodeMock).toHaveBeenCalledWith(token, { complete: true });

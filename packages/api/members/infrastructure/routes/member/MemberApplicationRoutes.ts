@@ -11,7 +11,7 @@ import { PromoCodeResponseModel } from '@blc-mono/members/application/models/pro
 
 export function memberApplicationRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
   return {
     'POST /members/{memberId}/applications': Route.createRoute({
       ...defaultRouteProps,

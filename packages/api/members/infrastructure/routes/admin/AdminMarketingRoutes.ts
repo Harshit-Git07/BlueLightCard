@@ -6,7 +6,7 @@ import { ApiGatewayV1ApiFunctionRouteProps, ApiGatewayV1ApiRouteProps } from 'ss
 
 export function adminMarketingRoutes(
   defaultRouteProps: DefaultRouteProps,
-): Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> {
+): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
   const defaultRouteParams = {
     ...defaultRouteProps,
     environment: {

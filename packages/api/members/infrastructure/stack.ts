@@ -20,7 +20,7 @@ import { createAdminTable } from '@blc-mono/members/infrastructure/dynamodb/crea
 import { createOrganisationsTable } from '@blc-mono/members/infrastructure/dynamodb/createOrganisationsTable';
 import { createProfilesTable } from '@blc-mono/members/infrastructure/dynamodb/createProfilesTable';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
-import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 import { memberProfileRoutes } from '@blc-mono/members/infrastructure/routes/member/MemberProfileRoutes';
 import { memberApplicationRoutes } from '@blc-mono/members/infrastructure/routes/member/MemberApplicationRoutes';
@@ -51,7 +51,8 @@ import { createProcessInboundBatchFileFunction } from '@blc-mono/members/infrast
 import { MembersOpenSearchDomain } from './opensearch/MembersOpenSearchDomain';
 import { createProfilesSeedSearchIndexPipeline } from '@blc-mono/members/infrastructure/lambdas/createProfilesSeedSearchIndexPipeline';
 import { createProfilesSeedSearchIndexTable } from '@blc-mono/members/infrastructure/dynamodb/createProfilesSeedSearchIndexTable';
-import { STAGES } from '@blc-mono/core/types/stages.enum';
+import { ApiGatewayAuthorizer, SharedAuthorizer } from '@blc-mono/core/identity/authorizer';
+import { Identity } from '@blc-mono/identity/stack';
 
 const SERVICE_NAME = 'members';
 
@@ -162,12 +163,14 @@ export async function MembersApiStack({ app, stack }: StackContext) {
 
   const { profilesTable, organisationsTable, documentUploadBucket } = use(MembersStack);
   const { certificateArn } = use(Shared);
+  const { authorizer } = use(Identity);
 
   const { api, requestValidator, config } = createRestApi(
     app,
     stack,
     'members-api',
     certificateArn,
+    authorizer,
   );
   const restApi = api.cdk.restApi;
 
@@ -183,7 +186,7 @@ export async function MembersApiStack({ app, stack }: StackContext) {
     apiGatewayModelGenerator,
     defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
   };
-  const routes: Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> = {
+  const routes: Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> = {
     ...memberProfileRoutes({
       ...defaultRouteProps,
       bind: [profilesTable, organisationsTable],
@@ -210,12 +213,14 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
   const { profilesTable, organisationsTable, adminTable, documentUploadBucket, openSearchDomain } =
     use(MembersStack);
   const { certificateArn, vpc } = use(Shared);
+  const { authorizer } = use(Identity);
 
   const { api, requestValidator, config } = createRestApi(
     app,
     stack,
     'members-admin-api',
     certificateArn,
+    authorizer,
   );
   const restApi = api.cdk.restApi;
 
@@ -231,7 +236,7 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
     apiGatewayModelGenerator,
     defaultAllowedOrigins: config.apiDefaultAllowedOrigins,
   };
-  const routes: Record<string, ApiGatewayV1ApiFunctionRouteProps<never>> = {
+  const routes: Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> = {
     ...adminProfileRoutes({
       ...defaultRouteProps,
       bind: [profilesTable, organisationsTable],
@@ -273,19 +278,27 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
   api.addRoutes(stack, routes);
 }
 
-function createRestApi(app: App, stack: Stack, name: string, certificateArn?: string) {
+function createRestApi(
+  app: App,
+  stack: Stack,
+  name: string,
+  certificateArn?: string,
+  authorizer?: SharedAuthorizer,
+) {
   const config = MemberStackConfigResolver.for(stack, app.region as MemberStackRegion);
   const globalConfig = GlobalConfigResolver.for(stack.stage);
 
   stack.setDefaultFunctionProps(getDefaultFunctionProps(stack.region));
 
+  const authorizers =
+    authorizer !== undefined
+      ? { memberAuthorizer: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', authorizer) }
+      : undefined;
+
   const api = new ApiGatewayV1Api(stack, name, {
-    authorizers: {
-      // memberAuthorizer: ApiGatewayAuthorizer(stack, 'ApiGatewayAuthorizer', authorizer),
-    },
+    authorizers,
     defaults: {
-      // authorizer: 'memberAuthorizer',
-      authorizer: 'none',
+      authorizer: authorizer !== undefined ? 'memberAuthorizer' : 'none',
     },
     cdk: {
       restApi: {

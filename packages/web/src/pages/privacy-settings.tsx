@@ -5,10 +5,23 @@ import { Heading, ThemeVariant } from '@bluelightcard/shared-ui';
 import { faDownload, faTrash } from '@fortawesome/pro-solid-svg-icons';
 import { fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import withAccountLayout from '../common/layouts/AccountBaseLayout/withAccountLayout';
+import { BRAND } from '@/global-vars';
+import { BRANDS } from '@/types/brands.enum';
+
+export const supportLink = (brand: BRANDS) => {
+  const SUPPORT_URLS = {
+    [BRANDS.BLC_UK]:
+      'https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=23553686637969',
+    [BRANDS.DDS_UK]:
+      'https://support.defencediscountservice.co.uk/hc/en-gb/requests/new?ticket_form_id=25146038943889',
+    [BRANDS.BLC_AU]:
+      'https://support-zendesk.bluelightcard.com.au/hc/en-gb/requests/new?ticket_form_id=28000130152593',
+  };
+
+  return SUPPORT_URLS[brand] || SUPPORT_URLS[BRANDS.BLC_UK];
+};
 
 const PrivacySettingsPage: NextPage = () => {
-  const supportLink =
-    'https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=23553686637969';
   const handleOpenLinkInNewTab = (url: string) => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
@@ -36,7 +49,7 @@ const PrivacySettingsPage: NextPage = () => {
             invertColor={false}
             variant={ThemeVariant.Tertiary}
             iconRight={faDownload}
-            onClick={() => handleOpenLinkInNewTab(supportLink)}
+            onClick={() => handleOpenLinkInNewTab(supportLink(BRAND))}
           >
             Request your data
           </Button>
@@ -62,7 +75,7 @@ const PrivacySettingsPage: NextPage = () => {
             variant={ThemeVariant.TertiaryDanger}
             iconRight={faTrash}
             size="Small"
-            onClick={() => handleOpenLinkInNewTab(supportLink)}
+            onClick={() => handleOpenLinkInNewTab(supportLink(BRAND))}
           >
             Delete account
           </Button>

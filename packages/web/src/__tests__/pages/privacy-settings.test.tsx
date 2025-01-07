@@ -2,7 +2,8 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import PrivacySettingsPage from '../../pages/privacy-settings';
+import PrivacySettingsPage, { supportLink } from '../../pages/privacy-settings';
+import { BRANDS } from '@/types/brands.enum';
 
 describe('PrivacySettingsPage', () => {
   const supportLink =
@@ -64,5 +65,31 @@ describe('PrivacySettingsPage', () => {
 
     fireEvent.click(deleteButton);
     expect(window.open).toHaveBeenCalledWith(supportLink, '_blank', 'noopener,noreferrer');
+  });
+});
+
+describe('SupportLink', () => {
+  it('returns the correct URL for BLC_UK', () => {
+    expect(supportLink(BRANDS.BLC_UK)).toBe(
+      'https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=23553686637969'
+    );
+  });
+
+  it('returns the correct URL for DDS_UK', () => {
+    expect(supportLink(BRANDS.DDS_UK)).toBe(
+      'https://support.defencediscountservice.co.uk/hc/en-gb/requests/new?ticket_form_id=25146038943889'
+    );
+  });
+
+  it('returns the correct URL for BLC_AU', () => {
+    expect(supportLink(BRANDS.BLC_AU)).toBe(
+      'https://support-zendesk.bluelightcard.com.au/hc/en-gb/requests/new?ticket_form_id=28000130152593'
+    );
+  });
+
+  it('returns the default URL when brand is not recognized', () => {
+    expect(supportLink('UNKNOWN_BRAND' as any)).toBe(
+      'https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=23553686637969'
+    );
   });
 });

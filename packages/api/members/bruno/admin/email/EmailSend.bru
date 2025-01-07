@@ -1,0 +1,25 @@
+meta {
+  name: EmailSend
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{apiBaseUrl}}/admin/sendEmail
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "emailType": "verify_new_email",
+    "payload": {
+      "email": "danielcook+1234@bluelightcard.co.uk",
+      "newEmail":"danielcook+12345@bluelightcard.co.uk",
+      "subject": "verify new email",
+      "content": {
+        "F_Name": "Cooky"
+        }
+    }
+  }
+}

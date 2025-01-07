@@ -20,7 +20,11 @@ module.exports = {
     project: 'tsconfig.json',
     tsconfigRootDir: __dirname,
   },
-  ignorePatterns: ['application/braze/__tests__/*', 'application/repositories/__tests__/*'],
+  ignorePatterns: [
+    'application/braze/__tests__/*',
+    'application/repositories/__tests__/*',
+    'libs/emailTemplates',
+  ],
   rules: {
     'prettier/prettier': [
       'error',

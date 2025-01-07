@@ -4,12 +4,16 @@ import {
   ApiGatewayV1ApiFunctionRouteProps,
   App,
   Bucket,
+  Config,
   dependsOn,
   Queue,
   Stack,
   StackContext,
   use,
 } from 'sst/constructs';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
+import * as path from 'path';
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { Shared } from '../../../../stacks/stack';
 import {
@@ -33,6 +37,7 @@ import { adminOrganisationsRoutes } from './routes/admin/AdminOrganisationsRoute
 import { adminCardRoutes } from './routes/admin/AdminCardRoutes';
 import { adminPaymentRoutes } from './routes/admin/AdminPaymentRoutes';
 import { adminProfileRoutes } from './routes/admin/AdminProfileRoutes';
+import { adminEmailRoutes } from './routes/admin/AdminEmailRoutes';
 import { DocumentUpload } from './s3/DocumentUploadBucket';
 import { ResponseType } from 'aws-cdk-lib/aws-apigateway';
 import { DefaultRouteProps } from './routes/route';
@@ -82,6 +87,29 @@ export async function MembersStack({ app, stack }: StackContext) {
         autoDeleteObjects: false,
       },
     },
+  });
+
+  //email templates stuff
+  const whatDeployment = isDdsUkBrand()
+    ? 'dds'
+    : app.region === 'ap-south-east-2'
+      ? 'blcau'
+      : 'blcuk';
+  const emailTemplatesBucket = new s3.Bucket(stack, `${whatDeployment}-emailTemplatesBucket`, {
+    removalPolicy: RemovalPolicy.RETAIN,
+    autoDeleteObjects: false,
+  });
+
+  new s3deploy.BucketDeployment(stack, 'DeployFiles', {
+    sources: [
+      s3deploy.Source.asset(
+        `./packages/api/members/libs/emailTemplates/${whatDeployment}/service/`,
+      ),
+    ],
+    destinationBucket: emailTemplatesBucket,
+  });
+  const bucketName = new Config.Parameter(stack, 'email-templates-bucket', {
+    value: emailTemplatesBucket.bucketName,
   });
 
   const enableAutomaticCardBatching = getEnvOrDefault(
@@ -154,6 +182,7 @@ export async function MembersStack({ app, stack }: StackContext) {
     adminTable,
     documentUploadBucket: documentUpload.bucket,
     batchFilesBucket: batchFilesBucket,
+    emailTemplatesBucket: bucketName,
     openSearchDomain,
   };
 }
@@ -161,7 +190,8 @@ export async function MembersStack({ app, stack }: StackContext) {
 export async function MembersApiStack({ app, stack }: StackContext) {
   stack.tags.setTag('service', SERVICE_NAME);
 
-  const { profilesTable, organisationsTable, documentUploadBucket } = use(MembersStack);
+  const { profilesTable, organisationsTable, documentUploadBucket, emailTemplatesBucket } =
+    use(MembersStack);
   const { certificateArn } = use(Shared);
   const { authorizer } = use(Identity);
 
@@ -195,11 +225,8 @@ export async function MembersApiStack({ app, stack }: StackContext) {
       ...defaultRouteProps,
       bind: [profilesTable, organisationsTable, documentUploadBucket],
     }),
-    ...memberOrganisationsRoutes({
-      ...defaultRouteProps,
-      bind: [organisationsTable],
-    }),
-    ...memberMarketingRoutes(defaultRouteProps),
+    ...memberOrganisationsRoutes({ ...defaultRouteProps, bind: [organisationsTable] }),
+    ...memberMarketingRoutes({ ...defaultRouteProps, bind: [emailTemplatesBucket] }),
   };
 
   api.addRoutes(stack, routes);
@@ -209,9 +236,14 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
   stack.tags.setTag('service', SERVICE_NAME);
 
   dependsOn(MembersApiStack);
-
-  const { profilesTable, organisationsTable, adminTable, documentUploadBucket, openSearchDomain } =
-    use(MembersStack);
+  const {
+    profilesTable,
+    organisationsTable,
+    adminTable,
+    documentUploadBucket,
+    openSearchDomain,
+    emailTemplatesBucket,
+  } = use(MembersStack);
   const { certificateArn, vpc } = use(Shared);
   const { authorizer } = use(Identity);
 
@@ -273,6 +305,7 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
       ...defaultRouteProps,
       bind: [adminTable],
     }),
+    ...adminEmailRoutes({ ...defaultRouteProps, bind: [emailTemplatesBucket] }),
   };
 
   api.addRoutes(stack, routes);

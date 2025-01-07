@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.5.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.4.0...bluelightcard/members-v1.5.0) (2025-01-06)
+
+
+### Features
+
+* [MM-105] Add error handling for getOrganisation and getEmployer in search index lambda ([#3481](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3481)) ([1f84d81](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1f84d8165fc62bbd4dbcae2d0f4de0ce74e12b95))
+* [MM-105] Add member profile seed search index pipeline ([#3446](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3446)) ([ed4d50b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ed4d50bdb6ff52d708ca3b593f7c5166e4ff046a))
+* [MM-105] Add members OpenSearch domain ([#3390](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3390)) ([70abfcb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/70abfcbc0b167b0ff0dfd39b3877b69bef2d8ea7))
+* [MM-105] Add members search query ([#3298](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3298)) ([f83ff23](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f83ff23c94a1bf8b6250cc8560b9c6bc1875e331))
+* [MM-105] Add OpenSearch subnet configuration ([#3439](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3439)) ([a104d42](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a104d42ba16a625c49df5c34bace307dc31335a6))
+* add 3 batch endpoint getInternal/updateInternal/getAll ([#3473](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3473)) ([3b3f7a0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3b3f7a0017ebfe868db9503370b33e63816ebee6))
+* MM-265 Event Dispatcher ([#3480](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3480)) ([386224d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/386224d6d17dc80fb049030b541d95242b36b4fe))
+
+
+### Bug Fixes
+
+* [None] Fix OOM error running the jest tests, allow stacks to deploy in parallel ([#3430](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3430)) ([3c7a1b4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3c7a1b4ac257fcba8d4ce47af8ad99c4e0b3027f))
+* [None] Update card test data to include name on card ([#3433](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3433)) ([4f54731](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4f54731f45c0739e20c5d75a507d5c1fa9a825bf))
+* MM-477 - disabling CORS temporarily for staging ([#3457](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3457)) ([c4b5724](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c4b57245a90aebf2a24698b02647876d6a93e7a8))
+
+
+### Other Changes
+
+* [None] add members e2e tests to PRs ([#3375](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3375)) ([70b5a59](https://github.com/bluelightcard/BlueLightCard-2.0/commit/70b5a59ce91a732a6b2f797d689a4f503ec60804))
+
 ## [1.4.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/members-v1.3.1...bluelightcard/members-v1.4.0) (2024-12-16)
 
 

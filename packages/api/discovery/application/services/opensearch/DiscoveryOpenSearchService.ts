@@ -19,6 +19,8 @@ import { OpenSearchSearchRequests } from '@blc-mono/discovery/application/servic
 import { isValidTrust } from '@blc-mono/discovery/application/utils/trustRules';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
+import { FirehoseService } from '../firehose/FirehoseService';
+
 export const draftIndexPrefix = 'draft-';
 
 const logger = new LambdaLogger({ serviceName: 'openSearch' });
@@ -32,12 +34,24 @@ type OpenSearchIndex = {
   creationDate: string;
 };
 
+export type DiscoverySearchContext = {
+  term: string;
+  indexName: string;
+  dob: string;
+  organisation: string;
+  offerType?: string;
+  memberId: string;
+  platform: 'mobile' | 'web';
+};
+
 export class DiscoveryOpenSearchService extends OpenSearchService {
   private indicesList: OpenSearchIndex[] = [];
+  private readonly dwhClient: FirehoseService;
 
-  constructor() {
+  constructor(dwhClient = new FirehoseService()) {
     const searchDomainHost = getEnv(DiscoveryStackEnvironmentKeys.OPENSEARCH_DOMAIN_ENDPOINT);
     super(searchDomainHost, logger);
+    this.dwhClient = dwhClient;
   }
 
   public async createIndex(indexName: string): Promise<void> {
@@ -68,13 +82,9 @@ export class DiscoveryOpenSearchService extends OpenSearchService {
     });
   }
 
-  public async queryBySearchTerm(
-    term: string,
-    indexName: string,
-    dob: string,
-    organisation: string,
-    offerType?: string,
-  ): Promise<SearchResult[]> {
+  public async queryBySearchTerm(searchContext: DiscoverySearchContext): Promise<SearchResult[]> {
+    const { dob, indexName, organisation, term, offerType } = searchContext;
+    this.dwhClient.logSearchRequest(searchContext);
     const searchResults = new OpenSearchSearchRequests(indexName, dob)
       .buildSearchRequest(term, offerType)
       .map(async (search) => {

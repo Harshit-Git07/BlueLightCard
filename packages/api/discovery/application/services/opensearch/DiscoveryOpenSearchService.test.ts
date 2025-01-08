@@ -5,7 +5,13 @@ import * as getEnvModule from '@blc-mono/core/utils/getEnv';
 jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 import { openSearchFieldMapping } from '@blc-mono/discovery/application/models/OpenSearchFieldMapping';
 
-import { DiscoveryOpenSearchService } from './DiscoveryOpenSearchService';
+import * as Firehose from '../firehose/FirehoseService';
+
+import { DiscoveryOpenSearchService, DiscoverySearchContext } from './DiscoveryOpenSearchService';
+
+jest.mock('../firehose/FirehoseService');
+
+const mockFirehoseService = jest.mocked(Firehose.FirehoseService);
 
 const mockCreate = jest.fn().mockResolvedValue({ acknowledged: true });
 const mockAddBlock = jest.fn().mockResolvedValue({});
@@ -145,10 +151,18 @@ describe('OpenSearchService', () => {
   });
 
   describe('Search', () => {
-    const organisation = 'NHS';
-    const dob = '2001-01-01';
+    const mockSearchContext: DiscoverySearchContext = {
+      organisation: 'NHS',
+      dob: '2001-01-01',
+      memberId: 'memberId',
+      term: sampleDocument.title,
+      indexName,
+      platform: 'web',
+      offerType: '1',
+    };
+
     it('should Search Index', async () => {
-      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, dob, organisation);
+      const results = await openSearchService.queryBySearchTerm(mockSearchContext);
 
       expect(mockSearch).toHaveBeenCalledTimes(5);
       expect(results[0]).toMatchObject({
@@ -171,7 +185,7 @@ describe('OpenSearchService', () => {
       });
       jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithDuplicates);
 
-      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, dob, organisation);
+      const results = await openSearchService.queryBySearchTerm(mockSearchContext);
 
       expect(results).toStrictEqual([
         {
@@ -206,7 +220,7 @@ describe('OpenSearchService', () => {
       });
       jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithTrustExclusions);
 
-      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, dob, organisation);
+      const results = await openSearchService.queryBySearchTerm(mockSearchContext);
 
       expect(results).toStrictEqual([
         {
@@ -241,7 +255,7 @@ describe('OpenSearchService', () => {
       });
       jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithTrustInclusions);
 
-      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, dob, organisation);
+      const results = await openSearchService.queryBySearchTerm(mockSearchContext);
 
       expect(results).toStrictEqual([
         {
@@ -286,7 +300,7 @@ describe('OpenSearchService', () => {
       });
       jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWithDuplicates);
 
-      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, dob, organisation);
+      const results = await openSearchService.queryBySearchTerm(mockSearchContext);
 
       expect(results).toStrictEqual([
         {
@@ -314,9 +328,24 @@ describe('OpenSearchService', () => {
       });
       jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockSearchWith41Results);
 
-      const results = await openSearchService.queryBySearchTerm(sampleDocument.title, indexName, dob, organisation);
+      const results = await openSearchService.queryBySearchTerm(mockSearchContext);
 
       expect(results.length).toBe(40);
+    });
+
+    it('should successfully call firehose service', async () => {
+      const spy = jest.spyOn(mockFirehoseService.prototype, 'logSearchRequest');
+      await openSearchService.queryBySearchTerm(mockSearchContext);
+
+      expect(spy).toHaveBeenCalledWith({
+        dob: mockSearchContext.dob,
+        indexName,
+        memberId: mockSearchContext.memberId,
+        offerType: mockSearchContext.offerType,
+        organisation: mockSearchContext.organisation,
+        platform: mockSearchContext.platform,
+        term: mockSearchContext.term,
+      });
     });
   });
 

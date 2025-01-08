@@ -38,11 +38,11 @@ const platformMap = {
 } as const;
 
 const callbackVaultRedemptionStreamNames = {
-	[BLC_UK_BRAND]: 'blc-uk-vaultIntegrationCallback',
-	[BLC_AU_BRAND]: 'blc-au-vaultIntegrationCallback',
-	// This one doesn't have dds in the name because the stage is "staging-dds" or "production-dds"
-	[DDS_UK_BRAND]: 'uk-vaultIntegrationCallback'
-}
+  [BLC_UK_BRAND]: 'blc-uk-vaultIntegrationCallback',
+  [BLC_AU_BRAND]: 'blc-au-vaultIntegrationCallback',
+  // This one doesn't have dds in the name because the stage is "staging-dds" or "production-dds"
+  [DDS_UK_BRAND]: 'uk-vaultIntegrationCallback',
+};
 
 let redshiftSecret: ISecret;
 const getRedshiftSecret = (stack: Stack) => {
@@ -70,12 +70,13 @@ export class DwhKenisisFirehoseStreams {
   public readonly themedMenuStream: IFirehoseStreamAdapter;
   public readonly redemptionTypeStream: IFirehoseStreamAdapter;
   public readonly paymentStream: IFirehoseStreamAdapter;
-	public readonly callbackVaultRedemptionStream: IFirehoseStreamAdapter;
+  public readonly callbackVaultRedemptionStream: IFirehoseStreamAdapter;
   public readonly companyLocationStream: IFirehoseStreamAdapter;
   public readonly redemptionStream: IFirehoseStreamAdapter;
   public readonly vaultIntegrationStream: IFirehoseStreamAdapter;
   public readonly vaultStockStream: IFirehoseStreamAdapter;
   public readonly vaultBatchStockStream: IFirehoseStreamAdapter;
+  public readonly searchRequestsStream: IFirehoseStreamAdapter;
 
   constructor(stack: Stack) {
     // Creates Firehose stream references. Mocked in Production environments if present within `UNMANAGED_STREAMS` list.
@@ -89,39 +90,116 @@ export class DwhKenisisFirehoseStreams {
     const brandFromEnv = getBrandFromEnv();
     const brandPrefix = platformMap[brandFromEnv];
 
-    this.compViewStream = new KenisisFirehoseStream(stack, 'dwh-compView', `dwh-${brandPrefix}-production-compView`).setup();
-    this.compClickStream = new KenisisFirehoseStream(stack, 'dwh-compClick', `dwh-${brandPrefix}-production-compClick`).setup();
-    this.compAppViewStream = new KenisisFirehoseStream(stack, 'dwh-compAppView', `dwh-${brandPrefix}-production-compAppView`).setup();
-    this.compAppClickStream = new KenisisFirehoseStream(stack, 'dwh-compAppClick', `dwh-${brandPrefix}-production-compAppClick`).setup();
-    this.vaultStream = new KenisisFirehoseStream(stack, 'dwh-vault', `dwh-${brandPrefix}-production-vault`).setup();
-    this.redemptionTypeStream = new KenisisFirehoseStream(stack, 'dwh-redemption', `dwh-${brandPrefix}-redemption`, {
-      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.tblredemption` : undefined)
-    }).setup();
-    this.paymentStream = new KenisisFirehoseStream(stack, 'dwh-payments', `dwh-${brandPrefix}-payments`, {
-      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.tblpayments` : undefined)
-    }).setup();
-		this.callbackVaultRedemptionStream = new KenisisFirehoseStream(stack, 'dwh-vaultIntegrationCallback', callbackVaultRedemptionStreamNames[brandFromEnv]).setup();
-    this.companyLocationStream = new KenisisFirehoseStream(stack, 'dwh-companyLocation', `dwh-${MAP_BRAND[getBrandFromEnv()]}-company-location`,{
+    this.compViewStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-compView',
+      `dwh-${brandPrefix}-production-compView`,
+    ).setup();
+    this.compClickStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-compClick',
+      `dwh-${brandPrefix}-production-compClick`,
+    ).setup();
+    this.compAppViewStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-compAppView',
+      `dwh-${brandPrefix}-production-compAppView`,
+    ).setup();
+    this.compAppClickStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-compAppClick',
+      `dwh-${brandPrefix}-production-compAppClick`,
+    ).setup();
+    this.vaultStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-vault',
+      `dwh-${brandPrefix}-production-vault`,
+    ).setup();
+    this.redemptionTypeStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-redemption',
+      `dwh-${brandPrefix}-redemption`,
+      {
+        tableName: redshiftSchemaName ? `${redshiftSchemaName}.tblredemption` : undefined,
+      },
+    ).setup();
+    this.paymentStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-payments',
+      `dwh-${brandPrefix}-payments`,
+      {
+        tableName: redshiftSchemaName ? `${redshiftSchemaName}.tblpayments` : undefined,
+      },
+    ).setup();
+    this.callbackVaultRedemptionStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-vaultIntegrationCallback',
+      callbackVaultRedemptionStreamNames[brandFromEnv],
+    ).setup();
+    this.companyLocationStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-companyLocation',
+      `dwh-${MAP_BRAND[getBrandFromEnv()]}-company-location`,
+      {
         tableName: redshiftSchemaName ? `${redshiftSchemaName}.company_location` : undefined, //table name to be confirmed
-    }).setup();
-    this.redemptionStream = new KenisisFirehoseStream(stack, 'dwh-redemptions', `dwh-${MAP_BRAND[getBrandFromEnv()]}-redemptions`, {
-      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.redemption` : undefined)
-    }).setup();
-    this.menuStream = new KenisisFirehoseStream(stack, 'dwh-menu', `dwh-${MAP_BRAND[getBrandFromEnv()]}-menu`,{
-      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.menu` : undefined)
-    }).setup();
-    this.themedMenuStream = new KenisisFirehoseStream(stack, 'dwh-themedMenu', `dwh-${MAP_BRAND[getBrandFromEnv()]}-themed-menu`,{
-      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.themed_menu` : undefined)
-    }).setup();
-    this.vaultIntegrationStream = new KenisisFirehoseStream(stack, 'dwh-vaultIntegration', `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultIntegration`, {
-      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.vault_integration` : undefined)
-    }).setup();
-    this.vaultStockStream = new KenisisFirehoseStream(stack, 'dwh-vaultStock', `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultStock`, {
-      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.vault_stock` : undefined)
-    }).setup();
-    this.vaultBatchStockStream = new KenisisFirehoseStream(stack, 'dwh-vaultBatchStock', `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultBatchStock`, {
-      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.vault_stock_batch` : undefined)
-    }).setup();
+      },
+    ).setup();
+    this.redemptionStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-redemptions',
+      `dwh-${MAP_BRAND[getBrandFromEnv()]}-redemptions`,
+      {
+        tableName: redshiftSchemaName ? `${redshiftSchemaName}.redemption` : undefined,
+      },
+    ).setup();
+    this.menuStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-menu',
+      `dwh-${MAP_BRAND[getBrandFromEnv()]}-menu`,
+      {
+        tableName: redshiftSchemaName ? `${redshiftSchemaName}.menu` : undefined,
+      },
+    ).setup();
+    this.themedMenuStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-themedMenu',
+      `dwh-${MAP_BRAND[getBrandFromEnv()]}-themed-menu`,
+      {
+        tableName: redshiftSchemaName ? `${redshiftSchemaName}.themed_menu` : undefined,
+      },
+    ).setup();
+    this.vaultIntegrationStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-vaultIntegration',
+      `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultIntegration`,
+      {
+        tableName: redshiftSchemaName ? `${redshiftSchemaName}.vault_integration` : undefined,
+      },
+    ).setup();
+    this.vaultStockStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-vaultStock',
+      `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultStock`,
+      {
+        tableName: redshiftSchemaName ? `${redshiftSchemaName}.vault_stock` : undefined,
+      },
+    ).setup();
+    this.vaultBatchStockStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-vaultBatchStock',
+      `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultBatchStock`,
+      {
+        tableName: redshiftSchemaName ? `${redshiftSchemaName}.vault_stock_batch` : undefined,
+      },
+    ).setup();
+    this.searchRequestsStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-searchRequest',
+      `dwh-${brandPrefix}-searchRequests`,
+      {
+        tableName: redshiftSchemaName ? `${redshiftSchemaName}.search` : undefined,
+      },
+    ).setup();
   }
 }
 

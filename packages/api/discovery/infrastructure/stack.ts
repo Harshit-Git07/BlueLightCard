@@ -5,7 +5,7 @@ import { ApiGatewayV1Api, Function, FunctionDefinition, StackContext, use } from
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayExtension';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
-import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
+import { getBrandFromEnv, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
@@ -24,7 +24,7 @@ import { createMenusTable } from './database/createMenusTable';
 import { eventQueue } from './eventHandling/eventQueue';
 import { Route } from './routes/route';
 async function DiscoveryStack({ stack, app }: StackContext) {
-  const { certificateArn, vpc, bus } = use(Shared);
+  const { certificateArn, vpc, bus, dwhKenisisFirehoseStreams } = use(Shared);
   const { authorizer } = use(Identity);
   const SERVICE_NAME = 'discovery';
   stack.tags.setTag('service', SERVICE_NAME);
@@ -42,6 +42,7 @@ async function DiscoveryStack({ stack, app }: StackContext) {
   stack.setDefaultFunctionProps({
     timeout: 20,
     environment: {
+      BRAND: getBrandFromEnv(),
       region: stack.region,
       SERVICE: SERVICE_NAME,
       DD_VERSION: process.env.DD_VERSION ?? '',
@@ -107,10 +108,11 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       functionName: 'GetSearchHandler',
       handler: 'packages/api/discovery/application/handlers/search/getSearch.handler',
       requestValidatorName: 'GetSearchValidator',
-      permissions: ['es'],
+      permissions: ['es', 'firehose:PutRecord'],
       environment: {
         OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomain,
         STAGE: stack.stage,
+        DWH_FIREHOSE_SEARCH_REQUESTS_STREAM_NAME: dwhKenisisFirehoseStreams.searchRequestsStream.getStreamName(),
       },
       vpc,
     }),

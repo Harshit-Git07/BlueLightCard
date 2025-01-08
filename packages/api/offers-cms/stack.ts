@@ -50,7 +50,8 @@ export function OffersCMS({ stack }: StackContext) {
     });
   }
 
-  const cmsEvents = createCMSEventBus(stack, CMS_BUS_NAME, {
+  const cmsEvents = createCMSEventBus(stack, env, CMS_BUS_NAME, {
+    dwhKenisisFirehoseStreams,
     consumerFunction,
   });
 

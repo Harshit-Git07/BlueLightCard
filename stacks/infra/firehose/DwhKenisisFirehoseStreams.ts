@@ -8,10 +8,16 @@ import { IFirehoseStreamAdapter } from './adapter';
 import { isProduction, isStaging } from '@blc-mono/core/src/utils/checkEnvironment';
 import { Config, Stack } from 'sst/constructs';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
-import { BLC_AU_BRAND, BLC_UK_BRAND, DDS_UK_BRAND, MAP_BRAND } from '@blc-mono/core/constants/common';
+import {
+  BLC_AU_BRAND,
+  BLC_UK_BRAND,
+  DDS_UK_BRAND,
+  MAP_BRAND,
+} from '@blc-mono/core/constants/common';
 
 type S3Destination = kinesisfirehose.CfnDeliveryStream.S3DestinationConfigurationProperty;
-type RedshiftDestination = kinesisfirehose.CfnDeliveryStream.RedshiftDestinationConfigurationProperty;
+type RedshiftDestination =
+  kinesisfirehose.CfnDeliveryStream.RedshiftDestinationConfigurationProperty;
 
 type DestinationConfiguration = S3Destination | RedshiftDestination;
 type Writeable<T> = { -readonly [P in keyof T]-?: T[P] };
@@ -25,10 +31,10 @@ const UNMANAGED_STREAMS = [
 ];
 
 // TODO: Normalise the stream names with brands [blc-uk, dds-uk, blc-au] and stages [staging, production]
-const platformMap =  {
-  [BLC_UK_BRAND] : 'blc',
-  [DDS_UK_BRAND] : 'dds',
-  [BLC_AU_BRAND] : 'blc-au',
+const platformMap = {
+  [BLC_UK_BRAND]: 'blc',
+  [DDS_UK_BRAND]: 'dds',
+  [BLC_AU_BRAND]: 'blc-au',
 } as const;
 
 const callbackVaultRedemptionStreamNames = {
@@ -49,7 +55,7 @@ const getRedshiftSecret = (stack: Stack) => {
   }
 
   return redshiftSecret;
-}
+};
 
 /**
  * Production data-warehouse kenisis firehose streams.
@@ -60,6 +66,8 @@ export class DwhKenisisFirehoseStreams {
   public readonly compAppViewStream: IFirehoseStreamAdapter;
   public readonly compAppClickStream: IFirehoseStreamAdapter;
   public readonly vaultStream: IFirehoseStreamAdapter;
+  public readonly menuStream: IFirehoseStreamAdapter;
+  public readonly themedMenuStream: IFirehoseStreamAdapter;
   public readonly redemptionTypeStream: IFirehoseStreamAdapter;
   public readonly paymentStream: IFirehoseStreamAdapter;
 	public readonly callbackVaultRedemptionStream: IFirehoseStreamAdapter;
@@ -78,8 +86,8 @@ export class DwhKenisisFirehoseStreams {
     }
 
     const redshiftSchemaName = secret.secretValueFromJson('schema');
-		const brandFromEnv = getBrandFromEnv()
-    const brandPrefix = platformMap[brandFromEnv];MAP_BRAND[getBrandFromEnv()]
+    const brandFromEnv = getBrandFromEnv();
+    const brandPrefix = platformMap[brandFromEnv];
 
     this.compViewStream = new KenisisFirehoseStream(stack, 'dwh-compView', `dwh-${brandPrefix}-production-compView`).setup();
     this.compClickStream = new KenisisFirehoseStream(stack, 'dwh-compClick', `dwh-${brandPrefix}-production-compClick`).setup();
@@ -99,6 +107,12 @@ export class DwhKenisisFirehoseStreams {
     this.redemptionStream = new KenisisFirehoseStream(stack, 'dwh-redemptions', `dwh-${MAP_BRAND[getBrandFromEnv()]}-redemptions`, {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.redemption` : undefined)
     }).setup();
+    this.menuStream = new KenisisFirehoseStream(stack, 'dwh-menu', `dwh-${MAP_BRAND[getBrandFromEnv()]}-menu`,{
+      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.menu` : undefined)
+    }).setup();
+    this.themedMenuStream = new KenisisFirehoseStream(stack, 'dwh-themedMenu', `dwh-${MAP_BRAND[getBrandFromEnv()]}-themed-menu`,{
+      tableName: (redshiftSchemaName ? `${redshiftSchemaName}.themed_menu` : undefined)
+    }).setup();
     this.vaultIntegrationStream = new KenisisFirehoseStream(stack, 'dwh-vaultIntegration', `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultIntegration`, {
       tableName: (redshiftSchemaName ? `${redshiftSchemaName}.vault_integration` : undefined)
     }).setup();
@@ -117,8 +131,8 @@ class KenisisFirehoseStream {
     private readonly id: string,
     private readonly streamName: string,
     private readonly redshiftOptions: {
-      tableName?: string
-    } = {}
+      tableName?: string;
+    } = {},
   ) {}
 
   public setup(): IFirehoseStreamAdapter {
@@ -145,10 +159,14 @@ class KenisisFirehoseStream {
           resources: [streamArn],
         });
       },
-    }
+    };
   }
 
-  private createRedshiftReference(tableName: string, role: iam.Role, s3: S3Destination): kinesisfirehose.CfnDeliveryStream.RedshiftDestinationConfigurationProperty {
+  private createRedshiftReference(
+    tableName: string,
+    role: iam.Role,
+    s3: S3Destination,
+  ): kinesisfirehose.CfnDeliveryStream.RedshiftDestinationConfigurationProperty {
     const secret = getRedshiftSecret(this.stack);
     return {
       clusterJdbcurl: secret.secretValueFromJson('jdbc_url').toString(),
@@ -158,10 +176,10 @@ class KenisisFirehoseStream {
       password: secret.secretValueFromJson('password').toString(),
       copyCommand: {
         dataTableName: tableName,
-        copyOptions: `json 'auto'`
+        copyOptions: `json 'auto'`,
       },
       retryOptions: {
-        durationInSeconds: 120
+        durationInSeconds: 120,
       },
     };
   }
@@ -170,7 +188,7 @@ class KenisisFirehoseStream {
     bucket: s3.Bucket,
     role: iam.Role,
     logGroup: logs.LogGroup,
-    logStream: logs.LogStream
+    logStream: logs.LogStream,
   ): kinesisfirehose.CfnDeliveryStream.S3DestinationConfigurationProperty {
     return {
       bucketArn: bucket.bucketArn,
@@ -182,9 +200,9 @@ class KenisisFirehoseStream {
       cloudWatchLoggingOptions: {
         enabled: true,
         logGroupName: logGroup.logGroupName,
-        logStreamName: logStream.logStreamName
+        logStreamName: logStream.logStreamName,
       },
-    }
+    };
   }
 
   private setupNewStream(): IFirehoseStreamAdapter {
@@ -195,47 +213,40 @@ class KenisisFirehoseStream {
     destinationBucket.grantReadWrite(deliveryRole);
 
     const { logGroup, logStream } = this.createLogStream(streamName);
-    const s3Config = this.createS3Reference(
-      destinationBucket,
-      deliveryRole,
-      logGroup,
-      logStream
-    );
+    const s3Config = this.createS3Reference(destinationBucket, deliveryRole, logGroup, logStream);
 
     const isRedShiftEnvironment = isProduction(this.stack.stage) || isStaging(this.stack.stage);
-    const useRedshift = (isRedShiftEnvironment && this.redshiftOptions.tableName);
-    const redshiftConfig = useRedshift ? this.createRedshiftReference(
-      String(this.redshiftOptions.tableName),
-      deliveryRole,
-      s3Config,
-    ) : undefined;
+    const useRedshift = isRedShiftEnvironment && this.redshiftOptions.tableName;
+    const redshiftConfig = useRedshift
+      ? this.createRedshiftReference(String(this.redshiftOptions.tableName), deliveryRole, s3Config)
+      : undefined;
 
-    const deliveryStream = this.createDeliveryStream(
-      streamName,
-      redshiftConfig ?? s3Config,
-    );
+    const deliveryStream = this.createDeliveryStream(streamName, redshiftConfig ?? s3Config);
 
-    if(useRedshift) {
-      deliveryRole
-        .addManagedPolicy(
-          iam.ManagedPolicy.fromManagedPolicyArn(this.stack, `AmazonRedShiftFullDataAccess-${this.streamName}`,
-            'arn:aws:iam::aws:policy/AmazonRedshiftDataFullAccess')
-        );
+    if (useRedshift) {
+      deliveryRole.addManagedPolicy(
+        iam.ManagedPolicy.fromManagedPolicyArn(
+          this.stack,
+          `AmazonRedShiftFullDataAccess-${this.streamName}`,
+          'arn:aws:iam::aws:policy/AmazonRedshiftDataFullAccess',
+        ),
+      );
     }
-
 
     return this.createAdapter(deliveryStream);
   }
 
   private createDestinationBucket(): s3.Bucket {
     const regionPrefix = this.stack.region === 'eu-west-2' ? '' : `au-`;
-    const bucketName = `${regionPrefix}${this.stack.stage}-${this.streamName}-destination`.toLowerCase().substring(0, 63);
+    const bucketName = `${regionPrefix}${this.stack.stage}-${this.streamName}-destination`
+      .toLowerCase()
+      .substring(0, 63);
     new Config.Parameter(
       this.stack,
       `${this.streamName.toUpperCase().replaceAll('-', '_')}_DESTINATION_BUCKET`,
       {
         value: bucketName,
-      }
+      },
     );
     return new s3.Bucket(this.stack, bucketName, {
       removalPolicy: RemovalPolicy.DESTROY,
@@ -263,8 +274,8 @@ class KenisisFirehoseStream {
 
     return {
       logGroup,
-      logStream
-    }
+      logStream,
+    };
   }
 
   private createDeliveryStream(
@@ -297,10 +308,12 @@ class KenisisFirehoseStream {
           resources: [deliveryStream.attrArn],
         });
       },
-    }
+    };
   }
 
-  private isRedshiftDestination(destination: DestinationConfiguration): destination is RedshiftDestination {
+  private isRedshiftDestination(
+    destination: DestinationConfiguration,
+  ): destination is RedshiftDestination {
     return (destination as RedshiftDestination).clusterJdbcurl !== undefined;
   }
 }

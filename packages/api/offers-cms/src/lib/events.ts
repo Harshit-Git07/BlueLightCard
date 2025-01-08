@@ -1,4 +1,8 @@
-import type { CompanyLocation, WebhookEventResult } from '@bluelightcard/sanity-types';
+import type {
+  CompanyLocation,
+  MenuThemedOffer,
+  WebhookEventResult,
+} from '@bluelightcard/sanity-types';
 
 type ArrayElement<ArrayType> = ArrayType extends readonly (infer ElementType)[]
   ? ElementType
@@ -12,9 +16,15 @@ export type CompanyLocationBatch = {
   locations: CompanyLocation[];
 };
 
-export type WebhookResultRecord = ArrayElement<WebhookEventResult> | CompanyLocationBatch;
+export type WebhookResultRecord =
+  | ArrayElement<WebhookEventResult>
+  | CompanyLocationBatch
+  | MenuThemedOffer;
 
-type RecordType = WebhookResultRecord['_type'] | CompanyLocationBatch['_type'];
+type RecordType =
+  | WebhookResultRecord['_type']
+  | CompanyLocationBatch['_type']
+  | MenuThemedOffer['_type'];
 
 export type Record<type extends RecordType> = Extract<WebhookResultRecord, { _type: type }>;
 

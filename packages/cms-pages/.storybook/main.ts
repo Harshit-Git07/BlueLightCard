@@ -21,11 +21,11 @@ const config: StorybookConfig = {
   env: (env) => ({
     ...env,
     // mock environemnt variables
-    NEXT_PUBLIC_SANITY_PROJECT_ID: '1234',
+    NEXT_PUBLIC_SANITY_PROJECT_ID: '1',
+    NEXT_PUBLIC_SANITY_DATASET_NAME: 'storybook',
   }),
   staticDirs: [
     '../storybook-assets',
-    '../public',
     {
       from: '../../shared-ui/fonts',
       to: '/fonts',

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Braze } from 'braze-api';
 import z from 'zod';
 
@@ -24,10 +25,13 @@ export class BrazeEmailClientProvider implements IBrazeEmailClientProvider {
   private brazeApiUrl = getEnv(RedemptionsStackEnvironmentKeys.BRAZE_API_URL);
 
   public async getClient(): Promise<Braze> {
+    console.log('SECRETS_MANAGER_NAME', getEnv(RedemptionsStackEnvironmentKeys.SECRETS_MANAGER_NAME));
     const secrets = await this.secretsManger.getSecretValueJson(
       getEnv(RedemptionsStackEnvironmentKeys.SECRETS_MANAGER_NAME),
     );
+    console.log('secrets', secrets);
     const braze = BrazeCredentialsSecretSchema.parse(secrets);
+    console.log('braze', braze);
     return new Braze(this.brazeApiUrl, braze.brazeApiKey);
   }
 }

@@ -22,11 +22,6 @@ jest.mock('swiper/modules', () => ({
 
 jest.mock('swiper/css', () => jest.fn());
 
-const mockUser = {
-  dob: '1990-01-01',
-  organisation: 'nhs',
-};
-
 const { DealsOfTheWeek, FeaturedOffers, Marketplace } = composeStories(stories);
 
 const testTable = [
@@ -50,14 +45,14 @@ const testTable = [
 describe('MenuCarousels components', () => {
   describe('should render component without error', () => {
     test.each(testTable)('$title', async ({ Component }) => {
-      await givenComponentIsRendered(<Component user={mockUser} />);
+      await givenComponentIsRendered(<Component />);
     });
   });
 
   describe('should render the menu offers', () => {
     test.each(testTable)('$title', async ({ Component, offer }) => {
       const offerData = givenOfferDataExists(offer);
-      const container = await givenComponentIsRendered(<Component user={mockUser} />);
+      const container = await givenComponentIsRendered(<Component />);
       await givenOfferIsRendered(container, offerData);
     });
   });
@@ -67,9 +62,7 @@ describe('MenuCarousels components', () => {
       const offerData = givenOfferDataExists(offer);
 
       const onOfferClick = jest.fn();
-      const container = await givenComponentIsRendered(
-        <Component onOfferClick={onOfferClick} user={mockUser} />,
-      );
+      const container = await givenComponentIsRendered(<Component onOfferClick={onOfferClick} />);
 
       const renderedOffer = await givenOfferIsRendered(container, offerData);
       givenOfferIsClicked(offerData, renderedOffer, onOfferClick);

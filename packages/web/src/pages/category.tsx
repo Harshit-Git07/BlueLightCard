@@ -1,4 +1,4 @@
-import { FC, Suspense, useContext, useRef, useState } from 'react';
+import { FC, Suspense, useRef, useState } from 'react';
 import { NextPage } from 'next';
 import { ErrorBoundary } from 'react-error-boundary';
 import {
@@ -24,7 +24,6 @@ import TenancyBanner from '../common/components/TenancyBanner';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 import useCategoryData from '@/hooks/useCategoryData';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
-import UserContext from '../common/context/User/UserContext';
 
 const CategorySkeleton: FC = () => {
   const isMobile = useMobileMediaQuery();
@@ -105,7 +104,6 @@ const CategoryPage: NextPage = () => {
   const platformAdapter = usePlatformAdapter();
   const router = useRouter();
   const { viewOffer } = useOfferDetails();
-  const userCtx = useContext(UserContext);
 
   if (!router.isReady) return;
 
@@ -186,20 +184,8 @@ const CategoryPage: NextPage = () => {
           />
         </Suspense>
 
-        <MenuCarousels
-          menus={['featured']}
-          user={{
-            dob: userCtx.user?.profile.dob ?? '',
-            organisation: userCtx.user?.profile.organisation ?? '',
-          }}
-        >
-          <MenuCarousels.FeaturedOffers
-            onOfferClick={onFeaturedOfferClick}
-            user={{
-              dob: userCtx.user?.profile.dob ?? '',
-              organisation: userCtx.user?.profile.organisation ?? '',
-            }}
-          />
+        <MenuCarousels menus={['featured']}>
+          <MenuCarousels.FeaturedOffers onOfferClick={onFeaturedOfferClick} />
         </MenuCarousels>
 
         <div>

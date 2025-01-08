@@ -2,12 +2,9 @@ import '@testing-library/jest-dom';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { render, within, RenderResult, RenderOptions } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import _noop from 'lodash/noop';
 import { composeStories } from '@storybook/react';
 import { NextRouter } from 'next/router';
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
-import { Factory } from 'fishery';
-
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   AmplitudeEvents,
@@ -16,7 +13,6 @@ import {
   storybookPlatformAdapter,
 } from '@bluelightcard/shared-ui';
 import * as stories from '../../page-stories/flexible-offers.stories';
-import UserContext, { UserContextType } from '../../common/context/User/UserContext';
 
 const viewOfferMock = jest.fn();
 
@@ -30,35 +26,16 @@ const mockRouter: Partial<NextRouter> = {
   query: { id: 'test-flexi-menu-id' },
 };
 
-const userContextTypeFactory = Factory.define<UserContextType>(() => ({
-  dislikes: [],
-  error: undefined,
-  isAgeGated: false,
-  setUser: _noop,
-  user: {
-    companies_follows: [],
-    legacyId: 'mock-legacy-id',
-    profile: {
-      dob: 'mock-dob',
-      organisation: 'mock-organisation',
-    },
-    uuid: 'mock-uuid',
-  },
-}));
-
 const wrapper: RenderOptions['wrapper'] = ({ children }) => {
   storybookPlatformAdapter.logAnalyticsEvent = jest.fn();
-  const userContext = userContextTypeFactory.build();
 
   return (
     <QueryClientProvider client={new QueryClient()}>
-      <UserContext.Provider value={userContext}>
-        <RouterContext.Provider value={mockRouter as NextRouter}>
-          <OfferDetailsContext.Provider value={{ viewOffer: viewOfferMock }}>
-            {children}
-          </OfferDetailsContext.Provider>
-        </RouterContext.Provider>
-      </UserContext.Provider>
+      <RouterContext.Provider value={mockRouter as NextRouter}>
+        <OfferDetailsContext.Provider value={{ viewOffer: viewOfferMock }}>
+          {children}
+        </OfferDetailsContext.Provider>
+      </RouterContext.Provider>
     </QueryClientProvider>
   );
 };

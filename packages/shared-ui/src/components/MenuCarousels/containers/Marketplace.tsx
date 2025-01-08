@@ -3,12 +3,8 @@ import type { MenuCarouselsContainerProps } from '../types';
 import { MenuOffersCarousel } from '../presenters';
 import useMenusData from '../../../hooks/useMenusData';
 
-export const Marketplace: FC<MenuCarouselsContainerProps> = ({
-  user,
-  menus = [],
-  onOfferClick,
-}) => {
-  const { data } = useMenusData(user, menus);
+export const Marketplace: FC<MenuCarouselsContainerProps> = ({ menus = [], onOfferClick }) => {
+  const { data } = useMenusData(menus);
 
   return data.marketplace?.map((marketplaceCarousel) => (
     <MenuOffersCarousel

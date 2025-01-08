@@ -8,41 +8,18 @@ import {
   useMockPlatformAdapter,
 } from '@bluelightcard/shared-ui';
 import { ErrorBoundary } from 'react-error-boundary';
-import _noop from 'lodash/noop';
 import useFlexibleOffersData from '../useFlexibleOffersData';
-import { Factory } from 'fishery';
-import UserContext, { UserContextType } from '../../context/User/UserContext';
 
 let mockPlatformAdapter: ReturnType<typeof useMockPlatformAdapter>;
 
-const userContextTypeFactory = Factory.define<UserContextType>(() => ({
-  dislikes: [],
-  error: undefined,
-  isAgeGated: false,
-  setUser: _noop,
-  user: {
-    companies_follows: [],
-    legacyId: 'mock-legacy-id',
-    profile: {
-      dob: 'mock-dob',
-      organisation: 'mock-organisation',
-    },
-    uuid: 'mock-uuid',
-  },
-}));
-
 const wrapper: RenderOptions['wrapper'] = ({ children }) => {
-  const userContext = userContextTypeFactory.build();
-
   return (
     <QueryClientProvider client={new QueryClient()}>
-      <UserContext.Provider value={userContext}>
-        <PlatformAdapterProvider adapter={mockPlatformAdapter}>
-          <ErrorBoundary fallback="error">
-            <Suspense fallback="loading">{children}</Suspense>
-          </ErrorBoundary>
-        </PlatformAdapterProvider>
-      </UserContext.Provider>
+      <PlatformAdapterProvider adapter={mockPlatformAdapter}>
+        <ErrorBoundary fallback="error">
+          <Suspense fallback="loading">{children}</Suspense>
+        </ErrorBoundary>
+      </PlatformAdapterProvider>
     </QueryClientProvider>
   );
 };

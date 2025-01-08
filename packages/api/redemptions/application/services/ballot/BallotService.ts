@@ -178,6 +178,11 @@ export class BallotService implements IBallotService {
         offset,
       );
 
+      this.logger.info({
+        message: `Found ${entriesBatch.length} successful entries`,
+        context: { ballotId, offset, ballotEntryStatus },
+      });
+
       if (entriesBatch.length > 0) {
         const transformedEntries = this.redemptionCustomAttributeTransformer.transformToUsersWithCustomAttributes(
           ballotId,

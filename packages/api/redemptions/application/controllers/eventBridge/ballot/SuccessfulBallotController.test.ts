@@ -38,7 +38,7 @@ describe('SuccessfulBallotController', () => {
       await controller.invoke(mockEvent);
       expect(ballotService.notifyEntriesOfBallotOutcome).toHaveBeenCalledWith(
         fakeBallotId,
-        ballotEntryStatusEnum.enumValues[3],
+        ballotEntryStatusEnum.enumValues[2],
       );
     });
   });

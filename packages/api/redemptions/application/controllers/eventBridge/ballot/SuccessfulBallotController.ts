@@ -45,6 +45,6 @@ export class SuccessfulBallotController extends EventBridgeController<BallotSucc
 
   protected async handle(event: BallotSuccessfulEvent): Promise<void> {
     this.logger.info({ message: 'Handle ballot successful request', context: { event } });
-    await this.ballotService.notifyEntriesOfBallotOutcome(event.detail.ballotId, 'confirmed');
+    await this.ballotService.notifyEntriesOfBallotOutcome(event.detail.ballotId, 'unconfirmed');
   }
 }

@@ -38,7 +38,7 @@ export class EmailService implements IEmailService {
           brazeExternalUserId: event.detail.memberDetails.brazeExternalUserId,
           memberId: event.detail.memberDetails.memberId,
           companyName: event.detail.redemptionDetails.companyName,
-          offerName: event.detail.redemptionDetails.offerName,
+          offerName: event.detail.redemptionDetails.ballotDetails?.offerName ?? '',
           url: event.detail.redemptionDetails?.url ?? '',
           redemptionType: redemptionType,
           eventDate: event.detail.redemptionDetails.ballotDetails?.eventDate ?? '',

@@ -1,6 +1,7 @@
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Cron, Queue, Stack } from 'sst/constructs';
 
+import { isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { RedemptionsStackConfig } from '@blc-mono/redemptions/infrastructure/config/config';
 
 import { RedemptionsStackEnvironmentKeys } from '../constants/environment';
@@ -10,6 +11,7 @@ import { IDatabase } from '../database/adapter';
 import { RedemptionsCronJobs } from './RedemptionsCronJobs';
 
 const EVERY_DAY_AT_10_PM = 'cron(0 22 * * ? *)';
+const EVERY_30_MINUTES = 'rate(30 minutes)';
 
 const putEventsPolicy = new PolicyStatement({
   actions: ['events:PutEvents'],
@@ -40,7 +42,7 @@ export function checkBallotsCron(
 
   return new Cron(stack, RedemptionsCronJobs.BALLOT_CHECK, {
     job: checkBallotHandler,
-    schedule: EVERY_DAY_AT_10_PM,
+    schedule: isStaging(stack.stage) ? EVERY_30_MINUTES : EVERY_DAY_AT_10_PM,
     enabled: true,
   });
 }

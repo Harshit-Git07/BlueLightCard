@@ -215,7 +215,7 @@ describe('BallotService', () => {
     });
   });
 
-  describe.skip('when running ballot for a single ballot and ballot is not ready to run', () => {
+  describe('when running ballot for a single ballot and ballot is not ready to run', () => {
     it('should throw an error, ballot not ready', async () => {
       const dateOfRun = new Date();
       const drawDate = set(new Date(), { hours: 21, minutes: 59, seconds: 59 });

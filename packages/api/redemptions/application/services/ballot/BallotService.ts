@@ -101,17 +101,17 @@ export class BallotService implements IBallotService {
 
     this.logger.info({ message: `Ballot ${ballotId} is in a pending state` });
 
-    // if (!isBallotReadyToRun(ballot.drawDate, dateOfRun)) {
-    //   const message = 'This ballot is not ready to run, the current date is not the draw date or not after 10pm';
-    //   this.logger.error({
-    //     message,
-    //     context: {
-    //       ballotId,
-    //       dateOfRun,
-    //     },
-    //   });
-    //   throw new Error(`${message} (ballotId="${ballotId}")`);
-    // }
+    if (!isBallotReadyToRun(ballot.drawDate, dateOfRun)) {
+      const message = 'This ballot is not ready to run, the current date is not the draw date or not after 10pm';
+      this.logger.error({
+        message,
+        context: {
+          ballotId,
+          dateOfRun,
+        },
+      });
+      throw new Error(`${message} (ballotId="${ballotId}")`);
+    }
 
     this.logger.info({ message: `Ballot ${ballotId} is ready to run` });
 

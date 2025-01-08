@@ -3,6 +3,8 @@ import { usePlatformAdapter, withClientSidePagination } from '@bluelightcard/sha
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import type { QueryClient } from '@tanstack/react-query';
 import type { CategoryData, PaginatedCategoryData } from '@bluelightcard/shared-ui';
+import UserContext from '../context/User/UserContext';
+import { useContext } from 'react';
 
 // Create cache entries of paginated category data
 const createPaginatedCache = (
@@ -42,6 +44,7 @@ const createPaginatedCache = (
 const useCategoryData = (categoryId: string, page: number, pageSize: number) => {
   const queryClient = useQueryClient();
   const platformAdapter = usePlatformAdapter();
+  const userCtx = useContext(UserContext);
 
   if (!categoryId || categoryId === '' || categoryId === 'undefined')
     throw new Error('Valid category ID not provided');
@@ -70,8 +73,8 @@ const useCategoryData = (categoryId: string, page: number, pageSize: number) => 
             {
               method: 'GET',
               queryParameters: {
-                dob: '2001-01-01',
-                organisation: 'DEN',
+                dob: userCtx.user?.profile.dob ?? '',
+                organisation: userCtx.user?.profile.organisation ?? '',
               },
             }
           );

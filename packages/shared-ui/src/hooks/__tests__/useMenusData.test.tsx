@@ -22,6 +22,11 @@ const wrapper: RenderOptions['wrapper'] = ({ children }) => {
   );
 };
 
+const mockUser = {
+  dob: '1990-01-01',
+  organisation: 'nhs',
+};
+
 describe('useMenusData', () => {
   describe('it calls the menus V5 API', () => {
     beforeEach(() => {
@@ -57,7 +62,7 @@ describe('useMenusData', () => {
           }),
         );
 
-        renderHook(() => useMenusData(), {
+        renderHook(() => useMenusData(mockUser), {
           wrapper,
         });
 
@@ -78,7 +83,7 @@ describe('useMenusData', () => {
           }),
         );
 
-        renderHook(() => useMenusData(), {
+        renderHook(() => useMenusData(mockUser), {
           wrapper,
         });
 
@@ -92,13 +97,16 @@ describe('useMenusData', () => {
 
     describe('and returns the result', () => {
       test('for all menus', async () => {
-        const { result } = renderHook(() => useMenusData(), {
+        const { result } = renderHook(() => useMenusData(mockUser), {
           wrapper,
         });
 
         expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(V5_API_URL.Menus, {
           method: 'GET',
-          queryParameters: {},
+          queryParameters: {
+            dob: '1990-01-01',
+            organisation: 'nhs',
+          },
         });
 
         await waitFor(() => {
@@ -117,7 +125,7 @@ describe('useMenusData', () => {
           }),
         );
 
-        const { result } = renderHook(() => useMenusData(['dealsOfTheWeek']), {
+        const { result } = renderHook(() => useMenusData(mockUser, ['dealsOfTheWeek']), {
           wrapper,
         });
 
@@ -125,6 +133,8 @@ describe('useMenusData', () => {
           method: 'GET',
           queryParameters: {
             id: 'dealsOfTheWeek',
+            dob: '1990-01-01',
+            organisation: 'nhs',
           },
         });
 

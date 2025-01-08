@@ -5,10 +5,15 @@ import type { FlexibleOfferData } from '@bluelightcard/shared-ui';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { useAtomValue } from 'jotai';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { userProfile } from '@/components/UserProfileProvider/store';
 
 const useFlexibleOffersData = (flexiMenuId: string) => {
   const amplitudeExperiments = useAtomValue(experimentsAndFeatureFlags);
   const platformAdapter = usePlatformAdapter();
+  const profile = useAtomValue(userProfile);
+
+  const dob = profile?.dob ?? '';
+  const organisation = profile?.organisation ?? '';
 
   const v5ApiFlag = amplitudeExperiments[FeatureFlags.V5_API_INTEGRATION] ?? 'off';
 
@@ -17,7 +22,7 @@ const useFlexibleOffersData = (flexiMenuId: string) => {
   }
 
   return useSuspenseQuery({
-    queryKey: ['flexibleOffersData', flexiMenuId, `v5-${v5ApiFlag}`],
+    queryKey: ['flexibleOffersData', flexiMenuId, `v5-${v5ApiFlag}`, dob, organisation],
     refetchInterval: false,
     refetchIntervalInBackground: false,
     refetchOnMount: false,
@@ -29,6 +34,10 @@ const useFlexibleOffersData = (flexiMenuId: string) => {
         V5_API_URL.FlexibleOffers + `/${flexiMenuId}`,
         {
           method: 'GET',
+          queryParameters: {
+            dob,
+            organisation,
+          },
         },
       );
 

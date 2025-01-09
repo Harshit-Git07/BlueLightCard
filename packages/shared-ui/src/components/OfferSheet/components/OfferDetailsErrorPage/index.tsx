@@ -9,7 +9,7 @@ import { usePlatformAdapter } from '../../../../adapters';
 
 const OfferDetailsErrorPage: FC = () => {
   const platformAdapter = usePlatformAdapter();
-  const { offerMeta, amplitudeEvent, redemptionType } = useAtomValue(offerSheetAtom);
+  const { offerMeta, amplitudeEvent, onClose, redemptionType } = useAtomValue(offerSheetAtom);
 
   const onButtonClick = () => {
     if (amplitudeEvent) {
@@ -22,6 +22,7 @@ const OfferDetailsErrorPage: FC = () => {
         },
       });
     }
+    onClose();
     platformAdapter.navigate(`/company?cid=${offerMeta?.companyId}`);
   };
 

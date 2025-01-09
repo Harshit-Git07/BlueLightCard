@@ -39,8 +39,9 @@ export const OfferDetailsLink: FC<OfferDetailsComponentProps> = () => {
 
 export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
   const setOfferSheetAtom = useSetAtom(offerSheetAtom);
-  const { offerMeta } = useAtomValue(offerSheetAtom);
+  const { offerMeta, redemptionType } = useAtomValue(offerSheetAtom);
   const [experiment, setExperiment] = useState('control');
+  const brand = process.env.NEXT_PUBLIC_APP_BRAND;
   const fsiCompanyIdsEnv = process.env.NEXT_PUBLIC_FSI_COMPANY_IDS?.trim()
     .split(', ')
     ?.filter(Boolean);
@@ -56,12 +57,24 @@ export const useOfferDetailsComponent = (platformAdapter: IPlatformAdapter) => {
   }
 
   function getOfferDetailsComponent() {
-    if (!experiment || experiment === 'control' || isFsi) {
+    // if the current offer is FS&I -> redirect to legacy page (OfferDetailsLink component)
+    if (isFsi) {
       return OfferDetailsLink;
     }
-
-    if (experiment === 'treatment' || experiment === 'on') {
+    // If the experiment is in the 'treatment' group or is 'on' -> return the OfferSheet component
+    // OR if there's no redemption type provided by the API (400 error) for BLC_UK only -> return the OfferSheet
+    // component and display error page in OfferSheet
+    if (
+      experiment === 'treatment' ||
+      experiment === 'on' ||
+      (!redemptionType && brand === 'blc-uk')
+    ) {
       return OfferSheet;
+    }
+
+    // If there is no experiment or the experiment is in the 'control' group -> redirect to legacy page (OfferDetailsLink component)
+    if (!experiment || experiment === 'control') {
+      return OfferDetailsLink;
     }
 
     return EmptyOfferDetails;

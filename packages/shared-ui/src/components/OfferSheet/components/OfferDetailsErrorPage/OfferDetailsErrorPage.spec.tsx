@@ -18,6 +18,8 @@ jest.mock('next/router', () => ({
   }),
 }));
 
+const onClose = jest.fn();
+
 const HydrateAtoms = ({
   initialValues,
   children,
@@ -71,7 +73,7 @@ describe('smoke test', () => {
     const { getByRole } = render(
       <PlatformAdapterProvider adapter={mockPlatformAdapter}>
         <TestProvider
-          initialValues={[[offerSheetAtom, { offerMeta: { companyId: mockCompanyId } }]]}
+          initialValues={[[offerSheetAtom, { offerMeta: { companyId: mockCompanyId }, onClose }]]}
         >
           <OfferDetailsErrorPage />
         </TestProvider>

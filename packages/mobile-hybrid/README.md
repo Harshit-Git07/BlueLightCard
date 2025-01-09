@@ -10,7 +10,6 @@ yarn dev
 pnpm dev
 ```
 
-
 Hybrid is built as a React frontend for the iOS and Android apps, so by default it will only actually work inside of the app environments. This means that when the development server is running you will also need to set up the native app development environments. Currently, the best existing documentation for this can be found here:
 
 - [iOS](https://bluelightcard.atlassian.net/wiki/spaces/BTB/pages/2522513443/Developer+Onboarding+iOS)

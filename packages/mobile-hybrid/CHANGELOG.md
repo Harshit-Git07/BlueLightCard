@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.55.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.54.0...bluelightcard/mobile-hybrid-v1.55.0) (2025-01-09)
+
+
+### Features
+
+* Disco-1392 - Update Endpoints ([#3505](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3505)) ([6b3b031](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6b3b031802c907e0446667220987c190a28f9659))
+* Feat/to 1499 redemption api failure redirect offersheet ([#3387](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3387)) ([2a23205](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2a23205a42dbf00798910fff6c64f4fc433dac9f))
+
+
+### Bug Fixes
+
+* DISCO-1327 Hybrid Search fixes ([#3467](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3467)) ([438303f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/438303fe2ecf36d4159d7436093e9e7610cc2298))
+* Revert "fix: DISCO-1327 Hybrid Search fixes ([#3467](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3467))" ([#3539](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3539)) ([4e05803](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4e05803193f884b5e5ba1f7b06b408daac7fc9ad))
+
 ## [1.54.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.53.0...bluelightcard/mobile-hybrid-v1.54.0) (2024-12-19)
 
 

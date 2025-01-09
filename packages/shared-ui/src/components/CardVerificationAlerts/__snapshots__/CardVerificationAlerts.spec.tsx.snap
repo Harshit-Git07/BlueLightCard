@@ -65,7 +65,7 @@ exports[`CardVerificationAlert renders awaitingId banner 1`] = `
             class="h-full flex items-center tablet:ml-auto"
           >
             <a
-              class="rounded transition border-1 py-[4px] px-[12px] h-[32px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              class="rounded transition border py-[4px] px-[12px] h-[32px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
               href="/eligibility"
             >
               Get your card
@@ -167,7 +167,7 @@ exports[`CardVerificationAlert renders awaitingIdApproval banner 1`] = `
             class="h-full flex items-center tablet:ml-auto"
           >
             <a
-              class="rounded transition border-1 h-[32px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none !px-0 text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              class="rounded transition border h-[32px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none !px-0 text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
               href="https://support.bluelightcard.co.uk/hc/en-gb/requests/new"
             >
               Need help?
@@ -269,7 +269,7 @@ exports[`CardVerificationAlert renders rejection banner 1`] = `
             class="h-full flex items-center tablet:ml-auto"
           >
             <a
-              class="rounded transition border-1 py-[4px] px-[12px] h-[32px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              class="rounded transition border py-[4px] px-[12px] h-[32px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
               href="/eligibility"
             >
               Verify your eligibility

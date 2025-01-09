@@ -1,0 +1,54 @@
+import { Canvas, Controls, Meta, Story, DocsContext } from '@storybook/blocks';
+import ComponentStatus from '@bluelightcard/shared-ui/storybook-config/blocks/ComponentStatus';
+import FigmaEmbed from '@bluelightcard/shared-ui/storybook-config/blocks/FigmaEmbed';
+import * as CreativeModule from './CreativeModule.stories';
+
+<Meta title="Modules/Creative Module" of={CreativeModule} />
+
+# Creative Module
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Design](#design)
+
+## Status
+
+<ComponentStatus />
+
+## Overview
+
+The creative module is used for layouts that contain rich text, images, icons, and CTAs.
+
+## Props
+
+<Controls />
+
+## State
+
+This component does not manage any state of its own.
+
+## Design
+
+<FigmaEmbed />
+
+## Variants
+
+List of variants can be shown below here.
+
+### Default
+
+<Canvas of={CreativeModule.Default} />
+
+### Center Aligned
+
+<Canvas of={CreativeModule.CenterAligned} />
+
+### Right Aligned
+
+<Canvas of={CreativeModule.RightAligned} />
+
+### Multiple Columns
+
+<Canvas of={CreativeModule.MultipleColumns} />

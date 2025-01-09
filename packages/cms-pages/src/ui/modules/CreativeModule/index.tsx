@@ -37,7 +37,7 @@ export default function CreativeModule({
     <section>
       <div className="section space-y-8">
         {intro && (
-          <header className="richtext mx-auto max-w-xl text-balance text-center">
+          <header className="richtext mx-auto max-w-xl text-balance text-center font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark">
             <PortableText value={intro} />
           </header>
         )}
@@ -70,6 +70,7 @@ export default function CreativeModule({
                         module={subModule}
                         className={cn(
                           stegaClean(textAlign) === 'center' && 'justify-center',
+                          stegaClean(textAlign) === 'right' && 'justify-end',
                           'dds:flex-col',
                         )}
                         key={ii}
@@ -83,7 +84,10 @@ export default function CreativeModule({
                     return (
                       <IconSubModule
                         module={subModule}
-                        className={cn(stegaClean(textAlign) === 'center' && '[&_img]:mx-auto')}
+                        className={cn(
+                          stegaClean(textAlign) === 'center' && '[&_img]:mx-auto',
+                          stegaClean(textAlign) === 'right' && '[&_img]:float-right',
+                        )}
                         key={ii}
                       />
                     );

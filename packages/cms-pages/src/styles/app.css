@@ -59,11 +59,6 @@
   ::-webkit-details-marker {
     display: none;
   }
-
-  a {
-    font-size: 1.2em;
-    font-weight: 700;
-  }
 }
 
 @layer components {
@@ -109,47 +104,6 @@
 
   .text-gradient {
     @apply bg-gradient-to-br from-ink/5 to-ink bg-clip-text text-transparent;
-  }
-
-  /* ctas, links */
-
-  ._btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5em 1.5em;
-    text-align: center;
-    font-weight: bold;
-  }
-
-  .action2 {
-    @apply _btn frosted-glass rounded bg-gradient-to-br from-ink/70 to-ink text-white shadow;
-  }
-
-  .action {
-    @apply _btn rounded-lg bg-white text-blue-600 shadow;
-    font-size: 1.2em;
-    font-weight: 700;
-  }
-
-  .ghost2 {
-    @apply _btn frosted-glass rounded hover:bg-ink/5;
-  }
-
-  .ghost {
-    @apply _btn hover:frosted-glass rounded-lg bg-white text-blue-600 shadow hover:shadow-lg;
-    font-size: 1.2em;
-    font-weight: 700;
-  }
-
-  .link {
-    text-decoration: underline;
-    font-size: 1.2em;
-    font-weight: 700;
-
-    &:hover {
-      text-decoration-thickness: 2px;
-    }
   }
 
   .dropdown-menu1 {
@@ -205,14 +159,6 @@
     & :is(ul, ol) {
       list-style: revert;
       padding-left: 1.5em;
-    }
-
-    & a:not(:is(.action, .ghost)) {
-      @apply link;
-
-      &[href^='http'] {
-        @apply is-external;
-      }
     }
 
     & :not(pre) > code {

@@ -7,7 +7,7 @@ export type RichtextSubModuleType = Sanity.Module<'richtext'> &
 
 export default function RichtextSubModule({ module }: { module: RichtextSubModuleType }) {
   return (
-    <div className="richtext">
+    <div className="richtext font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark">
       <PortableText value={module.content} />
     </div>
   );

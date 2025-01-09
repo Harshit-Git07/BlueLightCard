@@ -120,7 +120,7 @@ const Button: FC<ButtonProps> = ({
   }, []);
 
   const classes = cssUtil([
-    'rounded transition border-1',
+    'rounded transition border',
     sizeSpecificStyles,
     disabled ? colourToken.disabled : '',
     colourToken.text,

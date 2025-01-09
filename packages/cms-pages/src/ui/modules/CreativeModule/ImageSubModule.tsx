@@ -17,7 +17,7 @@ export default function ImageSubModule({
   return (
     <figure>
       <Img
-        className="w-full object-cover"
+        className="w-full object-cover rounded-[24px]"
         style={{ aspectRatio: stegaClean(module.aspectRatio) }}
         image={module}
         {...props}

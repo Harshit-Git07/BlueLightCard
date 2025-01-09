@@ -1,0 +1,589 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Creative Module CenterAligned should match snapshot 1`] = `
+<div>
+  <section>
+    <div
+      class="section space-y-8"
+    >
+      <header
+        class="richtext mx-auto max-w-xl text-balance text-center font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+      >
+        <h2>
+          This is a Creative module.
+        </h2>
+        <p>
+          It combines rich text with images, icons, and CTAs.
+        </p>
+      </header>
+      <div
+        class="grid items-center gap-x-12 gap-y-8 md:grid-cols-[repeat(var(--col,1),minmax(0px,1fr))]"
+        style="--col: 1; text-align: center;"
+      >
+        <article
+          class="space-y-4"
+        >
+          <div
+            class="richtext font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+          >
+            <p>
+              This is richtext!
+            </p>
+          </div>
+          <div
+            class="font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+          >
+            <p>
+              This is custom HTML!
+            </p>
+          </div>
+          <nav
+            class="flex flex-wrap items-center gap-[.5em] justify-center dds:flex-col"
+          >
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+                href="/"
+              >
+                Internal Action
+              </a>
+            </button>
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+                href="/"
+              >
+                Internal Ghost
+              </a>
+            </button>
+            <button
+              class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+                href="/"
+              >
+                Internal Link
+              </a>
+            </button>
+          </nav>
+          <nav
+            class="flex flex-wrap items-center gap-[.5em] justify-center dds:flex-col"
+          >
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+              >
+                External Action
+              </a>
+            </button>
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+              >
+                External Ghost
+              </a>
+            </button>
+            <button
+              class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+              >
+                External Link
+              </a>
+            </button>
+          </nav>
+          <figure
+            class="[&_img]:mx-auto"
+          >
+            <img
+              alt=""
+              class="w-auto"
+              decoding="async"
+              height="320"
+              loading="lazy"
+              src="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?auto=format"
+              srcset="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?w=120&auto=format 120w"
+              style="max-height: 128px;"
+              width="640"
+            />
+          </figure>
+          <figure>
+            <img
+              alt=""
+              class="w-full object-cover rounded-[24px]"
+              decoding="async"
+              height="360"
+              loading="lazy"
+              src="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?auto=format"
+              srcset="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=120&auto=format 120w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=160&auto=format 160w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=200&auto=format 200w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=240&auto=format 240w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=320&auto=format 320w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=400&auto=format 400w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=480&auto=format 480w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=520&auto=format 520w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=560&auto=format 560w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=600&auto=format 600w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=640&auto=format 640w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=800&auto=format 800w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=960&auto=format 960w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1280&auto=format 1280w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1440&auto=format 1440w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1600&auto=format 1600w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1800&auto=format 1800w"
+              width="720"
+            />
+          </figure>
+        </article>
+      </div>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Creative Module Default should match snapshot 1`] = `
+<div>
+  <section>
+    <div
+      class="section space-y-8"
+    >
+      <header
+        class="richtext mx-auto max-w-xl text-balance text-center font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+      >
+        <h2>
+          This is a Creative module.
+        </h2>
+        <p>
+          It combines rich text with images, icons, and CTAs.
+        </p>
+      </header>
+      <div
+        class="grid items-center gap-x-12 gap-y-8 md:grid-cols-[repeat(var(--col,1),minmax(0px,1fr))]"
+        style="--col: 1;"
+      >
+        <article
+          class="space-y-4"
+        >
+          <div
+            class="richtext font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+          >
+            <p>
+              This is richtext!
+            </p>
+          </div>
+          <div
+            class="font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+          >
+            <p>
+              This is custom HTML!
+            </p>
+          </div>
+          <nav
+            class="flex flex-wrap items-center gap-[.5em] dds:flex-col"
+          >
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+                href="/"
+              >
+                Internal Action
+              </a>
+            </button>
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+                href="/"
+              >
+                Internal Ghost
+              </a>
+            </button>
+            <button
+              class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+                href="/"
+              >
+                Internal Link
+              </a>
+            </button>
+          </nav>
+          <nav
+            class="flex flex-wrap items-center gap-[.5em] dds:flex-col"
+          >
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+              >
+                External Action
+              </a>
+            </button>
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+              >
+                External Ghost
+              </a>
+            </button>
+            <button
+              class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+              >
+                External Link
+              </a>
+            </button>
+          </nav>
+          <figure
+            class=""
+          >
+            <img
+              alt=""
+              class="w-auto"
+              decoding="async"
+              height="320"
+              loading="lazy"
+              src="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?auto=format"
+              srcset="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?w=120&auto=format 120w"
+              style="max-height: 128px;"
+              width="640"
+            />
+          </figure>
+          <figure>
+            <img
+              alt=""
+              class="w-full object-cover rounded-[24px]"
+              decoding="async"
+              height="360"
+              loading="lazy"
+              src="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?auto=format"
+              srcset="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=120&auto=format 120w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=160&auto=format 160w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=200&auto=format 200w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=240&auto=format 240w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=320&auto=format 320w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=400&auto=format 400w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=480&auto=format 480w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=520&auto=format 520w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=560&auto=format 560w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=600&auto=format 600w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=640&auto=format 640w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=800&auto=format 800w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=960&auto=format 960w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1280&auto=format 1280w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1440&auto=format 1440w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1600&auto=format 1600w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1800&auto=format 1800w"
+              width="720"
+            />
+          </figure>
+        </article>
+      </div>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Creative Module MultipleColumns should match snapshot 1`] = `
+<div>
+  <section>
+    <div
+      class="section space-y-8"
+    >
+      <header
+        class="richtext mx-auto max-w-xl text-balance text-center font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+      >
+        <h2>
+          This is a Creative module.
+        </h2>
+        <p>
+          It combines rich text with images, icons, and CTAs.
+        </p>
+      </header>
+      <div
+        class="grid items-center gap-x-12 gap-y-8 md:grid-cols-[repeat(var(--col,1),minmax(0px,1fr))]"
+        style="--col: 6;"
+      >
+        <article
+          class="space-y-4"
+        >
+          <div
+            class="richtext font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+          >
+            <p>
+              This is richtext!
+            </p>
+          </div>
+        </article>
+        <article
+          class="space-y-4"
+        >
+          <div
+            class="font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+          >
+            <p>
+              This is custom HTML!
+            </p>
+          </div>
+        </article>
+        <article
+          class="space-y-4"
+        >
+          <nav
+            class="flex flex-wrap items-center gap-[.5em] dds:flex-col"
+          >
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+                href="/"
+              >
+                Internal Action
+              </a>
+            </button>
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+                href="/"
+              >
+                Internal Ghost
+              </a>
+            </button>
+            <button
+              class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+                href="/"
+              >
+                Internal Link
+              </a>
+            </button>
+          </nav>
+        </article>
+        <article
+          class="space-y-4"
+        >
+          <nav
+            class="flex flex-wrap items-center gap-[.5em] dds:flex-col"
+          >
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+              >
+                External Action
+              </a>
+            </button>
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+              >
+                External Ghost
+              </a>
+            </button>
+            <button
+              class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+              >
+                External Link
+              </a>
+            </button>
+          </nav>
+        </article>
+        <article
+          class="space-y-4"
+        >
+          <figure
+            class=""
+          >
+            <img
+              alt=""
+              class="w-auto"
+              decoding="async"
+              height="320"
+              loading="lazy"
+              src="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?auto=format"
+              srcset="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?w=120&auto=format 120w"
+              style="max-height: 128px;"
+              width="640"
+            />
+          </figure>
+        </article>
+        <article
+          class="space-y-4"
+        >
+          <figure>
+            <img
+              alt=""
+              class="w-full object-cover rounded-[24px]"
+              decoding="async"
+              height="360"
+              loading="lazy"
+              src="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?auto=format"
+              srcset="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=120&auto=format 120w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=160&auto=format 160w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=200&auto=format 200w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=240&auto=format 240w"
+              width="720"
+            />
+          </figure>
+        </article>
+      </div>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Creative Module RightAligned should match snapshot 1`] = `
+<div>
+  <section>
+    <div
+      class="section space-y-8"
+    >
+      <header
+        class="richtext mx-auto max-w-xl text-balance text-center font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+      >
+        <h2>
+          This is a Creative module.
+        </h2>
+        <p>
+          It combines rich text with images, icons, and CTAs.
+        </p>
+      </header>
+      <div
+        class="grid items-center gap-x-12 gap-y-8 md:grid-cols-[repeat(var(--col,1),minmax(0px,1fr))]"
+        style="--col: 1; text-align: right; align-items: bottom;"
+      >
+        <article
+          class="space-y-4"
+        >
+          <div
+            class="richtext font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+          >
+            <p>
+              This is richtext!
+            </p>
+          </div>
+          <div
+            class="font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+          >
+            <p>
+              This is custom HTML!
+            </p>
+          </div>
+          <nav
+            class="flex flex-wrap items-center gap-[.5em] justify-end dds:flex-col"
+          >
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+                href="/"
+              >
+                Internal Action
+              </a>
+            </button>
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+                href="/"
+              >
+                Internal Ghost
+              </a>
+            </button>
+            <button
+              class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+                href="/"
+              >
+                Internal Link
+              </a>
+            </button>
+          </nav>
+          <nav
+            class="flex flex-wrap items-center gap-[.5em] justify-end dds:flex-col"
+          >
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-label-colour-light dark:text-button-primary-default-label-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-bg-colour-light dark:bg-button-primary-default-bg-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+              >
+                External Action
+              </a>
+            </button>
+            <button
+              class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+              >
+                External Ghost
+              </a>
+            </button>
+            <button
+              class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+              type="button"
+            >
+              <a
+                class="max-md:w-full"
+              >
+                External Link
+              </a>
+            </button>
+          </nav>
+          <figure
+            class="[&_img]:float-right"
+          >
+            <img
+              alt=""
+              class="w-auto"
+              decoding="async"
+              height="320"
+              loading="lazy"
+              src="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?auto=format"
+              srcset="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?w=120&auto=format 120w"
+              style="max-height: 128px;"
+              width="640"
+            />
+          </figure>
+          <figure>
+            <img
+              alt=""
+              class="w-full object-cover rounded-[24px]"
+              decoding="async"
+              height="360"
+              loading="lazy"
+              src="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?auto=format"
+              srcset="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=120&auto=format 120w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=160&auto=format 160w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=200&auto=format 200w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=240&auto=format 240w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=320&auto=format 320w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=400&auto=format 400w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=480&auto=format 480w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=520&auto=format 520w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=560&auto=format 560w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=600&auto=format 600w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=640&auto=format 640w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=800&auto=format 800w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=960&auto=format 960w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1280&auto=format 1280w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1440&auto=format 1440w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1600&auto=format 1600w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1800&auto=format 1800w"
+              width="720"
+            />
+          </figure>
+        </article>
+      </div>
+    </div>
+  </section>
+</div>
+`;

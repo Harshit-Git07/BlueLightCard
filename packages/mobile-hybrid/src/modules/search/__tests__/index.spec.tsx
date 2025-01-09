@@ -91,6 +91,26 @@ describe('SearchModule', () => {
         push: pushMockFn,
       });
     });
+
+    it('should show an error if searching for less than 3 characters', async () => {
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
+        [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+      });
+
+      const searchInput = screen.getByRole('searchbox');
+
+      await act(() => userEvent.type(searchInput, 'te'));
+
+      await waitFor(() => {
+        expect(searchInput).toHaveValue('te');
+        fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter', charCode: 13 });
+
+        const errorMessage = screen.getByText('Enter 3 or more characters to search.');
+        expect(errorMessage).toBeInTheDocument();
+      });
+    });
+
     it('should navigate to searchresults on submit search', async () => {
       const mockPlatformAdapter = useMockPlatformAdapter();
       givenSearchModuleIsRenderedWith(mockPlatformAdapter, {

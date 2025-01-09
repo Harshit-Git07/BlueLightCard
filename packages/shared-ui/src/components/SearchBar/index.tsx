@@ -17,15 +17,16 @@ const SearchBar: FC<SearchProps> = ({
   onClear,
   onBackButtonClick,
   onFocus,
+  onBlur,
   placeholderText,
   value,
   showBackArrow,
   experimentalSearchVariant,
+  errorMessage = '',
 }) => {
   const initialValue = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const _showBackArrow = isFocused || showBackArrow;
 
@@ -47,13 +48,8 @@ const SearchBar: FC<SearchProps> = ({
     }
 
     event.preventDefault();
-
-    if (searchTerm && searchTerm.length >= 3) {
-      _onBackButtonClick();
-      onSearch(searchTerm);
-    } else {
-      setErrorMessage('Enter 3 or more characters to search.');
-    }
+    onInputBlur();
+    onSearch(searchTerm);
   };
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -79,7 +75,6 @@ const SearchBar: FC<SearchProps> = ({
 
     setIsFocused(false);
     setSearchTerm('');
-    setErrorMessage('');
   }, []);
 
   const onInputFocus = () => {
@@ -91,6 +86,10 @@ const SearchBar: FC<SearchProps> = ({
   };
 
   const onInputBlur = () => {
+    if (onBlur) {
+      onBlur();
+    }
+
     setIsFocused(false);
   };
 
@@ -113,8 +112,7 @@ const SearchBar: FC<SearchProps> = ({
   const searchIcon = (
     <FontAwesomeIcon
       icon={faSearch}
-      size="xl"
-      className="absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
+      className="absolute w-[24px] h-[24px] left-2 px-2 top-1/2 transform -translate-y-1/2 text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
       aria-hidden="true"
     />
   );

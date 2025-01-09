@@ -6,6 +6,8 @@ export interface SearchProps {
   onBackButtonClick?: () => void;
   onClear?: () => void;
   onFocus?: () => void;
+  onBlur?: () => void;
   placeholderText?: string;
   experimentalSearchVariant?: string;
+  errorMessage?: string;
 }

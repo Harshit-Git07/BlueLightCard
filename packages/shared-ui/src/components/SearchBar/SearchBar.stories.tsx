@@ -35,11 +35,18 @@ Edited.play = async ({ canvasElement }) => {
   await userEvent.type(searchBar, 'Nike');
 };
 
-export const Error = DefaultTemplate.bind({});
+export const EditedError = DefaultTemplate.bind({});
 
-Error.args = {
+EditedError.args = {
   ...Default.args,
-  errorMessage: 'Enter 3 or more characters to search.',
+};
+EditedError.play = async ({ canvasElement }) => {
+  const screen = within(canvasElement);
+
+  const searchBar = screen.getByLabelText('Search bar');
+
+  fireEvent.focusIn(searchBar);
+  await userEvent.type(searchBar, 'Te');
 };
 
 export const Submitted = DefaultTemplate.bind({});
@@ -50,6 +57,24 @@ Submitted.args = {
 Submitted.play = async (props) => {
   if (Edited.play) {
     await Edited.play(props);
+  }
+
+  const { canvasElement } = props;
+  const screen = within(canvasElement);
+
+  const searchBar = screen.getByLabelText('Search bar');
+
+  fireEvent.keyDown(searchBar, { key: 'Enter' });
+};
+
+export const SubmittedError = DefaultTemplate.bind({});
+
+SubmittedError.args = {
+  ...Default.args,
+};
+SubmittedError.play = async (props) => {
+  if (EditedError.play) {
+    await EditedError.play(props);
   }
 
   const { canvasElement } = props;

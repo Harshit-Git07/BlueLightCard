@@ -152,7 +152,7 @@ exports[`Navbar renders the authenticatedNavBar correctly when isAuthenticated i
                   >
                     <svg
                       aria-hidden="true"
-                      class="svg-inline--fa fa-magnifying-glass absolute w-[24px] h-[24px] left-2 px-2 top-1/2 transform -translate-y-1/2 text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
+                      class="svg-inline--fa fa-magnifying-glass fa-xl absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
                       data-icon="magnifying-glass"
                       data-prefix="fas"
                       focusable="false"
@@ -322,7 +322,7 @@ exports[`Navbar renders the authenticatedNavBar correctly when isAuthenticated i
           >
             <svg
               aria-hidden="true"
-              class="svg-inline--fa fa-magnifying-glass absolute w-[24px] h-[24px] left-2 px-2 top-1/2 transform -translate-y-1/2 text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
+              class="svg-inline--fa fa-magnifying-glass fa-xl absolute left-2 px-2 top-1/2 transform -translate-y-1/2 text-searchBar-icon-colour-light dark:text-searchBar-icon-colour-dark"
               data-icon="magnifying-glass"
               data-prefix="fas"
               focusable="false"

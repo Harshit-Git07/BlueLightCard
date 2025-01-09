@@ -2,8 +2,17 @@ import { act, render, screen, within } from '@testing-library/react';
 import { composeStories } from '@storybook/react';
 import * as stories from '../SearchBar.stories';
 
-const { Default, Edited, Submitted, Cleared, Reset, Error, ExperimentalDark, ExperimentalLight } =
-  composeStories(stories);
+const {
+  Default,
+  Edited,
+  Submitted,
+  Cleared,
+  Reset,
+  SubmittedError,
+  EditedError,
+  ExperimentalDark,
+  ExperimentalLight,
+} = composeStories(stories);
 
 it('renders the search bar', () => {
   const { container } = render(<Default />);
@@ -83,10 +92,22 @@ it('resets the search bar', async () => {
 describe('displays an error', () => {
   jest.restoreAllMocks();
 
-  it('shows the given error message', async () => {
+  it('edits the search bar with incorrect value', async () => {
+    const onFocus = jest.fn();
+
+    const { container } = render(<EditedError onFocus={onFocus} />);
+
+    await act(() => EditedError.play({ canvasElement: container }));
+
+    expect(onFocus).toHaveBeenCalled();
+    expect(container).toMatchSnapshot();
+  });
+  it('shows an error when submitting less than the required characters', async () => {
     const onSearch = jest.fn();
 
-    const { container } = render(<Error onSearch={onSearch} />);
+    const { container } = render(<SubmittedError onSearch={onSearch} />);
+
+    await act(() => SubmittedError.play({ canvasElement: container }));
 
     const errorMessage = screen.getByText('Enter 3 or more characters to search.');
     expect(errorMessage).toHaveClass('error-message');

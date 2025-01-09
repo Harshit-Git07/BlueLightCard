@@ -51,13 +51,12 @@ export default function App({ Component, pageProps }: AppProps) {
               <main className={`${museoFont.variable} ${sourceSansPro.variable} mb-4`}>
                 {USE_DEV_TOOLS ? <DevToolsDrawer /> : null}
 
-                <Spinner />
-
                 <ViewOfferProvider>
                   <DeeplinkOverrideRouter>
                     <Component {...pageProps} />
                   </DeeplinkOverrideRouter>
                 </ViewOfferProvider>
+                <Spinner />
               </main>
             </UserProfileProvider>
           </AmplitudeProvider>

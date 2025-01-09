@@ -1,5 +1,25 @@
 # Changelog
 
+## [1.104.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.103.1...bluelightcard/web-v1.104.0) (2025-01-09)
+
+
+### Features
+
+* Added specific branded support links to Privacy page ([#3518](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3518)) ([df66615](https://github.com/bluelightcard/BlueLightCard-2.0/commit/df66615530f605dab0846513656c000cf5c2e6a9))
+* Disco-1392 - Update Endpoints ([#3505](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3505)) ([6b3b031](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6b3b031802c907e0446667220987c190a28f9659))
+* Feat/to 1499 redemption api failure redirect offersheet ([#3387](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3387)) ([2a23205](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2a23205a42dbf00798910fff6c64f4fc433dac9f))
+
+
+### Bug Fixes
+
+* DISCO-1327 Hybrid Search fixes ([#3467](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3467)) ([438303f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/438303fe2ecf36d4159d7436093e9e7610cc2298))
+* Revert "fix: DISCO-1327 Hybrid Search fixes ([#3467](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3467))" ([#3539](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3539)) ([4e05803](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4e05803193f884b5e5ba1f7b06b408daac7fc9ad))
+
+
+### Other Changes
+
+* DISCO-1264 Refactored CMS Pages `&lt;CreativeModule /&gt;` ([#3536](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3536)) ([7b9840b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7b9840b549eee02f5d7c3c08d37a17f8fc2e4f75))
+
 ## [1.103.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/web-v1.103.0...bluelightcard/web-v1.103.1) (2025-01-06)
 
 

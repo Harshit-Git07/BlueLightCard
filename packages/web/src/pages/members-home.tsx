@@ -36,8 +36,6 @@ import AmplitudeContext from '../common/context/AmplitudeContext';
 import { useMedia } from 'react-use';
 import TenancyBanner from '../common/components/TenancyBanner';
 import useFetchHomepageData from '@/hooks/useFetchHomepageData';
-import { useShowRenewalModal } from '@/root/src/member-eligibility/hooks/UseShowRenewalModal';
-import { RenewalModal } from '@/root/src/member-eligibility/renewal/modal/RenewalModal';
 
 const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   startTime: BLACK_FRIDAY_TIME_LOCK_START_DATE,
@@ -83,8 +81,9 @@ const HomePage: NextPage<any> = () => {
 
   const amplitude = useContext(AmplitudeContext);
 
-  const { shouldShowRenewalModal, onHideRenewalModal, ifCardExpiredMoreThan30Days } =
-    useShowRenewalModal();
+  // TODO: Disabled as was blowing up on production due to using the staging url on production
+  // const { shouldShowRenewalModal, onHideRenewalModal, ifCardExpiredMoreThan30Days } =
+  //   useShowRenewalModal();
 
   // TODO: Disabled due to Friday code freeze
   // useEligibilityRedirector();
@@ -180,14 +179,14 @@ const HomePage: NextPage<any> = () => {
 
   return (
     <>
-      {shouldShowRenewalModal && (
-        <RenewalModal
-          data-testid="renewal-modal"
-          ifCardExpiredMoreThan30Days={ifCardExpiredMoreThan30Days}
-          onClose={onHideRenewalModal}
-        />
-      )}
-
+      {/* TODO: Disabled as was blowing up on production due to using the staging url on production */}
+      {/*{shouldShowRenewalModal && (*/}
+      {/*  <RenewalModal*/}
+      {/*    data-testid="renewal-modal"*/}
+      {/*    ifCardExpiredMoreThan30Days={ifCardExpiredMoreThan30Days}*/}
+      {/*    onClose={onHideRenewalModal}*/}
+      {/*  />*/}
+      {/*)}*/}
       {loadingError && (
         <Container className="pt-5" addBottomHorizontalLine={false}>
           <AlertBox
@@ -197,7 +196,6 @@ const HomePage: NextPage<any> = () => {
           />
         </Container>
       )}
-
       {/* Promo banner placeholder while experiment value is loading */}
       {brazeContentCardsEnabled.status === 'pending' && (
         <Container
@@ -208,7 +206,6 @@ const HomePage: NextPage<any> = () => {
           <PromoBannerPlaceholder />
         </Container>
       )}
-
       {/* Promo banner carousel */}
       {brazeContentCardsEnabled.data?.variantName === 'control' &&
         (banners.length > 0 || !hasLoaded) && (
@@ -240,14 +237,12 @@ const HomePage: NextPage<any> = () => {
             </SwiperCarousel>
           </Container>
         )}
-
       {/* Braze tenancy banner carousel */}
       {brazeContentCardsEnabled.data?.variantName === 'treatment' && (
         <Container className="py-5" data-testid="braze-tenancy-banner" addBottomHorizontalLine>
           <TenancyBanner title="homepage_sponsor_banner" variant="large" />
         </Container>
       )}
-
       {usePlatformAdapter().getAmplitudeFeatureFlag(AmplitudeExperimentFlags.BLT_TICKET_SHEET) ===
         'on' && (
         <Button
@@ -258,7 +253,6 @@ const HomePage: NextPage<any> = () => {
           BLT Test
         </Button>
       )}
-
       {/* Deals of the week carousel */}
       {(dealsOfTheWeekOffersData.length > 0 || !hasLoaded) && (
         <Container
@@ -276,7 +270,6 @@ const HomePage: NextPage<any> = () => {
           />
         </Container>
       )}
-
       {/* Flexible offers carousel */}
       {(flexibleOffersData.length > 0 || !hasLoaded) && (
         <Container
@@ -295,7 +288,6 @@ const HomePage: NextPage<any> = () => {
           />
         </Container>
       )}
-
       {/* Marketplace carousels */}
       {marketplaceMenus.length > 0 &&
         marketplaceMenus.map((menu: MarketPlaceMenuType, index: number) => {
@@ -339,7 +331,6 @@ const HomePage: NextPage<any> = () => {
             </Container>
           );
         })}
-
       {/* Featured offers carousel */}
       {(featuredOffersData.length > 0 || !hasLoaded) && (
         <Container

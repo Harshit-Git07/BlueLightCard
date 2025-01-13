@@ -4,6 +4,8 @@ import Card from './';
 import { CardProps } from './types';
 
 describe('Card component', () => {
+  const MockSvg = () => <svg data-testid="mock-svg" width="81px" height="91px" />;
+
   const setupCard = (overrideProps = {}) => {
     const defaultProps: CardProps = {
       initialCardState: 'default',
@@ -12,10 +14,12 @@ describe('Card component', () => {
       buttonTitle: 'Click Me',
       imageAlt: 'Test Image',
       imageSrc: 'test-image.jpg',
+      imageSvg: null,
       showImage: true,
       showDescription: true,
       showButton: true,
       onClick: jest.fn(),
+      cardOnClick: jest.fn(),
       ariaLabel: 'Test Card',
     };
 
@@ -29,6 +33,8 @@ describe('Card component', () => {
       cardInnerDiv: () => screen.getByText('Test Card').closest('.group')?.querySelector('div'),
       button: () => screen.queryByText('Click Me'),
       image: () => screen.queryByAltText('Test Image'),
+      svgElement: () => screen.queryByTestId('mock-svg'),
+      card: () => screen.getByText(''),
     };
   };
 
@@ -67,6 +73,15 @@ describe('Card component', () => {
     const { image } = setupCard(props);
 
     expect(image()).not.toBeInTheDocument();
+  });
+
+  it('should render an SVG when imageSvg prop is provided', () => {
+    const props = { imageSvg: <MockSvg /> };
+    const { svgElement } = setupCard(props);
+
+    expect(svgElement()).toBeInTheDocument();
+    expect(svgElement()).toHaveAttribute('width', '81px');
+    expect(svgElement()).toHaveAttribute('height', '91px');
   });
 
   it('should render button when showButton is true', () => {
@@ -137,6 +152,13 @@ describe('Card component', () => {
     expect(cardInnerDiv()).toHaveClass('border-colour-primary', 'dark:border-colour-primary-dark');
   });
 
+  it('calls cardOnClick when card is clicked', () => {
+    const mockCardOnClick = jest.fn();
+    const { cardElement } = setupCard({ cardOnClick: mockCardOnClick });
+    fireEvent.click(cardElement()!);
+    expect(mockCardOnClick).toHaveBeenCalledTimes(1);
+  });
+
   it('should maintain selected state on hover', () => {
     const { button, cardElement, cardInnerDiv } = setupCard();
 
@@ -144,5 +166,18 @@ describe('Card component', () => {
     fireEvent.mouseEnter(cardElement()!);
 
     expect(cardInnerDiv()).toHaveClass('border-colour-primary', 'dark:border-colour-primary-dark');
+  });
+
+  it('should call cardOnClick when Enter or Space key is pressed', () => {
+    const mockCardOnClick = jest.fn();
+    const { cardElement } = setupCard({ cardOnClick: mockCardOnClick });
+
+    // Simulate 'Enter' key press
+    fireEvent.keyDown(cardElement()!, { key: 'Enter', code: 'Enter' });
+    expect(mockCardOnClick).toHaveBeenCalledTimes(1);
+
+    // Simulate 'Space' key press
+    fireEvent.keyDown(cardElement()!, { key: ' ', code: 'Space' });
+    expect(mockCardOnClick).toHaveBeenCalledTimes(2); // Should be called again
   });
 });

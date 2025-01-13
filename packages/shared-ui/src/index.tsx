@@ -63,6 +63,7 @@ export * from './utils/getCDNUrl';
 export * from './utils/pathUtils';
 export * from './utils/ageUtils';
 export * from './utils/withClientSidePagination';
+export * from './utils/getBrandedSupportLink';
 export * from './lib/rewriters';
 export * from './lib/invoke';
 export * from './types';

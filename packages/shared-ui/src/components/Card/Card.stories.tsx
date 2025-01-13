@@ -63,6 +63,21 @@ Selected.args = {
 };
 Selected.decorators = [ConstrainedDecorator];
 
+export const CardAsButton = DefaultTemplate.bind({});
+CardAsButton.args = {
+  ...Default.args,
+  showImage: false,
+  showDescription: false,
+  showButton: true,
+  onClick: () => {
+    console.log('Button clicked!');
+  },
+  cardOnClick: () => {
+    console.log('Card clicked!');
+  },
+};
+CardAsButton.decorators = [ConstrainedDecorator];
+
 export const Hover = DefaultTemplate.bind({});
 Hover.args = {
   ...Default.args,

@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { FC, useState, useRef, useEffect, useMemo, useCallback, KeyboardEvent } from 'react';
 import { CardProps, CardState } from './types';
 import Button from '../Button-V2';
 import { debounce } from 'lodash';
@@ -18,9 +18,11 @@ const Card: FC<CardProps> = ({
   showImage = true,
   showDescription = true,
   showButton,
+  cardOnClick,
   onClick,
   ariaLabel,
   className = '',
+  imageSvg,
   canHover = true,
   ...props
 }) => {
@@ -72,6 +74,12 @@ const Card: FC<CardProps> = ({
       setCardState('hover');
     }
   }, [cardState]);
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      cardOnClick?.();
+    }
+  };
 
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
@@ -126,23 +134,41 @@ const Card: FC<CardProps> = ({
 
   const centerContent = !showImage || !showDescription || (showDescription && isSingleLine);
 
+  const cardPointerStyle = cardOnClick ? 'cursor-pointer' : 'cursor-default';
+
+  const useSvgImage = imageSvg;
+  const useSrcImage = imageSrc && showImage;
+
+  const renderCardImage = () => {
+    if (useSvgImage) {
+      return <div className="w-[84px] min-h-[100px] flex-shrink-0">{imageSvg}</div>;
+    }
+
+    if (useSrcImage) {
+      return (
+        <div className="w-[84px] min-h-[100px] flex-shrink-0">
+          <img src={imageSrc} alt={imageAlt} className="w-full h-full object-cover" />
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
     <div
-      className={`${className} w-full min-w-[275px] group`}
+      className={`${className} ${cardPointerStyle} w-full min-w-[275px] group`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       data-testid={props['data-testid']}
+      onClick={cardOnClick}
+      onKeyDown={handleKeyDown}
     >
       <div
         className={`${styles.border} flex flex-col border rounded overflow-hidden w-full transition-colors duration-200`}
       >
-        <div className={cardTextStyles}>
-          {showImage && imageSrc && (
-            <div className="w-[84px] min-h-[100px] flex-shrink-0">
-              <img src={imageSrc} alt={imageAlt} className="w-full h-full object-cover" />
-            </div>
-          )}
-
+        <div className={`${cardTextStyles} ${cardPointerStyle}`}>
+          {renderCardImage()}
           {cardTitle && (
             <Index
               title={cardTitle}
@@ -160,7 +186,10 @@ const Card: FC<CardProps> = ({
           <div className="mt-auto">
             <Button
               className={buttonClassName}
-              onClick={handleClick}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClick();
+              }}
               iconRight={iconRight}
               iconLeft={iconLeft}
               size="Large"

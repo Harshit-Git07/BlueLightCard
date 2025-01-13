@@ -1,21 +1,28 @@
 import { NextPage } from 'next';
 import useRouterReady from '@/hooks/useRouterReady';
-import Button from '../../../shared-ui/src/components/Button-V2/index';
-import { CardVerificationAlerts, ThemeVariant } from '../../../shared-ui/';
+import {
+  ButtonV2 as Button,
+  BRAND,
+  CardVerificationAlerts,
+  ThemeVariant,
+  getBrandedSupportLink,
+  fonts,
+} from '@bluelightcard/shared-ui';
+
 import {
   faDownload,
   faTrash,
   faArrowUpRightFromSquare,
   faChevronLeft,
 } from '@fortawesome/pro-solid-svg-icons';
-import { fonts } from '../../../shared-ui/src/tailwind/theme';
 import InvokeNativeNavigation from '@/invoke/navigation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const PrivacySettingsPage: NextPage = () => {
   useRouterReady();
-
+  const brand: BRAND = (process.env.NEXT_PUBLIC_APP_BRAND as BRAND) ?? BRAND.BLC_UK;
   const navigation = new InvokeNativeNavigation();
+  const supportLink = getBrandedSupportLink(brand);
 
   const descriptionStyle = ` ${fonts.body} text-colour-onSurface-subtle-light dark:!text-colour-onSurface-subtle-dark pb-2`;
 
@@ -27,6 +34,7 @@ const PrivacySettingsPage: NextPage = () => {
 
   return (
     <div className="max-w-[500px]">
+      <CardVerificationAlerts memberUuid={memberId} />
       <div className="p-3 grid grid-cols-3 border-b-[0.2px] border-colour-onSurface-outline-outline-subtle-light dark:border-colour-onSurface-outline-outline-subtle-dark">
         <button
           onClick={backBtn}
@@ -48,9 +56,6 @@ const PrivacySettingsPage: NextPage = () => {
           </h3>
         </div>
       </div>
-
-      <CardVerificationAlerts memberUuid={memberId} />
-
       <div className="px-4">
         <div className="py-5 grid w-full">
           <div className="col-span-2">
@@ -97,11 +102,7 @@ const PrivacySettingsPage: NextPage = () => {
               invertColor={false}
               variant={ThemeVariant.Tertiary}
               iconRight={faDownload}
-              onClick={() =>
-                navigation.navigate(
-                  '/url.php?url=https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=2355368663796',
-                )
-              }
+              onClick={() => navigation.navigate(`/url.php?url=${supportLink}`)}
             >
               Request your data
             </Button>
@@ -197,11 +198,7 @@ const PrivacySettingsPage: NextPage = () => {
               className="!px-0"
               variant={ThemeVariant.TertiaryDanger}
               iconRight={faTrash}
-              onClick={() =>
-                navigation.navigate(
-                  '/url.php?url=https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=2355368663796',
-                )
-              }
+              onClick={() => navigation.navigate(`/url.php?url=${supportLink}`)}
             >
               Delete account
             </Button>

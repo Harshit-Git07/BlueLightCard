@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 import PrivacySettingsPage from '@/pages/privacy-settings';
 import { NextRouter } from 'next/router';
 import InvokeNativeNavigation from '@/invoke/navigation';
-import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui/adapters';
+import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const mockRouter: Partial<NextRouter> = {
@@ -29,6 +29,7 @@ describe('PrivacySettingsPage', () => {
   beforeEach(() => {
     const queryClient = new QueryClient();
     const mockPlatformAdapter = useMockPlatformAdapter();
+
     render(
       <QueryClientProvider client={queryClient}>
         <PlatformAdapterProvider adapter={mockPlatformAdapter}>
@@ -110,7 +111,7 @@ describe('PrivacySettingsPage', () => {
     const requestDataButton = screen.getByText('Request your data');
     fireEvent.click(requestDataButton);
     expect(invokeNavigation.navigate).toHaveBeenCalledWith(
-      '/url.php?url=https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=2355368663796',
+      '/url.php?url=https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=23553686637969',
     );
   });
 
@@ -118,7 +119,7 @@ describe('PrivacySettingsPage', () => {
     const deleteAccountButton = screen.getByText('Delete account');
     fireEvent.click(deleteAccountButton);
     expect(invokeNavigation.navigate).toHaveBeenCalledWith(
-      '/url.php?url=https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=2355368663796',
+      '/url.php?url=https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=23553686637969',
     );
   });
 

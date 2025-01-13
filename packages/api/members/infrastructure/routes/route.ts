@@ -1,4 +1,4 @@
-import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
+import { IAuthorizer, RequestValidator } from 'aws-cdk-lib/aws-apigateway';
 import { ApiGatewayV1ApiFunctionRouteProps, Function, Stack } from 'sst/constructs';
 import { SSTConstruct } from 'sst/constructs/Construct';
 import { Permissions } from 'sst/constructs/util/permission';
@@ -12,6 +12,8 @@ import { MemberStackEnvironmentKeys } from '../constants/environment';
 import { NamedZodType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import { z } from 'zod';
 import { IVpc } from 'aws-cdk-lib/aws-ec2';
+
+type CreateRouteResult = ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>;
 
 export type RouteProps<Request extends z.AnyZodObject, Response extends z.AnyZodObject> = {
   stack: Stack;
@@ -27,6 +29,7 @@ export type RouteProps<Request extends z.AnyZodObject, Response extends z.AnyZod
   permissions?: Permissions;
   apiKeyRequired?: boolean;
   vpc?: IVpc;
+  authorizer?: CreateRouteResult['authorizer'];
 };
 
 export type DefaultRouteProps = Pick<
@@ -37,6 +40,7 @@ export type DefaultRouteProps = Pick<
   | 'bind'
   | 'defaultAllowedOrigins'
   | 'environment'
+  | 'authorizer'
 >;
 
 export class Route {
@@ -54,6 +58,7 @@ export class Route {
     permissions,
     apiKeyRequired,
     vpc,
+    authorizer = 'memberAuthorizer',
   }: RouteProps<Request, Response>): ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'> {
     let requestModels;
     if (requestModelType) {
@@ -90,6 +95,7 @@ export class Route {
     }
 
     return {
+      authorizer,
       cdk: {
         function: new Function(stack, `${name}Function`, {
           bind: bind,

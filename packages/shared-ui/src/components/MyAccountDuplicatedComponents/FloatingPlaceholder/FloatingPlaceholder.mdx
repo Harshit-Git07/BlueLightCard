@@ -1,0 +1,64 @@
+import { Canvas, Controls, Meta } from '@storybook/blocks'
+import * as FloatingPlaceholder from './FloatingPlaceholder.stories'
+
+<Meta of={FloatingPlaceholder}/>
+
+# FloatingPlaceholder
+
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Implementation](#implementation)
+
+## Overview
+
+The FloatingPlaceholder is intended to replace the native `placeholder` attribute on `<input/>` elements to achieve the dynamic placement of the placeholder text when the field is active.
+
+<Canvas of={FloatingPlaceholder.Default}/>
+
+## Props
+
+<Controls/>
+
+## State
+
+### Default State
+
+<Canvas of={FloatingPlaceholder.Default}/>
+
+### Disabled State
+
+<Canvas of={FloatingPlaceholder.Disabled}/>
+
+## Implementation
+
+Usage example using jsx
+
+The class *peer* must be added to the input element
+
+The FloatingPlaceholder must be the next sibling of the input element
+
+Both should be wrapped in a class of `absolute | relative | fixed` etc
+
+```tsx
+import { FC } from 'react';
+import FloatingPlaceholder from '@bluelightcard/shared-ui/src/components/FloatingPlaceholder';
+
+const FloatingPlaceholderWrapper: FC = () => {
+  const value = 'abc'
+  return (
+    <div className="relative">
+      <input
+        className="w-full px-[16px] py-[12px] peer"
+        id="fieldName"
+        type="text"
+        disabled={false}
+        value={value}
+      />
+      <FloatingPlaceholder htmlFor="fieldName" isDisabled={false} isValid={true} hasValue={!!value}>
+        Placeholder
+      </FloatingPlaceholder>
+    </div>);
+};
+```
+**NOTE:** a dynamic top-margin will need to be applied to the FloatingPlaceholder or wrapper element so that space above the transformed placeholder remains consistent.

@@ -191,7 +191,7 @@ describe('Save button & Validation', () => {
 
       it('displays duplicate error if api returns 401', async () => {
         const { saveButton, adapter } = await submittableHarness(401, {
-          errors: [{ code: '401' }],
+          error: [{ code: '401' }],
         });
 
         await act(async () => await userEvent.click(saveButton));
@@ -203,7 +203,7 @@ describe('Save button & Validation', () => {
 
       it('displays api error for other error code', async () => {
         const { saveButton, adapter } = await submittableHarness(400, {
-          errors: [{ code: '400', detail: 'testError' }],
+          error: [{ code: '400', detail: 'testError' }],
         });
 
         await act(async () => await userEvent.click(saveButton));

@@ -1,8 +1,8 @@
 import { FC, PropsWithChildren } from 'react';
 import Button from '../Button-V2';
 import { ButtonProps } from '../Button-V2/types';
-import { ThemeVariant } from '@/types';
-import { colours, fonts } from '@/tailwind/theme';
+import { ThemeVariant } from '../../types';
+import { colours, fonts } from '../../tailwind/theme';
 
 type AccountDrawerProps = PropsWithChildren & {
   title?: string;

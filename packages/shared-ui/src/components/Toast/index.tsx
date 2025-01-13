@@ -2,7 +2,7 @@ import { FC, MouseEventHandler, ReactNode } from 'react';
 import { ToastStatus } from './ToastTypes';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { fonts } from '../../tailwind/theme';
+import { colours, fonts } from '../../tailwind/theme';
 import {
   faCheckCircle,
   faCircle,
@@ -48,13 +48,11 @@ const Toast: FC<ToastProps> = ({
 }) => {
   const { closeToast, timer } = useToaster();
 
-  const articleClasses = 'w-full py-4 px-4 max-w-[713px] min-h-12';
-  const iconPositioning = 'absolute left-4 top-4';
-  const iconClasses = 'left-4 top-4 w-6 h-6';
-  const xPositioning = 'top-4 right-4';
-  const bodyPaddingX = 'pl-10 pr-5';
-  const titleClasses = `${fonts.titleMediumSemiBold} text-colour-onSurface dark:text-colour-onSurface-dark`;
-  const subtextClasses = `${fonts.body} text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark`;
+  const articleClasses = 'w-full p-[16px] max-w-[713px] min-h-12 flex';
+  const iconClasses = 'w-[24px] h-[24px]';
+  const bodyPaddingX = 'px-[16px]';
+  const titleClasses = `${fonts.titleMediumSemiBold} ${colours.textOnSurface}`;
+  const subtextClasses = `${fonts.body} ${colours.textOnSurfaceSubtle}`;
   const dropShadow = 'shadow-[0px_1px_4px_0px_#0000001F]';
 
   const [defaultIcon, iconColours] = getToastIcon(status);
@@ -75,11 +73,11 @@ const Toast: FC<ToastProps> = ({
     <article
       aria-live="polite"
       aria-atomic="true"
-      className={`relative ${articleClasses} w-full rounded rounded-1.5 bg-colour-onPrimary dark:bg-colour-onPrimary-dark ${dropShadow}`}
+      className={`${articleClasses} w-full rounded rounded-1.5 ${colours.backgroundOnPrimary} ${dropShadow}`}
       onMouseEnter={handleHover(true)}
       onMouseLeave={handleHover(false)}
     >
-      <div className={iconPositioning} role="img" aria-label={`Icon: ${status}`}>
+      <div role="img" aria-label={`Icon: ${status}`}>
         {ico}
       </div>
 
@@ -91,11 +89,11 @@ const Toast: FC<ToastProps> = ({
 
       {hasClose ? (
         <button
-          className={`appearance-none absolute ${xPositioning} text-colour-onSurface-subtle dark:text-colour-onSurface-subtle-dark`}
+          className={`appearance-none flex ${colours.textOnSurfaceSubtle} ml-auto`}
           onClick={handleClose}
           aria-label={'close'}
         >
-          <FontAwesomeIcon icon={faXmark} className={'w-6 h-6'} />
+          <FontAwesomeIcon icon={faXmark} className={iconClasses} />
         </button>
       ) : null}
     </article>

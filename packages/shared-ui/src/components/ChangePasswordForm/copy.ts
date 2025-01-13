@@ -16,11 +16,10 @@ const changePasswordFormCopy = {
   },
   validation: {
     missingCurrent: 'The current password is required.',
-    incorrectCurrentPassword:
-      'The password entered doesn’t match with this account. Please try again.',
-    invalidPasswordRequirements: 'The password entered is invalid. Please try again.',
+    incorrectCurrentPassword: 'Please enter a valid current password.',
+    invalidPasswordRequirements: 'Please enter a valid password.',
     notNew: 'The new password needs to be different from current password.',
-    doesNotMatch: 'The passwords entered do not match. Please try again.',
+    doesNotMatch: 'Please enter a matching password.',
   },
 };
 

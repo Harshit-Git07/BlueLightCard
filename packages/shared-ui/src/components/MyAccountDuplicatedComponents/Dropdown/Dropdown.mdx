@@ -1,0 +1,41 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+
+import * as Dropdown from './Dropdown.stories';
+
+<Meta of={Dropdown} />
+
+# Dropdown
+
+- [Overview](#overview)
+- [Props](#props)
+- [Variants and States](#variants-and-states)
+
+## Overview
+The Dropdown component is used to create a dropdown input either. Can be searchable. Accepts props for disabled, help icon (tooltip), tooltip text, label, message, help text, error state, 
+
+## Props
+<Controls />
+
+## Variants and States
+List of variants can be shown below here.
+
+### Default
+<Canvas of={Dropdown.Default} />
+
+### Searchable
+<Canvas of={Dropdown.Searchable} />
+
+### Disabled
+<Canvas of={Dropdown.Disabled} />
+
+### FullLabelsAndText
+<Canvas of={Dropdown.FullLabelsAndText} />
+
+### ErrorState
+<Canvas of={Dropdown.ErrorState} />
+
+### ErrorStateFullLabelsAndText
+<Canvas of={Dropdown.ErrorStateFullLabelsAndText} />
+
+## Design
+Please see the [Figma design](<https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=47-12288>).

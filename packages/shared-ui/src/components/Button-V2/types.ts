@@ -12,6 +12,7 @@ export type ButtonProps = PropsWithChildren & {
   iconLeft?: IconDefinition;
   iconRight?: IconDefinition;
   href?: string;
+  newTab?: boolean;
   onClick?: MouseEventHandler;
   withoutHover?: boolean;
   withoutFocus?: boolean;

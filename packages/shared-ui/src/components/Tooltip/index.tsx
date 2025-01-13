@@ -1,11 +1,12 @@
 import { FC, useId } from 'react';
 import { conditionalStrings } from '../../utils/conditionalStrings';
 import { useCSSMerge } from '../../hooks/useCSS';
+import { TooltipPosition } from '../../types';
 
 export type Props = {
   children: React.ReactNode;
   text: string;
-  position: 'top' | 'bottom' | 'right' | 'left';
+  position: TooltipPosition;
   isMaxWidth?: boolean;
   isOpen?: boolean;
 };
@@ -27,7 +28,7 @@ const Tooltip: FC<Props> = ({ children, text, position, isOpen, isMaxWidth = fal
     squareWidthCss,
     squarePositionCss,
     'transition-opacity ease-in pointer-events-none',
-    `max-w-60 text-center rounded px-4 py-[6px] ${!isOpen && 'opacity-0'} group-hover:opacity-100 absolute`,
+    `max-w-60 text-center rounded px-4 py-[6px] ${!isOpen && 'opacity-0'} absolute`,
     'bg-colour-surface-inverse dark:bg-colour-surface-inverse-dark dark:text-colour-onSurface text-colour-onSurface-dark',
     'font-typography-body-small font-typography-body-small-weight text-typography-body-small leading-typography-body-small',
   );
@@ -47,7 +48,7 @@ const Tooltip: FC<Props> = ({ children, text, position, isOpen, isMaxWidth = fal
   const id = useId();
 
   return (
-    <div className="group relative inline-block">
+    <div className="relative inline-block [&>div]:hover:opacity-100">
       <div aria-describedby={id}>{children}</div>
 
       <div id={id} role="tooltip" className={squareCss}>

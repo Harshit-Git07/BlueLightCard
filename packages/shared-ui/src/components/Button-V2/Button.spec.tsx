@@ -90,5 +90,36 @@ describe('Button component', () => {
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
     });
+
+    it('only applies anchor props with href', () => {
+      const { container: noNewTabContainer } = render(<Button href="/test">Button</Button>);
+      const noNewTabButton = noNewTabContainer.querySelector('a');
+
+      expect(noNewTabButton).toHaveProperty('href');
+      expect(noNewTabButton).toHaveProperty('target', '');
+
+      const { container: newTabContainer } = render(
+        <Button href="/test" newTab>
+          Button
+        </Button>,
+      );
+      const newTabButton = newTabContainer.querySelector('a');
+
+      expect(newTabButton).toHaveProperty('href');
+      expect(newTabButton).toHaveProperty('target', '_blank');
+
+      expect(noNewTabButton).not.toHaveProperty('onClick');
+      expect(newTabButton).not.toHaveProperty('onClick');
+    });
+
+    it('only applies button props with onClick', () => {
+      const { container } = render(<Button onClick={jest.fn()}>Button</Button>);
+      const buttonElement = container.querySelector('button');
+
+      expect(buttonElement).toHaveProperty('onclick');
+      expect(buttonElement).toHaveProperty('type', 'button');
+
+      expect(buttonElement).not.toHaveProperty('href');
+    });
   });
 });

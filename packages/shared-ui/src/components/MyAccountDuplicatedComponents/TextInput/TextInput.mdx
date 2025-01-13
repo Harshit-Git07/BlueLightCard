@@ -1,0 +1,90 @@
+import { Canvas, Controls, Meta } from '@storybook/blocks'
+import * as TextInput from './TextInput.stories'
+import ComponentStatus from '../../../../.storybook/blocks/ComponentStatus'
+
+<Meta of={TextInput}/>
+
+# TextInput
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Usage Guidelines](#usage-guidelines)
+- [Design](#design)
+
+## Status
+<ComponentStatus/>
+
+## Overview
+
+The Text Input component is a versatile UI element used to create text field input areas in forms. It typically includes a label and optional helper text or validation messages. This component ensures consistency and accessibility in form design, providing a structured and user-friendly way to capture user input.
+
+## Props
+<Canvas of={TextInput.Default}/>
+<Controls/>
+
+
+## Variants and States
+
+List of variants can be shown below here.
+
+**Default**
+<Canvas of={TextInput.Default}/>
+
+**Filled**
+<Canvas of={TextInput.Filled}/>
+
+**Error**
+<Canvas of={TextInput.Error}/>
+
+**Success**
+<Canvas of={TextInput.Success}/>
+
+**Disabled**
+<Canvas of={TextInput.Disabled}/>
+
+## Implementation
+Usage example using jsx
+
+```tsx
+import React, { ChangeEvent, useState } from 'react';
+import TextInput from './TextInput';
+
+const ExampleComponent = () => {
+  const [value, setValue] = useState(args.value ?? '');
+  const [validationMessage, setValidationMessage] = useState(args.validationMessage);
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    setValue(newValue.length <= args.maxLength ? newValue : value);
+  };
+
+  useEffect(() => {
+    if (args.maxLength) {
+      const charsLeft = args.maxLength - value.length;
+      const charsLeftString = `${charsLeft} characters remaining`;
+      setValidationMessage(charsLeftString);
+    }
+  }, [value]);
+
+  return (
+    <TextInput {...args} value={value} validationMessage={validationMessage} onChange={onChange} />
+  );
+};
+
+export default ExampleComponent;
+```
+
+## Usage Guidelines
+
+➡️ Always use placeholder in input field where indicated
+
+➡️ Character or word counters should be used if there is a character or word limit.
+
+## Design
+- [Confluence: Text Input Documentation](https://bluelightcard.atlassian.net/wiki/spaces/PE/pages/2935881730/Text+Input)
+- [Figma: TextInput](https://www.figma.com/design/n2NzB4G3OTR74o3dQ4BOwm/My-Account-%26-Sign-up-Component-library?node-id=22-4300&node-type=canvas&m=dev)
+

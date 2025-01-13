@@ -1,5 +1,6 @@
 import { PasswordFields } from './constants';
 import { ApiResponseError, ApiResponseSuccess } from '../../api/types';
+import { components } from '../../generated/MembersApi';
 
 export type InputElementState = {
   value: string;
@@ -14,10 +15,7 @@ export type CurrentFormState = {
   newPasswordConfirm: InputElementState;
 };
 
-export type UpdatePasswordPayload = {
-  currentPassword: string;
-  newPassword: string;
-};
+export type UpdatePasswordPayload = components['schemas']['PasswordChangeModel'];
 
 type UpdatePasswordSuccessResponse = Partial<ApiResponseSuccess> & {
   type: 'success';

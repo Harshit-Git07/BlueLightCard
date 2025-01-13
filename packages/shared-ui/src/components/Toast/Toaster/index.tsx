@@ -11,11 +11,11 @@ export const getToastClasses = (position: ToastPosition) => {
   const isTop = [TopLeft, TopCenter, TopRight].includes(position);
 
   return conditionalStrings({
-    'fixed z-[1000] w-full max-w-[713px]': always,
-    'left-0': isLeft,
-    'left-1/2 -translate-x-1/2': isCenter,
-    'right-0': isRight,
-    'top-0': isTop,
+    'fixed z-[1000] w-fit px-[12px] tablet:px-0': always,
+    'tablet:left-[64px]': isLeft,
+    'tablet:left-1/2 -translate-x-1/2': isCenter,
+    'tablet:right-[64px]': isRight,
+    'top-[64px]': isTop,
     'bottom-0': !isTop,
   });
 };

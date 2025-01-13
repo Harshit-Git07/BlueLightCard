@@ -11,6 +11,7 @@ import MyCardPage from '@/pages/your-card';
 import { formatDateDDMMYYYY } from '../../../../shared-ui/src/utils/dates';
 import * as globals from '@/globals';
 import { mockMemberProfileResponse } from '@bluelightcard/shared-ui/components/MyAccountDebugTools/mocks/mockMemberProfileGet';
+import { PlatformVariant } from '@bluelightcard/shared-ui/types';
 
 const mockProfileNoCard = { ...mockMemberProfileResponse };
 mockProfileNoCard.cards = [];
@@ -45,14 +46,19 @@ jest.mock('next/router', () => ({
   useRouter: () => mockRouter,
 }));
 
-describe('MyCard Page', () => {
+describe('YourCard Page', () => {
+  beforeEach(() => {
+    window.localStorage.setItem('username', 'testMemberId');
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
+    window.localStorage.clear();
   });
 
   const whenPageIsRendered = async (data?: any) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const mockPlatformAdapter = useMockPlatformAdapter(200, data);
+    const mockPlatformAdapter = useMockPlatformAdapter(200, data, PlatformVariant.Web);
     render(
       <QueryClientProvider client={new QueryClient()}>
         <PlatformAdapterProvider adapter={mockPlatformAdapter}>

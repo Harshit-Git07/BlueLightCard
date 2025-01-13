@@ -7,7 +7,6 @@ import {
   getBrandStrapline,
   NoCardImage,
   ThemeVariant,
-  Typography,
   useMemberCard,
   useMemberId,
   useMemberProfileGet,
@@ -36,8 +35,8 @@ const YourCardPage: NextPage = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex justify-between items-center tablet-xl:mt-5">
-        <Typography variant="title-large">Your card</Typography>
+      <div className="mt-[2px] flex justify-between items-center">
+        <h2 className={fonts.titleLarge}>Your card</h2>
 
         {hasGenerated ? (
           <Button

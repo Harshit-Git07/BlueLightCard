@@ -1,7 +1,7 @@
-import TextInput from '../../TextInput';
 import { FC, SyntheticEvent } from 'react';
 import AccountDrawer from '../../AccountDrawer';
 import changeEmailAddressText from '../ChangeEmailAddressText';
+import TextInput from '../../MyAccountDuplicatedComponents/TextInput';
 
 interface ChangeEmailAddressFormProps {
   email: string;
@@ -50,7 +50,7 @@ const ChangeEmailAddressForm: FC<ChangeEmailAddressFormProps> = ({
             isValid={!newEmailError}
             value={newEmail}
             onChange={onChange(true)}
-            message={newEmailError}
+            validationMessage={newEmailError}
           />
         </div>
         <div className={'pt-6'}>
@@ -60,7 +60,7 @@ const ChangeEmailAddressForm: FC<ChangeEmailAddressFormProps> = ({
             value={confirmEmail}
             isValid={!confirmEmailError}
             onChange={onChange(false)}
-            message={confirmEmailError}
+            validationMessage={confirmEmailError}
           />
         </div>
       </AccountDrawer>

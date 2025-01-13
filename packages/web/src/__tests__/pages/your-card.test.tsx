@@ -7,7 +7,7 @@ import {
   PlatformAdapterProvider,
   useMockPlatformAdapter,
 } from '../../../../shared-ui/src/adapters';
-import MyCardPage from '@/pages/your-card';
+import YourCardPage from '@/pages/your-card';
 
 import { formatDateDDMMYYYY } from '../../../../shared-ui/src/utils/dates';
 
@@ -37,7 +37,8 @@ jest.mock('react-use', () => ({
 }));
 
 describe('MyCard Page', () => {
-  afterEach(() => {
+  beforeEach(() => {
+    localStorage.setItem('username', 'test');
     jest.clearAllMocks();
   });
 
@@ -48,7 +49,7 @@ describe('MyCard Page', () => {
       <QueryClientProvider client={new QueryClient()}>
         <PlatformAdapterProvider adapter={mockPlatformAdapter}>
           <RouterContext.Provider value={mockRouter as NextRouter}>
-            <MyCardPage />
+            <YourCardPage />
           </RouterContext.Provider>
         </PlatformAdapterProvider>
       </QueryClientProvider>

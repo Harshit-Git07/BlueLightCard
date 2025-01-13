@@ -1,15 +1,14 @@
 import React from 'react';
 import { NextPage } from 'next';
 import withAccountLayout from '../common/layouts/AccountBaseLayout/withAccountLayout';
-import { Typography } from '@bluelightcard/shared-ui';
-import MarketingPreferences from '@bluelightcard/shared-ui/components/MarketingPreferences';
+import { fonts, MarketingPreferences } from '@bluelightcard/shared-ui';
 
 const ContactPreferencesPage: NextPage = () => {
   return (
-    <>
-      <Typography variant="title-large">Marketing Preferences</Typography>
+    <div className="mt-[6px]">
+      <h2 className={fonts.titleLarge}>Marketing Preferences</h2>
       <MarketingPreferences memberUuid={'abcd-1234'} />
-    </>
+    </div>
   );
 };
 

@@ -97,6 +97,7 @@ const Button: FC<ButtonProps> = ({
   disabled,
   children,
   href,
+  newTab = false,
   type = 'button',
   variant = ThemeVariant.Primary,
   onClick,
@@ -133,14 +134,23 @@ const Button: FC<ButtonProps> = ({
 
   const ButtonTag = href ? 'a' : 'button';
 
+  const anchorProps = {
+    href, // Only apply href when anchor tag is used
+    target: newTab ? '_blank' : undefined,
+    rel: newTab ? 'noopener noreferrer' : undefined,
+  };
+
+  const buttonProps = {
+    onClick, // Apply onClick only for buttons
+    disabled, // Apply disabled only for buttons
+    type, // Only apply type when it's a button
+  };
+
   return (
     <ButtonTag
       className={`${classes} text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font`}
       data-testid={props['data-testid']}
-      href={ButtonTag === 'a' ? href : undefined} // Only apply href when anchor tag is used
-      type={ButtonTag === 'button' ? type : undefined} // Only apply type when it's a button
-      disabled={ButtonTag === 'button' ? disabled : undefined} // Apply disabled only for buttons
-      onClick={ButtonTag === 'button' ? onClick : undefined} // Apply onClick only for buttons
+      {...(ButtonTag === 'a' ? anchorProps : buttonProps)}
     >
       {iconLeft && <FontAwesomeIcon className="mr-[4px]" icon={iconLeft} />}
       {children}

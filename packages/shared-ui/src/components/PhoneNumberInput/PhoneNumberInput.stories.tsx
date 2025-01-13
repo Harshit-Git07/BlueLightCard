@@ -1,62 +1,75 @@
 import { Meta, StoryFn } from '@storybook/react';
 import PhoneNumberInput from './';
-import { useState } from 'react';
+import { CountryIso2, defaultCountries, parseCountry } from 'react-international-phone';
+
+const countryList: Array<CountryIso2 | undefined> = defaultCountries
+  .map(parseCountry)
+  .map((parsedCountry) => parsedCountry.iso2);
 
 const componentMeta: Meta<typeof PhoneNumberInput> = {
   title: 'Component System/PhoneNumberInput',
   component: PhoneNumberInput,
-
   argTypes: {
-    disabled: {
+    value: {
+      control: 'text',
+      description: '`string`: The phone number. (default: `""`)',
+    },
+    isDisabled: {
       control: 'boolean',
       description: '`boolean`: Whether the input is disabled. (default: `false`)',
     },
-    showErrors: {
-      control: 'boolean',
-      description: '`boolean`: Whether to show validation errors. (default: `false`)',
+    defaultCountry: {
+      control: 'select',
+      options: countryList,
+      description:
+        '`string`: The default country code. (default: `gb or ua depending on local but to add more countries needs to be updated`)',
     },
     label: {
       control: 'text',
-      description: '`string`: Label text for the input. (default: ``)',
+      description: '`string`: Label text for the input. (default: `""`)',
     },
-    helpText: {
+    description: {
       control: 'text',
-      description: '`string`: Help text to assist the user. (default: ``)',
-    },
-    messageText: {
-      control: 'text',
-      description: '`string`: Additional message text. (default: ``)',
-    },
-    isSelectable: {
-      control: 'boolean',
-      description: '`boolean`: Whether the country selector is clickable. (default: `false`)',
+      description: '`string`: Description that shows in the tooltip. (default: `""`)',
     },
     onChange: {
       action: 'changed',
       description: '`function`: Callback triggered when the value changes.',
     },
+    isSelectable: {
+      control: 'boolean',
+      description: '`boolean`: Whether the country selector is clickable. (default: `false`)',
+    },
+    validationMessage: {
+      control: 'text',
+      description:
+        '`string`: Additional message text. Used for displaying errors in combination with `isValid`. (default: `""`)',
+    },
+    isValid: {
+      control: 'boolean',
+      description:
+        '`boolean`: Describes the state that the input is in; `false` for an error state.',
+    },
   },
 };
 
-const DefaultTemplate: StoryFn<typeof PhoneNumberInput> = (args) => {
-  const [phoneNumber, setPhoneNumber] = useState('');
-  return <PhoneNumberInput {...args} value={phoneNumber} onChange={setPhoneNumber} />;
-};
+const DefaultTemplate: StoryFn<typeof PhoneNumberInput> = (args) => <PhoneNumberInput {...args} />;
 
 export const Default = DefaultTemplate.bind({});
-Default.args = {};
+Default.args = {
+  value: '+44',
+};
 
 export const Disabled = DefaultTemplate.bind({});
 Disabled.args = {
   ...Default.args,
-  disabled: true,
+  isDisabled: true,
 };
 
 export const ClickableDropdown = DefaultTemplate.bind({});
 ClickableDropdown.args = {
   ...Default.args,
   isSelectable: true,
-  showErrors: true,
 };
 
 ClickableDropdown.decorators = [
@@ -72,18 +85,17 @@ ClickableDropdown.decorators = [
   ),
 ];
 
-export const HelpTextWithMessage = DefaultTemplate.bind({});
-HelpTextWithMessage.args = {
+export const Labelled = DefaultTemplate.bind({});
+Labelled.args = {
   ...Default.args,
-  helpText: 'Enter your phone number',
-  label: 'Label',
-  messageText: 'Message',
-  showErrors: true,
+  label: 'Phone Number',
 };
 
-export const Validation = DefaultTemplate.bind({});
-Validation.args = {
-  showErrors: true,
+export const LabelledWithError = DefaultTemplate.bind({});
+LabelledWithError.args = {
+  ...Default.args,
+  label: 'Phone Number',
+  isValid: false,
 };
 
 export default componentMeta;

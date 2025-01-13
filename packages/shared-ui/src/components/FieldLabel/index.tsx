@@ -31,7 +31,7 @@ const FieldLabel: FC<Props> = ({
             htmlFor={htmlFor}
             aria-label={label}
           >
-            {transformTextCase(label, TextCase.CAPS_FIRST_LETTER_ONLY)}
+            {transformTextCase(label, TextCase.CAPS_FIRST_LETTER)}
           </label>
           {tooltip ? (
             // TODO: MAMA-174 add htmlFor prop to tooltip to correctly calculate ariaDescribedBy in parent input

@@ -44,7 +44,8 @@ const useChangeEmailAddressState = (email: string, memberUuid: string) => {
     if (isPending) return;
     setGenericError('');
     const { status, data } = await mutateAsync({
-      email: newEmail,
+      currentEmail: email,
+      newEmail: newEmail,
     });
 
     if (status >= 400) {

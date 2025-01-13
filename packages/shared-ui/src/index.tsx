@@ -23,6 +23,8 @@ export { default as CopyButton } from './components/CopyButton/CopyButton';
 export { default as AccountDetails } from './components/AccountDetails';
 export { default as YourCard } from './components/YourCard';
 export { default as Link } from './components/Link';
+export { default as PersonalInformation } from './components/PersonalInformation';
+export { default as MarketingPreferences } from './components/MarketingPreferences';
 export { default as OfferCardCarousel } from './components/OfferCardCarousel';
 export { default as OfferCardList } from './components/OfferCardList';
 export { default as OfferSheet } from './components/OfferSheet';

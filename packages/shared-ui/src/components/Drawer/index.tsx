@@ -31,16 +31,16 @@ const Drawer = () => {
     'opacity-0 pointer-events-none': !isOpen,
   });
 
-  const sidebarMobile = 'w-full rounded-t-3xl laptop:rounded-none';
-  const sidebarLaptop = 'laptop:w-[384px]';
+  const sidebarMobile = 'w-full rounded-t-3xl tablet:rounded-none';
+  const sidebarLaptop = 'tablet:w-[384px]';
 
   const sidebarClasses = conditionalStrings({
     'flex flex-col duration-500 fixed bottom-0 z-[100] bg-colour-surface dark:bg-colour-surface-dark transition-top transition-right':
       true,
     [sidebarMobile]: true,
     [sidebarLaptop]: true,
-    'top-[100%] laptop:top-0 right-0 laptop:-right-[384px]': !isOpen,
-    'top-[10%] laptop:top-0 right-0': isOpen,
+    'top-[100%] tablet:top-0 right-0 tablet:-right-[384px]': !isOpen,
+    'top-[10%] tablet:top-0 right-0': isOpen,
   });
 
   return (

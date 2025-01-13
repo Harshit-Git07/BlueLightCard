@@ -1,11 +1,10 @@
 import { usePlatformAdapter } from '../../adapters';
 import { useMutation } from '@tanstack/react-query';
 import { jsonOrNull } from '../../utils/jsonUtils';
-import { V5_API_URL } from '@/constants';
+import { V5_API_URL } from '../../constants';
+import { components } from '../../generated/MembersApi';
 
-interface Updates {
-  email: string;
-}
+type PutSchema = components['schemas']['EmailChangeModel'];
 
 interface PutResponseData {
   error?: string;
@@ -14,16 +13,13 @@ interface PutResponseData {
 const useChangeEmailAddressPut = (memberId: string) => {
   const adapter = usePlatformAdapter();
   return useMutation({
-    mutationFn: async (update: Updates) => {
-      const { email } = update;
+    mutationFn: async (putBody: PutSchema) => {
       try {
         const { status, data } = await adapter.invokeV5Api(
           `${V5_API_URL.Profile(memberId)}/email`,
           {
             method: 'PUT',
-            body: JSON.stringify({
-              newEmail: email,
-            }),
+            body: JSON.stringify(putBody),
           },
         );
 

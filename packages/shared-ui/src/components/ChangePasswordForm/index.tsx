@@ -1,5 +1,5 @@
 import { FC, FormEventHandler } from 'react';
-import { ApiMessage } from '@/api/types';
+import { ApiMessage } from '../../api/types';
 import useDrawer from '../Drawer/useDrawer';
 import { useChangePasswordState } from './hooks/useChangePasswordState';
 import { PasswordInputGroup } from './components/PasswordInputGroup';
@@ -22,10 +22,15 @@ const ChangePasswordForm: FC<Props> = ({ memberId, onPasswordUpdateSuccess }) =>
 
     const response = await makeApiRequest();
 
-    if (response.type === 'success') {
+    if (response?.type === 'success') {
       handleSuccess();
     } else {
-      response.errors?.forEach(handleError);
+      // need to handle case where api is returning bad data for the time being
+      if (Array.isArray(response?.error)) {
+        response?.error?.forEach(handleError);
+      } else {
+        handleError({ code: '500', detail: '' });
+      }
     }
   };
 

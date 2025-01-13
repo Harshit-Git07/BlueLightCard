@@ -89,7 +89,7 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
       </div>
 
       <div
-        className={`mt-6 relative grow pb-16 flex gap-2 h-full desktop:container desktop:mx-auto tablet:mx-5`}
+        className={`mt-[24px] relative grow pb-16 flex gap-[24px] h-full desktop:container desktop:mx-auto tablet:mx-5`}
       >
         <LeftNavigation
           firstName={memberProfile?.firstName ?? ''}
@@ -108,7 +108,7 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
           />
         ) : null}
 
-        <div className={`w-full px-5 tablet:px-0 min-h-[300px]`}>{children}</div>
+        <div className={`w-full px-[18px] tablet:px-0 min-h-[300px]`}>{children}</div>
       </div>
 
       {!isOpen ? <Footer isAuthenticated /> : null}

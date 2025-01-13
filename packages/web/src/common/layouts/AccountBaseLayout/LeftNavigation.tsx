@@ -23,7 +23,7 @@ const LeftNavigation = ({
   return (
     <div
       className={`
-        absolute tablet:relative z-10 flex flex-col h-full p-4 bg-white delay-400 duration-500 ease-in-out transition-all tablet:animate-none
+        absolute tablet:relative z-10 flex flex-col h-full bg-white delay-400 duration-500 ease-in-out transition-all tablet:animate-none
         ${isOpen ? 'translate-x-0' : '-translate-x-full tablet:translate-x-0'}
       `}
     >

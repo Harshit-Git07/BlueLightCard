@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import useRouterReady from '@/hooks/useRouterReady';
-import { CardVerificationAlerts } from '@bluelightcard/shared-ui';
+import { CardVerificationAlerts, PersonalInformation } from '@bluelightcard/shared-ui';
 
 const PersonalDetailsPage: NextPage = () => {
   useRouterReady();
@@ -10,7 +10,7 @@ const PersonalDetailsPage: NextPage = () => {
   return (
     <>
       <CardVerificationAlerts memberUuid={memberUuid} />
-      <div>Personal information page</div>
+      <PersonalInformation />
     </>
   );
 };

@@ -12,7 +12,7 @@ export type ApiResponseSuccess = {
 };
 
 export type ApiResponseError = {
-  errors: Array<ApiMessage>;
+  error: Array<ApiMessage>;
 };
 
 export type MemberProfile = components['schemas']['ProfileModel'];
@@ -20,6 +20,7 @@ export type MemberProfile = components['schemas']['ProfileModel'];
 export type EmploymentStatus = components['schemas']['ProfileModel']['employmentStatus'];
 
 export type Organisation = components['schemas']['OrganisationModel'];
+export type Employer = components['schemas']['EmployerModel'];
 
 export type SupportedDocument = {
   idKey: string;

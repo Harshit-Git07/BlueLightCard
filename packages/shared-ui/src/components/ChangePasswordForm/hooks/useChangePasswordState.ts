@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useFormValidation } from './useFormValidation';
 import { CurrentFormState, InputElementState, PasswordField } from '../types';
 import { useChangePasswordPut } from './useChangePasswordPut';
+import useMemberProfileGet from '../../../hooks/useMemberProfileGet';
 
 const initialElementState: InputElementState = {
   value: '',
@@ -15,6 +16,7 @@ const initialFormState: CurrentFormState = {
 
 export const useChangePasswordState = (memberUuid: string) => {
   const [formState, setFormState] = useState<CurrentFormState>(initialFormState);
+  const { memberProfile } = useMemberProfileGet(memberUuid);
   const { validationResult, validateForm } = useFormValidation(formState);
   const { mutateAsync, isPending } = useChangePasswordPut(memberUuid);
 
@@ -40,10 +42,13 @@ export const useChangePasswordState = (memberUuid: string) => {
   };
 
   const makeApiRequest = async () => {
-    return mutateAsync({
-      currentPassword: formState.currentPassword.value,
-      newPassword: formState.newPassword.value,
-    });
+    if (memberProfile) {
+      return mutateAsync({
+        email: memberProfile.email,
+        currentPassword: formState.currentPassword.value,
+        newPassword: formState.newPassword.value,
+      });
+    }
   };
 
   return {

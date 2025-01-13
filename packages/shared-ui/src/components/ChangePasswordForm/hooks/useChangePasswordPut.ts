@@ -1,9 +1,9 @@
-import { usePlatformAdapter } from '@/adapters';
+import { usePlatformAdapter } from '../../../adapters';
 import { useMutation } from '@tanstack/react-query';
 import { UpdatePasswordPayload, UpdatePasswordResponse } from '../types';
-import { jsonOrNull } from '@/utils/jsonUtils';
-import { ApiResponseError, ApiResponseSuccess } from '@/api/types';
-import { V5_API_URL } from '@/constants';
+import { jsonOrNull } from '../../../utils/jsonUtils';
+import { ApiResponseError, ApiResponseSuccess } from '../../../api/types';
+import { V5_API_URL } from '../../../constants';
 
 export const useChangePasswordPut = (memberId: string) => {
   const platformAdapter = usePlatformAdapter();

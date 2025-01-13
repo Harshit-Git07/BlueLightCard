@@ -1,9 +1,8 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Button from '@bluelightcard/shared-ui/components/Button-V2/index';
-import { Heading, ThemeVariant } from '@bluelightcard/shared-ui';
+import { ThemeVariant, fonts } from '@bluelightcard/shared-ui';
 import { faDownload, faTrash } from '@fortawesome/pro-solid-svg-icons';
-import { fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import withAccountLayout from '../common/layouts/AccountBaseLayout/withAccountLayout';
 import { BRAND } from '@/global-vars';
 import { BRANDS } from '@/types/brands.enum';
@@ -26,10 +25,8 @@ const PrivacySettingsPage: NextPage = () => {
     window.open(url, '_blank', 'noopener,noreferrer');
   };
   return (
-    <div>
-      <Heading headingLevel="h2" className="pb-5 !m-0">
-        Privacy
-      </Heading>
+    <div className="mt-[6px]">
+      <h2 className={`pb-[24px] ${fonts.titleLarge}`}>Privacy</h2>
 
       <div className="pb-5 grid laptop:grid-cols-3 w-full">
         <div className="laptop:col-span-2">

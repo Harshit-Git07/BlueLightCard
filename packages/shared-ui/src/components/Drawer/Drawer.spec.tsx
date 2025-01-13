@@ -43,7 +43,7 @@ describe('Drawer', () => {
     expect(blackout).toHaveClass('opacity-0 pointer-events-none');
 
     const aside = sidebar.children[1];
-    expect(aside).toHaveClass('laptop:-right-[384px]');
+    expect(aside).toHaveClass('tablet:-right-[384px]');
     expect(aside.children.length).toEqual(0);
 
     const btn = within(sidebar).queryByRole('button');

@@ -31,33 +31,33 @@ const testHarness = (status = 200, data = {}) => {
   const currentEmail = screen.getAllByLabelText(changeEmailAddressText.currentEmail.label, {})[0];
   const newEmail = screen.getAllByLabelText(changeEmailAddressText.newEmail.label, {})[0];
   const confirmEmail = screen.getAllByLabelText(changeEmailAddressText.confirmEmail.label, {})[0];
-  const saveBtn = screen.getByText('Save', { exact: true });
-  const cancelBtn = screen.getByText('Cancel', { exact: true });
+  const saveButton = screen.getByText('Save', { exact: true });
+  const cancelButton = screen.getByText('Cancel', { exact: true });
   return {
     mockPlatformAdapter,
     currentEmail,
     newEmail,
     confirmEmail,
-    saveBtn,
-    cancelBtn,
+    saveButton,
+    cancelButton,
   };
 };
 
 describe('ChangeEmailAddress component', () => {
   it('should render initial state', () => {
-    const { currentEmail, newEmail, confirmEmail, saveBtn, cancelBtn } = testHarness();
+    const { currentEmail, newEmail, confirmEmail, saveButton, cancelButton } = testHarness();
     const txt = screen.getByText('Change email', {});
     expect(txt).toBeInTheDocument();
     expect(currentEmail).toHaveValue('example@blc.co.uk');
     expect(newEmail).toHaveValue('');
     expect(confirmEmail).toHaveValue('');
-    expect(saveBtn).toBeDisabled();
-    expect(cancelBtn).toBeEnabled();
+    expect(saveButton).toBeDisabled();
+    expect(cancelButton).toBeEnabled();
   });
 
   describe('happy path', () => {
     it('should call the api endpoint', async () => {
-      const { mockPlatformAdapter, newEmail, confirmEmail, saveBtn } = testHarness();
+      const { mockPlatformAdapter, newEmail, confirmEmail, saveButton } = testHarness();
 
       // type a new email address
       await act(async () => {
@@ -70,11 +70,11 @@ describe('ChangeEmailAddress component', () => {
       });
 
       // save button should now be clickable
-      expect(saveBtn).toBeEnabled();
+      expect(saveButton).toBeEnabled();
 
       // click the save button
       await act(async () => {
-        await userEvent.click(saveBtn);
+        await userEvent.click(saveButton);
       });
 
       // calls the API
@@ -84,6 +84,7 @@ describe('ChangeEmailAddress component', () => {
           {
             method: 'PUT',
             body: JSON.stringify({
+              currentEmail: 'example@blc.co.uk',
               newEmail: 'foo@bar.com',
             }),
           },
@@ -98,7 +99,7 @@ describe('ChangeEmailAddress component', () => {
 
   describe('sad paths', () => {
     it('should show error if new email is invalid', async () => {
-      const { newEmail, saveBtn } = testHarness();
+      const { newEmail, saveButton } = testHarness();
 
       // type a new email address
       await act(async () => {
@@ -112,11 +113,11 @@ describe('ChangeEmailAddress component', () => {
       });
 
       // blocked
-      expect(saveBtn).toBeDisabled();
+      expect(saveButton).toBeDisabled();
     });
 
     it('should show error if emails are not the same', async () => {
-      const { newEmail, confirmEmail, saveBtn } = testHarness();
+      const { newEmail, confirmEmail, saveButton } = testHarness();
 
       // type a new email address
       await act(async () => {
@@ -131,11 +132,11 @@ describe('ChangeEmailAddress component', () => {
       });
 
       // blocked
-      expect(saveBtn).toBeDisabled();
+      expect(saveButton).toBeDisabled();
     });
 
     it('should show an error from API', async () => {
-      const { mockPlatformAdapter, newEmail, confirmEmail, saveBtn } = testHarness(500, {
+      const { mockPlatformAdapter, newEmail, confirmEmail, saveButton } = testHarness(500, {
         error: 'foobar happened',
       });
 
@@ -146,11 +147,11 @@ describe('ChangeEmailAddress component', () => {
       });
 
       // save button should now be clickable
-      expect(saveBtn).toBeEnabled();
+      expect(saveButton).toBeEnabled();
 
       // click the save button
       await act(async () => {
-        await userEvent.click(saveBtn);
+        await userEvent.click(saveButton);
       });
 
       // calls the API
@@ -166,7 +167,7 @@ describe('ChangeEmailAddress component', () => {
     });
 
     it('should show an unknown error when API goes wrong', async () => {
-      const { mockPlatformAdapter, newEmail, confirmEmail, saveBtn } = testHarness(400);
+      const { mockPlatformAdapter, newEmail, confirmEmail, saveButton } = testHarness(400);
 
       // type a new email address
       await act(async () => {
@@ -175,11 +176,11 @@ describe('ChangeEmailAddress component', () => {
       });
 
       // save button should now be clickable
-      expect(saveBtn).toBeEnabled();
+      expect(saveButton).toBeEnabled();
 
       // click the save button
       await act(async () => {
-        await userEvent.click(saveBtn);
+        await userEvent.click(saveButton);
       });
 
       // calls the API
@@ -203,7 +204,7 @@ describe('ChangeEmailAddress component', () => {
 
       // click the save button AGAIN
       await act(async () => {
-        await userEvent.click(saveBtn);
+        await userEvent.click(saveButton);
       });
 
       // calls the API

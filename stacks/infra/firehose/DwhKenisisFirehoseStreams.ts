@@ -189,7 +189,7 @@ export class DwhKenisisFirehoseStreams {
       'dwh-vaultBatchStock',
       `dwh-${MAP_BRAND[getBrandFromEnv()]}-vaultBatchStock`,
       {
-        tableName: redshiftSchemaName ? `${redshiftSchemaName}.vault_stock_batch` : undefined,
+        tableName: redshiftSchemaName ? `${redshiftSchemaName}.vault_batch` : undefined,
       },
     ).setup();
     this.searchRequestsStream = new KenisisFirehoseStream(
@@ -232,7 +232,7 @@ class KenisisFirehoseStream {
       },
       getPutRecordPolicyStatement: () => {
         return new iam.PolicyStatement({
-          actions: ['firehose:PutRecord'],
+          actions: ['firehose:PutRecord', 'firehose:PutRecordBatch'],
           effect: iam.Effect.ALLOW,
           resources: [streamArn],
         });
@@ -381,7 +381,7 @@ class KenisisFirehoseStream {
       },
       getPutRecordPolicyStatement: () => {
         return new iam.PolicyStatement({
-          actions: ['firehose:PutRecord'],
+          actions: ['firehose:PutRecord', 'firehose:PutRecordBatch'],
           effect: iam.Effect.ALLOW,
           resources: [deliveryStream.attrArn],
         });

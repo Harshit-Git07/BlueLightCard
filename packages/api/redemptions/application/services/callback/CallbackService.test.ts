@@ -16,6 +16,8 @@ describe('CallbackService', () => {
       logVaultRedemption: jest.fn(),
       logCallbackEagleEyeVaultRedemption: jest.fn(),
       logCallbackUniqodoVaultRedemption: jest.fn(),
+      logVaultStock: jest.fn(),
+      logVaultBatchStock: jest.fn(),
     };
   }
 

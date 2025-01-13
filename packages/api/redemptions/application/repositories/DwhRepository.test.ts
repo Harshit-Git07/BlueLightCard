@@ -1,4 +1,4 @@
-import { FirehoseClient, PutRecordCommand } from '@aws-sdk/client-firehose';
+import { FirehoseClient, PutRecordBatchCommand, PutRecordCommand } from '@aws-sdk/client-firehose';
 import { faker } from '@faker-js/faker';
 import { mockClient } from 'aws-sdk-client-mock';
 
@@ -8,7 +8,7 @@ import { eagleEyeModelFactory, uniqodoModelFactory } from '@blc-mono/redemptions
 
 import { MemberRedemptionParamsDto } from '../services/DWH/dwhLoggingService';
 
-import { DwhRepository } from './DwhRepository';
+import { DwhRepository, VaultBatchStockData, VaultStockData } from './DwhRepository';
 
 jest.useFakeTimers({
   now: new Date('2021-09-01T00:00:00.000Z'),
@@ -27,6 +27,8 @@ describe('DwhRepository', () => {
     delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_REDEMPTIONS_STREAM_NAME];
     delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_CALLBACK_STREAM_NAME];
     delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_INTEGRATION_STREAM_NAME];
+    delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STOCK_STREAM_NAME];
+    delete process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_BATCH_STOCK_STREAM_NAME];
     delete process.env.BRAND;
   });
 
@@ -504,6 +506,106 @@ describe('DwhRepository', () => {
       const result = dwhRepository.logCallbackUniqodoVaultRedemption(testUniqodoData);
 
       // Assert
+      await expect(result).rejects.toThrow();
+    });
+  });
+
+  describe('logVaultStock', () => {
+    const vaultStockStream = 'vault-stock-stream';
+    const vaultStockTestBrand = 'BLC_UK';
+    const vaultStockData = [
+      {
+        vaultId: faker.string.uuid(),
+        offerId: faker.string.uuid(),
+        companyId: faker.string.uuid(),
+        manager: faker.internet.email(),
+        unclaimed: faker.number.int({ min: 1, max: 1000 }),
+        isActive: 'true',
+        vaultProvider: 'whoever',
+      },
+    ] satisfies VaultStockData[];
+
+    it('should send data to the vault stock stream', async () => {
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STOCK_STREAM_NAME] = vaultStockStream;
+      process.env.BRAND = vaultStockTestBrand;
+      mockFirehoseClient.on(PutRecordBatchCommand);
+      const dwhRepository = new DwhRepository();
+      await dwhRepository.logVaultStock(vaultStockData);
+
+      const calls = mockFirehoseClient.calls();
+      expect(calls.length).toBe(1);
+      const putRecordBatchCommand = calls[0].args[0] as PutRecordBatchCommand;
+      expect(putRecordBatchCommand.input.DeliveryStreamName).toBe(vaultStockStream);
+      const data = new TextDecoder().decode(putRecordBatchCommand.input.Records![0].Data);
+      expect(JSON.parse(data)).toStrictEqual({
+        vault_id: vaultStockData[0].vaultId,
+        offer_id: vaultStockData[0].offerId,
+        company_id: vaultStockData[0].companyId,
+        brand: vaultStockTestBrand,
+        manager: vaultStockData[0].manager,
+        unclaimed: vaultStockData[0].unclaimed,
+        update_time: '2021-09-01T00:00:00.000Z',
+        is_active: vaultStockData[0].isActive,
+        vault_provider: vaultStockData[0].vaultProvider,
+      });
+    });
+
+    it('should bubble exceptions from the firehose client to the caller unable to reach vault stock stream', async () => {
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STOCK_STREAM_NAME] = vaultStockStream;
+      process.env.BRAND = vaultStockTestBrand;
+      const dwhRepository = new DwhRepository();
+
+      mockFirehoseClient.on(PutRecordBatchCommand).rejects('reject stream');
+
+      const result = dwhRepository.logVaultStock(vaultStockData);
+      await expect(result).rejects.toThrow();
+    });
+  });
+
+  describe('logVaultBatchStock', () => {
+    const vaultBatchStockStream = 'vault-batch-stock-stream';
+    const vaultBatchStockTestBrand = 'BLC_UK';
+    const vaultBatchStockData = [
+      {
+        batchId: faker.string.uuid(),
+        offerId: faker.string.uuid(),
+        companyId: faker.string.uuid(),
+        batchExpires: new Date('2029-12-31T23:59:59.999Z'),
+        batchCount: faker.number.int({ min: 1, max: 1000 }),
+      },
+    ] satisfies VaultBatchStockData[];
+
+    it('should send data to the vault batch stock stream', async () => {
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_BATCH_STOCK_STREAM_NAME] = vaultBatchStockStream;
+      process.env.BRAND = vaultBatchStockTestBrand;
+      mockFirehoseClient.on(PutRecordBatchCommand);
+      const dwhRepository = new DwhRepository();
+      await dwhRepository.logVaultBatchStock(vaultBatchStockData);
+
+      const calls = mockFirehoseClient.calls();
+      expect(calls.length).toBe(1);
+      const putRecordBatchCommand = calls[0].args[0] as PutRecordBatchCommand;
+      expect(putRecordBatchCommand.input.DeliveryStreamName).toBe(vaultBatchStockStream);
+      const data = new TextDecoder().decode(putRecordBatchCommand.input.Records![0].Data);
+      expect(JSON.parse(data)).toStrictEqual({
+        batch_id: vaultBatchStockData[0].batchId,
+        offer_id: vaultBatchStockData[0].offerId,
+        company_id: vaultBatchStockData[0].companyId,
+        brand: vaultBatchStockTestBrand,
+        batch_expires: vaultBatchStockData[0].batchExpires.toISOString(),
+        batch_count: vaultBatchStockData[0].batchCount,
+        update_time: '2021-09-01T00:00:00.000Z',
+      });
+    });
+
+    it('should bubble exceptions from the firehose client to the caller unable to reach vault batch stock stream', async () => {
+      process.env[RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_BATCH_STOCK_STREAM_NAME] = vaultBatchStockStream;
+      process.env.BRAND = vaultBatchStockTestBrand;
+      const dwhRepository = new DwhRepository();
+
+      mockFirehoseClient.on(PutRecordBatchCommand).rejects('reject stream');
+
+      const result = dwhRepository.logVaultBatchStock(vaultBatchStockData);
       await expect(result).rejects.toThrow();
     });
   });

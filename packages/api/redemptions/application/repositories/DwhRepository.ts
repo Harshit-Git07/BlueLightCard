@@ -1,4 +1,4 @@
-import { FirehoseClient, PutRecordCommand } from '@aws-sdk/client-firehose';
+import { FirehoseClient, PutRecordBatchCommand, PutRecordCommand } from '@aws-sdk/client-firehose';
 
 import { ClientType } from '@blc-mono/core/schemas/domain';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
@@ -23,7 +23,27 @@ export interface IDwhRepository {
   logRedemptions(dto: MemberRedemptionParamsDto): Promise<void>;
   logCallbackEagleEyeVaultRedemption(data: EagleEyeModel): Promise<void>;
   logCallbackUniqodoVaultRedemption(data: UniqodoModel): Promise<void>;
+  logVaultStock(vaultStockData: VaultStockData[]): Promise<void>;
+  logVaultBatchStock(vaultBatchStockData: VaultBatchStockData[]): Promise<void>;
 }
+
+export type VaultStockData = {
+  vaultId: string;
+  offerId: string;
+  companyId: string;
+  manager: string;
+  unclaimed: number;
+  isActive: string;
+  vaultProvider: string;
+};
+
+export type VaultBatchStockData = {
+  batchId: string;
+  offerId: string;
+  companyId: string;
+  batchExpires: Date;
+  batchCount: number;
+};
 
 const EVENT_ORIGIN_OFFER_SHEET = 'offer_sheet';
 const CLIENT_TYPE_WEB = 'web' satisfies ClientType;
@@ -220,6 +240,60 @@ export class DwhRepository implements IDwhRepository {
           }),
         ),
       },
+    });
+    await this.client.send(command);
+  }
+
+  async logVaultStock(vaultStockData: VaultStockData[]): Promise<void> {
+    const brand = getBrandFromEnv();
+    const updateTime = new Date().toISOString();
+    const records = [];
+    for (const vaultStockDataItem of vaultStockData) {
+      const data = Buffer.from(
+        JSON.stringify({
+          vault_id: vaultStockDataItem.vaultId,
+          offer_id: vaultStockDataItem.offerId,
+          company_id: vaultStockDataItem.companyId,
+          brand: brand,
+          manager: vaultStockDataItem.manager,
+          unclaimed: vaultStockDataItem.unclaimed,
+          update_time: updateTime,
+          is_active: vaultStockDataItem.isActive,
+          vault_provider: vaultStockDataItem.vaultProvider,
+        }),
+      );
+      records.push({ Data: data });
+    }
+
+    const command = new PutRecordBatchCommand({
+      DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_STOCK_STREAM_NAME),
+      Records: records,
+    });
+    await this.client.send(command);
+  }
+
+  async logVaultBatchStock(vaultBatchStockData: VaultBatchStockData[]): Promise<void> {
+    const brand = getBrandFromEnv();
+    const updateTime = new Date().toISOString();
+    const records = [];
+    for (const vaultBatchStockDataItem of vaultBatchStockData) {
+      const data = Buffer.from(
+        JSON.stringify({
+          batch_id: vaultBatchStockDataItem.batchId,
+          offer_id: vaultBatchStockDataItem.offerId,
+          company_id: vaultBatchStockDataItem.companyId,
+          brand: brand,
+          batch_expires: vaultBatchStockDataItem.batchExpires,
+          batch_count: vaultBatchStockDataItem.batchCount,
+          update_time: updateTime,
+        }),
+      );
+      records.push({ Data: data });
+    }
+
+    const command = new PutRecordBatchCommand({
+      DeliveryStreamName: getEnv(RedemptionsStackEnvironmentKeys.DWH_FIREHOSE_VAULT_BATCH_STOCK_STREAM_NAME),
+      Records: records,
     });
     await this.client.send(command);
   }

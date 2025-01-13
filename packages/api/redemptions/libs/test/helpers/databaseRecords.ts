@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 
+import { RedemptionTypes } from '@blc-mono/core/constants/redemptions';
 import { VaultCodeEntity } from '@blc-mono/redemptions/application/repositories/VaultCodesRepository';
 import { DatabaseConnection } from '@blc-mono/redemptions/libs/database/connection';
 import {
@@ -17,8 +18,14 @@ import { vaultEntityFactory } from '@blc-mono/redemptions/libs/test/factories/va
 
 export async function createRedemptionRecord(
   connection: DatabaseConnection,
+  redemptionType?: RedemptionTypes,
 ): Promise<typeof redemptionsTable.$inferSelect> {
-  const redemption = redemptionConfigEntityFactory.build();
+  let redemption;
+  if (redemptionType) {
+    redemption = redemptionConfigEntityFactory.build({ redemptionType: redemptionType });
+  } else {
+    redemption = redemptionConfigEntityFactory.build();
+  }
   await connection.db.insert(redemptionsTable).values(redemption).execute();
   return redemption;
 }

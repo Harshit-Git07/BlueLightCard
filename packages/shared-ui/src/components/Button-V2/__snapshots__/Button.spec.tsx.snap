@@ -1,8 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Button component snapshot Test renders a Primary button with inverted colour 1`] = `
+<button
+  className="rounded transition border py-[4px] px-[12px] h-[32px] flex items-center justify-center gap-[8px] disabled:bg-button-primary-disabled-bg-colour-light disabled:dark:bg-button-primary-disabled-bg-colour-dark disabled:text-button-primary-disabled-label-colour-light disabled:dark:text-button-primary-disabled-label-colour-dark text-button-primary-default-bg-colour-light dark:text-button-primary-default-bg-colour-dark  focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-label-colour-light dark:bg-button-primary-default-label-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+  disabled={true}
+  onClick={[Function]}
+  type="submit"
+>
+  Button
+</button>
+`;
+
 exports[`Button component snapshot Test renders a Secondary button in disabled state button 1`] = `
 <button
   className="rounded transition border py-[4px] px-[12px] h-[32px] flex items-center justify-center gap-[8px] disabled:text-button-secondary-disabled-label-colour-light disabled:dark:text-button-secondary-disabled-label-colour-dark disabled:border-button-secondary-disabled-border-colour-light dark:disabled:border-button-secondary-disabled-border-colour-dark text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark    border-button-secondary-default-border-colour-light dark:border-button-secondary-default-border-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+  disabled={true}
+  onClick={[Function]}
+  type="submit"
+>
+  Button
+</button>
+`;
+
+exports[`Button component snapshot Test renders a Secondary button with inverted colour 1`] = `
+<button
+  className="rounded transition border py-[4px] px-[12px] h-[32px] flex items-center justify-center gap-[8px] disabled:text-button-secondary-disabled-label-colour-light disabled:dark:text-button-secondary-disabled-label-colour-dark disabled:border-button-secondary-disabled-border-colour-light dark:disabled:border-button-secondary-disabled-border-colour-dark text-white dark:text-button-secondary-default-label-colour-dark  focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-bg-colour-light dark:border-button-secondary-default-bg-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
   disabled={true}
   onClick={[Function]}
   type="submit"

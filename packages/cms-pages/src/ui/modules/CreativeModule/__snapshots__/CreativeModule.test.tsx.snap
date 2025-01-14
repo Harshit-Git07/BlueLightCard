@@ -117,8 +117,8 @@ exports[`Creative Module CenterAligned should match snapshot 1`] = `
               decoding="async"
               height="320"
               loading="lazy"
-              src="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?auto=format"
-              srcset="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?w=120&auto=format 120w"
+              src="http://localhost/images/1/storybook/icon-640x320.jpg?auto=format"
+              srcset="http://localhost/images/1/storybook/icon-640x320.jpg?w=120&auto=format 120w"
               style="max-height: 128px;"
               width="640"
             />
@@ -130,8 +130,8 @@ exports[`Creative Module CenterAligned should match snapshot 1`] = `
               decoding="async"
               height="360"
               loading="lazy"
-              src="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?auto=format"
-              srcset="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=120&auto=format 120w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=160&auto=format 160w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=200&auto=format 200w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=240&auto=format 240w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=320&auto=format 320w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=400&auto=format 400w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=480&auto=format 480w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=520&auto=format 520w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=560&auto=format 560w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=600&auto=format 600w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=640&auto=format 640w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=800&auto=format 800w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=960&auto=format 960w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1280&auto=format 1280w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1440&auto=format 1440w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1600&auto=format 1600w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1800&auto=format 1800w"
+              src="http://localhost/images/1/storybook/stock-720x360.jpg?auto=format"
+              srcset="http://localhost/images/1/storybook/stock-720x360.jpg?w=120&auto=format 120w, http://localhost/images/1/storybook/stock-720x360.jpg?w=160&auto=format 160w, http://localhost/images/1/storybook/stock-720x360.jpg?w=200&auto=format 200w, http://localhost/images/1/storybook/stock-720x360.jpg?w=240&auto=format 240w, http://localhost/images/1/storybook/stock-720x360.jpg?w=320&auto=format 320w, http://localhost/images/1/storybook/stock-720x360.jpg?w=400&auto=format 400w, http://localhost/images/1/storybook/stock-720x360.jpg?w=480&auto=format 480w, http://localhost/images/1/storybook/stock-720x360.jpg?w=520&auto=format 520w, http://localhost/images/1/storybook/stock-720x360.jpg?w=560&auto=format 560w, http://localhost/images/1/storybook/stock-720x360.jpg?w=600&auto=format 600w, http://localhost/images/1/storybook/stock-720x360.jpg?w=640&auto=format 640w, http://localhost/images/1/storybook/stock-720x360.jpg?w=800&auto=format 800w, http://localhost/images/1/storybook/stock-720x360.jpg?w=960&auto=format 960w, http://localhost/images/1/storybook/stock-720x360.jpg?w=1280&auto=format 1280w, http://localhost/images/1/storybook/stock-720x360.jpg?w=1440&auto=format 1440w, http://localhost/images/1/storybook/stock-720x360.jpg?w=1600&auto=format 1600w, http://localhost/images/1/storybook/stock-720x360.jpg?w=1800&auto=format 1800w"
               width="720"
             />
           </figure>
@@ -259,8 +259,8 @@ exports[`Creative Module Default should match snapshot 1`] = `
               decoding="async"
               height="320"
               loading="lazy"
-              src="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?auto=format"
-              srcset="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?w=120&auto=format 120w"
+              src="http://localhost/images/1/storybook/icon-640x320.jpg?auto=format"
+              srcset="http://localhost/images/1/storybook/icon-640x320.jpg?w=120&auto=format 120w"
               style="max-height: 128px;"
               width="640"
             />
@@ -272,8 +272,8 @@ exports[`Creative Module Default should match snapshot 1`] = `
               decoding="async"
               height="360"
               loading="lazy"
-              src="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?auto=format"
-              srcset="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=120&auto=format 120w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=160&auto=format 160w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=200&auto=format 200w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=240&auto=format 240w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=320&auto=format 320w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=400&auto=format 400w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=480&auto=format 480w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=520&auto=format 520w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=560&auto=format 560w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=600&auto=format 600w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=640&auto=format 640w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=800&auto=format 800w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=960&auto=format 960w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1280&auto=format 1280w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1440&auto=format 1440w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1600&auto=format 1600w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1800&auto=format 1800w"
+              src="http://localhost/images/1/storybook/stock-720x360.jpg?auto=format"
+              srcset="http://localhost/images/1/storybook/stock-720x360.jpg?w=120&auto=format 120w, http://localhost/images/1/storybook/stock-720x360.jpg?w=160&auto=format 160w, http://localhost/images/1/storybook/stock-720x360.jpg?w=200&auto=format 200w, http://localhost/images/1/storybook/stock-720x360.jpg?w=240&auto=format 240w, http://localhost/images/1/storybook/stock-720x360.jpg?w=320&auto=format 320w, http://localhost/images/1/storybook/stock-720x360.jpg?w=400&auto=format 400w, http://localhost/images/1/storybook/stock-720x360.jpg?w=480&auto=format 480w, http://localhost/images/1/storybook/stock-720x360.jpg?w=520&auto=format 520w, http://localhost/images/1/storybook/stock-720x360.jpg?w=560&auto=format 560w, http://localhost/images/1/storybook/stock-720x360.jpg?w=600&auto=format 600w, http://localhost/images/1/storybook/stock-720x360.jpg?w=640&auto=format 640w, http://localhost/images/1/storybook/stock-720x360.jpg?w=800&auto=format 800w, http://localhost/images/1/storybook/stock-720x360.jpg?w=960&auto=format 960w, http://localhost/images/1/storybook/stock-720x360.jpg?w=1280&auto=format 1280w, http://localhost/images/1/storybook/stock-720x360.jpg?w=1440&auto=format 1440w, http://localhost/images/1/storybook/stock-720x360.jpg?w=1600&auto=format 1600w, http://localhost/images/1/storybook/stock-720x360.jpg?w=1800&auto=format 1800w"
               width="720"
             />
           </figure>
@@ -417,8 +417,8 @@ exports[`Creative Module MultipleColumns should match snapshot 1`] = `
               decoding="async"
               height="320"
               loading="lazy"
-              src="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?auto=format"
-              srcset="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?w=120&auto=format 120w"
+              src="http://localhost/images/1/storybook/icon-640x320.jpg?auto=format"
+              srcset="http://localhost/images/1/storybook/icon-640x320.jpg?w=120&auto=format 120w"
               style="max-height: 128px;"
               width="640"
             />
@@ -434,8 +434,8 @@ exports[`Creative Module MultipleColumns should match snapshot 1`] = `
               decoding="async"
               height="360"
               loading="lazy"
-              src="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?auto=format"
-              srcset="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=120&auto=format 120w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=160&auto=format 160w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=200&auto=format 200w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=240&auto=format 240w"
+              src="http://localhost/images/1/storybook/stock-720x360.jpg?auto=format"
+              srcset="http://localhost/images/1/storybook/stock-720x360.jpg?w=120&auto=format 120w, http://localhost/images/1/storybook/stock-720x360.jpg?w=160&auto=format 160w, http://localhost/images/1/storybook/stock-720x360.jpg?w=200&auto=format 200w, http://localhost/images/1/storybook/stock-720x360.jpg?w=240&auto=format 240w"
               width="720"
             />
           </figure>
@@ -563,8 +563,8 @@ exports[`Creative Module RightAligned should match snapshot 1`] = `
               decoding="async"
               height="320"
               loading="lazy"
-              src="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?auto=format"
-              srcset="https://cdn.sanity.io/images/td1j6hke/develop/icon-640x320.jpg?w=120&auto=format 120w"
+              src="http://localhost/images/1/storybook/icon-640x320.jpg?auto=format"
+              srcset="http://localhost/images/1/storybook/icon-640x320.jpg?w=120&auto=format 120w"
               style="max-height: 128px;"
               width="640"
             />
@@ -576,8 +576,8 @@ exports[`Creative Module RightAligned should match snapshot 1`] = `
               decoding="async"
               height="360"
               loading="lazy"
-              src="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?auto=format"
-              srcset="https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=120&auto=format 120w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=160&auto=format 160w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=200&auto=format 200w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=240&auto=format 240w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=320&auto=format 320w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=400&auto=format 400w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=480&auto=format 480w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=520&auto=format 520w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=560&auto=format 560w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=600&auto=format 600w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=640&auto=format 640w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=800&auto=format 800w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=960&auto=format 960w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1280&auto=format 1280w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1440&auto=format 1440w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1600&auto=format 1600w, https://cdn.sanity.io/images/td1j6hke/develop/stock-720x360.jpg?w=1800&auto=format 1800w"
+              src="http://localhost/images/1/storybook/stock-720x360.jpg?auto=format"
+              srcset="http://localhost/images/1/storybook/stock-720x360.jpg?w=120&auto=format 120w, http://localhost/images/1/storybook/stock-720x360.jpg?w=160&auto=format 160w, http://localhost/images/1/storybook/stock-720x360.jpg?w=200&auto=format 200w, http://localhost/images/1/storybook/stock-720x360.jpg?w=240&auto=format 240w, http://localhost/images/1/storybook/stock-720x360.jpg?w=320&auto=format 320w, http://localhost/images/1/storybook/stock-720x360.jpg?w=400&auto=format 400w, http://localhost/images/1/storybook/stock-720x360.jpg?w=480&auto=format 480w, http://localhost/images/1/storybook/stock-720x360.jpg?w=520&auto=format 520w, http://localhost/images/1/storybook/stock-720x360.jpg?w=560&auto=format 560w, http://localhost/images/1/storybook/stock-720x360.jpg?w=600&auto=format 600w, http://localhost/images/1/storybook/stock-720x360.jpg?w=640&auto=format 640w, http://localhost/images/1/storybook/stock-720x360.jpg?w=800&auto=format 800w, http://localhost/images/1/storybook/stock-720x360.jpg?w=960&auto=format 960w, http://localhost/images/1/storybook/stock-720x360.jpg?w=1280&auto=format 1280w, http://localhost/images/1/storybook/stock-720x360.jpg?w=1440&auto=format 1440w, http://localhost/images/1/storybook/stock-720x360.jpg?w=1600&auto=format 1600w, http://localhost/images/1/storybook/stock-720x360.jpg?w=1800&auto=format 1800w"
               width="720"
             />
           </figure>

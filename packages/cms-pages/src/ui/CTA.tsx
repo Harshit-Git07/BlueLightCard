@@ -7,6 +7,10 @@ import { stegaClean } from '@sanity/client/stega';
 
 type ButtonStyle = 'action' | 'ghost' | 'link';
 
+export type CTAWithCustomProps = Sanity.CTA & {
+  invertColor?: boolean;
+};
+
 const ButtonVariants = {
   action: ThemeVariant.Primary,
   ghost: ThemeVariant.Secondary,
@@ -16,9 +20,10 @@ const ButtonVariants = {
 export default function CTA({
   link,
   style,
+  invertColor,
   className,
   children,
-}: Sanity.CTA & React.HTMLAttributes<HTMLAnchorElement>) {
+}: CTAWithCustomProps & React.HTMLAttributes<HTMLAnchorElement>) {
   if (link == null || !link?.type) return null;
 
   const buttonStyle = stegaClean(style ?? 'action') as ButtonStyle;
@@ -34,14 +39,14 @@ export default function CTA({
       if (link.internal == null) return null;
 
       return (
-        <ButtonV2 size="Large" variant={buttonVariant}>
+        <ButtonV2 size="Large" variant={buttonVariant} invertColor={invertColor}>
           <Link href={processUrl(link.internal, { base: false, params: link.params })} {...props} />
         </ButtonV2>
       );
 
     case 'external':
       return (
-        <ButtonV2 size="Large" variant={buttonVariant}>
+        <ButtonV2 size="Large" variant={buttonVariant} invertColor={invertColor}>
           <a href={link.external} {...props} />
         </ButtonV2>
       );

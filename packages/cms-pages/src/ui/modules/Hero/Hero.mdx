@@ -1,0 +1,68 @@
+import { Canvas, Controls, Meta, Story, DocsContext } from '@storybook/blocks';
+import ComponentStatus from '@bluelightcard/shared-ui/storybook-config/blocks/ComponentStatus';
+import FigmaEmbed from '@bluelightcard/shared-ui/storybook-config/blocks/FigmaEmbed';
+import * as Hero from './Hero.stories';
+
+<Meta title="Hero" of={Hero} />
+
+# Category
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Design](#design)
+
+## Status
+
+<ComponentStatus />
+
+## Overview
+
+The Hero module is used for displaying a hero image along with overlayed content such as a title, richtext and CTA's.
+
+When it comes to CTA's, the link style will always be rendered beneath the other CTA styles, as seen below with the "Link Style" CTA.
+
+## Props
+
+<Controls />
+
+## State
+
+This component does not manage any state of its own.
+
+## Design
+
+<FigmaEmbed />
+
+## Variants
+
+List of variants can be shown below here.
+
+### Default
+
+<Canvas of={Hero.Default} />
+
+### Left Aligned
+
+<Canvas of={Hero.LeftAligned} />
+
+### Center Aligned
+
+<Canvas of={Hero.CenterAligned} />
+
+### Right Aligned
+
+<Canvas of={Hero.RightAligned} />
+
+### Top Aligned
+
+<Canvas of={Hero.TopAligned} />
+
+### Vertical Center Aligned
+
+<Canvas of={Hero.VerticalCenterAligned} />
+
+### Bottom Aligned
+
+<Canvas of={Hero.BottomAligned} />

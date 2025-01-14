@@ -68,11 +68,29 @@ Primary.args = {
   onClick: undefined,
 };
 
+export const PrimaryInvert = DefaultTemplate.bind({});
+
+PrimaryInvert.args = {
+  variant: ThemeVariant.Primary,
+  invertColor: true,
+  disabled: false,
+  onClick: undefined,
+};
+
 export const Secondary = DefaultTemplate.bind({});
 
 Secondary.args = {
   variant: ThemeVariant.Secondary,
   disabled: false,
+  onClick: undefined,
+};
+
+export const SecondaryInvert = DefaultTemplate.bind({});
+
+SecondaryInvert.args = {
+  variant: ThemeVariant.Secondary,
+  disabled: false,
+  invertColor: true,
   onClick: undefined,
 };
 

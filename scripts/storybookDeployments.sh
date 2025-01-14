@@ -12,6 +12,11 @@ then
   mkdir -p packages/"$PACKAGE_NAME"/.brands/fonts
   cp -r packages/shared-ui/fonts/* packages/"$PACKAGE_NAME"/.brands/fonts
 
+  if [ -d "packages/$PACKAGE_NAME/storybook-assets" ]
+  then
+    cp -r packages/$PACKAGE_NAME/storybook-assets/* packages/"$PACKAGE_NAME"/.brands
+  fi
+
   if [ "$PACKAGE_NAME" = "web" ]
   then
     mkdir -p packages/web/.brands/assets

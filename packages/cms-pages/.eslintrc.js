@@ -8,22 +8,12 @@ module.exports = {
     'next',
     'plugin:react/recommended',
     'next/core-web-vitals',
-    'prettier',
     'plugin:storybook/recommended',
   ],
   root: true,
-  plugins: ['prettier'],
   overrides: [],
   parserOptions: {
     project: 'tsconfig.json',
     tsconfigRootDir: __dirname,
-  },
-  rules: {
-    'prettier/prettier': [
-      'error',
-      {
-        printWidth: 100,
-      },
-    ],
   },
 };

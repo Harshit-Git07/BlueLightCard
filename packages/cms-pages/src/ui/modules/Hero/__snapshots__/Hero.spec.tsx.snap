@@ -1,0 +1,659 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Hero BottomAligned should match snapshot 1`] = `
+<div>
+  <section
+    class="grid bg-ink text-canvas *:col-span-full *:row-span-full dds:h-96"
+  >
+    <picture
+      class="dds:h-96"
+    >
+      <img
+        alt=""
+        class="size-full max-h-fold object-cover"
+        decoding="async"
+        draggable="false"
+        height="1360"
+        loading="lazy"
+        src="http://localhost/images/1/storybook/hero-3456x1360.jpg?auto=format"
+        srcset="http://localhost/images/1/storybook/hero-3456x1360.jpg?w=120&auto=format 120w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=160&auto=format 160w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=200&auto=format 200w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=240&auto=format 240w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=320&auto=format 320w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=400&auto=format 400w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=480&auto=format 480w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=520&auto=format 520w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=560&auto=format 560w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=600&auto=format 600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=640&auto=format 640w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=800&auto=format 800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=960&auto=format 960w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1280&auto=format 1280w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1440&auto=format 1440w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1600&auto=format 1600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1800&auto=format 1800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=2000&auto=format 2000w"
+        width="3456"
+      />
+    </picture>
+    <div
+      class="section flex w-full flex-col justify-end items-center"
+    >
+      <h2
+        class="text-center font-typography-display-medium font-typography-display-medium-weight text-typography-display-medium tracking-typography-display-medium leading-typography-display-medium"
+      >
+        This is the pretitle of a hero section
+      </h2>
+      <div
+        class="portable-text my-5 flex justify-center text-2xl"
+      >
+        <div
+          class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+        >
+          <h2
+            class="group"
+            id="hero-title"
+          >
+            Hero Title
+            <a
+              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
+              href="#hero-title"
+            >
+              🔗
+            </a>
+          </h2>
+        </div>
+      </div>
+      <nav
+        class="flex flex-wrap items-center gap-[.5em] !mt-4"
+      >
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-bg-colour-light dark:text-button-primary-default-bg-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-label-colour-light dark:bg-button-primary-default-label-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Action Style
+          </a>
+        </button>
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-white dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-bg-colour-light dark:border-button-secondary-default-bg-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Ghost Style
+          </a>
+        </button>
+      </nav>
+      <div
+        class="mt-2"
+      >
+        <button
+          class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="text-white hover:underline"
+            href="/"
+          >
+            Link Style
+          </a>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Hero CenterAligned should match snapshot 1`] = `
+<div>
+  <section
+    class="grid bg-ink text-canvas *:col-span-full *:row-span-full dds:h-96"
+  >
+    <picture
+      class="dds:h-96"
+    >
+      <img
+        alt=""
+        class="size-full max-h-fold object-cover"
+        decoding="async"
+        draggable="false"
+        height="1360"
+        loading="lazy"
+        src="http://localhost/images/1/storybook/hero-3456x1360.jpg?auto=format"
+        srcset="http://localhost/images/1/storybook/hero-3456x1360.jpg?w=120&auto=format 120w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=160&auto=format 160w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=200&auto=format 200w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=240&auto=format 240w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=320&auto=format 320w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=400&auto=format 400w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=480&auto=format 480w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=520&auto=format 520w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=560&auto=format 560w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=600&auto=format 600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=640&auto=format 640w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=800&auto=format 800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=960&auto=format 960w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1280&auto=format 1280w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1440&auto=format 1440w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1600&auto=format 1600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1800&auto=format 1800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=2000&auto=format 2000w"
+        width="3456"
+      />
+    </picture>
+    <div
+      class="section flex w-full flex-col items-center"
+    >
+      <h2
+        class="text-center font-typography-display-medium font-typography-display-medium-weight text-typography-display-medium tracking-typography-display-medium leading-typography-display-medium"
+      >
+        This is the pretitle of a hero section
+      </h2>
+      <div
+        class="portable-text my-5 flex justify-center text-2xl"
+      >
+        <div
+          class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+        >
+          <h2
+            class="group"
+            id="hero-title"
+          >
+            Hero Title
+            <a
+              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
+              href="#hero-title"
+            >
+              🔗
+            </a>
+          </h2>
+        </div>
+      </div>
+      <nav
+        class="flex flex-wrap items-center gap-[.5em] !mt-4"
+      >
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-bg-colour-light dark:text-button-primary-default-bg-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-label-colour-light dark:bg-button-primary-default-label-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Action Style
+          </a>
+        </button>
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-white dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-bg-colour-light dark:border-button-secondary-default-bg-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Ghost Style
+          </a>
+        </button>
+      </nav>
+      <div
+        class="mt-2"
+      >
+        <button
+          class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="text-white hover:underline"
+            href="/"
+          >
+            Link Style
+          </a>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Hero Default should match snapshot 1`] = `
+<div>
+  <section
+    class="grid bg-ink text-canvas *:col-span-full *:row-span-full dds:h-96"
+  >
+    <picture
+      class="dds:h-96"
+    >
+      <img
+        alt=""
+        class="size-full max-h-fold object-cover"
+        decoding="async"
+        draggable="false"
+        height="1360"
+        loading="lazy"
+        src="http://localhost/images/1/storybook/hero-3456x1360.jpg?auto=format"
+        srcset="http://localhost/images/1/storybook/hero-3456x1360.jpg?w=120&auto=format 120w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=160&auto=format 160w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=200&auto=format 200w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=240&auto=format 240w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=320&auto=format 320w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=400&auto=format 400w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=480&auto=format 480w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=520&auto=format 520w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=560&auto=format 560w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=600&auto=format 600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=640&auto=format 640w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=800&auto=format 800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=960&auto=format 960w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1280&auto=format 1280w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1440&auto=format 1440w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1600&auto=format 1600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1800&auto=format 1800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=2000&auto=format 2000w"
+        width="3456"
+      />
+    </picture>
+    <div
+      class="section flex w-full flex-col items-center"
+    >
+      <h2
+        class="text-center font-typography-display-medium font-typography-display-medium-weight text-typography-display-medium tracking-typography-display-medium leading-typography-display-medium"
+      >
+        This is the pretitle of a hero section
+      </h2>
+      <div
+        class="portable-text my-5 flex justify-center text-2xl"
+      >
+        <div
+          class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+        >
+          <h2
+            class="group"
+            id="hero-title"
+          >
+            Hero Title
+            <a
+              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
+              href="#hero-title"
+            >
+              🔗
+            </a>
+          </h2>
+        </div>
+      </div>
+      <nav
+        class="flex flex-wrap items-center gap-[.5em] !mt-4"
+      >
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-bg-colour-light dark:text-button-primary-default-bg-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-label-colour-light dark:bg-button-primary-default-label-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Action Style
+          </a>
+        </button>
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-white dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-bg-colour-light dark:border-button-secondary-default-bg-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Ghost Style
+          </a>
+        </button>
+      </nav>
+      <div
+        class="mt-2"
+      >
+        <button
+          class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="text-white hover:underline"
+            href="/"
+          >
+            Link Style
+          </a>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Hero LeftAligned should match snapshot 1`] = `
+<div>
+  <section
+    class="grid bg-ink text-canvas *:col-span-full *:row-span-full dds:h-96"
+  >
+    <picture
+      class="dds:h-96"
+    >
+      <img
+        alt=""
+        class="size-full max-h-fold object-cover"
+        decoding="async"
+        draggable="false"
+        height="1360"
+        loading="lazy"
+        src="http://localhost/images/1/storybook/hero-3456x1360.jpg?auto=format"
+        srcset="http://localhost/images/1/storybook/hero-3456x1360.jpg?w=120&auto=format 120w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=160&auto=format 160w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=200&auto=format 200w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=240&auto=format 240w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=320&auto=format 320w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=400&auto=format 400w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=480&auto=format 480w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=520&auto=format 520w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=560&auto=format 560w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=600&auto=format 600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=640&auto=format 640w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=800&auto=format 800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=960&auto=format 960w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1280&auto=format 1280w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1440&auto=format 1440w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1600&auto=format 1600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1800&auto=format 1800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=2000&auto=format 2000w"
+        width="3456"
+      />
+    </picture>
+    <div
+      class="section flex w-full flex-col items-start"
+    >
+      <h2
+        class="text-center font-typography-display-medium font-typography-display-medium-weight text-typography-display-medium tracking-typography-display-medium leading-typography-display-medium"
+      >
+        This is the pretitle of a hero section
+      </h2>
+      <div
+        class="portable-text my-5 flex justify-center text-2xl"
+      >
+        <div
+          class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+        >
+          <h2
+            class="group"
+            id="hero-title"
+          >
+            Hero Title
+            <a
+              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
+              href="#hero-title"
+            >
+              🔗
+            </a>
+          </h2>
+        </div>
+      </div>
+      <nav
+        class="flex flex-wrap items-center gap-[.5em] !mt-4"
+      >
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-bg-colour-light dark:text-button-primary-default-bg-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-label-colour-light dark:bg-button-primary-default-label-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Action Style
+          </a>
+        </button>
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-white dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-bg-colour-light dark:border-button-secondary-default-bg-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Ghost Style
+          </a>
+        </button>
+      </nav>
+      <div
+        class="mt-2"
+      >
+        <button
+          class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="text-white hover:underline"
+            href="/"
+          >
+            Link Style
+          </a>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Hero RightAligned should match snapshot 1`] = `
+<div>
+  <section
+    class="grid bg-ink text-canvas *:col-span-full *:row-span-full dds:h-96"
+  >
+    <picture
+      class="dds:h-96"
+    >
+      <img
+        alt=""
+        class="size-full max-h-fold object-cover"
+        decoding="async"
+        draggable="false"
+        height="1360"
+        loading="lazy"
+        src="http://localhost/images/1/storybook/hero-3456x1360.jpg?auto=format"
+        srcset="http://localhost/images/1/storybook/hero-3456x1360.jpg?w=120&auto=format 120w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=160&auto=format 160w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=200&auto=format 200w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=240&auto=format 240w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=320&auto=format 320w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=400&auto=format 400w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=480&auto=format 480w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=520&auto=format 520w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=560&auto=format 560w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=600&auto=format 600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=640&auto=format 640w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=800&auto=format 800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=960&auto=format 960w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1280&auto=format 1280w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1440&auto=format 1440w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1600&auto=format 1600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1800&auto=format 1800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=2000&auto=format 2000w"
+        width="3456"
+      />
+    </picture>
+    <div
+      class="section flex w-full flex-col items-end"
+    >
+      <h2
+        class="text-center font-typography-display-medium font-typography-display-medium-weight text-typography-display-medium tracking-typography-display-medium leading-typography-display-medium"
+      >
+        This is the pretitle of a hero section
+      </h2>
+      <div
+        class="portable-text my-5 flex justify-center text-2xl"
+      >
+        <div
+          class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+        >
+          <h2
+            class="group"
+            id="hero-title"
+          >
+            Hero Title
+            <a
+              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
+              href="#hero-title"
+            >
+              🔗
+            </a>
+          </h2>
+        </div>
+      </div>
+      <nav
+        class="flex flex-wrap items-center gap-[.5em] !mt-4"
+      >
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-bg-colour-light dark:text-button-primary-default-bg-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-label-colour-light dark:bg-button-primary-default-label-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Action Style
+          </a>
+        </button>
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-white dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-bg-colour-light dark:border-button-secondary-default-bg-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Ghost Style
+          </a>
+        </button>
+      </nav>
+      <div
+        class="mt-2"
+      >
+        <button
+          class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="text-white hover:underline"
+            href="/"
+          >
+            Link Style
+          </a>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Hero TopAligned should match snapshot 1`] = `
+<div>
+  <section
+    class="grid bg-ink text-canvas *:col-span-full *:row-span-full dds:h-96"
+  >
+    <picture
+      class="dds:h-96"
+    >
+      <img
+        alt=""
+        class="size-full max-h-fold object-cover"
+        decoding="async"
+        draggable="false"
+        height="1360"
+        loading="lazy"
+        src="http://localhost/images/1/storybook/hero-3456x1360.jpg?auto=format"
+        srcset="http://localhost/images/1/storybook/hero-3456x1360.jpg?w=120&auto=format 120w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=160&auto=format 160w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=200&auto=format 200w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=240&auto=format 240w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=320&auto=format 320w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=400&auto=format 400w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=480&auto=format 480w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=520&auto=format 520w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=560&auto=format 560w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=600&auto=format 600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=640&auto=format 640w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=800&auto=format 800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=960&auto=format 960w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1280&auto=format 1280w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1440&auto=format 1440w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1600&auto=format 1600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1800&auto=format 1800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=2000&auto=format 2000w"
+        width="3456"
+      />
+    </picture>
+    <div
+      class="section flex w-full flex-col justify-start items-center"
+    >
+      <h2
+        class="text-center font-typography-display-medium font-typography-display-medium-weight text-typography-display-medium tracking-typography-display-medium leading-typography-display-medium"
+      >
+        This is the pretitle of a hero section
+      </h2>
+      <div
+        class="portable-text my-5 flex justify-center text-2xl"
+      >
+        <div
+          class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+        >
+          <h2
+            class="group"
+            id="hero-title"
+          >
+            Hero Title
+            <a
+              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
+              href="#hero-title"
+            >
+              🔗
+            </a>
+          </h2>
+        </div>
+      </div>
+      <nav
+        class="flex flex-wrap items-center gap-[.5em] !mt-4"
+      >
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-bg-colour-light dark:text-button-primary-default-bg-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-label-colour-light dark:bg-button-primary-default-label-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Action Style
+          </a>
+        </button>
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-white dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-bg-colour-light dark:border-button-secondary-default-bg-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Ghost Style
+          </a>
+        </button>
+      </nav>
+      <div
+        class="mt-2"
+      >
+        <button
+          class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="text-white hover:underline"
+            href="/"
+          >
+            Link Style
+          </a>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Hero VerticalCenterAligned should match snapshot 1`] = `
+<div>
+  <section
+    class="grid bg-ink text-canvas *:col-span-full *:row-span-full dds:h-96"
+  >
+    <picture
+      class="dds:h-96"
+    >
+      <img
+        alt=""
+        class="size-full max-h-fold object-cover"
+        decoding="async"
+        draggable="false"
+        height="1360"
+        loading="lazy"
+        src="http://localhost/images/1/storybook/hero-3456x1360.jpg?auto=format"
+        srcset="http://localhost/images/1/storybook/hero-3456x1360.jpg?w=120&auto=format 120w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=160&auto=format 160w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=200&auto=format 200w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=240&auto=format 240w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=320&auto=format 320w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=400&auto=format 400w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=480&auto=format 480w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=520&auto=format 520w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=560&auto=format 560w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=600&auto=format 600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=640&auto=format 640w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=800&auto=format 800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=960&auto=format 960w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1280&auto=format 1280w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1440&auto=format 1440w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1600&auto=format 1600w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=1800&auto=format 1800w, http://localhost/images/1/storybook/hero-3456x1360.jpg?w=2000&auto=format 2000w"
+        width="3456"
+      />
+    </picture>
+    <div
+      class="section flex w-full flex-col justify-center items-center"
+    >
+      <h2
+        class="text-center font-typography-display-medium font-typography-display-medium-weight text-typography-display-medium tracking-typography-display-medium leading-typography-display-medium"
+      >
+        This is the pretitle of a hero section
+      </h2>
+      <div
+        class="portable-text my-5 flex justify-center text-2xl"
+      >
+        <div
+          class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+        >
+          <h2
+            class="group"
+            id="hero-title"
+          >
+            Hero Title
+            <a
+              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
+              href="#hero-title"
+            >
+              🔗
+            </a>
+          </h2>
+        </div>
+      </div>
+      <nav
+        class="flex flex-wrap items-center gap-[.5em] !mt-4"
+      >
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-button-primary-default-bg-colour-light dark:text-button-primary-default-bg-colour-dark hover:bg-button-primary-hover-bg-colour-light dark:hover:bg-button-primary-hover-bg-colour-dark hover:text-button-primary-hover-label-colour-light dark:hover:text-button-primary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00] bg-button-primary-default-label-colour-light dark:bg-button-primary-default-label-colour-dark border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Action Style
+          </a>
+        </button>
+        <button
+          class="rounded transition border py-[8px] px-[24px] h-[40px] flex items-center justify-center gap-[8px]  text-white dark:text-button-secondary-default-label-colour-dark hover:bg-button-secondary-hover-bg-colour-light dark:hover:bg-button-secondary-hover-bg-colour-dark hover:text-button-secondary-hover-label-colour-light dark:hover:text-button-secondary-hover-label-colour-dark hover:border-transparent focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-button-secondary-default-bg-colour-light dark:border-button-secondary-default-bg-colour-dark  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="max-md:w-full"
+            href="/"
+          >
+            Ghost Style
+          </a>
+        </button>
+      </nav>
+      <div
+        class="mt-2"
+      >
+        <button
+          class="rounded transition border h-[40px] flex items-center justify-center gap-[8px]  text-button-tertiary-default-label-colour-light dark:text-button-tertiary-default-label-colour-dark hover:text-button-tertiary-hover-label-colour-light dark:hover:text-button-tertiary-hover-label-colour-dark focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]  border-none  text-button-label-font font-button-label-font font-button-label-font-weight tracking-button-label-font leading-button-label-font"
+          type="button"
+        >
+          <a
+            class="text-white hover:underline"
+            href="/"
+          >
+            Link Style
+          </a>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>
+`;

@@ -20,11 +20,12 @@ export const ButtonColour: ThemeColorTokens = {
       disabled: `disabled:bg-${BUTTON_PRIMARY}-disabled-bg-colour-light disabled:dark:bg-${BUTTON_PRIMARY}-disabled-bg-colour-dark disabled:text-${BUTTON_PRIMARY}-disabled-label-colour-light disabled:dark:text-${BUTTON_PRIMARY}-disabled-label-colour-dark`,
     },
     invert: {
-      bg: 'bg-[#FAFAFA]',
-      hover: 'hover:bg-[#B3FAFAFA]',
-      focus: 'focus:outline-0',
-      text: 'text-[#000099]',
-      border: 'border-transparent',
+      bg: `bg-button-primary-default-label-colour-light dark:bg-button-primary-default-label-colour-dark`,
+      hover: `hover:bg-${BUTTON_PRIMARY}-hover-bg-colour-light dark:hover:bg-${BUTTON_PRIMARY}-hover-bg-colour-dark hover:text-${BUTTON_PRIMARY}-hover-label-colour-light dark:hover:text-${BUTTON_PRIMARY}-hover-label-colour-dark`,
+      focus: 'focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]',
+      text: `text-button-primary-default-bg-colour-light dark:text-button-primary-default-bg-colour-dark`,
+      border: 'border-none',
+      disabled: `disabled:bg-${BUTTON_PRIMARY}-disabled-bg-colour-light disabled:dark:bg-${BUTTON_PRIMARY}-disabled-bg-colour-dark disabled:text-${BUTTON_PRIMARY}-disabled-label-colour-light disabled:dark:text-${BUTTON_PRIMARY}-disabled-label-colour-dark`,
     },
   },
   [ThemeVariant.Secondary]: {
@@ -32,16 +33,17 @@ export const ButtonColour: ThemeColorTokens = {
       bg: '',
       hover: `hover:bg-${BUTTON_SECONDARY}-hover-bg-colour-light dark:hover:bg-${BUTTON_SECONDARY}-hover-bg-colour-dark hover:text-${BUTTON_SECONDARY}-hover-label-colour-light dark:hover:text-${BUTTON_SECONDARY}-hover-label-colour-dark hover:border-transparent`,
       focus: 'focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]',
-      text: `text-${BUTTON_SECONDARY}-default-label-colour-light dark:text-${BUTTON_SECONDARY}-default-label-colour-dark`,
+      text: `text-button-secondary-default-label-colour-light dark:text-button-secondary-default-label-colour-dark`,
       border: `border-${BUTTON_SECONDARY}-default-border-colour-light dark:border-${BUTTON_SECONDARY}-default-border-colour-dark`,
       disabled: `disabled:text-${BUTTON_SECONDARY}-disabled-label-colour-light disabled:dark:text-${BUTTON_SECONDARY}-disabled-label-colour-dark disabled:border-${BUTTON_SECONDARY}-disabled-border-colour-light dark:disabled:border-${BUTTON_SECONDARY}-disabled-border-colour-dark`,
     },
     invert: {
-      bg: 'bg-[rgba(0, 0, 0, 0)]',
-      hover: 'hover:opacity-75',
-      focus: 'focus:outline-0',
-      text: 'text-[#FAFAFA]',
-      border: 'border-[#FAFAFA]',
+      bg: '',
+      hover: `hover:bg-${BUTTON_SECONDARY}-hover-bg-colour-light dark:hover:bg-${BUTTON_SECONDARY}-hover-bg-colour-dark hover:text-${BUTTON_SECONDARY}-hover-label-colour-light dark:hover:text-${BUTTON_SECONDARY}-hover-label-colour-dark hover:border-transparent`,
+      focus: 'focus:outline-[#2EB8E6] dark:focus:outline-[#FFFF00]',
+      text: `text-white dark:text-button-secondary-default-label-colour-dark`,
+      border: `border-button-secondary-default-bg-colour-light dark:border-button-secondary-default-bg-colour-dark`,
+      disabled: `disabled:text-${BUTTON_SECONDARY}-disabled-label-colour-light disabled:dark:text-${BUTTON_SECONDARY}-disabled-label-colour-dark disabled:border-${BUTTON_SECONDARY}-disabled-border-colour-light dark:disabled:border-${BUTTON_SECONDARY}-disabled-border-colour-dark`,
     },
   },
   [ThemeVariant.Tertiary]: {
@@ -90,6 +92,18 @@ const sizeSpecificPadding: Record<ButtonSize, string> = {
   Small: 'py-[4px] px-[12px]',
 };
 
+function getColourTokens(variant: ThemeVariant, invertColor?: boolean) {
+  const tokenSet = ButtonColour[variant];
+
+  let tokens = tokenSet.base;
+
+  if (invertColor && tokenSet.invert) {
+    tokens = tokenSet.invert;
+  }
+
+  return tokens;
+}
+
 const Button: FC<ButtonProps> = ({
   className = '',
   iconLeft,
@@ -104,9 +118,10 @@ const Button: FC<ButtonProps> = ({
   withoutHover = false,
   withoutFocus = false,
   size = 'Small',
+  invertColor,
   ...props
 }) => {
-  const colourToken = ButtonColour[variant].base;
+  const colourToken = getColourTokens(variant, invertColor);
 
   const sizeSpecificStyles = useMemo(() => {
     const styles = sizeStyles[size];

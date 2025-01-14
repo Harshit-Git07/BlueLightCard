@@ -55,6 +55,22 @@ describe('Button component', () => {
       expect(tree).toMatchSnapshot();
     });
 
+    it('renders a Primary button with inverted colour', () => {
+      const component = renderer.create(
+        <Button
+          variant={ThemeVariant.Primary}
+          onClick={() => console.log()}
+          disabled={true}
+          invertColor={true}
+          type={'submit'}
+        >
+          Button
+        </Button>,
+      );
+      const tree = component.toJSON();
+      expect(tree).toMatchSnapshot();
+    });
+
     it('renders a Secondary button in disabled state button', () => {
       const component = renderer.create(
         <Button
@@ -62,6 +78,22 @@ describe('Button component', () => {
           onClick={() => console.log()}
           disabled={true}
           withoutFocus={true}
+          type={'submit'}
+        >
+          Button
+        </Button>,
+      );
+      const tree = component.toJSON();
+      expect(tree).toMatchSnapshot();
+    });
+
+    it('renders a Secondary button with inverted colour', () => {
+      const component = renderer.create(
+        <Button
+          variant={ThemeVariant.Secondary}
+          onClick={() => console.log()}
+          disabled={true}
+          invertColor={true}
           type={'submit'}
         >
           Button

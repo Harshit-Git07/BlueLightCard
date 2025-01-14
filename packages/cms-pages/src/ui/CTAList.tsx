@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils';
-import CTA from './CTA';
+import CTA, { CTAWithCustomProps } from './CTA';
 
 export default function CTAList({
   ctas,
   className,
 }: React.HTMLAttributes<HTMLParagraphElement> & {
-  ctas?: Sanity.CTA[];
+  ctas?: CTAWithCustomProps[];
 }) {
   return (
     <nav className={cn('flex flex-wrap items-center gap-[.5em]', className ?? '')}>

@@ -2,16 +2,11 @@ import plugin from 'tailwindcss/plugin';
 import { env } from '@bluelightcard/shared-ui/env';
 import { createBrandedPreset } from '@bluelightcard/shared-ui/tailwind';
 import type { Config } from 'tailwindcss';
-const { fontFamily } = require('tailwindcss/defaultTheme');
 
 const brand = env.APP_BRAND;
 
-const isStorybookLifecycle =
-  process.env.npm_lifecycle_event === 'storybook' ||
-  process.env.npm_lifecycle_event === 'build-storybook';
-
 const config: Config = {
-  darkMode: isStorybookLifecycle ? 'media' : 'class',
+  darkMode: 'class', // dark mode is not required for re-platforming
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',

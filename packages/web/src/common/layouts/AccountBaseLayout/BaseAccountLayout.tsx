@@ -77,10 +77,11 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
       <MyAccountDebugToolsLazily />
       <Drawer />
       <Toaster />
-      <Navigation onToggleMobileSideBar={toggleDrawer} />
-      <CardVerificationAlerts memberUuid={memberId} />
-
-      <div className="pl-[16px] mt-[32px] flex flex-col hidden tablet:block desktop:container mx-[20px] desktop:mx-auto">
+      <div className="sticky top-0 z-50">
+        <Navigation onToggleMobileSideBar={toggleDrawer} />
+        <CardVerificationAlerts memberUuid={memberId} />
+      </div>
+      <div className="mt-[32px] flex flex-col hidden tablet:block desktop:container mx-[20px] desktop:mx-auto">
         <AccountDetails
           accountNumber={card?.cardNumber}
           firstName={memberProfile?.firstName ?? ''}

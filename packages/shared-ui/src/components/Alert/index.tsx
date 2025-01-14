@@ -32,7 +32,8 @@ const Alert: FC<AlertProps> = ({
   const styleVariant = {
     Banner: {
       fullWidth: 'w-full',
-      variant: 'sticky top-0 left-0 z-50 px-[1rem] tablet:px-[3.5rem] laptop:px-[6.5rem] py-[1rem]',
+      variant: 'sticky top-0 z-50 px-[1rem] tablet:px-[3.5rem] py-[1rem]',
+      content: 'flex basis-full flex-row desktop:container desktop:mx-auto',
       layout: 'tablet:flex tablet:mx-6',
       title: `${fonts.titleSmall} tablet:font-typography-title-medium-semibold tablet:font-typography-title-medium-semibold-weight tablet:text-typography-title-medium-semibold tablet:leading-typography-title-medium-semibold tablet:tracking-typography-title-medium-semibold`,
       subtext: `pt-2 ${fonts.bodySmall} tablet:font-typography-body tablet:font-typography-body-weight tablet:text-typography-body tablet:leading-typography-body tablet:tracking-typography-body`,
@@ -45,6 +46,7 @@ const Alert: FC<AlertProps> = ({
       variant: 'relative  px-3 py-2',
       title: fonts.bodySmallSemiBold,
       subtext: `pt-1 ${fonts.bodySmall}`,
+      content: 'flex basis-full flex-row',
       layout: 'flex flex-col gap-0',
       children: 'flex flex-col gap-1',
       icon: '',
@@ -60,7 +62,7 @@ const Alert: FC<AlertProps> = ({
     if (!children) return null;
 
     const flexDirectionStyles = variant === 'Inline' ? 'flex-col' : 'flex-row';
-    const bannerStyles = variant === 'Banner' ? 'ml-auto mr-4 items-center' : '';
+    const bannerStyles = variant === 'Banner' ? 'tablet:ml-auto items-center' : '';
     const childContainerStyles = `${variantStyle.children} ${flexDirectionStyles} ${bannerStyles} flex justify-start items-start max-w-[250px] text-base w-full`;
     return <div className={childContainerStyles}>{children}</div>;
   }, [variantStyle.children, variant]);
@@ -68,8 +70,8 @@ const Alert: FC<AlertProps> = ({
   if (!visible) return null;
 
   const contentClass = conditionalStrings({
-    'flex-col content-center  max-w-[750px]': true,
-    'tablet:pr-[16px]': isDismissable,
+    'flex-col content-center max-w-[750px]': true,
+    'mobile:pr-[16px]': isDismissable,
   });
 
   return (
@@ -83,7 +85,7 @@ const Alert: FC<AlertProps> = ({
       `}
       data-testid="alert"
     >
-      <div className="flex basis-full flex-row" data-testid={`alert${variant}`}>
+      <div className={variantStyle.content} data-testid={`alert${variant}`}>
         {resolvedIcon && typeof resolvedIcon !== 'string' ? (
           <div className={`flex items-start ${variantStyle.icon}`}>
             <div className={`${iconAlertColor}`} data-testid="alert-icon">

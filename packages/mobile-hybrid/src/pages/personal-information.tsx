@@ -1,15 +1,17 @@
 import { NextPage } from 'next';
 import useRouterReady from '@/hooks/useRouterReady';
-import { CardVerificationAlerts, PersonalInformation } from '@bluelightcard/shared-ui';
+import { CardVerificationAlerts, useMemberId, PersonalInformation } from '@bluelightcard/shared-ui';
+import AccountPagesHeader from '@/page-components/account/AccountPagesHeader';
 
 const PersonalDetailsPage: NextPage = () => {
   useRouterReady();
 
-  const memberUuid = 'test';
+  const memberId = useMemberId();
 
   return (
     <>
-      <CardVerificationAlerts memberUuid={memberUuid} />
+      <AccountPagesHeader title="Personal Information" />
+      <CardVerificationAlerts memberUuid={memberId} />
       <PersonalInformation />
     </>
   );

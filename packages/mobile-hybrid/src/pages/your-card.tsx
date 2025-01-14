@@ -16,6 +16,7 @@ import {
 import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
 import useRouterReady from '@/hooks/useRouterReady';
 import { SyntheticEvent } from 'react';
+import AccountPagesHeader from '@/page-components/account/AccountPagesHeader';
 
 const MyCardPage: NextPage = () => {
   useRouterReady();
@@ -46,6 +47,8 @@ const MyCardPage: NextPage = () => {
   if (!hasNoCard) {
     return (
       <>
+        <AccountPagesHeader title="Your Card" hasBackButton={false} />
+        <CardVerificationAlerts memberUuid={memberId} />
         <div className="relative flex justify-center h-[calc(100vh-113px)]">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <YourCard
@@ -57,9 +60,6 @@ const MyCardPage: NextPage = () => {
             />
           </div>
         </div>
-
-        <CardVerificationAlerts memberUuid={memberId} />
-
         {hasGenerated ? (
           <div className={`absolute bottom-0 pb-[24px] flex flex-col items-center w-full`}>
             <div className="w-[327px] flex flex-col gap-2">
@@ -90,6 +90,7 @@ const MyCardPage: NextPage = () => {
 
   return (
     <>
+      <AccountPagesHeader title="Your Card" hasBackButton={false} />
       <div className="mt-[24px] flex flex-col items-center justify-center">
         <div className="flex flex-col items-center justify-center">
           <NoCardImage />

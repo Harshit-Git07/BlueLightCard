@@ -1,61 +1,34 @@
 import { NextPage } from 'next';
 import useRouterReady from '@/hooks/useRouterReady';
 import {
-  ButtonV2 as Button,
   BRAND,
   CardVerificationAlerts,
   ThemeVariant,
-  getBrandedSupportLink,
+  useMemberId,
   fonts,
+  ButtonV2 as Button,
+  getBrandedSupportLink,
 } from '@bluelightcard/shared-ui';
+import { faDownload, faTrash, faArrowUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
 
-import {
-  faDownload,
-  faTrash,
-  faArrowUpRightFromSquare,
-  faChevronLeft,
-} from '@fortawesome/pro-solid-svg-icons';
 import InvokeNativeNavigation from '@/invoke/navigation';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import AccountPagesHeader from '@/page-components/account/AccountPagesHeader';
 
 const PrivacySettingsPage: NextPage = () => {
   useRouterReady();
+
+  const memberId = useMemberId();
+
   const brand: BRAND = (process.env.NEXT_PUBLIC_APP_BRAND as BRAND) ?? BRAND.BLC_UK;
   const navigation = new InvokeNativeNavigation();
   const supportLink = getBrandedSupportLink(brand);
 
-  const descriptionStyle = ` ${fonts.body} text-colour-onSurface-subtle-light dark:!text-colour-onSurface-subtle-dark pb-2`;
-
-  const backBtn = () => {
-    window.history.back();
-  };
-
-  const memberId = 'test';
+  const descriptionStyle = `${fonts.body} text-colour-onSurface-subtle-light dark:!text-colour-onSurface-subtle-dark pb-2`;
 
   return (
-    <div className="max-w-[500px]">
+    <>
+      <AccountPagesHeader title="Privacy Settings" />
       <CardVerificationAlerts memberUuid={memberId} />
-      <div className="p-3 grid grid-cols-3 border-b-[0.2px] border-colour-onSurface-outline-outline-subtle-light dark:border-colour-onSurface-outline-outline-subtle-dark">
-        <button
-          onClick={backBtn}
-          className="text-start text-colour-primary-light dark:text-colour-primary-dark text-lg"
-        >
-          <FontAwesomeIcon
-            data-testid="back-icon"
-            icon={faChevronLeft}
-            size="xs"
-            className="pr-2 text-colour-primary-light dark:text-colour-primary-dark"
-          />
-          Back
-        </button>
-        <div className="grid-cols-2">
-          <h3
-            className={`pb-1 text-center text-colour-onSurface dark:text-colour-onSurface-dark ${fonts.titleMedium}`}
-          >
-            Privacy
-          </h3>
-        </div>
-      </div>
       <div className="px-4">
         <div className="py-5 grid w-full">
           <div className="col-span-2">
@@ -205,7 +178,7 @@ const PrivacySettingsPage: NextPage = () => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

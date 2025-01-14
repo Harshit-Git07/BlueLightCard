@@ -1,14 +1,16 @@
 import { NextPage } from 'next';
 import useRouterReady from '@/hooks/useRouterReady';
-import { CardVerificationAlerts } from '@bluelightcard/shared-ui';
+import { CardVerificationAlerts, useMemberId } from '@bluelightcard/shared-ui';
+import AccountPagesHeader from '@/page-components/account/AccountPagesHeader';
 
 const PreferencesPage: NextPage = () => {
   useRouterReady();
 
-  const memberUuid = 'test';
+  const memberUuid = useMemberId();
 
   return (
     <>
+      <AccountPagesHeader title="Preferences" />
       <CardVerificationAlerts memberUuid={memberUuid} />
       <div>Contact preferences page</div>
     </>

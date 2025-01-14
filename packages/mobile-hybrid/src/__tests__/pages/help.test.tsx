@@ -60,14 +60,4 @@ describe('HelpPage', () => {
       expect(mockNavigate).toHaveBeenCalledWith(link);
     });
   });
-
-  test('Back button triggers window.history.back on click', () => {
-    const backButton = screen.getByText('Back');
-    const mockGoBack = jest.spyOn(window.history, 'back').mockImplementation(() => {});
-
-    fireEvent.click(backButton);
-    expect(mockGoBack).toHaveBeenCalledTimes(1);
-
-    mockGoBack.mockRestore();
-  });
 });

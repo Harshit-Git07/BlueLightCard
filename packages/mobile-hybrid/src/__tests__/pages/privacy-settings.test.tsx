@@ -43,14 +43,6 @@ describe('PrivacySettingsPage', () => {
     jest.clearAllMocks();
   });
 
-  test('renders Back button with correct icon and text', () => {
-    const backButton = screen.getByText('Back');
-    const backIcon = screen.getByTestId('back-icon');
-
-    expect(backButton).toBeInTheDocument();
-    expect(backIcon).toBeInTheDocument();
-  });
-
   test('renders all section headings, descriptions, and buttons correctly', () => {
     const headings = [
       'Permissions and mobile data',
@@ -121,15 +113,5 @@ describe('PrivacySettingsPage', () => {
     expect(invokeNavigation.navigate).toHaveBeenCalledWith(
       '/url.php?url=https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=23553686637969',
     );
-  });
-
-  test('Back button triggers window.history.back on click', () => {
-    const backButton = screen.getByText('Back');
-    const mockGoBack = jest.spyOn(window.history, 'back').mockImplementation(() => {});
-
-    fireEvent.click(backButton);
-    expect(mockGoBack).toHaveBeenCalledTimes(1);
-
-    mockGoBack.mockRestore();
   });
 });

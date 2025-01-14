@@ -156,6 +156,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: remove mock login
+        if: matrix.environment == 'Production'
         run: rm -rf packages/web/src/pages/mock-login.tsx
       - name: Generate SST Types
         env:

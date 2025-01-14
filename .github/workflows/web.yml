@@ -1,8 +1,6 @@
 name: 'Web'
 on:
   push:
-    branches:
-      - main
     paths:
       - packages/web/**
       - packages/shared-ui/**
@@ -11,53 +9,13 @@ on:
       - sst.config.ts
       - package.json
       - .github/workflows/web.yml
-  pull_request:
-    paths:
-      - packages/web/**
-      - packages/shared-ui/**
-      - .github/actions/**
-      - package-lock.json
-      - sst.config.ts
-      - package.json
-      - .github/workflows/web.yml
-
-env:
-  CI: true
 
 permissions: write-all
 
 jobs:
-  install:
-    name: Install
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup
-        uses: ./.github/actions/setup
-        with:
-          restore_cache: false
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-  changes:
-    name: Changes
-    runs-on: ubuntu-latest
-    outputs:
-      components: ${{ steps.filter.outputs.components }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dorny/paths-filter@v2
-        id: filter
-        with:
-          filters: |
-            components:
-              - 'packages/web/src/common/components/**'
-              - 'packages/web/src/offers/components/**'
-
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
-    needs: install
     env:
       NEXT_PUBLIC_COGNITO_CLIENT_REGION: eu-west-2
     steps:
@@ -65,26 +23,29 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Unit Tests
         run: npm run test:coverage -w packages/web
-#      - name: SonarQube Scan
-#        uses: SonarSource/sonarqube-scan-action@master
-#        if: github.actor != 'dependabot[bot]'
-#        with:
-#          projectBaseDir: packages/web
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: SonarQube Scan
+      #   uses: SonarSource/sonarqube-scan-action@master
+      #   if: github.actor != 'dependabot[bot]'
+      #   with:
+      #     projectBaseDir: packages/web
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   lint:
     name: Linting
     runs-on: ubuntu-latest
-    needs: install
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Generate SST Types
         env:
           BRAND: BLC_UK
@@ -95,12 +56,13 @@ jobs:
   lint-styles:
     name: Linting Styles
     runs-on: ubuntu-latest
-    needs: install
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Lint Styles
         run: npm run lint:style -w packages/web
 
@@ -110,8 +72,6 @@ jobs:
     outputs:
       url: ${{ steps.storybook-publish.outputs.url }}
     needs:
-      - install
-      - changes
       - test
       - lint
       - lint-styles
@@ -120,6 +80,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish
         uses: ./.github/actions/storybook
         id: storybook-publish
@@ -129,175 +91,70 @@ jobs:
           packageName: web
           brandDeployments: true
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-
-  changelog:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    name: Changelog
-    runs-on: ubuntu-latest
-    outputs:
-      releases_created: ${{ steps.tag-release.outputs.releases_created }}
-    steps:
-      - uses: googleapis/release-please-action@v3
-        id: tag-release
-        with:
-          path: packages/web
-          token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: node
-          monorepo-tags: true
-          package-name: bluelightcard/web
-          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
-
-  sharedui-changelog:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    name: SharedUI Changelog
-    runs-on: ubuntu-latest
-    outputs:
-      releases_created: ${{ steps.tag-release.outputs.releases_created }}
-    steps:
-      - uses: googleapis/release-please-action@v3
-        id: tag-release
-        with:
-          path: packages/shared-ui
-          token: ${{ secrets.GITHUB_TOKEN }}
-          monorepo-tags: true
-          release-type: node
-          package-name: '@bluelightcard/shared-ui'
-          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Other Changes","hidden":false},{"type":"refactor","section":"Other Changes","hidden":false}]'
-
-  staging:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    name: Deploy Staging
-    environment: Staging
+          
+  deploy:
+    name: 'Deploy ${{matrix.environment}} [${{matrix.brand}}]'
     strategy:
       matrix:
-        include:
-          - brand: 'blc-uk'
-            brand_url: 'staging.bluelightcard.co.uk'
-            identity_brand: 'blc_uk'
-            identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
-            identity_api_url: 'https://staging-identity.blcshine.io'
-            datadog_app_id: 'DATADOG_BLC_UK_APP_ID'
-            datadog_client_token: 'DATADOG_BLC_UK_CLIENT_TOKEN'
-            datadog_default_service: 'web'
-            amplitude_deployment_key: 'BLC_UK_AMPLITUDE_DEPLOYMENT_KEY'
-            cognito_client_id: 'BLC_UK_COGNITO_CLIENT_ID'
-            cognito_client_secret: 'BLC_UK_COGNITO_CLIENT_SECRET'
-            region: 'eu-west-2'
-            offers_graphql_endpoint: 'https://w6cu72lyfngylgfvgjla66levi.appsync-api.eu-west-2.amazonaws.com/graphql'
-            offers_api_gateway_endpoint: 'https://staging-offers.blcshine.io'
-            offers_brand: 'blc-uk'
-            zendesk_url: 'https://bluelightcard.zendesk.com/hc/en-gb/signin'
-            auth0_login_url: 'https://staging-access.blcshine.io/authorize?response_type=code&client_id=RykFoOxMBh3AGX8o13qSkT063SuUOn58&redirect_uri=https://www.staging.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
-            auth0_logout_url: 'https://staging-access.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php'
-            auth0_domain: 'staging-access.blcshine.io'
-            auth0_redirect_url: 'https://www.staging.bluelightcard.co.uk/auth/callback.php%3Fprovider%3Dauth0'
-            auth0_client_id: 'RykFoOxMBh3AGX8o13qSkT063SuUOn58'
-            auth0_client_secret: 'BLC_UK_AUTH0_CLIENT_SECRET'
-            stripe_publishable_key: 'pk_test_51QACN4S9N5NHrlGYTj7qmy768u9A2lqFqL2AWQbOX3tbJhJO3tjDS74KuBcOwyiz6Dov35tox4aMi97bWX4Z2MCM00boCBdcYs'
-            currency_symbol: '£'
-            membership_price: '4.99'
-            fsiCompanyIds: '16913'
-          - brand: 'blc-au'
-            brand_url: 'www.develop.bluelightcard.com.au'
-            identity_brand: 'blc_au'
-            identity_api_key: 'IDENTITY_AP_SOUTHEAST_2_API_KEY'
-            identity_api_url: 'https://staging-identity-au.blcshine.io'
-            amplitude_deployment_key: 'BLC_AU_AMPLITUDE_DEPLOYMENT_KEY'
-            cognito_client_id: 'BLC_AU_COGNITO_CLIENT_ID'
-            cognito_client_secret: 'BLC_AU_COGNITO_CLIENT_SECRET'
-            region: 'ap-southeast-2'
-            offers_graphql_endpoint: 'https://nmgjfvhy5vdhjgngzxtuomgbdi.appsync-api.ap-southeast-2.amazonaws.com/graphql'
-            offers_api_gateway_endpoint: 'https://staging-offers-au.blcshine.io'
-            offers_brand: 'blc-aus'
-            auth0_login_url: 'https://staging-access-au.blcshine.io/authorize?response_type=code&client_id=iIIpjE1a3VyAeal66XDVaIAWxlqfEvq4&redirect_uri=https://www.develop.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
-            auth0_logout_url: 'https://staging-access-au.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.develop.bluelightcard.com.au%2Flogout.php'
-            auth0_domain: 'staging-access-au.blcshine.io'
-            auth0_redirect_url: 'https://www.develop.bluelightcard.com.au/auth/callback.php%3Fprovider%3Dauth0'
-            auth0_client_id: 'iIIpjE1a3VyAeal66XDVaIAWxlqfEvq4'
-            auth0_client_secret: 'BLC_AU_AUTH0_CLIENT_SECRET'
-            stripe_publishable_key: 'pk_test_51QDnRh4I1xKGJ9IaK8cbogDKvzETPhdg8d5OaWzYnKx3RfC2OLKKjeWyEy2GP1Y6yziqaphIpX5tsiW56Sz2efVN00m9FM9UTI'
-            currency_symbol: '$'
-            membership_price: '4.99'
-            fsiCompanyIds: ''
-          - brand: 'dds-uk'
-            brand_url: 'ddsstaging.bluelightcard.tech'
-            identity_brand: 'dds_uk'
-            identity_api_key: 'IDENTITY_EU_WEST_2_API_KEY'
-            identity_api_url: 'https://staging-identity.blcshine.io'
-            amplitude_deployment_key: 'DDS_UK_AMPLITUDE_DEPLOYMENT_KEY'
-            cognito_client_id: 'DDS_UK_COGNITO_CLIENT_ID'
-            cognito_client_secret: 'DDS_UK_COGNITO_CLIENT_SECRET'
-            region: 'eu-west-2'
-            offers_graphql_endpoint: 'https://whrpak5b7vgk5ccqwmsc5geltm.appsync-api.eu-west-2.amazonaws.com/graphql'
-            offers_api_gateway_endpoint: 'https://staging-offers-dds-uk.blcshine.io'
-            offers_brand: 'dds-uk'
-            auth0_login_url: 'https://staging-access-dds.blcshine.io/authorize?response_type=code&client_id=EpyfTT48gUFhcRWptlFb1vA6q4y1XZRf&redirect_uri=https://www.ddsstaging.bluelightcard.tech/auth/callback.php%3Fprovider%3Dauth0&scope=offline_access%20openid%20profile%20email'
-            auth0_logout_url: 'https://staging-access-dds.blcshine.io/logout?returnTo=https%3A%2F%2Fwww.ddsstaging.bluelightcard.tech%2Flogout.php'
-            auth0_domain: 'staging-access-dds.blcshine.io'
-            auth0_redirect_url: 'https://www.ddsstaging.bluelightcard.tech/auth/callback.php%3Fprovider%3Dauth0'
-            auth0_client_id: 'EpyfTT48gUFhcRWptlFb1vA6q4y1XZRf'
-            auth0_client_secret: 'DDS_UK_AUTH0_CLIENT_SECRET'
-            stripe_publishable_key: 'pk_test_51QDnVMRKWQ2ywD57QCtBLA63lMYr0atSNttufBF3pMmmFE6sI7cl4Pghi54yoeO1Twgv69ri1BaKZNwmTagRJxiF00iOOLy93p'
-            currency_symbol: '£'
-            membership_price: '4.99'
-            fsiCompanyIds: ''
+        brand: ['blc-uk', 'blc-au', 'dds-uk']
+        environment: ['Preview', 'Production']
+        exclude: ${{ github.ref != 'refs/heads/main' && fromJSON('[{"environment":"Production"}]') || fromJSON('[]') }}
+    environment:
+      name: ${{matrix.brand}} (${{matrix.environment}})
+      url: ${{ steps.deploy.outputs.pages-deployment-alias-url }}
     runs-on: ubuntu-latest
-    needs:
-      - install
-      - test
-      - lint
-      - lint-styles
-      - changelog
     env:
-      NEXT_PUBLIC_API_PROXY_URL: https://staging-api.bluelightcard.workers.dev
+      NEXT_PUBLIC_API_PROXY_URL: ${{ vars.PUBLIC_API_PROXY_URL }}
       NEXT_PUBLIC_AMPLITUDE_API_KEY: ${{ secrets.AMPLITUDE_API_KEY }}
-      NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets[matrix.amplitude_deployment_key] }}
-      NEXT_PUBLIC_OFFERS_ENDPOINT: ${{matrix.offers_graphql_endpoint}}
-      NEXT_PUBLIC_OFFERS_API_GATEWAY_ENDPOINT: ${{matrix.offers_api_gateway_endpoint}}
-      NEXT_PUBLIC_OFFERS_BRAND: ${{matrix.offers_brand}}
+      NEXT_PUBLIC_AMPLITUDE_DEPLOYMENT_KEY: ${{ secrets.AMPLITUDE_DEPLOYMENT_KEY }}
+      NEXT_PUBLIC_OFFERS_ENDPOINT: ${{ vars.PUBLIC_OFFERS_ENDPOINT }}
+      NEXT_PUBLIC_OFFERS_API_GATEWAY_ENDPOINT: ${{ vars.PUBLIC_OFFERS_API_GATEWAY_ENDPOINT }}
+      NEXT_PUBLIC_OFFERS_BRAND: ${{ vars.PUBLIC_OFFERS_BRAND }}
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_START_DATE: '2023-11-14T01:00:00'
       NEXT_PUBLIC_BLACK_FRIDAY_TIME_LOCK_END_DATE: '2023-11-27T23:59:59'
-      NEXT_PUBLIC_IDENTITY_API_URL: ${{matrix.identity_api_url}}
-      NEXT_PUBLIC_IDENTITY_API_KEY: ${{ secrets[matrix.identity_api_key] }}
-      NEXT_PUBLIC_USER_PROFILE_ENDPOINT: /user
-      NEXT_PUBLIC_ORGANISATION_ENDPOINT: /${{matrix.identity_brand}}/organisation
-      NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: /${{matrix.identity_brand}}/formOutputData
-      NEXT_PUBLIC_DATADOG_APP_ID: ${{ secrets[matrix.datadog_app_id] }}
-      NEXT_PUBLIC_DATADOG_CLIENT_TOKEN: ${{ secrets[matrix.datadog_client_token] }}
-      NEXT_PUBLIC_DATADOG_DEFAULT_SERVICE: ${{ matrix.datadog_default_service }}
-      NEXT_PUBLIC_DATADOG_ENV: staging_stage
-      NEXT_PUBLIC_SEARCH_ENDPOINT: https://lcsn8cd6i6.execute-api.eu-west-2.amazonaws.com/develop
-      NEXT_PUBLIC_RETRIEVE_FAVOURITE_ENDPOINT: https://hmkt7fpodd.execute-api.eu-west-2.amazonaws.com/develop/Favourites/retrieve
-      NEXT_PUBLIC_UPDATE_FAVOURITE_ENDPOINT: https://hmkt7fpodd.execute-api.eu-west-2.amazonaws.com/develop/Favourites/update
-      NEXT_PUBLIC_RETRIEVE_OFFER_ENDPOINT: https://6sz52oo9ud.execute-api.eu-west-2.amazonaws.com/v1/offers/
-      NEXT_PUBLIC_APP_MICROSERVICE_BRAND: BLC
-      NEXT_PUBLIC_COGNITO_CLIENT_REGION: ${{matrix.region}}
-      NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets[matrix.cognito_client_id] }}
-      NEXT_PUBLIC_COGNITO_CLIENT_SECRET: ${{ secrets[matrix.cognito_client_secret] }}
+      NEXT_PUBLIC_IDENTITY_API_URL: ${{ vars.PUBLIC_IDENTITY_API_URL }}
+      NEXT_PUBLIC_IDENTITY_API_KEY: ${{ secrets.IDENTITY_API_KEY }}
+      NEXT_PUBLIC_USER_PROFILE_ENDPOINT: ${{ vars.PUBLIC_USER_PROFILE_ENDPOINT }}
+      NEXT_PUBLIC_ORGANISATION_ENDPOINT: ${{ vars.PUBLIC_ORGANISATION_ENDPOINT }}
+      NEXT_PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT: ${{ vars.PUBLIC_ELIGIBILITY_FORM_OUTPUT_ENDPOINT }}
+      NEXT_PUBLIC_DATADOG_APP_ID: ${{ secrets.DATADOG_APP_ID }}
+      NEXT_PUBLIC_DATADOG_CLIENT_TOKEN: ${{ secrets.DATADOG_CLIENT_TOKEN }}
+      NEXT_PUBLIC_DATADOG_DEFAULT_SERVICE: ${{ vars.PUBLIC_DATADOG_DEFAULT_SERVICE }}
+      NEXT_PUBLIC_DATADOG_ENV: ${{ vars.PUBLIC_DATADOG_ENV }}
+      NEXT_PUBLIC_SEARCH_ENDPOINT: ${{ vars.PUBLIC_SEARCH_ENDPOINT }}
+      NEXT_PUBLIC_RETRIEVE_FAVOURITE_ENDPOINT: ${{ vars.PUBLIC_RETRIEVE_FAVOURITE_ENDPOINT }}
+      NEXT_PUBLIC_UPDATE_FAVOURITE_ENDPOINT: ${{ vars.PUBLIC_UPDATE_FAVOURITE_ENDPOINT }}
+      NEXT_PUBLIC_RETRIEVE_OFFER_ENDPOINT: ${{ vars.PUBLIC_RETRIEVE_OFFER_ENDPOINT }}
+      NEXT_PUBLIC_APP_MICROSERVICE_BRAND: ${{ vars.PUBLIC_APP_MICROSERVICE_BRAND }}
+      NEXT_PUBLIC_COGNITO_CLIENT_REGION: ${{ vars.PUBLIC_COGNITO_CLIENT_REGION }}
+      NEXT_PUBLIC_COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
+      NEXT_PUBLIC_COGNITO_CLIENT_SECRET: ${{ secrets.COGNITO_CLIENT_SECRET }}
       NEXT_PUBLIC_FLAGSMITH_KEY: ${{ secrets.FLAGSMITH_KEY }}
-      NEXT_PUBLIC_COGNITO_LOGIN_URL: https://staging-auth.blcshine.io/login?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php
-      NEXT_PUBLIC_COGNITO_LOGOUT_URL: https://staging-auth.blcshine.io/logout?client_id=fk2gc4sadrmoqi91voamd6snu&response_type=code&scope=aws.cognito.signin.user.admin+email+openid+profile&redirect_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Fauth%2Fcallback.php&logout_uri=https%3A%2F%2Fwww.staging.bluelightcard.co.uk%2Flogout.php
-      NEXT_PUBLIC_AUTH0_LOGIN_URL: ${{matrix.auth0_login_url}}
-      NEXT_PUBLIC_AUTH0_LOGOUT_URL: ${{matrix.auth0_logout_url}}
-      NEXT_PUBLIC_AUTH0_DOMAIN: ${{matrix.auth0_domain}}
-      NEXT_PUBLIC_AUTH0_CLIENT_ID: ${{matrix.auth0_client_id}}
-      NEXT_PUBLIC_AUTH0_CLIENT_SECRET: ${{secrets[matrix.auth0_client_secret]}}
-      NEXT_PUBLIC_AUTH0_REDIRECT_URL: ${{matrix.auth0_redirect_url}}
-      NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: sdk.fra-02.braze.eu
+      NEXT_PUBLIC_COGNITO_LOGIN_URL: ${{ vars.PUBLIC_COGNITO_LOGIN_URL }}
+      NEXT_PUBLIC_COGNITO_LOGOUT_URL: ${{ vars.PUBLIC_COGNITO_LOGOUT_URL }}
+      NEXT_PUBLIC_AUTH0_LOGIN_URL: ${{ vars.PUBLIC_AUTH0_LOGIN_URL }}
+      NEXT_PUBLIC_AUTH0_LOGOUT_URL: ${{ vars.PUBLIC_AUTH0_LOGOUT_URL }}
+      NEXT_PUBLIC_AUTH0_DOMAIN: ${{ vars.PUBLIC_AUTH0_DOMAIN }}
+      NEXT_PUBLIC_AUTH0_CLIENT_ID: ${{ vars.PUBLIC_AUTH0_CLIENT_ID }}
+      NEXT_PUBLIC_AUTH0_CLIENT_SECRET: ${{ secrets.AUTH0_CLIENT_SECRET }}
+      NEXT_PUBLIC_AUTH0_REDIRECT_URL: ${{ vars.PUBLIC_AUTH0_REDIRECT_URL }}
+      NEXT_PUBLIC_BRAZE_SDK_ENDPOINT: ${{ vars.PUBLIC_BRAZE_SDK_ENDPOINT }}
       NEXT_PUBLIC_BRAZE_SDK_API_KEY: ${{ secrets.BRAZE_SDK_API_KEY }}
-      NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: offer-sheet-redeem-vault-search-and-homepage-web-2
-      NEXT_PUBLIC_BRAND_URL: ${{matrix.brand_url}}
-      NEXT_ZENDESK_V1_BLC_UK_URL: ${{ matrix.zendesk_url }}
-      NEXT_PUBLIC_ENV: 'staging'
-      NEXT_PUBLIC_STRIPE_KEY: ${{matrix.stripe_publishable_key}}
-      NEXT_PUBLIC_CURRENCY_SYMBOL: ${{matrix.currency_symbol}}
-      NEXT_PUBLIC_MEMBERSHIP_PRICE: ${{matrix.membership_price}}
-      NEXT_PUBLIC_FSI_COMPANY_IDS: ${{matrix.fsiCompanyIds}}
+      NEXT_PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB: ${{ vars.PUBLIC_AMPLITUDE_EXPERIMENT_REDEMPTION_VAULT_WEB }}
+      NEXT_PUBLIC_BRAND_URL: ${{ vars.PUBLIC_BRAND_URL }}
+      NEXT_ZENDESK_V1_BLC_UK_URL: ${{ vars.PUBLIC_ZENDESK_V1_URL }}
+      NEXT_PUBLIC_ENV: ${{ vars.PUBLIC_ENV }}
+      NEXT_PUBLIC_STRIPE_KEY: ${{ vars.PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+      NEXT_PUBLIC_CURRENCY_SYMBOL: ${{ vars.PUBLIC_CURRENCY_SYMBOL }}
+      NEXT_PUBLIC_MEMBERSHIP_PRICE: ${{ vars.PUBLIC_MEMBERSHIP_PRICE }}
+      NEXT_PUBLIC_FSI_COMPANY_IDS: ${{ vars.PUBLIC_FSI_COMPANY_IDS }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup
         uses: ./.github/actions/setup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: remove mock login
         run: rm -rf packages/web/src/pages/mock-login.tsx
       - name: Generate SST Types
@@ -310,18 +167,18 @@ jobs:
       - name: Build
         run: NEXT_PUBLIC_APP_BRAND=${{matrix.brand}} npm run build -w packages/web
       - name: Publish
-        uses: cloudflare/pages-action@1
+        id: deploy
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{matrix.brand}}
-          directory: packages/web/out
-          branch: 'staging'
+          command: pages deploy packages/web/out --project-name ${{matrix.brand}} ${{ github.ref == 'refs/heads/main' && matrix.environment == 'Preview' && '--branch staging' || '' }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
       - name: Datadog deployment metrics
+        if: github.ref == 'refs/heads/main'
         uses: ./.github/actions/datadog
         with:
-          environment: 'staging'
+          environment: ${{ matrix.environment == 'Production' && 'production' || 'staging'}}
           service_name: 'web'
           workflow_run_id: ${{ github.run_id }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -338,16 +195,11 @@ jobs:
         with:
           webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
           title: ':test_tube: Staging deployment for Web (${{matrix.brand}}) was successful!'
+      - name: Create commit comment
+        id: comment
+        uses: peter-evans/commit-comment@v3
+        with:
+          body: |
+            :sparkles: Commit deployed!
+            ${{matrix.brand}} (${{matrix.environment}}): ${{ steps.deploy.outputs.deployment-url }}
 
-  release:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && (needs.changelog.outputs.releases_created || needs.sharedui-changelog.outputs.releases_created)
-    needs:
-      - install
-      - test
-      - lint
-      - lint-styles
-      - changelog
-      - sharedui-changelog
-      - staging
-    uses: ./.github/workflows/production-deploy-web.yml
-    secrets: inherit

@@ -76,12 +76,9 @@ export function middleware<T>(handler: (event: APIGatewayProxyEvent) => Promise<
         return Response.Unauthorized({ error: 'Not authorized' });
       } else if (error instanceof NotFoundError) {
         return Response.NotFound({ error: 'Resource not found' });
-      } else if (error instanceof ValidationError) {
+      } else if (error instanceof ValidationError || error instanceof ZodError) {
         logger.warn('Validation error', error);
         return Response.BadRequest({ error: error.message });
-      } else if (error instanceof ZodError) {
-        logger.warn('Validation error', error);
-        return Response.BadRequest({ error: JSON.parse(error.message) });
       } else {
         return Response.Error(error);
       }

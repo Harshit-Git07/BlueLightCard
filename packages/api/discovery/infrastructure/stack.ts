@@ -25,7 +25,8 @@ import { eventQueue } from './eventHandling/eventQueue';
 import { Route } from './routes/route';
 async function DiscoveryStack({ stack, app }: StackContext) {
   const { certificateArn, vpc, bus, dwhKenisisFirehoseStreams } = use(Shared);
-  const { authorizer } = use(Identity);
+  const { authorizer, identityTableName } = use(Identity);
+
   const SERVICE_NAME = 'discovery';
   stack.tags.setTag('service', SERVICE_NAME);
 
@@ -43,6 +44,7 @@ async function DiscoveryStack({ stack, app }: StackContext) {
     timeout: 20,
     environment: {
       BRAND: getBrandFromEnv(),
+      IDENTITY_TABLE_NAME: identityTableName,
       region: stack.region,
       SERVICE: SERVICE_NAME,
       DD_VERSION: process.env.DD_VERSION ?? '',
@@ -53,6 +55,7 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       USE_DATADOG_AGENT,
       DD_SERVICE: SERVICE_NAME,
       DD_SITE: 'datadoghq.eu',
+      DWH_FIREHOSE_SEARCH_REQUESTS_STREAM_NAME: dwhKenisisFirehoseStreams.searchRequestsStream.getStreamName(),
     },
     layers,
   });
@@ -108,11 +111,10 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       functionName: 'GetSearchHandler',
       handler: 'packages/api/discovery/application/handlers/search/getSearch.handler',
       requestValidatorName: 'GetSearchValidator',
-      permissions: ['es', 'firehose:PutRecord'],
+      permissions: ['es', 'firehose:PutRecord', 'dynamodb:Query'],
       environment: {
         OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomain,
         STAGE: stack.stage,
-        DWH_FIREHOSE_SEARCH_REQUESTS_STREAM_NAME: dwhKenisisFirehoseStreams.searchRequestsStream.getStreamName(),
       },
       vpc,
     }),

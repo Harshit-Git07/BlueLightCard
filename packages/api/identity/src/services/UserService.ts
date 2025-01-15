@@ -1,8 +1,8 @@
 import { Logger } from '@aws-lambda-powertools/logger';
-import { UserModel } from 'src/models/user';
+import { UserModel } from '..//models/user';
 import { CardModel } from '..//models/card';
 import { BrandModel } from '..//models/brand';
-import { UserRepository } from 'src/repositories/userRepository';
+import { UserRepository } from '../repositories/userRepository';
 import { CompanyFollowsModel } from '../models/companyFollows';
 import { isEmpty } from 'lodash';
 import { getOfferRedeemStatus } from '../utils/cardUtils';
@@ -18,7 +18,6 @@ export class UserService {
   }
 
   public async findUserDetails(uuid: string) {
-
     try {
       this.userDetails = [];
       const results = await this.userRepository.findItemsByUuid(uuid);
@@ -41,7 +40,7 @@ export class UserService {
       });
 
       if (isEmpty(userDetails)) {
-        this.log.debug('User Not Found by UUID', {uuid} );
+        this.log.debug('User Not Found by UUID', { uuid });
         return null;
       }
 

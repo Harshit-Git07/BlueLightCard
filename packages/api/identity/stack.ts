@@ -8,6 +8,7 @@ import {
   Table,
   use,
 } from 'sst/constructs';
+import { Table as DynamoDbTable } from 'aws-cdk-lib/aws-dynamodb';
 import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { Shared } from '../../../stacks/stack';
 import { userStatusUpdatedRule } from './src/eventRules/userStatusUpdated';
@@ -49,7 +50,7 @@ import {
 } from '@blc-mono/core/identity/identityStackOutputs';
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { IdentityStackEnvironmentKeys } from '@blc-mono/identity/src/utils/identityStackEnvironmentKeys';
-import { IdentityStackConfigResolver } from "./src/config/config";
+import { IdentityStackConfigResolver } from './src/config/config';
 
 const SERVICE_NAME = 'identity';
 
@@ -258,9 +259,12 @@ export function Identity({ stack }: StackContext) {
         OLD_USER_POOL_ID_DDS: oldCognitoDds.cognito.userPoolId,
         USER_POOL_ID: cognito.userPoolId,
         USER_POOL_ID_DDS: cognito_dds.userPoolId,
-        [IdentityStackEnvironmentKeys.AUTH0_ISSUER]: identityConfig.lambdaAuthorizerConfig.auth0Issuer,
-        [IdentityStackEnvironmentKeys.AUTH0_EXTRA_ISSUER]: identityConfig.lambdaAuthorizerConfig.auth0ExtraIssuer ?? '',
-        [IdentityStackEnvironmentKeys.AUTH0_TEST_ISSUER]: identityConfig.lambdaAuthorizerConfig.auth0TestIssuer ?? '',
+        [IdentityStackEnvironmentKeys.AUTH0_ISSUER]:
+          identityConfig.lambdaAuthorizerConfig.auth0Issuer,
+        [IdentityStackEnvironmentKeys.AUTH0_EXTRA_ISSUER]:
+          identityConfig.lambdaAuthorizerConfig.auth0ExtraIssuer ?? '',
+        [IdentityStackEnvironmentKeys.AUTH0_TEST_ISSUER]:
+          identityConfig.lambdaAuthorizerConfig.auth0TestIssuer ?? '',
       },
     });
 
@@ -340,7 +344,7 @@ export function Identity({ stack }: StackContext) {
     identityApi.addRoutes(stack, {
       'POST /global-logout': {
         function: {
-          handler: "packages/api/identity/src/cognito/globalLogout.handler",
+          handler: 'packages/api/identity/src/cognito/globalLogout.handler',
           environment: {
             ADMIN_AUTH_API_KEY: appSecret.secretValueFromJson('admin_auth_api_key').toString(),
             BLC_UK_COGNITO_USER_POOL_ID: cognito.userPoolId,
@@ -348,13 +352,13 @@ export function Identity({ stack }: StackContext) {
           },
           permissions: [
             new PolicyStatement({
-              actions: ["cognito-idp:AdminUserGlobalSignOut"],
+              actions: ['cognito-idp:AdminUserGlobalSignOut'],
               resources: [cognito.userPoolArn, oldCognitoBlc.cognito.userPoolArn],
               effect: Effect.ALLOW,
             }),
           ],
-        }
-      }
+        },
+      },
     });
 
     stack.addOutputs({
@@ -520,6 +524,7 @@ export function Identity({ stack }: StackContext) {
 
     return {
       identityApi,
+      identityTableName: identityTable.tableName,
       authorizer: sharedAuthorizer,
     };
   }
@@ -539,6 +544,7 @@ function deployDdsSpecificResources(stack: Stack) {
     IdentityStackEnvironmentKeys.DDS_OLD_COGNITO_USER_POOL_ID,
   );
   const BLC_UK_IDENTITY_API_ID = getEnv(IdentityStackEnvironmentKeys.BLC_UK_IDENTITY_API_ID);
+  const IDENTITY_TABLE_NAME = getEnv(IdentityStackEnvironmentKeys.IDENTITY_TABLE_NAME);
 
   // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
   const layers =
@@ -567,7 +573,8 @@ function deployDdsSpecificResources(stack: Stack) {
       OLD_USER_POOL_ID_DDS: DDS_OLD_COGNITO_USER_POOL_ID,
       USER_POOL_ID: BLC_UK_COGNITO_USER_POOL_ID,
       USER_POOL_ID_DDS: DDS_COGNITO_USER_POOL_ID,
-      [IdentityStackEnvironmentKeys.AUTH0_ISSUER]: identityConfig.lambdaAuthorizerConfig.auth0Issuer
+      [IdentityStackEnvironmentKeys.AUTH0_ISSUER]:
+        identityConfig.lambdaAuthorizerConfig.auth0Issuer,
     },
   });
 
@@ -608,6 +615,7 @@ function deployDdsSpecificResources(stack: Stack) {
 
   return {
     identityApi,
+    identityTableName: IDENTITY_TABLE_NAME,
     authorizer: sharedAuthorizer,
   };
 }

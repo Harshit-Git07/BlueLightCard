@@ -378,8 +378,6 @@ describe('Categories E2E Event Handling', async () => {
 
   beforeAll(async () => {
     await sendTestEvents({ source: Events.EVENT_CREATED, events });
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
     await sendTestEvents({ source: Events.OFFER_CREATED, events: offers });
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
@@ -418,7 +416,7 @@ describe('Categories E2E Event Handling', async () => {
     expect(searchResult).toStrictEqual(expectedSearchResult);
   });
 
-  it.only('should consume events and return only valid events when queries by category', async () => {
+  it('should consume events and return only valid events when queries by category', async () => {
     const expectedSearchResult: EventResponse = {
       eventID: activeEventUUID,
       eventName: activeEventUUID,

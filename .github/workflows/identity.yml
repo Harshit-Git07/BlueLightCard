@@ -51,14 +51,14 @@ jobs:
         uses: ./.github/actions/setup
       - name: Test
         run: npm run test -w packages/api/identity
-#      - name: SonarQube Scan
-#        uses: SonarSource/sonarqube-scan-action@master
-#        if: github.actor != 'dependabot[bot]'
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          projectBaseDir: packages/api/identity
+  #      - name: SonarQube Scan
+  #        uses: SonarSource/sonarqube-scan-action@master
+  #        if: github.actor != 'dependabot[bot]'
+  #        env:
+  #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #        with:
+  #          projectBaseDir: packages/api/identity
 
   typecheck:
     name: Check Types
@@ -128,6 +128,7 @@ jobs:
             ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
             ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
             blcUkIdentityApiId: 'tr1afrar24'
+            identityTableName: 'staging-blc-mono-identityTable'
     needs:
       - install
       - test
@@ -159,6 +160,7 @@ jobs:
           DDS_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsCognitoUserPoolId }}
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsOldCognitoUserPoolId }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.deployment.blcUkIdentityApiId }}
+          IDENTITY_TABLE_NAME: ${{ matrix.deployment.identityTableName }}
           DD_VERSION: '${{ env.DD_VERSION }}'
           DD_ENV: '${{ env.DD_ENV }}'
           DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
@@ -179,13 +181,13 @@ jobs:
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
-          title: ":x: :test_tube: Staging deployment failed for Identity (${{matrix.deployment.brand}})!"
+          title: ':x: :test_tube: Staging deployment failed for Identity (${{matrix.deployment.brand}})!'
       - name: Send Slack message on success
         if: ${{ success() }}
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
-          title: ":test_tube: Staging deployment for Identity (${{matrix.deployment.brand}}) was successful!"
+          title: ':test_tube: Staging deployment for Identity (${{matrix.deployment.brand}}) was successful!'
 
   e2e-test:
     name: End to End Test

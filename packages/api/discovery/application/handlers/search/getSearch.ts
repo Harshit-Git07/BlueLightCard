@@ -14,6 +14,8 @@ import {
   DiscoverySearchContext,
 } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
 
+import { getUserDetails } from '../../utils/getUserDetails';
+
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
 
 const logger = new LambdaLogger({ serviceName: 'search-get' });
@@ -26,33 +28,53 @@ const headersSchema = z.object({
 const openSearchService = new DiscoveryOpenSearchService();
 
 const handlerUnwrapped = async (event: APIGatewayEvent) => {
-  const { searchTerm, organisation, dob, authToken, platform } = getQueryParams(event);
+  const { searchTerm, authToken, platform } = getQueryParams(event);
 
-  if (searchTerm && organisation && dob) {
-    logger.info({ message: `Search term: ${searchTerm}, organisation: ${organisation}, dob: ${dob}` });
+  logger.info({ message: `Searching for ${searchTerm}` });
 
-    try {
-      const parsedBearerToken = unpackJWT(authToken);
+  try {
+    const parsedBearerToken = unpackJWT(authToken);
+    const userProfile = await getUserDetails(parsedBearerToken['custom:blc_old_uuid']);
 
-      const searchContext: DiscoverySearchContext = {
-        term: searchTerm,
-        dob,
-        indexName: await openSearchService.getLatestIndexName(),
-        organisation,
-        memberId: parsedBearerToken['custom:blc_old_uuid'],
-        platform,
-      };
-      const results = await openSearchService.queryBySearchTerm(searchContext);
-
-      return Response.OK({ message: 'Success', data: results });
-    } catch (error) {
-      logger.error({ message: `Error querying OpenSearch: ${JSON.stringify(error)}` });
-      return Response.Error(new Error('Error querying OpenSearch'), HttpStatusCode.INTERNAL_SERVER_ERROR);
+    if (!userProfile) {
+      logger.error({ message: 'User profile not found' });
+      return Response.Unauthorized({ message: 'User profile not found' });
     }
-  } else {
-    return Response.BadRequest({
-      message: `Missing data on request - searchTerm: ${searchTerm}, organisation: ${organisation}, dob: ${dob}`,
-    });
+
+    if (!userProfile?.organisation) {
+      logger.error({ message: 'User profile missing organisation, returning empty offers' });
+      return Response.OK({ message: 'No organisaton assigned on user, defaulting to no offers', data: [] });
+    }
+
+    const { dob, organisation } = userProfile;
+    if (searchTerm) {
+      logger.info({
+        message: `Search term: ${searchTerm}, organisation: ${organisation}, dob: ${dob}`,
+      });
+
+      try {
+        const searchContext: DiscoverySearchContext = {
+          term: searchTerm,
+          dob,
+          indexName: await openSearchService.getLatestIndexName(),
+          organisation,
+          memberId: parsedBearerToken['custom:blc_old_uuid'],
+          platform,
+        };
+        const results = await openSearchService.queryBySearchTerm(searchContext);
+
+        return Response.OK({ message: 'Success', data: results });
+      } catch (error) {
+        logger.error({ message: `Error querying OpenSearch: ${JSON.stringify(error)}` });
+        return Response.Error(new Error('Error querying OpenSearch'), HttpStatusCode.INTERNAL_SERVER_ERROR);
+      }
+    } else {
+      return Response.BadRequest({
+        message: `Missing search term on data request`,
+      });
+    }
+  } catch (error) {
+    return Response.Error(new Error('Error querying OpenSearch'), HttpStatusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -61,8 +83,7 @@ export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) 
 const getQueryParams = (event: APIGatewayEvent) => {
   const queryParams = event.queryStringParameters as APIGatewayProxyEventQueryStringParameters;
   const searchTerm = queryParams?.query;
-  const organisation = queryParams?.organisation;
-  const dob = queryParams?.dob;
+
   const headerValidation = headersSchema.safeParse(event.headers);
   if (!headerValidation.success) {
     throw new Error(
@@ -73,5 +94,5 @@ const getQueryParams = (event: APIGatewayEvent) => {
   const authToken = headerValidation.data.Authorization;
   const platform = headerValidation.data['x-client-type'];
 
-  return { searchTerm, organisation, dob, authToken, platform };
+  return { searchTerm, authToken, platform };
 };

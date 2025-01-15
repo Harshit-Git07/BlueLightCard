@@ -30,6 +30,7 @@ jobs:
             ddsCognitoUserPoolId: 'eu-west-2_3WlS5ZkAh'
             ddsOldCognitoUserPoolId: 'eu-west-2_y2KyCUbVT'
             blcUkIdentityApiId: 'ue8dcieh75'
+            blcIdentityTableName: 'production-blc-mono-identityTable'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -60,6 +61,7 @@ jobs:
           DDS_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsCognitoUserPoolId }}
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsOldCognitoUserPoolId }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.deployment.blcUkIdentityApiId }}
+          IDENTITY_TABLE_NAME: ${{ matrix.blcIdentityTableName }}
           DD_VERSION: '${{ env.DD_VERSION }}'
           DD_ENV: '${{ env.DD_ENV }}'
           DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
@@ -80,10 +82,10 @@ jobs:
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
-          title: "@here :x: Production deployment failed for Identity (${{matrix.deployment.brand}})!"
+          title: '@here :x: Production deployment failed for Identity (${{matrix.deployment.brand}})!'
       - name: Send Slack message on success
         if: ${{ success() }}
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
-          title: ":rocket: Production deployment for Identity was successful (${{matrix.deployment.brand}}})!"
+          title: ':rocket: Production deployment for Identity was successful (${{matrix.deployment.brand}}})!'

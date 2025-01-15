@@ -26,6 +26,7 @@ const whenSearchIsCalledWith = async (params: Record<string, string>, headers: R
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'x-client-type': 'web',
       ...headers,
     },
   });
@@ -39,30 +40,12 @@ describe('GET /search', async () => {
       'A valid request is sent',
       {
         query: 'Test Company',
-        dob: '2001-01-01',
-        organisation: 'blc',
       },
       { Authorization: `Bearer ${testUserTokens.idToken}` },
     ],
-    [401, 'No authorization header is provided', { query: 'JD Sports', isAgeGated: 'false', organisation: 'blc' }, {}],
-    [
-      401,
-      'Invalid authorization header is provided',
-      { query: 'JD Sports', isAgeGated: 'false', organisation: 'blc' },
-      { Authorization: `Bearer invalidToken` },
-    ],
-    [
-      400,
-      'No search term is provided',
-      { isAgeGated: 'false', organisation: 'blc' },
-      { Authorization: `Bearer ${testUserTokens.idToken}` },
-    ],
-    [
-      400,
-      'No organisation is provided',
-      { query: 'JD Sports', isAgeGated: 'false' },
-      { Authorization: `Bearer ${testUserTokens.idToken}` },
-    ],
+    [401, 'No authorization header is provided', { query: 'JD Sports' }, {}],
+    [401, 'Invalid authorization header is provided', { query: 'JD Sports' }, { Authorization: `Bearer invalidToken` }],
+    [400, 'No search term is provided', {}, { Authorization: `Bearer ${testUserTokens.idToken}` }],
   ])('should return with response code %s when %s', async (statusCode, _description, params, headers) => {
     const result = await whenSearchIsCalledWith(params, headers);
     expect(result.status).toBe(statusCode);
@@ -209,7 +192,7 @@ describe('Search E2E Event Handling', async () => {
     };
 
     const result = await whenSearchIsCalledWith(
-      { query: activeOfferUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { query: activeOfferUUID },
       { Authorization: `Bearer ${testUserTokens.idToken}` },
     );
 
@@ -239,7 +222,7 @@ describe('Search E2E Event Handling', async () => {
     ];
 
     const result = await whenSearchIsCalledWith(
-      { query: evergreenOfferUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { query: evergreenOfferUUID },
       { Authorization: `Bearer ${testUserTokens.idToken}` },
     );
 
@@ -268,7 +251,7 @@ describe('Search E2E Event Handling', async () => {
     ];
 
     const result = await whenSearchIsCalledWith(
-      { query: validStartDateOfferNoExpiryDateUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { query: validStartDateOfferNoExpiryDateUUID },
       { Authorization: `Bearer ${testUserTokens.idToken}` },
     );
 
@@ -297,7 +280,7 @@ describe('Search E2E Event Handling', async () => {
     ];
 
     const result = await whenSearchIsCalledWith(
-      { query: validExpiryDateOfferNoStartDateUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { query: validExpiryDateOfferNoStartDateUUID },
       { Authorization: `Bearer ${testUserTokens.idToken}` },
     );
 
@@ -335,7 +318,7 @@ describe('Search E2E Event Handling', async () => {
 
   it('should not return offers status "expired" in search results', async () => {
     const result = await whenSearchIsCalledWith(
-      { query: statusExpiredOfferUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { query: statusExpiredOfferUUID },
       { Authorization: `Bearer ${testUserTokens.idToken}` },
     );
 
@@ -348,7 +331,7 @@ describe('Search E2E Event Handling', async () => {
 
   it('should not return offer with no expiry date and start date in the future in search results', async () => {
     const result = await whenSearchIsCalledWith(
-      { query: invalidStartDateOfferNoExpiryDateUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { query: invalidStartDateOfferNoExpiryDateUUID },
       { Authorization: `Bearer ${testUserTokens.idToken}` },
     );
 
@@ -361,7 +344,7 @@ describe('Search E2E Event Handling', async () => {
 
   it('should not return offer with no start date and expiry date in the past in search results', async () => {
     const result = await whenSearchIsCalledWith(
-      { query: invalidExpiryDateOfferNoStartDateUUID, dob: '1990-01-01', organisation: 'DEN' },
+      { query: invalidExpiryDateOfferNoStartDateUUID },
       { Authorization: `Bearer ${testUserTokens.idToken}` },
     );
 

@@ -10,8 +10,10 @@ import { SearchResult } from '@blc-mono/discovery/application/services/opensearc
 import { handler } from '../../../application/handlers/search/getSearch';
 import { OfferType } from '../../models/Offer';
 import { DiscoveryOpenSearchService } from '../../services/opensearch/DiscoveryOpenSearchService';
+import * as UserDetails from '../../utils/getUserDetails';
 
 jest.mock('../../services/opensearch/DiscoveryOpenSearchService');
+jest.mock('../../utils/getUserDetails');
 jest.mock('@blc-mono/core/utils/getEnv');
 jest.mock('@blc-mono/core/utils/unpackJWT');
 
@@ -42,6 +44,7 @@ describe('getSearch Handler', () => {
   });
 
   beforeEach(() => {
+    jest.spyOn(UserDetails, 'getUserDetails').mockResolvedValue({ dob: '2001-01-01', organisation: 'DEN' });
     jest.spyOn(getEnv, 'getEnv').mockImplementation(() => 'example-variable');
     jest.spyOn(JWTUtils, 'unpackJWT').mockImplementation(() => mockStandardToken);
     jest.spyOn(DiscoveryOpenSearchService.prototype, 'queryBySearchTerm').mockResolvedValue(searchResults);
@@ -76,27 +79,7 @@ describe('getSearch Handler', () => {
     const results = await whenSearchCalled('');
 
     const expectedResponse = Response.BadRequest({
-      message: 'Missing data on request - searchTerm: , organisation: DEN, dob: 2001-01-01',
-    });
-
-    expect(results).toEqual(expectedResponse);
-  });
-
-  it('should return a 400 if service is missing', async () => {
-    const results = await whenSearchCalled('nike', '');
-
-    const expectedResponse = Response.BadRequest({
-      message: 'Missing data on request - searchTerm: nike, organisation: , dob: 2001-01-01',
-    });
-
-    expect(results).toEqual(expectedResponse);
-  });
-
-  it('should return a 400 if dob is missing', async () => {
-    const results = await whenSearchCalled('nike', 'DEN', '');
-
-    const expectedResponse = Response.BadRequest({
-      message: 'Missing data on request - searchTerm: nike, organisation: DEN, dob: ',
+      message: 'Missing search term on data request',
     });
 
     expect(results).toEqual(expectedResponse);
@@ -148,6 +131,35 @@ describe('getSearch Handler', () => {
     };
 
     await expect(handler(event as APIGatewayEvent)).rejects.toThrow('Invalid headers: x-client-type - Required');
+  });
+
+  it('should return a 401 if no user profile is found', async () => {
+    jest.spyOn(UserDetails, 'getUserDetails').mockResolvedValue(undefined);
+
+    const results = await whenSearchCalled();
+
+    const expectedResponse = Response.Unauthorized({
+      message: 'User profile not found',
+    });
+
+    expect(results).toEqual(expectedResponse);
+  });
+
+  it('should return a 200 but no offers if no organisation is found', async () => {
+    const mockUserDetails = { dob: '2001-01-01', organisation: undefined } as unknown as {
+      dob: string;
+      organisation: string;
+    };
+    jest.spyOn(UserDetails, 'getUserDetails').mockResolvedValue(mockUserDetails);
+
+    const results = await whenSearchCalled();
+
+    const expectedResponse = Response.OK({
+      message: 'No organisaton assigned on user, defaulting to no offers',
+      data: [],
+    });
+
+    expect(results).toEqual(expectedResponse);
   });
 
   const whenSearchCalled = (query = 'nike', service = 'DEN', dob = '2001-01-01') => {

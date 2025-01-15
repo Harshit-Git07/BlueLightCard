@@ -380,6 +380,7 @@ jobs:
       - name: Build Discovery DDS
         env:
           BRAND: DDS_UK
+          IDENTITY_TABLE_NAME: pr-${{ github.event.pull_request.number }}-blc-mono-identityTable
           OPENSEARCH_CREATE_NEW_DOMAIN: ${{ github.event.label.name == 'createNewOpenSearchDomain' && 'true' || 'false' }}
           BLC_UK_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.blc-uk-cognito-user-pool-id }}
           BLC_UK_OLD_COGNITO_USER_POOL_ID: ${{ needs.backend-shared.outputs.blc-uk-old-cognito-user-pool-id }}
@@ -509,10 +510,13 @@ jobs:
       matrix:
         include:
           - brand: 'blc-uk'
+            cloudflare_project_name: 'mobile-hybrid-blc-uk'
             offers_brand: 'blc-uk'
           - brand: 'blc-au'
+            cloudflare_project_name: 'mobile-hybrid-blc-au'
             offers_brand: 'blc-aus'
           - brand: 'dds-uk'
+            cloudflare_project_name: 'mobile-hybrid-dds'
             offers_brand: 'dds-4j3'
     runs-on: ubuntu-latest
     env:
@@ -547,7 +551,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: mobile-hybrid-${{matrix.brand}}
+          projectName: ${{matrix.cloudflare_project_name}}
           branch: mobile-hybrid-pr-${{ github.event.pull_request.number }}
           directory: packages/mobile-hybrid/dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}

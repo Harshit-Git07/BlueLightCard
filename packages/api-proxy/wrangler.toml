@@ -144,7 +144,9 @@ workers_dev = true
 [env.staging]
 name = "staging-api"
 workers_dev = true
+logpush = true
 
 [env.production]
 name = "api"
 workers_dev = true
+logpush = true

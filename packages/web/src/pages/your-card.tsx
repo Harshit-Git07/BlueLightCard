@@ -35,7 +35,7 @@ const YourCardPage: NextPage = () => {
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="mt-[2px] flex justify-between items-center">
+      <div className="mt-[6px] flex justify-between items-center">
         <h2 className={fonts.titleLarge}>Your card</h2>
 
         {hasGenerated ? (

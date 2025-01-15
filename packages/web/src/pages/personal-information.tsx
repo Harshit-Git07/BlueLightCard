@@ -6,7 +6,7 @@ import { fonts, PersonalInformation } from '@bluelightcard/shared-ui';
 const PersonalInformationPage: NextPage = () => {
   return (
     <div className="mt-[6px] flex flex-col gap-[24px]">
-      <h2 className={fonts.titleLarge}>Personal Information</h2>
+      <h2 className={fonts.titleLarge}>Personal information</h2>
       <PersonalInformation />
     </div>
   );

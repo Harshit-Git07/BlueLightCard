@@ -1,15 +1,14 @@
 import { NextPage } from 'next';
 import useRouterReady from '@/hooks/useRouterReady';
-import { CardVerificationAlerts, useMemberId } from '@bluelightcard/shared-ui';
+import { CardVerificationAlerts, useMemberId, Card, fonts } from '@bluelightcard/shared-ui';
 import AccountPagesHeader from '@/page-components/account/AccountPagesHeader';
-import { fonts } from '../../../shared-ui/src/tailwind/theme';
+
 import InvokeNativeNavigation from '@/invoke/navigation';
 import FaqBlc from '@/components/Help/FaqBlc';
 import FaqDds from '../components/Help/FaqDds';
 import ChatBlc from '@/components/Help/ChatBlc';
 import ChatDds from '@/components/Help/ChatDds';
 import { BRAND } from '@/globals';
-import Card from '../../../shared-ui/src/components/Card';
 import { BRANDS } from '@/types/brands.enum';
 
 const HelpPage: NextPage = () => {
@@ -25,7 +24,7 @@ const HelpPage: NextPage = () => {
     <>
       <AccountPagesHeader title="Help" />
       <CardVerificationAlerts memberUuid={memberId} />
-      <div className="flex flex-col p-[18px]">
+      <div className="p-[16px]">
         <h2
           className={`pb-[24px] text-left text-colour-onSurface dark:text-colour-onSurface-dark ${fonts.titleMedium}`}
         >

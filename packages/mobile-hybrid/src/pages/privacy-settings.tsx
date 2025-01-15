@@ -8,6 +8,7 @@ import {
   fonts,
   ButtonV2 as Button,
   getBrandedSupportLink,
+  colours,
 } from '@bluelightcard/shared-ui';
 import { faDownload, faTrash, faArrowUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
 
@@ -18,10 +19,8 @@ const PrivacySettingsPage: NextPage = () => {
   useRouterReady();
 
   const memberId = useMemberId();
-
-  const brand: BRAND = (process.env.NEXT_PUBLIC_APP_BRAND as BRAND) ?? BRAND.BLC_UK;
   const navigation = new InvokeNativeNavigation();
-  const supportLink = getBrandedSupportLink(brand);
+  const supportLink = getBrandedSupportLink();
 
   const descriptionStyle = `${fonts.body} text-colour-onSurface-subtle-light dark:!text-colour-onSurface-subtle-dark pb-2`;
 
@@ -29,17 +28,13 @@ const PrivacySettingsPage: NextPage = () => {
     <>
       <AccountPagesHeader title="Privacy Settings" />
       <CardVerificationAlerts memberUuid={memberId} />
-      <div className="px-4">
+      <div className="p-[16px]">
         <div className="py-5 grid w-full">
           <div className="col-span-2">
-            <h3
-              className={`pb-1 ${fonts.body} text-colour-onSurface dark:text-colour-onSurface-dark`}
-            >
+            <h3 className={`pb-1 ${fonts.body} ${colours.textOnSurface}`}>
               Permissions and mobile data
             </h3>
-            <p
-              className={` ${fonts.body} text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark pb-2`}
-            >
+            <p className={`pb-2 ${fonts.body} ${colours.textOnSurfaceSubtle}`}>
               Details on required permissions and your mobile data usage.
             </p>
           </div>
@@ -58,14 +53,10 @@ const PrivacySettingsPage: NextPage = () => {
 
         <div className="pb-5 grid w-full">
           <div className="col-span-2">
-            <h3
-              className={`pb-1 text-colour-onSurface dark:text-colour-onSurface-dark ${fonts.body}`}
-            >
+            <h3 className={`pb-1 ${colours.textOnSurface} ${fonts.body}`}>
               Request your data access
             </h3>
-            <p
-              className={` ${fonts.body} text-colour-onSurface-subtle-light dark:text-colour-onSurface-subtle-dark pb-2`}
-            >
+            <p className={`pb-2 ${fonts.body} ${colours.textOnSurfaceSubtle}`}>
               Access all the data we hold on you anytime you wish.
             </p>
           </div>
@@ -84,11 +75,7 @@ const PrivacySettingsPage: NextPage = () => {
 
         <div className="pb-5 grid w-full">
           <div className="col-span-2">
-            <h3
-              className={`pb-1 ${fonts.body} text-colour-onSurface dark:text-colour-onSurface-dark`}
-            >
-              Terms and conditions
-            </h3>
+            <h3 className={`pb-1 ${fonts.body} ${colours.textOnSurface}`}>Terms and conditions</h3>
             <p className={descriptionStyle}>
               Understand the rules and conditions when using Blue Light Card app.
             </p>
@@ -108,11 +95,7 @@ const PrivacySettingsPage: NextPage = () => {
 
         <div className="pb-5 grid w-full">
           <div className="col-span-2">
-            <h3
-              className={`pb-1 ${fonts.body} text-colour-onSurface dark:text-colour-onSurface-dark`}
-            >
-              Privacy notice
-            </h3>
+            <h3 className={`pb-1 ${fonts.body} ${colours.textOnSurface}`}>Privacy notice</h3>
             <p className={descriptionStyle}>
               Learn what information we collect and how we use it to protect your data.
             </p>
@@ -132,11 +115,7 @@ const PrivacySettingsPage: NextPage = () => {
 
         <div className="pb-5 grid w-full">
           <div className="col-span-2">
-            <h3
-              className={`pb-1 ${fonts.body} text-colour-onSurface dark:text-colour-onSurface-dark`}
-            >
-              Legal and regulatory
-            </h3>
+            <h3 className={`pb-1 ${fonts.body} ${colours.textOnSurface}`}>Legal and regulatory</h3>
             <p className={descriptionStyle}>
               Discover how we offer savings to our community and build partnerships with brands.{' '}
             </p>
@@ -156,11 +135,7 @@ const PrivacySettingsPage: NextPage = () => {
 
         <div className="grid w-full pb-[24px]">
           <div className="">
-            <h3
-              className={`pb-1 ${fonts.body} text-colour-onSurface dark:text-colour-onSurface-dark`}
-            >
-              Delete your account
-            </h3>
+            <h3 className={`pb-1 ${fonts.body} ${colours.textOnSurface}`}>Delete your account</h3>
             <p className={descriptionStyle}>
               You can delete your account anytime. This will remove your personal data and end your
               access to the Blue Light Card community and its exclusive offers.

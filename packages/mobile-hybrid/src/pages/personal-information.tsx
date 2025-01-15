@@ -12,7 +12,9 @@ const PersonalDetailsPage: NextPage = () => {
     <>
       <AccountPagesHeader title="Personal Information" />
       <CardVerificationAlerts memberUuid={memberId} />
-      <PersonalInformation />
+      <div className="p-[16px]">
+        <PersonalInformation />
+      </div>
     </>
   );
 };

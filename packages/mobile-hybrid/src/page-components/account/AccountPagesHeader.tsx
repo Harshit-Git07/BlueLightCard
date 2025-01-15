@@ -1,7 +1,7 @@
 import InvokeNativeLifecycle from '@/invoke/lifecycle';
 import { faChevronLeft } from '@fortawesome/pro-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { fonts, colours } from '@bluelightcard/shared-ui';
+import { fonts, colours, Toaster, Drawer } from '@bluelightcard/shared-ui';
 
 interface AccountPagesHeaderProps {
   title: string;
@@ -23,10 +23,12 @@ const AccountPagesHeader = ({ title, hasBackButton = true }: AccountPagesHeaderP
     <div
       className={`relative flex w-full items-center justify-center p-3 border-[1px] ${colours.borderOnSurfaceOutlineSubtle}`}
     >
+      <Drawer />
+      <Toaster />
       {hasBackButton ? (
         <button
           onClick={handleBackClick}
-          className={`absolute left-4 w-[fit-content] text-lg ${colours.textPrimary}`}
+          className={`absolute left-4 w-[fit-content]  ${colours.textPrimary}`}
         >
           <FontAwesomeIcon
             icon={faChevronLeft}

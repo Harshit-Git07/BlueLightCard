@@ -12,6 +12,7 @@ export { default as CompanyAbout } from './components/CompanyAbout';
 export { default as Dropdown } from './components/Dropdown';
 export { default as ErrorState } from './components/ErrorState';
 export { default as Heading } from './components/Heading';
+export { default as Card } from './components/Card';
 export { default as Image } from './components/Image';
 export { default as ResponsiveOfferCard } from './components/ResponsiveOfferCard';
 export { default as Badge } from './components/Badge';

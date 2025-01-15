@@ -1,9 +1,8 @@
 import { FC } from 'react';
 import { PersonalInfoFormState } from '../hooks/usePersonalInfoState';
-import { ThemeVariant } from '../../..';
+import { getBrandedSupportLink, ThemeVariant } from '../../..';
 import { copy } from '../copy';
 import Button from '../../Button-V2';
-import { zendeskUrl } from '..';
 import { useGetEmployers } from '../../../hooks/useGetEmployers';
 import useMemberId from '../../../hooks/useMemberId';
 import useMemberProfileGet from '../../../hooks/useMemberProfileGet';
@@ -25,6 +24,8 @@ export const EmploymentSection: FC<EmploymentSectionProps> = ({ divisionId, onDi
   const { isLoading: isLoadingEmployerDetails, data: employerDetails } = useGetEmployers(
     memberProfile?.organisationId,
   );
+
+  const zendeskUrl = getBrandedSupportLink();
 
   const divisionOptions: DropdownOptions =
     employerDetails && employerDetails?.length > 0

@@ -48,7 +48,7 @@ const Tooltip: FC<Props> = ({ children, text, position, isOpen, isMaxWidth = fal
   const id = useId();
 
   return (
-    <div className="relative inline-block [&>div]:hover:opacity-100">
+    <div className="relative hidden min-[350px]:inline-block [&>div]:hover:opacity-100">
       <div aria-describedby={id}>{children}</div>
 
       <div id={id} role="tooltip" className={squareCss}>

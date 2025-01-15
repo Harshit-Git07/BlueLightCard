@@ -77,7 +77,7 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
       <MyAccountDebugToolsLazily />
       <Drawer />
       <Toaster />
-      <div className="sticky top-0 z-50">
+      <div className="sticky top-0 z-40">
         <Navigation onToggleMobileSideBar={toggleDrawer} />
         <CardVerificationAlerts memberUuid={memberId} />
       </div>

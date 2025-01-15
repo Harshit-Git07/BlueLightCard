@@ -91,6 +91,7 @@ const MyCardPage: NextPage = () => {
   return (
     <>
       <AccountPagesHeader title="Your Card" hasBackButton={false} />
+      <CardVerificationAlerts memberUuid={memberId} />
       <div className="mt-[24px] flex flex-col items-center justify-center">
         <div className="flex flex-col items-center justify-center">
           <NoCardImage />

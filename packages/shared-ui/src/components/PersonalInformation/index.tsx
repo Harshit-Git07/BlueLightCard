@@ -1,4 +1,4 @@
-import React, { FC, FormEventHandler } from 'react';
+import { FC, FormEventHandler } from 'react';
 import { copy } from './copy';
 import { ThemeVariant } from '../../types';
 import { PersonalInfoFormState, usePersonalInfoState } from './hooks/usePersonalInfoState';
@@ -19,9 +19,6 @@ import { DropdownOption } from '../MyAccountDuplicatedComponents/Dropdown/types'
 import DatePicker from '../MyAccountDuplicatedComponents/DatePicker';
 import useToaster from '../Toast/Toaster/useToaster';
 import { ToastPosition, ToastStatus } from '../Toast/ToastTypes';
-
-export const zendeskUrl =
-  'https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=23553483975569';
 
 const PersonalInformation: FC = () => {
   const memberId = useMemberId();

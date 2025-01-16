@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.56.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.55.0...bluelightcard/mobile-hybrid-v1.56.0) (2025-01-15)
+
+
+### Features
+
+* [MAMA-141] - Added branding and DeepLinks to Help in hybrid ([#3520](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3520)) ([b3ebbd9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b3ebbd9b66f2ed38325d2099af67f34ff041e200))
+* [MAMA-326] - Added back button handlers to the native LifecycleEvent ([#3524](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3524)) ([bec5080](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bec50805f2622e594f1e19c9f5116f6cfe3725dd))
+* [MAMA-329] - Mobile-Hybrid Account content ([#3556](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3556)) ([aa32f28](https://github.com/bluelightcard/BlueLightCard-2.0/commit/aa32f2877685cdd818075922152be78da45b6075))
+* MAMA-23: My Account Personal Information Page ([#3461](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3461)) ([4dee0ed](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4dee0ed8a723bf22e57e7001bffbe49146be3643))
+
 ## [1.55.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.54.0...bluelightcard/mobile-hybrid-v1.55.0) (2025-01-09)
 
 

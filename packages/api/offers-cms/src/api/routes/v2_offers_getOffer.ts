@@ -1,4 +1,5 @@
 import { createRoute, z } from '@hono/zod-openapi';
+import { isValidOffer } from 'src/lib/utils';
 import invariant from 'tiny-invariant';
 
 import { getOffer } from '../../cms/data/offer';
@@ -47,11 +48,7 @@ export const registerV2OffersGetOffer = (app: App) =>
       notFound();
     }
 
-    if (item.status !== 'live') {
-      notFound();
-    }
-
-    if (item.expires && new Date(item.expires) < new Date()) {
+    if (!isValidOffer(item)) {
       notFound();
     }
 

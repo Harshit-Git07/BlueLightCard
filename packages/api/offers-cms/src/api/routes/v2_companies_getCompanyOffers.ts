@@ -3,7 +3,7 @@ import invariant from 'tiny-invariant';
 
 import { getCompany } from '../../cms/data/company';
 import { getOffersByCompanyId } from '../../cms/data/offer';
-import { coerceNumber } from '../../lib/utils';
+import { coerceNumber, isValidOffer } from '../../lib/utils';
 import { notFound } from '../errors/helpers';
 import { openApiErrorResponses } from '../errors/openapi_responses';
 import type { App } from '../hono/app';
@@ -61,8 +61,7 @@ export const registerV2CompaniesGetCompanyOffers = (app: App) =>
     }
 
     const offers = items
-      .filter((offer) => offer.status === 'live')
-      .filter((offer) => !offer.expires || new Date(offer.expires) > new Date())
+      .filter((offer) => isValidOffer(offer))
       .map((offer) => {
         invariant(offer.name, 'Missing `offer.name`');
         invariant(offer.offerType?.offerType, 'Missing `offer.offerType`');

@@ -34,6 +34,7 @@ export const RedemptionTypeSchema = z.union([
   z.literal('showCard'),
   z.literal('vault'),
   z.literal('vaultQR'),
+  z.literal('compare'),
   z.literal('ballot'),
 ]);
 export type RedemptionType = z.infer<typeof RedemptionTypeSchema>;

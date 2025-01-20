@@ -15,6 +15,7 @@ import {
   offerTypeLabelMap,
   Typography,
   getBrandedRedemptionsPath,
+  RedeemData,
 } from '../../../../index';
 import { faWandMagicSparkles } from '@fortawesome/pro-solid-svg-icons';
 import type { RedemptionType } from '../../types';
@@ -28,6 +29,13 @@ enum BallotRedeemError {
   UNAUTHORISED = 'ballot_unauthorised',
   EXPIRED = 'ballot_expired',
 }
+
+type RedeemDataT = {
+  statusCode: number;
+  data: RedeemData & {
+    kind?: any;
+  };
+};
 
 const OfferSheetDetailsPage: FC = () => {
   const {
@@ -105,48 +113,83 @@ const OfferSheetDetailsPage: FC = () => {
 
   // ----- Mobile Hybrid single button click handler
   const hybridDiscountClickHandler = async () => {
-    const redeemData = await getRedemptionData();
+    const redeemData: RedeemDataT = await getRedemptionData();
+
+    const handleGenericRedemption = (redeemData: RedeemDataT) => {
+      logCodeClicked(events.USE_CODE_CLICKED);
+      if (!isRedeemDataErrorResponse(redeemData.data)) {
+        copyCodeAndRedirect(
+          redeemData.data.redemptionDetails.code,
+          redeemData.data.redemptionDetails.url,
+        );
+      }
+    };
+
+    const handleVaultRedemption = (redeemData: RedeemDataT) => {
+      logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
+      if (!isRedeemDataErrorResponse(redeemData.data)) {
+        copyCodeAndRedirect(
+          redeemData.data.redemptionDetails.code,
+          redeemData.data.redemptionDetails.url,
+        );
+      }
+    };
+
+    const handlePreAppliedAndCompareRedemptions = (redeemData: RedeemDataT) => {
+      logCodeClicked(events.REQUEST_CODE_CLICKED);
+      if (!isRedeemDataErrorResponse(redeemData.data)) {
+        handleRedirect(redeemData.data.redemptionDetails.url as string);
+      }
+    };
+
+    const handleShowCardRedemption = () => {
+      logCodeClicked(events.REQUEST_CODE_CLICKED);
+      platformAdapter.navigate('/highstreetcard.php');
+    };
+
+    const handleVaultQRRedemption = (redeemData: RedeemDataT) => {
+      logCodeClicked(events.REQUEST_CODE_CLICKED);
+      if (!isRedeemDataErrorResponse(redeemData.data)) {
+        setOfferSheetAtom((v) => {
+          if (!isRedeemDataErrorResponse(redeemData.data)) {
+            return {
+              ...v,
+              qrCodeValue: redeemData.data.redemptionDetails.code,
+            };
+          } else {
+            return {
+              ...v,
+              qrCodeValue: '',
+            };
+          }
+        });
+      }
+    };
+
+    const handleBallotRedemption = () => {
+      logCodeClicked(events.REQUEST_CODE_CLICKED);
+    };
 
     if (redeemData.statusCode == 200) {
       switch (redemptionType) {
         case 'generic':
-          logCodeClicked(events.USE_CODE_CLICKED);
-          if (!isRedeemDataErrorResponse(redeemData.data)) {
-            copyCodeAndRedirect(
-              redeemData.data.redemptionDetails.code,
-              redeemData.data.redemptionDetails.url,
-            );
-          }
+          handleGenericRedemption(redeemData);
           break;
         case 'vault':
-          logCodeClicked(events.VAULT_CODE_USE_CODE_CLICKED);
-          if (!isRedeemDataErrorResponse(redeemData.data)) {
-            copyCodeAndRedirect(
-              redeemData.data.redemptionDetails.code,
-              redeemData.data.redemptionDetails.url,
-            );
-          }
+          handleVaultRedemption(redeemData);
           break;
         case 'preApplied':
-          logCodeClicked(events.REQUEST_CODE_CLICKED);
-          if (!isRedeemDataErrorResponse(redeemData.data)) {
-            handleRedirect(redeemData.data.redemptionDetails.url);
-          }
+        case 'compare':
+          handlePreAppliedAndCompareRedemptions(redeemData);
           break;
         case 'showCard':
-          logCodeClicked(events.REQUEST_CODE_CLICKED);
-          platformAdapter.navigate('/highstreetcard.php');
+          handleShowCardRedemption();
           break;
         case 'vaultQR':
-          logCodeClicked(events.REQUEST_CODE_CLICKED);
-          setOfferSheetAtom((v) => ({
-            ...v,
-            qrCodeValue: redeemData.data.redemptionDetails.code,
-          }));
+          handleVaultQRRedemption(redeemData);
           break;
-
         case 'ballot':
-          logCodeClicked(events.REQUEST_CODE_CLICKED);
+          handleBallotRedemption();
           break;
         default:
           return <></>;
@@ -173,16 +216,25 @@ const OfferSheetDetailsPage: FC = () => {
 
   // Web first button click handler
   const webDiscountClickHandler = async () => {
-    const redeemData = await getRedemptionData();
+    const redeemData: RedeemDataT = await getRedemptionData();
 
     if (redeemData.statusCode == 200) {
       setWebRedeemData(redeemData);
 
       if (redemptionType === 'vaultQR') {
-        setOfferSheetAtom((v) => ({
-          ...v,
-          qrCodeValue: redeemData.data.redemptionDetails.code,
-        }));
+        setOfferSheetAtom((v) => {
+          if (!isRedeemDataErrorResponse(redeemData.data)) {
+            return {
+              ...v,
+              qrCodeValue: redeemData.data.redemptionDetails.code,
+            };
+          } else {
+            return {
+              ...v,
+              qrCodeValue: '',
+            };
+          }
+        });
       } else if (redemptionType === 'showCard') {
         onClose();
       }
@@ -200,7 +252,8 @@ const OfferSheetDetailsPage: FC = () => {
     if (
       redemptionType === 'generic' ||
       redemptionType === 'vault' ||
-      redemptionType === 'preApplied'
+      redemptionType === 'preApplied' ||
+      redemptionType === 'compare'
     ) {
       if (webRedeemData.statusCode !== 200) {
         setShowErrorPage(true);
@@ -212,7 +265,11 @@ const OfferSheetDetailsPage: FC = () => {
       );
 
       if (!isRedeemDataErrorResponse(webRedeemData.data)) {
-        if (redemptionType !== 'preApplied' && webRedeemData.data.redemptionDetails.code)
+        if (
+          redemptionType !== 'preApplied' &&
+          redemptionType !== 'compare' &&
+          webRedeemData.data.redemptionDetails.code
+        )
           copyCode(webRedeemData.data.redemptionDetails.code);
         if (webRedeemData.data.redemptionDetails.url)
           handleRedirect(webRedeemData.data.redemptionDetails.url);
@@ -273,6 +330,9 @@ const OfferSheetDetailsPage: FC = () => {
       case 'ballot':
         primaryButtonTextValue = 'Enter ballot';
         break;
+      case 'compare':
+        primaryButtonTextValue = 'Compare';
+        break;
       default:
         primaryButtonTextValue = 'Get discount';
     }
@@ -315,7 +375,7 @@ const OfferSheetDetailsPage: FC = () => {
         secondaryButtonSubtextValue = 'Redirecting to partner website';
         break;
       case 'preApplied':
-        // TODO ADD if statement for giftcards offer type that are pre-applied redemption type
+        // if statement for gift-card offer type that are pre-applied redemption type
         if (offerData.type === 'gift-card') {
           secondaryButtonTextValue = 'Get instant savings';
           secondaryButtonSubtextValue = 'Redirecting to voucher shop';
@@ -333,6 +393,10 @@ const OfferSheetDetailsPage: FC = () => {
       case 'ballot':
         secondaryButtonTextValue = 'Entry received';
         secondaryButtonSubtextValue = 'We’ll let you know if you’ve won via email';
+        break;
+      case 'compare':
+        secondaryButtonTextValue = 'Compare';
+        secondaryButtonSubtextValue = 'Redirecting to comparison service';
         break;
       default:
         secondaryButtonTextValue = 'Continue to partner website';
@@ -370,6 +434,10 @@ const OfferSheetDetailsPage: FC = () => {
         webSecondaryButtonTextValue = 'Entry received';
         webSecondaryButtonSubtextValue = 'We’ll let you know if you’ve won via email';
         break;
+      case 'compare':
+        webSecondaryButtonTextValue = 'Continue to comparison service';
+        // compare will not have a webSecondaryButtonSubtextValue as it is not needed
+        break;
       default:
         webSecondaryButtonTextValue = 'Continue to partner website';
         webSecondaryButtonSubtextValue = 'Code will be copied - paste it at checkout';
@@ -402,6 +470,7 @@ const OfferSheetDetailsPage: FC = () => {
             case 'vaultQR':
             case 'ballot':
             case 'showCard':
+            case 'compare':
               logCodeClicked(events.REQUEST_CODE_CLICKED);
               break;
             default:

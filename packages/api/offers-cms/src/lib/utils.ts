@@ -1,3 +1,4 @@
+import { type Offer } from '@bluelightcard/sanity-types';
 import { coerce } from 'zod';
 
 /**

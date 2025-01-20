@@ -1,8 +1,8 @@
 import { createRoute, z } from '@hono/zod-openapi';
-import { isValidOffer } from 'src/lib/utils';
 import invariant from 'tiny-invariant';
 
 import { getOffer } from '../../cms/data/offer';
+import { isValidOffer } from '../../lib/utils';
 import { notFound } from '../errors/helpers';
 import { openApiErrorResponses } from '../errors/openapi_responses';
 import type { App } from '../hono/app';

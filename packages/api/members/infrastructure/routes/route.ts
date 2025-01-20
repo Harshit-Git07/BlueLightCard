@@ -20,7 +20,8 @@ export type RouteProps<Request extends z.AnyZodObject, Response extends z.AnyZod
   name: string;
   apiGatewayModelGenerator: ApiGatewayModelGenerator;
   environment?: Partial<Record<MemberStackEnvironmentKeys, string>>;
-  handler: string;
+  handler?: string;
+  handlerFunction?: Function;
   requestValidator: RequestValidator;
   requestModelType?: NamedZodType<Request>;
   responseModelType?: NamedZodType<Response>;
@@ -41,6 +42,9 @@ export type DefaultRouteProps = Pick<
   | 'defaultAllowedOrigins'
   | 'environment'
   | 'authorizer'
+  | 'name'
+  | 'permissions'
+  | 'vpc'
 >;
 
 export class Route {
@@ -50,6 +54,7 @@ export class Route {
     apiGatewayModelGenerator,
     environment,
     handler,
+    handlerFunction,
     requestValidator,
     requestModelType,
     responseModelType,
@@ -97,18 +102,20 @@ export class Route {
     return {
       authorizer,
       cdk: {
-        function: new Function(stack, `${name}Function`, {
-          bind: bind,
-          permissions,
-          handler,
-          environment: {
-            [MemberStackEnvironmentKeys.SERVICE]: 'members',
-            ...environment,
-            [MemberStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS]:
-              JSON.stringify(defaultAllowedOrigins),
-          },
-          vpc,
-        }),
+        function:
+          handlerFunction ??
+          new Function(stack, `${name}Function`, {
+            bind: bind,
+            permissions,
+            handler,
+            environment: {
+              [MemberStackEnvironmentKeys.SERVICE]: 'members',
+              ...environment,
+              [MemberStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS]:
+                JSON.stringify(defaultAllowedOrigins),
+            },
+            vpc,
+          }),
         method: {
           apiKeyRequired: apiKeyRequired,
           requestModels,

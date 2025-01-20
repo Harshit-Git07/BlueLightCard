@@ -3,11 +3,15 @@ import axios from 'axios';
 import * as AWS from 'aws-sdk';
 import { logger } from '../middleware';
 import { NotFoundError } from '../errors/NotFoundError';
+import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 
 export default class BrazeClient {
   constructor(
     private readonly instanceUrl: string = 'rest.fra-02.braze.eu',
-    private readonly brazeJson: object = JSON.parse(process.env.BRAZE_SERVICE_JSON),
+    private readonly brazeJson: object = JSON.parse(
+      getEnvOrDefault(MemberStackEnvironmentKeys.BRAZE_SERVICE_JSON),
+    ),
   ) {}
 
   async getAttributes(memberId: string, attributes: string[]): Promise<Record<string, string>> {

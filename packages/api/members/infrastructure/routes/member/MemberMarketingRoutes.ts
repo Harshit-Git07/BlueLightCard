@@ -7,16 +7,9 @@ import { BrazeUpdateModel } from '@blc-mono/members/application/models/brazeUpda
 export function memberMarketingRoutes(
   defaultRouteProps: DefaultRouteProps,
 ): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
-  const defaultRouteParams = {
-    ...defaultRouteProps,
-    environment: {
-      BRAZE_SERVICE_JSON: process.env.BRAZE_SERVICE_JSON,
-    },
-  };
-
   return {
     'POST /members/{memberId}/marketing/braze/': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
 
       name: 'MemberFetchBrazeAttributes',
       handler:
@@ -26,7 +19,7 @@ export function memberMarketingRoutes(
     }),
 
     'GET /members/{memberId}/marketing/preferences/{environment}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'MemberGetMarketingPreferences',
       handler:
         'packages/api/members/application/handlers/member/marketing/getMarketingPreferences.handler',
@@ -34,7 +27,7 @@ export function memberMarketingRoutes(
       permissions: ['secretsmanager:GetSecretValue'],
     }),
     'POST /members/{memberId}/marketing/braze/update': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'MemberUpdateMarketingPreferences',
       handler:
         'packages/api/members/application/handlers/member/marketing/updateMarketingPreferences.handler',

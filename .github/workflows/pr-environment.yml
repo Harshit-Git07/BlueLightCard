@@ -431,7 +431,7 @@ jobs:
         env:
           BRAND: ${{ matrix.brand }}
           SKIP_MEMBERS_STACK: false
-          BRAZE_SERVICE_JSON: ${{ secrets[matrix.brazeSecret] }}
+          BRAZE_SERVICE_JSON: ${{ secrets.BLC_UK_BRAZE_SERVICE_JSON }}
         run: npx sst deploy members members-api members-admin-api --stage $PR_PREFIX --region ${{matrix.region}}
       - name: Extract Api URL and set output
         id: sst-members-outputs

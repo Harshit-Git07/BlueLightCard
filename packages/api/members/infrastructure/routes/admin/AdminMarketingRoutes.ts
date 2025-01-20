@@ -2,40 +2,50 @@ import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/route
 import { MarketingPreferencesModel } from '@blc-mono/members/application/models/marketingPreferences';
 import { BrazeUpdateModel } from '@blc-mono/members/application/models/brazeUpdateModel';
 import { BrazeAttributesModel } from '@blc-mono/members/application/models/brazeAttributesModel';
-import { ApiGatewayV1ApiFunctionRouteProps, ApiGatewayV1ApiRouteProps } from 'sst/constructs';
+import { ApiGatewayV1ApiFunctionRouteProps, Function } from 'sst/constructs';
+import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 
 export function adminMarketingRoutes(
   defaultRouteProps: DefaultRouteProps,
 ): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
-  const defaultRouteParams = {
-    ...defaultRouteProps,
-    environment: {
-      BRAZE_SERVICE_JSON: process.env.BRAZE_SERVICE_JSON,
+  const singleAdminMarketingHandler = new Function(
+    defaultRouteProps.stack,
+    'AdminMarketingHandlerFunction',
+    {
+      bind: defaultRouteProps.bind,
+      permissions: defaultRouteProps.permissions,
+      handler:
+        'packages/api/members/application/handlers/admin/marketing/adminMarketingHandler.handler',
+      environment: {
+        [MemberStackEnvironmentKeys.SERVICE]: 'members',
+        ...defaultRouteProps.environment,
+        [MemberStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS]: JSON.stringify(
+          defaultRouteProps.defaultAllowedOrigins,
+        ),
+      },
+      vpc: defaultRouteProps.vpc,
     },
-  };
+  );
 
   return {
     'POST /admin/members/{memberId}/marketing/braze': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminFetchBrazeAttributes',
-      handler:
-        'packages/api/members/application/handlers/admin/marketing/getBrazeAttributes.handler',
       responseModelType: BrazeAttributesModel,
+      handlerFunction: singleAdminMarketingHandler,
     }),
     'GET /admin/members/{memberId}/marketing/preferences/{environment}': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminGetMarketingPreferences',
-      handler:
-        'packages/api/members/application/handlers/admin/marketing/getMarketingPreferences.handler',
       responseModelType: MarketingPreferencesModel,
+      handlerFunction: singleAdminMarketingHandler,
       permissions: ['secretsmanager:GetSecretValue'],
     }),
     'POST /admin/members/{memberId}/marketing/braze/update': Route.createRoute({
-      ...defaultRouteParams,
+      ...defaultRouteProps,
       name: 'AdminUpdateMarketingPreferences',
-      handler:
-        'packages/api/members/application/handlers/admin/marketing/updateMarketingPreferences.handler',
       responseModelType: BrazeUpdateModel,
+      handlerFunction: singleAdminMarketingHandler,
     }),
   };
 }

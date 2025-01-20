@@ -109,7 +109,6 @@ describe('CardService', () => {
       );
 
       expect(repositoryMock.upsertCard).toHaveBeenCalled();
-      expect(ProfileService.prototype.getProfile).toHaveBeenCalledWith(memberId);
     });
   });
 });

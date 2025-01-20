@@ -285,7 +285,7 @@ describe('ProfileService', () => {
 
   describe('documentUploadComplete', () => {
     it('should record document upload successfully', async () => {
-      await profileService.documentUploadComplete(memberId, 'key');
+      await profileService.documentUploadComplete(memberId);
       expect(profileRepositoryMock.updateProfile).toHaveBeenCalledWith(memberId, {
         idUploaded: true,
       });
@@ -297,7 +297,7 @@ describe('ProfileService', () => {
 
     it('should throw an error if recording document upload fails', async () => {
       profileRepositoryMock.updateProfile.mockRejectedValue(new Error('Update failed'));
-      await expect(profileService.documentUploadComplete(memberId, 'key')).rejects.toThrow(
+      await expect(profileService.documentUploadComplete(memberId)).rejects.toThrow(
         'Update failed',
       );
     });

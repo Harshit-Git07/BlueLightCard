@@ -1,7 +1,8 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { UpdateProfileModel } from '@blc-mono/members/application/models/profileModel';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/profileService');
 
@@ -15,8 +16,7 @@ describe('updateProfile handler', () => {
   const event = {
     pathParameters: { memberId },
     body: JSON.stringify(profile),
-  } as any as APIGatewayProxyEvent;
-  const context = {} as Context;
+  } as unknown as APIGatewayProxyEvent;
 
   beforeEach(() => {
     ProfileService.prototype.updateProfile = jest.fn().mockResolvedValue(undefined);
@@ -24,19 +24,19 @@ describe('updateProfile handler', () => {
 
   it('should return 400 if request body is missing', async () => {
     const event = {} as unknown as APIGatewayProxyEvent;
-    const response = await handler(event, context);
+
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(400);
   });
 
   it('should return 204 on successful update', async () => {
-    const response = await handler(event, context);
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(204);
   });
 });
 
-async function handler(
-  event: APIGatewayProxyEvent,
-  context: Context,
-): Promise<APIGatewayProxyResult> {
-  return (await import('../updateProfile')).handler(event, context);
+async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+  return await (await import('../updateProfile')).handler(event, emptyContextStub);
 }

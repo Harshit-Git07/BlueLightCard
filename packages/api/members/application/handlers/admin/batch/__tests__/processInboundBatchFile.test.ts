@@ -1,5 +1,6 @@
-import { S3Event, S3EventRecord, Context } from 'aws-lambda';
+import { S3Event, S3EventRecord } from 'aws-lambda';
 import { BatchService } from '@blc-mono/members/application/services/batchService';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/batchService');
 
@@ -15,19 +16,18 @@ describe('processInboundBatchFile handler', () => {
     },
   } as S3EventRecord;
   const event = { Records: [record] } as S3Event;
-  const context = {} as Context;
 
   beforeEach(() => {
     BatchService.prototype.processInboundBatchFile = jest.fn();
   });
 
   it('should call upload batch file', async () => {
-    await handler(event, context);
+    await handler(event);
 
     expect(BatchService.prototype.processInboundBatchFile).toHaveBeenCalledWith(record);
   });
 });
 
-async function handler(event: S3Event, context: Context) {
-  return (await import('../processInboundBatchFile')).handler(event, context);
+async function handler(event: S3Event) {
+  return await (await import('../processInboundBatchFile')).handler(event, emptyContextStub);
 }

@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '../../../middleware';
 import MarketingService from '@blc-mono/members/application/services/marketingService';
 import { verifyMemberHasAccessToProfile } from '../memberAuthorization';

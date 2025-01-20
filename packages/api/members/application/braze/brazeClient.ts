@@ -1,20 +1,35 @@
-// @ts-nocheck
 import axios from 'axios';
-import * as AWS from 'aws-sdk';
 import { logger } from '../middleware';
 import { NotFoundError } from '../errors/NotFoundError';
-import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
+import { MarketingPreferencesEnvironment } from '@blc-mono/members/application/types/marketingPreferencesEnvironment';
+import {
+  BrazeUpdateAttributeValue,
+  BrazeUpdateModel,
+} from '@blc-mono/members/application/models/brazeUpdateModel';
+
+interface BrazeServiceJson {
+  BRAZE_SERVICE_API_KEY: string;
+  BRAZE_SERVICE_MARKETING_SMS_CAMPAIGN_ID: string;
+}
+
+export interface CheckListResponse {
+  users: CheckListResponseUser[];
+  message: string;
+}
+
+interface CheckListResponseUser {
+  [key: string]: string | Record<string, unknown>;
+}
 
 export default class BrazeClient {
   constructor(
     private readonly instanceUrl: string = 'rest.fra-02.braze.eu',
-    private readonly brazeJson: object = JSON.parse(
-      getEnvOrDefault(MemberStackEnvironmentKeys.BRAZE_SERVICE_JSON),
+    private readonly brazeJson: BrazeServiceJson = JSON.parse(
+      process.env.BRAZE_SERVICE_JSON ?? '{}',
     ),
   ) {}
 
-  async getAttributes(memberId: string, attributes: string[]): Promise<Record<string, string>> {
+  async getAttributes(memberId: string, attributes: string[]): Promise<Record<string, unknown>> {
     const checkListUrl = `https://${this.instanceUrl}/users/export/ids`;
 
     const headers = {
@@ -30,45 +45,44 @@ export default class BrazeClient {
     };
 
     try {
-      const { data } = await axios.post(checkListUrl, body, { headers });
+      const { data } = await axios.post<CheckListResponse>(checkListUrl, body, { headers });
 
       if (data.users[0] === undefined) {
         throw new NotFoundError('Braze user not found');
       }
 
-      const options = Object.entries(data.users[0]).reduce((array, [key, value]) => {
-        if (key === 'custom_attributes') {
+      return Object.entries(data.users[0]).reduce<Record<string, unknown>>(
+        (options, [key, value]) => {
+          if (!attributes.includes(key)) return options;
+
+          if (typeof value === 'string') {
+            options[key] = value;
+            return options;
+          }
+
           for (const customAttributeKey in value) {
-            if (value.hasOwnProperty(customAttributeKey)) {
-              array[customAttributeKey] =
-                value[customAttributeKey] !== 'unsubscribed' &&
-                value[customAttributeKey] !== undefined
-                  ? value[customAttributeKey]
-                  : 'unsubscribed';
-            }
-          }
-        } else {
-          array[key] = value;
-        }
-        let array2 = {};
-        for (let i = 0; i < Object.keys(array).length; i++) {
-          for (let z = 0; z < attributes.length; z++) {
-            array2[attributes[z]] = array[attributes[z]];
-            delete array2['custom_attributes'];
-          }
-        }
+            if (!value[customAttributeKey] || !attributes.includes(customAttributeKey)) continue;
 
-        return array2;
-      }, {});
-
-      return options;
+            options[customAttributeKey] =
+              value[customAttributeKey] !== 'unsubscribed' &&
+              value[customAttributeKey] !== undefined
+                ? value[customAttributeKey]
+                : 'unsubscribed';
+          }
+          return options;
+        },
+        {},
+      );
     } catch (error) {
       logger.error({ message: 'Error getting attributes', error });
       throw error;
     }
   }
 
-  async getMarketingPreferences(memberId: string, environment: 'web' | 'mobile') {
+  async getMarketingPreferences(
+    memberId: string,
+    environment: MarketingPreferencesEnvironment,
+  ): Promise<Record<string, unknown> | Record<string, unknown>[]> {
     const checkListUrl = `https://${this.instanceUrl}/users/export/ids`;
     const headers = {
       Authorization: `Bearer ${this.brazeJson.BRAZE_SERVICE_API_KEY}`,
@@ -83,37 +97,39 @@ export default class BrazeClient {
     };
 
     try {
-      const { data } = await axios.post(checkListUrl, body, { headers });
+      const { data } = await axios.post<CheckListResponse>(checkListUrl, body, { headers });
       if (data.users[0] === undefined) {
         throw new NotFoundError('Braze user not found');
       }
 
-      const options = Object.entries(data.users[0]).reduce(
-        (array, [key, value]): [string, string] => {
-          if (key === 'custom_attributes') {
-            array.sms_subscribe =
-              value.sms_subscribe === 'opted_in' && value.sms_subscribe != undefined
-                ? value.sms_subscribe
-                : 'unsubscribed';
-            array.analytics =
-              value.analytics !== 'subscribed' && value.analytics != undefined
-                ? value.analytics
-                : 'unsubscribed';
-            array.personalised_offers =
-              value.personalised_offers !== 'subscribed' && value.personalised_offers != undefined
-                ? value.personalised_offers
-                : 'unsubscribed';
-          } else {
+      const options = Object.entries(data.users[0]).reduce<Record<string, unknown>>(
+        (options, [key, value]) => {
+          if (typeof value === 'string') {
             if (
               key !== 'push_opted_in_at' &&
               key !== 'email_opted_in_at' &&
               key !== 'email_unsubscribed_at' &&
               key !== 'push_unsubscribed_at'
             ) {
-              array[key] = value !== 'subscribed' && value !== undefined ? value : 'unsubscribed';
+              options[key] = value !== 'subscribed' && value !== undefined ? value : 'unsubscribed';
             }
+
+            return options;
           }
-          return array;
+
+          options.sms_subscribe =
+            value.sms_subscribe === 'opted_in' && value.sms_subscribe != null
+              ? value.sms_subscribe
+              : 'unsubscribed';
+          options.analytics =
+            value.analytics !== 'subscribed' && value.analytics != null
+              ? value.analytics
+              : 'unsubscribed';
+          options.personalised_offers =
+            value.personalised_offers !== 'subscribed' && value.personalised_offers != null
+              ? value.personalised_offers
+              : 'unsubscribed';
+          return options;
         },
         {},
       );
@@ -129,34 +145,24 @@ export default class BrazeClient {
     }
   }
 
-  private extendForMobile(attributes: any) {
+  private extendForMobile(attributes: Record<string, unknown>): Record<string, unknown>[] {
     return MARKETING_BRAZE_OPTIONS.map((option) => ({
       ...option,
       status: attributes[option.brazeAlias] === 'opted_in' ? 1 : 0,
     }));
   }
 
-  async updateBraze(memberId: string, attributes: any): Promise<void> {
+  async updateBraze(memberId: string, attributes: BrazeUpdateModel['attributes']): Promise<void> {
     const checkListUrl = `https://${this.instanceUrl}/users/track`;
-    const containsSmsSubscribe = attributes.hasOwnProperty('sms_subscribe');
-
-    const options = attributes;
+    const containsSmsSubscribe = attributes['sms_subscribe'] !== undefined;
 
     const headers = {
       Authorization: `Bearer ${this.brazeJson.BRAZE_SERVICE_API_KEY}`,
       'Content-Type': 'application/json',
     };
 
-    const attributesArray = {
-      external_id: memberId,
-    };
-
-    for (const [key, value] of Object.entries(options)) {
-      attributesArray[key] = value;
-    }
-
     const body = {
-      attributes: [attributesArray],
+      attributes: [attributes],
     };
 
     try {
@@ -186,7 +192,11 @@ export default class BrazeClient {
     }
   }
 
-  async updateSubscriptionGroup(memberId: string, groupId: string, value: string): Promise<void> {
+  async updateSubscriptionGroup(
+    memberId: string,
+    groupId: string,
+    value: BrazeUpdateAttributeValue,
+  ): Promise<void> {
     const checkListUrl = `https://${this.instanceUrl}/subscription/status/set`;
     const subGroupStatus = value === 'opted_in' ? 'subscribed' : 'unsubscribed';
 

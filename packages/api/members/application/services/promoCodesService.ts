@@ -72,7 +72,7 @@ export class PromoCodesService {
     logger.debug({ message: 'Applying promo code to application', applicationId });
     const promoCodeResponse = await this.validatePromoCode(memberId, promoCode);
 
-    let codeDetails = await this.getMultiUseOrSingleUseChildPromoCode(promoCode);
+    const codeDetails = await this.getMultiUseOrSingleUseChildPromoCode(promoCode);
 
     if (codeDetails) {
       if (

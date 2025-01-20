@@ -1,8 +1,9 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import { CardModel } from '@blc-mono/members/application/models/cardModel';
 import { CardService } from '@blc-mono/members/application/services/cardService';
 import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/cardService');
 
@@ -20,8 +21,7 @@ describe('getCard handler', () => {
   };
   const event = {
     pathParameters: { memberId, cardNumber },
-  } as any as APIGatewayProxyEvent;
-  const context = {} as Context;
+  } as unknown as APIGatewayProxyEvent;
 
   beforeEach(() => {
     CardService.prototype.getCard = jest.fn().mockResolvedValue(card);
@@ -29,17 +29,20 @@ describe('getCard handler', () => {
 
   it('should return 400 if memberId or cardNumber is missing', async () => {
     const event = { pathParameters: {} } as unknown as APIGatewayProxyEvent;
-    const response = await handler(event, context);
+
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(400);
   });
 
   it('should return 200 with card on successful retrieval', async () => {
-    const response = await handler(event, context);
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(200);
     expect(JSON.parse(response.body)).toEqual(card);
   });
 });
 
-async function handler(event: APIGatewayProxyEvent, context: Context) {
-  return (await import('../getCard')).handler(event, context);
+async function handler(event: APIGatewayProxyEvent) {
+  return await (await import('../getCard')).handler(event, emptyContextStub);
 }

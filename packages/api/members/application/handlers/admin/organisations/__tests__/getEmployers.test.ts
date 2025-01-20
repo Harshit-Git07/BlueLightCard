@@ -1,9 +1,10 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { EmployerModel } from '@blc-mono/members/application/models/employerModel';
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 import { v4 as uuidv4 } from 'uuid';
 import { EmploymentStatus } from '@blc-mono/members/application/models/enums/EmploymentStatus';
 import { IdType } from '@blc-mono/members/application/models/enums/IdType';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/organisationService');
 
@@ -36,7 +37,6 @@ describe('getEmployers handler', () => {
     },
   ];
   const event = { pathParameters: { organisationId } } as unknown as APIGatewayProxyEvent;
-  const context = {} as Context;
 
   beforeEach(() => {
     OrganisationService.prototype.getEmployers = jest.fn().mockResolvedValue(employers);
@@ -44,17 +44,20 @@ describe('getEmployers handler', () => {
 
   it('should return 400 if organisationId is missing', async () => {
     const event = { pathParameters: {} } as unknown as APIGatewayProxyEvent;
-    const response = await handler(event, context);
+
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(400);
   });
 
   it('should return 200 with list of employers', async () => {
-    const response = await handler(event, context);
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(200);
     expect(JSON.parse(response.body)).toEqual(employers);
   });
 });
 
-async function handler(event: APIGatewayProxyEvent, context: Context) {
-  return (await import('../getEmployers')).handler(event, context);
+async function handler(event: APIGatewayProxyEvent) {
+  return await (await import('../getEmployers')).handler(event, emptyContextStub);
 }

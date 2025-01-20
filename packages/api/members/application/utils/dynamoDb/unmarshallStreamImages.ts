@@ -1,19 +1,28 @@
-import { StreamRecord } from 'aws-lambda/trigger/dynamodb-stream';
+import { AttributeValue, StreamRecord } from 'aws-lambda/trigger/dynamodb-stream';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { AttributeValue as DynamoDBAttributeValue } from '@aws-sdk/client-dynamodb';
+import { AttributeValue as DynamoClientAttributeValue } from '@aws-sdk/client-dynamodb';
 
-export const unmarshallStreamImages = <T>(
+export interface StreamImages<ImageType> {
+  oldImage: ImageType | undefined;
+  newImage: ImageType | undefined;
+}
+
+export function unmarshallStreamImages<ImageType>(
   streamRecord?: StreamRecord,
-): {
-  oldImage: T | undefined;
-  newImage: T | undefined;
-} => {
+): StreamImages<ImageType> {
   return {
-    oldImage: streamRecord?.OldImage
-      ? (unmarshall(streamRecord.OldImage as { [key: string]: DynamoDBAttributeValue }) as T)
-      : undefined,
-    newImage: streamRecord?.NewImage
-      ? (unmarshall(streamRecord.NewImage as { [key: string]: DynamoDBAttributeValue }) as T)
-      : undefined,
+    oldImage: unmarshallImage(streamRecord?.OldImage),
+    newImage: unmarshallImage(streamRecord?.NewImage),
   };
-};
+}
+
+type StreamRecordImage = Record<string, AttributeValue>;
+
+function unmarshallImage<ImageType>(
+  streamRecordImage: StreamRecordImage | undefined,
+): ImageType | undefined {
+  if (streamRecordImage === undefined) return undefined;
+
+  // AWS SDK seems to get confused between the types here, so doing a hard cast to the other type
+  return unmarshall(streamRecordImage as unknown as DynamoClientAttributeValue) as ImageType;
+}

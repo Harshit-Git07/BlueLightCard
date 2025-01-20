@@ -6,7 +6,6 @@ import {
   ScanCommand,
   ScanCommandInput,
   TransactWriteCommand,
-  UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
@@ -17,21 +16,14 @@ import { CreateNoteModel, NoteModel } from '../models/noteModel';
 import { CardModel } from '../models/cardModel';
 import { ApplicationModel } from '../models/applicationModel';
 import { CreateProfileModel, ProfileModel } from '../models/profileModel';
-import {
-  APPLICATION,
-  memberKey,
-  PROFILE,
-  CARD,
-  MEMBER,
-  noteKey,
-  NOTE,
-  Repository,
-} from './repository';
+import { APPLICATION, MEMBER, memberKey, NOTE, noteKey, PROFILE, Repository } from './repository';
 import { NotFoundError } from '../errors/NotFoundError';
+import { omit } from 'lodash';
 
 export class ProfileRepository extends Repository {
   constructor(
     dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     private readonly tableName: string = Table.memberProfiles.tableName,
   ) {
@@ -77,13 +69,13 @@ export class ProfileRepository extends Repository {
   }
 
   async updateProfile(memberId: string, profile: Partial<ProfileModel>): Promise<void> {
-    const { applications, cards, ...reducedProfile } = profile;
+    const profileWithoutApplicationsOrCards = omit(profile, ['applications', 'cards']);
     await this.partialUpdate({
       tableName: this.tableName,
       pk: memberKey(memberId),
       sk: PROFILE,
       data: {
-        ...reducedProfile,
+        ...profileWithoutApplicationsOrCards,
         lastUpdated: new Date().toISOString(),
       },
     });
@@ -121,7 +113,7 @@ export class ProfileRepository extends Repository {
 
     let profile: ProfileModel | undefined;
     let cards: CardModel[] = [];
-    let applications: ApplicationModel[] = [];
+    const applications: ApplicationModel[] = [];
 
     const result = await this.dynamoDB.send(new QueryCommand(params));
     result.Items?.forEach((item) => {

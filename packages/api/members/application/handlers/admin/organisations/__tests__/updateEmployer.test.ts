@@ -1,9 +1,10 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 import { UpdateEmployerModel } from '@blc-mono/members/application/models/employerModel';
 import { v4 as uuidv4 } from 'uuid';
 import { EmploymentStatus } from '@blc-mono/members/application/models/enums/EmploymentStatus';
 import { IdType } from '@blc-mono/members/application/models/enums/IdType';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/organisationService');
 
@@ -34,31 +35,37 @@ describe('updateEmployer handler', () => {
   const event = {
     pathParameters: { organisationId, employerId },
     body: JSON.stringify(employer),
-  } as any as APIGatewayProxyEvent;
-  const context = {} as Context;
+  } as unknown as APIGatewayProxyEvent;
 
   beforeEach(() => {
     OrganisationService.prototype.updateEmployer = jest.fn().mockResolvedValue(employer);
   });
 
   it('should return 400 if organisationId or employerId is missing', async () => {
-    const event = { pathParameters: { organisationId } } as any as APIGatewayProxyEvent;
-    const response = await handler(event, context);
+    const event = { pathParameters: { organisationId } } as unknown as APIGatewayProxyEvent;
+
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(400);
   });
 
   it('should return 400 if request body is missing', async () => {
-    const event = { pathParameters: { organisationId, employerId } } as any as APIGatewayProxyEvent;
-    const response = await handler(event, context);
+    const event = {
+      pathParameters: { organisationId, employerId },
+    } as unknown as APIGatewayProxyEvent;
+
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(400);
   });
 
   it('should return 204 on successful employer update', async () => {
-    const response = await handler(event, context);
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(204);
   });
 });
 
-async function handler(event: APIGatewayProxyEvent, context: Context) {
-  return (await import('../updateEmployer')).handler(event, context);
+async function handler(event: APIGatewayProxyEvent) {
+  return await (await import('../updateEmployer')).handler(event, emptyContextStub);
 }

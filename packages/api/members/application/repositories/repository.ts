@@ -9,6 +9,7 @@ import {
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { defaultDynamoDbClient } from './dynamoClient';
+import { UpdateCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/UpdateCommand';
 
 export const ORGANISATION = 'ORGANISATION';
 export const EMPLOYER = 'EMPLOYER';
@@ -75,7 +76,7 @@ export class Repository {
     try {
       const scanCommand = new ScanCommand(params);
 
-      return this.dynamoDB.send(scanCommand);
+      return await this.dynamoDB.send(scanCommand);
     } catch (error) {
       const message = 'Error trying to scan record using DynamoDB service';
       throw new Error(`${message}: [${error}]`);
@@ -83,10 +84,10 @@ export class Repository {
   }
 
   async partialUpdate<T>({ tableName, pk, sk, data }: PartialUpdateProps<T>): Promise<void> {
-    let [updateExpression, expressionAttributeNames, expressionAttributeValues] =
+    const [updateExpression, expressionAttributeNames, expressionAttributeValues] =
       this.getPartialUpdateExpressionValues(data);
 
-    const params = {
+    const params: UpdateCommandInput = {
       TableName: tableName,
       Key: {
         pk,
@@ -100,12 +101,12 @@ export class Repository {
     await this.dynamoDB.send(new UpdateCommand(params));
   }
 
-  getPartialUpdateExpressionValues<T>(
-    data: Partial<T>,
-  ): [string[], { [key: string]: any }, { [key: string]: any }] {
+  getPartialUpdateExpressionValues<AttributeValue>(
+    data: Partial<AttributeValue>,
+  ): [string[], Record<string, string>, Record<string, AttributeValue[keyof AttributeValue]>] {
     const updateExpression: string[] = [];
-    const expressionAttributeNames: { [key: string]: any } = {};
-    const expressionAttributeValues: { [key: string]: any } = {};
+    const expressionAttributeNames: Record<string, string> = {};
+    const expressionAttributeValues: Record<string, AttributeValue[keyof AttributeValue]> = {};
 
     for (const field of Object.keys(data) as (keyof typeof data)[]) {
       if (data[field] !== undefined) {

@@ -7,6 +7,7 @@ import {
   EventBridgeEvent,
   S3Event,
   SQSEvent,
+  StreamRecord,
 } from 'aws-lambda';
 import { datadog } from 'datadog-lambda-js';
 import 'dd-trace/init';
@@ -60,7 +61,7 @@ export function middleware<T>(handler: (event: APIGatewayProxyEvent) => Promise<
       }
 
       return Response.NoContent();
-    } catch (error: Error | any) {
+    } catch (error) {
       logger.error({ message: 'Error occurred', error });
 
       auditLogger.info({
@@ -80,7 +81,7 @@ export function middleware<T>(handler: (event: APIGatewayProxyEvent) => Promise<
         logger.warn('Validation error', error);
         return Response.BadRequest({ error: error.message });
       } else {
-        return Response.Error(error);
+        return Response.Error(error as Error);
       }
     }
   };
@@ -106,7 +107,7 @@ export function s3Middleware(handler: S3Handler): S3Handler {
         message: 'Event success',
         event: event.Records[0]?.eventName,
       });
-    } catch (error: Error | any) {
+    } catch (error) {
       logger.error({ message: 'Error occurred', error });
 
       auditLogger.info({
@@ -139,13 +140,13 @@ export function sqsMiddleware(handler: SQSHandler): SQSHandler {
         message: 'Event success',
         numberOfRecords: event.Records.length,
       });
-    } catch (error: Error | any) {
+    } catch (error) {
       logger.error({ message: 'Error occurred', error });
 
       auditLogger.info({
         message: 'Request failed',
         numberOfRecords: event.Records.length,
-        error: error.message,
+        error: (error as Error)?.message,
       });
 
       if (error instanceof ValidationError || error instanceof ZodError) {
@@ -175,7 +176,7 @@ export function dynamoDBMiddleware(handler: DynamoDBHandler): DynamoDBHandler {
         message: 'Event success',
         event: event.Records[0]?.eventName,
       });
-    } catch (error: Error | any) {
+    } catch (error) {
       logger.error({ message: 'Error occurred', error });
 
       auditLogger.info({
@@ -190,10 +191,13 @@ export function dynamoDBMiddleware(handler: DynamoDBHandler): DynamoDBHandler {
   };
 }
 
-type EventBusHandler = (event: EventBridgeEvent<any, any>, context: Context) => Promise<void>;
+type EventBusHandler = (
+  event: EventBridgeEvent<string, StreamRecord>,
+  context: Context,
+) => Promise<void>;
 
 export function eventBusMiddleware(handler: EventBusHandler): EventBusHandler {
-  return async (event: EventBridgeEvent<any, any>, context: Context): Promise<void> => {
+  return async (event, context): Promise<void> => {
     logger.addContext(context);
 
     try {
@@ -208,14 +212,14 @@ export function eventBusMiddleware(handler: EventBusHandler): EventBusHandler {
       auditLogger.info({
         message: 'Event success',
       });
-    } catch (error: Error | any) {
+    } catch (error) {
       logger.error({ message: 'Error occurred', error });
 
       auditLogger.info({
         message: 'Request failed',
         eventDetail: event.detail,
         eventDetailType: event['detail-type'],
-        error: error.message,
+        error: (error as Error)?.message,
       });
 
       if (error instanceof ValidationError || error instanceof ZodError) {
@@ -243,12 +247,12 @@ export function lambdaMiddleware(handler: LambdaHandler): LambdaHandler {
       auditLogger.info({
         message: 'Event success',
       });
-    } catch (error: Error | any) {
+    } catch (error) {
       logger.error({ message: 'Error occurred', error });
 
       auditLogger.info({
         message: 'Request failed',
-        error: error.message,
+        error: (error as Error)?.message,
       });
 
       if (error instanceof ValidationError || error instanceof ZodError) {

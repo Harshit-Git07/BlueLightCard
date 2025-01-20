@@ -252,7 +252,7 @@ describe('Organisation ID Mapping', () => {
 
       const { organisations } = mapOrganisationsAndEmployers(eligibilityRules);
 
-      expect(organisations.length).toBe(1);
+      expect(organisations).toHaveLength(1);
       expect(organisations[0]).toEqual(expectedOrg);
     });
     it('should map eligibility rules to employers', () => {

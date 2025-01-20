@@ -27,9 +27,6 @@ jest.mock('../profileService');
 jest.mock('../cardService');
 jest.mock('aws-sdk');
 jest.mock('../../../../core/src/utils/checkBrand');
-const isBlcUkBrandMock = jest.mocked(isBlcUkBrand);
-const getBrandFromEnvMock = jest.mocked(getBrandFromEnv);
-
 jest.mock('sst/node/bucket', () => ({
   Bucket: {
     batchFilesBucket: {
@@ -79,7 +76,6 @@ const application: ApplicationModel = {
   postcode: 'PT1 4RF',
   country: 'United Kingdom',
 };
-
 const profile: ProfileModel = {
   memberId,
   firstName: 'John',
@@ -90,11 +86,14 @@ const profile: ProfileModel = {
   applications: [application],
 };
 
-let batchService: BatchService;
+const isBlcUkBrandMock = jest.mocked(isBlcUkBrand);
+const getBrandFromEnvMock = jest.mocked(getBrandFromEnv);
 let repositoryMock: jest.Mocked<BatchRepository>;
 let profileServiceMock: jest.Mocked<ProfileService>;
 let cardServiceMock: jest.Mocked<CardService>;
 let s3ClientMock: jest.Mocked<S3>;
+
+let batchService: BatchService;
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -144,6 +143,7 @@ describe('BatchService', () => {
       repositoryMock.createBatch.mockResolvedValue(batchId);
 
       const result = await batchService.createBatch(createBatchModel);
+
       expect(result).toEqual(batchId);
     });
   });
@@ -159,7 +159,9 @@ describe('BatchService', () => {
 
     it('should create batch entry successfully', async () => {
       repositoryMock.createBatchEntry.mockResolvedValue(batchId);
+
       const result = await batchService.createBatchEntry(batchEntryModel);
+
       expect(result).toEqual(batchId);
     });
   });
@@ -282,7 +284,6 @@ describe('BatchService', () => {
       const validCard = createCard();
       const invalidCard = createCard({ nameOnCard: 'This Name Is Far Too Long For Batching' });
       cardServiceMock.getCardsWithStatus.mockResolvedValue([validCard, invalidCard]);
-
       const profileWithoutCounty = { ...profile };
       delete profileWithoutCounty.county;
       profileServiceMock.getProfile.mockResolvedValue(profileWithoutCounty);
@@ -293,12 +294,10 @@ describe('BatchService', () => {
         cardStatus: validCard.cardStatus,
         printingErrorStatus: PrintingErrorStatus.MISSING_ADDRESS,
       });
-
       expect(cardServiceMock.updateCard).toHaveBeenCalledWith(memberId, invalidCard.cardNumber, {
         cardStatus: invalidCard.cardStatus,
         printingErrorStatus: PrintingErrorStatus.MISSING_ADDRESS_AND_NAME_TOO_LONG,
       });
-
       expect(repositoryMock.createBatch).not.toHaveBeenCalled();
     });
 
@@ -307,10 +306,8 @@ describe('BatchService', () => {
       cardServiceMock.getCardsWithStatus.mockResolvedValue(cardArray);
       profileServiceMock.getProfile.mockResolvedValue(profile);
       repositoryMock.createBatch.mockResolvedValue(batchId);
-
       isBlcUkBrandMock.mockReturnValue(true);
       getBrandFromEnvMock.mockReturnValue(BLC_UK_BRAND);
-
       const expectedBatch: CreateBatchModel = {
         name: 'batch#2023-01-01T00:00:00.000Z',
         type: BatchType.EXTERNAL,
@@ -321,13 +318,11 @@ describe('BatchService', () => {
 
       expect(repositoryMock.createBatch).toHaveBeenCalledWith(expectedBatch);
       expect(repositoryMock.createBatchEntry).toHaveBeenCalledTimes(3);
-
       cardArray.forEach((card) => {
         expect(cardServiceMock.updateCard).toHaveBeenCalledWith(memberId, card.cardNumber, {
           cardStatus: CardStatus.ADDED_TO_BATCH,
         });
       });
-
       const expectedBodyLines = cardArray.map(() =>
         [
           memberId,
@@ -343,9 +338,7 @@ describe('BatchService', () => {
           batchId,
         ].join('|'),
       );
-
       const expectedBody = expectedBodyLines.join('\r\n');
-
       expect(s3ClientMock.upload).toHaveBeenCalledWith({
         Bucket: 'batchFileBucketMock',
         Key: `blc-uk/outbound/${batchId}.csv`,
@@ -524,25 +517,33 @@ describe('BatchService', () => {
         repositoryMock as BatchRepository,
         cardServiceMock as CardService,
         profileServiceMock as ProfileService,
-        undefined as any,
+        undefined,
       );
     });
 
     it('should create an internal batch with valid cards', async () => {
       const validCard1 = createCard({ cardNumber: 'CARD12345', nameOnCard: 'John Doe' });
       const validCard2 = createCard({ cardNumber: 'CARD67890', nameOnCard: 'Jane Doe' });
-
       cardServiceMock.getCardById
         .mockResolvedValueOnce(validCard1)
         .mockResolvedValueOnce(validCard2);
-
       jest
-        .spyOn(internalBatchService as any, 'cardIsValidForBatch')
+        .spyOn(internalBatchService, 'cardIsValidForBatch')
         .mockResolvedValueOnce(true)
         .mockResolvedValueOnce(true);
-      jest
-        .spyOn(internalBatchService as any, 'getProfileAndApplication')
-        .mockResolvedValue([profile, application]);
+      profileServiceMock.getProfile.mockResolvedValue({
+        ...profile,
+        applications: [
+          {
+            ...application,
+            cardNumber: validCard1.cardNumber,
+          },
+          {
+            ...application,
+            cardNumber: validCard2.cardNumber,
+          },
+        ],
+      });
       repositoryMock.createBatch.mockResolvedValue(batchId);
       repositoryMock.createBatchEntry.mockResolvedValue(batchId);
 
@@ -550,6 +551,7 @@ describe('BatchService', () => {
         validCard1.cardNumber,
         validCard2.cardNumber,
       ]);
+
       expect(result).toEqual({ batchId });
       expect(repositoryMock.createBatchEntry).toHaveBeenCalledTimes(2);
       expect(cardServiceMock.updateCard).toHaveBeenCalledTimes(2);
@@ -558,19 +560,22 @@ describe('BatchService', () => {
     it('should create an internal batch with only valid cards', async () => {
       const validCard = createCard({ cardNumber: 'CARD12345' });
       const invalidCard = createCard({ cardNumber: 'CARD67890' });
-
       cardServiceMock.getCardById
         .mockResolvedValueOnce(validCard)
         .mockResolvedValueOnce(invalidCard);
-
       jest
-        .spyOn(internalBatchService as any, 'cardIsValidForBatch')
+        .spyOn(internalBatchService, 'cardIsValidForBatch')
         .mockResolvedValueOnce(true)
         .mockResolvedValueOnce(false);
-
-      jest
-        .spyOn(internalBatchService as any, 'getProfileAndApplication')
-        .mockResolvedValue([profile, application]);
+      profileServiceMock.getProfile.mockResolvedValue({
+        ...profile,
+        applications: [
+          {
+            ...application,
+            cardNumber: validCard.cardNumber,
+          },
+        ],
+      });
       repositoryMock.createBatch.mockResolvedValue(batchId);
 
       const result = await internalBatchService.createInternalBatch('Internal Batch Test', [
@@ -585,6 +590,7 @@ describe('BatchService', () => {
 
     it('should throw if an error occurs', async () => {
       cardServiceMock.getCardById.mockRejectedValue(new Error('Failure retrieving card'));
+
       await expect(
         internalBatchService.createInternalBatch('Internal Batch Test', ['CARD12345']),
       ).rejects.toThrow('Failure retrieving card');

@@ -1,6 +1,5 @@
 import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import { z } from 'zod';
-import { ApplicationModel } from '@blc-mono/members/application/models/applicationModel';
 import { PromoCodeType } from '@blc-mono/members/application/models/enums/PromoCodeType';
 
 export const PromoCodeModel = createZodNamedType(

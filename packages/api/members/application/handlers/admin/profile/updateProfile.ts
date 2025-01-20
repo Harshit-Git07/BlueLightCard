@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '../../../middleware';
 import { UpdateProfileModel } from '@blc-mono/members/application/models/profileModel';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';

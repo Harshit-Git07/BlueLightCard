@@ -1,4 +1,9 @@
-import { SearchHit, SearchRequest, SearchResponse } from '@opensearch-project/opensearch/api/types';
+import {
+  QueryDslQueryContainer,
+  SearchHit,
+  SearchRequest,
+  SearchResponse,
+} from '@opensearch-project/opensearch/api/types';
 import {
   MemberDocumentModel,
   MemberDocumentsSearchModel,
@@ -8,7 +13,7 @@ import { logger } from '@blc-mono/members/application/middleware';
 const PAGE_SIZE = 50;
 
 export function buildOpenSearchRequest(filterParams: MemberDocumentsSearchModel): SearchRequest {
-  const mustQueries: any[] = [];
+  const mustQueries: QueryDslQueryContainer[] = [];
 
   const filterParamsKeys = (
     Object.keys(filterParams) as (keyof MemberDocumentsSearchModel)[]
@@ -21,14 +26,14 @@ export function buildOpenSearchRequest(filterParams: MemberDocumentsSearchModel)
   });
 
   if (filterParams.signupDateStart || filterParams.signupDateEnd) {
-    const rangeQuery: any = { range: { signupDate: {} } };
-    if (filterParams.signupDateStart) {
-      rangeQuery.range.signupDate.gte = filterParams.signupDateStart;
-    }
-    if (filterParams.signupDateEnd) {
-      rangeQuery.range.signupDate.lte = filterParams.signupDateEnd;
-    }
-    mustQueries.push(rangeQuery);
+    mustQueries.push({
+      range: {
+        signupDate: {
+          gte: filterParams.signupDateStart,
+          lte: filterParams.signupDateEnd,
+        },
+      },
+    });
   }
 
   const from = PAGE_SIZE * (filterParams.pageIndex - 1);

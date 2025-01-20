@@ -1,30 +1,12 @@
-const { exclude } = require('tsafe');
-
 module.exports = {
-  env: {
-    browser: true,
-    es2021: true,
-    node: true,
-  },
   extends: [
-    'next',
-    'plugin:react/recommended',
-    'next/core-web-vitals',
     'prettier',
-    'plugin:storybook/recommended',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:jest/recommended',
+    'plugin:jest/style',
   ],
-  root: true,
-  plugins: ['prettier'],
-  overrides: [],
-  parserOptions: {
-    project: 'tsconfig.json',
-    tsconfigRootDir: __dirname,
-  },
-  ignorePatterns: [
-    'application/braze/__tests__/*',
-    'application/repositories/__tests__/*',
-    'libs/emailTemplates',
-  ],
+  plugins: ['prettier', '@typescript-eslint', 'jest'],
   rules: {
     'prettier/prettier': [
       'error',
@@ -32,5 +14,27 @@ module.exports = {
         printWidth: 100,
       },
     ],
+    '@typescript-eslint/no-misused-promises': 'error',
+    'no-return-await': 'off',
+    '@typescript-eslint/return-await': ['error', 'always'],
+    eqeqeq: ['error', 'smart'],
+    'jest/prefer-to-be': 'off', // This rule is just for grammar purposes, doesn't actually improve performance. Not fussed with it being slightly wrong
+  },
+  root: true,
+  overrides: [],
+  ignorePatterns: [
+    'application/braze/__tests__/*',
+    'application/repositories/__tests__/*',
+    'libs/emailTemplates',
+  ],
+  parserOptions: {
+    parser: '@typescript-eslint/parser',
+    project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
+  },
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
   },
 };

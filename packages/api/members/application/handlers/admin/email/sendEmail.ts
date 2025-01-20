@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '@blc-mono/members/application/middleware';
 import { EmailModel } from '@blc-mono/members/application/models/emailModel';
 import { EmailService } from '@blc-mono/members/application/services/emailService';

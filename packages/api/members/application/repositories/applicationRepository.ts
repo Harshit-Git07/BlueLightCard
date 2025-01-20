@@ -4,12 +4,9 @@ import {
   GetCommandInput,
   PutCommand,
   QueryCommand,
-  QueryCommandInput,
   ScanCommand,
   ScanCommandInput,
   TransactWriteCommand,
-  UpdateCommand,
-  UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { ApplicationModel, CreateApplicationModel } from '../models/applicationModel';
 import { defaultDynamoDbClient } from './dynamoClient';
@@ -22,6 +19,7 @@ import { EligibilityStatus } from '../models/enums/EligibilityStatus';
 export class ApplicationRepository extends Repository {
   constructor(
     dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     private readonly tableName: string = Table.memberProfiles.tableName,
   ) {

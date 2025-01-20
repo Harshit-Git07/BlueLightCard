@@ -21,8 +21,7 @@ export class EmailEventsService {
   };
 
   isSendApplicationUpdateToEmail = (dynamoStream: StreamRecord | undefined) => {
-    const { oldImage: oldApplication, newImage: newApplication } =
-      unmarshallStreamImages<ApplicationModel>(dynamoStream);
+    const { newImage: newApplication } = unmarshallStreamImages<ApplicationModel>(dynamoStream);
 
     if (hasAttributeChanged('trustedDomainEmail', dynamoStream)) {
       this.sendEventBusMessage(
@@ -34,7 +33,7 @@ export class EmailEventsService {
 
     if (
       hasAttributeChanged('eligibilityStatus', dynamoStream) &&
-      newApplication?.eligibilityStatus == EligibilityStatus.ELIGIBLE
+      newApplication?.eligibilityStatus === EligibilityStatus.ELIGIBLE
     ) {
       this.sendEventBusMessage(
         EventBusSource.EMAIL,
@@ -45,17 +44,17 @@ export class EmailEventsService {
 
     if (
       hasAttributeChanged('paymentStatus', dynamoStream) &&
-      newApplication?.paymentStatus == PaymentStatus.PAID_PROMO_CODE
+      newApplication?.paymentStatus === PaymentStatus.PAID_PROMO_CODE
     ) {
       this.sendEventBusMessage(EventBusSource.EMAIL, MemberEvent.EMAIL_PROMO_PAYMENT, dynamoStream);
     }
 
     if (
       hasAttributeChanged('paymentStatus', dynamoStream) &&
-      (newApplication?.paymentStatus == PaymentStatus.PAID_CARD ||
-        newApplication?.paymentStatus == PaymentStatus.PAID_PAYPAL ||
-        newApplication?.paymentStatus == PaymentStatus.PAID_CHEQUE ||
-        newApplication?.paymentStatus == PaymentStatus.PAID_ADMIN)
+      (newApplication?.paymentStatus === PaymentStatus.PAID_CARD ||
+        newApplication?.paymentStatus === PaymentStatus.PAID_PAYPAL ||
+        newApplication?.paymentStatus === PaymentStatus.PAID_CHEQUE ||
+        newApplication?.paymentStatus === PaymentStatus.PAID_ADMIN)
     ) {
       this.sendEventBusMessage(EventBusSource.EMAIL, MemberEvent.EMAIL_PAYMENT_MADE, dynamoStream);
     }
@@ -66,12 +65,11 @@ export class EmailEventsService {
   };
 
   isSendCardUpdateToEmail = (dynamoStream: StreamRecord | undefined) => {
-    const { oldImage: oldCard, newImage: newCard } =
-      unmarshallStreamImages<CardModel>(dynamoStream);
+    const { newImage: newCard } = unmarshallStreamImages<CardModel>(dynamoStream);
 
     if (
       hasAttributeChanged('cardStatus', dynamoStream) &&
-      newCard?.cardStatus == CardStatus.PHYSICAL_CARD
+      newCard?.cardStatus === CardStatus.PHYSICAL_CARD
     ) {
       this.sendEventBusMessage(EventBusSource.EMAIL, MemberEvent.EMAIL_CARD_POSTED, dynamoStream);
     }

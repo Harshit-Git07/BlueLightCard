@@ -49,12 +49,11 @@ export class BrazeEventsService {
   };
 
   isSendApplicationUpdateToBraze = (dynamoStream: StreamRecord | undefined) => {
-    const { oldImage: oldApplication, newImage: newApplication } =
-      unmarshallStreamImages<ApplicationModel>(dynamoStream);
+    const { newImage: newApplication } = unmarshallStreamImages<ApplicationModel>(dynamoStream);
 
     if (
       hasAttributeChanged('eligibilityStatus', dynamoStream) &&
-      newApplication?.eligibilityStatus == EligibilityStatus.ELIGIBLE
+      newApplication?.eligibilityStatus === EligibilityStatus.ELIGIBLE
     ) {
       this.sendEventBusMessage(
         EventBusSource.BRAZE,
@@ -80,16 +79,15 @@ export class BrazeEventsService {
   };
 
   isSendCardUpdateToBraze = (dynamoStream: StreamRecord | undefined) => {
-    const { oldImage: oldCard, newImage: newCard } =
-      unmarshallStreamImages<CardModel>(dynamoStream);
+    const { newImage: newCard } = unmarshallStreamImages<CardModel>(dynamoStream);
 
     if (
       hasAttributeChanged('cardStatus', dynamoStream) &&
-      (newCard?.cardStatus == CardStatus.AWAITING_POSTAGE ||
-        newCard?.cardStatus == CardStatus.PHYSICAL_CARD ||
-        newCard?.cardStatus == CardStatus.CARD_LOST ||
-        newCard?.cardStatus == CardStatus.DISABLED ||
-        newCard?.cardStatus == CardStatus.CARD_EXPIRED)
+      (newCard?.cardStatus === CardStatus.AWAITING_POSTAGE ||
+        newCard?.cardStatus === CardStatus.PHYSICAL_CARD ||
+        newCard?.cardStatus === CardStatus.CARD_LOST ||
+        newCard?.cardStatus === CardStatus.DISABLED ||
+        newCard?.cardStatus === CardStatus.CARD_EXPIRED)
     ) {
       this.sendEventBusMessage(EventBusSource.BRAZE, MemberEvent.BRAZE_CARD_UPDATED, dynamoStream);
     }
@@ -99,7 +97,7 @@ export class BrazeEventsService {
     }
 
     if (hasAttributeChanged('paymentStatus', dynamoStream)) {
-      if (newCard?.paymentStatus == PaymentStatus.REFUNDED) {
+      if (newCard?.paymentStatus === PaymentStatus.REFUNDED) {
         this.sendEventBusMessage(
           EventBusSource.BRAZE,
           MemberEvent.BRAZE_CARD_UPDATED,

@@ -1,11 +1,12 @@
 import * as getEnvModule from '@blc-mono/core/utils/getEnv';
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import {
   MemberDocumentModel,
   MemberDocumentsSearchModel,
 } from '@blc-mono/members/application/models/memberDocument';
 import { MembersOpenSearchService } from '../service/membersOpenSearchService';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 
@@ -25,7 +26,6 @@ describe('memberSearch handler', () => {
     lastName: 'Doe',
   };
   const event = { body: JSON.stringify(searchBody) } as unknown as APIGatewayProxyEvent;
-  const context = {} as Context;
 
   beforeEach(() => {
     MembersOpenSearchService.prototype.searchProfiles = jest.fn().mockResolvedValue({
@@ -38,7 +38,7 @@ describe('memberSearch handler', () => {
   it('should return 400 if request body is missing', async () => {
     const event = { body: undefined } as unknown as APIGatewayProxyEvent;
 
-    const response = await handler(event, context);
+    const response = await handler(event);
 
     expect(response.statusCode).toEqual(400);
   });
@@ -46,13 +46,13 @@ describe('memberSearch handler', () => {
   it('should return 400 if request body is missing required parameters', async () => {
     const event = { body: JSON.stringify({}) } as unknown as APIGatewayProxyEvent;
 
-    const response = await handler(event, context);
+    const response = await handler(event);
 
     expect(response.statusCode).toEqual(400);
   });
 
   it('should return 200 with member document data on successful retrieval', async () => {
-    const response = await handler(event, context);
+    const response = await handler(event);
 
     expect(response.statusCode).toEqual(200);
     expect(JSON.parse(response.body)).toEqual({
@@ -63,9 +63,6 @@ describe('memberSearch handler', () => {
   });
 });
 
-async function handler(
-  event: APIGatewayProxyEvent,
-  context: Context,
-): Promise<APIGatewayProxyResult> {
-  return (await import('../memberSearch')).handler(event, context);
+async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+  return await (await import('../memberSearch')).handler(event, emptyContextStub);
 }

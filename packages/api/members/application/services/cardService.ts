@@ -78,11 +78,6 @@ export class CardService {
     });
 
     // TODO: delete application for card and any remaining ID files if present
-
-    const profile = await this.profileService.getProfile(memberId);
-    const firstName = profile.firstName;
-    const lastName = profile.lastName;
-    const email = profile.email;
     // TODO: email user with card_posted template
   }
 }

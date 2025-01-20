@@ -1,8 +1,7 @@
-import { Context, DynamoDBRecord, DynamoDBStreamEvent, StreamRecord } from 'aws-lambda';
+import { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
 import { AttributeValue as StreamAttributeValue } from 'aws-lambda/trigger/dynamodb-stream';
-import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
-import { dynamoDBMiddleware, logger } from '@blc-mono/members/application/middleware';
+import { dynamoDBMiddleware } from '@blc-mono/members/application/middleware';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 import { BrazeEventsService } from '@blc-mono/members/application/events/BrazeEventsService';
@@ -13,15 +12,12 @@ import { SystemEventsService } from '@blc-mono/members/application/events/System
 
 type StreamRecordTypes = 'PROFILE' | 'APPLICATION' | 'CARD';
 
-export const unwrappedHandler = async (
-  event: DynamoDBStreamEvent,
-  context: Context,
-): Promise<void> => {
-  if (getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_GLOBAL) === 'true') {
-    event.Records.forEach((record) => {
-      processDynamoDBRecord(record);
-    });
-  }
+export const unwrappedHandler = async (event: DynamoDBStreamEvent): Promise<void> => {
+  if (getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_GLOBAL) !== 'true') return;
+
+  event.Records.forEach((record) => {
+    processDynamoDBRecord(record);
+  });
 };
 
 const processDynamoDBRecord = (record: DynamoDBRecord) => {

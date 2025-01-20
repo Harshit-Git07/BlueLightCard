@@ -64,7 +64,7 @@ export class EmailService {
       case 'auth0_verification':
         await this.triggerAuth0Email(payload);
         break;
-      default:
+      default: {
         const emailTypesVerification = [
           'activation_email_new_journey',
           'activation_email',
@@ -85,6 +85,7 @@ export class EmailService {
         }
         await this.sendViaSes(emailType, payload);
         break;
+      }
     }
   }
 

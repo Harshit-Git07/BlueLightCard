@@ -1,40 +1,36 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '../../../middleware';
 import MarketingService from '@blc-mono/members/application/services/marketingService';
 import { BrazeAttributesModel } from '@blc-mono/members/application/models/brazeAttributesModel';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { BrazeUpdateModel } from '@blc-mono/members/application/models/brazeUpdateModel';
+import { isMarketingPreferencesEnvironment } from '@blc-mono/members/application/types/marketingPreferencesEnvironment';
 
 const service = new MarketingService();
 
-const unwrappedHandler = async (
-  event: APIGatewayProxyEvent,
-): Promise<Record<string, string> | any | void> => {
-  if (
-    event.pathParameters &&
-    event.pathParameters.memberId &&
-    event.path === `/admin/members/${event.pathParameters.memberId}/marketing/braze`
-  ) {
-    return getBrazeAttributes(event);
+const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<unknown> => {
+  if (isGetBrazeAttributesEvent(event)) {
+    return await getBrazeAttributes(event);
   }
-  if (
-    event.pathParameters &&
-    event.pathParameters.memberId &&
-    event.path ===
-      `/admin/members/${event.pathParameters.memberId}/marketing/preferences/${event.pathParameters.environment}`
-  ) {
-    return getMarketingPreferences(event);
+
+  if (isGetMarketingPreferencesEvent(event)) {
+    return await getMarketingPreferences(event);
   }
-  if (
-    event.pathParameters &&
-    event.pathParameters.memberId &&
-    event.path === `/admin/members/${event.pathParameters.memberId}/marketing/braze/update`
-  ) {
-    return updateMarketingPreferences(event);
+
+  if (isUpdateMarketingPreferencesEvent(event)) {
+    return await updateMarketingPreferences(event);
   }
 };
 
-const getBrazeAttributes = async (event: APIGatewayProxyEvent): Promise<Record<string, string>> => {
+function isGetBrazeAttributesEvent(event: APIGatewayProxyEvent) {
+  return (
+    event.pathParameters &&
+    event.pathParameters.memberId &&
+    event.path === `/admin/members/${event.pathParameters.memberId}/marketing/braze`
+  );
+}
+
+async function getBrazeAttributes(event: APIGatewayProxyEvent): Promise<Record<string, unknown>> {
   const { memberId } = event.pathParameters || {};
   if (!memberId) {
     throw new ValidationError('Member ID is required');
@@ -46,19 +42,41 @@ const getBrazeAttributes = async (event: APIGatewayProxyEvent): Promise<Record<s
 
   const model = BrazeAttributesModel.parse(JSON.parse(event.body));
   return await service.getAttributes(memberId, model.attributes);
-};
+}
 
-const getMarketingPreferences = async (event: APIGatewayProxyEvent): Promise<any> => {
+function isGetMarketingPreferencesEvent(event: APIGatewayProxyEvent) {
+  return (
+    event.pathParameters &&
+    event.pathParameters.memberId &&
+    event.path ===
+      `/admin/members/${event.pathParameters.memberId}/marketing/preferences/${event.pathParameters.environment}`
+  );
+}
+
+async function getMarketingPreferences(
+  event: APIGatewayProxyEvent,
+): Promise<Record<string, unknown> | Record<string, unknown>[]> {
   const { memberId, environment } = event.pathParameters || {};
   if (!memberId || !environment) {
     throw new ValidationError('Member ID and Environment is required');
-  } else if (environment !== 'web' && environment !== 'mobile') {
+  }
+
+  if (!isMarketingPreferencesEnvironment(environment)) {
     throw new ValidationError('Environment must be either "web" or "mobile"');
   }
-  return await service.getPreferences(memberId, environment);
-};
 
-const updateMarketingPreferences = async (event: APIGatewayProxyEvent) => {
+  return await service.getPreferences(memberId, environment);
+}
+
+function isUpdateMarketingPreferencesEvent(event: APIGatewayProxyEvent) {
+  return (
+    event.pathParameters &&
+    event.pathParameters.memberId &&
+    event.path === `/admin/members/${event.pathParameters.memberId}/marketing/braze/update`
+  );
+}
+
+async function updateMarketingPreferences(event: APIGatewayProxyEvent): Promise<void> {
   const { memberId } = event.pathParameters || {};
   if (!memberId) {
     throw new ValidationError('Member ID is required');
@@ -70,6 +88,6 @@ const updateMarketingPreferences = async (event: APIGatewayProxyEvent) => {
 
   const model = BrazeUpdateModel.parse(JSON.parse(event.body));
   await service.updateBraze(memberId, model.attributes);
-};
+}
 
 export const handler = middleware(unwrappedHandler);

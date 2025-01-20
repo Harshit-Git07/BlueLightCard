@@ -1,5 +1,5 @@
-import { IAuthorizer, RequestValidator } from 'aws-cdk-lib/aws-apigateway';
-import { ApiGatewayV1ApiFunctionRouteProps, Function, Stack } from 'sst/constructs';
+import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
+import { ApiGatewayV1ApiFunctionRouteProps, Function as SstFunction, Stack } from 'sst/constructs';
 import { SSTConstruct } from 'sst/constructs/Construct';
 import { Permissions } from 'sst/constructs/util/permission';
 import {
@@ -19,9 +19,9 @@ export type RouteProps<Request extends z.AnyZodObject, Response extends z.AnyZod
   stack: Stack;
   name: string;
   apiGatewayModelGenerator: ApiGatewayModelGenerator;
-  environment?: Partial<Record<MemberStackEnvironmentKeys, string>>;
+  environment?: Partial<Record<keyof typeof MemberStackEnvironmentKeys, string>>;
   handler?: string;
-  handlerFunction?: Function;
+  handlerFunction?: SstFunction;
   requestValidator: RequestValidator;
   requestModelType?: NamedZodType<Request>;
   responseModelType?: NamedZodType<Response>;
@@ -104,7 +104,7 @@ export class Route {
       cdk: {
         function:
           handlerFunction ??
-          new Function(stack, `${name}Function`, {
+          new SstFunction(stack, `${name}Function`, {
             bind: bind,
             permissions,
             handler,

@@ -22,6 +22,8 @@ describe('parseCsvFile', () => {
         if (event === 'end') {
           callback();
         }
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return this;
       }),
@@ -43,6 +45,7 @@ describe('parseCsvFile', () => {
           callback(mockError);
         }
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         return this;
       }),

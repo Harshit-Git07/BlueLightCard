@@ -1,4 +1,4 @@
-import { EbsDeviceVolumeType, IVpc, Port, SubnetType } from 'aws-cdk-lib/aws-ec2';
+import { EbsDeviceVolumeType, IVpc, Port } from 'aws-cdk-lib/aws-ec2';
 import { PolicyStatement, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { Domain, EngineVersion, TLSSecurityPolicy } from 'aws-cdk-lib/aws-opensearchservice';
 import { Stack } from 'sst/constructs';

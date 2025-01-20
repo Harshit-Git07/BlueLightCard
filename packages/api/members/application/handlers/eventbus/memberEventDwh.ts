@@ -1,4 +1,4 @@
-import { Context, EventBridgeEvent, StreamRecord } from 'aws-lambda';
+import { EventBridgeEvent, StreamRecord } from 'aws-lambda';
 import { FirehoseClient, PutRecordCommand } from '@aws-sdk/client-firehose';
 import { eventBusMiddleware, logger } from '../../middleware';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
@@ -11,8 +11,7 @@ import { unmarshallStreamImages } from '@blc-mono/members/application/utils/dyna
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 
 export const unwrappedHandler = async (
-  event: EventBridgeEvent<any, any>,
-  context: Context,
+  event: EventBridgeEvent<string, StreamRecord>,
 ): Promise<void> => {
   if (getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_DWH) !== 'true') {
     return;
@@ -20,10 +19,11 @@ export const unwrappedHandler = async (
 
   const dynamoStream: StreamRecord = event.detail;
   switch (event['detail-type']) {
-    case MemberEvent.DWH_PROFILE_CREATED:
-      const { oldImage: oldProfile, newImage: newProfile } =
-        unmarshallStreamImages<ProfileModel>(dynamoStream);
+    case MemberEvent.DWH_PROFILE_CREATED: {
+      const { newImage: newProfile } = unmarshallStreamImages<ProfileModel>(dynamoStream);
       const lastUpdated = getLastUpdated(dynamoStream);
+      if (!lastUpdated) return;
+
       sendDwhUserUuid(newProfile, lastUpdated);
       sendDwhUsersNew(newProfile, lastUpdated);
       sendDwhUsersConfirmed(newProfile, lastUpdated);
@@ -35,22 +35,23 @@ export const unwrappedHandler = async (
       sendDwhUserProfiles(newProfile, lastUpdated);
       sendDwhUserChanges(newProfile);
       break;
+    }
     case MemberEvent.DWH_PROFILE_UPDATED:
       isSendProfileUpdateToDwh(dynamoStream);
       break;
-    case MemberEvent.DWH_APPLICATION_CREATED:
-      const { oldImage: oldApplication, newImage: newApplication } =
-        unmarshallStreamImages<ApplicationModel>(dynamoStream);
+    case MemberEvent.DWH_APPLICATION_CREATED: {
+      const { newImage: newApplication } = unmarshallStreamImages<ApplicationModel>(dynamoStream);
       sendDwhPrivCardsActionsApplication(newApplication);
       break;
+    }
     case MemberEvent.DWH_APPLICATION_UPDATED:
       isSendApplicationUpdateToDwh(dynamoStream);
       break;
-    case MemberEvent.DWH_CARD_CREATED:
-      const { oldImage: oldCard, newImage: newCard } =
-        unmarshallStreamImages<CardModel>(dynamoStream);
+    case MemberEvent.DWH_CARD_CREATED: {
+      const { newImage: newCard } = unmarshallStreamImages<CardModel>(dynamoStream);
       sendDwhPrivCardsActionsCard(newCard);
       break;
+    }
     case MemberEvent.DWH_CARD_UPDATED:
       isSendCardUpdateToDwh(dynamoStream);
       break;
@@ -61,10 +62,10 @@ export const unwrappedHandler = async (
   }
 };
 
-const isSendProfileUpdateToDwh = (dynamoStream: StreamRecord | undefined) => {
-  const { oldImage: oldProfile, newImage: newProfile } =
-    unmarshallStreamImages<ProfileModel>(dynamoStream);
+function isSendProfileUpdateToDwh(dynamoStream: StreamRecord | undefined): void {
+  const { newImage: newProfile } = unmarshallStreamImages<ProfileModel>(dynamoStream);
   const lastUpdated = getLastUpdated(dynamoStream);
+  if (!lastUpdated) return;
 
   if (hasAttributeChanged('status', dynamoStream)) {
     sendDwhUsersConfirmed(newProfile, lastUpdated);
@@ -104,14 +105,18 @@ const isSendProfileUpdateToDwh = (dynamoStream: StreamRecord | undefined) => {
   ) {
     sendDwhUserChanges(newProfile);
   }
-};
+}
 
+// TODO: When implemlented remove this eslint disable
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isSendApplicationUpdateToDwh = (dynamoStream: StreamRecord | undefined) => {
-  // TODO - Pending conversation with DWH about revised app payload with no card #
+  // TODO: Pending conversation with DWH about revised app payload with no card #
 };
 
+// TODO: When implemlented remove this eslint disable
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isSendCardUpdateToDwh = (dynamoStream: StreamRecord | undefined) => {
-  // TODO - Pending conversation with DWH about revised card payload with new format
+  // TODO: Pending conversation with DWH about revised card payload with new format
 };
 
 const sendDwhUserUuid = (profile: ProfileModel | undefined, lastUpdated: string) => {
@@ -187,82 +192,79 @@ const sendDwhUsersServiceMember = (profile: ProfileModel | undefined, lastUpdate
   sendDwhFirehoseStream(firehoseStream, payload);
 };
 
-const sendDwhUsersTrustMember = (profile: ProfileModel | undefined, lastUpdated: string) => {
+function sendDwhUsersTrustMember(profile: ProfileModel | undefined, lastUpdated: string): void {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERSTRUSTMEMBER,
   );
 
-  const payload = {
+  sendDwhFirehoseStream(firehoseStream, {
     id: profile?.memberId,
     trustmember: profile?.employerId,
     last_updated: lastUpdated,
-  };
+  });
+}
 
-  sendDwhFirehoseStream(firehoseStream, payload);
-};
-
-const sendDwhUsersCounty = (profile: ProfileModel | undefined, lastUpdated: string) => {
+function sendDwhUsersCounty(profile: ProfileModel | undefined, lastUpdated: string): void {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERSCOUNTY,
   );
 
-  const payload = {
+  sendDwhFirehoseStream(firehoseStream, {
     id: profile?.memberId,
     county: profile?.county,
     last_updated: lastUpdated,
-  };
+  });
+}
 
-  sendDwhFirehoseStream(firehoseStream, payload);
-};
-
-const sendDwhUsersEmail = (profile: ProfileModel | undefined, lastUpdated: string) => {
+function sendDwhUsersEmail(profile: ProfileModel | undefined, lastUpdated: string): void {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERSEMAIL,
   );
 
-  const payload = {
+  sendDwhFirehoseStream(firehoseStream, {
     id: profile?.memberId,
     email: profile?.email,
     last_updated: lastUpdated,
-  };
+  });
+}
 
-  sendDwhFirehoseStream(firehoseStream, payload);
-};
-
-const sendDwhUserProfiles = (profile: ProfileModel | undefined, lastUpdated: string) => {
+function sendDwhUserProfiles(profile: ProfileModel | undefined, lastUpdated: string): void {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERPROFILES,
   );
 
-  const payload = {
+  sendDwhFirehoseStream(firehoseStream, {
     id: profile?.memberId,
     dob: profile?.dateOfBirth,
     gender: profile?.gender,
     mobile: profile?.phoneNumber,
     last_updated: lastUpdated,
-  };
+  });
+}
 
-  sendDwhFirehoseStream(firehoseStream, payload);
-};
-
-const sendDwhUserChanges = (profile: ProfileModel | undefined) => {
+// TODO: Verify what this is supposed to do, at the time of adding this eslint disable it didn't do very much...
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function sendDwhUserChanges(profile: ProfileModel | undefined): void {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERCHANGES,
   );
 
-  const payload = {
-    id: profile?.memberId,
-    ip: profile?.lastIpAddress,
-    browser: 'TBC',
-    changetype: 'TBC',
-    details: 'TBC',
-    time: profile?.lastLogin,
-  };
+  // TODO: Can this be removed? It is unused...
+  // const payload = {
+  //   id: profile?.memberId,
+  //   ip: profile?.lastIpAddress,
+  //   browser: 'TBC',
+  //   changetype: 'TBC',
+  //   details: 'TBC',
+  //   time: profile?.lastLogin,
+  // };
 
   sendDwhFirehoseStream(firehoseStream, {});
-};
+}
 
-const sendDwhPrivCardsActionsApplication = (application: ApplicationModel | undefined) => {
+// TODO: Verify what this is supposed to do, at the time of adding this eslint disable it didn't do very much...
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function sendDwhPrivCardsActionsApplication(application: ApplicationModel | undefined): void {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_PRIVCARDSACTIONS,
   );
@@ -270,9 +272,11 @@ const sendDwhPrivCardsActionsApplication = (application: ApplicationModel | unde
   //TODO - update priv card actions for promo and id upload etc
 
   sendDwhFirehoseStream(firehoseStream, {});
-};
+}
 
-const sendDwhPrivCardsActionsCard = (card: CardModel | undefined) => {
+// TODO: Verify what this is supposed to do, at the time of adding this eslint disable it didn't do very much...
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function sendDwhPrivCardsActionsCard(card: CardModel | undefined): void {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_PRIVCARDSACTIONS,
   );
@@ -280,9 +284,9 @@ const sendDwhPrivCardsActionsCard = (card: CardModel | undefined) => {
   //TODO - update priv card actions for status change for batch, print, post etc
 
   sendDwhFirehoseStream(firehoseStream, {});
-};
+}
 
-const sendDwhFirehoseStream = (streamName: string, payload: object) => {
+function sendDwhFirehoseStream(streamName: string, payload: object): void {
   const client = new FirehoseClient();
   const input = {
     DeliveryStreamName: streamName,
@@ -292,14 +296,14 @@ const sendDwhFirehoseStream = (streamName: string, payload: object) => {
   };
 
   const command = new PutRecordCommand(input);
-  const response = client.send(command).catch((err) => {
+  client.send(command).catch((err) => {
     logger.error(err);
   });
-};
+}
 
-const getLastUpdated = (dynamoStream: StreamRecord | undefined) => {
-  const { newImage: newImage } = <Record<string, any>>unmarshallStreamImages(dynamoStream);
-  return newImage['lastUpdated'];
-};
+function getLastUpdated(dynamoStream: StreamRecord | undefined): string | undefined {
+  const { newImage: newImage } = unmarshallStreamImages<Record<string, string>>(dynamoStream);
+  return newImage?.['lastUpdated'];
+}
 
 export const handler = eventBusMiddleware(unwrappedHandler);

@@ -5,6 +5,7 @@ import { BrazeEventsService } from '@blc-mono/members/application/events/BrazeEv
 import { DwhEventsService } from '@blc-mono/members/application/events/DwhEventsService';
 import { EmailEventsService } from '@blc-mono/members/application/events/EmailEventsService';
 import { LegacyEventsService } from '@blc-mono/members/application/events/LegacyEventsService';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/core/utils/getEnv');
 jest.mock('@blc-mono/members/application/events/BrazeEventsService');
@@ -55,12 +56,10 @@ describe('eventDispatcher handler', () => {
     StreamViewType: 'NEW_AND_OLD_IMAGES',
   };
 
-  const context = {} as any;
-
-  let mockIsSendProfileCreateToBraze = jest.fn();
-  let mockIsSendProfileCreateToDwh = jest.fn();
-  let mockIsSendProfileCreateToEmail = jest.fn();
-  let mockIsSendProfileCreateToLegacy = jest.fn();
+  const mockIsSendProfileCreateToBraze = jest.fn();
+  const mockIsSendProfileCreateToDwh = jest.fn();
+  const mockIsSendProfileCreateToEmail = jest.fn();
+  const mockIsSendProfileCreateToLegacy = jest.fn();
 
   beforeEach(() => {
     (getEnv as jest.Mock).mockImplementation((name: string) => {
@@ -81,7 +80,7 @@ describe('eventDispatcher handler', () => {
     mockIsSendProfileCreateToEmail.mockResolvedValue(undefined);
     mockIsSendProfileCreateToLegacy.mockResolvedValue(undefined);
 
-    await handler(mockEvent, context);
+    await handler(mockEvent);
 
     expect(mockIsSendProfileCreateToBraze).toHaveBeenCalledWith(mockResponse);
     expect(mockIsSendProfileCreateToDwh).toHaveBeenCalledWith(mockResponse);
@@ -90,6 +89,6 @@ describe('eventDispatcher handler', () => {
   });
 });
 
-async function handler(event: DynamoDBStreamEvent, context: any): Promise<void> {
-  return (await import('../eventDispatcher')).handler(event, context);
+async function handler(event: DynamoDBStreamEvent): Promise<void> {
+  return await (await import('../eventDispatcher')).handler(event, emptyContextStub);
 }

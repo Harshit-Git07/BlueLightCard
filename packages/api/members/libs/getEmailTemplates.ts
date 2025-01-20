@@ -9,7 +9,7 @@ export async function getEmailTemplate(
   payload: EmailPayload,
 ) {
   const s3 = new S3Client();
-  if (!emailTypes[brand].hasOwnProperty(emailType)) {
+  if (!Object.keys(emailTypes[brand]).includes(emailType)) {
     return undefined;
   }
 

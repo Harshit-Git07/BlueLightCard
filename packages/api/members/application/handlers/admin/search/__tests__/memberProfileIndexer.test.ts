@@ -1,5 +1,5 @@
 import * as getEnv from '@blc-mono/core/utils/getEnv';
-import { Context, SQSEvent, SQSRecord } from 'aws-lambda';
+import { SQSEvent, SQSRecord } from 'aws-lambda';
 import {
   getDocumentFromApplicationRecord,
   getDocumentFromCardRecord,
@@ -18,6 +18,7 @@ import { OrganisationModel } from '@blc-mono/members/application/models/organisa
 import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
 import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
 import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/handlers/admin/search/service/parseDocumentFromRecord');
 jest.mock('@blc-mono/core/utils/getEnv');
@@ -65,7 +66,6 @@ const getOrganisationMock = jest.spyOn(OrganisationService.prototype, 'getOrgani
 const getEmployerMock = jest.spyOn(OrganisationService.prototype, 'getEmployer');
 
 describe('memberProfileIndexer handler', () => {
-  const context = {} as Context;
   let upsertDocumentsToIndexSpy: jest.SpyInstance;
 
   beforeEach(() => {
@@ -90,7 +90,7 @@ describe('memberProfileIndexer handler', () => {
     });
     const event = buildSQSEventFor(PROFILE);
 
-    await handler(event, context);
+    await handler(event);
 
     expect(getDocumentFromProfileRecordMock).toHaveBeenCalledWith({
       dynamodb: {
@@ -109,7 +109,7 @@ describe('memberProfileIndexer handler', () => {
     });
     const event = buildSQSEventFor(PROFILE);
 
-    await handler(event, context);
+    await handler(event);
 
     expect(createMemberProfileOpenSearchDocumentsMock).toHaveBeenCalledWith([
       {
@@ -129,7 +129,7 @@ describe('memberProfileIndexer handler', () => {
     getEmployerMock.mockRejectedValue(new Error('Employer not found'));
     const event = buildSQSEventFor(PROFILE);
 
-    await handler(event, context);
+    await handler(event);
 
     expect(createMemberProfileOpenSearchDocumentsMock).toHaveBeenCalledWith([
       {
@@ -148,7 +148,7 @@ describe('memberProfileIndexer handler', () => {
     getOrganisationMock.mockRejectedValue(new Error('Employer not found'));
     const event = buildSQSEventFor(PROFILE);
 
-    await handler(event, context);
+    await handler(event);
 
     expect(createMemberProfileOpenSearchDocumentsMock).toHaveBeenCalledWith([
       {
@@ -171,7 +171,7 @@ describe('memberProfileIndexer handler', () => {
     });
     const event = buildSQSEventFor(PROFILE);
 
-    await handler(event, context);
+    await handler(event);
 
     expect(createMemberProfileOpenSearchDocumentsMock).toHaveBeenCalledWith([
       {
@@ -187,7 +187,7 @@ describe('memberProfileIndexer handler', () => {
     getDocumentFromApplicationRecordMock.mockReturnValue(memberDocument);
     const event = buildSQSEventFor(APPLICATION);
 
-    await handler(event, context);
+    await handler(event);
 
     expect(getDocumentFromApplicationRecordMock).toHaveBeenCalledWith({
       dynamodb: {
@@ -202,7 +202,7 @@ describe('memberProfileIndexer handler', () => {
     getDocumentFromCardRecordMock.mockReturnValue(memberDocument);
     const event = buildSQSEventFor(CARD);
 
-    await handler(event, context);
+    await handler(event);
 
     expect(getDocumentFromCardRecordMock).toHaveBeenCalledWith({
       dynamodb: {
@@ -216,13 +216,13 @@ describe('memberProfileIndexer handler', () => {
   it('should throw an error if sortKey is not recognised', async () => {
     const event = buildSQSEventFor('Unknown');
 
-    await expect(handler(event, context)).rejects.toThrow('Unknown sortKey prefix: Unknown#1234');
+    await expect(handler(event)).rejects.toThrow('Unknown sortKey prefix: Unknown#1234');
   });
 
   it('should throw an error if no sortKey on record', async () => {
     const event = buildSQSEventWithoutSortKey();
 
-    await expect(handler(event, context)).rejects.toThrow('Stream record missing sortKey: sk');
+    await expect(handler(event)).rejects.toThrow('Stream record missing sortKey: sk');
   });
 
   it('should call opensearch service with documents', async () => {
@@ -237,7 +237,7 @@ describe('memberProfileIndexer handler', () => {
     ]);
     const event = buildSQSEventFor(PROFILE);
 
-    await handler(event, context);
+    await handler(event);
 
     expect(upsertDocumentsToIndexSpy).toHaveBeenCalledWith(
       [openSearchBulkCommand, openSearchBulkCommand],
@@ -275,6 +275,6 @@ const buildSQSEventWithoutSortKey = (): SQSEvent => {
   };
 };
 
-async function handler(event: SQSEvent, context: Context) {
-  return (await import('../memberProfileIndexer')).handler(event, context);
+async function handler(event: SQSEvent) {
+  return await (await import('../memberProfileIndexer')).handler(event, emptyContextStub);
 }

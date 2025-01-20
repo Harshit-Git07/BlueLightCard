@@ -1,6 +1,5 @@
 import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { PromoCodeResponseModel } from '@blc-mono/members/application/models/promoCodeModel';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { middleware } from '@blc-mono/members/application/middleware';
 import { UpdateApplicationModel } from '@blc-mono/members/application/models/applicationModel';

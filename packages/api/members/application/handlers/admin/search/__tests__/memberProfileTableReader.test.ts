@@ -1,4 +1,3 @@
-import { Context } from 'aws-lambda';
 import { Repository } from '@blc-mono/members/application/repositories/repository';
 import { ScanCommandOutput } from '@aws-sdk/lib-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
@@ -8,6 +7,7 @@ import {
   getMemberProfilesTableName,
   getSeedSearchIndexTableQueueUrl,
 } from '../getMemberProfileResources';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/repositories/repository');
 jest.mock('../getMemberProfileResources');
@@ -42,8 +42,6 @@ const mockScanSecondResponse: ScanCommandOutput = {
   $metadata: {},
 };
 
-const context = {} as Context;
-
 describe('Read member profile data', () => {
   beforeEach(() => {
     Repository.prototype.scan = jest
@@ -55,7 +53,7 @@ describe('Read member profile data', () => {
   });
 
   it('should scan table multiple times', async () => {
-    await handler(context);
+    await handler();
 
     expect(Repository.prototype.scan).toHaveBeenCalledTimes(2);
     expect(Repository.prototype.scan).toHaveBeenCalledWith({
@@ -71,7 +69,7 @@ describe('Read member profile data', () => {
   });
 
   it('should send sqs event', async () => {
-    await handler(context);
+    await handler();
 
     expect(mockSqsClient).toHaveReceivedNthCommandWith(1, SendMessageCommand, {
       QueueUrl: 'queueUrl',
@@ -98,6 +96,6 @@ describe('Read member profile data', () => {
   });
 });
 
-async function handler(context: Context) {
-  return (await import('../memberProfileTableReader')).handler(context);
+async function handler() {
+  return await (await import('../memberProfileTableReader')).handler(emptyContextStub);
 }

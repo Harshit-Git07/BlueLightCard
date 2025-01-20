@@ -9,25 +9,13 @@ import { PromoCodeModel } from '@blc-mono/members/application/models/promoCodeMo
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
 import { PromoCodeType } from '@blc-mono/members/application/models/enums/PromoCodeType';
-import {
-  ApplicationModel,
-  ApplyPromoCodeApplicationModel,
-} from '@blc-mono/members/application/models/applicationModel';
-import {
-  applicationKey,
-  EMPLOYER,
-  employerKey,
-  ID_REQUIREMENT,
-  memberKey,
-  ORGANISATION,
-  organisationKey,
-  promoCodeKey,
-  Repository,
-} from './repository';
+import { ApplyPromoCodeApplicationModel } from '@blc-mono/members/application/models/applicationModel';
+import { applicationKey, memberKey, promoCodeKey, Repository } from './repository';
 
 export class PromoCodesRepository extends Repository {
   constructor(
     dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     private readonly tableName: string = Table.memberProfiles.tableName,
   ) {
@@ -51,7 +39,7 @@ export class PromoCodesRepository extends Repository {
 
     const queryResult = await this.dynamoDB.send(new QueryCommand(params));
 
-    return this.getValidatedResultAsModel(queryResult);
+    return await this.getValidatedResultAsModel(queryResult);
   }
 
   async getSingleUseParentPromoCode(promoCodeId: string): Promise<PromoCodeModel[] | null> {
@@ -66,7 +54,7 @@ export class PromoCodesRepository extends Repository {
 
     const queryResult = await this.dynamoDB.send(new QueryCommand(params));
 
-    return this.getValidatedResultAsModel(queryResult);
+    return await this.getValidatedResultAsModel(queryResult);
   }
 
   async updatePromoCodeUsage(
@@ -110,7 +98,7 @@ export class PromoCodesRepository extends Repository {
       },
     };
 
-    let [updateExpression, expressionAttributeNames, expressionAttributeValues] =
+    const [updateExpression, expressionAttributeNames, expressionAttributeValues] =
       this.getPartialUpdateExpressionValues(applyPromoCodeApplicationModel);
     const applicationUpdateParams = {
       Update: {

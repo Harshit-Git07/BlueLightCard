@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '../../../middleware';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { BatchService } from '@blc-mono/members/application/services/batchService';

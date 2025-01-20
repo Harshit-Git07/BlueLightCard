@@ -1,10 +1,7 @@
-// @ts-nocheck
-
-import axios from 'axios';
-import BrazeClient from '../brazeClient';
+import axios, { AxiosResponse } from 'axios';
+import BrazeClient, { CheckListResponse } from '../brazeClient';
 import { NotFoundError } from '../../errors/NotFoundError';
 
-//mocks
 jest.mock('@aws-lambda-powertools/logger');
 jest.mock('axios');
 
@@ -21,9 +18,9 @@ describe('Braze class tests', () => {
         message: 'success',
       },
     };
-
     (axios.post as jest.Mock).mockResolvedValue(mockResponse);
     const braze = new BrazeClient();
+
     try {
       await braze.getMarketingPreferences('invalidMemberId', 'web');
       fail('Expected NotFoundError');
@@ -39,9 +36,9 @@ describe('Braze class tests', () => {
         message: 'success',
       },
     };
-
     (axios.post as jest.Mock).mockResolvedValue(mockResponse);
     const braze = new BrazeClient();
+
     try {
       await braze.getAttributes('invalidMemberId', ['att1', 'att2']);
       fail('Expected NotFoundError');
@@ -49,7 +46,6 @@ describe('Braze class tests', () => {
       expect(error).toBeInstanceOf(NotFoundError);
     }
   });
-  //   happy paths
 
   it('constructor works and returns correctly', async () => {
     const braze = new BrazeClient();
@@ -64,38 +60,41 @@ describe('Braze class tests', () => {
   });
 
   it('retrieving marketing preferences - web', async () => {
-    const mockResponse = {
-      data: {
-        users: [
-          {
-            custom_attributes: {
-              0: 'blank',
-              card_holder: false,
-              card_requested: '2024-04-15T10:31:22.000Z',
-              card_status: 1,
-              sign_up_date: '2024-04-15T10:31:22.000Z',
-              marketing_opt_outs: ['Email marketing', 'SMS Marketing', 'Push notifications'],
-              sms_subscribe: 'unsubscribed',
-              county: 'Leicestershire',
-              service: 'AMBU',
-              trust: 'Air Ambulance',
-              marketing_opt_ins: ['Analytics', 'NightwatchTests', 'Personalised offers'],
-              analytics: 'opted_in',
-              personalised_offers: 'opted_in',
-              smsSubscriptionGroup: 'unused - was for testing',
-            },
-            push_subscribe: 'unsubscribed',
-            push_unsubscribed_at: '2024-10-17T09:50:54.707Z',
-            email_subscribe: 'unsubscribed',
-            email_unsubscribed_at: '2024-11-22T12:12:24.712Z',
+    const data: CheckListResponse = {
+      users: [
+        {
+          custom_attributes: {
+            0: 'blank',
+            card_holder: false,
+            card_requested: '2024-04-15T10:31:22.000Z',
+            card_status: 1,
+            sign_up_date: '2024-04-15T10:31:22.000Z',
+            marketing_opt_outs: ['Email marketing', 'SMS Marketing', 'Push notifications'],
+            sms_subscribe: 'unsubscribed',
+            county: 'Leicestershire',
+            service: 'AMBU',
+            trust: 'Air Ambulance',
+            marketing_opt_ins: ['Analytics', 'NightwatchTests', 'Personalised offers'],
+            analytics: 'opted_in',
+            personalised_offers: 'opted_in',
+            smsSubscriptionGroup: 'unused - was for testing',
           },
-        ],
-        message: 'success',
-      },
+          push_subscribe: 'unsubscribed',
+          push_unsubscribed_at: '2024-10-17T09:50:54.707Z',
+          email_subscribe: 'unsubscribed',
+          email_unsubscribed_at: '2024-11-22T12:12:24.712Z',
+        },
+      ],
+      message: 'success',
     };
+    const mockResponse = {
+      data,
+    } as unknown as AxiosResponse<CheckListResponse>;
     (axios.post as jest.Mock).mockResolvedValue(mockResponse);
+
     const braze = new BrazeClient();
     const result = await braze.getMarketingPreferences('correctMemberId', 'web');
+
     expect(result).toEqual({
       sms_subscribe: 'unsubscribed',
       analytics: 'opted_in',
@@ -106,38 +105,41 @@ describe('Braze class tests', () => {
   });
 
   it('retrieving marketing preferences - mobile', async () => {
-    const mockResponse = {
-      data: {
-        users: [
-          {
-            custom_attributes: {
-              0: 'blank',
-              card_holder: false,
-              card_requested: '2024-04-15T10:31:22.000Z',
-              card_status: 1,
-              sign_up_date: '2024-04-15T10:31:22.000Z',
-              marketing_opt_outs: ['Email marketing', 'SMS Marketing', 'Push notifications'],
-              sms_subscribe: 'unsubscribed',
-              county: 'Leicestershire',
-              service: 'AMBU',
-              trust: 'Air Ambulance',
-              marketing_opt_ins: ['Analytics', 'NightwatchTests', 'Personalised offers'],
-              analytics: 'opted_in',
-              personalised_offers: 'opted_in',
-              smsSubscriptionGroup: 'unused - was for testing',
-            },
-            push_subscribe: 'unsubscribed',
-            push_unsubscribed_at: '2024-10-17T09:50:54.707Z',
-            email_subscribe: 'unsubscribed',
-            email_unsubscribed_at: '2024-11-22T12:12:24.712Z',
+    const data: CheckListResponse = {
+      users: [
+        {
+          custom_attributes: {
+            0: 'blank',
+            card_holder: false,
+            card_requested: '2024-04-15T10:31:22.000Z',
+            card_status: 1,
+            sign_up_date: '2024-04-15T10:31:22.000Z',
+            marketing_opt_outs: ['Email marketing', 'SMS Marketing', 'Push notifications'],
+            sms_subscribe: 'unsubscribed',
+            county: 'Leicestershire',
+            service: 'AMBU',
+            trust: 'Air Ambulance',
+            marketing_opt_ins: ['Analytics', 'NightwatchTests', 'Personalised offers'],
+            analytics: 'opted_in',
+            personalised_offers: 'opted_in',
+            smsSubscriptionGroup: 'unused - was for testing',
           },
-        ],
-        message: 'success',
-      },
+          push_subscribe: 'unsubscribed',
+          push_unsubscribed_at: '2024-10-17T09:50:54.707Z',
+          email_subscribe: 'unsubscribed',
+          email_unsubscribed_at: '2024-11-22T12:12:24.712Z',
+        },
+      ],
+      message: 'success',
     };
+    const mockResponse: AxiosResponse<CheckListResponse> = {
+      data,
+    } as unknown as AxiosResponse<CheckListResponse>;
     (axios.post as jest.Mock).mockResolvedValue(mockResponse);
+
     const braze = new BrazeClient();
     const result = await braze.getMarketingPreferences('correctMemberId', 'mobile');
+
     expect(result).toEqual([
       {
         optionId: '1',
@@ -208,38 +210,41 @@ describe('Braze class tests', () => {
   });
 
   it('get attributes from braze', async () => {
-    const mockResponse = {
-      data: {
-        users: [
-          {
-            custom_attributes: {
-              0: 'blank',
-              card_holder: false,
-              card_requested: '2024-04-15T10:31:22.000Z',
-              card_status: 1,
-              sign_up_date: '2024-04-15T10:31:22.000Z',
-              marketing_opt_outs: ['Email marketing', 'SMS Marketing', 'Push notifications'],
-              sms_subscribe: 'unsubscribed',
-              county: 'Leicestershire',
-              service: 'AMBU',
-              trust: 'Air Ambulance',
-              marketing_opt_ins: ['Analytics', 'NightwatchTests', 'Personalised offers'],
-              analytics: 'opted_in',
-              personalised_offers: 'opted_in',
-              smsSubscriptionGroup: 'unused - was for testing',
-            },
-            push_subscribe: 'unsubscribed',
-            push_unsubscribed_at: '2024-10-17T09:50:54.707Z',
-            email_subscribe: 'unsubscribed',
-            email_unsubscribed_at: '2024-11-22T12:12:24.712Z',
+    const data: CheckListResponse = {
+      users: [
+        {
+          custom_attributes: {
+            0: 'blank',
+            card_holder: false,
+            card_requested: '2024-04-15T10:31:22.000Z',
+            card_status: 1,
+            sign_up_date: '2024-04-15T10:31:22.000Z',
+            marketing_opt_outs: ['Email marketing', 'SMS Marketing', 'Push notifications'],
+            sms_subscribe: 'unsubscribed',
+            county: 'Leicestershire',
+            service: 'AMBU',
+            trust: 'Air Ambulance',
+            marketing_opt_ins: ['Analytics', 'NightwatchTests', 'Personalised offers'],
+            analytics: 'opted_in',
+            personalised_offers: 'opted_in',
+            smsSubscriptionGroup: 'unused - was for testing',
           },
-        ],
-        message: 'success',
-      },
+          push_subscribe: 'unsubscribed',
+          push_unsubscribed_at: '2024-10-17T09:50:54.707Z',
+          email_subscribe: 'unsubscribed',
+          email_unsubscribed_at: '2024-11-22T12:12:24.712Z',
+        },
+      ],
+      message: 'success',
     };
+    const mockResponse = {
+      data,
+    } as unknown as AxiosResponse<CheckListResponse>;
     (axios.post as jest.Mock).mockResolvedValue(mockResponse);
+
     const braze = new BrazeClient();
     const result = await braze.getAttributes('correctMemberId', ['push_subscribe', 'analytics']);
+
     expect(result).toEqual({
       push_subscribe: 'unsubscribed',
       analytics: 'opted_in',
@@ -253,11 +258,13 @@ describe('Braze class tests', () => {
       },
     };
     (axios.post as jest.Mock).mockResolvedValue(mockResponse);
+
     const braze = new BrazeClient();
     const result = await braze.updateBraze('correctMemberId', {
       push_subscribe: 'opted_in',
       analytics: 'unsubscribed',
     });
+
     expect(result).toEqual(undefined);
   });
 
@@ -267,10 +274,8 @@ describe('Braze class tests', () => {
         message: 'success',
       },
     };
-
     process.env.BRAZE_SERVICE_JSON =
       '{"BRAZE_SERVICE_API_KEY":"", "BRAZE_SERVICE_SERVICE_SMS_CAMPAIGN_ID":"", "BRAZE_SERVICE_MARKETING_SMS_CAMPAIGN_ID":"sms"}';
-
     (axios.post as jest.Mock).mockResolvedValue(mockResponse);
 
     const braze = new BrazeClient();
@@ -278,6 +283,7 @@ describe('Braze class tests', () => {
       sms_subscribe: 'opted_in',
       analytics: 'unsubscribed',
     });
+
     expect(result).toEqual(undefined);
   });
 });

@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '../../../middleware';
 import MarketingService from '@blc-mono/members/application/services/marketingService';
 import { BrazeAttributesModel } from '@blc-mono/members/application/models/brazeAttributesModel';
@@ -7,7 +7,7 @@ import { ValidationError } from '@blc-mono/members/application/errors/Validation
 
 const service = new MarketingService();
 
-const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<Record<string, string>> => {
+const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<Record<string, unknown>> => {
   const { memberId } = event.pathParameters || {};
   if (!memberId) {
     throw new ValidationError('Member ID is required');

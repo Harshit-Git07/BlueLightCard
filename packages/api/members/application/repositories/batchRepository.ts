@@ -26,6 +26,7 @@ import { NotFoundError } from '../errors/NotFoundError';
 export class BatchRepository extends Repository {
   constructor(
     dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     private readonly tableName: string = Table.memberAdmin.tableName,
   ) {

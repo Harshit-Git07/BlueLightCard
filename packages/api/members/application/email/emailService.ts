@@ -22,63 +22,63 @@ export class EmailService {
     //  generic template lookup... at some point...
     const body = emailChangeRequestBody({ subject: subject });
 
-    return this.sendEmail(emailAddress, subject, body);
+    await this.sendEmail(emailAddress, subject, body);
   }
 
   public async sendEmailSignup(emailAddress: string): Promise<void> {
     const subject = 'Welcome to Blue Light Card';
     const body = this.getEmailBody('signup-email');
 
-    return this.sendEmail(emailAddress, subject, body);
+    await this.sendEmail(emailAddress, subject, body);
   }
 
   public async sendEmailTrustedDomain(emailAddress: string): Promise<void> {
     const subject = 'Trusted Domain Verification Request';
     const body = this.getEmailBody('trusted-domain');
 
-    return this.sendEmail(emailAddress, subject, body);
+    await this.sendEmail(emailAddress, subject, body);
   }
 
   public async sendEmailPromoPayment(emailAddress: string): Promise<void> {
     const subject = 'Promo Code Payment Accepted';
     const body = this.getEmailBody('promo-code-payment');
 
-    return this.sendEmail(emailAddress, subject, body);
+    await this.sendEmail(emailAddress, subject, body);
   }
 
   public async sendEmailPaymentMade(emailAddress: string): Promise<void> {
     const subject = 'Payment Made';
     const body = this.getEmailBody('payment-made');
 
-    return this.sendEmail(emailAddress, subject, body);
+    await this.sendEmail(emailAddress, subject, body);
   }
 
   public async sendEmailMembershipLive(emailAddress: string): Promise<void> {
     const subject = 'Membership Live';
     const body = this.getEmailBody('membership-live');
 
-    return this.sendEmail(emailAddress, subject, body);
+    await this.sendEmail(emailAddress, subject, body);
   }
 
   public async sendEmailCardCreated(emailAddress: string): Promise<void> {
     const subject = 'Card Created';
     const body = this.getEmailBody('card-created');
 
-    return this.sendEmail(emailAddress, subject, body);
+    await this.sendEmail(emailAddress, subject, body);
   }
 
   public async sendEmailCardPosted(emailAddress: string): Promise<void> {
     const subject = 'Card Posted';
     const body = this.getEmailBody('card-posted');
 
-    return this.sendEmail(emailAddress, subject, body);
+    await this.sendEmail(emailAddress, subject, body);
   }
 
   public async sendEmailRenewal(emailAddress: string): Promise<void> {
     const subject = 'Renewal Notice/Completion';
     const body = this.getEmailBody('renewal-notice');
 
-    return this.sendEmail(emailAddress, subject, body);
+    await this.sendEmail(emailAddress, subject, body);
   }
 
   private async sendEmail(emailAddress: string, subject: string, body: string): Promise<void> {

@@ -11,3 +11,4 @@ export const BrazeUpdateModel = createZodNamedType(
 );
 
 export type BrazeUpdateModel = z.infer<typeof BrazeUpdateModel>;
+export type BrazeUpdateAttributeValue = z.infer<typeof AttributeValue>;

@@ -39,6 +39,7 @@ export class ApplicationService {
     private readonly profileService: ProfileService = new ProfileService(),
     private readonly promoCodeService: PromoCodesService = new PromoCodesService(),
     private readonly s3Client: S3 = new S3({ region: process.env.REGION ?? 'eu-west-2' }),
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     private readonly uploadBucketName: string = Bucket.documentUploadBucket.bucketName,
   ) {}

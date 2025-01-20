@@ -7,6 +7,8 @@ import {
 } from '@blc-mono/members/application/auth0/auth0Clients';
 
 export class Auth0ClientService {
+  // TODO: Implement this and then remove the eslint disable
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async changeEmail(memberId: string, newEmail: string): Promise<void> {}
 
   async changePassword(memberAuth0Id: string, newPassword: string): Promise<void> {

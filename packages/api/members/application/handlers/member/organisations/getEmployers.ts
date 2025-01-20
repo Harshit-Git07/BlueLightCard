@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '@blc-mono/members/application/middleware';
 import { EmployerModel } from '@blc-mono/members/application/models/employerModel';
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
@@ -13,9 +13,10 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<EmployerMo
   }
 
   const redactedSchema = EmployerModel.omit({ trustedDomains: true });
-  return (await service.getEmployers(organisationId)).map((employer) =>
-    redactedSchema.parse(employer),
-  );
+  const employers = await service.getEmployers(organisationId);
+  return employers.map((employer) => {
+    return redactedSchema.parse(employer);
+  });
 };
 
 export const handler = middleware(unwrappedHandler);

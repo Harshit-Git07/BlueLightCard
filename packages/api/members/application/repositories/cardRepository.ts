@@ -9,7 +9,7 @@ import {
 import { CardModel } from '../models/cardModel';
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
-import { CARD, cardKey, MEMBER, memberKey, PROFILE } from './repository';
+import { CARD, cardKey, memberKey } from './repository';
 import { NotFoundError } from '../errors/NotFoundError';
 import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
 
@@ -23,6 +23,7 @@ export interface UpsertCardOptions {
 export class CardRepository {
   constructor(
     private readonly dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     private readonly tableName: string = Table.memberProfiles.tableName,
   ) {}
@@ -108,7 +109,7 @@ export class CardRepository {
     isInsert = false,
   }: UpsertCardOptions): Promise<void> {
     const updateExpression: string[] = ['memberId = :memberId', 'cardNumber = :cardNumber'];
-    const expressionAttributeValues: { [key: string]: any } = {
+    const expressionAttributeValues: Record<string, unknown> = {
       ':memberId': memberId,
       ':cardNumber': cardNumber,
     };

@@ -1,7 +1,8 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
 import { UpdateApplicationModel } from '@blc-mono/members/application/models/applicationModel';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/applicationService');
 
@@ -14,8 +15,7 @@ describe('updateApplication handler', () => {
   const event = {
     pathParameters: { memberId, applicationId },
     body: JSON.stringify(application),
-  } as any as APIGatewayProxyEvent;
-  const context = {} as Context;
+  } as unknown as APIGatewayProxyEvent;
 
   beforeEach(() => {
     ApplicationService.prototype.updateApplication = jest.fn();
@@ -23,7 +23,9 @@ describe('updateApplication handler', () => {
 
   it('should return 400 if request body is missing', async () => {
     const event = {} as unknown as APIGatewayProxyEvent;
-    const response = await handler(event, context);
+
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(400);
   });
 
@@ -32,13 +34,14 @@ describe('updateApplication handler', () => {
       eventWithApplication({
         promoCode: 'NHS12345',
       }),
-      context,
     );
+
     expect(response.statusCode).toEqual(400);
   });
 
   it('should return 204 on successful update', async () => {
-    const response = await handler(event, context);
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(204);
   });
 
@@ -48,13 +51,10 @@ describe('updateApplication handler', () => {
     return {
       pathParameters: { memberId, applicationId },
       body: JSON.stringify(applicationModel ? applicationModel : application),
-    } as any as APIGatewayProxyEvent;
+    } as unknown as APIGatewayProxyEvent;
   };
 });
 
-async function handler(
-  event: APIGatewayProxyEvent,
-  context: Context,
-): Promise<APIGatewayProxyResult> {
-  return (await import('../updateApplication')).handler(event, context);
+async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+  return await (await import('../updateApplication')).handler(event, emptyContextStub);
 }

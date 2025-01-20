@@ -1,17 +1,17 @@
 import { BatchRepository } from '@blc-mono/members/application/repositories/batchRepository';
 import { logger } from '@blc-mono/members/application/middleware';
 import {
-  CreateBatchModel,
-  UpdateBatchModel,
-  ExtendedBatchModel,
   BatchModel,
+  CreateBatchModel,
+  CreateInternalBatchModelResponse,
+  ExtendedBatchModel,
+  UpdateBatchModel,
 } from '@blc-mono/members/application/models/batchModel';
 import { BatchEntryModel } from '@blc-mono/members/application/models/batchEntryModel';
 import { CardModel } from '@blc-mono/members/application/models/cardModel';
 import { PrintingErrorStatus } from '@blc-mono/members/application/models/enums/PrintingErrorStatus';
 import { CardService } from '@blc-mono/members/application/services/cardService';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
-import { CreateInternalBatchModelResponse } from '@blc-mono/members/application/models/batchModel';
 import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
 import { ExternalCardPrintingDataModel } from '@blc-mono/members/application/models/ExternalCardPrintingDataModel';
 import { Bucket } from 'sst/node/bucket';
@@ -82,37 +82,29 @@ export class BatchService {
   }
 
   private async getValidCards(cards: string[]): Promise<CardModel[]> {
-    const parsedCards: CardModel[] = await Promise.all(
-      cards.map((cardId) => this.cardService.getCardById(cardId)),
-    );
+    const parsedCards: CardModel[] = await Promise.all(cards.map(this.cardService.getCardById));
+    const areCardsValidForBatch = await Promise.all(parsedCards.map(this.cardIsValidForBatch));
 
-    const areCardsValidForBatch = await Promise.all(
-      parsedCards.map((card) => this.cardIsValidForBatch(card)),
-    );
-
-    const validCards = parsedCards.filter((_, index) => areCardsValidForBatch[index]);
-
-    return validCards;
+    return parsedCards.filter((_, index) => areCardsValidForBatch[index]);
   }
 
   private async processValidCards(batchId: string, validCards: CardModel[]): Promise<void> {
     for (const card of validCards) {
-      const [profile, application] = await this.getProfileAndApplication(card);
+      const [, application] = await this.getProfileAndApplication(card);
+      if (!application) return;
 
-      if (application) {
-        const batchEntryAttributes: BatchEntryModel = BatchEntryModel.parse({
-          batchId: batchId,
-          cardNumber: card.cardNumber,
-          memberId: card.memberId,
-          applicationId: application.applicationId,
-        });
+      const batchEntryAttributes: BatchEntryModel = BatchEntryModel.parse({
+        batchId: batchId,
+        cardNumber: card.cardNumber,
+        memberId: card.memberId,
+        applicationId: application.applicationId,
+      });
 
-        await this.repository.createBatchEntry(batchEntryAttributes);
+      await this.repository.createBatchEntry(batchEntryAttributes);
 
-        await this.cardService.updateCard(card.memberId, card.cardNumber, {
-          cardStatus: CardStatus.ADDED_TO_BATCH,
-        });
-      }
+      await this.cardService.updateCard(card.memberId, card.cardNumber, {
+        cardStatus: CardStatus.ADDED_TO_BATCH,
+      });
     }
   }
 
@@ -225,7 +217,7 @@ export class BatchService {
 
         const externalCardPrintingData: Array<ExternalCardPrintingDataModel> = [];
         for (const card of batch) {
-          let [profile, application] = await this.getProfileAndApplication(card);
+          const [profile, application] = await this.getProfileAndApplication(card);
 
           if (profile && application) {
             const batchAttributes: BatchEntryModel = BatchEntryModel.parse({
@@ -434,7 +426,7 @@ export class BatchService {
   ): Promise<Array<InboundBatchFileCardDataResponseModel>> {
     try {
       logger.debug({ message: 'Parsing inbound batch file' });
-      return new Promise((resolve, reject) => {
+      return await new Promise((resolve, reject) => {
         const inboundCardDataResponse: InboundBatchFileCardDataResponseModel[] = [];
 
         const bufferStream = Readable.from(csvData.toString());
@@ -610,7 +602,7 @@ export class BatchService {
     card.nameOnCard.length <= MAX_NAME_ON_CARD_CHARACTER_LIMIT;
 
   private async addressIsValid(card: CardModel): Promise<boolean> {
-    let [profile, applicationForCard] = await this.getProfileAndApplication(card);
+    const [profile, applicationForCard] = await this.getProfileAndApplication(card);
 
     if (profile && applicationForCard) {
       return !!(
@@ -630,14 +622,18 @@ export class BatchService {
   ): Promise<[ProfileModel, ApplicationModel]> {
     const profile = await this.profileService.getProfile(card.memberId);
     const memberApplications = profile.applications;
-    if (memberApplications) {
-      const applicationForCard = memberApplications.filter(
-        (application) => application.cardNumber === card.cardNumber,
-      )[0];
-      return [profile, applicationForCard];
-    } else {
-      throw new Error(`No applications found for member ${card.memberId}`);
+    if (!memberApplications) throw new Error(`No applications found for member ${card.memberId}`);
+
+    const applicationForCard = memberApplications.find(
+      (application) => application.cardNumber === card.cardNumber,
+    );
+    if (!applicationForCard) {
+      throw new Error(
+        `No applications found for member '${card.memberId}' with card number '${card.cardNumber}'`,
+      );
     }
+
+    return [profile, applicationForCard];
   }
 
   private async setPrintingError(card: CardModel, hasValidName: boolean, hasValidAddress: boolean) {

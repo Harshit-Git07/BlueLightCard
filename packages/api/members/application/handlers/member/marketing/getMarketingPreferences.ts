@@ -1,17 +1,21 @@
-import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '../../../middleware';
 import MarketingService from '@blc-mono/members/application/services/marketingService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { MarketingPreferencesModel } from '@blc-mono/members/application/models/marketingPreferences';
 import { verifyMemberHasAccessToProfile } from '../memberAuthorization';
+import { isMarketingPreferencesEnvironment } from '@blc-mono/members/application/types/marketingPreferencesEnvironment';
 
 const service = new MarketingService();
 
-const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<any> => {
+const unwrappedHandler = async (
+  event: APIGatewayProxyEvent,
+): Promise<Record<string, unknown> | Record<string, unknown>[]> => {
   const { memberId, environment } = event.pathParameters || {};
   if (!memberId || !environment) {
     throw new ValidationError('Member ID and Environment is required');
-  } else if (environment !== 'web' && environment !== 'mobile') {
+  }
+
+  if (!isMarketingPreferencesEnvironment(environment)) {
     throw new ValidationError('Environment must be either "web" or "mobile"');
   }
 

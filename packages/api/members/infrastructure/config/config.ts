@@ -43,6 +43,8 @@ export class MemberStackConfigResolver {
     };
   }
 
+  // TODO: Remove this disable if the commented out block (at the time of writing) is uncommented or changed
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public static forStagingStage(region: MemberStackRegion): MemberStackConfig {
     return {
       apiDefaultAllowedOrigins: ['*'],

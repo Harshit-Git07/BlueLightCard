@@ -13,7 +13,7 @@ export interface ResponsePayload {
 
 interface BodyPayload {
   message?: string;
-  data?: any;
+  data?: unknown;
   error?: string;
 }
 

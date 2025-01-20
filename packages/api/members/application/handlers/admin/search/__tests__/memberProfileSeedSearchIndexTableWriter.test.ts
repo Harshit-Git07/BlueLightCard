@@ -1,7 +1,8 @@
-import { Context, SQSEvent } from 'aws-lambda';
+import { SQSEvent } from 'aws-lambda';
 import { Repository } from '@blc-mono/members/application/repositories/repository';
 import 'aws-sdk-client-mock-jest';
 import { getMemberProfilesSeedSearchIndexTableName } from '@blc-mono/members/application/handlers/admin/search/getMemberProfileResources';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/repositories/repository');
 jest.mock('../getMemberProfileResources');
@@ -27,8 +28,6 @@ const application = {
 };
 
 describe('Write to member profile seed index table', () => {
-  const context = {} as Context;
-
   afterEach(() => {
     jest.resetAllMocks();
   });
@@ -48,9 +47,9 @@ describe('Write to member profile seed index table', () => {
           body: JSON.stringify([application]),
         },
       ],
-    } as any;
+    } as unknown as SQSEvent;
 
-    await handler(event, context);
+    await handler(event);
 
     expect(Repository.prototype.batchInsert).toHaveBeenCalledTimes(2);
     expect(Repository.prototype.batchInsert).toHaveBeenNthCalledWith(
@@ -80,6 +79,8 @@ describe('Write to member profile seed index table', () => {
   });
 });
 
-async function handler(event: SQSEvent, context: Context) {
-  return (await import('../memberProfileSeedSearchIndexTableWriter')).handler(event, context);
+async function handler(event: SQSEvent) {
+  return await (
+    await import('../memberProfileSeedSearchIndexTableWriter')
+  ).handler(event, emptyContextStub);
 }

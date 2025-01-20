@@ -159,7 +159,7 @@ export class ProfileService {
     }
   }
 
-  async documentUploadComplete(memberId: string, key: string): Promise<void> {
+  async documentUploadComplete(memberId: string): Promise<void> {
     try {
       logger.debug({ message: 'Recording document upload' });
       await this.repository.updateProfile(memberId, {

@@ -36,7 +36,7 @@ const unwrappedHandler = async (event: SQSEvent) => {
     let profileEmployerName: string | undefined;
 
     switch (recordType) {
-      case 'Profile':
+      case 'Profile': {
         const {
           memberDocument,
           employerIdChanged,
@@ -48,6 +48,7 @@ const unwrappedHandler = async (event: SQSEvent) => {
         updateOrganisation = organisationIdChanged;
         profileEmployerName = employerName;
         break;
+      }
       case 'Application':
         memberProfileDocument = getDocumentFromApplicationRecord(dynamoDBStreamRecord);
         break;
@@ -143,7 +144,6 @@ const getEmployerName = async (
   profileEmployerName: string | undefined,
 ): Promise<string | undefined> => {
   if (profileEmployerName && !employerId) return profileEmployerName;
-
   if (!organisationId || !employerId || !updateEmployer) return undefined;
 
   try {

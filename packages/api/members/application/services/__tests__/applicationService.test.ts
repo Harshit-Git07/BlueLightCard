@@ -4,7 +4,11 @@ import { PromoCodesService } from '../promoCodesService';
 import { S3 } from 'aws-sdk';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { EligibilityStatus } from '../../models/enums/EligibilityStatus';
-import { CreateApplicationModel, UpdateApplicationModel } from '../../models/applicationModel';
+import {
+  ApplicationModel,
+  CreateApplicationModel,
+  UpdateApplicationModel,
+} from '../../models/applicationModel';
 import { ApplicationReason } from '../../models/enums/ApplicationReason';
 import { ProfileService } from '../profileService';
 
@@ -92,7 +96,7 @@ describe('ApplicationService', () => {
     it('should throw validation error if application is not awaiting ID approval', async () => {
       repositoryMock.getApplication.mockResolvedValue({
         eligibilityStatus: EligibilityStatus.ELIGIBLE,
-      } as any);
+      } as unknown as ApplicationModel);
 
       await expect(
         applicationService.generateDocumentUploadUrl(memberId, applicationId),
@@ -102,7 +106,7 @@ describe('ApplicationService', () => {
     it('should generate a presigned URL successfully', async () => {
       repositoryMock.getApplication.mockResolvedValue({
         eligibilityStatus: EligibilityStatus.AWAITING_ID_APPROVAL,
-      } as any);
+      } as unknown as ApplicationModel);
       s3ClientMock.getSignedUrlPromise.mockResolvedValue('mockUrl');
 
       const result = await applicationService.generateDocumentUploadUrl(memberId, applicationId);
@@ -120,7 +124,10 @@ describe('ApplicationService', () => {
     });
 
     it('should fetch applications for a member successfully', async () => {
-      const applications = [{ applicationId, memberId }] as any;
+      const applications: ApplicationModel[] = [
+        { applicationId, memberId } as unknown as ApplicationModel,
+      ];
+
       repositoryMock.getApplications.mockResolvedValue(applications);
 
       const result = await applicationService.getApplications(memberId);
@@ -140,7 +147,7 @@ describe('ApplicationService', () => {
     });
 
     it('should fetch an application successfully', async () => {
-      const application = { applicationId, memberId } as any;
+      const application = { applicationId, memberId } as unknown as ApplicationModel;
       repositoryMock.getApplication.mockResolvedValue(application);
 
       const result = await applicationService.getApplication(memberId, applicationId);

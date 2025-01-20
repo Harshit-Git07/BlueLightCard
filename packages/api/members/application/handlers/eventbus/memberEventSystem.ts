@@ -1,12 +1,11 @@
-import { Context, EventBridgeEvent } from 'aws-lambda';
-import { eventBusMiddleware, logger } from '../../middleware';
+import { EventBridgeEvent, StreamRecord } from 'aws-lambda';
+import { eventBusMiddleware } from '../../middleware';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { MemberEvent } from '@blc-mono/members/application/models/enums/MemberEvent';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 
 export const unwrappedHandler = async (
-  event: EventBridgeEvent<any, any>,
-  context: Context,
+  event: EventBridgeEvent<string, StreamRecord>,
 ): Promise<void> => {
   if (getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_SYSTEM) !== 'true') {
     return;

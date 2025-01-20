@@ -71,7 +71,7 @@ export function mapOrganisationsAndEmployers(
   organisationIdMappings: Map<string, OrganisationIdMapping[]>,
 ) {
   const organisations: OrganisationModel[] = [];
-  let employers = new Map<string, CreateEmployerModel[]>();
+  const employers = new Map<string, CreateEmployerModel[]>();
 
   for (const organisationName of organisationIdMappings.keys()) {
     const mappingsByOrganisation = organisationIdMappings.get(organisationName) ?? [];

@@ -13,9 +13,9 @@ import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/con
 export class SystemEventsService {
   constructor() {}
 
+  // TODO: This needs implemented?
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   isSendProfileUpdateToSystem = (dynamoStream: StreamRecord | undefined) => {
-    const { oldImage: oldApplication, newImage: newApplication } =
-      unmarshallStreamImages<ApplicationModel>(dynamoStream);
     // TODO - confirm no triggered events sent to self for profile updates
   };
 
@@ -25,7 +25,7 @@ export class SystemEventsService {
 
     if (
       hasAttributeChanged('eligibilityStatus', dynamoStream) &&
-      newApplication?.eligibilityStatus == EligibilityStatus.ELIGIBLE
+      newApplication?.eligibilityStatus === EligibilityStatus.ELIGIBLE
     ) {
       if (
         newApplication?.paymentStatus?.startsWith('PAID') ||
@@ -42,8 +42,8 @@ export class SystemEventsService {
       newApplication?.paymentStatus?.startsWith('PAID')
     ) {
       if (
-        newApplication?.eligibilityStatus == EligibilityStatus.ELIGIBLE ||
-        oldApplication?.eligibilityStatus == EligibilityStatus.ELIGIBLE
+        newApplication?.eligibilityStatus === EligibilityStatus.ELIGIBLE ||
+        oldApplication?.eligibilityStatus === EligibilityStatus.ELIGIBLE
       ) {
         this.sendEventBusMessage(
           EventBusSource.SYSTEM,

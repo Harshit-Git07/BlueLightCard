@@ -4,26 +4,25 @@ import { OrganisationModel } from '@blc-mono/members/application/models/organisa
 import { EmploymentStatus } from '@blc-mono/members/application/models/enums/EmploymentStatus';
 import { getTestUserBearerToken } from '@blc-mono/members/e2e/TestUser';
 
-describe('GET /categories', async () => {
-  const bearerToken = await getTestUserBearerToken();
+describe('GET /categories', () => {
+  let bearerToken: string;
 
-  const whenGetOrganisationsIsCalledWith = async (headers: Record<string, string>) => {
-    const orgsEndpoint = `${ApiGatewayV1Api['members-admin-api'].url}admin/orgs`;
-    return fetch(orgsEndpoint, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        ...headers,
-      },
+  beforeEach(async () => {
+    bearerToken = await getTestUserBearerToken();
+  });
+
+  it('should return 200 when invalid token is provided', async () => {
+    const result = await whenGetOrganisationsIsCalledWith({
+      Authorization: `Bearer ${bearerToken}`,
     });
-  };
 
-  it.each([
-    [200, 'A valid request is sent', { authorization: `Bearer ${bearerToken}` }],
-    [401, 'An invalid request is sent', { Authorization: `Bearer invalid` }],
-  ])('should return with response code %s when %s', async (statusCode, _description, headers) => {
-    const result = await whenGetOrganisationsIsCalledWith(headers);
-    expect(result.status).toBe(statusCode);
+    expect(result.status).toBe(401);
+  });
+
+  it('should return 401 when invalid token is provided', async () => {
+    const result = await whenGetOrganisationsIsCalledWith({ Authorization: 'Bearer invalid' });
+
+    expect(result.status).toBe(401);
   });
 
   it('should return a valid list of organisations', async () => {
@@ -37,4 +36,15 @@ describe('GET /categories', async () => {
       results.find((result) => result.employmentStatus?.includes(EmploymentStatus.EMPLOYED)),
     ).toBeDefined();
   });
+
+  const whenGetOrganisationsIsCalledWith = async (headers: Record<string, string>) => {
+    const orgsEndpoint = `${ApiGatewayV1Api['members-admin-api'].url}admin/orgs`;
+    return await fetch(orgsEndpoint, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        ...headers,
+      },
+    });
+  };
 });

@@ -1,14 +1,14 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
 import { UpdateApplicationModel } from '@blc-mono/members/application/models/applicationModel';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/promoCodesService');
 
 describe('applyPromoCode handler', () => {
   const memberId = uuidv4();
   const applicationId = uuidv4();
-  const context = {} as Context;
 
   beforeEach(() => {
     PromoCodesService.prototype.applyPromoCode = jest.fn();
@@ -16,13 +16,17 @@ describe('applyPromoCode handler', () => {
 
   it('should return 400 if required parameters are missing', async () => {
     const event = { pathParameters: { memberId } } as unknown as APIGatewayProxyEvent;
-    const response = await handler(event, context);
+
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(400);
   });
 
   it('should return 400 if request body is missing', async () => {
     const event = {} as unknown as APIGatewayProxyEvent;
-    const response = await handler(event, context);
+
+    const response = await handler(event);
+
     expect(response.statusCode).toEqual(400);
   });
 
@@ -31,8 +35,8 @@ describe('applyPromoCode handler', () => {
       eventWithApplication({
         address1: '123 Example Street',
       }),
-      context,
     );
+
     expect(response.statusCode).toEqual(400);
   });
 
@@ -42,8 +46,8 @@ describe('applyPromoCode handler', () => {
         promoCode: 'NHS12345',
         promoCodeApplied: true,
       }),
-      context,
     );
+
     expect(response.statusCode).toEqual(204);
   });
 
@@ -51,13 +55,10 @@ describe('applyPromoCode handler', () => {
     return {
       pathParameters: { memberId, applicationId },
       body: JSON.stringify(applicationModel),
-    } as any as APIGatewayProxyEvent;
+    } as unknown as APIGatewayProxyEvent;
   };
 });
 
-async function handler(
-  event: APIGatewayProxyEvent,
-  context: Context,
-): Promise<APIGatewayProxyResult> {
-  return (await import('../applyPromoCode')).handler(event, context);
+async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+  return await (await import('../applyPromoCode')).handler(event, emptyContextStub);
 }

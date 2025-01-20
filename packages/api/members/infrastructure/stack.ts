@@ -13,7 +13,6 @@ import {
 } from 'sst/constructs';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
-import * as path from 'path';
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
 import { Shared } from '../../../../stacks/stack';
 import {

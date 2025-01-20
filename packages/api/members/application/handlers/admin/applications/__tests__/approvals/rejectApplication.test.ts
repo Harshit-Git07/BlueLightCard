@@ -1,6 +1,7 @@
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
+import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/applicationService');
 
@@ -10,7 +11,6 @@ describe('rejectApplication handler', () => {
   const event = {
     pathParameters: { memberId, applicationId },
   } as unknown as APIGatewayProxyEvent;
-  const context = {} as Context;
 
   beforeEach(() => {
     ApplicationService.prototype.rejectApplication = jest.fn();
@@ -18,19 +18,19 @@ describe('rejectApplication handler', () => {
 
   it('should return 400 if memberId or applicationId is missing', async () => {
     const event = { pathParameters: {} } as unknown as APIGatewayProxyEvent;
-    const response = await handler(event, context);
-    expect(response.statusCode).toEqual(400);
+
+    const response = await handler(event);
+
+    expect(response.statusCode).toBe(400);
   });
 
   it('should return 204 on successful rejection', async () => {
-    const response = await handler(event, context);
-    expect(response.statusCode).toEqual(204);
+    const response = await handler(event);
+
+    expect(response.statusCode).toBe(204);
   });
 });
 
-async function handler(
-  event: APIGatewayProxyEvent,
-  context: Context,
-): Promise<APIGatewayProxyResult> {
-  return (await import('../../approvals/rejectApplication')).handler(event, context);
+async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
+  return await (await import('../../approvals/rejectApplication')).handler(event, emptyContextStub);
 }

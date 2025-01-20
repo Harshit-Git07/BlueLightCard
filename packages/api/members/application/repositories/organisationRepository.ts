@@ -24,6 +24,7 @@ import { NativeAttributeValue } from '@aws-sdk/util-dynamodb';
 export class OrganisationRepository extends Repository {
   constructor(
     dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     private readonly tableName: string = Table.memberOrganisations.tableName,
   ) {

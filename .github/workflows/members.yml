@@ -174,6 +174,7 @@ jobs:
             ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
             ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
             blcUkIdentityApiId: 'tr1afrar24'
+            identityTableName: 'staging-blc-mono-identityTable'
             # auth0Domain: DDS_UK_SERVICE_LAYER_AUTH0_DOMAIN
             # auth0ApiClientId: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
             # auth0ApiClientSecret: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
@@ -218,6 +219,7 @@ jobs:
           DDS_COGNITO_USER_POOL_ID: ${{ matrix.ddsCognitoUserPoolId }}
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
+          IDENTITY_TABLE_NAME: ${{ matrix.identityTableName }}
           MEMBERS_OPENSEARCH_CREATE_NEW_DOMAIN: ${{ github.event.label.name == 'membersCreateNewOpenSearchDomain' && 'true' || 'false' }}
           SERVICE_LAYER_EMAIL_FROM: 'noreply@bluelightcard.co.uk'
           SERVICE_LAYER_BRAZE_SQS_QUEUE: 'https://sqs.eu-west-2.amazonaws.com/361769569967/Braze-Push-develop-queue'

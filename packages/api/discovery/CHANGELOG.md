@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.22.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.22.0...bluelightcard/discovery-v1.22.1) (2025-01-20)
+
+
+### Bug Fixes
+
+* trigger release please ([#3582](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3582)) ([efa2bf4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/efa2bf4bf01d3a57f19db59bcf14dc2a6f6420f8))
+
 ## [1.22.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.21.0...bluelightcard/discovery-v1.22.0) (2025-01-20)
 
 

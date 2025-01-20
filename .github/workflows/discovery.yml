@@ -53,14 +53,14 @@ jobs:
         run: npx sst types --stage staging
       - name: Test
         run: npm run test:coverage -w packages/api/discovery
-#      - name: SonarQube Scan
-#        uses: SonarSource/sonarqube-scan-action@master
-#        if: github.actor != 'dependabot[bot]'
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          projectBaseDir: packages/api/discovery
+  #      - name: SonarQube Scan
+  #        uses: SonarSource/sonarqube-scan-action@master
+  #        if: github.actor != 'dependabot[bot]'
+  #        env:
+  #          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #        with:
+  #          projectBaseDir: packages/api/discovery
 
   format:
     name: Check Formatting
@@ -215,14 +215,13 @@ jobs:
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_FAILURE_NOTIFICATIONS_WEBHOOK }}
-          title: ":x: :test_tube: Staging deployment failed for Discovery!"
+          title: ':x: :test_tube: Staging deployment failed for Discovery!'
       - name: Send Slack message on success
         if: ${{ success() }}
         uses: bluelightcard/github-actions-slack-notification@v1
         with:
           webhook_url: ${{ secrets.CI_SUCCESS_NOTIFICATIONS_WEBHOOK }}
-          title: ":test_tube: Staging deployment for Discovery was successful!"
-
+          title: ':test_tube: Staging deployment for Discovery was successful!'
 
   e2e-test-staging:
     name: End to End Test Staging
@@ -250,6 +249,7 @@ jobs:
             dds-cognito-user-pool-id: 'eu-west-2_VdsvVVUrI'
             dds-old-cognito-user-pool-id: 'eu-west-2_jbLX0JEdN'
             identity-api-id: 'tr1afrar24'
+            identity-table-name: 'staging-blc-mono-identityTable'
             dds-identity-cognito-e2e-client-id: '7jpmpphent2tulhit3c8sngk54'
     needs:
       - install
@@ -271,13 +271,14 @@ jobs:
         working-directory: packages/api/discovery
         env:
           BRAND: ${{ matrix.brand }}
-          REGION : ${{ matrix.region }}
+          REGION: ${{ matrix.region }}
           E2E_TESTS_PASSWORD: ${{ secrets[matrix.e2e_test_password] }}
           BLC_UK_COGNITO_USER_POOL_ID: ${{ matrix.blc-uk-cognito-user-pool-id }}
           BLC_UK_OLD_COGNITO_USER_POOL_ID: ${{ matrix.blc-uk-old-cognito-user-pool-id }}
           DDS_COGNITO_USER_POOL_ID: ${{ matrix.dds-cognito-user-pool-id }}
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.dds-old-cognito-user-pool-id }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.identity-api-id }}
+          IDENTITY_TABLE_NAME: ${{ matrix.identity-table-name }}
           IDENTITY_COGNITO_E2E_CLIENT_ID: ${{ matrix.dds-identity-cognito-e2e-client-id }}
           IDENTITY_COGNITO_E2E_USER_POOL_ID: ${{ matrix.dds-cognito-user-pool-id }}
         run: npx sst bind --stage ${{ matrix.stage }} --region ${{ matrix.region }} vitest e2e/staging

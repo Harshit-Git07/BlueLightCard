@@ -1,6 +1,6 @@
 {
   "name": "@blc-mono/discovery",
-  "version": "1.20.0",
+  "version": "1.21.0",
   "scripts": {
     "pre:dev": "npm run opensearch:up",
     "test": "npm run test:unit",

@@ -61,7 +61,7 @@ jobs:
           DDS_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsCognitoUserPoolId }}
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsOldCognitoUserPoolId }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.deployment.blcUkIdentityApiId }}
-          IDENTITY_TABLE_NAME: ${{ matrix.blcIdentityTableName }}
+          IDENTITY_TABLE_NAME: ${{ matrix.deployment.blcIdentityTableName }}
           DD_VERSION: '${{ env.DD_VERSION }}'
           DD_ENV: '${{ env.DD_ENV }}'
           DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'

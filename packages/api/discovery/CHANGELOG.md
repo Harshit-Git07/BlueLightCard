@@ -1,5 +1,55 @@
 # Changelog
 
+## [1.22.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.21.0...bluelightcard/discovery-v1.22.0) (2025-01-20)
+
+
+### Features
+
+* [DISCO-1023] Map trust name instead of trust code to included and excluded trusts ([#3038](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3038)) ([3d77e56](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3d77e568ce99ffc169a740ce714c89ca6bcc6211))
+* [DISCO-1036] Get Category service ([#2813](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2813)) ([c9b47e7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c9b47e73f8ec6cbbf363bdccf568dcc5c2631330))
+* [DISCO-1070] Link homepage menus to new V5 menu API ([#2906](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2906)) ([cc8c63c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cc8c63c69cbbc267d94d1fb6bb40bb92aaa90c3a))
+* [DISCO-1163] Add "All Companies" request ([#2821](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2821)) ([86bf6b7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/86bf6b7e2d632eb23b42673d043ab34a1308aaae))
+* [DISCO-1164] Integrate UI with v5 get companies & categories ([#2857](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2857)) ([6a15c10](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6a15c10f226110f43eaf8552a208010b8e59ead6))
+* [DISCO-1214] Add Trust, Age & Expiry filters to Menu Offers ([#3123](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3123)) ([58a3dff](https://github.com/bluelightcard/BlueLightCard-2.0/commit/58a3dff6faf6e9273319e4ee956a3d42bc3e954c))
+* [DISCO-1258] Update trust inclusion logic to subtract excluded trusts from included trusts ([#3085](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3085)) ([4e92c02](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4e92c02070371f22df73f1d09eabb03227808668))
+* [MM-105] Add Members OpenSearch ingestion pipeline ([#3253](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3253)) ([022213d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/022213d56b8ce63dd15cb84fc3de81e801ce5c01))
+* add blc prod campaign id ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* add gift card push notification ([#2819](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2819)) ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* Blt backend v2 ([#3225](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3225)) ([56abf68](https://github.com/bluelightcard/BlueLightCard-2.0/commit/56abf68085f0c338847244d729eed5311f23308b))
+* Disco 1068 - Ingest Flexible Menus ([#2864](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2864)) ([30e16e4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/30e16e46175de735b69e0f6db16b98f1a068b6a5))
+* Disco-1073 - Add Support for company location events ([#3165](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3165)) ([fdeb71a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fdeb71afa7809b539591387f4fb3d84c2eba9170))
+* disco-1181 - Add Firehose Events to Search ([#3489](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3489)) ([f36ea6b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f36ea6b20714c8f9e7e9776a1dea9b85a6c0fd16))
+* Disco-1392 ([#3498](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3498)) ([1d432a5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1d432a5f998d43d5b1e6900c5c3e8b96abba3e7c))
+* refactor ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+* test ([7d791d0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7d791d092ee9735f6b11f9b483a612ae68311434))
+
+
+### Bug Fixes
+
+* [DISCO-1023] Add trust rules to search by term and category ([#2955](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2955)) ([ce9bec7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ce9bec70242bd43a878ae5109cd3b19439b28f65))
+* [DISCO-1023] Merge company included and excluded trusts into the offer level ([#2988](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2988)) ([5a0728e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5a0728ee0623ca2bcc8ce7fdbbb723782d67512d))
+* [DISCO-1023] Pull trust restrictions from the offer level ([#2961](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2961)) ([3a1a031](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3a1a031ac8396dc37ccaf1eb7479e1ca7def5ce8))
+* [DISCO-1214] Add offer status live & start date check to search query ([#3099](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3099)) ([9f14e03](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9f14e036927497e5c0cbd9bc4450a2f5b50018ae))
+* [DISCO-1214] Add offer status live check to search query ([9f14e03](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9f14e036927497e5c0cbd9bc4450a2f5b50018ae))
+* [DISCO-1249] Remove "Get offer by id" duplication issue ([#3094](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3094)) ([5c6dcc3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5c6dcc31a275368c55e2c4a8692e923d9be676e9))
+* [DISCO-1277] Enable delete old search indices cron in PR account ([#3196](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3196)) ([085227f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/085227f46430357f850f841b8a396e6b8663094c))
+* Discovery Companies Test into PR environment ([#3579](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3579)) ([c00b127](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c00b12733775e68e76edbc135a3cc0006211f5aa))
+* Fixing Discovery E2E ([#3246](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3246)) ([a2ec80d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a2ec80d0c4affb18531e68a4da30b1c17e9b9225))
+* Search results failing in staging due to extra data in there ([#3254](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3254)) ([99b3a59](https://github.com/bluelightcard/BlueLightCard-2.0/commit/99b3a5938a46d5a6b077fa11e39787d712624798))
+* Update Category to be valid id within staging test: ([#3242](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3242)) ([d2aa645](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d2aa645a3c11cfae480aa5ea8fe764afa37c8c7e))
+
+
+### Other Changes
+
+* [None] Set isolatedModules to true in ts-jest to speed up tests ([#3435](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3435)) ([195d4f6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/195d4f6c9b0f18d497e6378b55d23298447cea79))
+* DISCO-1283 Updated Discovery API categories list to match CMS categories ([#3214](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3214)) ([d09b2aa](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d09b2aa92b59484493a8cb83a5a19fafb96fe55f))
+* **main:** release bluelightcard/discovery 1.16.0 ([#2799](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2799)) ([9f0f56e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9f0f56edf936bb9d45dd0b6d74cd377c2e2c731c))
+* **main:** release bluelightcard/discovery 1.17.0 ([#2833](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2833)) ([68f48ac](https://github.com/bluelightcard/BlueLightCard-2.0/commit/68f48ac4528ae89aedbe7a28711732b2c247e1cd))
+* **main:** release bluelightcard/discovery 1.18.0 ([#2896](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2896)) ([2e1a5d2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2e1a5d2bf14b38488e4d991166affea74eb17661))
+* **main:** release bluelightcard/discovery 1.19.0 ([#3013](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3013)) ([33ef240](https://github.com/bluelightcard/BlueLightCard-2.0/commit/33ef2406348398b7fee21647acde719b585afb9a))
+* **main:** release bluelightcard/discovery 1.20.0 ([#3043](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3043)) ([fda2a5b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fda2a5b91541751ca754406415f2db542aff8eba))
+* **main:** release bluelightcard/discovery 1.21.0 ([#3241](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3241)) ([bf20324](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bf20324eab6bb0bb737c41da16861ac6106767d8))
+
 ## 1.21.0 (2025-01-14)
 
 ### Features

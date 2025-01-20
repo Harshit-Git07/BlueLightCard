@@ -8,6 +8,7 @@ on:
       - packages/api/core/**
       - stacks/**
       - .github/workflows/discovery.yml
+      - .github/workflows/production-deploy-discovery.yml
       - package-lock.json
       - sst.config.ts
       - package.json

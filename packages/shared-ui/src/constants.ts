@@ -32,5 +32,6 @@ export const V5_API_URL = {
   Menus: `/${V5_REGION}/discovery/menus`,
   Organisation: (orgId?: string) => `/orgs/${orgId}`,
   Profile: (memberId: string) => `/members/${memberId}/profile`,
+  Application: (memberId: string) => `/members/${memberId}/applications`,
   User: `/${V5_REGION}/members/user`,
 } as const;

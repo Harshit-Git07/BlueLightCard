@@ -4,31 +4,50 @@ import React, { useEffect, useState } from 'react';
 import ToggleInput from '../ToggleInput';
 import Button from '../Button-V2';
 import { mockApplication, mockCard, mockMemberProfileResponse } from './mocks/mockMemberProfileGet';
-import useMemberCard from '../../hooks/useMemberCard';
-import { ApplicationSchema, CardSchema } from '../CardVerificationAlerts/types';
+import { ApplicationSchema, CardSchema, ProfileSchema } from '../CardVerificationAlerts/types';
 import { setupMocks } from './mocks/setupMocks';
 import StagingUsers from './StagingUsers';
+import { useSetAtom } from 'jotai';
+import {
+  initializeRequestNewCardAtom,
+  requestNewCardAtom,
+} from '../RequestNewCard/requestNewCardAtom';
+import { RequestNewCardAtom } from '../RequestNewCard/requestNewCardTypes';
+import { colours } from '../../tailwind/theme';
+import { useOverrideStripe } from './useOverrideStripe';
 
 const MyAccountDebugTools = () => {
-  const memberId = 'member-uuid';
   const [overrides, setOverrides] = useState(false);
+  const [stripeWillSucceed, setStripeWillSucceed] = useState(true);
   const queryClient = useQueryClient();
   const adapter = usePlatformAdapter();
-  const { insideReprintPeriod } = useMemberCard(memberId);
+  const setAtom = useSetAtom(requestNewCardAtom);
+
+  useOverrideStripe(overrides, stripeWillSucceed);
 
   useEffect(() => {
     if (!overrides) return;
-    setupMocks(adapter, true);
+    setupMocks(adapter);
     queryClient.invalidateQueries({ queryKey: ['memberProfile'] });
   }, [overrides]);
 
   const resetAndReload = async ({
     card = {},
     application = {},
+    atom,
+    employmentStatus = 'EMPLOYED',
+    paymentWillSucceed = true,
   }: {
     card?: Partial<CardSchema> | null;
     application?: Partial<ApplicationSchema> | null;
+    atom?: Partial<RequestNewCardAtom>;
+    employmentStatus?: ProfileSchema['employmentStatus'];
+    paymentWillSucceed?: boolean;
   }) => {
+    setupMocks(adapter);
+    setStripeWillSucceed(paymentWillSucceed);
+    setAtom((prev) => (atom ? { ...prev, ...atom } : initializeRequestNewCardAtom()));
+    mockMemberProfileResponse.employmentStatus = employmentStatus;
     mockMemberProfileResponse.cards =
       card === null
         ? []
@@ -48,14 +67,8 @@ const MyAccountDebugTools = () => {
             },
           ];
     await queryClient.invalidateQueries({ queryKey: ['memberProfile'] });
+    await queryClient.invalidateQueries({ queryKey: ['/members/orgs'] });
   };
-
-  const toggleReprint = () =>
-    resetAndReload({
-      card: {
-        purchaseDate: insideReprintPeriod ? '2023-11-27T08:55:46.030Z' : new Date().toJSON(),
-      },
-    });
 
   const isAwaitingId = () =>
     resetAndReload({
@@ -95,6 +108,11 @@ const MyAccountDebugTools = () => {
       },
     });
 
+  const hasCardNoApplication = () =>
+    resetAndReload({
+      application: null,
+    });
+
   const hasNoCard = () =>
     resetAndReload({
       card: null,
@@ -106,28 +124,64 @@ const MyAccountDebugTools = () => {
       application: null,
     });
 
+  const freeReprint = () =>
+    resetAndReload({
+      card: {
+        purchaseDate: new Date().toJSON(),
+      },
+      application: null,
+    });
+
+  const requiresDoubleId = () =>
+    resetAndReload({
+      application: null,
+      employmentStatus: 'RETIRED',
+    });
+
+  const idRejected = () =>
+    resetAndReload({
+      application: {
+        ...mockApplication,
+        applicationReason: 'LOST_CARD',
+        rejectionReason: 'BLURRY_IMAGE_DECLINE_ID',
+        eligibilityStatus: 'INELIGIBLE',
+      },
+    });
+
   return (
-    <div className={'absolute left-4 bottom-4'}>
-      <StagingUsers />
+    <div
+      className={`absolute left-0 bottom-0 pb-4 bg-opacity-85 h-[56px] hover:h-auto z-[1000] ${colours.backgroundSurface} ${colours.borderPrimary} border rounded rounded-2`}
+    >
+      <h2 className={`bg-button-primary-default-bg-colour text-white p-4`}>
+        My Account - mock tools
+      </h2>
+      <div className={'p-4'}>
+        <StagingUsers />
 
-      <label className={'flex items-center py-1 gap-2'}>
-        <ToggleInput onChange={() => setOverrides(!overrides)} selected={overrides} />
-        Overrides?
-      </label>
+        <label className={'flex items-center py-1 gap-2'}>
+          <ToggleInput onChange={() => setOverrides(!overrides)} selected={overrides} />
+          Overrides?
+        </label>
 
-      {overrides ? (
-        <div className={'inline-flex flex-col gap-1'}>
-          <Button onClick={() => toggleReprint()}>
-            {insideReprintPeriod ? 'Outside' : 'Inside'} free reprint period
-          </Button>
-          <Button onClick={() => isAwaitingId()}>isAwaitingId</Button>
-          <Button onClick={() => isAwaitingIdApproval()}>isAwaitingIdApproval</Button>
-          <Button onClick={() => isAwaitingPayment()}>isAwaitingPayment</Button>
-          <Button onClick={() => isRejected()}>isRejected</Button>
-          <Button onClick={() => hasNoCard()}>hasNoCard</Button>
-          <Button onClick={() => hasNoCardNoApplication()}>hasNoCardNoApplication</Button>
-        </div>
-      ) : null}
+        {overrides ? (
+          <div className={'inline-flex flex-col gap-1'}>
+            <h2 className={'pt-2'}>Card Verification Alerts</h2>
+            <Button onClick={() => isAwaitingId()}>isAwaitingId</Button>
+            <Button onClick={() => isAwaitingIdApproval()}>isAwaitingIdApproval</Button>
+            <Button onClick={() => isAwaitingPayment()}>isAwaitingPayment</Button>
+            <Button onClick={() => isRejected()}>isRejected</Button>
+            <h2 className={'pt-2'}>Card Statuses</h2>
+            <Button onClick={() => hasCardNoApplication()}>hasCardNoApplication</Button>
+            <Button onClick={() => hasNoCard()}>hasNoCard</Button>
+            <Button onClick={() => hasNoCardNoApplication()}>hasNoCardNoApplication</Button>
+            <h2 className={'pt-2'}>Request new card</h2>
+            <Button onClick={() => freeReprint()}>Start (Reprint)</Button>
+            <Button onClick={() => hasCardNoApplication()}>Start</Button>
+            <Button onClick={() => requiresDoubleId()}>Requires 2x IDs</Button>
+            <Button onClick={() => idRejected()}>ID was rejected</Button>
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 };

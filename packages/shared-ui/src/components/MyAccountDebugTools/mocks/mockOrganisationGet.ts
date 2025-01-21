@@ -20,7 +20,7 @@ const mockOrganisationResponse = {
       {
         idKey: 'passport',
         type: 'IMAGE_UPLOAD',
-        guidelines: 'Must show XXXXXXX\nMust show your full name',
+        guidelines: 'Must show your full name',
         required: false,
         title: 'Passport',
         description: 'Upload a photo of your Passport',
@@ -28,7 +28,7 @@ const mockOrganisationResponse = {
       {
         idKey: 'p60',
         type: 'IMAGE_UPLOAD',
-        guidelines: 'Must show XXXXXXX\nMust show your full name',
+        guidelines: 'Must show your full name',
         required: false,
         title: 'P60',
         description: 'Upload an image of your P60',
@@ -41,7 +41,7 @@ const mockOrganisationResponse = {
       {
         idKey: 'passport',
         type: 'IMAGE_UPLOAD',
-        guidelines: 'Must show XXXXXXX\nMust show your full name',
+        guidelines: 'Must show your full name',
         required: true,
         title: 'Passport',
         description: 'Upload a photo of your Passport',

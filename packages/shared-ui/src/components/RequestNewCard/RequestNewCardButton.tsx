@@ -1,32 +1,46 @@
 import { ThemeVariant } from '../../types';
 import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
-import { ButtonV2 as Button, useDrawer } from '../../index';
-import React, { SyntheticEvent } from 'react';
+import { ButtonV2 as Button, useDrawer, useMemberProfileGet } from '../../index';
+import React, { FC, SyntheticEvent } from 'react';
+import RequestNewCard from './index';
 import useMemberId from '../../hooks/useMemberId';
 import useMemberApplication from '../../hooks/useMemberApplication';
+import { applicationIsComplete } from './util/applicationIsComplete';
 
-const RequestNewCardButton = () => {
+const getText = (applicationStarted: boolean, applicationCompleted: boolean) => {
+  if (applicationCompleted) return 'Request in progress';
+  if (applicationStarted) return 'Continue card request';
+  return 'Request new card';
+};
+
+const RequestNewCardButton: FC = () => {
   const { open } = useDrawer();
   const memberId = useMemberId();
-  const { hasApplication } = useMemberApplication(memberId);
+  const { memberProfile } = useMemberProfileGet(memberId);
+  const { hasApplication, application } = useMemberApplication(memberId);
 
   const onRequestNewCard = (e: SyntheticEvent) => {
     e.preventDefault();
-    open(<div>TODO</div>);
+    open(<RequestNewCard />);
   };
 
-  if (hasApplication) return <Button onClick={onRequestNewCard}>Continue card request</Button>;
-
+  const applicationCompleted = application
+    ? applicationIsComplete(application, memberProfile?.county)
+    : undefined;
+  const variant = hasApplication ? ThemeVariant.Primary : ThemeVariant.Tertiary;
+  const text = getText(!!hasApplication, !!applicationCompleted);
+  const className = hasApplication ? 'px-[24px]' : undefined;
   return (
     <Button
-      className="hidden tablet-xl:block"
-      variant={ThemeVariant.Tertiary}
+      className={className}
+      variant={variant}
       iconRight={faCreditCardBlank}
       type="button"
-      size="Large"
+      size={'Large'}
       onClick={onRequestNewCard}
+      disabled={applicationCompleted}
     >
-      Request new card
+      {text}
     </Button>
   );
 };

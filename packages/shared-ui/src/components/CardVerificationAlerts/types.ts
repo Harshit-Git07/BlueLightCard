@@ -1,9 +1,10 @@
 import type { components } from '../../generated/MembersApi';
+import { ReorderCardReason } from '../../api/types';
 
 export type ProfileSchema = components['schemas']['ProfileModel'];
 export type ApplicationSchema = ProfileSchema['applications'][number] & {
   documents?: string[];
-  county?: string;
+  reorderCardReason?: ReorderCardReason;
 };
 
 export type CardSchema = ProfileSchema['cards'][number];

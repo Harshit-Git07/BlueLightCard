@@ -6,6 +6,7 @@ import { mockMemberApplicationUploadDocument } from './mockMemberApplicationUplo
 import { mockS3PreSignedUpload } from './mockS3PreSignedUpload';
 import { mockClientSecret } from './mockClientSecret';
 import { mockOrganisationGet } from './mockOrganisationGet';
+import { s3UploadConf, S3UploadOptions } from '../../../hooks/useS3Upload';
 
 const matchProfile = /members\/[^/]+\/profile$/i;
 const matchApplication = /members\/[^/]+\/applications(\/[^/]+)?$/i;
@@ -19,13 +20,14 @@ const originals: { invokeV5Api?: IPlatformAdapter['invokeV5Api']; counter: numbe
   counter: 0,
 };
 
-export const setupMocks = (adapter: IPlatformAdapter, inOrOut: boolean) => {
+export const setupMocks = (adapter: IPlatformAdapter) => {
   if (!originals.invokeV5Api) originals.invokeV5Api = adapter.invokeV5Api;
 
-  mockMemberProfileResponse.cards[0].purchaseDate = inOrOut
-    ? new Date().toJSON()
-    : '2023-11-27T08:55:46.030Z';
   mockMemberProfileResponse.applications = [];
+
+  s3UploadConf.action = async (options: S3UploadOptions) => {
+    return adapter.invokeV5Api(options.preSignedUrl, { method: 'PUT' });
+  };
 
   adapter.invokeV5Api = async (path: string, options: V5RequestOptions): Promise<V5Response> => {
     originals.counter++;

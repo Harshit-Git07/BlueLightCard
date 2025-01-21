@@ -5,8 +5,9 @@ import { ApplicationSchema } from '../../CardVerificationAlerts/types';
 export const mockS3PreSignedUpload = async (path: string) => {
   await sleep(1500);
 
-  const application = mockMemberProfileResponse.applications[0] as ApplicationSchema;
-  if (!application || !application.documents) return { status: 404, data: {} };
+  const application = mockMemberProfileResponse.applications.at(-1) as ApplicationSchema;
+  if (!application) return { status: 404, data: {} };
+  if (!application.documents) application.documents = [];
   application.documents.push(path);
 
   return {

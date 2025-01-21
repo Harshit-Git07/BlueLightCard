@@ -64,7 +64,7 @@ describe('MyCard Page', () => {
     expect(pageTitle).toBeInTheDocument();
 
     const requestNewCardBtn = within(pageTitle!.parentElement!).getByRole('button', {
-      name: 'Request new card',
+      name: 'Continue card request',
     });
     expect(requestNewCardBtn).toBeInTheDocument();
 

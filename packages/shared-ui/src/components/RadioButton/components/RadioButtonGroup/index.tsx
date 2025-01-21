@@ -39,7 +39,7 @@ const RadioGroup: FC<RadioGroupProps> = ({
   };
 
   return (
-    <fieldset>
+    <fieldset className="flex flex-col">
       {cleanItems.map(({ id, label }) => (
         <RadioButton
           key={id}

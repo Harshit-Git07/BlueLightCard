@@ -9,6 +9,7 @@ interface FileInfoBase {
   id: string;
   uploadStatus: UploadStatus;
   file: File;
+  documentId?: string;
 }
 
 interface FileInfoWaiting extends FileInfoBase {

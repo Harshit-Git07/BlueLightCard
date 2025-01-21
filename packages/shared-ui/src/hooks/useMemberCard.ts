@@ -5,11 +5,10 @@ export const reprintPeriodInDays = 90;
 
 const useMemberCard = (memberId: string) => {
   const { isLoading, memberProfile } = useMemberProfileGet(memberId);
-  const cards = memberProfile?.cards ?? [];
-  const card = cards.length ? cards[cards.length - 1] : undefined;
+  const card = memberProfile?.cards?.at(-1) ?? null;
 
-  const cardCreated = card?.purchaseDate;
-  const cardAge = cardCreated ? getCardAgeInDays(cardCreated) : 0;
+  const purchaseDate = card?.purchaseDate;
+  const cardAge = purchaseDate ? getCardAgeInDays(purchaseDate) : 0;
   const insideReprintPeriod = cardAge < reprintPeriodInDays;
 
   const firstName = memberProfile?.firstName ?? '';

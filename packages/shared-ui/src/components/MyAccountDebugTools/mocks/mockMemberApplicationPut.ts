@@ -10,6 +10,9 @@ export const mockMemberApplicationPut = async (options: V5RequestOptions) => {
 
   const application = mockMemberProfileResponse.applications[0];
   if (!payload || !application) return { status: 404, data: {} };
+  if (Array.isArray(payload.documents) && payload.documents) {
+    mockMemberProfileResponse.applications[0].eligibilityStatus = 'AWAITING_ID_APPROVAL';
+  }
 
   mockMemberProfileResponse.applications[0] = { ...application, ...payload };
 

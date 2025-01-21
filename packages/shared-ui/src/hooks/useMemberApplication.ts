@@ -5,7 +5,7 @@ const useMemberApplication = (memberId: string) => {
   const { isLoading, memberProfile } = useMemberProfileGet(memberId);
   const hasApplication = memberProfile && memberProfile?.applications?.length >= 1;
   const application: ApplicationSchema | null = hasApplication
-    ? memberProfile.applications[0]
+    ? memberProfile.applications.at(-1) ?? null
     : null;
   const applicationId = application?.applicationId ?? '';
 

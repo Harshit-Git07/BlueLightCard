@@ -56,26 +56,24 @@ const RadioButton: FC<RadioButtonProps> = ({
   };
 
   return (
-    <div>
-      <label htmlFor={id} className={labelClasses}>
-        <RadioButtonInput
-          id={id}
-          name={name}
-          onChange={onChangeHandler}
-          checked={checked}
-          disabled={disabled}
-        />
-        <span className={'pl-2'}>
-          {typeof children === 'string' ? (
-            <span className={contentClasses} data-testid={'label-content'}>
-              {children}
-            </span>
-          ) : (
-            children
-          )}
-        </span>
-      </label>
-    </div>
+    <label htmlFor={id} className={labelClasses}>
+      <RadioButtonInput
+        id={id}
+        name={name}
+        onChange={onChangeHandler}
+        checked={checked}
+        disabled={disabled}
+      />
+      <span className={'pl-2'}>
+        {typeof children === 'string' ? (
+          <span className={contentClasses} data-testid={'label-content'}>
+            {children}
+          </span>
+        ) : (
+          children
+        )}
+      </span>
+    </label>
   );
 };
 

@@ -1,12 +1,18 @@
+// [TODO] fix import issues around pdfjs-dist - TypeError: Promise.withResolvers is not a function at node_modules/pdfjs-dist/build/pdf.mjs:5764:35
+// import { getDocument } from 'pdfjs-dist/webpack.mjs';
+
 import { ValidationResult } from '../types';
-import { getDocument } from 'pdfjs-dist/webpack.mjs';
+
+// [TODO] remove this when the pdfjs-dist - issues are fixed
+const getDocument = ({ data }: { data: ArrayBuffer }) => ({ promise: Promise.resolve(data) });
 
 const pdfFileIsPasswordProtected = async (file: File): Promise<boolean> => {
-  const arrayBuffer = await file.arrayBuffer();
   try {
+    const arrayBuffer = await file.arrayBuffer();
     await getDocument({ data: arrayBuffer }).promise;
     return false;
   } catch (error: any) {
+    console.log(error);
     return error?.name === 'PasswordException';
   }
 };

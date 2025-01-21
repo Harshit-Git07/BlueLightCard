@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SyntheticEvent } from 'react';
 import { NextPage } from 'next';
 import {
   ButtonV2 as Button,
@@ -6,7 +6,10 @@ import {
   fonts,
   getBrandStrapline,
   NoCardImage,
+  RequestNewCard,
+  RequestNewCardButton,
   ThemeVariant,
+  useDrawer,
   useMemberCard,
   useMemberId,
   useMemberProfileGet,
@@ -21,17 +24,23 @@ import withAccountLayout from '@/layouts/AccountBaseLayout/withAccountLayout';
 const YourCardPage: NextPage = () => {
   const memberId = useMemberId();
   const adapter = usePlatformAdapter();
+  const { open } = useDrawer();
   const { card } = useMemberCard(memberId);
-  const { isFetching, memberProfile } = useMemberProfileGet(memberId);
+  const { isLoading, memberProfile } = useMemberProfileGet(memberId);
 
-  if (isFetching) {
+  if (isLoading) {
     return null;
   }
   const strapline = getBrandStrapline(BRAND);
 
   const hasGenerated = !!card?.cardNumber;
-  const hasNotGenerated = !hasGenerated && memberProfile?.applications.length;
+  const hasNotGenerated = !hasGenerated && memberProfile?.applications?.length;
   const hasNoCard = !hasGenerated && !hasNotGenerated;
+
+  const onRequestNewCard = (e: SyntheticEvent) => {
+    e.preventDefault();
+    open(<RequestNewCard />);
+  };
 
   return (
     <div className="flex flex-col gap-5">
@@ -39,16 +48,9 @@ const YourCardPage: NextPage = () => {
         <h2 className={fonts.titleLarge}>Your card</h2>
 
         {hasGenerated ? (
-          <Button
-            className="hidden tablet-xl:block"
-            variant={ThemeVariant.Tertiary}
-            iconRight={faCreditCardBlank}
-            type="button"
-            size="Large"
-            onClick={() => {}}
-          >
-            Request new card
-          </Button>
+          <div className="hidden tablet-xl:block">
+            <RequestNewCardButton />
+          </div>
         ) : null}
       </div>
 
@@ -82,7 +84,7 @@ const YourCardPage: NextPage = () => {
                     iconRight={faCreditCardBlank}
                     type="button"
                     size="Large"
-                    onClick={() => {}}
+                    onClick={onRequestNewCard}
                   >
                     Request new card
                   </Button>

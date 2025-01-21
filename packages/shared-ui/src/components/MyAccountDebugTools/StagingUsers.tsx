@@ -52,11 +52,11 @@ const StagingUsers = () => {
         onChange={onChange}
         className={`block border rounded rounded-[8px] ${colours.borderPrimary} px-2 py-1`}
       >
+        <option value={''} disabled>
+          Select a staging member to mimic
+        </option>
         {Object.entries(stagingUsers).map(([name, members]) => (
           <>
-            <option value={''} disabled>
-              Select a staging member to mimic
-            </option>
             <optgroup key={name} label={name}>
               {members.map((memberId) => (
                 <option key={memberId} value={memberId.split(' ')[0]}>

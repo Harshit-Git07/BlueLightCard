@@ -12,6 +12,7 @@ type AccountDrawerProps = PropsWithChildren & {
   primaryButtonAdditionalProps?: Partial<ButtonProps>;
   secondaryButtonOnClick: () => void;
   secondaryButtonLabel: string;
+  isSecondaryButtonDisabled?: boolean;
   isDisabled?: boolean;
 };
 
@@ -23,6 +24,7 @@ const AccountDrawer: FC<AccountDrawerProps> = ({
   primaryButtonAdditionalProps = {},
   secondaryButtonLabel,
   secondaryButtonOnClick,
+  isSecondaryButtonDisabled = false,
   isDisabled = false,
   children,
 }) => {
@@ -43,6 +45,7 @@ const AccountDrawer: FC<AccountDrawerProps> = ({
             aria-label={secondaryButtonLabel}
             variant={ThemeVariant.Secondary}
             onClick={secondaryButtonOnClick}
+            disabled={isSecondaryButtonDisabled}
           >
             {secondaryButtonLabel}
           </Button>

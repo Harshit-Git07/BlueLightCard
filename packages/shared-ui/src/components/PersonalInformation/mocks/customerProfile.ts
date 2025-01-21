@@ -1,4 +1,4 @@
-import { ProfileSchema } from '@/components/CardVerificationAlerts/types';
+import { ProfileSchema } from '../../../components/CardVerificationAlerts/types';
 
 export const customerProfileNoCardMock: ProfileSchema = {
   firstName: 'Name',

@@ -20,6 +20,7 @@ import Navigation from '../../components/Navigation/Navigation';
 import { useAmplitudeExperiment } from '../../context/AmplitudeExperiment';
 import { AmplitudeExperimentFlags } from '../../utils/amplitude/AmplitudeExperimentFlags';
 import AuthContext from '../../context/Auth/AuthContext';
+import { useClickAway } from '../../hooks/useClickAway';
 
 const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
@@ -39,6 +40,10 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
       setIsOpen(false);
     }
   }, [isMobile]);
+
+  const leftNavRef = useClickAway(() => {
+    setIsOpen(false);
+  });
 
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
@@ -64,7 +69,7 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
       authContext.isReady &&
       (!loggedIn || (status !== 'pending' && accountFlag?.variantName !== 'on' && router.isReady))
     ) {
-      router.push('/');
+      router.replace('/members-home');
     }
   }, [accountFlag, router, status, loggedIn, authContext, ENVIRONMENT]);
 
@@ -90,6 +95,7 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
       </div>
 
       <div
+        ref={leftNavRef}
         className={`mt-[24px] relative grow pb-16 flex gap-[24px] h-full desktop:container desktop:mx-auto tablet:mx-5`}
       >
         <LeftNavigation
@@ -103,7 +109,7 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
 
         {isOpen ? (
           <div
-            className="block tablet:hidden w-full h-full bg-black/50 absolute"
+            className="z-[1] block tablet:hidden w-full h-full bg-black/50 absolute"
             onClick={toggleDrawer}
             aria-hidden={true}
           />

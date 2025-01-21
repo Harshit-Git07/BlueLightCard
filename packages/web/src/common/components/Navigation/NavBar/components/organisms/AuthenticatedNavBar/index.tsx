@@ -54,6 +54,15 @@ const AuthenticatedNavBar = ({
     onSearchCompanyChange(compId, company);
   };
 
+  const onAccountClick = onToggleMobileSideBar
+    ? () => {
+        if (showMobileMenu) {
+          setShowMobileMenu(false);
+        }
+        onToggleMobileSideBar();
+      }
+    : undefined;
+
   const onKeyDownListener = useCallback(
     (event: KeyboardEvent) => {
       if (!searchOverlayOpen) return;
@@ -113,7 +122,7 @@ const AuthenticatedNavBar = ({
             </div>
 
             <div className="flex ml-[16px] gap-[16px]">
-              <MyAccountButton href="/your-card" onClick={onToggleMobileSideBar} />
+              <MyAccountButton href="/your-card" onClick={onAccountClick} />
               <div className="laptop:hidden">
                 <MobileNavToggleButton
                   onIconClick={onShowMobileMenuClick}

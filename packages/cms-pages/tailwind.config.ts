@@ -6,7 +6,7 @@ import type { Config } from 'tailwindcss';
 const brand = env.APP_BRAND;
 
 const config: Config = {
-  darkMode: 'class', // dark mode is not required for re-platforming
+  darkMode: ['class', 'no-dark'], // dark mode is not required for re-platforming
   content: [
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',

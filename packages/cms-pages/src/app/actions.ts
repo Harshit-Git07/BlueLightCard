@@ -1,5 +1,6 @@
 'use server';
 
+import { APP_BRAND } from '@/lib/env';
 import { cookies } from 'next/headers';
 
 export async function updateBrand(brand: string) {
@@ -7,5 +8,13 @@ export async function updateBrand(brand: string) {
 }
 
 export async function getBrand() {
-  return cookies().get('selectedBrand')?.value || 'BLC_UK';
+  return (
+    (
+      {
+        'blc-uk': 'BLC_UK',
+        'blc-au': 'BLC_AU',
+        'dds-uk': 'DDS',
+      } as const
+    )[APP_BRAND] ?? APP_BRAND
+  );
 }

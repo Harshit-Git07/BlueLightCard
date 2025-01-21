@@ -1,6 +1,8 @@
 name: 'CMS Pages'
 on:
   push:
+    branches:
+      - main
     paths:
       - packages/cms-pages/**
       - scripts/**
@@ -19,23 +21,19 @@ on:
       - .github/actions/**
       - .github/workflows/cms-pages.yml
 
-jobs:
-  install:
-    name: Install
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Setup
-        uses: ./.github/actions/setup
-        with:
-          restore_cache: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+permissions: write-all
 
+env:
+  GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+  TF_CLOUD_ORGANIZATION: 'bluelightcard'
+  TF_API_TOKEN: ${{ secrets.TF_API_TOKEN }}
+  # Used in production
+  CACHE_REVALIDATION: 3600
+
+jobs:
   test:
     name: Unit Tests
     runs-on: ubuntu-latest
-    needs: install
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -47,7 +45,6 @@ jobs:
   lint:
     name: Linting
     runs-on: ubuntu-latest
-    needs: install
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -65,7 +62,6 @@ jobs:
     outputs:
       url: ${{ steps.storybook-publish.outputs.url }}
     needs:
-      - install
       - test
       - lint
     steps:
@@ -83,18 +79,150 @@ jobs:
           brandDeployments: true
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
-  build:
-    name: Build
-    if: false
+  pr-cleanup:
+    name: Cleanup PR comments
     runs-on: ubuntu-latest
-    needs: install
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Cleanup Terraform Comment
+        if: github.event_name == 'pull_request'
+        uses: ./.github/actions/comments-clean-pr
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          searchString: 'Terraform Cloud Plan Output'
+
+  deploy:
+    name: Deploy ${{ matrix.brand }} [${{ matrix.environment}}]
+    runs-on: ubuntu-latest
+    needs:
+      - pr-cleanup
+      - test
+      - lint
+    permissions:
+      contents: read
+      pull-requests: write
+    strategy:
+      matrix:
+        brand: ['blc-uk', 'blc-au', 'dds-uk']
+        environment: ['preview', 'production']
+        sanityId: ['td1j6hke']
+        exclude: ${{ github.ref != 'refs/heads/main' && fromJSON('[{"environment":"production"}]') || fromJSON('[{"environment":"preview"}]') }}
+    environment:
+      name: cms-pages-${{ matrix.brand }} (${{ matrix.environment }})
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Terraform plan
+        id: terraform-plan
+        uses: ./.github/actions/terraform-plan
+        with:
+          environment: ${{ matrix.environment }}
+          plan_only: false
+          relative_path: ./packages/cms-pages/infrastructure/terraform
+          workspace_prefix: blc-mono-${{ matrix.brand }}-cms-pages
+          GIT_SSH_KEY: ${{ secrets.GIT_SSH_KEY }}
+
+      - name: Comment Terraform Output
+        if: ${{ github.event_name == 'pull_request' && (steps.terraform-plan.outputs.add != '0' || steps.terraform-plan.outputs.change != '0' || steps.terraform-plan.outputs.destroy != '0') }}
+        uses: actions/github-script@v7
+        id: plan-comment
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // 1. Create comment for the PR
+            const output = `### Terraform Cloud Plan Output
+               #### ${{ matrix.brand }} (${{ matrix.environment }})
+               \`\`\`
+               Plan: ${{ steps.terraform-plan.outputs.add }} to add, ${{ steps.terraform-plan.outputs.change }} to change, ${{ steps.terraform-plan.outputs.destroy }} to destroy.
+               \`\`\`
+               Click [here](${{ steps.terraform-plan.outputs.run_link }}) to view changes in Terraform Cloud.
+               #### Apply changes
+               Run the [Terraform shared - apply](${{ github.server_url }}/${{ github.repository }}/actions/workflows/terraform-shared-apply.yml) workflow with the following paramters to apply the changes:
+
+               * Terraform directory name: **${{ matrix.brand }}**
+               * Terraform workspace environment: **${{ matrix.environment }}**
+               `;
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
+
+      - name: Terraform apply
+        id: terraform-apply
+        uses: ./.github/actions/terraform-apply
+        with:
+          environment: ${{ matrix.environment }}
+          relative_path: ./packages/cms-pages/infrastructure/terraform
+          run_id: ${{ steps.terraform-plan.outputs.run_id }}
+          workspace_prefix: blc-mono-${{ matrix.brand }}-cms-pages
+          GIT_SSH_KEY: ${{ secrets.GIT_SSH_KEY }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.9.8'
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Init
+        shell: bash
+        run: terraform -chdir=./packages/cms-pages/infrastructure/terraform/environments/${{ matrix.brand }} init
+        env:
+          TF_WORKSPACE: ${{ matrix.environment }}
+
+      - name: Terraform output
+        id: get-terraform-output
+        shell: bash
+        env:
+          TF_WORKSPACE: ${{ matrix.environment }}
+        run: |
+          echo "KV_NAMESPACE_ID=$(terraform -chdir=./packages/cms-pages/infrastructure/terraform/environments/${{ matrix.brand }} output kv_namespace_id | tr -d '"')" >> $GITHUB_ENV
+
+      - name: Inject Cloudflare Variables
+        shell: bash
+        run: |
+          sed -i 's/__KV_NAMESPACE_ID_PLACEHOLDER__/${{ env.KV_NAMESPACE_ID }}/g' packages/cms-pages/wrangler.toml
+          sed -i 's/__PROJECT_NAME_PLACEHOLDER__/blc-mono-${{ matrix.brand }}-cms-pages-${{ matrix.environment }}/g' packages/cms-pages/wrangler.toml
+          less packages/cms-pages/wrangler.toml
+
       - name: Setup
         uses: ./.github/actions/setup
-      - name: Build
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate SST Types
+        run: npx sst types --stage ${{ matrix.environment == 'preview' && 'staging' || matrix.environment }}
         env:
-          NEXT_PUBLIC_SANITY_PROJECT_ID: td1j6hke
-          NEXT_PUBLIC_SANITY_DATASET_NAME: develop
-        run: npm run build -w packages/cms-pages
+          BRAND: BLC_UK
+
+      - name: Deploy Worker
+        if: ${{ steps.terraform-apply.outputs.status == 'Success' || steps.terraform-apply.outputs.status == 'Noop' }}
+        id: deploy
+        shell: bash
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CMS_PAGES_CLOUDFLARE_API_KEY }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CMS_PAGES_CLOUDFLARE_ACCOUNT_ID }}
+          # Turn caching off in preview environments for better testing experience, since caching is persisted across deployments
+          NEXT_PUBLIC_REVALIDATE: ${{ matrix.environment == 'preview' && '0' || env.CACHE_REVALIDATION }}
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ matrix.sanityId }}
+          NEXT_PUBLIC_SANITY_DATASET_NAME: ${{ matrix.environment == 'preview' && 'staging' || matrix.environment }}
+          NEXT_PUBLIC_APP_BRAND: ${{ matrix.brand }}
+        working-directory: ./packages/cms-pages
+        # Extract the url from the deployed output and add it to the outputs of the job
+        run: |
+          npm run build:worker
+          if [ "${{ matrix.environment }}" = "preview" ]; then
+            output=$(npm run upload-version:worker -- --tag ${{ github.ref }})
+          else
+            output=$(npm run deploy:worker)
+          fi
+          URL=$(echo "$output" | grep -o -P "\s*(https?://[^\s\"'>]+)")
+          echo "deployment-url=$URL" >> $GITHUB_OUTPUT

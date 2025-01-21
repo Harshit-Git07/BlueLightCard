@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import Post from '@/ui/modules/blog/Post';
 import processMetadata from '@/lib/processMetadata';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page({ params }: Props) {
   const post = await getPost(params);
   if (!post) notFound();

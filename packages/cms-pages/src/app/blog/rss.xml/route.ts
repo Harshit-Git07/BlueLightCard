@@ -4,6 +4,8 @@ import { Feed } from 'feed';
 import { escapeHTML, toHTML } from '@portabletext/to-html';
 import { urlFor } from '@/lib/sanity/urlFor';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   const { blog, posts, site } = await fetchSanity<{
     blog: Sanity.Page;

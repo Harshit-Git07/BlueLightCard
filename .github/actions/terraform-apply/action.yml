@@ -27,6 +27,11 @@ inputs:
     required: true
     type: string
 
+outputs:
+  status:
+    description: The result of the operation. Possible values are `Success`, `Error`, `Timeout` or `Noop`.
+    value: ${{ steps.apply.outputs.status }}
+
 runs:
   using: composite
   steps:

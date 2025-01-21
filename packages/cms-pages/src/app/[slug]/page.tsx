@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import Modules from '@/ui/modules';
 import processMetadata from '@/lib/processMetadata';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page({ params }: Props) {
   const page = await getPage(params);
   if (!page) notFound();

@@ -63,7 +63,7 @@ runs:
       uses: hashicorp/setup-terraform@v3
       with:
         cli_config_credentials_token: ${{ inputs.TF_API_TOKEN }}
-        terraform_version: "1.9.8"
+        terraform_version: '1.9.8'
 
     - name: Setup SSH configuration
       shell: bash

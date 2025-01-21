@@ -49,29 +49,6 @@ export async function getSite(brand: string) {
     { params: { brand }, tags: ['site'] },
   );
 
-  if (!site) {
-    console.warn(`No site found for brand ${brand}. Falling back to default site.`);
-    return await fetchSanity<Sanity.Site>(
-      groq`
-							*[_type == 'site'][0]{
-									...,
-									ctas[]{
-											...,
-											link{
-													...,
-													internal->{ _type, title, metadata }
-											}
-									},
-									headerMenu->{ ${navigationQuery} },
-									footerMenu->{ ${navigationQuery} },
-									social->{ ${navigationQuery} },
-									'ogimage': ogimage.asset->url
-							}
-					`,
-      { params: {}, tags: ['site'] },
-    );
-  }
-
   return site;
 }
 

@@ -4,6 +4,7 @@ interface BrazeFunctions {
   openSession: () => void;
   getCachedContentCards: () => any;
   initialize: (apiKey: string, options: any) => boolean;
+  changeUser: (userId: string) => void;
   logContentCardClick: LogContentCardClick;
 }
 
@@ -19,6 +20,7 @@ export const importBrazeFunctions = async (): Promise<BrazeFunctions> => {
     getCachedContentCards,
     subscribeToContentCardsUpdates,
     logContentCardClick,
+    changeUser,
   } = await import('@braze/web-sdk');
 
   return {
@@ -28,5 +30,6 @@ export const importBrazeFunctions = async (): Promise<BrazeFunctions> => {
     initialize,
     requestContentCardsRefresh,
     logContentCardClick,
+    changeUser,
   };
 };

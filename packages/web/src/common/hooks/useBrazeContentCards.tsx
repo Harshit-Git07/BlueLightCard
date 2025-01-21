@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 import { BRAZE_SDK_ENDPOINT, BRAZE_SDK_API_KEY } from '@/global-vars';
 import { LogContentCardClick, importBrazeFunctions } from '@/utils/braze/importBrazeFunctions';
+import UserContext from '@/context/User/UserContext';
 
 export interface BrazeContentCard {
   id: string;
@@ -16,6 +17,8 @@ export interface BrazeContentCard {
 
 export const useBrazeContentCards = (): BrazeContentCard[] => {
   const [contentCards, setContentCards] = useState<BrazeContentCard[]>([]);
+
+  const userCtx = useContext(UserContext);
 
   const brazeContentCardsEnabled = useAmplitudeExperiment(
     AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED,
@@ -33,12 +36,15 @@ export const useBrazeContentCards = (): BrazeContentCard[] => {
         initialize,
         requestContentCardsRefresh,
         logContentCardClick,
+        changeUser,
       } = await importBrazeFunctions();
 
       initialize(BRAZE_SDK_API_KEY, {
         baseUrl: BRAZE_SDK_ENDPOINT,
+        enableLogging: true,
         enableSdkAuthentication: true,
       });
+      if (userCtx?.user?.uuid) changeUser(userCtx.user.uuid);
       requestContentCardsRefresh();
 
       const cachedCards = getCachedContentCards();
@@ -55,7 +61,7 @@ export const useBrazeContentCards = (): BrazeContentCard[] => {
     };
 
     fetchContentCards();
-  }, [brazeContentCardsEnabled.data?.variantName]);
+  }, [brazeContentCardsEnabled.data?.variantName, userCtx]);
 
   return contentCards;
 };

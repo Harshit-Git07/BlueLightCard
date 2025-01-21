@@ -1,14 +1,16 @@
 import * as target from '../useBrazeContentCards';
 import { useAmplitudeExperiment, Variant } from '@/context/AmplitudeExperiment';
 import { UseDerivedQueryResult } from '@/hooks/useDerivedQuery';
-import { renderHook, RenderHookResult, waitFor } from '@testing-library/react';
+import { RenderHookResult, RenderOptions, renderHook, waitFor } from '@testing-library/react';
 import { importBrazeFunctions } from '@/utils/braze/importBrazeFunctions';
+import UserContext from '@/context/User/UserContext';
 
 jest.mock('@/context/AmplitudeExperiment');
 jest.mock('@/utils/braze/importBrazeFunctions');
 
 const useAmplitudeExperimentMock = jest.mocked(useAmplitudeExperiment);
 const importBrazeFunctionsMock = jest.mocked(importBrazeFunctions);
+const changeUserMock = jest.fn();
 const logContentCardClickMock = jest.fn();
 
 const contentCard = {
@@ -20,6 +22,26 @@ const contentCard = {
   extras: {},
   logClick: expect.any(Function),
 };
+
+const mockUserContext = {
+  dislikes: [],
+  error: undefined,
+  isAgeGated: false,
+  setUser: () => undefined,
+  user: {
+    companies_follows: [],
+    legacyId: 'mock-legacy-id',
+    profile: {
+      dob: 'mock-dob',
+      organisation: 'mock-organisation',
+    },
+    uuid: 'mock-uuid',
+  },
+};
+
+const UserContextWrapper: RenderOptions['wrapper'] = ({ children }) => (
+  <UserContext.Provider value={mockUserContext}>{children}</UserContext.Provider>
+);
 
 describe('Use braze content cards', () => {
   describe('braze content cards feature flag disabled', () => {
@@ -37,6 +59,17 @@ describe('Use braze content cards', () => {
   describe('braze content cards feature flag enabled', () => {
     beforeEach(() => {
       givenFeatureFlagReturns('treatment');
+    });
+
+    it('should identify the user with the Braze SDK via user context', async () => {
+      givenBrazeReturnsCachedContentCards();
+
+      const contentCards = renderHook(() => target.useBrazeContentCards(), {
+        wrapper: UserContextWrapper,
+      });
+      await thenContentCardsAreReturnedFromTheHook(contentCards);
+
+      expect(changeUserMock).toHaveBeenCalledWith('mock-uuid');
     });
 
     it('should return content cards if content cards returned from braze cache function', async () => {
@@ -85,6 +118,7 @@ describe('Use braze content cards', () => {
         }),
         initialize: jest.fn(),
         logContentCardClick: logContentCardClickMock,
+        changeUser: changeUserMock,
       })
     );
   };
@@ -105,6 +139,7 @@ describe('Use braze content cards', () => {
         }),
         initialize: jest.fn(),
         logContentCardClick: logContentCardClickMock,
+        changeUser: changeUserMock,
       })
     );
   };

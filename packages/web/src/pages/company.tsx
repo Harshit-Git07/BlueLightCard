@@ -21,6 +21,8 @@ import AmplitudeContext from '@/context/AmplitudeContext';
 import UserContext from '@/context/User/UserContext';
 import { BRAND } from '@/global-vars';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
+import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
+import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 import amplitudeEvents from '@/utils/amplitude/events';
 import { logCompanyView } from '@/utils/amplitude/logCompanyView';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
@@ -33,6 +35,7 @@ import CompanyPageError from '../page-components/Company/CompanyPageError';
 import CompanyPageFilters from '../page-components/Company/CompanyPageFilters';
 import CompanyPageOffers from '../page-components/Company/CompanyPageOffers';
 import CompanyPageWebHeader from '../page-components/Company/CompanyPageWebHeader';
+import TenancyBanner from '../common/components/TenancyBanner';
 import { BannerDataType } from '../page-components/Company/types';
 
 const getBrand = () => {
@@ -56,9 +59,15 @@ const CompanyPage = () => {
   const userCtx = useContext(UserContext);
   const amplitude = useContext(AmplitudeContext);
 
+  const brazeContentCardsEnabled = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED,
+    'control'
+  );
+
   const brand = BRAND === 'blc-au' ? 'blc-aus' : BRAND;
   const adverts = useQuery({
     queryKey: ['companyPageAdverts', userCtx.isAgeGated ?? true],
+    enabled: brazeContentCardsEnabled.data?.variantName === 'control',
     queryFn: async () => {
       const bannerData = await makeQuery(advertQuery(brand, userCtx.isAgeGated ?? true));
       const banners = shuffle(bannerData.data.banners).slice(0, 2) as BannerDataType[];
@@ -119,44 +128,61 @@ const CompanyPage = () => {
               {/* Offer cards */}
 
               {/* Adverts (ONLY ON DESKTOP) */}
-              {!isMobile && adverts.isSuccess && adverts.data.length > 0 && (
-                <div className="w-full mb-16 tablet:mt-14">
-                  <div className="grid grid-cols-2 gap-10">
-                    {adverts.data.slice(0, 2).map((advert, index) => {
-                      return (
-                        <CampaignCard
-                          key={'card-' + index}
-                          name={advert.__typename}
-                          image={advert.imageSource}
-                          linkUrl={advert.link}
-                          className="h-[200px]"
-                        />
-                      );
-                    })}
+              {!isMobile &&
+                brazeContentCardsEnabled.data?.variantName === 'control' &&
+                adverts.isSuccess &&
+                adverts.data.length > 0 && (
+                  <div className="w-full mb-16 tablet:mt-14">
+                    <div className="grid grid-cols-2 gap-10">
+                      {adverts.data.slice(0, 2).map((advert, index) => {
+                        return (
+                          <CampaignCard
+                            key={'card-' + index}
+                            name={advert.__typename}
+                            image={advert.imageSource}
+                            linkUrl={advert.link}
+                            className="h-[200px]"
+                          />
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* About page (MOBILE) */}
               {isMobile && <MobileAbout companyId={cid} />}
 
               {/* Adverts (ONLY ON MOBILE RESPONSIVE - since it is positioned after the company about section) */}
-              {isMobile && adverts.isSuccess && adverts.data?.length > 0 && (
-                <div className="w-full mb-5 mt-4">
-                  <div className="grid gap-2">
-                    {adverts.data?.slice(0, 2).map((advert, index) => {
-                      return (
-                        <CampaignCard
-                          key={'mobile-card-' + index}
-                          name={advert.__typename}
-                          image={advert.imageSource}
-                          linkUrl={advert.link}
-                          className="min-h-[140px]"
-                        />
-                      );
-                    })}
+              {isMobile &&
+                brazeContentCardsEnabled.data?.variantName === 'control' &&
+                adverts.isSuccess &&
+                adverts.data?.length > 0 && (
+                  <div className="w-full mb-5 mt-4">
+                    <div className="grid gap-2">
+                      {adverts.data?.slice(0, 2).map((advert, index) => {
+                        return (
+                          <CampaignCard
+                            key={'mobile-card-' + index}
+                            name={advert.__typename}
+                            image={advert.imageSource}
+                            linkUrl={advert.link}
+                            className="min-h-[140px]"
+                          />
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
+                )}
+
+              {/* Braze small tenancy banner carousel */}
+              {brazeContentCardsEnabled.data?.variantName === 'treatment' && (
+                <Container
+                  className="py-5"
+                  data-testid="braze-tenancy-banner_small"
+                  addBottomHorizontalLine={false}
+                >
+                  <TenancyBanner title="bottom" variant="small" />
+                </Container>
               )}
             </Container>
             <SheetHandler companyId={cid} onSelectOffer={onSelectOffer} />

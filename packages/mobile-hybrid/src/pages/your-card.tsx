@@ -17,6 +17,8 @@ import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
 import useRouterReady from '@/hooks/useRouterReady';
 import { SyntheticEvent } from 'react';
 import AccountPagesHeader from '@/page-components/account/AccountPagesHeader';
+import InvokeNativeNavigation from '@/invoke/navigation';
+import { BRANDS } from '@/types/brands.enum';
 
 const MyCardPage: NextPage = () => {
   useRouterReady();
@@ -24,6 +26,21 @@ const MyCardPage: NextPage = () => {
   const memberId = useMemberId();
   const { card } = useMemberCard(memberId);
   const { isFetching, memberProfile } = useMemberProfileGet(memberId);
+
+  const navigation = new InvokeNativeNavigation();
+
+  const isDev = ['local', 'staging', 'preview'].includes(process.env.NEXT_PUBLIC_ENV ?? '');
+  const baseUrl: Record<BRANDS, string> = {
+    [BRANDS.BLC_UK]: isDev
+      ? 'https://www.staging.bluelightcard.co.uk'
+      : 'https://www.bluelightcard.co.uk',
+    [BRANDS.BLC_AU]: isDev
+      ? 'https://www.develop.bluelightcard.com.au'
+      : 'https://www.bluelightcard.com.au',
+    [BRANDS.DDS_UK]: isDev
+      ? 'https://www.ddsstaging.bluelightcard.tech'
+      : 'https://www.defencediscountservice.co.uk',
+  };
 
   if (isFetching) {
     return null;
@@ -34,12 +51,8 @@ const MyCardPage: NextPage = () => {
   const hasNotGenerated = !hasGenerated && memberProfile?.applications.length;
   const hasNoCard = !hasGenerated && !hasNotGenerated;
 
+  const eligibilityUrl = `${baseUrl[BRAND as BRANDS]}/eligibility`;
   const onRequestNewCard = (e: SyntheticEvent) => {
-    e.preventDefault();
-    // [TODO] implement later
-  };
-
-  const onGetYourCard = (e: SyntheticEvent) => {
     e.preventDefault();
     // [TODO] implement later
   };
@@ -111,7 +124,7 @@ const MyCardPage: NextPage = () => {
           iconRight={faCreditCardBlank}
           type="button"
           size="Large"
-          onClick={onGetYourCard}
+          onClick={() => navigation.navigateExternal(eligibilityUrl)}
         >
           Get your card
         </Button>

@@ -6,11 +6,13 @@ import useMemberId from '../../../hooks/useMemberId';
 import useMemberProfileGet from '../../../hooks/useMemberProfileGet';
 import TextInput from '../../MyAccountDuplicatedComponents/TextInput';
 import { getBrandedSupportLink } from '../../../utils/getBrandedSupportLink';
+import { usePlatformAdapter } from '../../../adapters';
 
 export const NameSection: FC = () => {
   const memberId = useMemberId();
   const { memberProfile } = useMemberProfileGet(memberId);
 
+  const { platform, navigate } = usePlatformAdapter();
   const zendeskUrl = getBrandedSupportLink();
   return (
     <>
@@ -30,7 +32,12 @@ export const NameSection: FC = () => {
         variant={ThemeVariant.Tertiary}
         size={'Small'}
         className={'!justify-start !w-fit !px-0'}
-        href={zendeskUrl}
+        href={platform !== 'mobile-hybrid' ? zendeskUrl : ''}
+        onClick={() => {
+          if (platform === 'mobile-hybrid') {
+            navigate('/chat');
+          }
+        }}
         newTab
       >
         {copy.nameSection.buttonText}

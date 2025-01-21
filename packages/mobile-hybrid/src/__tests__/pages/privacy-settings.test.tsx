@@ -102,16 +102,12 @@ describe('PrivacySettingsPage', () => {
   test('triggers "Request your data" navigation correctly', () => {
     const requestDataButton = screen.getByText('Request your data');
     fireEvent.click(requestDataButton);
-    expect(invokeNavigation.navigate).toHaveBeenCalledWith(
-      '/url.php?url=https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=23553686637969',
-    );
+    expect(invokeNavigation.navigate).toHaveBeenCalledWith('/chat');
   });
 
   test('triggers "Delete account" navigation correctly', () => {
     const deleteAccountButton = screen.getByText('Delete account');
     fireEvent.click(deleteAccountButton);
-    expect(invokeNavigation.navigate).toHaveBeenCalledWith(
-      '/url.php?url=https://support.bluelightcard.co.uk/hc/en-gb/requests/new?ticket_form_id=23553686637969',
-    );
+    expect(invokeNavigation.navigate).toHaveBeenCalledWith('/chat');
   });
 });

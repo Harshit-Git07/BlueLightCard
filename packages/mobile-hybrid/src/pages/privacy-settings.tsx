@@ -1,13 +1,11 @@
 import { NextPage } from 'next';
 import useRouterReady from '@/hooks/useRouterReady';
 import {
-  BRAND,
   CardVerificationAlerts,
   ThemeVariant,
   useMemberId,
   fonts,
   ButtonV2 as Button,
-  getBrandedSupportLink,
   colours,
 } from '@bluelightcard/shared-ui';
 import { faDownload, faTrash, faArrowUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
@@ -20,7 +18,6 @@ const PrivacySettingsPage: NextPage = () => {
 
   const memberId = useMemberId();
   const navigation = new InvokeNativeNavigation();
-  const supportLink = getBrandedSupportLink();
 
   const descriptionStyle = `${fonts.body} text-colour-onSurface-subtle-light dark:!text-colour-onSurface-subtle-dark pb-2`;
 
@@ -66,7 +63,7 @@ const PrivacySettingsPage: NextPage = () => {
               invertColor={false}
               variant={ThemeVariant.Tertiary}
               iconRight={faDownload}
-              onClick={() => navigation.navigate(`/url.php?url=${supportLink}`)}
+              onClick={() => navigation.navigate('/chat')}
             >
               Request your data
             </Button>
@@ -146,7 +143,7 @@ const PrivacySettingsPage: NextPage = () => {
               className="!px-0"
               variant={ThemeVariant.TertiaryDanger}
               iconRight={faTrash}
-              onClick={() => navigation.navigate(`/url.php?url=${supportLink}`)}
+              onClick={() => navigation.navigate('/chat')}
             >
               Delete account
             </Button>

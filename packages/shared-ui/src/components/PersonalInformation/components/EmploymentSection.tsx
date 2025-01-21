@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { PersonalInfoFormState } from '../hooks/usePersonalInfoState';
-import { getBrandedSupportLink, ThemeVariant } from '../../..';
+import { getBrandedSupportLink, ThemeVariant, usePlatformAdapter } from '../../..';
 import { copy } from '../copy';
 import Button from '../../Button-V2';
 import { useGetEmployers } from '../../../hooks/useGetEmployers';
@@ -25,6 +25,7 @@ export const EmploymentSection: FC<EmploymentSectionProps> = ({ divisionId, onDi
     memberProfile?.organisationId,
   );
 
+  const { platform, navigate } = usePlatformAdapter();
   const zendeskUrl = getBrandedSupportLink();
 
   const divisionOptions: DropdownOptions =
@@ -46,7 +47,12 @@ export const EmploymentSection: FC<EmploymentSectionProps> = ({ divisionId, onDi
           variant={ThemeVariant.Tertiary}
           size={'Small'}
           className={'!justify-start w-fit !px-0'}
-          href={zendeskUrl}
+          href={platform !== 'mobile-hybrid' ? zendeskUrl : ''}
+          onClick={() => {
+            if (platform === 'mobile-hybrid') {
+              navigate('/chat');
+            }
+          }}
           newTab
         >
           {copy.service.buttonText}

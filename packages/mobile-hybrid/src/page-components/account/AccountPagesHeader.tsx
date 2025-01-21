@@ -21,24 +21,29 @@ const AccountPagesHeader = ({ title, hasBackButton = true }: AccountPagesHeaderP
 
   return (
     <div
-      className={`relative flex w-full items-center justify-center p-3 border-[1px] ${colours.borderOnSurfaceOutlineSubtle}`}
+      className={`w-full grid grid-cols-12 p-[16px] border-[1px] ${colours.borderOnSurfaceOutlineSubtle}`}
     >
       <Drawer />
       <Toaster />
       {hasBackButton ? (
         <button
           onClick={handleBackClick}
-          className={`absolute left-4 w-[fit-content]  ${colours.textPrimary}`}
+          className={`col-span-2 w-[fit-content] ${colours.textPrimary}`}
         >
           <FontAwesomeIcon
             icon={faChevronLeft}
             size="xs"
-            className={`pr-2 ${colours.textPrimary}`}
+            className={`pr-[2px] ${colours.textPrimary} `}
           />
           Back
         </button>
       ) : null}
-      <h2 className={`text-center ${colours.textOnSurface} ${fonts.titleMedium}`}>{title}</h2>
+      <h2
+        className={`text-center ${colours.textOnSurface} ${fonts.titleMedium}
+        ${hasBackButton ? 'col-span-8' : 'col-span-12'}`}
+      >
+        {title}
+      </h2>
     </div>
   );
 };

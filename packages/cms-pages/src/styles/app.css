@@ -62,36 +62,6 @@
 }
 
 @layer components {
-  /* typography */
-
-  ._h {
-    font-weight: bold;
-  }
-
-  .h1 {
-    @apply _h text-3xl;
-  }
-
-  .h2 {
-    @apply _h text-2xl;
-  }
-
-  .h3 {
-    @apply _h text-xl;
-  }
-
-  .h4 {
-    @apply _h text-lg;
-  }
-
-  .h5 {
-    @apply _h;
-  }
-
-  .h6 {
-    @apply _h;
-  }
-
   .technical {
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -130,30 +100,6 @@
 
     & :is(h1, h2, h3, h4, h5, h6) strong {
       @apply text-gradient;
-    }
-
-    & h1 {
-      @apply h1;
-    }
-
-    & h2 {
-      @apply h2;
-    }
-
-    & h3 {
-      @apply h3;
-    }
-
-    & h4 {
-      @apply h4;
-    }
-
-    & h5 {
-      @apply h5;
-    }
-
-    & h6 {
-      @apply h6;
     }
 
     & :is(ul, ol) {

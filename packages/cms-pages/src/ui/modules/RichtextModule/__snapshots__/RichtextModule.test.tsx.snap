@@ -1,0 +1,145 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Richtext Module Blockquote should match snapshot 1`] = `
+<div>
+  <section
+    class="section grid gap-8 lg:grid-cols-[1fr,auto]"
+  >
+    <div
+      class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0 max-w-screen-lg"
+    >
+      <blockquote
+        class="mb-2 dark:text-colour-onSurface-dark border-l-2 pl-4 font-typography-body-light text-typography-body-light tracking-typography-body-light leading-typography-body-light"
+      >
+        This is a BLOCKQUOTE text
+      </blockquote>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Richtext Module Heading1 should match snapshot 1`] = `
+<div>
+  <section
+    class="section grid gap-8 lg:grid-cols-[1fr,auto]"
+  >
+    <div
+      class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0 max-w-screen-lg"
+    >
+      <h1
+        class="mb-2 dark:text-colour-onSurface-dark text-typography-display-small font-typography-display-small-weight leading-typography-display-small tracking-typography-display-small"
+      >
+        This is a H1 text
+      </h1>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Richtext Module Heading2 should match snapshot 1`] = `
+<div>
+  <section
+    class="section grid gap-8 lg:grid-cols-[1fr,auto]"
+  >
+    <div
+      class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0 max-w-screen-lg"
+    >
+      <h2
+        class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
+      >
+        This is a H2 text
+      </h2>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Richtext Module Heading3 should match snapshot 1`] = `
+<div>
+  <section
+    class="section grid gap-8 lg:grid-cols-[1fr,auto]"
+  >
+    <div
+      class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0 max-w-screen-lg"
+    >
+      <h3
+        class="mb-2 dark:text-colour-onSurface-dark text-typography-headline font-typography-headline-weight leading-typography-headline tracking-typography-headline"
+      >
+        This is a H3 text
+      </h3>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Richtext Module Heading4 should match snapshot 1`] = `
+<div>
+  <section
+    class="section grid gap-8 lg:grid-cols-[1fr,auto]"
+  >
+    <div
+      class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0 max-w-screen-lg"
+    >
+      <h4
+        class="mb-2 dark:text-colour-onSurface-dark text-typography-title-large font-typography-title-large-weight leading-typography-title-large tracking-typography-title-large"
+      >
+        This is a H4 text
+      </h4>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Richtext Module Heading5 should match snapshot 1`] = `
+<div>
+  <section
+    class="section grid gap-8 lg:grid-cols-[1fr,auto]"
+  >
+    <div
+      class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0 max-w-screen-lg"
+    >
+      <h5
+        class="mb-2 dark:text-colour-onSurface-dark text-typography-title-medium-semibold font-typography-title-medium-semibold-weight leading-typography-title-medium-semibold tracking-typography-title-medium-semibold"
+      >
+        This is a H5 text
+      </h5>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Richtext Module Heading6 should match snapshot 1`] = `
+<div>
+  <section
+    class="section grid gap-8 lg:grid-cols-[1fr,auto]"
+  >
+    <div
+      class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0 max-w-screen-lg"
+    >
+      <h6
+        class="mb-2 dark:text-colour-onSurface-dark text-typography-title-small font-typography-title-small-weight leading-typography-title-small tracking-typography-title-small"
+      >
+        This is a H6 text
+      </h6>
+    </div>
+  </section>
+</div>
+`;
+
+exports[`Richtext Module Normal should match snapshot 1`] = `
+<div>
+  <section
+    class="section grid gap-8 lg:grid-cols-[1fr,auto]"
+  >
+    <div
+      class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0 max-w-screen-lg"
+    >
+      <p
+        class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+      >
+        This is a NORMAL text
+      </p>
+    </div>
+  </section>
+</div>
+`;

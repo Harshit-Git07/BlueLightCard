@@ -35,16 +35,9 @@ exports[`Hero BottomAligned should match snapshot 1`] = `
           class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
         >
           <h2
-            class="group"
-            id="hero-title"
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
           >
             Hero Title
-            <a
-              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
-              href="#hero-title"
-            >
-              🔗
-            </a>
           </h2>
         </div>
       </div>
@@ -129,16 +122,9 @@ exports[`Hero CenterAligned should match snapshot 1`] = `
           class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
         >
           <h2
-            class="group"
-            id="hero-title"
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
           >
             Hero Title
-            <a
-              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
-              href="#hero-title"
-            >
-              🔗
-            </a>
           </h2>
         </div>
       </div>
@@ -223,16 +209,9 @@ exports[`Hero Default should match snapshot 1`] = `
           class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
         >
           <h2
-            class="group"
-            id="hero-title"
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
           >
             Hero Title
-            <a
-              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
-              href="#hero-title"
-            >
-              🔗
-            </a>
           </h2>
         </div>
       </div>
@@ -317,16 +296,9 @@ exports[`Hero LeftAligned should match snapshot 1`] = `
           class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
         >
           <h2
-            class="group"
-            id="hero-title"
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
           >
             Hero Title
-            <a
-              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
-              href="#hero-title"
-            >
-              🔗
-            </a>
           </h2>
         </div>
       </div>
@@ -411,16 +383,9 @@ exports[`Hero RightAligned should match snapshot 1`] = `
           class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
         >
           <h2
-            class="group"
-            id="hero-title"
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
           >
             Hero Title
-            <a
-              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
-              href="#hero-title"
-            >
-              🔗
-            </a>
           </h2>
         </div>
       </div>
@@ -505,16 +470,9 @@ exports[`Hero TopAligned should match snapshot 1`] = `
           class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
         >
           <h2
-            class="group"
-            id="hero-title"
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
           >
             Hero Title
-            <a
-              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
-              href="#hero-title"
-            >
-              🔗
-            </a>
           </h2>
         </div>
       </div>
@@ -599,16 +557,9 @@ exports[`Hero VerticalCenterAligned should match snapshot 1`] = `
           class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
         >
           <h2
-            class="group"
-            id="hero-title"
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
           >
             Hero Title
-            <a
-              class="anim-fade-to-r ml-2 !no-underline md:hidden md:group-hover:inline-block"
-              href="#hero-title"
-            >
-              🔗
-            </a>
           </h2>
         </div>
       </div>

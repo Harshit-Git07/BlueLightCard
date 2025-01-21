@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { PortableText } from '@portabletext/react';
+import Content from '../RichtextModule/Content';
 
 export default function AccordionList({
   intro,
@@ -28,7 +28,7 @@ export default function AccordionList({
             : 'text-center',
         )}
       >
-        <PortableText value={intro} />
+        <Content value={intro} />
       </header>
 
       <div className="mx-auto w-full max-w-screen-md grid gap-4">
@@ -58,7 +58,7 @@ export default function AccordionList({
                 className="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
                 itemProp="text"
               >
-                <PortableText value={content} />
+                <Content value={content} />
               </div>
             </div>
           </details>

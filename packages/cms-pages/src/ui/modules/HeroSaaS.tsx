@@ -1,4 +1,4 @@
-import { PortableText } from '@portabletext/react';
+import Content from './RichtextModule/Content';
 import Pretitle from '@/ui/Pretitle';
 import CTAList from '@/ui/CTAList';
 import Img from '@/ui/Img';
@@ -21,7 +21,7 @@ export default function HeroSaaS({
     <section className="section space-y-8 text-center">
       <div className="richtext mx-auto max-w-2xl text-balance">
         <Pretitle>{pretitle}</Pretitle>
-        <PortableText value={content} />
+        <Content value={content} />
         <CTAList ctas={ctas} className="!mt-8 justify-center" />
       </div>
 

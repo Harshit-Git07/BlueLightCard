@@ -7,14 +7,22 @@ exports[`Creative Module CenterAligned should match snapshot 1`] = `
       class="section space-y-8"
     >
       <header
-        class="richtext mx-auto max-w-xl text-balance text-center font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+        class="richtext mx-auto max-w-xl text-balance text-center"
       >
-        <h2>
-          This is a Creative module.
-        </h2>
-        <p>
-          It combines rich text with images, icons, and CTAs.
-        </p>
+        <div
+          class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+        >
+          <h2
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
+          >
+            This is a Creative module.
+          </h2>
+          <p
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+          >
+            It combines rich text with images, icons, and CTAs.
+          </p>
+        </div>
       </header>
       <div
         class="grid items-center gap-x-12 gap-y-8 md:grid-cols-[repeat(var(--col,1),minmax(0px,1fr))]"
@@ -24,11 +32,17 @@ exports[`Creative Module CenterAligned should match snapshot 1`] = `
           class="space-y-4"
         >
           <div
-            class="richtext font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            class="richtext"
           >
-            <p>
-              This is richtext!
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                This is richtext!
+              </p>
+            </div>
           </div>
           <div
             class="font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
@@ -149,14 +163,22 @@ exports[`Creative Module Default should match snapshot 1`] = `
       class="section space-y-8"
     >
       <header
-        class="richtext mx-auto max-w-xl text-balance text-center font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+        class="richtext mx-auto max-w-xl text-balance text-center"
       >
-        <h2>
-          This is a Creative module.
-        </h2>
-        <p>
-          It combines rich text with images, icons, and CTAs.
-        </p>
+        <div
+          class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+        >
+          <h2
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
+          >
+            This is a Creative module.
+          </h2>
+          <p
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+          >
+            It combines rich text with images, icons, and CTAs.
+          </p>
+        </div>
       </header>
       <div
         class="grid items-center gap-x-12 gap-y-8 md:grid-cols-[repeat(var(--col,1),minmax(0px,1fr))]"
@@ -166,11 +188,17 @@ exports[`Creative Module Default should match snapshot 1`] = `
           class="space-y-4"
         >
           <div
-            class="richtext font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            class="richtext"
           >
-            <p>
-              This is richtext!
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                This is richtext!
+              </p>
+            </div>
           </div>
           <div
             class="font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
@@ -291,14 +319,22 @@ exports[`Creative Module MultipleColumns should match snapshot 1`] = `
       class="section space-y-8"
     >
       <header
-        class="richtext mx-auto max-w-xl text-balance text-center font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+        class="richtext mx-auto max-w-xl text-balance text-center"
       >
-        <h2>
-          This is a Creative module.
-        </h2>
-        <p>
-          It combines rich text with images, icons, and CTAs.
-        </p>
+        <div
+          class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+        >
+          <h2
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
+          >
+            This is a Creative module.
+          </h2>
+          <p
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+          >
+            It combines rich text with images, icons, and CTAs.
+          </p>
+        </div>
       </header>
       <div
         class="grid items-center gap-x-12 gap-y-8 md:grid-cols-[repeat(var(--col,1),minmax(0px,1fr))]"
@@ -308,11 +344,17 @@ exports[`Creative Module MultipleColumns should match snapshot 1`] = `
           class="space-y-4"
         >
           <div
-            class="richtext font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            class="richtext"
           >
-            <p>
-              This is richtext!
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                This is richtext!
+              </p>
+            </div>
           </div>
         </article>
         <article
@@ -453,14 +495,22 @@ exports[`Creative Module RightAligned should match snapshot 1`] = `
       class="section space-y-8"
     >
       <header
-        class="richtext mx-auto max-w-xl text-balance text-center font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+        class="richtext mx-auto max-w-xl text-balance text-center"
       >
-        <h2>
-          This is a Creative module.
-        </h2>
-        <p>
-          It combines rich text with images, icons, and CTAs.
-        </p>
+        <div
+          class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+        >
+          <h2
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
+          >
+            This is a Creative module.
+          </h2>
+          <p
+            class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+          >
+            It combines rich text with images, icons, and CTAs.
+          </p>
+        </div>
       </header>
       <div
         class="grid items-center gap-x-12 gap-y-8 md:grid-cols-[repeat(var(--col,1),minmax(0px,1fr))]"
@@ -470,11 +520,17 @@ exports[`Creative Module RightAligned should match snapshot 1`] = `
           class="space-y-4"
         >
           <div
-            class="richtext font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"
+            class="richtext"
           >
-            <p>
-              This is richtext!
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                This is richtext!
+              </p>
+            </div>
           </div>
           <div
             class="font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark"

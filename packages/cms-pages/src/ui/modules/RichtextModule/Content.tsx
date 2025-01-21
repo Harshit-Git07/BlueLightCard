@@ -1,7 +1,7 @@
 import { PortableText, PortableTextMarkComponentProps } from '@portabletext/react';
-import AnchoredHeading from './AnchoredHeading';
 import Image from './Image';
 import { cn } from '@/lib/utils';
+import Typography from './Typography';
 
 export default function Content({
   value,
@@ -13,12 +13,15 @@ export default function Content({
         value={value}
         components={{
           block: {
-            h2: (node) => <AnchoredHeading as="h2" {...node} />,
-            h3: (node) => <AnchoredHeading as="h3" {...node} />,
-            blockquote: ({ children }) => (
-              <blockquote className="border-l-2 pl-4">
-                <div>{children}</div>
-              </blockquote>
+            normal: (node) => <Typography headingLevel="normal">{node.children}</Typography>,
+            h1: (node) => <Typography headingLevel="h1">{node.children}</Typography>,
+            h2: (node) => <Typography headingLevel="h2">{node.children}</Typography>,
+            h3: (node) => <Typography headingLevel="h3">{node.children}</Typography>,
+            h4: (node) => <Typography headingLevel="h4">{node.children}</Typography>,
+            h5: (node) => <Typography headingLevel="h5">{node.children}</Typography>,
+            h6: (node) => <Typography headingLevel="h6">{node.children}</Typography>,
+            blockquote: (node) => (
+              <Typography headingLevel="blockquote">{node.children}</Typography>
             ),
           },
           types: {

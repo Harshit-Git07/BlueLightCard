@@ -1,4 +1,4 @@
-import { PortableText } from '@portabletext/react';
+import Content from '../RichtextModule/Content';
 import CTAsSubModule, { type CTAsSubModuleType } from './CTAsSubModule';
 import CustomHTMLSubmodule, { type CustomHTMLSubmoduleType } from './CustomHTMLSubmodule';
 import IconSubModule, { type IconSubModuleType } from './IconSubModule';
@@ -37,8 +37,8 @@ export default function CreativeModule({
     <section>
       <div className="section space-y-8">
         {intro && (
-          <header className="richtext mx-auto max-w-xl text-balance text-center font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark">
-            <PortableText value={intro} />
+          <header className="richtext mx-auto max-w-xl text-balance text-center">
+            <Content value={intro} />
           </header>
         )}
 

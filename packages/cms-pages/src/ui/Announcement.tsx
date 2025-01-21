@@ -1,4 +1,4 @@
-import { PortableText, groq } from 'next-sanity';
+import Content from './modules/RichtextModule/Content';
 import CTA from '@/ui/CTA';
 import { getAnnouncements } from '@/lib/sanity/queries';
 
@@ -37,7 +37,7 @@ export default async function Announcement({ brand }: AnnouncementProps) {
             fill="white"
           ></path>
         </svg>
-        <PortableText value={active.content} />
+        <Content value={active.content} />
       </div>
 
       <CTA className="link anim-fade-to-l" link={active.cta} />

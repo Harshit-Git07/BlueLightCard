@@ -1,4 +1,4 @@
-import { PortableText } from '@portabletext/react';
+import Content from './RichtextModule/Content';
 
 export default function StepList({
   intro,
@@ -13,7 +13,7 @@ export default function StepList({
     <section className="section space-y-8">
       {intro && (
         <header className="richtext text-center">
-          <PortableText value={intro} />
+          <Content value={intro} />
         </header>
       )}
 
@@ -25,7 +25,7 @@ export default function StepList({
             </b>
 
             <div className="richtext">
-              <PortableText value={step.content} />
+              <Content value={step.content} />
             </div>
           </li>
         ))}

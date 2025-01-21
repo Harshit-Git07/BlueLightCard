@@ -1,4 +1,4 @@
-import { PortableText } from '@portabletext/react';
+import Content from './RichtextModule/Content';
 import Img from '@/ui/Img';
 import { cn } from '@/lib/utils';
 
@@ -13,7 +13,7 @@ export default function TestimonialList({
     <section className="section space-y-8 text-center">
       {intro && (
         <header className="richtext">
-          <PortableText value={intro} />
+          <Content value={intro} />
         </header>
       )}
 
@@ -22,7 +22,7 @@ export default function TestimonialList({
           <article className="!basis-[min(150px,70vw)]" key={key}>
             <blockquote className="space-y-6">
               <div className="richtext text-balance">
-                <PortableText value={testimonial.content} />
+                <Content value={testimonial.content} />
               </div>
 
               {author != null && (

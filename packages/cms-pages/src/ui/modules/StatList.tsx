@@ -1,4 +1,4 @@
-import { PortableText } from '@portabletext/react';
+import Content from './RichtextModule/Content';
 import { stegaClean } from '@sanity/client/stega';
 
 export default function StatList({
@@ -18,7 +18,7 @@ export default function StatList({
     <section className="section space-y-8" style={{ textAlign: stegaClean(textAlign) }}>
       {intro && (
         <header className="richtext text-center">
-          <PortableText value={intro} />
+          <Content value={intro} />
         </header>
       )}
 

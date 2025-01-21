@@ -10,9 +10,15 @@ exports[`Accordion List Default should match snapshot 1`] = `
     <header
       class="richtext font-typography-body-light-weight leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark text-center"
     >
-      <h2>
-        Accordion Intro
-      </h2>
+      <div
+        class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+      >
+        <h2
+          class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
+        >
+          Accordion Intro
+        </h2>
+      </div>
     </header>
     <div
       class="mx-auto w-full max-w-screen-md grid gap-4"
@@ -39,9 +45,15 @@ exports[`Accordion List Default should match snapshot 1`] = `
             class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
             itemprop="text"
           >
-            <p>
-              Content for Question 1
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                Content for Question 1
+              </p>
+            </div>
           </div>
         </div>
       </details>
@@ -67,9 +79,15 @@ exports[`Accordion List Default should match snapshot 1`] = `
             class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
             itemprop="text"
           >
-            <p>
-              Content for Question 2
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                Content for Question 2
+              </p>
+            </div>
           </div>
         </div>
       </details>
@@ -95,9 +113,15 @@ exports[`Accordion List Default should match snapshot 1`] = `
             class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
             itemprop="text"
           >
-            <p>
-              Content for Question 3
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                Content for Question 3
+              </p>
+            </div>
           </div>
         </div>
       </details>
@@ -116,9 +140,15 @@ exports[`Accordion List Horizontal should match snapshot 1`] = `
     <header
       class="richtext font-typography-body-light-weight leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark md:sticky-below-header self-start [--offset:1rem]"
     >
-      <h2>
-        Accordion Intro
-      </h2>
+      <div
+        class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+      >
+        <h2
+          class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
+        >
+          Accordion Intro
+        </h2>
+      </div>
     </header>
     <div
       class="mx-auto w-full max-w-screen-md grid gap-4"
@@ -145,9 +175,15 @@ exports[`Accordion List Horizontal should match snapshot 1`] = `
             class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
             itemprop="text"
           >
-            <p>
-              Content for Question 1
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                Content for Question 1
+              </p>
+            </div>
           </div>
         </div>
       </details>
@@ -173,9 +209,15 @@ exports[`Accordion List Horizontal should match snapshot 1`] = `
             class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
             itemprop="text"
           >
-            <p>
-              Content for Question 2
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                Content for Question 2
+              </p>
+            </div>
           </div>
         </div>
       </details>
@@ -201,9 +243,15 @@ exports[`Accordion List Horizontal should match snapshot 1`] = `
             class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
             itemprop="text"
           >
-            <p>
-              Content for Question 3
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                Content for Question 3
+              </p>
+            </div>
           </div>
         </div>
       </details>
@@ -222,9 +270,15 @@ exports[`Accordion List Vertical should match snapshot 1`] = `
     <header
       class="richtext font-typography-body-light-weight leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark text-center"
     >
-      <h2>
-        Accordion Intro
-      </h2>
+      <div
+        class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+      >
+        <h2
+          class="mb-2 dark:text-colour-onSurface-dark text-typography-headline-bold font-typography-headline-bold-weight leading-typography-headline-bold tracking-typography-headline-bold"
+        >
+          Accordion Intro
+        </h2>
+      </div>
     </header>
     <div
       class="mx-auto w-full max-w-screen-md grid gap-4"
@@ -251,9 +305,15 @@ exports[`Accordion List Vertical should match snapshot 1`] = `
             class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
             itemprop="text"
           >
-            <p>
-              Content for Question 1
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                Content for Question 1
+              </p>
+            </div>
           </div>
         </div>
       </details>
@@ -279,9 +339,15 @@ exports[`Accordion List Vertical should match snapshot 1`] = `
             class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
             itemprop="text"
           >
-            <p>
-              Content for Question 2
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                Content for Question 2
+              </p>
+            </div>
           </div>
         </div>
       </details>
@@ -307,9 +373,15 @@ exports[`Accordion List Vertical should match snapshot 1`] = `
             class="richtext font-typography-body-light font-typography-body-light-weight text-typography-body-light leading-typography-body-light text-colour-onSurface-light dark:text-colour-onSurface-dark"
             itemprop="text"
           >
-            <p>
-              Content for Question 3
-            </p>
+            <div
+              class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+            >
+              <p
+                class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+              >
+                Content for Question 3
+              </p>
+            </div>
           </div>
         </div>
       </details>

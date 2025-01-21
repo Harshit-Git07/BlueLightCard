@@ -1,4 +1,4 @@
-import { PortableText } from '@portabletext/react';
+import Content from '../RichtextModule/Content';
 
 export type RichtextSubModuleType = Sanity.Module<'richtext'> &
   Partial<{
@@ -7,8 +7,8 @@ export type RichtextSubModuleType = Sanity.Module<'richtext'> &
 
 export default function RichtextSubModule({ module }: { module: RichtextSubModuleType }) {
   return (
-    <div className="richtext font-typography-body font-typography-body-weight text-typography-body leading-typography-body text-colour-onSurface-light dark:text-colour-onSurface-dark">
-      <PortableText value={module.content} />
+    <div className="richtext">
+      <Content value={module.content} />
     </div>
   );
 }

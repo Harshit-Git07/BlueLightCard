@@ -1,4 +1,4 @@
-import { PortableText } from '@portabletext/react';
+import Content from './RichtextModule/Content';
 import Img from '@/ui/Img';
 import { cn } from '@/lib/utils';
 import { stegaClean } from '@sanity/client/stega';
@@ -21,7 +21,7 @@ export default function FlagList({
     <section className="section space-y-8">
       {intro && (
         <header className="richtext text-center">
-          <PortableText value={intro} />
+          <Content value={intro} />
         </header>
       )}
 
@@ -39,7 +39,7 @@ export default function FlagList({
             </figure>
 
             <div className="richtext">
-              <PortableText value={item.content} />
+              <Content value={item.content} />
             </div>
           </article>
         ))}

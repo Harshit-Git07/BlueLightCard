@@ -1,5 +1,5 @@
 import { fetchSanity, groq } from '@/lib/sanity/fetch';
-import { PortableText } from '@portabletext/react';
+import Content from './RichtextModule/Content';
 import Pretitle from '@/ui/Pretitle';
 import Img from '@/ui/Img';
 
@@ -21,7 +21,7 @@ export default async function LogoList({
       {(pretitle || intro) && (
         <header className="richtext text-center">
           <Pretitle>{pretitle}</Pretitle>
-          <PortableText value={intro} />
+          <Content value={intro} />
         </header>
       )}
 

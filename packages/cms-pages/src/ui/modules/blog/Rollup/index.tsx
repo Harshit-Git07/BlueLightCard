@@ -1,5 +1,5 @@
 import { fetchSanity, groq } from '@/lib/sanity/fetch';
-import { PortableText } from '@portabletext/react';
+import Content from '@/ui/modules/RichtextModule/Content';
 import Filtering from '@/ui/modules/blog/Rollup/Filtering';
 import List from './List';
 import { stegaClean } from '@sanity/client/stega';
@@ -33,7 +33,7 @@ export default async function Rollup({
     <section className="section space-y-8">
       {intro && (
         <header className="richtext text-blue-700">
-          <PortableText value={intro} />
+          <Content value={intro} />
           <hr />
         </header>
       )}

@@ -34,7 +34,7 @@ export async function fetchSanity<T = any>(
         }
       : {
           perspective: 'published',
-          useCdn: true,
+          useCdn: false,
           next: {
             revalidate: Number(process.env.NEXT_PUBLIC_REVALIDATE) || false,
             ...next,
@@ -54,7 +54,7 @@ export async function fetchSanityStatic<T = any>(
 ) {
   return await client.fetch<T>(query, params, {
     perspective: 'published',
-    useCdn: true,
+    useCdn: false,
     next: {
       revalidate: Number(process.env.NEXT_PUBLIC_REVALIDATE) || false,
       ...next,

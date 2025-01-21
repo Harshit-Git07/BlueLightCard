@@ -41,7 +41,6 @@ export const useBrazeContentCards = (): BrazeContentCard[] => {
 
       initialize(BRAZE_SDK_API_KEY, {
         baseUrl: BRAZE_SDK_ENDPOINT,
-        enableLogging: true,
         enableSdkAuthentication: true,
       });
       if (userCtx?.user?.uuid) changeUser(userCtx.user.uuid);

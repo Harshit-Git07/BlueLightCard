@@ -1,6 +1,6 @@
 import { Stack } from 'sst/constructs';
 
-import { BLC_AU_BRAND, BLC_UK_BRAND, DDS_UK_BRAND, MAP_BRAND } from '@blc-mono/core/constants/common';
+import { BLC_AU_BRAND, BLC_UK_BRAND, DDS_UK_BRAND } from '@blc-mono/core/constants/common';
 import { Brand, CORS_ALLOWED_ORIGINS_SCHEMA, JsonStringSchema } from '@blc-mono/core/schemas/common';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
@@ -46,7 +46,7 @@ export class OrdersStackConfigResolver {
       case PR_STAGE_REGEX.test(stack.stage):
         return this.forPrStage();
       default:
-        return this.fromEnvironmentVariables(stack.stage, MAP_BRAND[brand]);
+        return this.fromEnvironmentVariables();
     }
   }
 
@@ -161,7 +161,7 @@ export class OrdersStackConfigResolver {
     };
   }
 
-  public static fromEnvironmentVariables(stage: string, brand: string): OrdersStackConfig {
+  public static fromEnvironmentVariables(): OrdersStackConfig {
     return {
       membershipPrice: getEnv(OrdersStackEnvironmentKeys.MEMBERSHIP_PRICE),
       currencyCode: getEnv(OrdersStackEnvironmentKeys.CURRENCY_CODE),

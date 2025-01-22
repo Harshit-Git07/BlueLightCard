@@ -5747,8 +5747,12 @@
           "phoneNumber" : {
             "type" : "string"
           },
-          "idUploaded" : {
-            "type" : "boolean"
+          "documents": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
           },
           "spareEmailValidated" : {
             "type" : "boolean",

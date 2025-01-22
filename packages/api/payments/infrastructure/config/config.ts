@@ -1,6 +1,6 @@
 import { Stack } from 'sst/constructs';
 
-import { BLC_AU_BRAND, BLC_UK_BRAND, DDS_UK_BRAND, MAP_BRAND } from '@blc-mono/core/constants/common';
+import { BLC_AU_BRAND, BLC_UK_BRAND, DDS_UK_BRAND } from '@blc-mono/core/constants/common';
 import { Brand } from '@blc-mono/core/schemas/common';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
@@ -26,7 +26,7 @@ export class PaymentsStackConfigResolver {
       case PR_STAGE_REGEX.test(stack.stage):
         return this.forPrStage();
       default:
-        return this.fromEnvironmentVariables(stack.stage, MAP_BRAND[brand]);
+        return this.fromEnvironmentVariables();
     }
   }
 
@@ -91,7 +91,7 @@ export class PaymentsStackConfigResolver {
     };
   }
 
-  public static fromEnvironmentVariables(stage: string, brand: string): PaymentsStackConfig {
+  public static fromEnvironmentVariables(): PaymentsStackConfig {
     return {
       stripeEventSourcePrefix: 'aws.partner/stripe.com',
       currencyCode: getEnv(PaymentsStackEnvironmentKeys.CURRENCY_CODE),

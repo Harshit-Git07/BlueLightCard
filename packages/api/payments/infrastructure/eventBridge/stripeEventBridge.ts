@@ -1,6 +1,6 @@
 import { Stack } from 'aws-cdk-lib';
 import * as events from 'aws-cdk-lib/aws-events';
-import { EventBus, IRuleTarget, Match, Rule } from 'aws-cdk-lib/aws-events';
+import { EventBus, IRuleTarget, Rule } from 'aws-cdk-lib/aws-events';
 
 export class StripeEventBridge {
   private readonly stack: Stack;

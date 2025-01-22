@@ -6,7 +6,10 @@ import {
   CreateApplicationModelResponse,
   UpdateApplicationModel,
 } from '@blc-mono/members/application/models/applicationModel';
-import { DocumentUploadLocation } from '@blc-mono/members/application/models/documentUpload';
+import {
+  DocumentUploadLocation,
+  DocumentListPresignedUrl,
+} from '@blc-mono/members/application/models/documentUpload';
 import {
   ApplicationBatchApprovalModel,
   ApplicationBatchModel,
@@ -44,6 +47,12 @@ export function adminApplicationRoutes(
       handler:
         'packages/api/members/application/handlers/admin/applications/getApplication.handler',
       responseModelType: ApplicationModel,
+    }),
+    'GET /admin/members/{memberId}/applications/{applicationId}/documents': Route.createRoute({
+      ...defaultRouteProps,
+      name: 'AdminGetDocuments',
+      handler: 'packages/api/members/application/handlers/admin/applications/getDocuments.handler',
+      responseModelType: DocumentListPresignedUrl,
     }),
     'POST /admin/members/{memberId}/applications/{applicationId}/uploadDocument': Route.createRoute(
       {

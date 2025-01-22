@@ -1,4 +1,4 @@
-import { DynamoDBDocumentClient, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
+import { DynamoDBDocumentClient, UpdateCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { ApplicationRepository } from '../applicationRepository';
 import { ApplicationModel, CreateApplicationModel } from '../../models/applicationModel';
 import { NotFoundError } from '../../errors/NotFoundError';
@@ -7,6 +7,15 @@ import { applicationKey, memberKey } from '../repository';
 import { ApplicationReason } from '../../models/enums/ApplicationReason';
 
 jest.mock('@aws-sdk/lib-dynamodb');
+jest.mock('@aws-sdk/client-s3', () => {
+  return {
+    S3Client: jest.fn().mockImplementation(() => {
+      return {
+        getSignedUrlPromise: jest.fn().mockResolvedValue('signedUrl'),
+      };
+    }),
+  };
+});
 jest.mock('uuid', () => ({
   v4: jest.fn(),
 }));
@@ -41,6 +50,7 @@ describe('ApplicationRepository', () => {
     it('should create a new application', async () => {
       (uuidv4 as jest.Mock).mockReturnValue(applicationId);
       dynamoDBMock.send.mockResolvedValue({});
+
       const result = await repository.createApplication(
         memberId,
         CreateApplicationModel.parse(application),
@@ -65,6 +75,7 @@ describe('ApplicationRepository', () => {
   describe('updateApplication', () => {
     it('should update an existing application', async () => {
       dynamoDBMock.send.mockResolvedValue({});
+
       await repository.updateApplication(memberId, applicationId, application);
 
       expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(UpdateCommand));
@@ -95,14 +106,18 @@ describe('ApplicationRepository', () => {
   describe('getApplications', () => {
     it('should return an empty array if no applications are found for the member', async () => {
       dynamoDBMock.send.mockResolvedValue({ Items: [] });
+
       const result = await repository.getApplications(memberId);
+
       expect(result).toEqual([]);
     });
 
     it('should return applications for the member', async () => {
       const items = [application];
       dynamoDBMock.send.mockResolvedValue({ Items: items });
+
       const result = await repository.getApplications(memberId);
+
       expect(result).toEqual(items.map((item) => ApplicationModel.parse(item)));
     });
   });
@@ -110,6 +125,7 @@ describe('ApplicationRepository', () => {
   describe('getApplication', () => {
     it('should throw NotFoundError if application is not found', async () => {
       dynamoDBMock.send.mockResolvedValue({ Item: null });
+
       await expect(repository.getApplication(memberId, applicationId)).rejects.toThrow(
         NotFoundError,
       );
@@ -117,8 +133,29 @@ describe('ApplicationRepository', () => {
 
     it('should return the application if found', async () => {
       dynamoDBMock.send.mockResolvedValue({ Item: application });
+
       const result = await repository.getApplication(memberId, applicationId);
+
       expect(result).toEqual(ApplicationModel.parse(application));
+    });
+  });
+
+  describe('getDocumentsFromApplication', () => {
+    it('should throw NotFoundError if application is not found', async () => {
+      dynamoDBMock.send.mockResolvedValue({ Item: null });
+
+      await expect(repository.getDocumentsFromApplication(memberId, applicationId)).rejects.toThrow(
+        NotFoundError,
+      );
+    });
+
+    it('should return documents if application is found', async () => {
+      const documents = ['doc1', 'doc2'];
+      dynamoDBMock.send.mockResolvedValue({ Item: { documents } });
+
+      const result = await repository.getDocumentsFromApplication(memberId, applicationId);
+
+      expect(result).toEqual(['doc1', 'doc2']);
     });
   });
 });

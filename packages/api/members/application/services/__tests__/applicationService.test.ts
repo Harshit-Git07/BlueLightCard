@@ -11,13 +11,19 @@ import {
 } from '../../models/applicationModel';
 import { ApplicationReason } from '../../models/enums/ApplicationReason';
 import { ProfileService } from '../profileService';
+import { v4 as uuidv4 } from 'uuid';
 
 jest.mock('../../repositories/applicationRepository');
 jest.mock('../promoCodesService');
-jest.mock('aws-sdk');
-jest.mock('uuid', () => ({
-  v4: jest.fn(),
+jest.mock('../profileService');
+jest.mock('aws-sdk', () => ({
+  S3: jest.fn().mockImplementation(() => ({
+    getSignedUrlPromise: jest.fn(),
+  })),
 }));
+jest.mock('uuid');
+
+const mockedUuidv4 = jest.mocked(uuidv4);
 
 describe('ApplicationService', () => {
   const memberId = '7d92ad80-8691-4fc7-839a-715384a8a5e0';
@@ -30,6 +36,7 @@ describe('ApplicationService', () => {
   const updateApplication: UpdateApplicationModel = {
     city: 'New York',
   };
+  const documentId = '7d92ad80-8983-4f09-bfa1-f652b17e9ca1';
 
   let applicationService: ApplicationService;
   let repositoryMock: jest.Mocked<ApplicationRepository>;
@@ -108,10 +115,25 @@ describe('ApplicationService', () => {
         eligibilityStatus: EligibilityStatus.AWAITING_ID_APPROVAL,
       } as unknown as ApplicationModel);
       s3ClientMock.getSignedUrlPromise.mockResolvedValue('mockUrl');
+      mockedUuidv4.mockReturnValue('439a7a9a-7255-41d1-9435-d2a21e5f7e72');
 
       const result = await applicationService.generateDocumentUploadUrl(memberId, applicationId);
 
-      expect(result).toEqual({ preSignedUrl: 'mockUrl' });
+      expect(result).toEqual({
+        documentId: '439a7a9a-7255-41d1-9435-d2a21e5f7e72',
+        preSignedUrl: 'mockUrl',
+      });
+    });
+  });
+
+  describe('documentUploadComplete', () => {
+    it('should record document upload successfully', async () => {
+      await applicationService.documentUploadComplete(memberId, applicationId, documentId);
+
+      expect(profileServiceMock.createNote).toHaveBeenCalledWith(
+        memberId,
+        expect.objectContaining({ category: 'ID Uploaded' }),
+      );
     });
   });
 

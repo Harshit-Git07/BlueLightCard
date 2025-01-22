@@ -1,5 +1,4 @@
-import { RequestValidator } from 'aws-cdk-lib/aws-apigateway';
-import { RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { RequestValidator, RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { ApiGatewayV1ApiFunctionRouteProps, Stack } from 'sst/constructs';
 import { SSTConstruct } from 'sst/constructs/Construct';
@@ -10,7 +9,6 @@ import {
   Model,
   ResponseModel,
 } from '@blc-mono/core/extensions/apiGatewayExtension';
-import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 
 import { PaymentsStackEnvironmentKeys } from '../constants/environment';
 import { SSTFunction } from '../constructs/SSTFunction';

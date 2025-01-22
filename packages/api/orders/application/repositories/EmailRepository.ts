@@ -5,7 +5,6 @@ import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import { OrdersStackEnvironmentKeys } from '@blc-mono/orders/infrastructure/constants/environment';
 
 import { BrazeEmailClientProvider, IBrazeEmailClientProvider } from './BrazeEmailClientProvider';
-import { ISecretRepository, SecretRepository } from './SecretRepository';
 
 export type PaymentResultEmailParams = {
   member: {

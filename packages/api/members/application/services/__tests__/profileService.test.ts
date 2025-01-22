@@ -2,7 +2,6 @@ import { ProfileService } from '../profileService';
 import { ProfileRepository } from '../../repositories/profileRepository';
 import { OrganisationService } from '../organisationService';
 import { Auth0ClientService } from '../../auth0/auth0ClientService';
-import { v4 as uuidv4 } from 'uuid';
 import { OrganisationModel } from '../../models/organisationModel';
 import { EmployerModel } from '../../models/employerModel';
 import { CreateProfileModel } from '../../models/profileModel';
@@ -22,9 +21,9 @@ jest.mock('../../auth0/auth0ClientService');
 jest.mock('../../email/emailService');
 
 describe('ProfileService', () => {
-  const memberId = uuidv4();
-  const organisationId = uuidv4();
-  const employerId = uuidv4();
+  const memberId = '7d92ad80-8691-4fc7-839a-715384a8a5e0';
+  const organisationId = '9d2632fb-8983-4f09-bfa1-f652b17e9ca1';
+  const employerId = '9d2632fb-8691-4f09-bfa1-f652b17e9ca1';
   const newProfile: CreateProfileModel = {
     firstName: 'John',
     lastName: 'Doe',
@@ -71,7 +70,7 @@ describe('ProfileService', () => {
     currentEmail: 'email@example.com',
     newEmail: 'newemail@example.com',
   };
-  const noteId = uuidv4();
+  const noteId = '9d2632fb-8691-839a-bfa1-f652b17e9ca1';
   const note: NoteModel = {
     noteId,
     category: 'General',
@@ -280,26 +279,6 @@ describe('ProfileService', () => {
     it('should throw an error if fetching notes fails', async () => {
       profileRepositoryMock.getNotes.mockRejectedValue(new Error('Fetch failed'));
       await expect(profileService.getNotes(memberId)).rejects.toThrow('Fetch failed');
-    });
-  });
-
-  describe('documentUploadComplete', () => {
-    it('should record document upload successfully', async () => {
-      await profileService.documentUploadComplete(memberId);
-      expect(profileRepositoryMock.updateProfile).toHaveBeenCalledWith(memberId, {
-        idUploaded: true,
-      });
-      expect(profileRepositoryMock.createNote).toHaveBeenCalledWith(
-        memberId,
-        expect.objectContaining({ category: 'ID Uploaded' }),
-      );
-    });
-
-    it('should throw an error if recording document upload fails', async () => {
-      profileRepositoryMock.updateProfile.mockRejectedValue(new Error('Update failed'));
-      await expect(profileService.documentUploadComplete(memberId)).rejects.toThrow(
-        'Update failed',
-      );
     });
   });
 

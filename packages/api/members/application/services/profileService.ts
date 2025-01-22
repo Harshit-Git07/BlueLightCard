@@ -15,7 +15,6 @@ import { ProfileRepository } from '@blc-mono/members/application/repositories/pr
 import { Auth0ClientService } from '@blc-mono/members/application/auth0/auth0ClientService';
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { NoteSource } from '@blc-mono/members/application/models/enums/NoteSource';
 import { EmailService } from '@blc-mono/members/application/email/emailService';
 
 export class ProfileService {
@@ -163,25 +162,6 @@ export class ProfileService {
       return await this.repository.getNotes(memberId);
     } catch (error) {
       logger.error({ message: 'Error fetching notes', error });
-      throw error;
-    }
-  }
-
-  async documentUploadComplete(memberId: string): Promise<void> {
-    try {
-      logger.debug({ message: 'Recording document upload' });
-      await this.repository.updateProfile(memberId, {
-        idUploaded: true,
-      });
-
-      await this.repository.createNote(memberId, {
-        text: `ID document uploaded successfully`,
-        source: NoteSource.SYSTEM,
-        category: 'ID Uploaded',
-        pinned: false,
-      });
-    } catch (error) {
-      logger.error({ message: 'Error recording document upload', error });
       throw error;
     }
   }

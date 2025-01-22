@@ -1,9 +1,11 @@
 import { ApplicationRepository } from '../repositories/applicationRepository';
+import { v4 as uuidv4 } from 'uuid';
 import {
   ApplicationModel,
   CreateApplicationModel,
   UpdateApplicationModel,
 } from '../models/applicationModel';
+import { DocumentListPresignedUrl } from '../models/documentUpload';
 import { logger } from '../middleware';
 import { EligibilityStatus } from '../models/enums/EligibilityStatus';
 import { DocumentUploadLocation } from '../models/documentUpload';
@@ -13,6 +15,7 @@ import { PromoCodesService } from './promoCodesService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { ProfileService } from './profileService';
 import { ApplicationBatchApprovalModel } from '../models/applicationApprovalModel';
+import { NoteSource } from '../models/enums/NoteSource';
 
 export interface ApplicationSearch {
   eligibilityStatus?: EligibilityStatus;
@@ -107,7 +110,8 @@ export class ApplicationService {
         throw new ValidationError('Application is not awaiting ID approval');
       }
 
-      const key = `UPLOADS/${memberId}/${Date.now()}-ID-document`;
+      const documentId = uuidv4();
+      const key = `UPLOADS/${memberId}/${applicationId}/${documentId}`;
       const params = {
         Bucket: this.uploadBucketName,
         Key: key,
@@ -117,9 +121,61 @@ export class ApplicationService {
       const preSignedUrl = await this.s3Client.getSignedUrlPromise('putObject', params);
       return {
         preSignedUrl,
+        documentId,
       };
     } catch (error) {
       logger.error({ message: 'Error generating presigned URL', error });
+      throw error;
+    }
+  }
+
+  async documentUploadComplete(
+    memberId: string,
+    applicationId: string,
+    documentId: string,
+  ): Promise<void> {
+    try {
+      logger.info({ message: 'Recording document upload', memberId, applicationId, documentId });
+
+      await this.profileService.createNote(memberId, {
+        text: `ID document uploaded successfully`,
+        source: NoteSource.SYSTEM,
+        category: 'ID Uploaded',
+        pinned: false,
+      });
+    } catch (error) {
+      logger.error({ message: 'Error recording document upload', error });
+      throw error;
+    }
+  }
+
+  async getDocumentsFromApplication(
+    memberId: string,
+    applicationId: string,
+  ): Promise<DocumentListPresignedUrl> {
+    try {
+      logger.debug({ message: 'Fetching documents from application', memberId, applicationId });
+
+      const retrievedDocuments = await this.repository.getDocumentsFromApplication(
+        memberId,
+        applicationId,
+      );
+      if (!retrievedDocuments) return { documents: [] };
+
+      const preSignedUrls: DocumentListPresignedUrl['documents'] = [];
+      for (const documentId of retrievedDocuments) {
+        const key = `UPLOADS/${memberId}/${applicationId}/${documentId}`;
+        const s3Params = {
+          Bucket: this.uploadBucketName,
+          Key: key,
+          Expires: 1500,
+        };
+        const presignedUrl = await this.s3Client.getSignedUrlPromise('getObject', s3Params);
+        preSignedUrls.push(presignedUrl);
+      }
+      return { documents: preSignedUrls };
+    } catch (error) {
+      logger.error({ message: 'Error fetching documents from application', error });
       throw error;
     }
   }

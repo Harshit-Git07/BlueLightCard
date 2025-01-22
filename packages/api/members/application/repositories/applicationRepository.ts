@@ -8,11 +8,13 @@ import {
   ScanCommandInput,
   TransactWriteCommand,
 } from '@aws-sdk/lib-dynamodb';
+import { S3 } from 'aws-sdk';
 import { ApplicationModel, CreateApplicationModel } from '../models/applicationModel';
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
 import { APPLICATION, applicationKey, MEMBER, memberKey, Repository } from './repository';
 import { v4 as uuidv4 } from 'uuid';
+import { Bucket } from 'sst/node/bucket';
 import { NotFoundError } from '../errors/NotFoundError';
 import { EligibilityStatus } from '../models/enums/EligibilityStatus';
 
@@ -22,6 +24,8 @@ export class ApplicationRepository extends Repository {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     private readonly tableName: string = Table.memberProfiles.tableName,
+    private readonly uploadBucketName: string = Bucket.documentUploadBucket.bucketName,
+    private readonly s3Client: S3 = new S3({ region: process.env.REGION ?? 'eu-west-2' }),
   ) {
     super(dynamoDB);
   }
@@ -49,7 +53,7 @@ export class ApplicationRepository extends Repository {
     applicationId: string,
     application: Partial<ApplicationModel>,
   ): Promise<void> {
-    this.partialUpdate({
+    await this.partialUpdate({
       tableName: this.tableName,
       pk: memberKey(memberId),
       sk: applicationKey(applicationId),
@@ -97,6 +101,26 @@ export class ApplicationRepository extends Repository {
     }
 
     return result.Items.map((employer) => ApplicationModel.parse(employer));
+  }
+
+  async getDocumentsFromApplication(
+    memberId: string,
+    applicationId: string,
+  ): Promise<string[] | undefined> {
+    const params = {
+      TableName: this.tableName,
+      Key: {
+        pk: memberKey(memberId),
+        sk: applicationKey(applicationId),
+      },
+      ProjectionExpression: 'documents',
+    };
+    const result = await this.dynamoDB.send(new GetCommand(params));
+    if (!result.Item) {
+      throw new NotFoundError('Application not found');
+    }
+
+    return result.Item.documents;
   }
 
   async getApplication(memberId: string, applicationId: string): Promise<ApplicationModel> {

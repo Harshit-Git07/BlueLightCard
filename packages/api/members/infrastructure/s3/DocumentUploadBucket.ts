@@ -32,7 +32,7 @@ export class DocumentUpload extends Construct {
         REGION: 'eu-west-2',
         ID_UPLOAD_BUCKET: this.bucket.bucketName,
       },
-      bind: [profilesTable, organisationsTable],
+      bind: [profilesTable, organisationsTable, this.bucket],
     });
 
     this.bucket.addNotifications(this, {

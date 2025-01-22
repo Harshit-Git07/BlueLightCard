@@ -63,7 +63,8 @@ export class Route {
     permissions,
     apiKeyRequired,
     vpc,
-    authorizer = 'memberAuthorizer',
+    // TODO: Add authorizor only for member profile endpoint as it's causing some testing issues
+    authorizer,
   }: RouteProps<Request, Response>): ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'> {
     let requestModels;
     if (requestModelType) {

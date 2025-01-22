@@ -22,9 +22,8 @@ export const ApplicationModel = createZodNamedType(
     postcode: z.string().optional(),
     country: z.string().optional(),
     promoCode: z.string().nullable().optional(),
+    documents: z.array(z.string()).optional(),
     promoCodeApplied: z.boolean().optional(),
-    idS3LocationPrimary: z.string().optional(),
-    idS3LocationSecondary: z.string().optional(),
     trustedDomainEmail: z.string().optional(),
     trustedDomainValidated: z.boolean().optional(),
     nameChangeReason: z.string().nullable().optional(),
@@ -62,8 +61,6 @@ export const UpdateApplicationModel = createZodNamedType(
   ApplicationModel.omit({
     memberId: true,
     applicationId: true,
-    idS3LocationPrimary: true,
-    idS3LocationSecondary: true,
     applicationReason: true,
   }),
 );

@@ -10,6 +10,16 @@ export const OrganisationModel = createZodNamedType(
     name: z.string(),
     type: z.string().nullable().optional(),
     active: z.boolean().default(true),
+    trustedDomains: z.preprocess((val) => {
+      if (typeof val === 'string') {
+        try {
+          return JSON.parse(val);
+        } catch {
+          return [];
+        }
+      }
+      return val;
+    }, z.array(z.string()).default([])),
     employmentStatus: z.array(z.nativeEnum(EmploymentStatus)).optional(),
     employedIdRequirements: z
       .object({
@@ -59,7 +69,6 @@ export const OrganisationModel = createZodNamedType(
     isSelfEmployed: z.boolean().default(false).optional(),
     isCustomEmployerName: z.boolean().default(false).optional(),
     idUploadCount: z.number().default(0).optional(),
-    trustedDomains: z.array(z.string()).default([]).optional(),
     bypassPayment: z.boolean().default(false).optional(),
     bypassId: z.boolean().default(false).optional(),
     lastUpdated: z.string().optional(),

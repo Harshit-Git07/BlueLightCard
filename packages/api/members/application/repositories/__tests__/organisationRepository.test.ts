@@ -65,6 +65,7 @@ const employer: EmployerModel = {
   bypassPayment: false,
   bypassId: false,
   lastUpdated: '2023-01-01T00:00:00Z',
+  trustedDomains: [],
 };
 
 let repository: OrganisationRepository;

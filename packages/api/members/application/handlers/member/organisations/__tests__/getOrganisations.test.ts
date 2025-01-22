@@ -10,7 +10,9 @@ jest.mock('@blc-mono/members/application/services/organisationService');
 
 describe('getOrganisations handler', () => {
   const organisationId = uuidv4();
-  const supportedDocument = {
+  const supportedDocument: NonNullable<
+    OrganisationModel['employedIdRequirements']
+  >['supportedDocuments'][number] = {
     idKey: 'passport',
     title: 'Passport',
     description: 'Passport Document',
@@ -18,7 +20,7 @@ describe('getOrganisations handler', () => {
     guidelines: 'Upload your passport',
     required: false,
   };
-  const idRequirements = {
+  const idRequirements: OrganisationModel['employedIdRequirements'] = {
     minimumRequired: 1,
     supportedDocuments: [supportedDocument],
   };
@@ -31,6 +33,7 @@ describe('getOrganisations handler', () => {
       employedIdRequirements: idRequirements,
       retiredIdRequirements: idRequirements,
       volunteerIdRequirements: idRequirements,
+      trustedDomains: [],
     },
   ];
   const event = {} as APIGatewayProxyEvent;
@@ -43,7 +46,12 @@ describe('getOrganisations handler', () => {
     const response = await handler(event);
 
     expect(response.statusCode).toEqual(200);
-    expect(JSON.parse(response.body)).toEqual(organisations);
+    expect(JSON.parse(response.body)).toEqual([
+      {
+        ...organisations[0],
+        trustedDomains: undefined,
+      },
+    ]);
   });
 });
 

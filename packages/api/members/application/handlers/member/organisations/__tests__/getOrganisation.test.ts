@@ -30,6 +30,7 @@ describe('getOrganisation handler', () => {
     employedIdRequirements: idRequirements,
     retiredIdRequirements: idRequirements,
     volunteerIdRequirements: idRequirements,
+    trustedDomains: [],
   };
   const event = { pathParameters: { organisationId } } as unknown as APIGatewayProxyEvent;
 

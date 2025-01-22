@@ -5,13 +5,16 @@ import { v4 as uuidv4 } from 'uuid';
 import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
+import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
 
 jest.mock('@blc-mono/members/application/services/organisationService');
 
 describe('getEmployers handler', () => {
   const organisationId = uuidv4();
   const employerId = uuidv4();
-  const supportedDocument = {
+  const supportedDocument: NonNullable<
+    OrganisationModel['employedIdRequirements']
+  >['supportedDocuments'][number] = {
     idKey: 'passport',
     title: 'Passport',
     description: 'Passport Document',
@@ -19,7 +22,7 @@ describe('getEmployers handler', () => {
     guidelines: 'Upload your passport',
     required: false,
   };
-  const idRequirements = {
+  const idRequirements: OrganisationModel['employedIdRequirements'] = {
     minimumRequired: 1,
     supportedDocuments: [supportedDocument],
   };
@@ -33,6 +36,7 @@ describe('getEmployers handler', () => {
       employedIdRequirements: idRequirements,
       retiredIdRequirements: idRequirements,
       volunteerIdRequirements: idRequirements,
+      trustedDomains: [],
     },
   ];
   const event = { pathParameters: { organisationId } } as unknown as APIGatewayProxyEvent;
@@ -53,7 +57,12 @@ describe('getEmployers handler', () => {
     const response = await handler(event);
 
     expect(response.statusCode).toEqual(200);
-    expect(JSON.parse(response.body)).toEqual(employers);
+    expect(JSON.parse(response.body)).toEqual([
+      {
+        ...employers[0],
+        trustedDomains: undefined,
+      },
+    ]);
   });
 });
 

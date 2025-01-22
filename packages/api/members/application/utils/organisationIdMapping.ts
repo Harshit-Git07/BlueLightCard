@@ -97,6 +97,7 @@ export function mapOrganisationsAndEmployers(
         EmploymentStatus.VOLUNTEER,
       ),
       lastUpdated: new Date().toISOString(),
+      trustedDomains: [],
     };
     organisations.push(organisation);
   }
@@ -127,6 +128,7 @@ export function mapEmployers(mappingsByOrganisation: OrganisationIdMapping[]) {
       employedIdRequirements: mapIdRequirements(employerMappings, EmploymentStatus.EMPLOYED),
       retiredIdRequirements: mapIdRequirements(employerMappings, EmploymentStatus.RETIRED),
       volunteerIdRequirements: mapIdRequirements(employerMappings, EmploymentStatus.VOLUNTEER),
+      trustedDomains: [],
     };
     employers.push(employer);
   }

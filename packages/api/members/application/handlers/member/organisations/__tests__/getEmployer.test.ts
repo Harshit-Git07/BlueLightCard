@@ -32,6 +32,7 @@ describe('getEmployer handler', () => {
     employedIdRequirements: idRequirements,
     retiredIdRequirements: idRequirements,
     volunteerIdRequirements: idRequirements,
+    trustedDomains: [],
   };
   const event = {
     pathParameters: { organisationId, employerId },

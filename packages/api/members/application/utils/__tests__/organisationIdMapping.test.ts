@@ -158,6 +158,7 @@ describe('Organisation ID Mapping', () => {
           },
         ],
       },
+      trustedDomains: [],
       volunteerIdRequirements: {
         minimumRequired: 2,
         supportedDocuments: [
@@ -179,6 +180,7 @@ describe('Organisation ID Mapping', () => {
       name: 'EmpB',
       volunteerIdRequirements: undefined,
       employedIdRequirements: undefined,
+      trustedDomains: [],
       retiredIdRequirements: {
         minimumRequired: 2,
         supportedDocuments: [
@@ -248,6 +250,7 @@ describe('Organisation ID Mapping', () => {
           ],
         },
         lastUpdated: '2023-01-01T00:00:00.000Z',
+        trustedDomains: [],
       };
 
       const { organisations } = mapOrganisationsAndEmployers(eligibilityRules);

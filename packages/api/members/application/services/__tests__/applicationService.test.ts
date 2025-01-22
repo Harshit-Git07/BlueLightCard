@@ -3,6 +3,7 @@ import { ApplicationRepository } from '../../repositories/applicationRepository'
 import { CardRepository } from '../../repositories/cardRepository';
 import { S3 } from 'aws-sdk';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
+import { TrustedDomainService } from '../trustedDomainService';
 import { subDays } from 'date-fns';
 import {
   ApplicationModel,
@@ -16,15 +17,30 @@ import { ApplicationReason } from '@blc-mono/shared/models/members/enums/Applica
 import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { ReorderCardReason } from '@blc-mono/shared/models/members/enums/ReorderCardReason';
+import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
 
 jest.mock('../../repositories/applicationRepository');
 jest.mock('../promoCodesService');
 jest.mock('../profileService');
 jest.mock('../../repositories/cardRepository');
+jest.mock('../trustedDomainService');
 jest.mock('aws-sdk', () => ({
   S3: jest.fn().mockImplementation(() => ({
     getSignedUrlPromise: jest.fn(),
   })),
+}));
+jest.mock('sst/node/bucket', () => ({
+  Bucket: jest.fn(),
+}));
+jest.mock('sst/node/table', () => ({
+  Table: {
+    memberOrganisations: {
+      tableName: 'TestTableOrganisations',
+    },
+    memberProfiles: {
+      tableName: 'TestTableProfiles',
+    },
+  },
 }));
 jest.mock('uuid', () => ({
   v4: jest.fn(),
@@ -40,9 +56,7 @@ describe('ApplicationService', () => {
     eligibilityStatus: EligibilityStatus.ELIGIBLE,
     startDate: '2024-01-01T00:00:00Z',
   };
-  const updateApplication: UpdateApplicationModel = {
-    city: 'New York',
-  };
+  let applicationBeingUpdated: UpdateApplicationModel;
   const card: CardModel = {
     cardNumber: 'BLC123456789',
     cardStatus: CardStatus.PHYSICAL_CARD,
@@ -57,18 +71,28 @@ describe('ApplicationService', () => {
   let applicationService: ApplicationService;
   let repositoryMock: jest.Mocked<ApplicationRepository>;
   let profileServiceMock: jest.Mocked<ProfileService>;
+  let promoCodeServiceMock: jest.Mocked<PromoCodesService>;
+  let trustedDomainServiceMock: jest.Mocked<TrustedDomainService>;
   let cardRepositoryMock: jest.Mocked<CardRepository>;
   let s3ClientMock: jest.Mocked<S3>;
 
   beforeEach(() => {
+    applicationBeingUpdated = {
+      city: 'New York',
+    };
+
     repositoryMock = new ApplicationRepository() as jest.Mocked<ApplicationRepository>;
     profileServiceMock = new ProfileService() as jest.Mocked<ProfileService>;
+    promoCodeServiceMock = new PromoCodesService() as jest.Mocked<PromoCodesService>;
+    trustedDomainServiceMock = new TrustedDomainService() as jest.Mocked<TrustedDomainService>;
     cardRepositoryMock = new CardRepository() as jest.Mocked<CardRepository>;
     s3ClientMock = new S3() as jest.Mocked<S3>;
 
     applicationService = new ApplicationService(
       repositoryMock,
       profileServiceMock,
+      promoCodeServiceMock,
+      trustedDomainServiceMock,
       cardRepositoryMock,
       s3ClientMock,
       'mockBucketName',
@@ -187,23 +211,96 @@ describe('ApplicationService', () => {
   });
 
   describe('updateApplication', () => {
-    it('should throw error if update fails', async () => {
-      const error = new Error('Repository error');
-      repositoryMock.updateApplication.mockRejectedValue(error);
+    describe('given application has a trusted domain email', () => {
+      beforeEach(() => {
+        applicationBeingUpdated = {
+          ...applicationBeingUpdated,
+          trustedDomainEmail: 'blc@nsh.com',
+        };
+      });
 
-      await expect(
-        applicationService.updateApplication(memberId, applicationId, updateApplication),
-      ).rejects.toThrow(error);
+      describe('when the provided trusted domain email is valid', () => {
+        beforeEach(() => {
+          trustedDomainServiceMock.validateTrustedDomainEmail.mockResolvedValue(undefined);
+        });
+
+        it('should update the application successfully', async () => {
+          await applicationService.updateApplication(
+            memberId,
+            applicationId,
+            applicationBeingUpdated,
+          );
+
+          expect(repositoryMock.updateApplication).toHaveBeenCalledWith(
+            memberId,
+            applicationId,
+            applicationBeingUpdated,
+          );
+        });
+
+        describe('given update fails', () => {
+          const error = new Error('Repository error');
+
+          beforeEach(() => {
+            repositoryMock.updateApplication.mockRejectedValue(error);
+          });
+
+          it('should throw error if update fails', async () => {
+            await expect(
+              applicationService.updateApplication(
+                memberId,
+                applicationId,
+                applicationBeingUpdated,
+              ),
+            ).rejects.toThrow(error);
+          });
+        });
+      });
+
+      describe('when the provided trusted domain email is invalid', () => {
+        const validationError = new Error('mocked fail');
+
+        beforeEach(() => {
+          trustedDomainServiceMock.validateTrustedDomainEmail.mockRejectedValue(validationError);
+        });
+
+        it('should not update the application', async () => {
+          await expect(
+            applicationService.updateApplication(memberId, applicationId, applicationBeingUpdated),
+          ).rejects.toThrow(validationError);
+          expect(repositoryMock.updateApplication).not.toHaveBeenCalled();
+        });
+      });
     });
 
-    it('should update an application successfully', async () => {
-      await applicationService.updateApplication(memberId, applicationId, updateApplication);
+    describe('given a normal application is being updated', () => {
+      it('should update the application successfully', async () => {
+        await applicationService.updateApplication(
+          memberId,
+          applicationId,
+          applicationBeingUpdated,
+        );
 
-      expect(repositoryMock.updateApplication).toHaveBeenCalledWith(
-        memberId,
-        applicationId,
-        updateApplication,
-      );
+        expect(repositoryMock.updateApplication).toHaveBeenCalledWith(
+          memberId,
+          applicationId,
+          applicationBeingUpdated,
+        );
+      });
+
+      describe('given update fails', () => {
+        const error = new Error('Repository error');
+
+        beforeEach(() => {
+          repositoryMock.updateApplication.mockRejectedValue(error);
+        });
+
+        it('should throw error if update fails', async () => {
+          await expect(
+            applicationService.updateApplication(memberId, applicationId, applicationBeingUpdated),
+          ).rejects.toThrow(error);
+        });
+      });
     });
   });
 

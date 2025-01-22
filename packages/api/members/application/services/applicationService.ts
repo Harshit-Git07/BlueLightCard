@@ -14,13 +14,17 @@ import {
 } from '@blc-mono/shared/models/members/documentUpload';
 import { ApplicationBatchApprovalModel } from '@blc-mono/shared/models/members/applicationApprovalModel';
 import { NoteSource } from '@blc-mono/shared/models/members/enums/NoteSource';
+import { PromoCodesService } from './promoCodesService';
+import { TrustedDomainService } from './trustedDomainService';
+import { ProfileRepository } from '../repositories/profileRepository';
+import { OrganisationRepository } from '../repositories/organisationRepository';
+import { CardModel } from '@blc-mono/shared/models/members/cardModel';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 import {
   ApplicationModel,
   CreateApplicationModel,
   UpdateApplicationModel,
 } from '@blc-mono/shared/models/members/applicationModel';
-import { CardModel } from '@blc-mono/shared/models/members/cardModel';
-import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 
 export interface ApplicationSearch {
   eligibilityStatus?: EligibilityStatus;
@@ -45,6 +49,11 @@ export class ApplicationService {
   constructor(
     private readonly repository: ApplicationRepository = new ApplicationRepository(),
     private readonly profileService: ProfileService = new ProfileService(),
+    private readonly promoCodeService: PromoCodesService = new PromoCodesService(),
+    private readonly trustedDomainService = new TrustedDomainService(
+      new ProfileRepository(),
+      new OrganisationRepository(),
+    ),
     private readonly cardRepository: CardRepository = new CardRepository(),
     private readonly s3Client: S3 = new S3({ region: process.env.REGION ?? 'eu-west-2' }),
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -77,11 +86,19 @@ export class ApplicationService {
   async updateApplication(
     memberId: string,
     applicationId: string,
-    application: UpdateApplicationModel,
+    applicationUpdates: UpdateApplicationModel,
   ): Promise<void> {
     try {
-      logger.debug({ message: 'Updating application', application });
-      await this.repository.updateApplication(memberId, applicationId, application);
+      logger.debug({ message: 'Creating application', application: applicationUpdates });
+
+      if (applicationUpdates.trustedDomainEmail) {
+        await this.trustedDomainService.validateTrustedDomainEmail(
+          memberId,
+          applicationUpdates.trustedDomainEmail,
+        );
+      }
+
+      await this.repository.updateApplication(memberId, applicationId, applicationUpdates);
     } catch (error) {
       logger.error({ message: 'Error updating application', error });
       throw error;
@@ -205,7 +222,7 @@ export class ApplicationService {
     try {
       logger.debug({ message: 'Assigning applications for approval', adminId, batch });
 
-      let applicationIds: string[] = [];
+      let applicationIds: string[];
       if (batch.organisationId) {
         applicationIds = (
           await this.searchApplications({

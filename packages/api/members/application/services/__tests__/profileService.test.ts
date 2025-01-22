@@ -65,6 +65,7 @@ describe('ProfileService', () => {
     name: 'Employer1',
     active: true,
     employmentStatus: [EmploymentStatus.EMPLOYED],
+    trustedDomains: [],
   };
   const emailChange: EmailChangeModel = {
     currentEmail: 'email@example.com',

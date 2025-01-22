@@ -10,7 +10,9 @@ jest.mock('@blc-mono/members/application/services/organisationService');
 
 describe('getOrganisations handler', () => {
   const organisationId = uuidv4();
-  const supportedDocument = {
+  const supportedDocument: NonNullable<
+    OrganisationModel['employedIdRequirements']
+  >['supportedDocuments'][number] = {
     idKey: 'passport',
     title: 'Passport',
     description: 'Passport Document',
@@ -18,7 +20,7 @@ describe('getOrganisations handler', () => {
     guidelines: 'Upload your passport',
     required: false,
   };
-  const idRequirements = {
+  const idRequirements: OrganisationModel['employedIdRequirements'] = {
     minimumRequired: 1,
     supportedDocuments: [supportedDocument],
   };

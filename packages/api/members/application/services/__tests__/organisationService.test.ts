@@ -41,6 +41,7 @@ describe('OrganisationService', () => {
       employerId,
       name: 'Employer1',
       active: true,
+      trustedDomains: [],
     },
   ];
 

@@ -6,15 +6,18 @@ import { ValidationError } from '@blc-mono/members/application/errors/Validation
 
 const orgService = new OrganisationService();
 
-const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<OrganisationModel> => {
+const unwrappedHandler = async (
+  event: APIGatewayProxyEvent,
+): Promise<Partial<OrganisationModel>> => {
   const { organisationId } = event.pathParameters || {};
   if (!organisationId) {
     throw new ValidationError('Organisation ID is required');
   }
 
-  const redactedSchema = OrganisationModel.omit({ trustedDomains: true });
   const organisation = await orgService.getOrganisation(organisationId);
-  return redactedSchema.parse(organisation);
+  // TODO: Ideally we should have a new model for this for customer facing API, but for now we are just removing the trusted domains
+  organisation.trustedDomains = [];
+  return organisation;
 };
 
 export const handler = middleware(unwrappedHandler);

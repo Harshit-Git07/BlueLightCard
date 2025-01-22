@@ -12,9 +12,10 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<EmployerMo
     throw new ValidationError('Organisation ID and Employer ID are required');
   }
 
-  const redactedSchema = EmployerModel.omit({ trustedDomains: true });
   const employer = await service.getEmployer(organisationId, employerId);
-  return redactedSchema.parse(employer);
+  // TODO: Ideally we should have a new model for this for customer facing API, but for now we are just removing the trusted domains
+  employer.trustedDomains = [];
+  return employer;
 };
 
 export const handler = middleware(unwrappedHandler);

@@ -11,10 +11,10 @@ export function useIsNextButtonEnabled(eligibilityDetails: EligibilityDetails): 
     isAus && eligibilityDetails.organisation?.label === 'Healthcare Allied Health';
 
   return useMemo(() => {
+    if (!eligibilityDetails.organisation) return false;
     if (isHealthcareAlliedHealth && eligibilityDetails.jobDetailsAus?.isSelfEmployed) {
       return validateAustralianBusinessNumber(eligibilityDetails);
     }
-
     return validateJobTitle(eligibilityDetails) && validateJobReference(eligibilityDetails);
   }, [eligibilityDetails, isHealthcareAlliedHealth]);
 }

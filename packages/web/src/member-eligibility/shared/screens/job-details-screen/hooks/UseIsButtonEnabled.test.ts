@@ -75,7 +75,13 @@ describe('job title validation', () => {
     const details: EligibilityDetails = {
       flow: 'Sign Up',
       currentScreen: 'Job Details Screen',
-      jobTitle: 'Software Engineer',
+      jobTitle: 'Nurse',
+      organisation: {
+        id: '1',
+        label: 'Healthcare Allied Health',
+        requiresJobTitle: true,
+        requiresJobReference: false,
+      },
     };
 
     expect(target.useIsNextButtonEnabled(details)).toBe(true);
@@ -124,6 +130,12 @@ describe('job reference validation', () => {
       flow: 'Sign Up',
       currentScreen: 'Job Details Screen',
       jobTitle: '123',
+      organisation: {
+        id: '2',
+        label: 'NHS',
+        requiresJobTitle: false,
+        requiresJobReference: false,
+      },
     };
 
     expect(target.useIsNextButtonEnabled(details)).toBe(true);

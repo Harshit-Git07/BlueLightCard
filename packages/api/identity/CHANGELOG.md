@@ -1,5 +1,57 @@
 # Changelog
 
+## [1.121.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.118.0...bluelightcard/identity-v1.121.0) (2025-01-22)
+
+### Features
+
+- 1023 reverted the enpoint ([#2911](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2911)) ([ae3cadf](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ae3cadf3731f28c1ed8b141a850b722ff063020f))
+- add await on send function ([#3034](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3034)) ([3287341](https://github.com/bluelightcard/BlueLightCard-2.0/commit/32873415804768dc0cfa4e46908d21b241425106))
+- added zendesk app client for cognito in AU region ([#3161](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3161)) ([f8b72a7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f8b72a77ccbebd03939fa9b6f481648f576707f0))
+- added zendesk app client for dds & AU ([#3143](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3143)) ([2a07f80](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2a07f80d975ca86d84d40733cd275e4c762ab8bb))
+- **AUT-200:** Update user model to handle spare_email_validated containing space ([#3379](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3379)) ([c3a6eab](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c3a6eab9bfeda98b142f70462d2d9416fb1b0ce9))
+- convert status before storing it in DB ([#3119](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3119)) ([a9d95ef](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a9d95ef80ebdda43f5062913778528a15400e696))
+- cot-1000 adding card create handler ([#2978](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2978)) ([8f499c6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/8f499c6b4974891e979b6b1c0b76a5c8e560e0d6))
+- COT-1023 added new route for generating zendesk jwt token ([#2858](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2858)) ([319e1e2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/319e1e226e347a06e70184e56d8c89f69b64e73b))
+- COT-1042 reverted the AU zendesk app client config ([#3167](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3167)) ([e9b04f3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e9b04f3e6bb06b8e0ac343a8fdd1d0a26c9f81d3))
+- COT-1042, added zendesk app client for dds & AU ([#2907](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2907)) ([e33c385](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e33c385d5a8b06e2ed65612efb214cd8553b9433))
+- COT-814 fixing issue in handler card delete ([#2959](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2959)) ([a4dda98](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a4dda98beb5ed72ff62b868a48c7502e5488c2c9))
+- COT-958 adding masking for username for PII ([#2771](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2771)) ([cac69a9](https://github.com/bluelightcard/BlueLightCard-2.0/commit/cac69a9f4beaea64ce9c49bd042aac43df1b069a))
+- Disco-1392 ([#3498](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3498)) ([1d432a5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1d432a5f998d43d5b1e6900c5c3e8b96abba3e7c))
+- Feat/fix cognito ([#3179](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3179)) ([d7ad911](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d7ad91122db1573b608f4011359bc8ee45f2dfb1))
+- fix issue on card create/update handler ([#3107](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3107)) ([1121ea7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1121ea749ebb82d360dfee6ca7732448c8a914d8))
+- MM-457 Member API authorisation ([#3398](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3398)) ([e38c30d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e38c30d08e5169b5b17ece74629d3d871b9927dd))
+- reverted the app client for zendesk ([#3152](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3152)) ([d9887f5](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d9887f519bbe7bd05e099d09cff43bbac64b6a2a))
+- reverted the app client for zendesk for AU & DDS ([#2917](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2917)) ([17ac1a6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/17ac1a69003383a6f30a4de349c49fcdde4857d0))
+- userName equivalent to user email returned from old pool ([#3174](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3174)) ([d649c9c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d649c9ccfab92e731a1dc3e6236ea3e41c3652d2))
+
+### Bug Fixes
+
+- bump identity package ([#3595](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3595)) ([7b17035](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7b1703512d1550bbc9dd1314b551db4b20e591ee))
+- Update Identity Package ([#3588](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3588)) ([9470684](https://github.com/bluelightcard/BlueLightCard-2.0/commit/9470684c36278aab06beba3d491fecc031fee07e))
+
+### Other Changes
+
+- [None] Set isolatedModules to true in ts-jest to speed up tests ([#3435](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3435)) ([195d4f6](https://github.com/bluelightcard/BlueLightCard-2.0/commit/195d4f6c9b0f18d497e6378b55d23298447cea79))
+- Bumped Identity to v1.120.0 ([#3599](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3599)) ([d828652](https://github.com/bluelightcard/BlueLightCard-2.0/commit/d82865200a11576fe10ed95bbac45a36f1d8863d))
+- **main:** release bluelightcard/identity 1.0.0 ([#3383](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3383)) ([ca2c2ad](https://github.com/bluelightcard/BlueLightCard-2.0/commit/ca2c2ada815dd70155082e6994c1246f10573afe))
+- **main:** release bluelightcard/identity 1.1.0 ([#3590](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3590)) ([3fe016b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3fe016b46963065993d01ea1c9ae9324213de5a1))
+- **main:** release bluelightcard/identity 1.106.0 ([#2740](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2740)) ([0b4524a](https://github.com/bluelightcard/BlueLightCard-2.0/commit/0b4524a142a21c9bc6ff512635197baae4f5fa2e))
+- **main:** release bluelightcard/identity 1.107.0 ([#2895](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2895)) ([fe2e2e0](https://github.com/bluelightcard/BlueLightCard-2.0/commit/fe2e2e0693540f1b8c41bfa24ed0eaae32c4da56))
+- **main:** release bluelightcard/identity 1.108.0 ([#2913](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2913)) ([e16a954](https://github.com/bluelightcard/BlueLightCard-2.0/commit/e16a954f185468698d4adec8b5ec813773a50945))
+- **main:** release bluelightcard/identity 1.109.0 ([#2918](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2918)) ([3858720](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3858720df56429ea13c2191360b42db7a5ea6a65))
+- **main:** release bluelightcard/identity 1.110.0 ([#2964](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2964)) ([f71004f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f71004fc21cdd249ae5293069df40f8321b0e5f2))
+- **main:** release bluelightcard/identity 1.111.0 ([#2994](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2994)) ([5a35ac4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5a35ac4a2dd1bdf359a85b1f72b5cdb76e824f9d))
+- **main:** release bluelightcard/identity 1.112.0 ([#3035](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3035)) ([f9cd522](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f9cd522bffe4d7425803777a47e428e45986dd94))
+- **main:** release bluelightcard/identity 1.113.0 ([#3116](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3116)) ([1c39e1b](https://github.com/bluelightcard/BlueLightCard-2.0/commit/1c39e1bb87cde3830b397253c11899d68ac50c34))
+- **main:** release bluelightcard/identity 1.114.0 ([#3149](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3149)) ([71722ad](https://github.com/bluelightcard/BlueLightCard-2.0/commit/71722ad6289b57dc195ac7e7e6fa08cfe978c457))
+- **main:** release bluelightcard/identity 1.115.0 ([#3153](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3153)) ([f2003cc](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f2003cc8e815168a3a168681d5811ff450b0d87a))
+- **main:** release bluelightcard/identity 1.116.0 ([#3162](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3162)) ([58f6ca3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/58f6ca331d73daa1655b4076aff0eb9f1554f494))
+- **main:** release bluelightcard/identity 1.117.0 ([#3169](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3169)) ([70aef55](https://github.com/bluelightcard/BlueLightCard-2.0/commit/70aef55663c0b1be8f6fc8f923c0a1f02dcc2b5d))
+- **main:** release bluelightcard/identity 1.118.0 ([#3178](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3178)) ([2806758](https://github.com/bluelightcard/BlueLightCard-2.0/commit/280675873eff33cc15a6bd61d6128d1d330f5ec4))
+- **main:** release bluelightcard/identity 1.2.0 ([#3591](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3591)) ([b4b8aa7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/b4b8aa7f857b36a060721669ab4e81b628834fc5))
+- **main:** release bluelightcard/identity 1.3.0 ([#3593](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3593)) ([6ad25fb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/6ad25fbe24a0ce220faaa1586bf40a406b35061b))
+- terraform ( identity ) : adding databases and cognito ([#2948](https://github.com/bluelightcard/BlueLightCard-2.0/issues/2948)) ([3de5a1e](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3de5a1e4a1ba8b02422481c0b369a30bc22b659e))
+
 ## [1.119.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.2.0...bluelightcard/identity-v1.3.0) (2025-01-21)
 
 ### Features

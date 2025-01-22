@@ -5,6 +5,7 @@ import { getEnv, getEnvValidated } from '@blc-mono/core/utils/getEnv';
 
 import { MemberStackEnvironmentKeys } from '../constants/environment';
 import { isEphemeral, isPr, isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
+import { isBlcAuBrand, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 
 export type MemberStackRegion = 'eu-west-2' | 'ap-southeast-2';
 
@@ -71,6 +72,7 @@ export class MemberStackConfigResolver {
   public static forPrStage(): MemberStackConfig {
     return {
       apiDefaultAllowedOrigins: ['*'],
+      openSearchDomainEndpoint: this.getOpenSearchDomainEndpoint(),
     };
   }
 
@@ -84,5 +86,15 @@ export class MemberStackConfigResolver {
         MemberStackEnvironmentKeys.MEMBERS_OPENSEARCH_DOMAIN_ENDPOINT,
       ),
     };
+  }
+
+  private static getOpenSearchDomainEndpoint(): string {
+    if (isDdsUkBrand()) {
+      return 'https://vpc-pr-dds-search-j2ng55ajjivnpizl4vmlndpvvi.eu-west-2.es.amazonaws.com';
+    }
+    if (isBlcAuBrand()) {
+      return 'https://vpc-pr-aus-search-lr23p7ks6qcz6myx3foywtfbui.ap-southeast-2.es.amazonaws.com';
+    }
+    return 'https://vpc-pr-search-m7rbjpwa5lfwirp6m6wnyba674.eu-west-2.es.amazonaws.com';
   }
 }

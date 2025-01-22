@@ -103,7 +103,7 @@ export class ApplicationRepository extends Repository {
       return [];
     }
 
-    return result.Items.map((employer) => ApplicationModel.parse(employer));
+    return result.Items.map((application) => ApplicationModel.parse(application));
   }
 
   async getDocumentsFromApplication(

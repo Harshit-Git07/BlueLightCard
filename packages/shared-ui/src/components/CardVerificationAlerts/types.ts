@@ -5,7 +5,7 @@ import { ApplicationReason } from '@blc-mono/shared/models/members/enums/Applica
 import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
-import { ReorderCardReason } from '../../api/types';
+import { ReorderCardReason } from '@blc-mono/shared/models/members/enums/ReorderCardReason';
 
 export type ProfileSchema = ProfileModel;
 export type ApplicationSchema = ApplicationModel & {

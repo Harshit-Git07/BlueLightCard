@@ -4,6 +4,7 @@ import { RejectionReason } from './enums/RejectionReason';
 import { EligibilityStatus } from './enums/EligibilityStatus';
 import { PaymentStatus } from './enums/PaymentStatus';
 import { createZodNamedType } from '@blc-mono/shared/utils/zodNamedType';
+import { ReorderCardReason } from '@blc-mono/shared/models/members/enums/ReorderCardReason';
 
 export const ApplicationModel = createZodNamedType(
   'ApplicationModel',
@@ -15,6 +16,7 @@ export const ApplicationModel = createZodNamedType(
     paymentStatus: z.nativeEnum(PaymentStatus).optional(),
     purchaseDate: z.string().datetime().optional(),
     applicationReason: z.nativeEnum(ApplicationReason).nullable(),
+    reorderCardReason: z.nativeEnum(ReorderCardReason).optional(),
     verificationMethod: z.string().optional(),
     address1: z.string().optional(),
     address2: z.string().optional(),
@@ -43,6 +45,7 @@ export const CreateApplicationModel = createZodNamedType(
     startDate: true,
     eligibilityStatus: true,
     applicationReason: true,
+    reorderCardReason: true,
   }),
 );
 export type CreateApplicationModel = z.infer<typeof CreateApplicationModel>;

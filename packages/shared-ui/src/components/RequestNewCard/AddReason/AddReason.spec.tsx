@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import RequestNewCardReason, { radioOptions } from '.';
-import { ReorderCardReason } from '@/api/types';
+import { ReorderCardReason } from '@blc-mono/shared/models/members/enums/ReorderCardReason';
 
 const mutateAsync = jest.fn();
 const mockUseRequestNewCard = jest.fn().mockReturnValue({

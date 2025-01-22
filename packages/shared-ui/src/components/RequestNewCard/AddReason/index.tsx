@@ -11,9 +11,9 @@ import {
 } from '../requestNewCardConfig';
 import IdVerificationTitle from '../IdVerification/components/IdVerificationTitle';
 import useMemberCard from '../../../hooks/useMemberCard';
-import { ReorderCardReason } from '../../../api/types';
 import useDrawer from '../../../components/Drawer/useDrawer';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
+import { ReorderCardReason } from '@blc-mono/shared/models/members/enums/ReorderCardReason';
 
 export const radioOptions: RadioGroupItems = [
   {

@@ -1,8 +1,9 @@
 import { ApplicationService } from '../applicationService';
 import { ApplicationRepository } from '../../repositories/applicationRepository';
-import { PromoCodesService } from '../promoCodesService';
+import { CardRepository } from '../../repositories/cardRepository';
 import { S3 } from 'aws-sdk';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
+import { subDays } from 'date-fns';
 import {
   ApplicationModel,
   CreateApplicationModel,
@@ -12,16 +13,22 @@ import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/Eligibi
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
+import { CardModel } from '@blc-mono/shared/models/members/cardModel';
+import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
+import { ReorderCardReason } from '@blc-mono/shared/models/members/enums/ReorderCardReason';
 
 jest.mock('../../repositories/applicationRepository');
 jest.mock('../promoCodesService');
 jest.mock('../profileService');
+jest.mock('../../repositories/cardRepository');
 jest.mock('aws-sdk', () => ({
   S3: jest.fn().mockImplementation(() => ({
     getSignedUrlPromise: jest.fn(),
   })),
 }));
-jest.mock('uuid');
+jest.mock('uuid', () => ({
+  v4: jest.fn(),
+}));
 
 const mockedUuidv4 = jest.mocked(uuidv4);
 
@@ -36,24 +43,33 @@ describe('ApplicationService', () => {
   const updateApplication: UpdateApplicationModel = {
     city: 'New York',
   };
+  const card: CardModel = {
+    cardNumber: 'BLC123456789',
+    cardStatus: CardStatus.PHYSICAL_CARD,
+    createdDate: '2023-01-01T00:00:00.000Z',
+    nameOnCard: 'John Doe',
+    purchaseDate: '2023-01-01T00:00:00.000Z',
+    memberId,
+    expiryDate: '2024-01-01',
+  };
   const documentId = '7d92ad80-8983-4f09-bfa1-f652b17e9ca1';
 
   let applicationService: ApplicationService;
   let repositoryMock: jest.Mocked<ApplicationRepository>;
   let profileServiceMock: jest.Mocked<ProfileService>;
-  let promoCodeServiceMock: jest.Mocked<PromoCodesService>;
+  let cardRepositoryMock: jest.Mocked<CardRepository>;
   let s3ClientMock: jest.Mocked<S3>;
 
   beforeEach(() => {
     repositoryMock = new ApplicationRepository() as jest.Mocked<ApplicationRepository>;
     profileServiceMock = new ProfileService() as jest.Mocked<ProfileService>;
-    promoCodeServiceMock = new PromoCodesService() as jest.Mocked<PromoCodesService>;
+    cardRepositoryMock = new CardRepository() as jest.Mocked<CardRepository>;
     s3ClientMock = new S3() as jest.Mocked<S3>;
 
     applicationService = new ApplicationService(
       repositoryMock,
       profileServiceMock,
-      promoCodeServiceMock,
+      cardRepositoryMock,
       s3ClientMock,
       'mockBucketName',
     );
@@ -75,6 +91,98 @@ describe('ApplicationService', () => {
       const result = await applicationService.createApplication(memberId, createApplication);
 
       expect(result).toBe(applicationId);
+    });
+
+    describe('given the card was created within the last 90 days', () => {
+      beforeEach(() => {
+        repositoryMock.createApplication.mockResolvedValue(applicationId);
+        const createdDate = subDays(new Date(), 89);
+        const cards = [{ ...card, createdDate: createdDate.toISOString() }];
+        cardRepositoryMock.getCards.mockResolvedValue(cards);
+      });
+
+      describe.each([
+        {
+          applicationReason: ApplicationReason.REPRINT,
+          reorderCardReason: ReorderCardReason.CARD_NOT_RECEIVED_YET,
+        },
+        {
+          applicationReason: ApplicationReason.LOST_CARD,
+          reorderCardReason: ReorderCardReason.STOLEN_CARD,
+        },
+      ])('when application reason is "%s"', ({ applicationReason, reorderCardReason }) => {
+        let result: string;
+
+        beforeEach(async () => {
+          result = await applicationService.createApplication(memberId, {
+            applicationReason: applicationReason,
+            reorderCardReason: reorderCardReason,
+          });
+        });
+
+        it('should create application successfully', () => {
+          expect(result).toBe(applicationId);
+        });
+
+        it('should create note', () => {
+          expect(profileServiceMock.createNote).toHaveBeenCalledWith(memberId, {
+            text: `Reprint application created for reason '${reorderCardReason}' due to original card being created within 90 days`,
+          });
+        });
+
+        it('should create application with application reason "reprint"', () => {
+          expect(repositoryMock.createApplication).toHaveBeenCalledWith(memberId, {
+            applicationReason: ApplicationReason.REPRINT,
+            reorderCardReason: reorderCardReason,
+          });
+        });
+      });
+    });
+
+    describe('given the card was created more than 90 days ago', () => {
+      beforeEach(() => {
+        repositoryMock.createApplication.mockResolvedValue(applicationId);
+        const createdDate = subDays(new Date(), 90);
+        const cards = [{ ...card, createdDate: createdDate.toISOString() }];
+        cardRepositoryMock.getCards.mockResolvedValue(cards);
+      });
+
+      describe.each([
+        {
+          applicationReason: ApplicationReason.LOST_CARD,
+          reorderCardReason: ReorderCardReason.DAMAGED_CARD,
+        },
+        {
+          applicationReason: ApplicationReason.REPRINT,
+          reorderCardReason: ReorderCardReason.LOST_CARD,
+        },
+      ])('when application reason is "%s"', ({ applicationReason, reorderCardReason }) => {
+        let result: string;
+
+        beforeEach(async () => {
+          result = await applicationService.createApplication(memberId, {
+            applicationReason,
+            reorderCardReason,
+          });
+        });
+
+        it('should create application successfully', () => {
+          expect(result).toBe(applicationId);
+        });
+
+        it('should create note', () => {
+          expect(profileServiceMock.createNote).toHaveBeenCalledWith(memberId, {
+            text: `Lost card application created for reason '${reorderCardReason}' due to original card being older than 90 days`,
+          });
+        });
+
+        it('should create application with application reason "lost card"', () => {
+          expect(repositoryMock.createApplication).toHaveBeenCalledWith(memberId, {
+            applicationReason: ApplicationReason.LOST_CARD,
+            reorderCardReason: reorderCardReason,
+          });
+        });
+      });
     });
   });
 

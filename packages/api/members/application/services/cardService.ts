@@ -1,5 +1,10 @@
 import { logger } from '../middleware';
-import { CardModel, UpdateCardModel } from '@blc-mono/shared/models/members/cardModel';
+import {
+  AwaitingBatchingCardModel,
+  BatchedCardModel,
+  CardModel,
+  UpdateCardModel,
+} from '@blc-mono/shared/models/members/cardModel';
 import { CardRepository } from '../repositories/cardRepository';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
@@ -16,6 +21,26 @@ export class CardService {
       return await this.repository.getCards(memberId);
     } catch (error) {
       logger.error({ message: 'Error fetching cards', error });
+      throw error;
+    }
+  }
+
+  async getCardsInBatch(batchNumber: string): Promise<BatchedCardModel[]> {
+    try {
+      logger.debug({ message: 'Fetching cards in batch', batchNumber });
+      return await this.repository.getCardsInBatch(batchNumber);
+    } catch (error) {
+      logger.error({ message: 'Error fetching cards', error });
+      throw error;
+    }
+  }
+
+  async getCardsAwaitingBatching(): Promise<AwaitingBatchingCardModel[]> {
+    try {
+      logger.debug({ message: 'Fetching cards awaiting batching' });
+      return await this.repository.getCardsAwaitingBatching();
+    } catch (error) {
+      logger.error({ message: 'Error fetching cards awaiting batching', error });
       throw error;
     }
   }

@@ -1,7 +1,12 @@
 import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
 import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Api';
 import { CardPrintBatchModel } from '@blc-mono/shared/models/members/cardPrintBatchModel';
-import { CardModel, UpdateCardModel } from '@blc-mono/shared/models/members/cardModel';
+import {
+  AwaitingBatchingCardModel,
+  BatchedCardModel,
+  CardModel,
+  UpdateCardModel,
+} from '@blc-mono/shared/models/members/cardModel';
 import { FixBatchModelRequest } from '@blc-mono/shared/models/members/batchModel';
 
 export function adminCardRoutes(
@@ -55,6 +60,19 @@ export function adminCardRoutes(
       name: 'AdminFixCardPrintBatch',
       handler: 'packages/api/members/application/handlers/admin/batch/fixBatch.handler',
       requestModelType: FixBatchModelRequest,
+    }),
+    'GET /admin/cards/inBatch/{batchId}': Route.createRoute({
+      ...defaultRouteProps,
+      name: 'AdminGetCardsInBatch',
+      handler: 'packages/api/members/application/handlers/admin/cards/getCardsInBatch.handler',
+      responseModelType: BatchedCardModel,
+    }),
+    'GET /admin/cards/awaitingBatching': Route.createRoute({
+      ...defaultRouteProps,
+      name: 'AdminGetCardsAwaitingBatching',
+      handler:
+        'packages/api/members/application/handlers/admin/cards/getCardsAwaitingBatching.handler',
+      responseModelType: AwaitingBatchingCardModel,
     }),
   };
 }

@@ -6,7 +6,11 @@ import {
   QueryCommandInput,
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { CardModel } from '@blc-mono/shared/models/members/cardModel';
+import {
+  AwaitingBatchingCardModel,
+  BatchedCardModel,
+  CardModel,
+} from '@blc-mono/shared/models/members/cardModel';
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
 import { CARD, cardKey, memberKey } from './repository';
@@ -44,6 +48,36 @@ export class CardRepository {
     }
 
     return result.Items.map((item) => CardModel.parse(item));
+  }
+
+  async getCardsInBatch(batchNumber: string): Promise<BatchedCardModel[]> {
+    const queryParams: QueryCommandInput = {
+      TableName: this.tableName,
+      KeyConditionExpression: 'begins_with(sk, :card) AND :batchNumber = batchNumber',
+      ExpressionAttributeValues: {
+        ':card': CARD,
+        ':batchNumber': batchNumber,
+      },
+    };
+
+    const result = await this.dynamoDB.send(new QueryCommand(queryParams));
+
+    return result.Items?.map((item) => BatchedCardModel.parse(item)) ?? [];
+  }
+
+  async getCardsAwaitingBatching(): Promise<AwaitingBatchingCardModel[]> {
+    const params = {
+      TableName: this.tableName,
+      IndexName: 'CardStatusIndex',
+      KeyConditionExpression: 'cardStatus = :cardStatus',
+      ExpressionAttributeValues: {
+        ':cardStatus': CardStatus.AWAITING_BATCHING,
+      },
+    };
+
+    const result = await this.dynamoDB.send(new QueryCommand(params));
+
+    return result.Items?.map((item) => AwaitingBatchingCardModel.parse(item)) ?? [];
   }
 
   async getCardsWithStatus(cardStatus: CardStatus): Promise<CardModel[]> {

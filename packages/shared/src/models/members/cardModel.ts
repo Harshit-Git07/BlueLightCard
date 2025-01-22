@@ -40,3 +40,36 @@ export const UpdateCardModel = createZodNamedType(
 );
 
 export type UpdateCardModel = z.infer<typeof UpdateCardModel>;
+
+export const AwaitingBatchingCardModel = createZodNamedType(
+  'AwaitingBatchingCardModel',
+  CardModel.omit({
+    memberId: true,
+    expiryDate: true,
+    cardStatus: true,
+    postedDate: true,
+    printedDate: true,
+    refundedDate: true,
+    paymentStatus: true,
+    batchNumber: true,
+    promoCode: true,
+  }),
+);
+
+export type AwaitingBatchingCardModel = z.infer<typeof AwaitingBatchingCardModel>;
+
+export const BatchedCardModel = createZodNamedType(
+  'BatchedCardModel',
+  CardModel.omit({
+    memberId: true,
+    expiryDate: true,
+    printingErrorStatus: true,
+    purchaseDate: true,
+    refundedDate: true,
+    paymentStatus: true,
+    batchNumber: true,
+    promoCode: true,
+  }),
+);
+
+export type BatchedCardModel = z.infer<typeof BatchedCardModel>;

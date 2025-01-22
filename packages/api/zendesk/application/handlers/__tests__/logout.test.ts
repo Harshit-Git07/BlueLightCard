@@ -1,6 +1,4 @@
 import { handler } from '../logout';
-import { Logger } from '@aws-lambda-powertools/logger';
-import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 
 jest.mock('@blc-mono/core/utils/getEnv', () => ({
   getEnvRaw: jest.fn().mockImplementation((param) => {
@@ -62,8 +60,7 @@ describe('Zendesk Logout Handler', () => {
     const event = {
       headers: {},
     } as any;
-    const context = {} as any;
-    const response = await handler(event, context);
+    const response = await handler(event);
     expect(response).toEqual({
       statusCode: 302,
       headers: {

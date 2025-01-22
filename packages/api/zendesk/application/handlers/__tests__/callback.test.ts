@@ -1,9 +1,7 @@
-import { handler } from '../callback';
-import { Logger } from '@aws-lambda-powertools/logger';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import { Response } from '@blc-mono/core/utils/restResponse/response';
-import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+
+import { handler } from '../callback';
 
 jest.mock('@blc-mono/core/utils/getEnv', () => ({
   getEnvRaw: jest.fn().mockImplementation((param) => {
@@ -62,8 +60,6 @@ jest.mock('axios');
 jest.mock('jsonwebtoken');
 
 describe('Zendesk Callback Handler', () => {
-  const mockedGetEnv = getEnv as jest.Mock;
-  const mockedGetEnvOrDefault = getEnvOrDefault as jest.Mock;
   const mockedAxios = axios as jest.Mocked<typeof axios>;
   const mockedJwt = jwt as jest.Mocked<typeof jwt>;
 
@@ -90,9 +86,8 @@ describe('Zendesk Callback Handler', () => {
     const event = {
       queryStringParameters: { code: 'validCode' },
     } as any;
-    const context = {} as any;
 
-    const response = await handler(event, context);
+    const response = await handler(event);
 
     expect(response).toEqual({
       statusCode: 302,
@@ -120,9 +115,8 @@ describe('Zendesk Callback Handler', () => {
 
   it('should return 400 if code is missing', async () => {
     const event = { queryStringParameters: {} } as any;
-    const context = {} as any;
 
-    const response = await handler(event, context);
+    const response = await handler(event);
 
     expect(response).toEqual({
       statusCode: 400,
@@ -151,9 +145,8 @@ describe('Zendesk Callback Handler', () => {
     const event = {
       queryStringParameters: { code: 'validCode' },
     } as any;
-    const context = {} as any;
 
-    const response = await handler(event, context);
+    const response = await handler(event);
 
     expect(response).toEqual({
       statusCode: 302,

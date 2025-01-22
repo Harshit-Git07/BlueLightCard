@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { REDEMPTION_TYPES } from '@blc-mono/core/constants/redemptions';
-import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
+import { createZodNamedType } from '@blc-mono/shared/utils/zodNamedType';
 
 export const PatchRedemptionConfigBaseModel = createZodNamedType(
   'PatchRedemptionConfigBaseModel',

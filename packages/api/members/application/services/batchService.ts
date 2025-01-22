@@ -6,28 +6,28 @@ import {
   CreateInternalBatchModelResponse,
   ExtendedBatchModel,
   UpdateBatchModel,
-} from '@blc-mono/members/application/models/batchModel';
-import { BatchEntryModel } from '@blc-mono/members/application/models/batchEntryModel';
-import { CardModel } from '@blc-mono/members/application/models/cardModel';
-import { PrintingErrorStatus } from '@blc-mono/members/application/models/enums/PrintingErrorStatus';
+} from '@blc-mono/shared/models/members/batchModel';
+import { BatchEntryModel } from '@blc-mono/shared/models/members/batchEntryModel';
+import { CardModel } from '@blc-mono/shared/models/members/cardModel';
+import { PrintingErrorStatus } from '@blc-mono/shared/models/members/enums/PrintingErrorStatus';
 import { CardService } from '@blc-mono/members/application/services/cardService';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
-import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
-import { ExternalCardPrintingDataModel } from '@blc-mono/members/application/models/ExternalCardPrintingDataModel';
+import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
+import { ExternalCardPrintingDataModel } from '@blc-mono/shared/models/members/ExternalCardPrintingDataModel';
 import { Bucket } from 'sst/node/bucket';
-import { BatchType } from '@blc-mono/members/application/models/enums/BatchType';
-import { ProfileModel } from '@blc-mono/members/application/models/profileModel';
-import { ApplicationModel } from '@blc-mono/members/application/models/applicationModel';
+import { BatchType } from '@blc-mono/shared/models/members/enums/BatchType';
+import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
+import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 import { formatDateDDMMYYYY } from 'client/src/common/utils/dates';
 import { getBrandFromEnv, isBlcAuBrand, isBlcUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { MAP_BRAND } from '@blc-mono/core/constants/common';
 import { S3 } from 'aws-sdk';
 import { S3EventRecord } from 'aws-lambda';
 import { Client } from 'basic-ftp';
-import { InboundBatchFileCardDataResponseModel } from '@blc-mono/members/application/models/InboundBatchFileCardDataResponseModel';
+import { InboundBatchFileCardDataResponseModel } from '@blc-mono/shared/models/members/InboundBatchFileCardDataResponseModel';
 import csvParser from 'csv-parser';
 import { Readable } from 'stream';
-import { BatchStatus } from '@blc-mono/members/application/models/enums/BatchStatus';
+import { BatchStatus } from '@blc-mono/shared/models/members/enums/BatchStatus';
 import path from 'path';
 
 const MAX_NAME_ON_CARD_CHARACTER_LIMIT = 25;

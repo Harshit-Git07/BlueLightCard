@@ -4,12 +4,14 @@ on:
     branches:
       - main
     paths:
+      - packages/shared/**
       - packages/chrome-extension/**
       - package-lock.json
       - package.json
       - .github/workflows/chrome-extension.yml
   pull_request:
     paths:
+      - packages/shared/**
       - packages/chrome-extension/**
       - package-lock.json
       - package.json

@@ -1,9 +1,11 @@
 import { ServiceLayerOrganisation } from '@/root/src/member-eligibility/shared/types/ServiceLayerOrganisation';
+import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
+import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 
 export function buildTestServiceLayerOrganisation({
   organisationId = '1',
   name = 'Organisation 1',
-  employmentStatus = ['EMPLOYED'],
+  employmentStatus = [EmploymentStatus.EMPLOYED],
   active = true,
   idUploadCount = 1,
   bypassId = false,
@@ -17,7 +19,7 @@ export function buildTestServiceLayerOrganisation({
         idKey: 'Work Email',
         description: '',
         guidelines: 'Must be work email',
-        type: 'TRUSTED_DOMAIN',
+        type: IdType.TRUSTED_DOMAIN,
         required: true,
       },
     ],
@@ -30,7 +32,7 @@ export function buildTestServiceLayerOrganisation({
         idKey: 'Volunteer Card',
         description: '',
         guidelines: 'Upload volunteer card',
-        type: 'IMAGE_UPLOAD',
+        type: IdType.IMAGE_UPLOAD,
         required: false,
       },
     ],
@@ -43,7 +45,7 @@ export function buildTestServiceLayerOrganisation({
         idKey: 'ID Card',
         guidelines: 'Upload ID card',
         description: '',
-        type: 'IMAGE_UPLOAD',
+        type: IdType.IMAGE_UPLOAD,
         required: true,
       },
     ],

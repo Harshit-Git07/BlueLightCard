@@ -1,7 +1,9 @@
-import { handler } from '../generateToken';
 import jwt from 'jsonwebtoken';
+
 import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { unpackJWT } from '@blc-mono/core/utils/unpackJWT';
+
+import { handler } from '../generateToken';
 
 jest.mock('jsonwebtoken');
 jest.mock('@blc-mono/core/utils/unpackJWT');
@@ -35,7 +37,6 @@ jest.mock('@blc-mono/core/utils/getEnv', () => ({
 
 describe('Zendesk Token Generation Lambda', () => {
   let mockEvent: any;
-  let mockContext: any;
   const SECRET = 'test-secret';
   const ZENDESK_KID = 'test-kid';
   const testUser = {
@@ -51,7 +52,6 @@ describe('Zendesk Token Generation Lambda', () => {
       headers: {},
       body: null,
     };
-    mockContext = {};
     process.env.ZENDESK_MESSAGING_JWT_SECRET = SECRET;
     process.env.ZENDESK_MESSAGING_KID = ZENDESK_KID;
     jest.clearAllMocks();
@@ -61,7 +61,7 @@ describe('Zendesk Token Generation Lambda', () => {
     mockEvent.headers['authorization'] = 'Bearer validtokenhere';
     (unpackJWT as jest.Mock).mockReturnValue(testUser);
     (jwt.sign as jest.Mock).mockReturnValue('generatedjwttoken');
-    const result = await handler(mockEvent, mockContext);
+    const result = await handler(mockEvent);
     expect(result).toEqual(Response.OK({ message: 'Token Generated', data: { token: 'generatedjwttoken' } }));
     expect(jwt.sign).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -79,7 +79,7 @@ describe('Zendesk Token Generation Lambda', () => {
     (unpackJWT as jest.Mock).mockImplementation(() => {
       throw new Error('Token Missing');
     });
-    const result: any = await handler(mockEvent, mockContext);
+    const result: any = await handler(mockEvent);
     expect(JSON.parse(result.body).message).toEqual('Unauthorized');
   });
 
@@ -88,7 +88,7 @@ describe('Zendesk Token Generation Lambda', () => {
     (unpackJWT as jest.Mock).mockImplementation(() => {
       throw new Error('Invalid token');
     });
-    const result: any = await handler(mockEvent, mockContext);
+    const result: any = await handler(mockEvent);
     expect(JSON.parse(result.body).message).toEqual('Unauthorized');
   });
 
@@ -96,7 +96,7 @@ describe('Zendesk Token Generation Lambda', () => {
     mockEvent.headers['authorization'] = 'Bearer validtoken';
     (unpackJWT as jest.Mock).mockReturnValue({ 'custom:blc_old_uuid': '1234', email_verified: true });
     (jwt.sign as jest.Mock).mockReturnValue('generatedjwttoken');
-    const result = await handler(mockEvent, mockContext);
+    const result = await handler(mockEvent);
     expect(result).toEqual(Response.OK({ message: 'Token Generated', data: { token: 'generatedjwttoken' } }));
     expect(jwt.sign).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -115,7 +115,7 @@ describe('Zendesk Token Generation Lambda', () => {
     (unpackJWT as jest.Mock).mockImplementation(() => {
       throw new Error('Unexpected error');
     });
-    const result: any = await handler(mockEvent, mockContext);
+    const result: any = await handler(mockEvent);
     expect(JSON.parse(result.body).message).toEqual('Unauthorized');
   });
 });

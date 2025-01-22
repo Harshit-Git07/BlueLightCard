@@ -1,5 +1,7 @@
-import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
+import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
+import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
+import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 
-export type ServiceLayerMemberProfile = components['schemas']['ProfileModel'];
-export type ServiceLayerApplication = components['schemas']['ApplicationModel'];
-export type ServiceLayerMemberProfileCard = ServiceLayerMemberProfile['cards'][number];
+export type ServiceLayerMemberProfile = ProfileModel;
+export type ServiceLayerApplication = ApplicationModel;
+export type ServiceLayerMemberProfileCard = CardModel;

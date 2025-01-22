@@ -7,7 +7,7 @@ import {
 import {
   MemberDocumentModel,
   MemberDocumentsSearchModel,
-} from '@blc-mono/members/application/models/memberDocument';
+} from '@blc-mono/shared/models/members/memberDocument';
 import { logger } from '@blc-mono/members/application/middleware';
 
 const PAGE_SIZE = 50;

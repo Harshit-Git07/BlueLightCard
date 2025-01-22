@@ -3,11 +3,12 @@ import { sleep } from '../../../utils/sleep';
 import { jsonOrNull } from '../../../utils/jsonUtils';
 import { mockMemberProfileResponse } from './mockMemberProfileGet';
 import { ApplicationSchema } from '../../CardVerificationAlerts/types';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 
 export const mockMemberApplicationPost = async (options: V5RequestOptions) => {
   await sleep(500);
   const payload = jsonOrNull<Partial<ApplicationSchema>>(options?.body ?? '');
-  const { applicationReason = 'SIGNUP', memberId = 'abcd-1234' } =
+  const { applicationReason = ApplicationReason.SIGNUP, memberId = 'abcd-1234' } =
     payload as Partial<ApplicationSchema>;
 
   const mockMemberApplicationPostResponse = {

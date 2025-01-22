@@ -1,9 +1,9 @@
 import { mockClient } from 'aws-sdk-client-mock';
 import { DynamoDBDocumentClient, QueryCommand, TransactWriteCommand } from '@aws-sdk/lib-dynamodb';
 import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
-import { PromoCodeType } from '@blc-mono/members/application/models/enums/PromoCodeType';
+import { PromoCodeType } from '@blc-mono/shared/models/members/enums/PromoCodeType';
 import 'aws-sdk-client-mock-jest';
-import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 
 const mockDynamoDB = mockClient(DynamoDBDocumentClient);
 

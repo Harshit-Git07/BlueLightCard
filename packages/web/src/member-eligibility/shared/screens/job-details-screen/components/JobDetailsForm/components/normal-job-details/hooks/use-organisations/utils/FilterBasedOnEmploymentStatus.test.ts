@@ -1,21 +1,22 @@
 import * as target from './FilterBasedOnEmploymentStatus';
 import { buildTestServiceLayerOrganisation } from '@/root/src/member-eligibility/shared/types/testing/BuildTestServiceLayerOrganisation';
+import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 
 const serviceLayerOrganisations = [
   buildTestServiceLayerOrganisation({
     organisationId: 'employed',
     name: 'employed',
-    employmentStatus: ['EMPLOYED'],
+    employmentStatus: [EmploymentStatus.EMPLOYED],
   }),
   buildTestServiceLayerOrganisation({
     organisationId: 'retired',
     name: 'retired',
-    employmentStatus: ['RETIRED'],
+    employmentStatus: [EmploymentStatus.RETIRED],
   }),
   buildTestServiceLayerOrganisation({
     organisationId: 'volunteer',
     name: 'volunteer',
-    employmentStatus: ['VOLUNTEER'],
+    employmentStatus: [EmploymentStatus.VOLUNTEER],
   }),
 ];
 
@@ -26,7 +27,7 @@ it('should only return employers for the employed status', () => {
     buildTestServiceLayerOrganisation({
       organisationId: 'employed',
       name: 'employed',
-      employmentStatus: ['EMPLOYED'],
+      employmentStatus: [EmploymentStatus.EMPLOYED],
     }),
   ]);
 });
@@ -41,7 +42,7 @@ it('should only return employers for the retired status', () => {
     buildTestServiceLayerOrganisation({
       organisationId: 'retired',
       name: 'retired',
-      employmentStatus: ['RETIRED'],
+      employmentStatus: [EmploymentStatus.RETIRED],
     }),
   ]);
 });
@@ -53,7 +54,7 @@ it('should only return employers for the volunteer status', () => {
     buildTestServiceLayerOrganisation({
       organisationId: 'volunteer',
       name: 'volunteer',
-      employmentStatus: ['VOLUNTEER'],
+      employmentStatus: [EmploymentStatus.VOLUNTEER],
     }),
   ]);
 });

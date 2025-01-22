@@ -1,6 +1,6 @@
 import { middleware } from '../../../middleware';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
-import { ProfileModel } from '@blc-mono/members/application/models/profileModel';
+import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 
 const service = new ProfileService();
 

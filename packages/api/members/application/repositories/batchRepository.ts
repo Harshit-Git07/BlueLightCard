@@ -17,10 +17,10 @@ import {
   CreateBatchModel,
   UpdateBatchModel,
   BatchModel,
-} from '@blc-mono/members/application/models/batchModel';
+} from '@blc-mono/shared/models/members/batchModel';
 import { v4 as uuidv4 } from 'uuid';
-import { BatchStatus } from '@blc-mono/members/application/models/enums/BatchStatus';
-import { BatchEntryModel } from '@blc-mono/members/application/models/batchEntryModel';
+import { BatchStatus } from '@blc-mono/shared/models/members/enums/BatchStatus';
+import { BatchEntryModel } from '@blc-mono/shared/models/members/batchEntryModel';
 import { NotFoundError } from '../errors/NotFoundError';
 
 export class BatchRepository extends Repository {

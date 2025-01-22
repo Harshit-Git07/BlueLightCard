@@ -2,7 +2,7 @@ import { EventBridgeEvent, StreamRecord } from 'aws-lambda';
 import { eventBusMiddleware } from '../../middleware';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { EmailService } from '@blc-mono/members/application/email/emailService';
-import { MemberEvent } from '@blc-mono/members/application/models/enums/MemberEvent';
+import { MemberEvent } from '@blc-mono/shared/models/members/enums/MemberEvent';
 import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 

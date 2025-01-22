@@ -10,15 +10,15 @@ import {
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
 import { v4 as uuidv4 } from 'uuid';
-import { EligibilityStatus } from '../models/enums/EligibilityStatus';
-import { ApplicationReason } from '../models/enums/ApplicationReason';
-import { CreateNoteModel, NoteModel } from '../models/noteModel';
-import { CardModel } from '../models/cardModel';
-import { ApplicationModel } from '../models/applicationModel';
-import { CreateProfileModel, ProfileModel } from '../models/profileModel';
+import { CreateNoteModel, NoteModel } from '@blc-mono/shared/models/members/noteModel';
+import { CardModel } from '@blc-mono/shared/models/members/cardModel';
+import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
+import { CreateProfileModel, ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 import { APPLICATION, MEMBER, memberKey, NOTE, noteKey, PROFILE, Repository } from './repository';
 import { NotFoundError } from '../errors/NotFoundError';
 import { omit } from 'lodash';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 
 export class ProfileRepository extends Repository {
   constructor(

@@ -1,9 +1,9 @@
 import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
 import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Api';
-import { PaymentModel } from '@blc-mono/members/application/models/paymentModel';
-import { RefundModel } from '@blc-mono/members/application/models/refundModel';
 import { Function } from 'sst/constructs';
 import { MemberStackEnvironmentKeys } from '../../constants/environment';
+import { PaymentModel } from '@blc-mono/shared/models/members/paymentModel';
+import { RefundModel } from '@blc-mono/shared/models/members/refundModel';
 
 export function adminPaymentRoutes(
   defaultRouteProps: DefaultRouteProps,

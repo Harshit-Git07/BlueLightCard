@@ -1,6 +1,4 @@
 import { handler } from '../login';
-import { Logger } from '@aws-lambda-powertools/logger';
-import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 
 jest.mock('@blc-mono/core/utils/getEnv', () => ({
   getEnvRaw: jest.fn().mockImplementation((param) => {
@@ -45,7 +43,6 @@ jest.mock('@blc-mono/core/utils/getEnv', () => ({
 }));
 
 describe('Zendesk Login Handler', () => {
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -54,8 +51,7 @@ describe('Zendesk Login Handler', () => {
     const event = {
       headers: {},
     } as any;
-    const context = {} as any;
-    const response = await handler(event, context);
+    const response = await handler(event);
     expect(response).toEqual({
       statusCode: 302,
       headers: {
@@ -63,5 +59,4 @@ describe('Zendesk Login Handler', () => {
       },
     });
   });
-
 });

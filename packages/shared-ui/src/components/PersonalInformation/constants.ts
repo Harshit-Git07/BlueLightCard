@@ -2,6 +2,7 @@ import { ProfileSchema } from '../CardVerificationAlerts/types';
 import { TextCase, transformTextCases } from '../../utils/transformTextCase';
 import { DropdownOptions } from '../Dropdown/types';
 import { generateDropdownOptions } from '../MyAccountDuplicatedComponents/Dropdown/utils/generateDropdownOptions';
+import { Gender } from '@blc-mono/shared/models/members/enums/Gender';
 
 export const getFieldNameFromKey = (key: string) => {
   return key // E.g. 'phoneNumber'
@@ -17,10 +18,10 @@ export const renderGenderValue = (gender?: string) =>
 
 type GenderOptions<T = ProfileSchema['gender']> = T extends undefined ? never : T;
 const genderOptions: Array<GenderOptions> = [
-  'FEMALE',
-  'MALE',
-  'OTHER',
-  'PREFER_NOT_TO_SAY',
+  Gender.FEMALE,
+  Gender.MALE,
+  Gender.OTHER,
+  Gender.PREFER_NOT_TO_SAY,
 ] as const;
 export const genderDropdownOptions: DropdownOptions = genderOptions.map((genderOption) => ({
   id: genderOption,

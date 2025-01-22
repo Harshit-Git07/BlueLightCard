@@ -1,10 +1,10 @@
 import { OrganisationService } from '../organisationService';
-import { OrganisationModel } from '../../models/organisationModel';
-import { EmployerModel } from '../../models/employerModel';
+import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
+import { EmployerModel } from '@blc-mono/shared/models/members/employerModel';
 import { v4 as uuidv4 } from 'uuid';
 import { OrganisationRepository } from '../../repositories/organisationRepository';
-import { EmploymentStatus } from '../../models/enums/EmploymentStatus';
-import { IdType } from '../../models/enums/IdType';
+import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
+import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 
 jest.mock('../../repositories/organisationRepository');
 

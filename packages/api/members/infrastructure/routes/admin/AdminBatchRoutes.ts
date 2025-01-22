@@ -5,7 +5,7 @@ import {
   CreateInternalBatchModel,
   UpdateInternalBatchModel,
   BatchModel,
-} from '@blc-mono/members/application/models/batchModel';
+} from '@blc-mono/shared/models/members/batchModel';
 
 export function adminBatchRoutes(
   defaultRouteProps: DefaultRouteProps,

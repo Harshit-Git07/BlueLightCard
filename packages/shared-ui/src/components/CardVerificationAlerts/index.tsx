@@ -10,13 +10,16 @@ import {
   VerificationStatusSchema,
 } from './types';
 import useMemberApplication from '../../hooks/useMemberApplication';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
 
-const signUp: ApplicationReasonSchema = 'SIGNUP';
-const renewal: ApplicationReasonSchema = 'RENEWAL';
-const awaitingIdApproval: EligibilityStatusSchema = 'AWAITING_ID_APPROVAL';
-const awaitingPayment: PaymentStatusSchema = 'AWAITING_PAYMENT';
-const ineligible: EligibilityStatusSchema = 'INELIGIBLE';
-const eligible: VerificationStatusSchema = 'ELIGIBLE';
+const signUp: ApplicationReasonSchema = ApplicationReason.SIGNUP;
+const renewal: ApplicationReasonSchema = ApplicationReason.RENEWAL;
+const awaitingIdApproval: EligibilityStatusSchema = EligibilityStatus.AWAITING_ID_APPROVAL;
+const awaitingPayment: PaymentStatusSchema = PaymentStatus.AWAITING_PAYMENT;
+const ineligible: EligibilityStatusSchema = EligibilityStatus.INELIGIBLE;
+const eligible: VerificationStatusSchema = EligibilityStatus.ELIGIBLE;
 
 const isSignUpOrRenewal = (applicationReason?: string) =>
   applicationReason === signUp || applicationReason === renewal;
@@ -93,10 +96,10 @@ const CardVerificationBanner: FC<Props> = ({ memberUuid }) => {
     paymentStatus,
   } = application;
   return bannerTypeToAlert(
-    applicationReason,
+    applicationReason ?? undefined,
     eligibilityStatus,
     verificationMethod,
-    rejectionReason,
+    rejectionReason ?? undefined,
     paymentStatus,
   );
 };

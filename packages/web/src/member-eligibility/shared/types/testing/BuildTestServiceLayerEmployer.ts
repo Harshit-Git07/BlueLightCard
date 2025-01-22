@@ -1,10 +1,12 @@
 import { ServiceLayerEmployer } from '@/root/src/member-eligibility/shared/types/ServiceLayerEmployer';
+import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
+import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 
 export function buildTestServiceLayerEmployer({
   organisationId = '1',
   employerId = '1',
   name = 'Employer 1',
-  employmentStatus = ['EMPLOYED'],
+  employmentStatus = [EmploymentStatus.EMPLOYED],
   active = true,
   idUploadCount = 1,
   bypassId = false,
@@ -18,7 +20,7 @@ export function buildTestServiceLayerEmployer({
         idKey: 'employee_id',
         description: 'Employee identification',
         guidelines: 'Please upload your employee ID',
-        type: 'IMAGE_UPLOAD',
+        type: IdType.IMAGE_UPLOAD,
         required: true,
       },
     ],
@@ -31,7 +33,7 @@ export function buildTestServiceLayerEmployer({
         idKey: 'volunteer_badge',
         description: 'Volunteer identification',
         guidelines: 'Please upload your volunteer badge',
-        type: 'IMAGE_UPLOAD',
+        type: IdType.IMAGE_UPLOAD,
         required: false,
       },
     ],
@@ -44,7 +46,7 @@ export function buildTestServiceLayerEmployer({
         idKey: 'retiree_card',
         description: 'Retiree identification',
         guidelines: 'Please upload your retiree card',
-        type: 'IMAGE_UPLOAD',
+        type: IdType.IMAGE_UPLOAD,
         required: true,
       },
     ],

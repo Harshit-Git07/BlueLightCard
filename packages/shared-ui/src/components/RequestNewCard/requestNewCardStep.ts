@@ -56,6 +56,8 @@ export const isStepComplete = (
   if (step === ID_VERIFICATION_EMAIL) return !!trustedDomainValidated;
   // if (step === ID_VERIFICATION_UPLOAD) return true;
   if (step === ID_VERIFICATION_UPLOAD) return nDocs >= nRequiredDocs;
-  if (step === PAYMENT) return completedPaymentStatuses.includes(paymentStatus);
+  if (step === PAYMENT && paymentStatus) {
+    return completedPaymentStatuses.includes(paymentStatus);
+  }
   return false;
 };

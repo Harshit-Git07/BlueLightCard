@@ -8,6 +8,7 @@ name: 'Member-Services-Hub'
 on:
   push:
     paths:
+      - packages/shared/**
       - packages/member-services-hub/**
       - package-lock.json
       - sst.config.ts
@@ -15,6 +16,7 @@ on:
       - .github/workflows/member-services-hub.yml
   pull_request:
     paths:
+      - packages/shared/**
       - packages/member-services-hub/**
       - package-lock.json
       - sst.config.ts

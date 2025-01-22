@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '../../../middleware';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { NoteModel } from '@blc-mono/members/application/models/noteModel';
+import { NoteModel } from '@blc-mono/shared/models/members/noteModel';
 
 const service = new ProfileService();
 

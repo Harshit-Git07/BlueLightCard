@@ -3,10 +3,14 @@ import {
   CreateOrganisationModel,
   OrganisationModel,
   UpdateOrganisationModel,
-} from '../models/organisationModel';
+} from '@blc-mono/shared/models/members/organisationModel';
 import { logger } from '../middleware';
-import { CreateEmployerModel, EmployerModel, UpdateEmployerModel } from '../models/employerModel';
-import { IdRequirementModel } from '../models/idRequirementsModel';
+import {
+  CreateEmployerModel,
+  EmployerModel,
+  UpdateEmployerModel,
+} from '@blc-mono/shared/models/members/employerModel';
+import { IdRequirementModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 import {
   getOrganisationIdMappings,
   mapOrganisationsAndEmployers,

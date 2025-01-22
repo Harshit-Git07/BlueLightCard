@@ -4,12 +4,14 @@ on:
     branches:
       - main
     paths:
+      - packages/shared/**
       - packages/api-proxy/**
       - .github/workflows/api-proxy.yml
       - package-lock.json
       - package.json
   pull_request:
     paths:
+      - packages/shared/**
       - packages/api-proxy/**
       - .github/workflows/api-proxy.yml
       - package-lock.json

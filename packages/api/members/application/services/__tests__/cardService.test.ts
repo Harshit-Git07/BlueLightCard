@@ -1,10 +1,10 @@
 import { CardService } from '../../services/cardService';
 import { CardRepository } from '../../repositories/cardRepository';
-import { CardModel, UpdateCardModel } from '../../models/cardModel';
+import { CardModel, UpdateCardModel } from '@blc-mono/shared/models/members/cardModel';
 import { v4 as uuidv4 } from 'uuid';
-import { CardStatus } from '../../models/enums/CardStatus';
+import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
-import { ProfileModel } from '@blc-mono/members/application/models/profileModel';
+import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 
 jest.mock('../../repositories/cardRepository');
 

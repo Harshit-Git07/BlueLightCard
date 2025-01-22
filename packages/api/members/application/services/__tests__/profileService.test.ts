@@ -2,23 +2,23 @@ import { ProfileService } from '../profileService';
 import { ProfileRepository } from '../../repositories/profileRepository';
 import { OrganisationService } from '../organisationService';
 import { Auth0ClientService } from '../../auth0/auth0ClientService';
-import { OrganisationModel } from '../../models/organisationModel';
-import { EmployerModel } from '../../models/employerModel';
-import { CreateProfileModel } from '../../models/profileModel';
+import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
+import { EmployerModel } from '@blc-mono/shared/models/members/employerModel';
+import { CreateProfileModel } from '@blc-mono/shared/models/members/profileModel';
 import { NotFoundError } from '../../errors/NotFoundError';
-import { PasswordChangeModel } from '../../models/passwordChangeModel';
-import { EmailChangeModel } from '../../models/emailChangeModel';
-import { EmploymentStatus } from '../../models/enums/EmploymentStatus';
-import { NoteModel } from '../../models/noteModel';
-import { NoteSource } from '../../models/enums/NoteSource';
-import { IdType } from '../../models/enums/IdType';
-import { EmailService } from '../../email/emailService';
+import { PasswordChangeModel } from '@blc-mono/shared/models/members/passwordChangeModel';
+import { EmailChangeModel } from '@blc-mono/shared/models/members/emailChangeModel';
+import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
+import { NoteModel } from '@blc-mono/shared/models/members/noteModel';
+import { NoteSource } from '@blc-mono/shared/models/members/enums/NoteSource';
+import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 import { TokenSet } from 'auth0';
+import { EmailService } from '@blc-mono/members/application/email/emailService';
 
 jest.mock('../../repositories/profileRepository');
 jest.mock('../organisationService');
 jest.mock('../../auth0/auth0ClientService');
-jest.mock('../../email/emailService');
+jest.mock('@blc-mono/members/application/email/emailService');
 
 describe('ProfileService', () => {
   const memberId = '7d92ad80-8691-4fc7-839a-715384a8a5e0';

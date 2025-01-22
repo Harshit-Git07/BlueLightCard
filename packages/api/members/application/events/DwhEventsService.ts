@@ -2,8 +2,8 @@ import { StreamRecord } from 'aws-lambda';
 import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { logger } from '@blc-mono/members/application/middleware';
-import { EventBusSource } from '@blc-mono/members/application/models/enums/EventBusSource';
-import { MemberEvent } from '@blc-mono/members/application/models/enums/MemberEvent';
+import { EventBusSource } from '@blc-mono/shared/models/members/enums/EventBusSource';
+import { MemberEvent } from '@blc-mono/shared/models/members/enums/MemberEvent';
 import { hasAttributeChanged } from '@blc-mono/members/application/utils/dynamoDb/attibuteManagement';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 

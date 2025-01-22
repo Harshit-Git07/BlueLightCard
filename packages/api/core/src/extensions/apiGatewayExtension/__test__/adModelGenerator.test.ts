@@ -2,7 +2,8 @@ import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import { ApiGatewayModelGenerator, Model, BadRequestModelSchema, GenericResponseSchema, ResponseModel } from './..';
 import { Stack } from 'aws-cdk-lib';
 import { z } from 'zod';
-import { createZodNamedType } from '../agModelGenerator';
+
+import { createZodNamedType } from '@blc-mono/shared/utils/zodNamedType';
 
 jest.mock('aws-cdk-lib/aws-apigateway');
 jest.mock('../model');

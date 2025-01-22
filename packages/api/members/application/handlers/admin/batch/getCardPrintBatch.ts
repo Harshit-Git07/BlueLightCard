@@ -1,5 +1,5 @@
 import { middleware } from '../../../middleware';
-import { CardPrintBatchModel } from '@blc-mono/members/application/models/cardPrintBatchModel';
+import { CardPrintBatchModel } from '@blc-mono/shared/models/members/cardPrintBatchModel';
 
 const unwrappedHandler = async (): Promise<CardPrintBatchModel> => {
   // TODO: Actually implement this

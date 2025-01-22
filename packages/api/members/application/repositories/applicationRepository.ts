@@ -9,14 +9,17 @@ import {
   TransactWriteCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { S3 } from 'aws-sdk';
-import { ApplicationModel, CreateApplicationModel } from '../models/applicationModel';
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
 import { APPLICATION, applicationKey, MEMBER, memberKey, Repository } from './repository';
 import { v4 as uuidv4 } from 'uuid';
 import { Bucket } from 'sst/node/bucket';
 import { NotFoundError } from '../errors/NotFoundError';
-import { EligibilityStatus } from '../models/enums/EligibilityStatus';
+import {
+  ApplicationModel,
+  CreateApplicationModel,
+} from '@blc-mono/shared/models/members/applicationModel';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 
 export class ApplicationRepository extends Repository {
   constructor(

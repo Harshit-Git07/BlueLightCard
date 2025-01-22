@@ -1,32 +1,30 @@
 import { BatchService } from '@blc-mono/members/application/services/batchService';
 import { BatchRepository } from '@blc-mono/members/application/repositories/batchRepository';
-import {
-  CreateBatchModel,
-  UpdateBatchModel,
-} from '@blc-mono/members/application/models/batchModel';
-import { BatchType } from '@blc-mono/members/application/models/enums/BatchType';
-import { BatchEntryModel } from '@blc-mono/members/application/models/batchEntryModel';
+import { CreateBatchModel, UpdateBatchModel } from '@blc-mono/shared/models/members/batchModel';
+import { BatchType } from '@blc-mono/shared/models/members/enums/BatchType';
+import { BatchEntryModel } from '@blc-mono/shared/models/members/batchEntryModel';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { S3 } from 'aws-sdk';
 import { CardService } from '@blc-mono/members/application/services/cardService';
-import { CardModel } from '@blc-mono/members/application/models/cardModel';
-import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
-import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
-import { ProfileModel } from '@blc-mono/members/application/models/profileModel';
-import { ApplicationModel } from '@blc-mono/members/application/models/applicationModel';
-import { ApplicationReason } from '@blc-mono/members/application/models/enums/ApplicationReason';
-import { PrintingErrorStatus } from '@blc-mono/members/application/models/enums/PrintingErrorStatus';
+import { CardModel } from '@blc-mono/shared/models/members/cardModel';
+import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
+import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
+import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
+import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
+import { PrintingErrorStatus } from '@blc-mono/shared/models/members/enums/PrintingErrorStatus';
 import { getBrandFromEnv, isBlcUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { BLC_UK_BRAND } from '@blc-mono/core/constants/common';
 import { S3EventRecord } from 'aws-lambda';
 import { Client } from 'basic-ftp';
-import { BatchStatus } from '@blc-mono/members/application/models/enums/BatchStatus';
+import { BatchStatus } from '@blc-mono/shared/models/members/enums/BatchStatus';
 
 jest.mock('../../repositories/batchRepository');
 jest.mock('../profileService');
 jest.mock('../cardService');
 jest.mock('aws-sdk');
 jest.mock('../../../../core/src/utils/checkBrand');
+
 jest.mock('sst/node/bucket', () => ({
   Bucket: {
     batchFilesBucket: {

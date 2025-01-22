@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   MemberDocumentModel,
   MemberDocumentsSearchModel,
-} from '@blc-mono/members/application/models/memberDocument';
+} from '@blc-mono/shared/models/members/memberDocument';
 import { MembersOpenSearchService } from '../service/membersOpenSearchService';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 

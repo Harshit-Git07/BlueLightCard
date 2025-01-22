@@ -1,6 +1,8 @@
-import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
+import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
+import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 
-export type ServiceLayerOrganisation = components['schemas']['OrganisationModel'];
+export type ServiceLayerOrganisation = OrganisationModel;
 export type ServiceLayerIdRequirements = NonNullable<
   ServiceLayerOrganisation['employedIdRequirements']
 >;
+export const ServiceLayerEmploymentStatus = EmploymentStatus;

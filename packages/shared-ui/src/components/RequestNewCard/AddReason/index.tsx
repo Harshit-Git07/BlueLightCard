@@ -13,6 +13,7 @@ import IdVerificationTitle from '../IdVerification/components/IdVerificationTitl
 import useMemberCard from '../../../hooks/useMemberCard';
 import { ReorderCardReason } from '../../../api/types';
 import useDrawer from '../../../components/Drawer/useDrawer';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 
 export const radioOptions: RadioGroupItems = [
   {
@@ -49,7 +50,9 @@ const RequestNewCardReason: FC = () => {
 
   const onSubmit = async () => {
     await mutateAsync({
-      applicationReason: insideReprintPeriod ? 'REPRINT' : 'LOST_CARD',
+      applicationReason: insideReprintPeriod
+        ? ApplicationReason.REPRINT
+        : ApplicationReason.LOST_CARD,
       reorderCardReason: applicationReason,
     });
     goNext();
@@ -57,7 +60,9 @@ const RequestNewCardReason: FC = () => {
 
   const onSave = async () => {
     await mutateAsync({
-      applicationReason: insideReprintPeriod ? 'REPRINT' : 'LOST_CARD',
+      applicationReason: insideReprintPeriod
+        ? ApplicationReason.REPRINT
+        : ApplicationReason.LOST_CARD,
       reorderCardReason: applicationReason,
     });
 

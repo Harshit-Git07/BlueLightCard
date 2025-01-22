@@ -1,7 +1,7 @@
 import { IVpc } from 'aws-cdk-lib/aws-ec2';
 import { App, Stack } from 'sst/constructs';
 
-import { IBastionHostAdapter } from '@blc-mono/shared/infra/bastionHost/adapter';
+import { IBastionHostAdapter } from '@blc-mono/stacks/infra/bastionHost/adapter';
 
 import { DatabaseSeedMethod, DatabaseType, RedemptionsDatabaseConfigResolver } from '../config/database';
 

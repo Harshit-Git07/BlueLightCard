@@ -1,8 +1,8 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
-import { UpdateCardModel } from '@blc-mono/members/application/models/cardModel';
+import { UpdateCardModel } from '@blc-mono/shared/models/members/cardModel';
 import { CardService } from '@blc-mono/members/application/services/cardService';
-import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
+import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/cardService');

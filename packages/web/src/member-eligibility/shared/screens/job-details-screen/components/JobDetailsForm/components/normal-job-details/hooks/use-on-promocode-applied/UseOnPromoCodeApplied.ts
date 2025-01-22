@@ -3,7 +3,7 @@ import { PromoCodeVariant } from '@bluelightcard/shared-ui/components/PromoCode/
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { validatePromoCode } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/hooks/use-on-promocode-applied/service-layer/ValidatePromoCode';
-import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
+import { PromoCodeResponseModel } from '@blc-mono/shared/models/members/promoCodeModel';
 
 interface Result {
   promoCodeStatus: PromoCodeVariant | undefined;
@@ -59,7 +59,7 @@ export function useOnPromoCodeApplied(eligibilityDetailsState: EligibilityDetail
 }
 
 function parsePromoCodeStatusFromPromoCodeResponseModel(
-  promoCodeResponseModel: components['schemas']['PromoCodeResponseModel']
+  promoCodeResponseModel: PromoCodeResponseModel
 ): PromoCodeVariant {
   if (promoCodeResponseModel.bypassPayment && promoCodeResponseModel.bypassVerification) {
     return 'success-skip-id-and-payment';

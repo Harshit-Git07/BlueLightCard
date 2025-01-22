@@ -3,7 +3,7 @@ import { middleware } from '../../../middleware';
 import {
   MemberDocumentsSearchModel,
   MemberDocumentsSearchResponseModel,
-} from '@blc-mono/members/application/models/memberDocument';
+} from '@blc-mono/shared/models/members/memberDocument';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { MembersOpenSearchService } from './service/membersOpenSearchService';
 

@@ -4,9 +4,9 @@
 
 import { defaultDynamoDbClient } from '@blc-mono/members/application/repositories/dynamoClient';
 import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
-import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
-import { ApplicationReason } from '@blc-mono/members/application/models/enums/ApplicationReason';
 import { ApplicationRepository } from '@blc-mono/members/application/repositories/applicationRepository';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 
 const repository = new ApplicationRepository(
   defaultDynamoDbClient,

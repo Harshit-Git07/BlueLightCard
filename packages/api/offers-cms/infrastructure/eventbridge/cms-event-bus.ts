@@ -1,7 +1,7 @@
 import type { env as Env } from 'src/lib/env';
 import { EventBus, type Function as SSTFunction, type Stack } from 'sst/constructs';
 
-import { type DwhKenisisFirehoseStreams } from '@blc-mono/shared/infra/firehose/DwhKenisisFirehoseStreams';
+import { type DwhKenisisFirehoseStreams } from '@blc-mono/stacks/infra/firehose/DwhKenisisFirehoseStreams';
 
 export function createCMSEventBus(
   stack: Stack,

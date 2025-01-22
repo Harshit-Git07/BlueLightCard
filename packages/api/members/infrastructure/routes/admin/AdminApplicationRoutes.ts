@@ -5,15 +5,15 @@ import {
   CreateApplicationModel,
   CreateApplicationModelResponse,
   UpdateApplicationModel,
-} from '@blc-mono/members/application/models/applicationModel';
-import {
-  DocumentUploadLocation,
-  DocumentListPresignedUrl,
-} from '@blc-mono/members/application/models/documentUpload';
+} from '@blc-mono/shared/models/members/applicationModel';
 import {
   ApplicationBatchApprovalModel,
   ApplicationBatchModel,
-} from '@blc-mono/members/application/models/applicationApprovalModel';
+} from '@blc-mono/shared/models/members/applicationApprovalModel';
+import {
+  DocumentListPresignedUrl,
+  DocumentUploadLocation,
+} from '@blc-mono/shared/models/members/documentUpload';
 
 export function adminApplicationRoutes(
   defaultRouteProps: DefaultRouteProps,

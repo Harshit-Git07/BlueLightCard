@@ -1,9 +1,9 @@
 import { sqsMiddleware } from '../../../middleware';
 import { Repository } from '@blc-mono/members/application/repositories/repository';
 import { SQSEvent } from 'aws-lambda';
-import { ProfileModel } from '@blc-mono/members/application/models/profileModel';
-import { CardModel } from '@blc-mono/members/application/models/cardModel';
-import { ApplicationModel } from '@blc-mono/members/application/models/applicationModel';
+import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
+import { CardModel } from '@blc-mono/shared/models/members/cardModel';
+import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 import { getMemberProfilesSeedSearchIndexTableName } from '@blc-mono/members/application/handlers/admin/search/getMemberProfileResources';
 
 const repository = new Repository();

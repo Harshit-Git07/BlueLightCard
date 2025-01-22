@@ -1,5 +1,5 @@
-import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import {z} from 'zod';
+import { createZodNamedType } from '@blc-mono/shared/utils/zodNamedType';
 
 export const EcFormOutputDataModel = createZodNamedType(
   'EcFormOutputDataModel',

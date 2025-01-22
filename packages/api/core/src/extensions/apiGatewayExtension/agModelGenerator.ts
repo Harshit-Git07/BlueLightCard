@@ -1,15 +1,8 @@
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
-import { Model, BadRequestModelSchema, GenericResponseSchema, ResponseModel } from './';
+import { BadRequestModelSchema, GenericResponseSchema, Model, ResponseModel } from './';
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-
-export type NamedZodType<T extends z.ZodTypeAny> = T & { readonly _ModelName: string };
-export function createZodNamedType<T extends z.ZodTypeAny>(name: string, type: T): NamedZodType<T> {
-  const obj = type as NamedZodType<T>;
-  // @ts-expect-error
-  obj._ModelName = name;
-  return obj;
-}
+import { NamedZodType } from '@blc-mono/shared/utils/zodNamedType';
 
 export class ApiGatewayModelGenerator {
   private genericModel: Model;

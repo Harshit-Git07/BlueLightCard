@@ -1,9 +1,9 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '../../../middleware';
 import MarketingService from '@blc-mono/members/application/services/marketingService';
-import { BrazeAttributesModel } from '@blc-mono/members/application/models/brazeAttributesModel';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { BrazeUpdateModel } from '@blc-mono/members/application/models/brazeUpdateModel';
+import { BrazeAttributesModel } from '@blc-mono/shared/models/members/brazeAttributesModel';
+import { BrazeUpdateModel } from '@blc-mono/shared/models/members/brazeUpdateModel';
 import { isMarketingPreferencesEnvironment } from '@blc-mono/members/application/types/marketingPreferencesEnvironment';
 
 const service = new MarketingService();

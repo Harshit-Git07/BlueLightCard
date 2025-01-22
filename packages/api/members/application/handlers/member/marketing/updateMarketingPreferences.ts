@@ -3,7 +3,7 @@ import { middleware } from '../../../middleware';
 import MarketingService from '@blc-mono/members/application/services/marketingService';
 import { verifyMemberHasAccessToProfile } from '../memberAuthorization';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { BrazeUpdateModel } from '@blc-mono/members/application/models/brazeUpdateModel';
+import { BrazeUpdateModel } from '@blc-mono/shared/models/members/brazeUpdateModel';
 
 const service = new MarketingService();
 

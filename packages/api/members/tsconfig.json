@@ -4,8 +4,9 @@
     "module": "CommonJS",
     "baseUrl": ".",
     "paths": {
+      "@blc-mono/members/*": ["./*"],
       "@blc-mono/core/*": ["../core/src/*"],
-      "@blc-mono/members/*": ["./*"]
+      "@blc-mono/shared/*": ["../../shared/src/*"]
     },
     "esModuleInterop": true,
     "allowJs": true,

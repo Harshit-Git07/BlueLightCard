@@ -3,15 +3,15 @@ import { ApplicationRepository } from '../../repositories/applicationRepository'
 import { PromoCodesService } from '../promoCodesService';
 import { S3 } from 'aws-sdk';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { EligibilityStatus } from '../../models/enums/EligibilityStatus';
 import {
   ApplicationModel,
   CreateApplicationModel,
   UpdateApplicationModel,
-} from '../../models/applicationModel';
-import { ApplicationReason } from '../../models/enums/ApplicationReason';
-import { ProfileService } from '../profileService';
+} from '@blc-mono/shared/models/members/applicationModel';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { v4 as uuidv4 } from 'uuid';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 
 jest.mock('../../repositories/applicationRepository');
 jest.mock('../promoCodesService');

@@ -7,7 +7,7 @@ import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayEx
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { RedemptionsStackEnvironmentKeys } from '@blc-mono/redemptions/infrastructure/constants/environment';
 import { AdminRoute } from '@blc-mono/redemptions/infrastructure/routes/adminRoute';
-import { DwhKenisisFirehoseStreams } from '@blc-mono/shared/infra/firehose/DwhKenisisFirehoseStreams';
+import { DwhKenisisFirehoseStreams } from '@blc-mono/stacks/infra/firehose/DwhKenisisFirehoseStreams';
 
 import { RedemptionsStackConfig } from '../config/config';
 import { productionAdminDomainNames, stagingAdminDomainNames } from '../constants/domains';

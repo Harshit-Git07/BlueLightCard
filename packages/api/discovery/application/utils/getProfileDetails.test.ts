@@ -1,9 +1,9 @@
 import { format, subYears } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 
-import { ProfileModel } from '@blc-mono/members/application/models/profileModel';
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
+import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 
 import { getProfileDetails } from './getProfileDetails';
 

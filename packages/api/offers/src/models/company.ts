@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { createZodNamedType } from '../../../core/src/extensions/apiGatewayExtension/agModelGenerator';
+
+import { createZodNamedType } from '@blc-mono/shared/utils/zodNamedType';
 
 export const CompanyModel = createZodNamedType(
   'CompanyModel',

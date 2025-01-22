@@ -4,18 +4,20 @@ import {
   ApplicationModel,
   CreateApplicationModel,
   UpdateApplicationModel,
-} from '../models/applicationModel';
-import { DocumentListPresignedUrl } from '../models/documentUpload';
+} from '@blc-mono/shared/models/members/applicationModel';
 import { logger } from '../middleware';
-import { EligibilityStatus } from '../models/enums/EligibilityStatus';
-import { DocumentUploadLocation } from '../models/documentUpload';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import {
+  DocumentListPresignedUrl,
+  DocumentUploadLocation,
+} from '@blc-mono/shared/models/members/documentUpload';
 import { S3 } from 'aws-sdk';
 import { Bucket } from 'sst/node/bucket';
 import { PromoCodesService } from './promoCodesService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { ProfileService } from './profileService';
-import { ApplicationBatchApprovalModel } from '../models/applicationApprovalModel';
-import { NoteSource } from '../models/enums/NoteSource';
+import { ApplicationBatchApprovalModel } from '@blc-mono/shared/models/members/applicationApprovalModel';
+import { NoteSource } from '@blc-mono/shared/models/members/enums/NoteSource';
 
 export interface ApplicationSearch {
   eligibilityStatus?: EligibilityStatus;

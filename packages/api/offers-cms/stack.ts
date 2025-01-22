@@ -5,7 +5,7 @@ import { Api, Config, Function, type StackContext, use } from 'sst/constructs';
 import { ApiGatewayAuthorizer } from '@blc-mono/core/identity/authorizer';
 import { CliLogger } from '@blc-mono/core/utils/logger';
 import { Identity } from '@blc-mono/identity/stack';
-import { Shared } from '@blc-mono/shared/stack';
+import { Shared } from '@blc-mono/stacks/stack';
 
 import { createTables } from './infrastructure/dynamo';
 import { createCMSEventBus } from './infrastructure/eventbridge';

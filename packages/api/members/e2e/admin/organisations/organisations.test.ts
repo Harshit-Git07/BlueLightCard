@@ -1,7 +1,7 @@
 import { ApiGatewayV1Api } from 'sst/node/api';
 
-import { OrganisationModel } from '@blc-mono/members/application/models/organisationModel';
-import { EmploymentStatus } from '@blc-mono/members/application/models/enums/EmploymentStatus';
+import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
+import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 import { getTestUserBearerToken } from '@blc-mono/members/e2e/TestUser';
 
 describe('GET /categories', () => {

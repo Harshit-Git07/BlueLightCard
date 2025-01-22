@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
-import { DocumentListPresignedUrl } from '@blc-mono/members/application/models/documentUpload';
+import { DocumentListPresignedUrl } from '@blc-mono/shared/models/members/documentUpload';
 
 jest.mock('@blc-mono/members/application/services/applicationService');
 

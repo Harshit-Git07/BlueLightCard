@@ -1,7 +1,7 @@
 import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
 import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Api';
-import { OrganisationModel } from '@blc-mono/members/application/models/organisationModel';
-import { EmployerModel } from '@blc-mono/members/application/models/employerModel';
+import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
+import { EmployerModel } from '@blc-mono/shared/models/members/employerModel';
 
 export function memberOrganisationsRoutes(
   defaultRouteProps: DefaultRouteProps,

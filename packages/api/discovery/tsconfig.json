@@ -11,9 +11,10 @@
     "noEmit": true,
     "skipLibCheck": true,
     "paths": {
-      "@blc-mono/core/*": ["../core/src/*"],
       "@blc-mono/discovery/*": ["./*"],
-      "@blc-mono/members/*": ["../members/*"]
+      "@blc-mono/members/*": ["../members/*"],
+      "@blc-mono/core/*": ["../core/src/*"],
+      "@blc-mono/shared/*": ["../../shared/src/*"]
     }
   }
 }

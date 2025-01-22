@@ -3,7 +3,7 @@ import { middleware } from '../../../middleware';
 import {
   CreateApplicationModel,
   CreateApplicationModelResponse,
-} from '../../../models/applicationModel';
+} from '@blc-mono/shared/models/members/applicationModel';
 import { ApplicationService } from '../../../services/applicationService';
 import { verifyMemberHasAccessToProfile } from '../memberAuthorization';
 import { ValidationError } from '../../../errors/ValidationError';

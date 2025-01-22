@@ -1,10 +1,11 @@
 import { serviceLayerUrl } from '@/root/src/member-eligibility/constants/ServiceLayerUrl';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
-import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
 import { fetchWithAuth } from '@/root/src/member-eligibility/shared/utils/FetchWithAuth';
+import { PromoCodeResponseModel } from '@blc-mono/shared/models/members/promoCodeModel';
+import { UpdateApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 
-type Response = components['schemas']['PromoCodeResponseModel'];
-type Request = components['schemas']['UpdateApplicationModel'];
+type Response = PromoCodeResponseModel;
+type Request = UpdateApplicationModel;
 
 export async function applyPromoCode(
   eligibilityDetails: EligibilityDetails
@@ -23,9 +24,7 @@ export async function applyPromoCode(
     }
 
     const request: Request = {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      promoCode: eligibilityDetails.promoCode, // TODO: This is defined as an object in OpenAPI spec, but is actually a string
+      promoCode: eligibilityDetails.promoCode,
       promoCodeApplied: true,
     };
 

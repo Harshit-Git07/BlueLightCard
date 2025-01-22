@@ -3,7 +3,7 @@ import { App, Stack } from 'sst/constructs';
 
 import { CliLogger } from '@blc-mono/core/utils/logger/cliLogger';
 import { ILogger } from '@blc-mono/core/utils/logger/logger';
-import { IBastionHostAdapter } from '@blc-mono/shared/infra/bastionHost/adapter';
+import { IBastionHostAdapter } from '@blc-mono/stacks/infra/bastionHost/adapter';
 
 import { DatabaseConfig } from '../../../config/database';
 import { IDatabase } from '../../adapter';

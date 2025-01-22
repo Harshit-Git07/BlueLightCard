@@ -38,6 +38,9 @@
       ],
       "@bluelightcard/shared-ui/*": [
         "../shared-ui/src/*"
+      ],
+      "@blc-mono/shared/*": [
+        "../shared/src/*"
       ]
     }
   },

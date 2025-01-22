@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
+import { createZodNamedType } from '@blc-mono/shared/utils/zodNamedType';
 
 const userContext = z.object({
   memberId: z.string(),

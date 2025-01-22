@@ -7,17 +7,17 @@ import {
 } from '@blc-mono/members/application/handlers/admin/search/service/parseDocumentFromRecord';
 import { APPLICATION, CARD, PROFILE } from '@blc-mono/members/application/repositories/repository';
 import { MembersOpenSearchService } from '@blc-mono/members/application/handlers/admin/search/service/membersOpenSearchService';
-import { MemberDocumentModel } from '@blc-mono/members/application/models/memberDocument';
+import { MemberDocumentModel } from '@blc-mono/shared/models/members/memberDocument';
 import {
   createMemberProfileOpenSearchDocuments,
   OpenSearchBulkUpdateCommand,
 } from '@blc-mono/members/application/handlers/admin/search/service/opensearchMemberProfileDocument';
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
-import { EmployerModel } from '@blc-mono/members/application/models/employerModel';
-import { OrganisationModel } from '@blc-mono/members/application/models/organisationModel';
-import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
-import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
-import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
+import { EmployerModel } from '@blc-mono/shared/models/members/employerModel';
+import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
+import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/handlers/admin/search/service/parseDocumentFromRecord');

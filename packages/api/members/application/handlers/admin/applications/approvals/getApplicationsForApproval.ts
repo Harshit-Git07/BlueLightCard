@@ -1,7 +1,7 @@
 import { middleware } from '../../../../middleware';
 import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
-import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
-import { ApplicationBatchModel } from '@blc-mono/members/application/models/applicationApprovalModel';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { ApplicationBatchModel } from '@blc-mono/shared/models/members/applicationApprovalModel';
 
 const service = new ApplicationService();
 

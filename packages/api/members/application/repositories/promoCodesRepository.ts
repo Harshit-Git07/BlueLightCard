@@ -5,11 +5,11 @@ import {
   TransactWriteCommand,
   TransactWriteCommandInput,
 } from '@aws-sdk/lib-dynamodb';
-import { PromoCodeModel } from '@blc-mono/members/application/models/promoCodeModel';
+import { PromoCodeModel } from '@blc-mono/shared/models/members/promoCodeModel';
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
-import { PromoCodeType } from '@blc-mono/members/application/models/enums/PromoCodeType';
-import { ApplyPromoCodeApplicationModel } from '@blc-mono/members/application/models/applicationModel';
+import { PromoCodeType } from '@blc-mono/shared/models/members/enums/PromoCodeType';
+import { ApplyPromoCodeApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 import { applicationKey, memberKey, promoCodeKey, Repository } from './repository';
 
 export class PromoCodesRepository extends Repository {

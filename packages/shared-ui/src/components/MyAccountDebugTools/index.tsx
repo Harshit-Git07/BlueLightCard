@@ -7,6 +7,10 @@ import { mockApplication, mockCard, mockMemberProfileResponse } from './mocks/mo
 import { ApplicationSchema, CardSchema, ProfileSchema } from '../CardVerificationAlerts/types';
 import { setupMocks } from './mocks/setupMocks';
 import StagingUsers from './StagingUsers';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
+import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
 import { useSetAtom } from 'jotai';
 import {
   initializeRequestNewCardAtom,
@@ -15,6 +19,7 @@ import {
 import { RequestNewCardAtom } from '../RequestNewCard/requestNewCardTypes';
 import { colours } from '../../tailwind/theme';
 import { useOverrideStripe } from './useOverrideStripe';
+import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 
 const MyAccountDebugTools = () => {
   const [overrides, setOverrides] = useState(false);
@@ -35,7 +40,7 @@ const MyAccountDebugTools = () => {
     card = {},
     application = {},
     atom,
-    employmentStatus = 'EMPLOYED',
+    employmentStatus = EmploymentStatus.EMPLOYED,
     paymentWillSucceed = true,
   }: {
     card?: Partial<CardSchema> | null;
@@ -73,8 +78,8 @@ const MyAccountDebugTools = () => {
   const isAwaitingId = () =>
     resetAndReload({
       application: {
-        applicationReason: 'SIGNUP',
-        eligibilityStatus: 'INELIGIBLE',
+        applicationReason: ApplicationReason.SIGNUP,
+        eligibilityStatus: EligibilityStatus.INELIGIBLE,
         rejectionReason: undefined,
         paymentStatus: undefined,
       },
@@ -83,8 +88,8 @@ const MyAccountDebugTools = () => {
   const isAwaitingIdApproval = () =>
     resetAndReload({
       application: {
-        applicationReason: 'SIGNUP',
-        eligibilityStatus: 'AWAITING_ID_APPROVAL',
+        applicationReason: ApplicationReason.SIGNUP,
+        eligibilityStatus: EligibilityStatus.AWAITING_ID_APPROVAL,
         verificationMethod: 'something',
       },
     });
@@ -92,9 +97,9 @@ const MyAccountDebugTools = () => {
   const isAwaitingPayment = () =>
     resetAndReload({
       application: {
-        applicationReason: 'SIGNUP',
-        paymentStatus: 'AWAITING_PAYMENT',
-        eligibilityStatus: 'ELIGIBLE',
+        applicationReason: ApplicationReason.SIGNUP,
+        eligibilityStatus: EligibilityStatus.ELIGIBLE,
+        paymentStatus: PaymentStatus.AWAITING_PAYMENT,
       },
     });
 
@@ -102,9 +107,9 @@ const MyAccountDebugTools = () => {
     resetAndReload({
       application: {
         ...mockApplication,
-        applicationReason: 'SIGNUP',
-        rejectionReason: 'BLURRY_IMAGE_DECLINE_ID',
-        eligibilityStatus: 'INELIGIBLE',
+        applicationReason: ApplicationReason.SIGNUP,
+        eligibilityStatus: EligibilityStatus.INELIGIBLE,
+        rejectionReason: RejectionReason.BLURRY_IMAGE_DECLINE_ID,
       },
     });
 
@@ -135,16 +140,16 @@ const MyAccountDebugTools = () => {
   const requiresDoubleId = () =>
     resetAndReload({
       application: null,
-      employmentStatus: 'RETIRED',
+      employmentStatus: EmploymentStatus.RETIRED,
     });
 
   const idRejected = () =>
     resetAndReload({
       application: {
         ...mockApplication,
-        applicationReason: 'LOST_CARD',
-        rejectionReason: 'BLURRY_IMAGE_DECLINE_ID',
-        eligibilityStatus: 'INELIGIBLE',
+        applicationReason: ApplicationReason.LOST_CARD,
+        rejectionReason: RejectionReason.BLURRY_IMAGE_DECLINE_ID,
+        eligibilityStatus: EligibilityStatus.INELIGIBLE,
       },
     });
 

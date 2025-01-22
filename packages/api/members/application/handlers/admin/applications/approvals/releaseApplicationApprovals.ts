@@ -3,7 +3,7 @@ import { middleware } from '../../../../middleware';
 import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { UnauthorizedError } from '@blc-mono/members/application/errors/UnauthorizedError';
-import { ApplicationBatchApprovalModel } from '@blc-mono/members/application/models/applicationApprovalModel';
+import { ApplicationBatchApprovalModel } from '@blc-mono/shared/models/members/applicationApprovalModel';
 
 const service = new ApplicationService();
 

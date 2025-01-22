@@ -1,9 +1,9 @@
 import { DynamoDBRecord } from 'aws-lambda/trigger/dynamodb-stream';
-import { MemberDocumentModel } from '@blc-mono/members/application/models/memberDocument';
-import { ProfileModel } from '@blc-mono/members/application/models/profileModel';
+import { MemberDocumentModel } from '@blc-mono/shared/models/members/memberDocument';
+import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { ApplicationModel } from '@blc-mono/members/application/models/applicationModel';
-import { CardModel } from '@blc-mono/members/application/models/cardModel';
+import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
+import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { unmarshallStreamImages } from '@blc-mono/members/application/utils/dynamoDb/unmarshallStreamImages';
 import { logger } from '@blc-mono/members/application/middleware';
 import { isAfter } from 'date-fns';

@@ -1,7 +1,7 @@
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 import { APIGatewayProxyEvent } from 'aws-lambda/trigger/api-gateway-proxy';
 import { middleware } from '../../../middleware';
-import { UpdateEmployerModel } from '@blc-mono/members/application/models/employerModel';
+import { UpdateEmployerModel } from '@blc-mono/shared/models/members/employerModel';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 
 const orgService = new OrganisationService();

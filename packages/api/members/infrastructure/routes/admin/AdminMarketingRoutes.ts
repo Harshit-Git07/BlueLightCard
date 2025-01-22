@@ -1,9 +1,9 @@
 import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
-import { MarketingPreferencesModel } from '@blc-mono/members/application/models/marketingPreferences';
-import { BrazeUpdateModel } from '@blc-mono/members/application/models/brazeUpdateModel';
-import { BrazeAttributesModel } from '@blc-mono/members/application/models/brazeAttributesModel';
 import { ApiGatewayV1ApiFunctionRouteProps, Function } from 'sst/constructs';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
+import { BrazeAttributesModel } from '@blc-mono/shared/models/members/brazeAttributesModel';
+import { MarketingPreferencesModel } from '@blc-mono/shared/models/members/marketingPreferences';
+import { BrazeUpdateModel } from '@blc-mono/shared/models/members/brazeUpdateModel';
 
 export function adminMarketingRoutes(
   defaultRouteProps: DefaultRouteProps,

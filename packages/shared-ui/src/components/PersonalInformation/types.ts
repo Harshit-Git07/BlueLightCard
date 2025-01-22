@@ -1,7 +1,7 @@
 import { ApiResponseError, ApiResponseSuccess } from '../../api/types';
-import { components } from '../../generated/MembersApi';
+import { UpdateProfileModel } from '@blc-mono/shared/models/members/profileModel';
 
-export type UpdateCustomerProfilePayload = components['schemas']['UpdateProfileModel'];
+export type UpdateCustomerProfilePayload = UpdateProfileModel;
 
 type UpdateCustomerProfileSuccessResponse = Partial<ApiResponseSuccess> & {
   type: 'success';

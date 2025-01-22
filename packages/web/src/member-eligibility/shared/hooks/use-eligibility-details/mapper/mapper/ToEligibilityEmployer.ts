@@ -10,8 +10,8 @@ export function toEligibilityEmployer(
   return {
     id: serviceLayerEmployer.employerId,
     label: serviceLayerEmployer.name,
-    requiresJobTitle: serviceLayerEmployer.isJobTitleMandatory,
-    requiresJobReference: serviceLayerEmployer.isJobReferenceMandatory,
+    requiresJobTitle: serviceLayerEmployer.isJobTitleMandatory ?? true,
+    requiresJobReference: serviceLayerEmployer.isJobReferenceMandatory ?? false,
     promoCodeEffect: getPromoCodeEffect(serviceLayerEmployer),
   };
 }

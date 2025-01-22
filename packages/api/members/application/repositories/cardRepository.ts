@@ -6,12 +6,12 @@ import {
   QueryCommandInput,
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { CardModel } from '../models/cardModel';
+import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
 import { CARD, cardKey, memberKey } from './repository';
 import { NotFoundError } from '../errors/NotFoundError';
-import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
+import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 
 export interface UpsertCardOptions {
   memberId: string;

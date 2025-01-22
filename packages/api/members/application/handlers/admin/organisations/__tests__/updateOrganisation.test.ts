@@ -1,9 +1,9 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 import { v4 as uuidv4 } from 'uuid';
-import { EmploymentStatus } from '@blc-mono/members/application/models/enums/EmploymentStatus';
-import { UpdateOrganisationModel } from '@blc-mono/members/application/models/organisationModel';
-import { IdType } from '@blc-mono/members/application/models/enums/IdType';
+import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
+import { UpdateOrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
+import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/organisationService');

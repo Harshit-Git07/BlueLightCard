@@ -15,7 +15,7 @@ import {
 import { auth0LinkReturn } from '../types/emailTypes';
 import { Brand } from '@blc-mono/core/schemas/common';
 import { secretsObject } from '../types/auth0types';
-import { EmailPayload } from '@blc-mono/members/application/models/emailModel';
+import { EmailPayload } from '@blc-mono/shared/models/members/emailModel';
 
 const brand: Brand = (process.env.EMAIL_SERVICE_BRAND as Brand) ?? 'BLC_UK';
 

@@ -1,7 +1,7 @@
 import { Cron, Queue, Stack } from 'sst/constructs';
 
 import { isStaging } from '@blc-mono/core/utils/checkEnvironment';
-import { DwhKenisisFirehoseStreams } from '@blc-mono/shared/infra/firehose/DwhKenisisFirehoseStreams';
+import { DwhKenisisFirehoseStreams } from '@blc-mono/stacks/infra/firehose/DwhKenisisFirehoseStreams';
 
 import { RedemptionsStackEnvironmentKeys } from '../constants/environment';
 import { SSTFunction } from '../constructs/SSTFunction';

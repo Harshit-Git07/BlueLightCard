@@ -1,16 +1,11 @@
 {
   "openapi" : "3.0.1",
   "info" : {
-    "title" : "blc-mono-members-api",
-    "version" : "2024-12-11T18:46:28Z"
+    "title" : "staging-blc-mono-members-api",
+    "version" : "2025-01-22T10:13:35Z"
   },
   "servers" : [ {
-    "url" : "https://staging-members-api.blcshine.io/{basePath}",
-    "variables" : {
-      "basePath" : {
-        "default" : "v1"
-      }
-    }
+    "url" : "https://staging-members-api.blcshine.io"
   } ],
   "paths" : {
     "/members/{memberId}/applications/{applicationId}/code" : {
@@ -57,6 +52,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -71,18 +84,8 @@
           }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/OrganisationModel"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -121,16 +124,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -140,17 +133,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetOrganisationFun-P42paadBGRqR/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -189,6 +182,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -229,6 +240,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -243,18 +272,8 @@
           }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProfileModel"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -293,16 +312,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -312,17 +321,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetProfileFunction-uVSV2JG04m0p/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "put" : {
@@ -334,15 +343,15 @@
             "type" : "string"
           }
         } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/UpdateProfileModel"
-              }
-            }
-          },
-          "required" : true
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberUpdateProfileFunct-aTd5HHDC7YxX/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -381,6 +390,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -421,6 +448,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -442,18 +487,8 @@
           }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/UpdateApplicationModel"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -492,16 +527,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -511,17 +536,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--ApplyPromoCodeFunction5F-w98d2iVme6lG/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -567,6 +592,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -599,6 +642,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -620,18 +681,8 @@
           }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ApplicationModel"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -670,16 +721,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -689,17 +730,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetApplicationFunc-77XUT9A2WqbA/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "put" : {
@@ -718,15 +759,15 @@
             "type" : "string"
           }
         } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/UpdateApplicationModel"
-              }
-            }
-          },
-          "required" : true
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberUpdateApplicationF-zLoNabzT4yZJ/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -772,6 +813,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -804,6 +863,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -825,18 +902,8 @@
           }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/DocumentUploadLocation"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -875,16 +942,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -894,17 +951,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberUploadDocumentFunc-TLttp9UqBgBv/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -950,6 +1007,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -963,15 +1038,15 @@
             "type" : "string"
           }
         } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/EmailChangeModel"
-              }
-            }
-          },
-          "required" : true
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberChangeEmailRequest-j8SdSzmwO9X8/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -1010,6 +1085,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -1031,18 +1124,8 @@
           }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/EmployerModel"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1081,16 +1164,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -1100,17 +1173,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetEmployerFunctio-4omeOFDybLNc/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -1156,6 +1229,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -1184,18 +1275,8 @@
           }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/PromoCodeResponseModel"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1234,16 +1315,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -1253,17 +1324,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--ValidatePromoCodeFunctio-01c5pkkttTKu/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -1316,6 +1387,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -1329,15 +1418,15 @@
             "type" : "string"
           }
         } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/BrazeAttributesModel"
-              }
-            }
-          },
-          "required" : true
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberFetchBrazeAttribut-KxBxrS311fVt/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -1376,6 +1465,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -1390,18 +1497,8 @@
           }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/EmployerModel"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1440,16 +1537,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -1459,17 +1546,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetEmployersFuncti-YF14l2yemz5M/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -1508,6 +1595,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -1529,18 +1634,8 @@
           }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/MarketingPreferencesModel"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1579,16 +1674,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -1598,17 +1683,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetMarketingPrefer-h685nt5z5v9a/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -1654,24 +1739,32 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
     "/orgs" : {
       "get" : {
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/OrganisationModel"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1710,16 +1803,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -1729,17 +1812,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetOrganisationsFu-BCS77JaNS3WB/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -1770,24 +1853,32 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
     "/members/profile" : {
       "get" : {
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ProfileModel"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1826,16 +1917,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -1845,43 +1926,23 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetProfileForAuthe-EgT988jHxogl/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "post" : {
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CreateProfileModel"
-              }
-            }
-          },
-          "required" : true
-        },
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CreateProfileModelResponse"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1920,16 +1981,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -1939,17 +1990,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "api_key" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberCreateProfileFunct-rzZ482Mp2pPG/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -1980,6 +2031,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -1994,18 +2063,8 @@
           }
         } ],
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ApplicationModel"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -2044,16 +2103,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -2063,17 +2112,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetApplicationsFun-l1zNcnq7jKaw/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "post" : {
@@ -2085,29 +2134,9 @@
             "type" : "string"
           }
         } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CreateApplicationModel"
-              }
-            }
-          },
-          "required" : true
-        },
         "responses" : {
-          "200" : {
-            "description" : "200 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CreateApplicationModelResponse"
-                }
-              }
-            }
-          },
-          "201" : {
-            "description" : "201 response",
+          "404" : {
+            "description" : "404 response",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -2146,16 +2175,6 @@
               }
             }
           },
-          "204" : {
-            "description" : "204 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
           "403" : {
             "description" : "403 response",
             "content" : {
@@ -2165,17 +2184,17 @@
                 }
               }
             }
-          },
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
           }
+        },
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberCreateApplicationF-LotJdaPtkMjb/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -2214,6 +2233,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -2227,15 +2264,15 @@
             "type" : "string"
           }
         } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/BrazeUpdateModel"
-              }
-            }
-          },
-          "required" : true
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberUpdateMarketingPre-AWPUdzHLu4hq/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -2274,6 +2311,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -2314,6 +2369,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -2327,15 +2400,15 @@
             "type" : "string"
           }
         } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/PasswordChangeModel"
-              }
-            }
-          },
-          "required" : true
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberChangePasswordFunc-7uwywIl1g8cG/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
         }
       },
       "options" : {
@@ -2374,6 +2447,24 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     },
@@ -2421,705 +2512,30 @@
             },
             "content" : { }
           }
+        },
+        "x-amazon-apigateway-integration" : {
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match",
+          "type" : "mock"
         }
       }
     }
   },
   "components" : {
     "schemas" : {
-      "CreateApplicationModel" : {
-        "title" : "CreateApplicationModel",
-        "required" : [ "applicationReason" ],
-        "type" : "object",
-        "properties" : {
-          "eligibilityStatus" : {
-            "type" : "string",
-            "enum" : [ "INELIGIBLE", "AWAITING_ID_APPROVAL", "ASSIGNED_FOR_APPROVAL", "ELIGIBLE" ]
-          },
-          "applicationReason" : {
-            "anyOf" : [ {
-              "type" : "string",
-              "enum" : [ "SIGNUP", "RENEWAL", "NAME_CHANGE", "LOST_CARD", "REPRINT" ]
-            }, null ]
-          },
-          "startDate" : {
-            "type" : "string",
-            "format" : "date-time"
-          }
-        }
-      },
-      "CreateApplicationModelResponse" : {
-        "title" : "CreateApplicationModelResponse",
-        "required" : [ "applicationId" ],
-        "type" : "object",
-        "properties" : {
-          "applicationId" : {
-            "type" : "string",
-            "format" : "uuid"
-          }
-        }
-      },
-      "DocumentUploadLocation" : {
-        "title" : "DocumentUploadLocation",
-        "required" : [ "preSignedUrl" ],
-        "type" : "object",
-        "properties" : {
-          "preSignedUrl" : {
-            "type" : "string"
-          }
-        }
-      },
-      "UpdateProfileModel" : {
-        "title" : "UpdateProfileModel",
-        "required" : [ "dateOfBirth", "firstName", "lastName" ],
-        "type" : "object",
-        "properties" : {
-          "lastName" : {
-            "type" : "string"
-          },
-          "signupDate" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "organisationId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "gender" : {
-            "type" : "string",
-            "enum" : [ "MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY" ]
-          },
-          "companyName" : {
-            "type" : "string"
-          },
-          "jobTitle" : {
-            "type" : "string"
-          },
-          "county" : {
-            "type" : "string"
-          },
-          "employerName" : {
-            "type" : "string"
-          },
-          "dateOfBirth" : {
-            "type" : "string",
-            "format" : "date"
-          },
-          "employmentStatus" : {
-            "type" : "string",
-            "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
-          },
-          "jobReference" : {
-            "type" : "string"
-          },
-          "firstName" : {
-            "type" : "string"
-          },
-          "employerId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "phoneNumber" : {
-            "type" : "string"
-          },
-          "companyNumber" : {
-            "type" : "string"
-          },
-          "spareEmail" : {
-            "type" : "string",
-            "format" : "email"
-          },
-          "spareEmailValidated" : {
-            "type" : "boolean",
-            "default" : false
-          },
-          "emailValidated" : {
-            "type" : "boolean",
-            "default" : false
-          },
-          "status" : {
-            "type" : "string"
-          }
-        }
-      },
-      "ApplicationModel" : {
-        "title" : "ApplicationModel",
-        "required" : [ "applicationId", "applicationReason", "memberId" ],
-        "type" : "object",
-        "properties" : {
-          "country" : {
-            "type" : "string"
-          },
-          "purchaseDate" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "city" : {
-            "type" : "string"
-          },
-          "nameChangeLastName" : {
-            "type" : "object"
-          },
-          "nameChangeDocType" : {
-            "type" : "object"
-          },
-          "nameChangeReason" : {
-            "type" : "object"
-          },
-          "idS3LocationSecondary" : {
-            "type" : "string"
-          },
-          "promoCode" : {
-            "type" : "object"
-          },
-          "verificationMethod" : {
-            "type" : "string"
-          },
-          "applicationReason" : {
-            "anyOf" : [ {
-              "type" : "string",
-              "enum" : [ "SIGNUP", "RENEWAL", "NAME_CHANGE", "LOST_CARD", "REPRINT" ]
-            }, null ]
-          },
-          "paymentStatus" : {
-            "type" : "string",
-            "enum" : [ "AWAITING_PAYMENT", "PAID_CARD", "PAID_PAYPAL", "PAID_PROMO_CODE", "PAID_CHEQUE", "PAID_ADMIN", "PENDING_REFUND", "REFUNDED" ]
-          },
-          "memberId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "idS3LocationPrimary" : {
-            "type" : "string"
-          },
-          "address2" : {
-            "type" : "string"
-          },
-          "address1" : {
-            "type" : "string"
-          },
-          "postcode" : {
-            "type" : "string"
-          },
-          "eligibilityStatus" : {
-            "type" : "string",
-            "enum" : [ "INELIGIBLE", "AWAITING_ID_APPROVAL", "ASSIGNED_FOR_APPROVAL", "ELIGIBLE" ]
-          },
-          "promoCodeApplied" : {
-            "type" : "boolean"
-          },
-          "trustedDomainValidated" : {
-            "type" : "boolean"
-          },
-          "nameChangeFirstName" : {
-            "type" : "object"
-          },
-          "applicationId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "rejectionReason" : {
-            "anyOf" : [ {
-              "type" : "string",
-              "enum" : [ "DECLINE_INCORRECT_ID", "PICTURE_DECLINE_ID", "DL_PP_DECLINE_ID", "DATE_DECLINE_ID", "BLURRY_IMAGE_DECLINE_ID", "DIFFERENT_NAME_DECLINE_ID", "PASSWORD_PROTECTED_DECLINE_ID", "DECLINE_NOT_ELIGIBLE" ]
-            }, null ]
-          },
-          "startDate" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "trustedDomainEmail" : {
-            "type" : "string"
-          },
-          "cardNumber" : {
-            "type" : "string"
-          }
-        }
-      },
-      "EmployerModel" : {
-        "title" : "EmployerModel",
-        "required" : [ "employerId", "name", "organisationId" ],
-        "type" : "object",
-        "properties" : {
-          "organisationId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "bypassPayment" : {
-            "type" : "boolean",
-            "default" : false
-          },
-          "retiredIdRequirements" : {
-            "required" : [ "supportedDocuments" ],
-            "type" : "object",
-            "properties" : {
-              "minimumRequired" : {
-                "type" : "number",
-                "default" : 1
-              },
-              "supportedDocuments" : {
-                "type" : "array",
-                "items" : {
-                  "required" : [ "description", "guidelines", "idKey", "title", "type" ],
-                  "type" : "object",
-                  "properties" : {
-                    "idKey" : {
-                      "type" : "string"
-                    },
-                    "guidelines" : {
-                      "type" : "string"
-                    },
-                    "description" : {
-                      "type" : "string"
-                    },
-                    "type" : {
-                      "type" : "string",
-                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
-                    },
-                    "title" : {
-                      "type" : "string"
-                    },
-                    "required" : {
-                      "type" : "boolean",
-                      "default" : false
-                    }
-                  },
-                  "additionalProperties" : false
-                }
-              }
-            },
-            "additionalProperties" : false
-          },
-          "active" : {
-            "type" : "boolean",
-            "default" : true
-          },
-          "idUploadCount" : {
-            "type" : "number",
-            "default" : 0
-          },
-          "type" : {
-            "type" : "object"
-          },
-          "employmentStatus" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string",
-              "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
-            }
-          },
-          "volunteerIdRequirements" : {
-            "required" : [ "supportedDocuments" ],
-            "type" : "object",
-            "properties" : {
-              "minimumRequired" : {
-                "type" : "number",
-                "default" : 1
-              },
-              "supportedDocuments" : {
-                "type" : "array",
-                "items" : {
-                  "required" : [ "description", "guidelines", "idKey", "title", "type" ],
-                  "type" : "object",
-                  "properties" : {
-                    "idKey" : {
-                      "type" : "string"
-                    },
-                    "guidelines" : {
-                      "type" : "string"
-                    },
-                    "description" : {
-                      "type" : "string"
-                    },
-                    "type" : {
-                      "type" : "string",
-                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
-                    },
-                    "title" : {
-                      "type" : "string"
-                    },
-                    "required" : {
-                      "type" : "boolean",
-                      "default" : false
-                    }
-                  },
-                  "additionalProperties" : false
-                }
-              }
-            },
-            "additionalProperties" : false
-          },
-          "isJobReferenceMandatory" : {
-            "type" : "boolean",
-            "default" : false
-          },
-          "lastUpdated" : {
-            "type" : "string"
-          },
-          "employerId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "employedIdRequirements" : {
-            "required" : [ "supportedDocuments" ],
-            "type" : "object",
-            "properties" : {
-              "minimumRequired" : {
-                "type" : "number",
-                "default" : 1
-              },
-              "supportedDocuments" : {
-                "type" : "array",
-                "items" : {
-                  "required" : [ "description", "guidelines", "idKey", "title", "type" ],
-                  "type" : "object",
-                  "properties" : {
-                    "idKey" : {
-                      "type" : "string"
-                    },
-                    "guidelines" : {
-                      "type" : "string"
-                    },
-                    "description" : {
-                      "type" : "string"
-                    },
-                    "type" : {
-                      "type" : "string",
-                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
-                    },
-                    "title" : {
-                      "type" : "string"
-                    },
-                    "required" : {
-                      "type" : "boolean",
-                      "default" : false
-                    }
-                  },
-                  "additionalProperties" : false
-                }
-              }
-            },
-            "additionalProperties" : false
-          },
-          "bypassId" : {
-            "type" : "boolean",
-            "default" : false
-          },
-          "isJobTitleMandatory" : {
-            "type" : "boolean",
-            "default" : true
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "trustedDomains" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            },
-            "default" : [ ]
-          }
-        }
-      },
-      "UpdateApplicationModel" : {
-        "title" : "UpdateApplicationModel",
-        "type" : "object",
-        "properties" : {
-          "country" : {
-            "type" : "string"
-          },
-          "purchaseDate" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "address2" : {
-            "type" : "string"
-          },
-          "city" : {
-            "type" : "string"
-          },
-          "address1" : {
-            "type" : "string"
-          },
-          "nameChangeLastName" : {
-            "type" : "object"
-          },
-          "postcode" : {
-            "type" : "string"
-          },
-          "eligibilityStatus" : {
-            "type" : "string",
-            "enum" : [ "INELIGIBLE", "AWAITING_ID_APPROVAL", "ASSIGNED_FOR_APPROVAL", "ELIGIBLE" ]
-          },
-          "nameChangeDocType" : {
-            "type" : "object"
-          },
-          "nameChangeReason" : {
-            "type" : "object"
-          },
-          "promoCodeApplied" : {
-            "type" : "boolean"
-          },
-          "trustedDomainValidated" : {
-            "type" : "boolean"
-          },
-          "nameChangeFirstName" : {
-            "type" : "object"
-          },
-          "promoCode" : {
-            "type" : "object"
-          },
-          "verificationMethod" : {
-            "type" : "string"
-          },
-          "rejectionReason" : {
-            "anyOf" : [ {
-              "type" : "string",
-              "enum" : [ "DECLINE_INCORRECT_ID", "PICTURE_DECLINE_ID", "DL_PP_DECLINE_ID", "DATE_DECLINE_ID", "BLURRY_IMAGE_DECLINE_ID", "DIFFERENT_NAME_DECLINE_ID", "PASSWORD_PROTECTED_DECLINE_ID", "DECLINE_NOT_ELIGIBLE" ]
-            }, null ]
-          },
-          "startDate" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "paymentStatus" : {
-            "type" : "string",
-            "enum" : [ "AWAITING_PAYMENT", "PAID_CARD", "PAID_PAYPAL", "PAID_PROMO_CODE", "PAID_CHEQUE", "PAID_ADMIN", "PENDING_REFUND", "REFUNDED" ]
-          },
-          "trustedDomainEmail" : {
-            "type" : "string"
-          },
-          "cardNumber" : {
-            "type" : "string"
-          }
-        }
-      },
-      "OrganisationModel" : {
-        "title" : "OrganisationModel",
-        "required" : [ "name", "organisationId" ],
-        "type" : "object",
-        "properties" : {
-          "organisationId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "bypassPayment" : {
-            "type" : "boolean",
-            "default" : false
-          },
-          "retiredIdRequirements" : {
-            "required" : [ "supportedDocuments" ],
-            "type" : "object",
-            "properties" : {
-              "minimumRequired" : {
-                "type" : "number",
-                "default" : 1
-              },
-              "supportedDocuments" : {
-                "type" : "array",
-                "items" : {
-                  "required" : [ "description", "guidelines", "idKey", "title", "type" ],
-                  "type" : "object",
-                  "properties" : {
-                    "idKey" : {
-                      "type" : "string"
-                    },
-                    "guidelines" : {
-                      "type" : "string"
-                    },
-                    "description" : {
-                      "type" : "string"
-                    },
-                    "type" : {
-                      "type" : "string",
-                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
-                    },
-                    "title" : {
-                      "type" : "string"
-                    },
-                    "required" : {
-                      "type" : "boolean",
-                      "default" : false
-                    }
-                  },
-                  "additionalProperties" : false
-                }
-              }
-            },
-            "additionalProperties" : false
-          },
-          "isSelfEmployed" : {
-            "type" : "boolean",
-            "default" : false
-          },
-          "active" : {
-            "type" : "boolean",
-            "default" : true
-          },
-          "idUploadCount" : {
-            "type" : "number",
-            "default" : 0
-          },
-          "type" : {
-            "type" : "object"
-          },
-          "employmentStatus" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string",
-              "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
-            }
-          },
-          "volunteerIdRequirements" : {
-            "required" : [ "supportedDocuments" ],
-            "type" : "object",
-            "properties" : {
-              "minimumRequired" : {
-                "type" : "number",
-                "default" : 1
-              },
-              "supportedDocuments" : {
-                "type" : "array",
-                "items" : {
-                  "required" : [ "description", "guidelines", "idKey", "title", "type" ],
-                  "type" : "object",
-                  "properties" : {
-                    "idKey" : {
-                      "type" : "string"
-                    },
-                    "guidelines" : {
-                      "type" : "string"
-                    },
-                    "description" : {
-                      "type" : "string"
-                    },
-                    "type" : {
-                      "type" : "string",
-                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
-                    },
-                    "title" : {
-                      "type" : "string"
-                    },
-                    "required" : {
-                      "type" : "boolean",
-                      "default" : false
-                    }
-                  },
-                  "additionalProperties" : false
-                }
-              }
-            },
-            "additionalProperties" : false
-          },
-          "lastUpdated" : {
-            "type" : "string"
-          },
-          "employedIdRequirements" : {
-            "required" : [ "supportedDocuments" ],
-            "type" : "object",
-            "properties" : {
-              "minimumRequired" : {
-                "type" : "number",
-                "default" : 1
-              },
-              "supportedDocuments" : {
-                "type" : "array",
-                "items" : {
-                  "required" : [ "description", "guidelines", "idKey", "title", "type" ],
-                  "type" : "object",
-                  "properties" : {
-                    "idKey" : {
-                      "type" : "string"
-                    },
-                    "guidelines" : {
-                      "type" : "string"
-                    },
-                    "description" : {
-                      "type" : "string"
-                    },
-                    "type" : {
-                      "type" : "string",
-                      "enum" : [ "IMAGE_UPLOAD", "TRUSTED_DOMAIN" ]
-                    },
-                    "title" : {
-                      "type" : "string"
-                    },
-                    "required" : {
-                      "type" : "boolean",
-                      "default" : false
-                    }
-                  },
-                  "additionalProperties" : false
-                }
-              }
-            },
-            "additionalProperties" : false
-          },
-          "bypassId" : {
-            "type" : "boolean",
-            "default" : false
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "trustedDomains" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            },
-            "default" : [ ]
-          }
-        }
-      },
-      "CreateProfileModel" : {
-        "title" : "CreateProfileModel",
-        "required" : [ "dateOfBirth", "email", "firstName", "lastName" ],
-        "type" : "object",
-        "properties" : {
-          "firstName" : {
-            "type" : "string"
-          },
-          "lastName" : {
-            "type" : "string"
-          },
-          "dateOfBirth" : {
-            "type" : "string",
-            "format" : "date"
-          },
-          "employmentStatus" : {
-            "type" : "string",
-            "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
-          },
-          "email" : {
-            "type" : "string",
-            "format" : "email"
-          }
-        }
-      },
-      "CreateProfileModelResponse" : {
-        "title" : "CreateProfileModelResponse",
-        "required" : [ "memberId" ],
-        "type" : "object",
-        "properties" : {
-          "memberId" : {
-            "type" : "string",
-            "format" : "uuid"
-          }
-        }
-      },
-      "MarketingPreferencesModel" : {
-        "title" : "MarketingPreferencesModel",
-        "required" : [ "moreSpam", "spam" ],
-        "type" : "object",
-        "properties" : {
-          "spam" : {
-            "type" : "object"
-          },
-          "moreSpam" : {
-            "type" : "object"
-          }
-        }
-      },
       "GenericModel" : {
         "title" : "GenericModel",
         "required" : [ "message" ],
@@ -3127,61 +2543,6 @@
         "properties" : {
           "message" : {
             "type" : "string"
-          }
-        }
-      },
-      "PasswordChangeModel" : {
-        "title" : "PasswordChangeModel",
-        "required" : [ "currentPassword", "email", "newPassword" ],
-        "type" : "object",
-        "properties" : {
-          "newPassword" : {
-            "type" : "string"
-          },
-          "email" : {
-            "type" : "string",
-            "format" : "email"
-          },
-          "currentPassword" : {
-            "type" : "string"
-          }
-        }
-      },
-      "PromoCodeResponseModel" : {
-        "title" : "PromoCodeResponseModel",
-        "type" : "object",
-        "properties" : {
-          "bypassPayment" : {
-            "type" : "boolean"
-          },
-          "bypassVerification" : {
-            "type" : "boolean"
-          }
-        }
-      },
-      "BrazeUpdateModel" : {
-        "title" : "BrazeUpdateModel",
-        "required" : [ "attributes" ],
-        "type" : "object",
-        "properties" : {
-          "attributes" : {
-            "type" : "object",
-            "additionalProperties" : {
-              "type" : "object"
-            }
-          }
-        }
-      },
-      "BrazeAttributesModel" : {
-        "title" : "BrazeAttributesModel",
-        "type" : "object",
-        "properties" : {
-          "attributes" : {
-            "type" : "array",
-            "items" : {
-              "type" : "string"
-            },
-            "default" : [ ]
           }
         }
       },
@@ -3221,282 +2582,46 @@
             }
           }
         }
+      }
+    },
+    "securitySchemes" : {
+      "api_key" : {
+        "type" : "apiKey",
+        "name" : "x-api-key",
+        "in" : "header"
       },
-      "ProfileModel" : {
-        "title" : "ProfileModel",
-        "required" : [ "dateOfBirth", "email", "firstName", "lastName", "memberId" ],
-        "type" : "object",
-        "properties" : {
-          "lastName" : {
-            "type" : "string"
-          },
-          "lastLogin" : {
-            "type" : "string"
-          },
-          "organisationId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "cards" : {
-            "type" : "array",
-            "items" : {
-              "required" : [ "cardNumber", "cardStatus", "createdDate", "expiryDate", "memberId", "nameOnCard" ],
-              "type" : "object",
-              "properties" : {
-                "purchaseDate" : {
-                  "type" : "string",
-                  "format" : "date-time"
-                },
-                "refundedDate" : {
-                  "type" : "string",
-                  "format" : "date-time"
-                },
-                "postedDate" : {
-                  "type" : "string",
-                  "format" : "date-time"
-                },
-                "expiryDate" : {
-                  "type" : "string",
-                  "format" : "date-time"
-                },
-                "createdDate" : {
-                  "type" : "string",
-                  "format" : "date-time"
-                },
-                "nameOnCard" : {
-                  "type" : "string"
-                },
-                "printingErrorStatus" : {
-                  "type" : "string",
-                  "enum" : [ "MISSING_ADDRESS", "NAME_TOO_LONG", "MISSING_ADDRESS AND NAME_TOO_LONG" ]
-                },
-                "promoCode" : {
-                  "type" : "string"
-                },
-                "updated" : {
-                  "anyOf" : [ {
-                    "type" : "string",
-                    "format" : "date-time"
-                  }, null ]
-                },
-                "cardNumber" : {
-                  "type" : "string"
-                },
-                "cardStatus" : {
-                  "type" : "string",
-                  "enum" : [ "AWAITING_BATCHING", "ADDED_TO_BATCH", "AWAITING_POSTAGE", "PHYSICAL_CARD", "VIRTUAL_CARD", "CARD_LOST", "DISABLED", "CARD_EXPIRED" ]
-                },
-                "paymentStatus" : {
-                  "type" : "string",
-                  "enum" : [ "AWAITING_PAYMENT", "PAID_CARD", "PAID_PAYPAL", "PAID_PROMO_CODE", "PAID_CHEQUE", "PAID_ADMIN", "PENDING_REFUND", "REFUNDED" ]
-                },
-                "memberId" : {
-                  "type" : "string",
-                  "format" : "uuid"
-                },
-                "batchNumber" : {
-                  "type" : "string"
-                }
-              },
-              "additionalProperties" : false
-            },
-            "default" : [ ]
-          },
-          "gender" : {
-            "type" : "string",
-            "enum" : [ "MALE", "FEMALE", "OTHER", "PREFER_NOT_TO_SAY" ]
-          },
-          "companyName" : {
-            "type" : "string"
-          },
-          "jobTitle" : {
-            "type" : "string"
-          },
-          "county" : {
-            "type" : "string"
-          },
-          "employerName" : {
-            "type" : "string"
-          },
-          "employmentStatus" : {
-            "type" : "string",
-            "enum" : [ "EMPLOYED", "RETIRED", "VOLUNTEER" ]
-          },
-          "companyNumber" : {
-            "type" : "string"
-          },
-          "spareEmail" : {
-            "type" : "string",
-            "format" : "email"
-          },
-          "email" : {
-            "type" : "string",
-            "format" : "email"
-          },
-          "memberId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "signupDate" : {
-            "type" : "string",
-            "format" : "date-time"
-          },
-          "lastIpAddress" : {
-            "type" : "string"
-          },
-          "dateOfBirth" : {
-            "type" : "string",
-            "format" : "date"
-          },
-          "jobReference" : {
-            "type" : "string"
-          },
-          "firstName" : {
-            "type" : "string"
-          },
-          "employerId" : {
-            "type" : "string",
-            "format" : "uuid"
-          },
-          "phoneNumber" : {
-            "type" : "string"
-          },
-          "documents": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "default": []
-          },
-          "spareEmailValidated" : {
-            "type" : "boolean",
-            "default" : false
-          },
-          "emailValidated" : {
-            "type" : "boolean",
-            "default" : false
-          },
-          "gaKey" : {
-            "type" : "string"
-          },
-          "status" : {
-            "type" : "string"
-          },
-          "applications" : {
-            "type" : "array",
-            "items" : {
-              "required" : [ "applicationId", "applicationReason", "memberId" ],
-              "type" : "object",
-              "properties" : {
-                "country" : {
-                  "type" : "string"
-                },
-                "purchaseDate" : {
-                  "type" : "string",
-                  "format" : "date-time"
-                },
-                "city" : {
-                  "type" : "string"
-                },
-                "nameChangeLastName" : {
-                  "type" : "object"
-                },
-                "nameChangeDocType" : {
-                  "type" : "object"
-                },
-                "nameChangeReason" : {
-                  "type" : "object"
-                },
-                "idS3LocationSecondary" : {
-                  "type" : "string"
-                },
-                "promoCode" : {
-                  "type" : "object"
-                },
-                "verificationMethod" : {
-                  "type" : "string"
-                },
-                "applicationReason" : {
-                  "anyOf" : [ {
-                    "type" : "string",
-                    "enum" : [ "SIGNUP", "RENEWAL", "NAME_CHANGE", "LOST_CARD", "REPRINT" ]
-                  }, null ]
-                },
-                "paymentStatus" : {
-                  "type" : "string",
-                  "enum" : [ "AWAITING_PAYMENT", "PAID_CARD", "PAID_PAYPAL", "PAID_PROMO_CODE", "PAID_CHEQUE", "PAID_ADMIN", "PENDING_REFUND", "REFUNDED" ]
-                },
-                "memberId" : {
-                  "type" : "string",
-                  "format" : "uuid"
-                },
-                "idS3LocationPrimary" : {
-                  "type" : "string"
-                },
-                "address2" : {
-                  "type" : "string"
-                },
-                "address1" : {
-                  "type" : "string"
-                },
-                "postcode" : {
-                  "type" : "string"
-                },
-                "eligibilityStatus" : {
-                  "type" : "string",
-                  "enum" : [ "INELIGIBLE", "AWAITING_ID_APPROVAL", "ASSIGNED_FOR_APPROVAL", "ELIGIBLE" ]
-                },
-                "promoCodeApplied" : {
-                  "type" : "boolean"
-                },
-                "trustedDomainValidated" : {
-                  "type" : "boolean"
-                },
-                "nameChangeFirstName" : {
-                  "type" : "object"
-                },
-                "applicationId" : {
-                  "type" : "string",
-                  "format" : "uuid"
-                },
-                "rejectionReason" : {
-                  "anyOf" : [ {
-                    "type" : "string",
-                    "enum" : [ "DECLINE_INCORRECT_ID", "PICTURE_DECLINE_ID", "DL_PP_DECLINE_ID", "DATE_DECLINE_ID", "BLURRY_IMAGE_DECLINE_ID", "DIFFERENT_NAME_DECLINE_ID", "PASSWORD_PROTECTED_DECLINE_ID", "DECLINE_NOT_ELIGIBLE" ]
-                  }, null ]
-                },
-                "startDate" : {
-                  "type" : "string",
-                  "format" : "date-time"
-                },
-                "trustedDomainEmail" : {
-                  "type" : "string"
-                },
-                "cardNumber" : {
-                  "type" : "string"
-                }
-              },
-              "additionalProperties" : false
-            },
-            "default" : [ ]
-          }
-        }
-      },
-      "EmailChangeModel" : {
-        "title" : "EmailChangeModel",
-        "required" : [ "currentEmail", "newEmail" ],
-        "type" : "object",
-        "properties" : {
-          "newEmail" : {
-            "type" : "string",
-            "format" : "email"
-          },
-          "currentEmail" : {
-            "type" : "string",
-            "format" : "email"
-          }
+      "stagingblcmonomembersapimemberAuthorizerE01DF115" : {
+        "type" : "apiKey",
+        "name" : "Authorization",
+        "in" : "header",
+        "x-amazon-apigateway-authtype" : "custom",
+        "x-amazon-apigateway-authorizer" : {
+          "authorizerUri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-identity-AuthorizerBD825682-T6tcOUaVCdhv/invocations",
+          "authorizerResultTtlInSeconds" : 0,
+          "identitySource" : "method.request.header.Authorization",
+          "type" : "request"
         }
       }
+    }
+  },
+  "x-amazon-apigateway-gateway-responses" : {
+    "BAD_REQUEST_PARAMETERS" : {
+      "statusCode" : 400,
+      "responseTemplates" : {
+        "application/json" : "{\"error\":\"$context.error.validationErrorString\"}"
+      }
+    },
+    "BAD_REQUEST_BODY" : {
+      "statusCode" : 400,
+      "responseTemplates" : {
+        "application/json" : "{\"error\":\"$context.error.validationErrorString\"}"
+      }
+    }
+  },
+  "x-amazon-apigateway-request-validators" : {
+    "membersapiapirequestvalidatore1d60f54-usqx29brupqi" : {
+      "validateRequestParameters" : true,
+      "validateRequestBody" : true
     }
   }
 }

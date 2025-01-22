@@ -11,9 +11,10 @@
     "noEmit": true,
     "skipLibCheck": true,
     "paths": {
-      "@blc-mono/shared/*": ["../../../stacks/*"],
+      "@blc-mono/redemptions/*": ["./*"],
+      "@blc-mono/stacks/*": ["../../../stacks/*"],
       "@blc-mono/core/*": ["../core/src/*"],
-      "@blc-mono/redemptions/*": ["./*"]
+      "@blc-mono/shared/*": ["../../shared/src/*"]
     }
   },
   "exclude": ["cloudflare/QRImageGenerator"]

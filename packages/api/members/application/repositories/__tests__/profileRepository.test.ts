@@ -8,13 +8,13 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import { ProfileRepository } from '../profileRepository';
 import { v4 as uuidv4 } from 'uuid';
-import { ProfileModel, CreateProfileModel } from '../../models/profileModel';
+import { ProfileModel, CreateProfileModel } from '@blc-mono/shared/models/members/profileModel';
 import { NotFoundError } from '../../errors/NotFoundError';
 import { memberKey, noteKey } from '../repository';
-import { EligibilityStatus } from '../../models/enums/EligibilityStatus';
-import { ApplicationReason } from '../../models/enums/ApplicationReason';
-import { NoteModel, CreateNoteModel } from '../../models/noteModel';
-import { ApplicationModel } from '../../models/applicationModel';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
+import { NoteModel, CreateNoteModel } from '@blc-mono/shared/models/members/noteModel';
+import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 
 jest.mock('@aws-sdk/lib-dynamodb');
 jest.mock('uuid', () => ({

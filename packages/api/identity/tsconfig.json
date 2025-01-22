@@ -4,19 +4,24 @@
     "module": "CommonJS",
     "baseUrl": ".",
     "paths": {
-      "@blc-mono/core/*": ["../core/src/*"]
+      "@blc-mono/core/*": [
+        "../core/src/*"
+      ],
+      "@blc-mono/shared/*": [
+        "../../shared/src/*"
+      ]
     },
     "esModuleInterop": true,
     "allowJs": true,
     "resolveJsonModule": true
   },
   "ts-node": {
-		"target": "ES6",
-        "module": "CommonJS",
-        "lib": [
-            "DOM",
-            "ES5"
-        ],
-        "esModuleInterop": true
-	}
+    "target": "ES6",
+    "module": "CommonJS",
+    "lib": [
+      "DOM",
+      "ES5"
+    ],
+    "esModuleInterop": true
+  }
 }

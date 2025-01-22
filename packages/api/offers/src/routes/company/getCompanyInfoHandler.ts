@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { container } from 'tsyringe';
 import { APIGatewayEvent, APIGatewayProxyEventPathParameters } from 'aws-lambda';
-import { Response } from '@blc-mono/core/src/utils/restResponse/response';
+import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { getEnvRaw } from '../../../../core/src/utils/getEnv';
 import { CompanyOffersService } from '../../../src/services/CompanyOffersService';
 import { LambdaLogger } from '../../../../core/src/utils/logger/lambdaLogger';

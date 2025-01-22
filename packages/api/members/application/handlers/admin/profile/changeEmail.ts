@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '../../../middleware';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
-import { EmailChangeModel } from '@blc-mono/members/application/models/emailChangeModel';
+import { EmailChangeModel } from '@blc-mono/shared/models/members/emailChangeModel';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 
 const service = new ProfileService();

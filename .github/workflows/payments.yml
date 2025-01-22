@@ -4,6 +4,7 @@ on:
     branches:
       - main
     paths:
+      - packages/shared/**
       - packages/api/payments/**
       - packages/api/core/**
       - stacks/**
@@ -13,6 +14,7 @@ on:
       - package.json
   pull_request:
     paths:
+      - packages/shared/**
       - packages/api/payments/**
       - packages/api/core/**
       - stacks/**

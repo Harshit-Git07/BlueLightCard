@@ -1,8 +1,8 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
-import { ApplicationModel } from '@blc-mono/members/application/models/applicationModel';
-import { ApplicationReason } from '@blc-mono/members/application/models/enums/ApplicationReason';
+import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/applicationService');

@@ -1,6 +1,6 @@
 import { middleware } from '@blc-mono/members/application/middleware';
 import { BatchService } from '@blc-mono/members/application/services/batchService';
-import { BatchModel } from '@blc-mono/members/application/models/batchModel';
+import { BatchModel } from '@blc-mono/shared/models/members/batchModel';
 
 const service = new BatchService();
 

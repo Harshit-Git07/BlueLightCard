@@ -1,13 +1,13 @@
+import { PromoCodeType } from '@blc-mono/shared/models/members/enums/PromoCodeType';
+import { PromoCodeModel } from '@blc-mono/shared/models/members/promoCodeModel';
+import { v4 as uuidv4 } from 'uuid';
+import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
 import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { PromoCodeType } from '@blc-mono/members/application/models/enums/PromoCodeType';
-import { PromoCodeModel } from '@blc-mono/members/application/models/promoCodeModel';
-import { v4 as uuidv4 } from 'uuid';
-import { ProfileModel } from '@blc-mono/members/application/models/profileModel';
-import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
-import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
+import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 
 jest.mock('@blc-mono/members/application/repositories/promoCodesRepository');
 jest.mock('@blc-mono/members/application/services/profileService');

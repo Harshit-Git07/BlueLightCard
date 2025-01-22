@@ -1,7 +1,7 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
-import { NoteModel } from '@blc-mono/members/application/models/noteModel';
+import { NoteModel } from '@blc-mono/shared/models/members/noteModel';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/profileService');

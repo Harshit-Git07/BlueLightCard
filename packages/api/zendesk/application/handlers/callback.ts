@@ -1,10 +1,11 @@
-import { type APIGatewayEvent, type Context } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
+import { type APIGatewayEvent, type Context } from 'aws-lambda';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import url from 'url';
-import { Response } from '@blc-mono/core/utils/restResponse/response';
+
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { ZendeskStackEnvironmentKeys } from '@blc-mono/zendesk/infrastructure/constants/environment';
 
 const service: string = getEnv(ZendeskStackEnvironmentKeys.SERVICE);
@@ -25,7 +26,7 @@ const USER_POOL_DOMAIN = getEnv(ZendeskStackEnvironmentKeys.USER_POOL_DOMAIN);
 const SECRET = getEnv(ZendeskStackEnvironmentKeys.ZENDESK_JWT_SECRET);
 const ZENDESK_SUBDOMAIN = getEnv(ZendeskStackEnvironmentKeys.ZENDESK_SUBDOMAIN);
 
-export const handler = async (event: APIGatewayEvent, context: Context): Promise<object> => {
+export const handler = async (event: APIGatewayEvent): Promise<object> => {
   logger.info('input', { event });
   const code = event.queryStringParameters?.code ?? null;
   if (code == null) {

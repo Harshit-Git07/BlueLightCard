@@ -4,12 +4,14 @@ on:
     branches:
       - main
     paths:
+      - packages/shared/**
       - packages/shared-ui/**
       - .github/workflows/shared-ui.yml
       - package-lock.json
       - package.json
   pull_request:
     paths:
+      - packages/shared/**
       - packages/shared-ui/**
       - .github/workflows/shared-ui.yml
       - package-lock.json

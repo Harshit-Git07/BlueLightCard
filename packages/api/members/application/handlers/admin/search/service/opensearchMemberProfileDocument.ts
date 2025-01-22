@@ -1,4 +1,4 @@
-import { MemberDocumentModel } from '@blc-mono/members/application/models/memberDocument';
+import { MemberDocumentModel } from '@blc-mono/shared/models/members/memberDocument';
 
 export type OpenSearchBulkUpdateCommand = UpdateCommand | UpdateBody;
 

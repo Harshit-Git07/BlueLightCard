@@ -1,10 +1,13 @@
 import { DynamoDBDocumentClient, UpdateCommand, PutCommand } from '@aws-sdk/lib-dynamodb';
 import { ApplicationRepository } from '../applicationRepository';
-import { ApplicationModel, CreateApplicationModel } from '../../models/applicationModel';
+import {
+  ApplicationModel,
+  CreateApplicationModel,
+} from '@blc-mono/shared/models/members/applicationModel';
 import { NotFoundError } from '../../errors/NotFoundError';
 import { v4 as uuidv4 } from 'uuid';
 import { applicationKey, memberKey } from '../repository';
-import { ApplicationReason } from '../../models/enums/ApplicationReason';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 
 jest.mock('@aws-sdk/lib-dynamodb');
 jest.mock('@aws-sdk/client-s3', () => {

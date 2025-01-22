@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { OFFERS_TYPE_ENUM } from '../utils/global-constants';
-import { createZodNamedType } from '../../../core/src/extensions/apiGatewayExtension/agModelGenerator';
+
+import { createZodNamedType } from '@blc-mono/shared/utils/zodNamedType';
 
 export const OfferModel = createZodNamedType(
   'OffersModel',

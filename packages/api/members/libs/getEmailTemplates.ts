@@ -1,6 +1,6 @@
 import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { emailTemplates } from '../application/types/emailTypes';
-import { EmailPayload } from '@blc-mono/members/application/models/emailModel';
+import { EmailPayload } from '@blc-mono/shared/models/members/emailModel';
 
 export async function getEmailTemplate(
   bucketName: string,

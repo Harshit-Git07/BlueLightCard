@@ -21,6 +21,9 @@ const lostCardApplicationIsComplete = (
   county: string | undefined,
 ) => {
   const { eligibilityStatus, paymentStatus } = application;
+
+  if (!paymentStatus) return false;
+
   return (
     eligibilityStatus !== 'INELIGIBLE' &&
     completedPaymentStatuses.includes(paymentStatus) &&

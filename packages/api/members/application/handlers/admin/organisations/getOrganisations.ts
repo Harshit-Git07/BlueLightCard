@@ -1,6 +1,6 @@
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 import { middleware } from '../../../middleware';
-import { OrganisationModel } from '@blc-mono/members/application/models/organisationModel';
+import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
 
 const orgService = new OrganisationService();
 

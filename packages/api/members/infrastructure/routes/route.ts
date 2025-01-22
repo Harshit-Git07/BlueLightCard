@@ -9,9 +9,9 @@ import {
 } from '@blc-mono/core/extensions/apiGatewayExtension';
 
 import { MemberStackEnvironmentKeys } from '../constants/environment';
-import { NamedZodType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
 import { z } from 'zod';
 import { IVpc } from 'aws-cdk-lib/aws-ec2';
+import { NamedZodType } from '@blc-mono/shared/utils/zodNamedType';
 
 type CreateRouteResult = ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>;
 

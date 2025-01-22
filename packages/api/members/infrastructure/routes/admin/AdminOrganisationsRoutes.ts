@@ -5,14 +5,14 @@ import {
   CreateEmployerResponseModel,
   EmployerModel,
   UpdateEmployerModel,
-} from '@blc-mono/members/application/models/employerModel';
+} from '@blc-mono/shared/models/members/employerModel';
 import {
   CreateOrganisationModel,
   CreateOrganisationResponseModel,
   OrganisationModel,
   UpdateOrganisationModel,
-} from '@blc-mono/members/application/models/organisationModel';
-import { IdRequirementModel } from '@blc-mono/members/application/models/idRequirementsModel';
+} from '@blc-mono/shared/models/members/organisationModel';
+import { IdRequirementModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 
 export function adminOrganisationsRoutes(
   defaultRouteProps: DefaultRouteProps,

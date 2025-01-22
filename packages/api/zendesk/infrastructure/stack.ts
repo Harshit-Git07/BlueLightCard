@@ -1,14 +1,16 @@
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
 import { ApiGatewayV1Api, StackContext, use } from 'sst/constructs';
+
 import { GlobalConfigResolver } from '@blc-mono/core/configuration/global-config';
+import { STAGES } from '@blc-mono/core/types/stages.enum';
 import { getBrandFromEnv, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnvOrDefault, getEnvRaw } from '@blc-mono/core/utils/getEnv';
-import { Shared } from '@blc-mono/shared/stack';
-import { Secret } from 'aws-cdk-lib/aws-secretsmanager';
-import { STAGES } from '@blc-mono/core/types/stages.enum';
-import { ZendeskStackEnvironmentKeys } from './constants/environment';
+import { Shared } from '@blc-mono/stacks/stack';
+
 import { productionDomainNames, stagingDomainNames } from './constants/domains';
+import { ZendeskStackEnvironmentKeys } from './constants/environment';
 
 function ZendeskStack({ stack }: StackContext) {
   const globalConfig = GlobalConfigResolver.for(stack.stage);

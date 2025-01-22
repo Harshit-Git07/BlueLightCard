@@ -1,5 +1,6 @@
-import { type APIGatewayEvent, type Context } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
+import { type APIGatewayEvent, type Context } from 'aws-lambda';
+
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { ZendeskStackEnvironmentKeys } from '@blc-mono/zendesk/infrastructure/constants/environment';
 
@@ -19,7 +20,7 @@ const CLIENT_ID = getEnv(ZendeskStackEnvironmentKeys.ZENDESK_APP_CLIENT_ID);
 const USER_POOL_DOMAIN = getEnv(ZendeskStackEnvironmentKeys.USER_POOL_DOMAIN);
 const ZENDESK_SUBDOMAIN = getEnv(ZendeskStackEnvironmentKeys.ZENDESK_SUBDOMAIN);
 
-export const handler = async (event: APIGatewayEvent, context: Context): Promise<object> => {
+export const handler = (event: APIGatewayEvent): object => {
   logger.info('input', { event });
   const zendeskBaseUrl = `https://${ZENDESK_SUBDOMAIN}.zendesk.com/`;
   try {

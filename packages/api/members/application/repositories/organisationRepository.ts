@@ -4,10 +4,13 @@ import {
   PutCommand,
   QueryCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { CreateOrganisationModel, OrganisationModel } from '../models/organisationModel';
+import {
+  CreateOrganisationModel,
+  OrganisationModel,
+} from '@blc-mono/shared/models/members/organisationModel';
 import { Table } from 'sst/node/table';
 import { defaultDynamoDbClient } from './dynamoClient';
-import { CreateEmployerModel, EmployerModel } from '../models/employerModel';
+import { CreateEmployerModel, EmployerModel } from '@blc-mono/shared/models/members/employerModel';
 import { NotFoundError } from '../errors/NotFoundError';
 import {
   EMPLOYER,
@@ -18,7 +21,7 @@ import {
   Repository,
 } from './repository';
 import { v4 as uuidv4 } from 'uuid';
-import { IdRequirementModel } from '../models/idRequirementsModel';
+import { IdRequirementModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 import { NativeAttributeValue } from '@aws-sdk/util-dynamodb';
 
 export class OrganisationRepository extends Repository {

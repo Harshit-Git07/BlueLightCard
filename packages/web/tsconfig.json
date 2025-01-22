@@ -86,6 +86,9 @@
       ],
       "@blc/offers-legacy/*": [
         "../api/offers/src/*"
+      ],
+      "@blc-mono/shared/*": [
+        "../shared/src/*"
       ]
     },
     "plugins": [

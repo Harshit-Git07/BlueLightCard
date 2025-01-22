@@ -18,7 +18,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@blc/offers-legacy/*": ["../api/offers/src/*"]
+      "@blc/offers-legacy/*": ["../api/offers/src/*"],
+      "@blc-mono/shared/*": ["../shared/src/*"]
     }
   },
   "include": [

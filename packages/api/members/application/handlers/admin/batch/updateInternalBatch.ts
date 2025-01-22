@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { middleware } from '@blc-mono/members/application/middleware';
 import { BatchService } from '@blc-mono/members/application/services/batchService';
-import { CreateInternalBatchModelResponse } from '@blc-mono/members/application/models/batchModel';
+import { CreateInternalBatchModelResponse } from '@blc-mono/shared/models/members/batchModel';
 
 const service = new BatchService();
 

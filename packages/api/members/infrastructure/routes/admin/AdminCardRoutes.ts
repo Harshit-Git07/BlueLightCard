@@ -1,8 +1,8 @@
 import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
 import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Api';
-import { CardPrintBatchModel } from '@blc-mono/members/application/models/cardPrintBatchModel';
-import { CardModel, UpdateCardModel } from '@blc-mono/members/application/models/cardModel';
-import { FixBatchModelRequest } from '@blc-mono/members/application/models/batchModel';
+import { CardPrintBatchModel } from '@blc-mono/shared/models/members/cardPrintBatchModel';
+import { CardModel, UpdateCardModel } from '@blc-mono/shared/models/members/cardModel';
+import { FixBatchModelRequest } from '@blc-mono/shared/models/members/batchModel';
 
 export function adminCardRoutes(
   defaultRouteProps: DefaultRouteProps,

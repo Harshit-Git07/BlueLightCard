@@ -5,7 +5,7 @@ import { ValidationError } from '@blc-mono/members/application/errors/Validation
 import {
   CreateNoteModel,
   CreateNoteModelResponse,
-} from '@blc-mono/members/application/models/noteModel';
+} from '@blc-mono/shared/models/members/noteModel';
 
 const service = new ProfileService();
 

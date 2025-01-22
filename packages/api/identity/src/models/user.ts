@@ -1,6 +1,7 @@
 import {z} from 'zod';
 import { transformDateToFormatYYYYMMDD } from '../../../core/src/utils/date';
-import { createZodNamedType } from '@blc-mono/core/extensions/apiGatewayExtension/agModelGenerator';
+
+import { createZodNamedType } from '@blc-mono/shared/utils/zodNamedType';
 
 export const UserModel = createZodNamedType(
   'UserModel',

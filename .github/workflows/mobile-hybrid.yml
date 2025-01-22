@@ -2,6 +2,7 @@ name: 'Mobile Hybrid'
 on:
   push:
     paths:
+      - packages/shared/**
       - packages/mobile-hybrid/**
       - packages/shared-ui/**
       - scripts/**
@@ -12,6 +13,7 @@ on:
       - .github/workflows/mobile-hybrid.yml
   pull_request:
     paths:
+      - packages/shared/**
       - packages/mobile-hybrid/**
       - packages/shared-ui/**
       - scripts/**

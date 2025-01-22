@@ -1,5 +1,6 @@
-import { type APIGatewayEvent, type Context } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
+import { type APIGatewayEvent, type Context } from 'aws-lambda';
+
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { ZendeskStackEnvironmentKeys } from '@blc-mono/zendesk/infrastructure/constants/environment';
 
@@ -35,7 +36,7 @@ const brandURLs: { [key: string]: string } = {
   'support-zendesk.bluelightcard.com.au': ZENDESK_API_BASE_URL_AUS,
 };
 
-export const handler = async (event: APIGatewayEvent, context: Context): Promise<object> => {
+export const handler = (event: APIGatewayEvent): object => {
   logger.info('input', { event });
   const returnTo = event.queryStringParameters?.return_to;
   const requestType = event.queryStringParameters?.request_type ? event.queryStringParameters?.request_type : 'login';

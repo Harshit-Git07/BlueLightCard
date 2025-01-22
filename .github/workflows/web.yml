@@ -4,6 +4,7 @@ on:
     paths:
       - packages/web/**
       - packages/shared-ui/**
+      - packages/shared/**
       - .github/actions/**
       - package-lock.json
       - sst.config.ts

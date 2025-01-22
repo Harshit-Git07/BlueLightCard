@@ -11,7 +11,7 @@ import { ApiGatewayModelGenerator } from '@blc-mono/core/extensions/apiGatewayEx
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
 import { getEnvOrDefault, getEnvRaw } from '@blc-mono/core/utils/getEnv';
-import { Shared } from '@blc-mono/shared/stack';
+import { Shared } from '@blc-mono/stacks/stack';
 
 import { PostPaymentInitiationModel } from '../application/models/postPaymentInitiation';
 

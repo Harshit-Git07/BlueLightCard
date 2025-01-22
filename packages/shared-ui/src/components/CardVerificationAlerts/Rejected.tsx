@@ -4,7 +4,10 @@ import { copy } from './copy';
 import { RejectionReasonSchema } from './types';
 import { ButtonV2, ThemeVariant } from '../../index';
 
-type Props = { reason: RejectionReasonSchema };
+type Props = {
+  reason: RejectionReasonSchema | undefined;
+};
+
 const Rejected: FC<Props> = ({ reason }) => {
   const subtextCopy = reason ? copy.rejected.subtext[reason] : '';
 

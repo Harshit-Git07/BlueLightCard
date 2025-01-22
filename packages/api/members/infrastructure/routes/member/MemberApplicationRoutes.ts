@@ -5,9 +5,9 @@ import {
   CreateApplicationModel,
   CreateApplicationModelResponse,
   UpdateApplicationModel,
-} from '@blc-mono/members/application/models/applicationModel';
-import { DocumentUploadLocation } from '@blc-mono/members/application/models/documentUpload';
-import { PromoCodeResponseModel } from '@blc-mono/members/application/models/promoCodeModel';
+} from '@blc-mono/shared/models/members/applicationModel';
+import { PromoCodeResponseModel } from '@blc-mono/shared/models/members/promoCodeModel';
+import { DocumentUploadLocation } from '@blc-mono/shared/models/members/documentUpload';
 
 export function memberApplicationRoutes(
   defaultRouteProps: DefaultRouteProps,

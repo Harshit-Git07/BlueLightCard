@@ -6,5 +6,5 @@ import {
 export function getLatestCard(
   memberProfile: ServiceLayerMemberProfile
 ): ServiceLayerMemberProfileCard | undefined {
-  return memberProfile.cards.at(-1);
+  return memberProfile.cards?.at(-1);
 }

@@ -1,4 +1,7 @@
-import { ServiceLayerEmployer } from '@/root/src/member-eligibility/shared/types/ServiceLayerEmployer';
+import {
+  ServiceLayerEmployer,
+  ServiceLayerEmploymentStatus,
+} from '@/root/src/member-eligibility/shared/types/ServiceLayerEmployer';
 import { EmploymentStatus } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 
 export function filterBasedOnEmploymentStatus(
@@ -10,11 +13,17 @@ export function filterBasedOnEmploymentStatus(
 
     switch (employmentStatus) {
       case 'Employed':
-        return serviceLayerEmployer.employmentStatus?.includes('EMPLOYED');
+        return serviceLayerEmployer.employmentStatus?.includes(
+          ServiceLayerEmploymentStatus.EMPLOYED
+        );
       case 'Retired or Bereaved':
-        return serviceLayerEmployer.employmentStatus?.includes('RETIRED');
+        return serviceLayerEmployer.employmentStatus?.includes(
+          ServiceLayerEmploymentStatus.RETIRED
+        );
       case 'Volunteer':
-        return serviceLayerEmployer.employmentStatus?.includes('VOLUNTEER');
+        return serviceLayerEmployer.employmentStatus?.includes(
+          ServiceLayerEmploymentStatus.VOLUNTEER
+        );
     }
   });
 }

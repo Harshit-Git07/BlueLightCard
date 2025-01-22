@@ -6,7 +6,7 @@ import {
   DynamoDBRecord,
 } from 'aws-lambda/trigger/dynamodb-stream';
 import { APPLICATION, CARD, PROFILE } from '@blc-mono/members/application/repositories/repository';
-import { MemberDocumentModel } from '@blc-mono/members/application/models/memberDocument';
+import { MemberDocumentModel } from '@blc-mono/shared/models/members/memberDocument';
 import { MembersOpenSearchService } from '@blc-mono/members/application/handlers/admin/search/service/membersOpenSearchService';
 import { createMemberProfileOpenSearchDocuments } from '@blc-mono/members/application/handlers/admin/search/service/opensearchMemberProfileDocument';
 import {

@@ -11,7 +11,7 @@ import { getEnvOrDefault, getEnvRaw } from '@blc-mono/core/utils/getEnv';
 import { createRedemptionTransactionalEmailRule } from '@blc-mono/redemptions/infrastructure/eventBridge/rules/redemptionTransactionalEmail';
 import { PostAffiliateModel } from '@blc-mono/redemptions/libs/models/postAffiliate';
 import { PostRedeemModel } from '@blc-mono/redemptions/libs/models/postRedeem';
-import { Shared } from '@blc-mono/shared/stack';
+import { Shared } from '@blc-mono/stacks/stack';
 
 import { Identity } from '../../identity/stack';
 import { DatabaseConnectionType, SecretsManagerDatabaseCredentials } from '../libs/database/connection';

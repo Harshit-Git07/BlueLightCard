@@ -2,7 +2,7 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '../../../middleware';
 import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { DocumentListPresignedUrl } from '@blc-mono/members/application/models/documentUpload';
+import { DocumentListPresignedUrl } from '@blc-mono/shared/models/members/documentUpload';
 
 const service = new ApplicationService();
 

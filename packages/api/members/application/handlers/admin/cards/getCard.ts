@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '@blc-mono/members/application/middleware';
-import { CardModel } from '@blc-mono/members/application/models/cardModel';
+import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { CardService } from '@blc-mono/members/application/services/cardService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 

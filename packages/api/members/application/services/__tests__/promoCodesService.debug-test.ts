@@ -6,7 +6,7 @@ import { defaultDynamoDbClient } from '@blc-mono/members/application/repositorie
 import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
 import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
-import { ProfileModel } from '@blc-mono/members/application/models/profileModel';
+import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 
 jest.mock('@blc-mono/members/application/services/profileService', () => ({
   ProfileService: jest.fn().mockImplementation(() => ({

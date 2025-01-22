@@ -1,8 +1,9 @@
-import { type APIGatewayEvent, type Context, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
 import { Logger } from '@aws-lambda-powertools/logger';
+import { type APIGatewayEvent, APIGatewayProxyStructuredResultV2,type Context } from 'aws-lambda';
 import jwt from 'jsonwebtoken';
-import { Response } from '@blc-mono/core/utils/restResponse/response';
+
 import { getEnv, getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { unpackJWT } from '@blc-mono/core/utils/unpackJWT';
 import { ZendeskStackEnvironmentKeys } from '@blc-mono/zendesk/infrastructure/constants/environment';
 
@@ -19,7 +20,7 @@ const logger = new Logger({
 const SECRET = getEnv(ZendeskStackEnvironmentKeys.ZENDESK_MESSAGING_JWT_SECRET);
 const ZENDESK_KID = getEnv(ZendeskStackEnvironmentKeys.ZENDESK_MESSAGING_KID);
 
-export const handler = async (event: APIGatewayEvent, context: Context): Promise<APIGatewayProxyStructuredResultV2> => {
+export const handler = (event: APIGatewayEvent): APIGatewayProxyStructuredResultV2 => {
   logger.debug('input', { event });
   let authorization_header = '';
   if (event.headers.Authorization != undefined || event.headers.Authorization != '') {

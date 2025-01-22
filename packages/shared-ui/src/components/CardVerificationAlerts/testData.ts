@@ -1,8 +1,9 @@
 import { ApplicationSchema, ProfileSchema } from './types';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 
 export const defaultApplication: ApplicationSchema = {
   applicationId: '',
-  applicationReason: 'SIGNUP',
+  applicationReason: ApplicationReason.SIGNUP,
   memberId: 'test_id',
 };
 export const defaultProfile: ProfileSchema = {

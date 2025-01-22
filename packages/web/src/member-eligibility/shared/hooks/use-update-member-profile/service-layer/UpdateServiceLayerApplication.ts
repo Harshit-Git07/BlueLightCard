@@ -1,9 +1,9 @@
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
-import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
 import { serviceLayerUrl } from '@/root/src/member-eligibility/constants/ServiceLayerUrl';
+import { UpdateApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 import { fetchWithAuth } from '@/root/src/member-eligibility/shared/utils/FetchWithAuth';
 
-type Request = components['schemas']['UpdateApplicationModel'];
+type Request = UpdateApplicationModel;
 
 export async function updateServiceLayerApplication(
   applicationId: string,
@@ -16,9 +16,7 @@ export async function updateServiceLayerApplication(
     }
 
     const request: Request = {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      promoCode: eligibilityDetails.promoCode, // TODO: This is defined as an object in OpenAPI spec, but is actually a string
+      promoCode: eligibilityDetails.promoCode,
       verificationMethod: undefined, // TODO: This is defined as a string in the OpenAPI spec
       address1: eligibilityDetails.address?.line1,
       address2: eligibilityDetails.address?.line2,

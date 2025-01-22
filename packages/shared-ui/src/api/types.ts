@@ -1,4 +1,6 @@
-import type { components } from '../generated/MembersApi';
+import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
+import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
+import { EmployerModel } from '@blc-mono/shared/models/members/employerModel';
 
 export type ApiMessage = {
   code: string;
@@ -15,9 +17,10 @@ export type ApiResponseError = {
   error: Array<ApiMessage>;
 };
 
-export type MemberProfile = components['schemas']['ProfileModel'];
-
-export type EmploymentStatus = components['schemas']['ProfileModel']['employmentStatus'];
+export type MemberProfile = ProfileModel;
+export type EmploymentStatus = MemberProfile['employmentStatus'];
+export type Organisation = OrganisationModel;
+export type Employer = EmployerModel;
 
 // this definition is temporary while card reason is being worked on by service layer
 export enum ReorderCardReason {
@@ -26,9 +29,6 @@ export enum ReorderCardReason {
   STOLEN_CARD = 'STOLEN_CARD',
   DAMAGED_CARD = 'DAMAGED_CARD',
 }
-
-export type Organisation = components['schemas']['OrganisationModel'];
-export type Employer = components['schemas']['EmployerModel'];
 
 export type SupportedDocument = {
   idKey: string;

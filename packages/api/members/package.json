@@ -11,7 +11,10 @@
     "test:unit": "jest --runInBand",
     "e2e:members": "dotenv -e ../../../.env -- npx sst bind vitest e2e",
     "typecheck": "tsc -noEmit",
-    "dev": "sst dev"
+    "dev": "sst dev",
+    "generate-api-docs:staging": "npm run generate-api-docs:staging:members && npm run generate-api-docs:staging:members-admin",
+    "generate-api-docs:staging:members": "aws apigateway get-export --parameters extensions='apigateway' --rest-api-id dhx8r310ki --stage-name v1 --export-type oas30 ./api/members-api.json",
+    "generate-api-docs:staging:members-admin": "aws apigateway get-export --parameters extensions='apigateway' --rest-api-id 104vjkaomd --stage-name v1 --export-type oas30 ./api/members-admin-api.json"
   },
   "devDependencies": {
     "@aws-sdk/client-firehose": "3.606.0",

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { HttpStatusCode } from '@blc-mono/core/src/types/http-status-code.enum';
+import { HttpStatusCode } from '@blc-mono/core/types/http-status-code.enum';
 import { APIGatewayEvent } from 'aws-lambda';
 import { mockLegacyOfferRetrieveAPI } from '../../../mocks/legacyOfferRetrieveAPI';
 import { mockLambdaEvent } from '../../../mocks/lambdaEvent';

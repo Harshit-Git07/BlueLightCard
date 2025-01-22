@@ -1,9 +1,9 @@
 import { serviceLayerUrl } from '@/root/src/member-eligibility/constants/ServiceLayerUrl';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
-import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
 import { fetchWithAuth } from '@/root/src/member-eligibility/shared/utils/FetchWithAuth';
+import { PromoCodeResponseModel } from '@blc-mono/shared/models/members/promoCodeModel';
 
-type Response = components['schemas']['PromoCodeResponseModel'];
+type Response = PromoCodeResponseModel;
 
 export async function validatePromoCode(
   eligibilityDetails: EligibilityDetails

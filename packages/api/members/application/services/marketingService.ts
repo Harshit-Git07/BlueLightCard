@@ -1,7 +1,7 @@
 import { logger } from '../middleware';
 import BrazeClient from '../braze/brazeClient';
 import { MarketingPreferencesEnvironment } from '@blc-mono/members/application/types/marketingPreferencesEnvironment';
-import { BrazeUpdateModel } from '@blc-mono/members/application/models/brazeUpdateModel';
+import { BrazeUpdateModel } from '@blc-mono/shared/models/members/brazeUpdateModel';
 
 export default class MarketingService {
   constructor(private readonly brazeClient: BrazeClient = new BrazeClient()) {}

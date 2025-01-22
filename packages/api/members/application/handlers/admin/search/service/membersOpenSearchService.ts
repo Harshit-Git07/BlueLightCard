@@ -6,7 +6,7 @@ import { logger } from '@blc-mono/members/application/middleware';
 import {
   MemberDocumentsSearchModel,
   MemberDocumentsSearchResponseModel,
-} from '@blc-mono/members/application/models/memberDocument';
+} from '@blc-mono/shared/models/members/memberDocument';
 import {
   buildOpenSearchRequest,
   mapOpenSearchResultsToMemberDocuments,

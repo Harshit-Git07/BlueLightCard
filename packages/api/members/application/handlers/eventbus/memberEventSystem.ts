@@ -1,7 +1,7 @@
 import { EventBridgeEvent, StreamRecord } from 'aws-lambda';
 import { eventBusMiddleware } from '../../middleware';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
-import { MemberEvent } from '@blc-mono/members/application/models/enums/MemberEvent';
+import { MemberEvent } from '@blc-mono/shared/models/members/enums/MemberEvent';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 
 export const unwrappedHandler = async (

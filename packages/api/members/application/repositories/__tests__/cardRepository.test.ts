@@ -1,11 +1,11 @@
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { CardRepository } from '../cardRepository';
-import { CardModel } from '../../models/cardModel';
+import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { NotFoundError } from '../../errors/NotFoundError';
 import { v4 as uuidv4 } from 'uuid';
 import { cardKey, memberKey } from '../repository';
-import { CardStatus } from '../../models/enums/CardStatus';
-import { PaymentStatus } from '../../models/enums/PaymentStatus';
+import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
+import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
 
 jest.mock('@aws-sdk/lib-dynamodb');
 

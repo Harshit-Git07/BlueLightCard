@@ -5,11 +5,13 @@ on:
     branches:
       - main
     paths:
+      - packages/shared/**
       - packages/synthetic-tests/**
       - .github/workflows/synthetic-tests.yml
       - packages/synthetic-tests/CHANGELOG.md
   pull_request:
     paths:
+      - packages/shared/**
       - packages/synthetic-tests/**
       - .github/workflows/synthetic-tests.yml
       - packages/synthetic-tests/CHANGELOG.md

@@ -4,7 +4,7 @@ import { middleware } from '../../../middleware';
 import {
   CreateEmployerModel,
   CreateEmployerResponseModel,
-} from '@blc-mono/members/application/models/employerModel';
+} from '@blc-mono/shared/models/members/employerModel';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 
 const orgService = new OrganisationService();

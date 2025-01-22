@@ -1,11 +1,11 @@
-import { MemberDocumentsSearchModel } from '@blc-mono/members/application/models/memberDocument';
-import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
-import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
+import { MemberDocumentsSearchModel } from '@blc-mono/shared/models/members/memberDocument';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
 import {
   buildOpenSearchRequest,
   mapOpenSearchResultsToMemberDocuments,
 } from '../../service/membersOpenSearchRequest';
-import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
+import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { SearchResponse } from '@opensearch-project/opensearch/api/types';
 
 describe('Member Document Search', () => {

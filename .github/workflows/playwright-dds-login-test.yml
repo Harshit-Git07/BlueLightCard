@@ -5,7 +5,6 @@ on:
     - cron: '*/50 * * * *' # Run every 50 minutes
   workflow_dispatch:
 
-
 jobs:
   test:
     runs-on: ui-automation

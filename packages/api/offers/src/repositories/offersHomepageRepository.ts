@@ -1,4 +1,4 @@
-import { DbHelper } from '@blc-mono/core/src/aws/dynamodb/dbhelper';
+import { DbHelper } from '@blc-mono/core/aws/dynamodb/dbhelper';
 import { OfferHomepageKeys } from '../graphql/resolvers/queries/handlers/homepage/types';
 import { inject, injectable } from 'tsyringe';
 import { DI_KEYS } from '../utils/diTokens';

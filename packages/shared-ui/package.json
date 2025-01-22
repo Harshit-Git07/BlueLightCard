@@ -67,10 +67,7 @@
     "test:watch": "jest --watch",
     "format": "prettier --ignore-unknown --write .",
     "format:staged": "prettier --ignore-unknown --write",
-    "lint:staged": "eslint --fix",
-    "generate:api-types": "npm run generate:api-types:members && npm run generate:api-types:members-admin",
-    "generate:api-types:members": "openapi-typescript ../api/members/api/members-api.json -o ./src/generated/MembersApi.ts",
-    "generate:api-types:members-admin": "openapi-typescript ../api/members/api/members-admin-api.json -o ./src/generated/MembersAdminApi.ts"
+    "lint:staged": "eslint --fix"
   },
   "author": "",
   "license": "ISC",

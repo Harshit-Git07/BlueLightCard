@@ -5,7 +5,7 @@ import { MarketingPreferencesEnvironment } from '@blc-mono/members/application/t
 import {
   BrazeUpdateAttributeValue,
   BrazeUpdateModel,
-} from '@blc-mono/members/application/models/brazeUpdateModel';
+} from '@blc-mono/shared/models/members/brazeUpdateModel';
 
 interface BrazeServiceJson {
   BRAZE_SERVICE_API_KEY: string;

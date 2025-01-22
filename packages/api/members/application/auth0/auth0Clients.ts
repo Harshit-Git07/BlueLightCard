@@ -3,7 +3,7 @@ import { fetchWithRetry } from '@blc-mono/members/application/auth0/utils/fetchW
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
 import { secretsObject } from '../types/auth0types';
-import { EmailPayload } from '@blc-mono/members/application/models/emailModel';
+import { EmailPayload } from '@blc-mono/shared/models/members/emailModel';
 
 export const passwordValidationClient = new AuthenticationClient({
   domain: process.env.SERVICE_LAYER_AUTH0_DOMAIN as string,

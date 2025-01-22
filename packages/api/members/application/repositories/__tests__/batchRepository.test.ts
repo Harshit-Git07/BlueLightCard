@@ -6,19 +6,16 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import { BatchRepository } from '@blc-mono/members/application/repositories/batchRepository';
 import { v4 as uuidv4 } from 'uuid';
-import {
-  CreateBatchModel,
-  UpdateBatchModel,
-} from '@blc-mono/members/application/models/batchModel';
-import { BatchType } from '@blc-mono/members/application/models/enums/BatchType';
+import { CreateBatchModel, UpdateBatchModel } from '@blc-mono/shared/models/members/batchModel';
+import { BatchType } from '@blc-mono/shared/models/members/enums/BatchType';
 import {
   BATCH,
   batchKey,
   CARD,
   cardKey,
 } from '@blc-mono/members/application/repositories/repository';
-import { BatchStatus } from '@blc-mono/members/application/models/enums/BatchStatus';
-import { BatchEntryModel } from '@blc-mono/members/application/models/batchEntryModel';
+import { BatchStatus } from '@blc-mono/shared/models/members/enums/BatchStatus';
+import { BatchEntryModel } from '@blc-mono/shared/models/members/batchEntryModel';
 
 jest.mock('@aws-sdk/lib-dynamodb');
 jest.mock('uuid', () => ({

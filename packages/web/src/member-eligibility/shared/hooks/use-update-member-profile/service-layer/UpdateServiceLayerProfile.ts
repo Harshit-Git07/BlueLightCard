@@ -1,13 +1,11 @@
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { isAusAddress } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/utils/IsAusAddress';
-import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
 import { serviceLayerUrl } from '@/root/src/member-eligibility/constants/ServiceLayerUrl';
+import { UpdateProfileModel } from '@blc-mono/shared/models/members/profileModel';
+import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 import { fetchWithAuth } from '@/root/src/member-eligibility/shared/utils/FetchWithAuth';
 
-type Request = Omit<
-  components['schemas']['UpdateProfileModel'],
-  'spareEmailValidated' | 'emailValidated'
->;
+type Request = Omit<UpdateProfileModel, 'spareEmailValidated' | 'emailValidated'>;
 
 export async function updateServiceLayerProfile(
   eligibilityDetails: EligibilityDetails
@@ -55,13 +53,13 @@ function getDateOfBirth(eligibilityDetails: EligibilityDetails): string | undefi
   return eligibilityDetails.member?.dob?.toISOString()?.split('T')?.[0];
 }
 
-function getEmploymentStatus(eligibilityDetails: EligibilityDetails): Request['employmentStatus'] {
+function getEmploymentStatus(eligibilityDetails: EligibilityDetails): EmploymentStatus {
   switch (eligibilityDetails.employmentStatus) {
     case 'Employed':
-      return 'EMPLOYED';
+      return EmploymentStatus.EMPLOYED;
     case 'Retired or Bereaved':
-      return 'RETIRED';
+      return EmploymentStatus.RETIRED;
     default:
-      return 'VOLUNTEER';
+      return EmploymentStatus.VOLUNTEER;
   }
 }

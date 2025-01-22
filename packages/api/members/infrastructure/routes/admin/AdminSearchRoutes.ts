@@ -3,7 +3,7 @@ import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Ap
 import {
   MemberDocumentsSearchModel,
   MemberDocumentsSearchResponseModel,
-} from '@blc-mono/members/application/models/memberDocument';
+} from '@blc-mono/shared/models/members/memberDocument';
 import { IVpc } from 'aws-cdk-lib/aws-ec2';
 
 export function adminSearchRoutes(

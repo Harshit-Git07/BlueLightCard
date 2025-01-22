@@ -2,8 +2,14 @@
   "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
     "module": "esnext",
+    "baseUrl": ".",
     "paths": {
-      "@blc-mono/core/*": ["./*"],
+      "@blc-mono/core/*": [
+        "./*"
+      ],
+      "@blc-mono/shared/*": [
+        "../../shared/src/*"
+      ]
     }
   }
 }

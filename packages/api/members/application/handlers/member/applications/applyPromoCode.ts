@@ -2,7 +2,7 @@ import { PromoCodesService } from '@blc-mono/members/application/services/promoC
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { middleware } from '@blc-mono/members/application/middleware';
-import { UpdateApplicationModel } from '@blc-mono/members/application/models/applicationModel';
+import { UpdateApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 
 const service = new PromoCodesService();
 

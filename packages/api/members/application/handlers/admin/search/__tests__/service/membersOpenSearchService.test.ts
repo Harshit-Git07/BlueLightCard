@@ -3,7 +3,7 @@ import * as getEnvModule from '@blc-mono/core/utils/getEnv';
 jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 
 import { MembersOpenSearchService } from '@blc-mono/members/application/handlers/admin/search/service/membersOpenSearchService';
-import { MemberDocumentModel } from '@blc-mono/members/application/models/memberDocument';
+import { MemberDocumentModel } from '@blc-mono/shared/models/members/memberDocument';
 
 const mockBulkCreate = jest.fn().mockResolvedValue({ statusCode: 200 });
 

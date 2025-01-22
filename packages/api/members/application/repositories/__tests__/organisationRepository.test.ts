@@ -5,13 +5,16 @@ import {
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { OrganisationRepository } from '../organisationRepository';
-import { OrganisationModel, CreateOrganisationModel } from '../../models/organisationModel';
+import {
+  OrganisationModel,
+  CreateOrganisationModel,
+} from '@blc-mono/shared/models/members/organisationModel';
 import { NotFoundError } from '../../errors/NotFoundError';
 import { v4 as uuidv4 } from 'uuid';
-import { IdRequirementModel } from '../../models/idRequirementsModel';
-import { IdType } from '../../models/enums/IdType';
-import { EmployerModel } from '../../models/employerModel';
-import { EmploymentStatus } from '../../models/enums/EmploymentStatus';
+import { IdRequirementModel } from '@blc-mono/shared/models/members/idRequirementsModel';
+import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
+import { EmployerModel } from '@blc-mono/shared/models/members/employerModel';
+import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 
 jest.mock('@aws-sdk/lib-dynamodb');
 jest.mock('uuid', () => ({

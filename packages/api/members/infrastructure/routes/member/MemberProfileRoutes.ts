@@ -1,13 +1,13 @@
 import { DefaultRouteProps, Route } from '@blc-mono/members/infrastructure/routes/route';
 import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Api';
-import { EmailChangeModel } from '@blc-mono/members/application/models/emailChangeModel';
-import { PasswordChangeModel } from '@blc-mono/members/application/models/passwordChangeModel';
+import { EmailChangeModel } from '@blc-mono/shared/models/members/emailChangeModel';
+import { PasswordChangeModel } from '@blc-mono/shared/models/members/passwordChangeModel';
 import {
   CreateProfileModel,
   CreateProfileModelResponse,
   ProfileModel,
   UpdateProfileModel,
-} from '@blc-mono/members/application/models/profileModel';
+} from '@blc-mono/shared/models/members/profileModel';
 
 export function memberProfileRoutes(
   defaultRouteProps: DefaultRouteProps,

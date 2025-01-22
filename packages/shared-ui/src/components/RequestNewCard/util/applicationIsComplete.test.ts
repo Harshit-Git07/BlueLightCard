@@ -1,5 +1,8 @@
 import { ApplicationSchema } from '../../../components/CardVerificationAlerts/types';
 import { applicationIsComplete } from './applicationIsComplete';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
 
 const defaultApplication = {
   memberId: 'testMemberId',
@@ -17,15 +20,15 @@ describe('applicationIsComplete util', () => {
   describe('lost card flow', () => {
     const lostCardApplication: ApplicationSchema = {
       ...defaultApplication,
-      applicationReason: 'LOST_CARD',
+      applicationReason: ApplicationReason.LOST_CARD,
     };
 
     it('happy path works', () => {
       const completeApplication: ApplicationSchema = {
         ...lostCardApplication,
         ...defaultAddress,
-        eligibilityStatus: 'ELIGIBLE',
-        paymentStatus: 'PAID_CARD',
+        eligibilityStatus: EligibilityStatus.ELIGIBLE,
+        paymentStatus: PaymentStatus.PAID_CARD,
       };
 
       expect(applicationIsComplete(completeApplication, 'testCounty')).toBeTruthy();
@@ -35,8 +38,8 @@ describe('applicationIsComplete util', () => {
       const completeApplication: ApplicationSchema = {
         ...lostCardApplication,
         ...defaultAddress,
-        eligibilityStatus: 'INELIGIBLE',
-        paymentStatus: 'AWAITING_PAYMENT',
+        eligibilityStatus: EligibilityStatus.INELIGIBLE,
+        paymentStatus: PaymentStatus.AWAITING_PAYMENT,
       };
 
       expect(applicationIsComplete(completeApplication, 'testCounty')).toBeFalsy();
@@ -46,14 +49,14 @@ describe('applicationIsComplete util', () => {
   describe('lost card flow', () => {
     const lostCardApplication: ApplicationSchema = {
       ...defaultApplication,
-      applicationReason: 'RENEWAL',
+      applicationReason: ApplicationReason.RENEWAL,
     };
 
     it('happy path works', () => {
       const completeApplication: ApplicationSchema = {
         ...lostCardApplication,
         ...defaultAddress,
-        eligibilityStatus: 'ELIGIBLE',
+        eligibilityStatus: EligibilityStatus.ELIGIBLE,
       };
 
       expect(applicationIsComplete(completeApplication, 'testCounty')).toBeTruthy();
@@ -63,7 +66,7 @@ describe('applicationIsComplete util', () => {
       const completeApplication: ApplicationSchema = {
         ...lostCardApplication,
         ...defaultAddress,
-        eligibilityStatus: 'ELIGIBLE',
+        eligibilityStatus: EligibilityStatus.ELIGIBLE,
       };
 
       expect(applicationIsComplete(completeApplication, undefined)).toBeFalsy();

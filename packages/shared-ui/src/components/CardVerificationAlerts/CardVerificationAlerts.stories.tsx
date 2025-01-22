@@ -15,6 +15,8 @@ import {
   VerificationStatusSchema,
 } from './types';
 import { defaultApplication, defaultProfile } from './testData';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 
 const testClient = new QueryClient();
 
@@ -85,8 +87,8 @@ const DefaultTemplate: StoryFn<typeof Wrapper> = (args) => <Wrapper {...args} />
 
 export const Default = DefaultTemplate.bind({});
 Default.args = {
-  applicationReason: 'SIGNUP',
-  eligibilityStatus: 'INELIGIBLE',
+  applicationReason: ApplicationReason.SIGNUP,
+  eligibilityStatus: EligibilityStatus.INELIGIBLE,
   verificationMethod: 'other',
   rejectionReason: undefined,
 };

@@ -48,7 +48,7 @@ const MyCardPage: NextPage = () => {
   const strapline = getBrandStrapline(BRAND);
 
   const hasGenerated = !!card?.cardNumber;
-  const hasNotGenerated = !hasGenerated && memberProfile?.applications.length;
+  const hasNotGenerated = !hasGenerated && memberProfile?.applications?.length;
   const hasNoCard = !hasGenerated && !hasNotGenerated;
 
   const eligibilityUrl = `${baseUrl[BRAND as BRANDS]}/eligibility`;

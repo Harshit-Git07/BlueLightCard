@@ -4,6 +4,7 @@ on:
     branches:
       - main
     paths:
+      - packages/shared/**
       - packages/api/discovery/**
       - packages/api/core/**
       - stacks/**
@@ -14,6 +15,7 @@ on:
       - package.json
   pull_request:
     paths:
+      - packages/shared/**
       - packages/api/discovery/**
       - packages/api/core/**
       - stacks/**

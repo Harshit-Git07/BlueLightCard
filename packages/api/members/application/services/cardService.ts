@@ -1,7 +1,7 @@
 import { logger } from '../middleware';
-import { CardModel, UpdateCardModel } from '../models/cardModel';
+import { CardModel, UpdateCardModel } from '@blc-mono/shared/models/members/cardModel';
 import { CardRepository } from '../repositories/cardRepository';
-import { CardStatus } from '@blc-mono/members/application/models/enums/CardStatus';
+import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 
 export class CardService {

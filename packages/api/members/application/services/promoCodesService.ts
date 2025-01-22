@@ -1,15 +1,15 @@
+import { logger } from '../middleware';
+import { ApplyPromoCodeApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
+import { ProfileService } from '@blc-mono/members/application/services/profileService';
+import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
+import { PromoCodeType } from '@blc-mono/shared/models/members/enums/PromoCodeType';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
 import {
   PromoCodeModel,
   PromoCodeResponseModel,
-} from '@blc-mono/members/application/models/promoCodeModel';
-import { PromoCodeType } from '@blc-mono/members/application/models/enums/PromoCodeType';
-import { ProfileService } from '@blc-mono/members/application/services/profileService';
-import { logger } from '../middleware';
-import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { ApplyPromoCodeApplicationModel } from '@blc-mono/members/application/models/applicationModel';
-import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
-import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
+} from '@blc-mono/shared/models/members/promoCodeModel';
 
 export class PromoCodesService {
   constructor(

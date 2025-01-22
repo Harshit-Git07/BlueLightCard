@@ -5,7 +5,7 @@
 import { defaultDynamoDbClient } from '@blc-mono/members/application/repositories/dynamoClient';
 import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
-import { EmploymentStatus } from '@blc-mono/members/application/models/enums/EmploymentStatus';
+import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 
 const repository = new ProfileRepository(
   defaultDynamoDbClient,

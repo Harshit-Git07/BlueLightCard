@@ -1,6 +1,6 @@
 import { PasswordFields } from './constants';
 import { ApiResponseError, ApiResponseSuccess } from '../../api/types';
-import { components } from '../../generated/MembersApi';
+import { PasswordChangeModel } from '@blc-mono/shared/models/members/passwordChangeModel';
 
 export type InputElementState = {
   value: string;
@@ -15,7 +15,7 @@ export type CurrentFormState = {
   newPasswordConfirm: InputElementState;
 };
 
-export type UpdatePasswordPayload = components['schemas']['PasswordChangeModel'];
+export type UpdatePasswordPayload = PasswordChangeModel;
 
 type UpdatePasswordSuccessResponse = Partial<ApiResponseSuccess> & {
   type: 'success';

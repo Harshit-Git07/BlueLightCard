@@ -2,9 +2,9 @@ import { usePlatformAdapter } from '../../adapters';
 import { useMutation } from '@tanstack/react-query';
 import { jsonOrNull } from '../../utils/jsonUtils';
 import { V5_API_URL } from '../../constants';
-import { components } from '../../generated/MembersApi';
+import { EmailChangeModel } from '@blc-mono/shared/models/members/emailChangeModel';
 
-type PutSchema = components['schemas']['EmailChangeModel'];
+type PutSchema = EmailChangeModel;
 
 interface PutResponseData {
   error?: string;

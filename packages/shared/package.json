@@ -1,0 +1,22 @@
+{
+  "name": "@blc-mono/shared",
+  "description": "Shared types for frontend/backend, keep the footprint low here",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "format": "prettier . --write",
+    "lint": "npm run lint:eslint && npm run lint:typecheck && npm run lint:prettier",
+    "lint:eslint": "eslint .",
+    "lint:typecheck": "tsc -noEmit",
+    "lint:prettier": "prettier . --check",
+    "lint:fix": "eslint . --fix",
+    "test": "npm run test:unit",
+    "test:coverage": "npm run test:unit -- --coverage",
+    "test:unit": "jest --runInBand"
+  },
+  "devDependencies": {
+    "@types/uuid": "9.0.4",
+    "eslint-plugin-prettier": "5.2.1"
+  }
+}

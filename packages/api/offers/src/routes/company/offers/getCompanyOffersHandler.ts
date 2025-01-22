@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { APIGatewayEvent, APIGatewayProxyEventPathParameters } from 'aws-lambda';
-import { Response } from '@blc-mono/core/src/utils/restResponse/response';
+import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { getEnvRaw } from '../../../../../core/src/utils/getEnv';
 import { CompanyOffersService } from '../../../services/CompanyOffersService';
 import { LambdaLogger } from '../../../../../core/src/utils/logger/lambdaLogger';

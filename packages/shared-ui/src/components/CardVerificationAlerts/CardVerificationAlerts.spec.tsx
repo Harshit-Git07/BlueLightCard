@@ -3,6 +3,9 @@ import { render, screen } from '@testing-library/react';
 import CardVerificationBanner from '.';
 import { copy } from './copy';
 import { defaultApplication, defaultProfile } from './testData';
+import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
 
 const mockUseMemberApplication = jest.fn();
 jest.mock('../../hooks/useMemberApplication', () => ({
@@ -12,20 +15,20 @@ jest.mock('../../hooks/useMemberApplication', () => ({
 
 const awaitingIdProfile: ApplicationSchema = {
   ...defaultApplication,
-  applicationReason: 'SIGNUP',
-  eligibilityStatus: 'INELIGIBLE',
+  applicationReason: ApplicationReason.SIGNUP,
+  eligibilityStatus: EligibilityStatus.INELIGIBLE,
 };
 const awaitingIdApprovalProfile: ApplicationSchema = {
   ...defaultApplication,
-  applicationReason: 'SIGNUP',
-  eligibilityStatus: 'AWAITING_ID_APPROVAL',
+  applicationReason: ApplicationReason.SIGNUP,
+  eligibilityStatus: EligibilityStatus.AWAITING_ID_APPROVAL,
   verificationMethod: 'other',
 };
 const rejectedProfile: ApplicationSchema = {
   ...defaultApplication,
-  applicationReason: 'SIGNUP',
-  eligibilityStatus: 'INELIGIBLE',
-  rejectionReason: 'BLURRY_IMAGE_DECLINE_ID',
+  applicationReason: ApplicationReason.SIGNUP,
+  eligibilityStatus: EligibilityStatus.INELIGIBLE,
+  rejectionReason: RejectionReason.BLURRY_IMAGE_DECLINE_ID,
 };
 
 const testUuid = 'testUuid';
@@ -73,7 +76,7 @@ describe('CardVerificationAlert', () => {
       applications: [
         {
           ...defaultApplication,
-          applicationReason: 'NAME_CHANGE',
+          applicationReason: ApplicationReason.NAME_CHANGE,
         },
       ],
     };

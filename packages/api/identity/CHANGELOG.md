@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.122.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.121.0...bluelightcard/identity-v1.122.0) (2025-01-22)
+
+
+### Features
+
+* Move zod models to shared folder and use it throughout the frontend instead of the generated openAPI types ([#3554](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3554)) ([f6ae220](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f6ae220bc5f13846cb234b69e02f9b4cc62a7919))
+
 ## [1.121.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.118.0...bluelightcard/identity-v1.121.0) (2025-01-22)
 
 ### Features

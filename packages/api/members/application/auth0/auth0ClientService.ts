@@ -5,8 +5,48 @@ import {
   managementApiClient,
   passwordValidationClient,
 } from '@blc-mono/members/application/auth0/auth0Clients';
+import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
+import { AdminCreateProfileModel } from '@blc-mono/shared/models/members/profileModel';
+import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 
 export class Auth0ClientService {
+  async createUser(memberId: string, profile: AdminCreateProfileModel): Promise<void> {
+    try {
+      await managementApiClient().users.create({
+        email: profile.email,
+        email_verified: false,
+        verify_email: true,
+        password: profile.password,
+        given_name: profile.firstName,
+        family_name: profile.lastName,
+        user_id: memberId,
+        user_metadata: {
+          dateOfBirth: profile.dateOfBirth,
+        },
+        app_metadata: {
+          memberUuid: memberId,
+          status: this.getCreateUserStatus(),
+        },
+        connection: getEnvOrDefault(
+          'AUTH0_USER_MANAGEMENT_CONNECTION',
+          'Username-Password-Authentication',
+        ),
+      });
+      logger.info('User created successfully on Auth0');
+    } catch (error) {
+      logger.error(`Error creating user on Auth0 for member '${memberId}'`, profile);
+      throw error;
+    }
+  }
+
+  private getCreateUserStatus(): 'default' | 'confirmed' {
+    if (isDdsUkBrand()) {
+      return 'default';
+    }
+
+    return 'confirmed';
+  }
+
   // TODO: Implement this and then remove the eslint disable
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async changeEmail(memberId: string, newEmail: string): Promise<void> {}

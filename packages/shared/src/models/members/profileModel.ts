@@ -62,6 +62,14 @@ export const CreateProfileModel = createZodNamedType(
 );
 export type CreateProfileModel = z.infer<typeof CreateProfileModel>;
 
+export const AdminCreateProfileModel = createZodNamedType(
+  'AdminCreateProfileModel',
+  CreateProfileModel.extend({
+    password: z.string(),
+  }),
+);
+export type AdminCreateProfileModel = z.infer<typeof AdminCreateProfileModel>;
+
 export const CreateProfileModelResponse = createZodNamedType(
   'CreateProfileModelResponse',
   z.object({

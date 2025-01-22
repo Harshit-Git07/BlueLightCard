@@ -17,7 +17,7 @@ export const managementApiClient = (
   clientId: string = process.env.SERVICE_LAYER_AUTH0_API_CLIENT_ID as string,
   clientSecret: string = process.env.SERVICE_LAYER_AUTH0_API_CLIENT_SECRET as string,
   domain: string = process.env.SERVICE_LAYER_AUTH0_DOMAIN as string,
-) =>
+): ManagementClient =>
   new ManagementClient({
     domain,
     clientId,

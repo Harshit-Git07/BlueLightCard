@@ -1,4 +1,5 @@
 import {
+  DeleteCommand,
   DynamoDBDocumentClient,
   PutCommand,
   QueryCommand,
@@ -19,6 +20,7 @@ import { NotFoundError } from '../errors/NotFoundError';
 import { omit } from 'lodash';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
+import { DeleteCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/DeleteCommand';
 
 export class ProfileRepository extends Repository {
   constructor(
@@ -66,6 +68,18 @@ export class ProfileRepository extends Repository {
 
     await this.dynamoDB.send(new TransactWriteCommand(params));
     return memberId;
+  }
+
+  async deleteProfile(memberId: string): Promise<void> {
+    const params: DeleteCommandInput = {
+      TableName: this.tableName,
+      Key: {
+        pk: memberKey(memberId),
+        sk: PROFILE,
+      },
+    };
+
+    await this.dynamoDB.send(new DeleteCommand(params));
   }
 
   async updateProfile(memberId: string, profile: Partial<ProfileModel>): Promise<void> {

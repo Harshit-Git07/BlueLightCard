@@ -35,6 +35,16 @@ export class ProfileService {
     }
   }
 
+  async deleteProfile(memberId: string): Promise<void> {
+    try {
+      logger.debug({ message: 'Deleting profile', memberId });
+      await this.repository.deleteProfile(memberId);
+    } catch (error) {
+      logger.error({ message: 'Error deleting profile', error });
+      throw error;
+    }
+  }
+
   async updateProfile(memberId: string, profile: UpdateProfileModel): Promise<void> {
     try {
       logger.debug({ message: 'Updating profile', profile });

@@ -3,7 +3,7 @@ import { ApiGatewayV1ApiFunctionRouteProps } from 'sst/constructs/ApiGatewayV1Ap
 import { EmailChangeModel } from '@blc-mono/shared/models/members/emailChangeModel';
 import { PasswordChangeModel } from '@blc-mono/shared/models/members/passwordChangeModel';
 import {
-  CreateProfileModel,
+  AdminCreateProfileModel,
   CreateProfileModelResponse,
   ProfileModel,
   UpdateProfileModel,
@@ -34,7 +34,7 @@ export function adminProfileRoutes(
       ...defaultRouteProps,
       name: 'AdminCreateProfile',
       handler: 'packages/api/members/application/handlers/admin/profile/createProfile.handler',
-      requestModelType: CreateProfileModel,
+      requestModelType: AdminCreateProfileModel,
       responseModelType: CreateProfileModelResponse,
     }),
     'PUT /admin/members/{memberId}/profile': Route.createRoute({

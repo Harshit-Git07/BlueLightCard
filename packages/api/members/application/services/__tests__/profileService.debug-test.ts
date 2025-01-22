@@ -7,10 +7,7 @@ import { ProfileRepository } from '@blc-mono/members/application/repositories/pr
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 
-const repository = new ProfileRepository(
-  defaultDynamoDbClient,
-  'pr-3501-blc-mono-blc-mono-memberProfiles',
-);
+const repository = new ProfileRepository(defaultDynamoDbClient, 'staging-blc-mono-memberProfiles');
 
 const profileService = new ProfileService(repository);
 
@@ -25,4 +22,14 @@ it('should create a profile', async () => {
 
   expect(profileId).toEqual(expect.any(String));
   console.log({ profileId });
+});
+
+it('should delete a profile', async () => {
+  const id = '83339a45-48ee-467c-ada9-2482f194d971';
+
+  await profileService.deleteProfile(id);
+
+  await expect(profileService.getProfile(id)).rejects.toThrow(
+    new Error('Member profile not found'),
+  );
 });

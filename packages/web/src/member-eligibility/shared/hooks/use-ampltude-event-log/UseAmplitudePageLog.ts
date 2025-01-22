@@ -14,7 +14,6 @@ export function useLogAnalyticsPageView(eligibilityDetails: EligibilityDetails):
         platformAdapter.logAnalyticsEvent(event, {
           page_name: eligibilityDetails.currentScreen,
         });
-        console.log('Amplitude event logged', event);
         pageViewLogged.current = true;
       }
     } catch (error) {

@@ -72,8 +72,8 @@ describe('given the hook is rendered with a org that allows skipping id', () => 
         });
       });
 
-      it('should return default status', () => {
-        expect(result.current.promoCodeStatus).toBe('default');
+      it('should return open', () => {
+        expect(result.current.promoCodeStatus).toBe('open');
       });
     });
   });
@@ -123,8 +123,8 @@ describe('given the hook is rendered with a org that allows skipping id', () => 
         });
       });
 
-      it('should return default status', () => {
-        expect(result.current.promoCodeStatus).toBe('default');
+      it('should return default open', () => {
+        expect(result.current.promoCodeStatus).toBe('open');
       });
     });
   });

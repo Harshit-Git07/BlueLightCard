@@ -41,6 +41,10 @@ export function useUpdateMemberProfile(eligibilityDetailsState: EligibilityDetai
         });
       } catch (error) {
         console.error('Failed to update member application', error);
+
+        if (eligibilityDetailsOverrides) {
+          setEligibilityDetails(eligibilityDetailsOverrides);
+        }
       }
     },
     [eligibilityDetailsFromState, getMemberProfile, setEligibilityDetails]

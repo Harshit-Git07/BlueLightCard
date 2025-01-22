@@ -25,7 +25,7 @@ export class PromoCodesRepository extends Repository {
   async getMultiUseOrSingleUseChildPromoCode(
     promoCodeId: string,
   ): Promise<PromoCodeModel[] | null> {
-    const params = {
+    const queryCommand = new QueryCommand({
       TableName: this.tableName,
       IndexName: 'PromoCodeIndex',
       KeyConditionExpression: 'code = :code',
@@ -35,9 +35,9 @@ export class PromoCodesRepository extends Repository {
         ':multiCodeSk': 'MULTI_USE',
         ':singleCodeChildSk': 'SINGLE_USE#',
       },
-    };
+    });
 
-    const queryResult = await this.dynamoDB.send(new QueryCommand(params));
+    const queryResult = await this.dynamoDB.send(queryCommand);
 
     return await this.getValidatedResultAsModel(queryResult);
   }

@@ -21,31 +21,31 @@ const PromoCode: FC<PromoCodeProps> = ({
   className = '',
 }) => {
   const [isOpen, setIsOpen] = useState(variant === 'open');
-  const [currentVariant, setCurrentVariant] = useState<PromoCodeVariant>(variant);
 
   useEffect(() => {
-    setCurrentVariant(variant);
-    if (variant === 'open' || variant === 'error') {
-      setIsOpen(true);
-    }
+    setIsOpen(variant === 'open' || variant === 'error');
   }, [variant]);
 
   const isInSuccessState = useMemo(() => {
-    return currentVariant === 'success-skip-id' || currentVariant === 'success-skip-payment';
-  }, []);
+    return (
+      variant === 'success-skip-id' ||
+      variant === 'success-skip-payment' ||
+      variant === 'success-skip-id-and-payment'
+    );
+  }, [variant]);
 
   const togglePromoCodeTextEntryVisability = () => {
     if (isInSuccessState) return;
 
-    setIsOpen(!isOpen);
-    const newVariant = !isOpen ? 'open' : 'default';
-    setCurrentVariant(newVariant);
-    onStateChange?.(newVariant);
+    setIsOpen((previousIsOpen) => {
+      const newVariant = !previousIsOpen ? 'open' : 'default';
+      onStateChange?.(newVariant);
+      return !previousIsOpen;
+    });
   };
 
   const handleRemove = () => {
     onRemove?.();
-    setCurrentVariant('default');
     onStateChange?.('default');
     setIsOpen(false);
   };
@@ -61,13 +61,14 @@ const PromoCode: FC<PromoCodeProps> = ({
       case 'error':
         return `${baseClasses} bg-colour-surface-container dark:bg-colour-surface-container-dark border-colour-error dark:border-colour-error-dark`;
       case 'success-skip-id':
+      case 'success-skip-id-and-payment':
       case 'success-skip-payment':
         return `${baseClasses} bg-colour-success-bright dark:bg-colour-success-bright-dark border-colour-success dark:border-colour-success-dark`;
     }
   };
 
   return (
-    <div className={`${getOuterDivClasses(currentVariant)} ${className}`}>
+    <div className={`${getOuterDivClasses(variant)} ${className}`}>
       {!isInSuccessState && (
         <PromoCodeEntry
           name={name}
@@ -82,7 +83,7 @@ const PromoCode: FC<PromoCodeProps> = ({
           infoMessage={infoMessage}
           icon={icon}
           isOpen={isOpen}
-          currentVariant={currentVariant}
+          currentVariant={variant}
           onToggle={togglePromoCodeTextEntryVisability}
         />
       )}

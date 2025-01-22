@@ -5,7 +5,8 @@ export type PromoCodeVariant =
   | 'open'
   | 'error'
   | 'success-skip-id'
-  | 'success-skip-payment';
+  | 'success-skip-payment'
+  | 'success-skip-id-and-payment';
 
 export interface PromoCodeProps {
   name?: string;

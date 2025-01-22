@@ -8,9 +8,9 @@ import { useOnOrganisationChanged } from '@/root/src/member-eligibility/shared/s
 import { useEmployers } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/hooks/use-employers/UseEmployers';
 import { useEmployerChanged } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/hooks/UseEmployerChanged';
 import { useOnPromoCodeChange } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/hooks/UseOnPromoCodeChange';
-import { useOnPromoCodeApplied } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/hooks/UseOnPromoCodeApplied';
 import { useJobReferenceField } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/hooks/UseJobReferenceField';
 import { useJobTitleField } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/shared/hooks/UseJobTitleField';
+import { useOnPromoCodeApplied } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/hooks/use-on-promocode-applied/UseOnPromoCodeApplied';
 
 interface NormalJobDetailsProps {
   eligibilityDetailsState: EligibilityDetailsState;

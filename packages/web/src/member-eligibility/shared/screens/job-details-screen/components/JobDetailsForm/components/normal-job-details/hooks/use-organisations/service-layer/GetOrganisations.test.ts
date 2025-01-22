@@ -1,9 +1,11 @@
 import * as target from './GetOrganisations';
 import { buildTestServiceLayerOrganisation } from '@/root/src/member-eligibility/shared/types/testing/BuildTestServiceLayerOrganisation';
-
+import { fetchWithAuth } from '@/root/src/member-eligibility/shared/utils/FetchWithAuth';
 window.fetch = jest.fn();
 
-const fetchMock = jest.mocked(window.fetch);
+jest.mock('@/root/src/member-eligibility/shared/utils/FetchWithAuth', () => ({
+  fetchWithAuth: jest.fn(),
+}));
 
 const serviceLayerOrganisation = [
   buildTestServiceLayerOrganisation({
@@ -14,30 +16,27 @@ const serviceLayerOrganisation = [
 
 describe('given service layer responses successfully', () => {
   beforeEach(() => {
-    fetchMock.mockResolvedValue({
-      text: () => {
-        return Promise.resolve(JSON.stringify(serviceLayerOrganisation));
-      },
-    } as Response);
+    (fetchWithAuth as jest.Mock).mockResolvedValue(serviceLayerOrganisation);
   });
 
   it('should parse and return the payload successfully', async () => {
     const result = await target.getOrganisations();
 
-    expect(fetchMock).toHaveBeenCalledWith('https://staging-members-api.blcshine.io/orgs');
+    expect(fetchWithAuth).toHaveBeenCalledWith(expect.stringContaining('/orgs'));
+
     expect(result).toEqual(serviceLayerOrganisation);
   });
 });
 
 describe('given service layer fails to respond', () => {
   beforeEach(() => {
-    fetchMock.mockRejectedValue(new Error('Failed to fetch'));
+    (fetchWithAuth as jest.Mock).mockRejectedValue(new Error('Failed to fetch'));
   });
 
   it('should return undefined', async () => {
     const result = await target.getOrganisations();
 
-    expect(fetchMock).toHaveBeenCalledWith('https://staging-members-api.blcshine.io/orgs');
+    expect(fetchWithAuth).toHaveBeenCalledWith(expect.stringContaining('/orgs'));
     expect(result).toEqual(undefined);
   });
 });

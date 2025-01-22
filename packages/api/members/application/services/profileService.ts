@@ -1,14 +1,22 @@
-import { logger } from '../middleware';
-import { EmailChangeModel } from '../models/emailChangeModel';
-import { CreateNoteModel, NoteModel, UpdateNoteModel } from '../models/noteModel';
-import { PasswordChangeModel } from '../models/passwordChangeModel';
-import { CreateProfileModel, ProfileModel, UpdateProfileModel } from '../models/profileModel';
-import { ProfileRepository } from '../repositories/profileRepository';
-import { Auth0ClientService } from '../auth0/auth0ClientService';
-import { OrganisationService } from './organisationService';
+import { logger } from '@blc-mono/members/application/middleware';
+import { EmailChangeModel } from '@blc-mono/members/application/models/emailChangeModel';
+import {
+  CreateNoteModel,
+  NoteModel,
+  UpdateNoteModel,
+} from '@blc-mono/members/application/models/noteModel';
+import { PasswordChangeModel } from '@blc-mono/members/application/models/passwordChangeModel';
+import {
+  CreateProfileModel,
+  ProfileModel,
+  UpdateProfileModel,
+} from '@blc-mono/members/application/models/profileModel';
+import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
+import { Auth0ClientService } from '@blc-mono/members/application/auth0/auth0ClientService';
+import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { NoteSource } from '../models/enums/NoteSource';
-import { EmailService } from '../email/emailService';
+import { NoteSource } from '@blc-mono/members/application/models/enums/NoteSource';
+import { EmailService } from '@blc-mono/members/application/email/emailService';
 
 export class ProfileService {
   constructor(

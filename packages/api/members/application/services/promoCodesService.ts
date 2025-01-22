@@ -1,9 +1,12 @@
-import { PromoCodesRepository } from '../repositories/promoCodesRepository';
-import { PromoCodeModel, PromoCodeResponseModel } from '../models/promoCodeModel';
-import { PromoCodeType } from '../models/enums/PromoCodeType';
-import { ProfileService } from './profileService';
+import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
+import {
+  PromoCodeModel,
+  PromoCodeResponseModel,
+} from '@blc-mono/members/application/models/promoCodeModel';
+import { PromoCodeType } from '@blc-mono/members/application/models/enums/PromoCodeType';
+import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { logger } from '../middleware';
-import { ValidationError } from '../errors/ValidationError';
+import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { ApplyPromoCodeApplicationModel } from '@blc-mono/members/application/models/applicationModel';
 import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
 import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
@@ -13,55 +16,6 @@ export class PromoCodesService {
     private repository: PromoCodesRepository = new PromoCodesRepository(),
     private profileService: ProfileService = new ProfileService(),
   ) {}
-
-  async validatePromoCode(memberId: string, promoCode: string): Promise<PromoCodeResponseModel> {
-    logger.debug({ message: 'Validating promo code', promoCode });
-    const codeDetails = await this.getMultiUseOrSingleUseChildPromoCode(promoCode);
-
-    if (!codeDetails) {
-      throw new ValidationError('Promo code does not exist');
-    }
-
-    let parentCodeDetails: PromoCodeModel | undefined = codeDetails;
-    if (codeDetails.promoCodeType === PromoCodeType.SINGLE_USE) {
-      if (codeDetails.used === false) {
-        parentCodeDetails = await this.getParentCode(codeDetails);
-      } else {
-        throw new ValidationError('Promo code has already been used');
-      }
-    }
-
-    if (
-      parentCodeDetails &&
-      parentCodeDetails.active !== undefined &&
-      parentCodeDetails.validityStartDate &&
-      parentCodeDetails.validityEndDate &&
-      parentCodeDetails.currentUsages &&
-      parentCodeDetails.maxUsages
-    ) {
-      const currentDate = new Date();
-      const validityStartDate = new Date(parentCodeDetails.validityStartDate);
-      const validityEndDate = new Date(parentCodeDetails.validityEndDate);
-      validityEndDate.setHours(23, 59, 59, 999);
-
-      if (
-        parentCodeDetails.active &&
-        currentDate >= validityStartDate &&
-        currentDate <= validityEndDate &&
-        parentCodeDetails.currentUsages < parentCodeDetails.maxUsages
-      ) {
-        if (parentCodeDetails.codeProvider) {
-          return await this.checkCodeProvider(memberId, parentCodeDetails);
-        } else {
-          return this.generatePromoCodeResponse(parentCodeDetails);
-        }
-      } else {
-        throw new ValidationError('Promo code is invalid');
-      }
-    } else {
-      throw new ValidationError('Promo code is invalid');
-    }
-  }
 
   async applyPromoCode(
     memberId: string,
@@ -146,18 +100,44 @@ export class PromoCodesService {
     }
   }
 
-  private async getMultiUseOrSingleUseChildPromoCode(
-    promoCode: string,
-  ): Promise<PromoCodeModel | undefined> {
-    try {
-      const codeResult = await this.repository.getMultiUseOrSingleUseChildPromoCode(promoCode);
-      return codeResult?.[0];
-    } catch (error) {
-      logger.error({
-        message: 'Error fetching multi use parent promo code or single use child promo code',
-        error,
-      });
+  async validatePromoCode(memberId: string, promoCode: string): Promise<PromoCodeResponseModel> {
+    logger.debug({ message: 'Validating promo code', promoCode });
+    const promoCodeDetails = await this.getPromoCodeIfConsumable(promoCode);
+    if (!this.isWellFormedPromoCode(promoCodeDetails)) {
+      throw new ValidationError('Promo code is malformed on the database, so cannot process it');
     }
+    if (!this.isValidPromoCode(promoCodeDetails)) {
+      throw new ValidationError('Promo code has expired');
+    }
+
+    if (promoCodeDetails.codeProvider) {
+      return await this.checkCodeProvider(memberId, promoCodeDetails);
+    } else {
+      return this.generatePromoCodeResponse(promoCodeDetails);
+    }
+  }
+
+  private async getPromoCodeIfConsumable(promoCode: string): Promise<PromoCodeModel> {
+    const promoCodeDetails = await this.getMultiUseOrSingleUseChildPromoCode(promoCode);
+    if (!promoCodeDetails) {
+      throw new ValidationError(`Promo code does not exist '${promoCode}'`);
+    }
+    if (promoCodeDetails.promoCodeType !== PromoCodeType.SINGLE_USE) {
+      return promoCodeDetails;
+    }
+
+    if (promoCodeDetails.used) {
+      throw new ValidationError(`Promo code has already been used '${promoCode}'`);
+    }
+
+    const parentCodeDetails = await this.getParentCode(promoCodeDetails);
+    if (!parentCodeDetails) {
+      throw new ValidationError(
+        `Single use promo code '${promoCode}' does not have a parent promo code`,
+      );
+    }
+
+    return parentCodeDetails;
   }
 
   private async getParentCode(
@@ -185,6 +165,33 @@ export class PromoCodesService {
     }
   }
 
+  private isWellFormedPromoCode(
+    promoCode: PromoCodeModel | undefined,
+  ): promoCode is Required<PromoCodeModel> {
+    return (
+      promoCode !== undefined &&
+      promoCode.active !== undefined &&
+      promoCode.validityStartDate !== undefined &&
+      promoCode.validityEndDate !== undefined &&
+      promoCode.currentUsages !== undefined &&
+      promoCode.maxUsages !== undefined
+    );
+  }
+
+  private isValidPromoCode(promoCodeDetails: Required<PromoCodeModel>): boolean {
+    const currentDate = new Date();
+    const validityStartDate = new Date(promoCodeDetails.validityStartDate);
+    const validityEndDate = new Date(promoCodeDetails.validityEndDate);
+    validityEndDate.setHours(23, 59, 59, 999);
+
+    return (
+      promoCodeDetails.active &&
+      currentDate >= validityStartDate &&
+      currentDate <= validityEndDate &&
+      promoCodeDetails.currentUsages < promoCodeDetails.maxUsages
+    );
+  }
+
   private async checkCodeProvider(
     memberId: string,
     parentCodeDetails: PromoCodeModel,
@@ -198,12 +205,24 @@ export class PromoCodesService {
     throw new ValidationError('Promo code is not applicable for this employer');
   }
 
-  private generatePromoCodeResponse = (
-    parentCodeDetails: PromoCodeModel,
-  ): PromoCodeResponseModel => {
+  private generatePromoCodeResponse(parentCodeDetails: PromoCodeModel): PromoCodeResponseModel {
     return {
       bypassPayment: parentCodeDetails.bypassPayment,
       bypassVerification: parentCodeDetails.bypassVerification,
     };
-  };
+  }
+
+  private async getMultiUseOrSingleUseChildPromoCode(
+    promoCode: string,
+  ): Promise<PromoCodeModel | undefined> {
+    try {
+      const codeResult = await this.repository.getMultiUseOrSingleUseChildPromoCode(promoCode);
+      return codeResult?.[0];
+    } catch (error) {
+      logger.error({
+        message: 'Error fetching multi use parent promo code or single use child promo code',
+        error,
+      });
+    }
+  }
 }

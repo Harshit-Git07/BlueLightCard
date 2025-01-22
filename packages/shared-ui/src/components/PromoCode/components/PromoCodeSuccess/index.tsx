@@ -16,8 +16,10 @@ const PromoCodeSuccess: React.FC<PromoCodeSuccessProps> = ({ value, variant, onR
     switch (variant) {
       case 'success-skip-id':
         return 'ID Upload Skipped!';
-      case 'success-skip-payment':
+      case 'success-skip-id-and-payment':
         return 'ID Upload & Payment Skipped!';
+      case 'success-skip-payment':
+        return 'Payment Skipped!';
       default:
         return '';
     }

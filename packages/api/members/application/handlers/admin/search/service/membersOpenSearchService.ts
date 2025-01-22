@@ -35,7 +35,9 @@ export class MembersOpenSearchService extends OpenSearchService {
       index: indexName,
     });
     logger.debug({
-      message: `Response from upserting documents to index ${indexName} was ${response.statusCode} - ${JSON.stringify(response.body)}`,
+      message: `Response from upserting documents to index ${indexName} was ${
+        response.statusCode
+      } - ${JSON.stringify(response.body)}`,
     });
   }
 

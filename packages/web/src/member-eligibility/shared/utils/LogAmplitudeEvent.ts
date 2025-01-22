@@ -10,7 +10,6 @@ export function useLogAmplitudeEvent(): Callback {
   return useCallback(
     (amplitudeEvent) => {
       platformAdapter.logAnalyticsEvent(amplitudeEvent.event, amplitudeEvent.params);
-      console.log('Sends Events to Amplitude', amplitudeEvent);
     },
     [platformAdapter]
   );

@@ -6,6 +6,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/e2e/'],
+  testMatch: ['**/*.test.ts', '**/*.spec.ts'],
   workerIdleMemoryLimit: '1024MB',
   globals: {
     'ts-jest': {

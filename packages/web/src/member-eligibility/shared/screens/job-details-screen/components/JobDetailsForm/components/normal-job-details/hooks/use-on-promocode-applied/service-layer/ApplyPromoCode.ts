@@ -1,17 +1,24 @@
+import { serviceLayerUrl } from '@/root/src/member-eligibility/constants/ServiceLayerUrl';
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
-import { serviceLayerUrl } from '@/root/src/member-eligibility/constants/ServiceLayerUrl';
 import { fetchWithAuth } from '@/root/src/member-eligibility/shared/utils/FetchWithAuth';
 
+type Response = components['schemas']['PromoCodeResponseModel'];
 type Request = components['schemas']['UpdateApplicationModel'];
 
-export async function updateServiceLayerApplication(
-  applicationId: string,
+export async function applyPromoCode(
   eligibilityDetails: EligibilityDetails
-): Promise<string | undefined> {
+): Promise<Response | undefined> {
   try {
-    if (!eligibilityDetails.member?.id) {
-      console.error('No member id available so cannot update application');
+    const memberId = eligibilityDetails.member?.id;
+    if (!memberId) {
+      console.error('No member id available so cannot validate the promo code');
+      return undefined;
+    }
+
+    const applicationId = eligibilityDetails.member?.application?.id;
+    if (!applicationId) {
+      console.error('No application id available so cannot validate the promo code');
       return undefined;
     }
 
@@ -19,23 +26,18 @@ export async function updateServiceLayerApplication(
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       promoCode: eligibilityDetails.promoCode, // TODO: This is defined as an object in OpenAPI spec, but is actually a string
-      verificationMethod: undefined, // TODO: This is defined as a string in the OpenAPI spec
-      address1: eligibilityDetails.address?.line1,
-      address2: eligibilityDetails.address?.line2,
-      city: eligibilityDetails.address?.city,
-      postcode: eligibilityDetails.address?.postcode,
-      trustedDomainEmail: eligibilityDetails.emailVerification,
+      promoCodeApplied: true,
     };
 
     return await fetchWithAuth(
-      `${serviceLayerUrl}/members/${eligibilityDetails.member.id}/applications/${applicationId}`,
+      `${serviceLayerUrl}/members/${memberId}/applications/${applicationId}/code/apply`,
       {
         method: 'PUT',
         body: JSON.stringify(request),
       }
     );
   } catch (error) {
-    console.error('Failed to create member application', error);
+    console.error('Failed to validate promo code', error);
     return undefined;
   }
 }

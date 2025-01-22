@@ -29,8 +29,8 @@ export function toEligibilityOrganisation(
   return {
     id: serviceLayerOrganisation.organisationId,
     label: serviceLayerOrganisation.name,
-    requiresJobTitle: true, // TODO: This still needs to be added to service layer, defaulting to true for now so behaviour is the same as before
-    requiresJobReference: false, // TODO: This still needs to be added to service layer
+    requiresJobTitle: true, // Orgs on their own will always show job title
+    requiresJobReference: false, // Orgs on their own will not show the job reference
     promoCodeEffect: getPromoCodeEffect(serviceLayerOrganisation),
     idRequirements: idRequirements.length > 0 ? idRequirements : [],
   };

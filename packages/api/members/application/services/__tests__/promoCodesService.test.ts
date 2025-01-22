@@ -1,16 +1,16 @@
-import { PromoCodesService } from '../promoCodesService';
-import { PromoCodesRepository } from '../../repositories/promoCodesRepository';
-import { ProfileService } from '../../services/profileService';
-import { ValidationError } from '../../errors/ValidationError';
-import { PromoCodeType } from '../../models/enums/PromoCodeType';
-import { PromoCodeModel } from '../../models/promoCodeModel';
+import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
+import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
+import { ProfileService } from '@blc-mono/members/application/services/profileService';
+import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
+import { PromoCodeType } from '@blc-mono/members/application/models/enums/PromoCodeType';
+import { PromoCodeModel } from '@blc-mono/members/application/models/promoCodeModel';
 import { v4 as uuidv4 } from 'uuid';
-import { ProfileModel } from '../../models/profileModel';
+import { ProfileModel } from '@blc-mono/members/application/models/profileModel';
 import { EligibilityStatus } from '@blc-mono/members/application/models/enums/EligibilityStatus';
 import { PaymentStatus } from '@blc-mono/members/application/models/enums/PaymentStatus';
 
-jest.mock('../../repositories/promoCodesRepository');
-jest.mock('../../services/profileService');
+jest.mock('@blc-mono/members/application/repositories/promoCodesRepository');
+jest.mock('@blc-mono/members/application/services/profileService');
 
 interface PromoCodeConditions {
   active: boolean;
@@ -57,7 +57,7 @@ describe('PromoCodeService', () => {
       promoCodesRepositoryMock.getMultiUseOrSingleUseChildPromoCode.mockResolvedValue(null);
 
       await expect(service.validatePromoCode(memberId, promoCode)).rejects.toThrow(
-        new ValidationError('Promo code does not exist'),
+        new ValidationError(`Promo code does not exist '${promoCode}'`),
       );
     });
 
@@ -68,7 +68,7 @@ describe('PromoCodeService', () => {
       ]);
 
       await expect(service.validatePromoCode(memberId, promoCode)).rejects.toThrow(
-        new ValidationError('Promo code has already been used'),
+        new ValidationError(`Promo code has already been used '${promoCode}'`),
       );
     });
 
@@ -98,7 +98,7 @@ describe('PromoCodeService', () => {
       ]);
 
       await expect(service.validatePromoCode(memberId, promoCode)).rejects.toThrow(
-        new ValidationError('Promo code is invalid'),
+        new ValidationError('Promo code has expired'),
       );
     });
 

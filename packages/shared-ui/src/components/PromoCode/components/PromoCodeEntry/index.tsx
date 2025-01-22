@@ -104,7 +104,9 @@ const PromoCodeEntry: React.FC<PromoCodeEntryProps> = ({
                 className="h-[50px] transition-colors duration-200"
                 type="submit"
                 disabled={value === ''}
-                onClick={() => onApply(value)}
+                onClick={() => {
+                  onApply(value);
+                }}
               >
                 Apply
               </Button>

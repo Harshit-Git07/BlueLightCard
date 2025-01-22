@@ -10,8 +10,8 @@ export function toEligibilityEmployer(
   return {
     id: serviceLayerEmployer.employerId,
     label: serviceLayerEmployer.name,
-    requiresJobTitle: true, // TODO: This still needs to be added to service layer, defaulting to true for now so behaviour is the same as before
-    requiresJobReference: false, // TODO: This still needs to be added to service layer
+    requiresJobTitle: serviceLayerEmployer.isJobTitleMandatory,
+    requiresJobReference: serviceLayerEmployer.isJobReferenceMandatory,
     promoCodeEffect: getPromoCodeEffect(serviceLayerEmployer),
   };
 }

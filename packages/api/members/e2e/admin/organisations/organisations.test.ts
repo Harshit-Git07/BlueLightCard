@@ -11,12 +11,12 @@ describe('GET /categories', () => {
     bearerToken = await getTestUserBearerToken();
   });
 
-  it('should return 200 when invalid token is provided', async () => {
+  it('should return 200 when valid token is provided', async () => {
     const result = await whenGetOrganisationsIsCalledWith({
       Authorization: `Bearer ${bearerToken}`,
     });
 
-    expect(result.status).toBe(401);
+    expect(result.status).toBe(200);
   });
 
   it('should return 401 when invalid token is provided', async () => {

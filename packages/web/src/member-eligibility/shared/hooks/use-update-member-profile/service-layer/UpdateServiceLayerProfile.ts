@@ -2,6 +2,7 @@ import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/u
 import { isAusAddress } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/utils/IsAusAddress';
 import { components } from '@bluelightcard/shared-ui/generated/MembersApi';
 import { serviceLayerUrl } from '@/root/src/member-eligibility/constants/ServiceLayerUrl';
+import { fetchWithAuth } from '@/root/src/member-eligibility/shared/utils/FetchWithAuth';
 
 type Request = Omit<
   components['schemas']['UpdateProfileModel'],
@@ -29,18 +30,13 @@ export async function updateServiceLayerProfile(
       jobTitle: eligibilityDetails.jobTitle,
       jobReference: eligibilityDetails.jobReference,
     };
-    const result = await fetch(
+    return await fetchWithAuth(
       `${serviceLayerUrl}/members/${eligibilityDetails.member.id}/profile`,
       {
         method: 'PUT',
         body: JSON.stringify(request),
       }
     );
-
-    if (!result.ok) {
-      console.error('Failed to update member application for unknown reason', result.body);
-      return undefined;
-    }
   } catch (error) {
     console.error('Failed to create member application', error);
     return undefined;

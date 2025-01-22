@@ -386,13 +386,12 @@ function createRestApi(
     },
   });
 
-  const apiKey = api.cdk.restApi.addApiKey('members-api-key');
+  const apiKey = api.cdk.restApi.addApiKey('members-api-key', {
+    apiKeyName: getAPIKeyName(stack.stage, name),
+  });
 
   const usagePlan = api.cdk.restApi.addUsagePlan('members-api-usage-plan', {
-    throttle: {
-      rateLimit: 1,
-      burstLimit: 2,
-    },
+    name: getAPIUsagePlanName(stack.stage, name),
     apiStages: [
       {
         api: api.cdk.restApi,
@@ -542,6 +541,12 @@ const getDomainName = (stage: string, region: string, name: string) => {
     ? getAustraliaDomainName(stage, name)
     : getUKDomainName(stage, name);
 };
+
+const getAPIKeyName = (stage: string, name: string) =>
+  isProduction(stage) ? `${name}-key` : `${stage}-${name}-key`;
+
+const getAPIUsagePlanName = (stage: string, name: string) =>
+  isProduction(stage) ? `${name}-usage-plan` : `${stage}-${name}-usage-plan`;
 
 const getAustraliaDomainName = (stage: string, name: string) =>
   isProduction(stage) ? `${name}-au.blcshine.io` : `${stage}-${name}-au.blcshine.io`;

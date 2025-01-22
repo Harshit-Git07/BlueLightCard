@@ -27,6 +27,7 @@ export function memberProfileRoutes(
       requestModelType: CreateProfileModel,
       responseModelType: CreateProfileModelResponse,
       authorizer: 'none',
+      apiKeyRequired: true,
     }),
     'PUT /members/{memberId}/profile': Route.createRoute({
       ...defaultRouteProps,

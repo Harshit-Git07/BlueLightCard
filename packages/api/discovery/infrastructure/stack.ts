@@ -135,7 +135,7 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       functionName: 'GetCategoryHandler',
       handler: 'packages/api/discovery/application/handlers/categories/getCategory.handler',
       requestValidatorName: 'GetCategoryValidator',
-      permissions: ['es'],
+      permissions: ['es', 'dynamodb:Query'],
       environment: {
         OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomain,
         STAGE: stack.stage,
@@ -147,7 +147,7 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       functionName: 'GetCompaniesHandler',
       handler: 'packages/api/discovery/application/handlers/companies/getCompanies.handler',
       requestValidatorName: 'GetCompaniesValidator',
-      permissions: ['es'],
+      permissions: ['es', 'dynamodb:Query'],
       environment: {
         OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomain,
         STAGE: stack.stage,

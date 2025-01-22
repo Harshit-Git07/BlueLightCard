@@ -3,7 +3,6 @@ import 'dd-trace/init';
 import { APIGatewayEvent } from 'aws-lambda';
 import { APIGatewayProxyEventQueryStringParameters } from 'aws-lambda/trigger/api-gateway-proxy';
 import { datadog } from 'datadog-lambda-js';
-import { z } from 'zod';
 
 import { HttpStatusCode } from '@blc-mono/core/types/http-status-code.enum';
 import { LambdaLogger } from '@blc-mono/core/utils/logger/lambdaLogger';
@@ -14,16 +13,12 @@ import {
   DiscoverySearchContext,
 } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
 
+import { extractHeaders } from '../../utils/extractHeaders';
 import { getUserDetails } from '../../utils/getUserDetails';
 
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT || 'false';
 
 const logger = new LambdaLogger({ serviceName: 'search-get' });
-
-const headersSchema = z.object({
-  Authorization: z.string(),
-  ['x-client-type']: z.enum(['web', 'mobile']),
-});
 
 const openSearchService = new DiscoveryOpenSearchService();
 
@@ -43,7 +38,7 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
 
     if (!userProfile?.organisation) {
       logger.error({ message: 'User profile missing organisation, returning empty offers' });
-      return Response.OK({ message: 'No organisaton assigned on user, defaulting to no offers', data: [] });
+      return Response.OK({ message: 'No organisation assigned on user, defaulting to no offers', data: [] });
     }
 
     const { dob, organisation } = userProfile;
@@ -84,15 +79,7 @@ const getQueryParams = (event: APIGatewayEvent) => {
   const queryParams = event.queryStringParameters as APIGatewayProxyEventQueryStringParameters;
   const searchTerm = queryParams?.query;
 
-  const headerValidation = headersSchema.safeParse(event.headers);
-  if (!headerValidation.success) {
-    throw new Error(
-      `Invalid headers: ${headerValidation.error.issues.map((issue) => issue.path + ' - ' + issue.message).join(', ')}`,
-    );
-  }
-
-  const authToken = headerValidation.data.Authorization;
-  const platform = headerValidation.data['x-client-type'];
+  const { authToken, platform } = extractHeaders(event.headers);
 
   return { searchTerm, authToken, platform };
 };

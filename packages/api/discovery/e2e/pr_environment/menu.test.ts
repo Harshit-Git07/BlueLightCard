@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
 import { Event as SanityEvent, MenuOffer as SanityMenuOffer, Offer as SanityOffer } from '@bluelightcard/sanity-types';
-import { subDays, subYears } from 'date-fns';
+import { subDays } from 'date-fns';
 import { ApiGatewayV1Api } from 'sst/node/api';
 
 import { FlexibleMenuResponse } from '@blc-mono/discovery/application/models/FlexibleMenuResponse';
@@ -36,6 +36,7 @@ const whenMenuIsCalledWith = async (params: Record<string, string>, headers: Rec
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'x-client-type': 'web',
       ...headers,
     },
   });
@@ -55,6 +56,7 @@ const whenFlexibleMenuIsCalledWith = async (
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'x-client-type': 'web',
       ...headers,
     },
   });
@@ -228,8 +230,6 @@ describe('Menu', async () => {
       const response = await whenMenuIsCalledWith(
         {
           id: 'marketplace',
-          dob: '1990-01-01',
-          organisation: 'DEN',
         },
         { Authorization: `Bearer ${testUserTokens.idToken}` },
       );
@@ -255,8 +255,6 @@ describe('Menu', async () => {
       const response = await whenMenuIsCalledWith(
         {
           id: 'marketplace',
-          dob: '1990-01-01',
-          organisation: 'DEN',
         },
         { Authorization: `Bearer ${testUserTokens.idToken}` },
       );
@@ -274,60 +272,8 @@ describe('Menu', async () => {
       expect(expiredRestrictedOffer).toBeUndefined();
     });
 
-    it('should filter out age gated offers from the menu response', async () => {
-      const response = await whenMenuIsCalledWith(
-        {
-          id: 'marketplace',
-          dob: subYears(new Date(), 20).toString(),
-          organisation: 'DEN',
-        },
-        { Authorization: `Bearer ${testUserTokens.idToken}` },
-      );
-
-      const result = (await response.json()) as { data: MenuResponse };
-
-      const expectedMarketplaceMenu = result.data.marketplace?.find(
-        (menu) => menu.id === marketplaceSanityMenuOffer._id,
-      );
-      const ageRestrictedOffer = expectedMarketplaceMenu?.offers.find(
-        (offer) => offer.offerID === ageRestrictedOfferUUID,
-      );
-
-      expect(expectedMarketplaceMenu?.offers.length).toEqual(2);
-      expect(ageRestrictedOffer).toBeUndefined();
-    });
-
-    it('should filter out trust restricted offers from the menu response', async () => {
-      const response = await whenMenuIsCalledWith(
-        {
-          id: 'marketplace',
-          dob: '1990-01-01',
-          organisation: 'POLICE',
-        },
-        { Authorization: `Bearer ${testUserTokens.idToken}` },
-      );
-
-      const result = (await response.json()) as { data: MenuResponse };
-
-      const expectedMarketplaceMenu = result.data.marketplace?.find(
-        (menu) => menu.id === marketplaceSanityMenuOffer._id,
-      );
-      const trustRestrictedOffer = expectedMarketplaceMenu?.offers.find(
-        (offer) => offer.offerID === trustRestrictedOfferUUID,
-      );
-
-      expect(expectedMarketplaceMenu?.offers.length).toEqual(2);
-      expect(trustRestrictedOffer).toBeUndefined();
-    });
-
     it('should consume menu and offer events and return all menus in the response', async () => {
-      const response = await whenMenuIsCalledWith(
-        {
-          dob: '1990-01-01',
-          organisation: 'DEN',
-        },
-        { Authorization: `Bearer ${testUserTokens.idToken}` },
-      );
+      const response = await whenMenuIsCalledWith({}, { Authorization: `Bearer ${testUserTokens.idToken}` });
       const result = (await response.json()) as { data: MenuResponse };
 
       expect(result.data).toEqual({
@@ -390,10 +336,7 @@ describe('Menu', async () => {
     it('should return flexible menu data containing offers correctly', async () => {
       const response = await whenFlexibleMenuIsCalledWith(
         flexibleGeneratedSubMenuUUID,
-        {
-          dob: '1990-01-01',
-          organisation: 'DEN',
-        },
+        {},
         {
           Authorization: `Bearer ${testUserTokens.idToken}`,
         },
@@ -415,10 +358,7 @@ describe('Menu', async () => {
     it('should return flexible menu data containing events correctly', async () => {
       const response = await whenFlexibleMenuIsCalledWith(
         flexibleGeneratedEventSubMenuUUID,
-        {
-          dob: '1990-01-01',
-          organisation: 'DEN',
-        },
+        {},
         {
           Authorization: `Bearer ${testUserTokens.idToken}`,
         },
@@ -447,10 +387,7 @@ describe('Menu', async () => {
     it('should return flexible menu data filtering out expired events', async () => {
       const response = await whenFlexibleMenuIsCalledWith(
         flexibleGeneratedEventSubMenuUUID,
-        {
-          dob: '1990-01-01',
-          organisation: 'DEN',
-        },
+        {},
         {
           Authorization: `Bearer ${testUserTokens.idToken}`,
         },
@@ -465,10 +402,7 @@ describe('Menu', async () => {
     it('should return flexible menu data filtering out excluded events', async () => {
       const response = await whenFlexibleMenuIsCalledWith(
         flexibleGeneratedEventSubMenuUUID,
-        {
-          dob: '1990-01-01',
-          organisation: 'DEN',
-        },
+        {},
         {
           Authorization: `Bearer ${testUserTokens.idToken}`,
         },
@@ -483,10 +417,7 @@ describe('Menu', async () => {
     it('should return flexible menu data filtering out events with closed guestlists', async () => {
       const response = await whenFlexibleMenuIsCalledWith(
         flexibleGeneratedEventSubMenuUUID,
-        {
-          dob: '1990-01-01',
-          organisation: 'DEN',
-        },
+        {},
         {
           Authorization: `Bearer ${testUserTokens.idToken}`,
         },

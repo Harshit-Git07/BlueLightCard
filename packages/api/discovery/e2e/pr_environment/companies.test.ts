@@ -19,30 +19,14 @@ describe('GET /companies', async () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'x-client-type': 'web',
         ...headers,
       },
     });
   };
 
   it.each([
-    [
-      200,
-      'A valid request is sent',
-      { dob: '2001-01-01', organisation: 'blc', skipCache: 'true' },
-      { Authorization: `Bearer ${testUserTokens.idToken}` },
-    ],
-    [
-      400,
-      'No organisation param provided',
-      { dob: '2001-01-01', organisation: '', skipCache: 'true' },
-      { Authorization: `Bearer ${testUserTokens.idToken}` },
-    ],
-    [
-      400,
-      'No dob param provided',
-      { dob: '', organisation: 'blc', skipCache: 'true' },
-      { Authorization: `Bearer ${testUserTokens.idToken}` },
-    ],
+    [200, 'A valid request is sent', { skipCache: 'true' }, { Authorization: `Bearer ${testUserTokens.idToken}` }],
     [401, 'No authorization header is provided', {}, {}],
     [401, 'Invalid authorization header is provided', {}, { Authorization: `Bearer invalidToken` }],
   ])('should return with response code %s when %s', async (statusCode, _description, params, headers) => {

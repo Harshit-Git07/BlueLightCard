@@ -3,13 +3,30 @@ import { addMinutes } from 'date-fns';
 
 import * as getEnv from '@blc-mono/core/utils/getEnv';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
+import { JWT } from '@blc-mono/core/utils/unpackJWT';
+import * as JWTUtils from '@blc-mono/core/utils/unpackJWT';
 import { CompanySummary } from '@blc-mono/discovery/application/models/CompaniesResponse';
 import { DiscoveryOpenSearchService } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
+
+import * as UserDetails from '../../utils/getUserDetails';
+import { getUserInHandlersSharedTests } from '../getUserInHandlersTests';
 
 import { handler, resetCache } from './getCompanies';
 
 jest.mock('../../services/opensearch/DiscoveryOpenSearchService');
 jest.mock('@blc-mono/core/utils/getEnv');
+jest.mock('../../utils/getUserDetails');
+jest.mock('@blc-mono/core/utils/unpackJWT');
+
+const mockStandardToken: JWT = {
+  sub: '123456',
+  exp: 9999999999,
+  iss: 'https://example.com/',
+  iat: 999999999,
+  email: 'user@example.com',
+  'custom:blc_old_uuid': 'legacy-uuid',
+  'custom:blc_old_id': '1234',
+};
 
 describe('getCompanies Handler', () => {
   const companies: CompanySummary[] = [
@@ -28,13 +45,14 @@ describe('getCompanies Handler', () => {
     resetCache();
 
     jest.spyOn(getEnv, 'getEnv').mockImplementation(() => 'example-variable');
-
     jest.spyOn(DiscoveryOpenSearchService.prototype, 'queryAllCompanies').mockResolvedValue(companies);
     jest.spyOn(DiscoveryOpenSearchService.prototype, 'getLatestIndexName').mockResolvedValue('indexName');
+    jest.spyOn(JWTUtils, 'unpackJWT').mockImplementation(() => mockStandardToken);
+    jest.spyOn(UserDetails, 'getUserDetails').mockResolvedValue({ dob: '2001-01-01', organisation: 'DEN' });
   });
 
   it('should return a list of companies', async () => {
-    const result = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS');
+    const result = await givenGetCompaniesIsCalled();
 
     thenResponseShouldEqual(
       result,
@@ -49,11 +67,11 @@ describe('getCompanies Handler', () => {
   it('should use cache if cache data available and cache is valid', async () => {
     const timestamp = new Date();
     jest.spyOn(global.Date, 'now').mockImplementation(() => timestamp.getTime());
-    await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS');
+    await givenGetCompaniesIsCalled();
 
     expect(DiscoveryOpenSearchService.prototype.queryAllCompanies).toHaveBeenCalledTimes(1);
 
-    const cachedResult = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS');
+    const cachedResult = await givenGetCompaniesIsCalled();
     expect(DiscoveryOpenSearchService.prototype.queryAllCompanies).toHaveBeenCalledTimes(1);
     thenResponseShouldEqual(
       cachedResult,
@@ -66,7 +84,7 @@ describe('getCompanies Handler', () => {
   });
 
   it('should not use cache on first call', async () => {
-    const result = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS');
+    const result = await givenGetCompaniesIsCalled();
 
     expect(DiscoveryOpenSearchService.prototype.queryAllCompanies).toHaveBeenCalledTimes(1);
     thenResponseShouldEqual(
@@ -83,7 +101,7 @@ describe('getCompanies Handler', () => {
     const timestamp = new Date();
     jest.spyOn(global.Date, 'now').mockImplementation(() => addMinutes(timestamp, 6).getTime());
 
-    const newResult = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS');
+    const newResult = await givenGetCompaniesIsCalled();
 
     expect(DiscoveryOpenSearchService.prototype.queryAllCompanies).toHaveBeenCalled();
     thenResponseShouldEqual(
@@ -97,7 +115,7 @@ describe('getCompanies Handler', () => {
   });
 
   it('should not use cache if "skipCache" param is "true"', async () => {
-    const result = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS', 'true');
+    const result = await givenGetCompaniesIsCalled('true');
 
     expect(DiscoveryOpenSearchService.prototype.queryAllCompanies).toHaveBeenCalled();
     thenResponseShouldEqual(
@@ -113,7 +131,7 @@ describe('getCompanies Handler', () => {
   it('should return empty list when no companies found', async () => {
     jest.spyOn(DiscoveryOpenSearchService.prototype, 'queryAllCompanies').mockResolvedValue([]);
 
-    const result = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS');
+    const result = await givenGetCompaniesIsCalled();
 
     thenResponseShouldEqual(
       result,
@@ -125,49 +143,38 @@ describe('getCompanies Handler', () => {
     );
   });
 
-  it('should return a 400 if organisation is missing', async () => {
-    const expectedResponse = Response.BadRequest({
-      message: 'Missing data on request - organisation: , dob: 1990-01-01',
-    });
-
-    const result = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', '');
-
-    thenResponseShouldEqual(result, expectedResponse.body, 400);
-  });
-
-  it('should return a 400 if dob is missing', async () => {
-    const expectedResponse = Response.BadRequest({
-      message: 'Missing data on request - organisation: NHS, dob: ',
-    });
-
-    const result = await givenGetCompaniesCalledWithDobAndOrganisation('', 'NHS');
-
-    thenResponseShouldEqual(result, expectedResponse.body, 400);
-  });
-
   it('should return a 500 if OpenSearch query fails', async () => {
     jest
       .spyOn(DiscoveryOpenSearchService.prototype, 'queryAllCompanies')
       .mockRejectedValue(new Error('Error querying OpenSearch'));
     const expectedResponse = Response.Error(new Error('Error querying OpenSearch'));
 
-    const result = await givenGetCompaniesCalledWithDobAndOrganisation('1990-01-01', 'NHS');
+    const result = await givenGetCompaniesIsCalled();
 
     thenResponseShouldEqual(result, expectedResponse.body, 500);
   });
 
-  const givenGetCompaniesCalledWithDobAndOrganisation = async (
-    dob?: string,
-    organisation?: string,
-    skipCache?: string,
-  ) => {
+  const userTestProps = {
+    handler,
+    event: {
+      queryStringParameters: {},
+    },
+    errorMessage: 'Error querying OpenSearch',
+    noOrganisation: {
+      responseMessage: 'No organisation assigned on user, defaulting to no offers',
+      data: [],
+    },
+  };
+
+  getUserInHandlersSharedTests(userTestProps);
+
+  const givenGetCompaniesIsCalled = async (skipCache?: string) => {
     const event: Partial<APIGatewayEvent> = {
       headers: {
         Authorization: 'idToken',
+        'x-client-type': 'web',
       },
       queryStringParameters: {
-        dob,
-        organisation,
         skipCache,
       },
     };

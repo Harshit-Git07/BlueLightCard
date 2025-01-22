@@ -1,6 +1,8 @@
 import { APIGatewayEvent } from 'aws-lambda';
 
 import * as getEnv from '@blc-mono/core/utils/getEnv';
+import { JWT } from '@blc-mono/core/utils/unpackJWT';
+import * as JWTUtils from '@blc-mono/core/utils/unpackJWT';
 import { EventType, OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
 import { DiscoveryOpenSearchService } from '@blc-mono/discovery/application/services/opensearch/DiscoveryOpenSearchService';
@@ -8,9 +10,23 @@ import { SearchResult } from '@blc-mono/discovery/application/services/opensearc
 
 import { handler } from '../../../application/handlers/categories/getCategory';
 import { EventResponse } from '../../models/EventResponse';
+import * as UserDetails from '../../utils/getUserDetails';
+import { getUserInHandlersSharedTests } from '../getUserInHandlersTests';
 
 jest.mock('../../services/opensearch/DiscoveryOpenSearchService');
 jest.mock('@blc-mono/core/utils/getEnv');
+jest.mock('../../utils/getUserDetails');
+jest.mock('@blc-mono/core/utils/unpackJWT');
+
+const mockStandardToken: JWT = {
+  sub: '123456',
+  exp: 9999999999,
+  iss: 'https://example.com/',
+  iat: 999999999,
+  email: 'user@example.com',
+  'custom:blc_old_uuid': 'legacy-uuid',
+  'custom:blc_old_id': '1234',
+};
 
 describe('getCategory Handler', () => {
   const expectedOffers = [buildDummyOffer(1)];
@@ -48,6 +64,8 @@ describe('getCategory Handler', () => {
 
   beforeEach(() => {
     jest.spyOn(getEnv, 'getEnv').mockImplementation(() => 'example-variable');
+    jest.spyOn(JWTUtils, 'unpackJWT').mockImplementation(() => mockStandardToken);
+    jest.spyOn(UserDetails, 'getUserDetails').mockResolvedValue({ dob: '2001-01-01', organisation: 'DEN' });
   });
 
   it('should return a list of offers for a category', async () => {
@@ -103,10 +121,27 @@ describe('getCategory Handler', () => {
     );
   });
 
+  const userInHandlerProps = {
+    handler,
+    event: {
+      pathParameters: {
+        id: '1',
+      },
+    },
+    errorMessage: 'Error querying offers by category',
+    noOrganisation: {
+      responseMessage: 'No organisation assigned on user, defaulting to no offers',
+      data: [],
+    },
+  };
+
+  getUserInHandlersSharedTests(userInHandlerProps);
+
   const givenGetCategoryCalledWithCategory = async (categoryId: string) => {
     const event: Partial<APIGatewayEvent> = {
       headers: {
         Authorization: 'idToken',
+        'x-client-type': 'web',
       },
       pathParameters: {
         id: categoryId,

@@ -24,6 +24,7 @@ describe('GET /categories', async () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'x-client-type': 'web',
         ...headers,
       },
     });
@@ -114,10 +115,6 @@ describe('GET /categories', async () => {
 
 describe('GET /categories/${id}', async () => {
   const testUserTokens = await TestUser.authenticate();
-  const queryParams = {
-    dob: '2001-01-01',
-    organisation: 'blc',
-  };
 
   it.each([
     [200, 'A valid request is sent', { Authorization: `Bearer ${testUserTokens.idToken}` }, '1'],
@@ -125,18 +122,13 @@ describe('GET /categories/${id}', async () => {
     [401, 'Invalid authorization header is provided', { Authorization: `Bearer invalidToken` }, '1'],
     [400, 'Invalid category ID is provided', { Authorization: `Bearer ${testUserTokens.idToken}` }, 'Invalid'],
   ])('should return with response code %s when %s', async (statusCode, _description, headers, categoryId) => {
-    const result = await whenCategoryIsCalledWith(queryParams, headers, categoryId);
+    const result = await whenCategoryIsCalledWith(headers, categoryId);
     expect(result.status).toBe(statusCode);
   });
 
   it('should return the expected category', async () => {
-    const result = await whenCategoryIsCalledWith(
-      queryParams,
-      { Authorization: `Bearer ${testUserTokens.idToken}` },
-      '1',
-    );
+    const result = await whenCategoryIsCalledWith({ Authorization: `Bearer ${testUserTokens.idToken}` }, '1');
     const resultBody = (await result.json()) as { data: CategoryResponse };
-
     expect(resultBody.data.id).toStrictEqual('1');
     expect(resultBody.data.name).toStrictEqual('Home');
   });
@@ -282,7 +274,7 @@ describe('Categories E2E Event Handling', async () => {
           _updatedAt: '2024-09-21T11:16:00Z',
           code: 'REGFOR',
           description: '',
-          name: 'blc',
+          name: 'DEN',
           trustId: 38,
         },
       ],
@@ -399,14 +391,7 @@ describe('Categories E2E Event Handling', async () => {
       companyName: companyName,
     };
 
-    const result = await whenCategoryIsCalledWith(
-      {
-        dob: '2001-01-01',
-        organisation: 'blc',
-      },
-      { Authorization: `Bearer ${testUserTokens.idToken}` },
-      '1',
-    );
+    const result = await whenCategoryIsCalledWith({ Authorization: `Bearer ${testUserTokens.idToken}` }, '1');
 
     const results = (await result.json()) as { data: { data: OfferResponse[] } };
 
@@ -427,14 +412,7 @@ describe('Categories E2E Event Handling', async () => {
       venueName: 'The O2 Arena',
     };
 
-    const result = await whenCategoryIsCalledWith(
-      {
-        dob: '2001-01-01',
-        organisation: 'blc',
-      },
-      { Authorization: `Bearer ${testUserTokens.idToken}` },
-      '19',
-    );
+    const result = await whenCategoryIsCalledWith({ Authorization: `Bearer ${testUserTokens.idToken}` }, '19');
 
     const results = (await result.json()) as { data: { data: EventResponse[] } };
 
@@ -456,17 +434,13 @@ describe('Categories E2E Event Handling', async () => {
   });
 });
 
-const whenCategoryIsCalledWith = async (
-  params: Record<string, string>,
-  headers: Record<string, string>,
-  categoryId: string,
-) => {
-  const urlParams = new URLSearchParams(params);
-  const categoriesEndpoint = `${ApiGatewayV1Api.discovery.url}categories/${categoryId}?${urlParams.toString()}`;
+const whenCategoryIsCalledWith = async (headers: Record<string, string>, categoryId: string) => {
+  const categoriesEndpoint = `${ApiGatewayV1Api.discovery.url}categories/${categoryId}`;
   return fetch(categoriesEndpoint, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'x-client-type': 'web',
       ...headers,
     },
   });

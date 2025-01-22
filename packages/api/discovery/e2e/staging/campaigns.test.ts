@@ -12,6 +12,7 @@ describe('GET /campaigns', async () => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'x-client-type': 'web',
         ...headers,
       },
     });

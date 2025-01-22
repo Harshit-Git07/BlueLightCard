@@ -1,6 +1,8 @@
 import { APIGatewayEvent } from 'aws-lambda';
 
 import { Response } from '@blc-mono/core/utils/restResponse/response';
+import * as JWTUtils from '@blc-mono/core/utils/unpackJWT';
+import { JWT } from '@blc-mono/core/utils/unpackJWT';
 import { isValidOffer } from '@blc-mono/discovery/application/utils/isValidOffer';
 
 import { menuFactory } from '../../factories/MenuFactory';
@@ -9,11 +11,26 @@ import { subMenuFactory } from '../../factories/SubMenuFactory';
 import { MenuType } from '../../models/MenuResponse';
 import { mapMenusAndOffersToMenuResponse } from '../../repositories/Menu/service/mapper/MenuMapper';
 import { getMenusByMenuType, getMenusByMenuTypes } from '../../repositories/Menu/service/MenuService';
+import * as UserDetails from '../../utils/getUserDetails';
+import { getUserInHandlersSharedTests } from '../getUserInHandlersTests';
 
 import { handler } from './getMenus';
 
+jest.mock('../../services/opensearch/DiscoveryOpenSearchService');
+jest.mock('@blc-mono/core/utils/getEnv');
+jest.mock('@blc-mono/core/utils/unpackJWT');
 jest.mock('../../repositories/Menu/service/MenuService');
 jest.mock('@blc-mono/discovery/application/utils/isValidOffer');
+
+const mockStandardToken: JWT = {
+  sub: '123456',
+  exp: 9999999999,
+  iss: 'https://example.com/',
+  iat: 999999999,
+  email: 'user@example.com',
+  'custom:blc_old_uuid': 'legacy-uuid',
+  'custom:blc_old_id': '1234',
+};
 
 const getMenusByMenuTypeMock = jest.mocked(getMenusByMenuType);
 const getMenusByMenuTypesMock = jest.mocked(getMenusByMenuTypes);
@@ -47,17 +64,18 @@ describe('getMenus handler', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     isValidOfferMock.mockReturnValue(true);
+    jest.spyOn(UserDetails, 'getUserDetails').mockResolvedValue({ dob: '2001-01-01', organisation: 'DEN' });
+
+    jest.spyOn(JWTUtils, 'unpackJWT').mockImplementation(() => mockStandardToken);
   });
   it('should call the getMenusByMenuTypes when no ids are provided', async () => {
     getMenusByMenuTypesMock.mockResolvedValue(mockGetMenusResponse);
 
     const event: Partial<APIGatewayEvent> = {
-      queryStringParameters: {
-        dob: 'dob',
-        organisation: 'organisation',
-      },
+      queryStringParameters: {},
       headers: {
         Authorization: 'idToken',
+        'x-client-type': 'web',
       },
     };
 
@@ -79,12 +97,10 @@ describe('getMenus handler', () => {
     });
 
     const event: Partial<APIGatewayEvent> = {
-      queryStringParameters: {
-        dob: 'dob',
-        organisation: 'organisation',
-      },
+      queryStringParameters: {},
       headers: {
         Authorization: 'idToken',
+        'x-client-type': 'web',
       },
     };
 
@@ -137,11 +153,10 @@ describe('getMenus handler', () => {
     const event: Partial<APIGatewayEvent> = {
       queryStringParameters: {
         id: 'dealsOfTheWeek,featured',
-        dob: 'dob',
-        organisation: 'organisation',
       },
       headers: {
         Authorization: 'idToken',
+        'x-client-type': 'web',
       },
     };
 
@@ -165,11 +180,10 @@ describe('getMenus handler', () => {
     const event: Partial<APIGatewayEvent> = {
       queryStringParameters: {
         id: 'dealsOfTheWeek',
-        dob: 'dob',
-        organisation: 'organisation',
       },
       headers: {
         Authorization: 'idToken',
+        'x-client-type': 'web',
       },
     };
 
@@ -183,59 +197,15 @@ describe('getMenus handler', () => {
     expect(result).toEqual(expectedResponse);
   });
 
-  it('should return a bad request response when no dob query parameter provided', async () => {
-    const event: Partial<APIGatewayEvent> = {
-      queryStringParameters: {
-        id: 'dealsOfTheWeek',
-        organisation: 'organisation',
-      },
-      headers: {
-        Authorization: 'idToken',
-      },
-    };
-    const result = await handler(event as APIGatewayEvent);
-    const expectedResponse = Response.BadRequest({
-      message: `Missing query parameter on request - organisation: organisation, dob: ${undefined}`,
-    });
-    expect(result).toEqual(expectedResponse);
-  });
+  const userTestProps = {
+    handler,
+    event: {},
+    errorMessage: 'Error querying getMenus',
+    noOrganisation: {
+      responseMessage: 'No organisation assigned on user, defaulting to no offers',
+      data: [],
+    },
+  };
 
-  it('should return a bad request response when no organisation query parameter provided', async () => {
-    const event: Partial<APIGatewayEvent> = {
-      queryStringParameters: {
-        id: 'dealsOfTheWeek',
-        dob: 'dob',
-      },
-      headers: {
-        Authorization: 'idToken',
-      },
-    };
-    const result = await handler(event as APIGatewayEvent);
-    const expectedResponse = Response.BadRequest({
-      message: `Missing query parameter on request - organisation: ${undefined}, dob: dob`,
-    });
-    expect(result).toEqual(expectedResponse);
-  });
-
-  it('should return error when no matching ids are provided', async () => {
-    const event: Partial<APIGatewayEvent> = {
-      queryStringParameters: {
-        id: 'nonExistentMenu',
-        dob: 'dob',
-        organisation: 'organisation',
-      },
-      headers: {
-        Authorization: 'idToken',
-      },
-    };
-
-    const result = await handler(event as APIGatewayEvent);
-
-    const expectedResponse = Response.BadRequest({
-      message: `error`,
-      data: 'Error querying getMenus',
-    });
-
-    expect(result).toEqual(expectedResponse);
-  });
+  getUserInHandlersSharedTests(userTestProps);
 });

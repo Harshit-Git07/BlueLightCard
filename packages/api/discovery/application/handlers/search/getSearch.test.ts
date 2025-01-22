@@ -1,6 +1,5 @@
 import { APIGatewayEvent } from 'aws-lambda';
 
-import { HttpStatusCode } from '@blc-mono/core/types/http-status-code.enum';
 import * as getEnv from '@blc-mono/core/utils/getEnv';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
 import * as JWTUtils from '@blc-mono/core/utils/unpackJWT';
@@ -11,6 +10,7 @@ import { handler } from '../../../application/handlers/search/getSearch';
 import { OfferType } from '../../models/Offer';
 import { DiscoveryOpenSearchService } from '../../services/opensearch/DiscoveryOpenSearchService';
 import * as UserDetails from '../../utils/getUserDetails';
+import { getUserInHandlersSharedTests } from '../getUserInHandlersTests';
 
 jest.mock('../../services/opensearch/DiscoveryOpenSearchService');
 jest.mock('../../utils/getUserDetails');
@@ -85,18 +85,6 @@ describe('getSearch Handler', () => {
     expect(results).toEqual(expectedResponse);
   });
 
-  it('should return a 500 if an error is thrown in unpacking the Authorisation token', async () => {
-    jest.spyOn(JWTUtils, 'unpackJWT').mockImplementation(() => {
-      throw new Error('Error unpacking token');
-    });
-    const results = await whenSearchCalled();
-    const expectedResponse = Response.Error(
-      new Error('Error querying OpenSearch'),
-      HttpStatusCode.INTERNAL_SERVER_ERROR,
-    );
-    expect(results).toEqual(expectedResponse);
-  });
-
   it('should throw an error if no authorisation header is present', async () => {
     const event: Partial<APIGatewayEvent> = {
       body: '',
@@ -107,8 +95,6 @@ describe('getSearch Handler', () => {
       multiValueQueryStringParameters: {},
       queryStringParameters: {
         query: 'nike',
-        organisation: 'DEN',
-        dob: '2001-01-01',
       },
     };
 
@@ -117,52 +103,34 @@ describe('getSearch Handler', () => {
 
   it('should throw an error if no platform header is present', async () => {
     const event: Partial<APIGatewayEvent> = {
-      body: '',
       headers: {
         Authorization: 'idToken',
       },
-      multiValueHeaders: {},
-      multiValueQueryStringParameters: {},
       queryStringParameters: {
         query: 'nike',
-        organisation: 'DEN',
-        dob: '2001-01-01',
       },
     };
 
     await expect(handler(event as APIGatewayEvent)).rejects.toThrow('Invalid headers: x-client-type - Required');
   });
 
-  it('should return a 401 if no user profile is found', async () => {
-    jest.spyOn(UserDetails, 'getUserDetails').mockResolvedValue(undefined);
-
-    const results = await whenSearchCalled();
-
-    const expectedResponse = Response.Unauthorized({
-      message: 'User profile not found',
-    });
-
-    expect(results).toEqual(expectedResponse);
-  });
-
-  it('should return a 200 but no offers if no organisation is found', async () => {
-    const mockUserDetails = { dob: '2001-01-01', organisation: undefined } as unknown as {
-      dob: string;
-      organisation: string;
-    };
-    jest.spyOn(UserDetails, 'getUserDetails').mockResolvedValue(mockUserDetails);
-
-    const results = await whenSearchCalled();
-
-    const expectedResponse = Response.OK({
-      message: 'No organisaton assigned on user, defaulting to no offers',
+  const userTestProps = {
+    handler,
+    event: {
+      queryStringParameters: {
+        query: 'nike',
+      },
+    },
+    errorMessage: 'Error querying OpenSearch',
+    noOrganisation: {
+      responseMessage: 'No organisation assigned on user, defaulting to no offers',
       data: [],
-    });
+    },
+  };
 
-    expect(results).toEqual(expectedResponse);
-  });
+  getUserInHandlersSharedTests(userTestProps);
 
-  const whenSearchCalled = (query = 'nike', service = 'DEN', dob = '2001-01-01') => {
+  const whenSearchCalled = (query = 'nike') => {
     const event: Partial<APIGatewayEvent> = {
       body: '',
       headers: {
@@ -173,8 +141,6 @@ describe('getSearch Handler', () => {
       multiValueQueryStringParameters: {},
       queryStringParameters: {
         query,
-        organisation: service,
-        dob: dob,
       },
     };
 

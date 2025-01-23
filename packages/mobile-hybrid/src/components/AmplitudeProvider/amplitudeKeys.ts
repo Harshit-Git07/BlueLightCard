@@ -21,6 +21,7 @@ export enum Experiments {
   USP_BANNER_HOMEPAGE = 'usp-banner-homepage',
   DEALS_TIMER = 'conv-blc-8-0-deals-timer',
   NEW_COMPANY_PAGE = 'app-new-company-page',
+  OFFER_INTERSTITIAL = 'conv-blc-4-0-interstitial',
   SEARCH_UI_CONTRAST = 'conv-blc-5-0-search-ui',
   POPULAR_BRANDS_INLINE_LAYOUT = 'conv-blc-2-3-popular-brands-inline-layout-ab-test',
 }

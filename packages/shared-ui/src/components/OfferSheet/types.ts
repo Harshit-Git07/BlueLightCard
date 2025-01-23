@@ -8,6 +8,7 @@ export interface OfferMeta {
 export interface OfferDetails {
   companyId?: LegacyOrModernId;
   companyLogo?: string | undefined;
+  companyName?: string | undefined;
   description?: string | undefined;
   expiry?: string | undefined;
   id?: LegacyOrModernId;

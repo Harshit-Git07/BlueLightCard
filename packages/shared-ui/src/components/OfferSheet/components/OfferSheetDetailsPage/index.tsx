@@ -22,6 +22,10 @@ import type { RedemptionType } from '../../types';
 import OfferDetailsErrorPage from '../OfferDetailsErrorPage';
 import { useQuery } from '@tanstack/react-query';
 import { userQuery } from '../../../../api/identity';
+
+// mobile-hybrid component imported for Conversion BLC 4.0 Interstitial experiment
+import OfferInterstitial from '../../../OfferInterstitial/OfferInterstitial';
+
 import moment from 'moment';
 
 enum BallotRedeemError {
@@ -52,7 +56,10 @@ const OfferSheetDetailsPage: FC = () => {
   const [showErrorPage, setShowErrorPage] = useState(false);
   const [webRedeemData, setWebRedeemData] = useState<any | null>(null);
   const [maxPerUserReached, setMaxPerUserReached] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [ballotRedeemError, setBallotRedeemError] = useState<BallotRedeemError | null>(null);
+
+  const flag = (feature: string) => platformAdapter.getAmplitudeFeatureFlag(feature);
 
   const user = useQuery(userQuery());
   const offer = redemptionType === 'ballot' ? eventData : offerData;
@@ -204,12 +211,20 @@ const OfferSheetDetailsPage: FC = () => {
   };
 
   async function copyCodeAndRedirect(code: string | undefined, url: string | undefined) {
-    // async function for code and redirect on mobile hybrid only
     if (code) {
       await platformAdapter.writeTextToClipboard(code);
     }
+
+    setIsModalOpen(true);
+
     if (url) {
-      handleRedirect(url);
+      setTimeout(() => {
+        handleRedirect(url);
+
+        setTimeout(() => {
+          setIsModalOpen(false);
+        }, 1000);
+      }, 3000);
     }
   }
   // ----- END of Mobile Hybrid single button click handler
@@ -341,13 +356,7 @@ const OfferSheetDetailsPage: FC = () => {
   };
 
   const hasDealExpired = (expiry?: string | null) => {
-    // ****
-    //  Determines whether or not the deal has expired to set the state of the deal button
-    // ****
-    if (
-      platformAdapter.getAmplitudeFeatureFlag('conv-blc-8-0-deals-timer') &&
-      platformAdapter.getAmplitudeFeatureFlag('conv-blc-8-0-deals-timer') !== 'treatment'
-    ) {
+    if (flag('conv-blc-8-0-deals-timer') && flag('conv-blc-8-0-deals-timer') !== 'treatment') {
       return false;
     }
 
@@ -367,9 +376,6 @@ const OfferSheetDetailsPage: FC = () => {
 
     switch (redemptionType) {
       case 'generic':
-        secondaryButtonTextValue = 'Code copied!';
-        secondaryButtonSubtextValue = 'Redirecting to partner website';
-        break;
       case 'vault':
         secondaryButtonTextValue = 'Code copied!';
         secondaryButtonSubtextValue = 'Redirecting to partner website';
@@ -576,6 +582,14 @@ const OfferSheetDetailsPage: FC = () => {
 
   return (
     <div className={css}>
+      {flag('conv-blc-4-0-interstitial') && (
+        <OfferInterstitial
+          isOpen={isModalOpen}
+          imageSource={offer.image}
+          companyName={offerMeta.companyName ?? 'company'}
+          offerName={offer.name}
+        />
+      )}
       {showErrorPage && <OfferDetailsErrorPage />}
       {!showErrorPage && user.data && (
         <>

@@ -109,7 +109,7 @@ exports[`ViewOfferProvider it renders the offer sheet 1`] = `
             class="absolute w-[100vw] h-[100vh] opacity-100"
           />
           <div
-            class="fixed w-[100vw] flex flex-col space-y-2 rounded-t-3xl transition-transform duration-1000 bg-colour-surface-light dark:bg-colour-surface-dark translate-y-[-100%] h-[90%] bottom-[-90%]"
+            class="fixed w-[100vw] flex flex-col space-y-2 rounded-t-3xl transition-transform duration-1000 bg-colour-surface-light dark:bg-colour-surface-dark overflow-hidden translate-y-[-100%] h-[90%] bottom-[-90%]"
           >
             <div
               class="w-full flex justify-end p-4 text-colour-onSurface-light dark:text-colour-onSurface-dark"

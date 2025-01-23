@@ -1,17 +1,22 @@
-import { FC } from 'react';
 import { cssUtil } from '@/utils/cssUtil';
+import { FC } from 'react';
 
-const Spinner: FC = () => {
+type SpinnerProps = {
+  noShadow?: boolean;
+  size?: number;
+};
+
+const Spinner: FC<SpinnerProps> = ({ noShadow = false, size = 60 }) => {
   const spinnerClass = cssUtil([
     'path',
     'stroke-spinner-colour-light dark:stroke-spinner-colour-dark',
   ]);
   return (
-    <div role="progressbar" className="p-3 rounded shadow-lg">
+    <div role="progressbar" className={`p-3 rounded ${noShadow ? '' : 'shadow-lg'}`}>
       <svg
         className="spinner"
-        width="60px"
-        height="60px"
+        width={`${size}px`}
+        height={`${size}px`}
         viewBox="0 0 66 66"
         xmlns="http://www.w3.org/2000/svg"
       >

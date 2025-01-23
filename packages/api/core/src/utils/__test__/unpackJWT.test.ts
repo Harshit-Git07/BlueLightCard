@@ -1,7 +1,5 @@
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { unpackJWT, JWT, Auth0Jwt } from "../unpackJWT";
-
-jest.mock("jwt-decode");
 
 const mockAuth0Token: Auth0Jwt = {
   sub: "auth0|123456",
@@ -22,6 +20,10 @@ const mockStandardToken: JWT = {
   'custom:blc_old_uuid': "legacy-uuid",
   'custom:blc_old_id': "1234",
 };
+
+jest.mock("jwt-decode", () => ({
+  jwtDecode: jest.fn(),
+}));
 
 describe("unpackJWT", () => {
   afterEach(() => {

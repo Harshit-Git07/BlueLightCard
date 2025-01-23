@@ -6,7 +6,7 @@ import {
   PolicyDocument,
 } from 'aws-lambda';
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { Logger } from '@aws-lambda-powertools/logger';
 
 import { datadog } from 'datadog-lambda-js';
@@ -40,13 +40,10 @@ const handlerUnwrapped = async function (
   const auth0ExtraIssuer = getEnvOrDefault(IdentityStackEnvironmentKeys.AUTH0_EXTRA_ISSUER, '');
   const auth0TestIssuer = getEnvOrDefault(IdentityStackEnvironmentKeys.AUTH0_TEST_ISSUER, '');
 
-  logger.debug(`event => ${JSON.stringify(event)}`);
-
   const authToken = getAuthenticationToken(event);
 
   try {
     const decodedToken: any = jwtDecode(authToken);
-    logger.debug(decodedToken);
 
     const mainIssuerMatch = decodedToken?.iss === auth0Issuer;
     const extraIssuerMatch = auth0ExtraIssuer && decodedToken?.iss === auth0ExtraIssuer;
@@ -87,8 +84,6 @@ const handlerUnwrapped = async function (
     const CognitoVerifyParameters: any = {};
     const decodedJWT = await cognitoJwtVerifier.verify(authToken, CognitoVerifyParameters);
 
-    logger.debug('decodedJWT ' + JSON.stringify(decodedJWT));
-
     const policyDocument: PolicyDocument = {
       Version: '2012-10-17',
       Statement: [
@@ -104,8 +99,6 @@ const handlerUnwrapped = async function (
       principalId: decodedJWT.sub,
       policyDocument,
     };
-
-    logger.debug(`response => ${JSON.stringify(response)}`);
 
     return response;
   } catch (err: any) {

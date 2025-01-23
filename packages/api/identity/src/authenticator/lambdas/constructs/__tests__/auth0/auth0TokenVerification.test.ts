@@ -37,16 +37,6 @@ describe('auth0TokenVerification', () => {
       .toThrow('Expected Authorization header was not set');
   });
 
-  it('should throw error when the Authorization header is not a Bearer token', async () => {
-    const event = {
-      headers: { Authorization: 'Not a bearer' }
-    } as any as APIGatewayRequestAuthorizerEvent;
-
-    await expect(authenticateAuth0Token(event, auth0Issuer))
-      .rejects
-      .toThrow('Invalid Authorization token does not match "Bearer .*"');
-  });
-
   it('should throw error when the decoded token is null', async () => {
     decodeMock.mockReturnValueOnce(null);
     const event = {
@@ -131,7 +121,10 @@ describe('auth0TokenVerification', () => {
     beforeEach(() => {
       decodeMock.mockReturnValueOnce({ header: { kid } });
       getJwksPublicKeyMock.mockResolvedValue(signingKey);
-      verifyMock.mockImplementation(() => ({ sub: auth0SubClaim, memberUuid } as JwtPayload));
+      verifyMock.mockImplementation(() => ({
+        sub: auth0SubClaim,
+        memberUuid
+      } as JwtPayload));
     });
 
     it('should return a valid API Gateway Authorizer Result', async () => {
@@ -142,6 +135,21 @@ describe('auth0TokenVerification', () => {
 
       const result = await authenticateAuth0Token(event, auth0Issuer);
 
+      thenResponseIsValid(result);
+    });
+
+    it('should return a valid API Gateway Authorizer Result even without a Bearer prefix', async () => {
+      const event = {
+        methodArn,
+        headers: { Authorization: token }
+      } as any as APIGatewayRequestAuthorizerEvent;
+
+      const result = await authenticateAuth0Token(event, auth0Issuer);
+
+      thenResponseIsValid(result);
+    });
+
+    function thenResponseIsValid(result: APIGatewayAuthorizerResult) {
       expect(result).toEqual(<APIGatewayAuthorizerResult>{
         principalId: auth0SubClaim,
         policyDocument: {
@@ -163,6 +171,6 @@ describe('auth0TokenVerification', () => {
       expect(verifyMock).toHaveBeenCalledWith(token, signingKey, {
         issuer: auth0Issuer
       });
-    });
+    }
   });
 });

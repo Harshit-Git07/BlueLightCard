@@ -2,7 +2,10 @@ import { describe, expect, test } from '@jest/globals';
 import { UserService } from '../../services/UserService';
 import { handler } from '../getUserDataHandler';
 
-jest.mock('jwt-decode', () => () => ({ client_id: 1234, 'custom:blc_old_uuid': 'testUUID' }));
+jest.mock('jwt-decode', () => ({
+  jwtDecode: jest.fn().mockReturnValue({ client_id: 1234, 'custom:blc_old_uuid': 'testUUID' }),
+}));
+
 jest.mock('../../services/UserService');
 
 describe('User Profile, Brand and Card data', () => {

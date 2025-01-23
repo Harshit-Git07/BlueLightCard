@@ -1,6 +1,6 @@
 import * as amplitude from '@amplitude/analytics-browser';
 import * as target from '../index';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import EVENTS from '../../amplitude/events';
 import {
   logSearchTermEvent,
@@ -17,7 +17,10 @@ import {
 const mockedUserId = '1234';
 const deviceId = 'deviceId';
 
-jest.mock('jwt-decode');
+jest.mock('jwt-decode', () => ({
+  jwtDecode: jest.fn().mockReturnValue({ client_id: 1234, 'custom:blc_old_uuid': 'testUUID' }),
+}));
+
 jest.mock('@amplitude/analytics-browser');
 jest.mock('@/global-vars', () => ({
   AMPLITUDE_API_KEY: 'API_KEY',

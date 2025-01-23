@@ -54,10 +54,6 @@ const extractToken = (params: APIGatewayRequestAuthorizerEvent): string => {
     throw new Error('Expected Authorization header was not set');
   }
 
-  if (!authorizationToken.startsWith(BEARER_PREFIX)) {
-    throw new Error('Invalid Authorization token does not match "Bearer .*"');
-  }
-
   return authorizationToken.replace(BEARER_PREFIX, '');
 };
 

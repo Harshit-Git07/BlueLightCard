@@ -5,7 +5,9 @@ import { UserRepository } from '../userRepository';
 import { handler } from '../../user-management/getUserDataHandler';
 
 const mockDynamoDB = mockClient(DynamoDBDocumentClient);
-jest.mock('jwt-decode', () => () => ({ client_id: 1234, 'custom:blc_old_uuid': 'testUUID' }));
+jest.mock('jwt-decode', () => ({
+  jwtDecode: jest.fn().mockReturnValue({ client_id: 1234, 'custom:blc_old_uuid': 'testUUID' }),
+}));
 
 describe('UserRepository', () => {
   const tableName = 'test-identity-user-table';

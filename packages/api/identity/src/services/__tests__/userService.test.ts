@@ -5,7 +5,10 @@ import { UserService } from '../UserService';
 import { UserRepository } from 'src/repositories/userRepository';
 import { Logger } from '@aws-lambda-powertools/logger';
 
-jest.mock('jwt-decode', () => () => ({  client_id: 1234,  'custom:blc_old_uuid': 'testUUID'}))
+jest.mock('jwt-decode', () => ({
+  jwtDecode: jest.fn().mockReturnValue({ client_id: 1234, 'custom:blc_old_uuid': 'testUUID' }),
+}));
+
 let dynamoMock: ReturnType<typeof mockClient>;
   describe('User Profile, Brand and Card data', () => {
     let userService: UserService;

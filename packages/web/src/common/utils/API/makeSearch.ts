@@ -26,6 +26,8 @@ export type SearchResultsType = {
  * @param idToken The id token for the user for authentication
  * @param allowAgeGated Whether or not the search should allow age gated content
  * @param service Include the users service (organisation) for obtaining service specific content
+ * @param ampExpSearchOn Whether or not to use the experimental search endpoint
+ * @param searchWithSharedAuthorizerEnabled Whether or not to use the shared authorizer for search
  * @returns SearchResultsType object with either an error or results
  */
 export async function makeSearch(
@@ -33,11 +35,16 @@ export async function makeSearch(
   idToken: string,
   allowAgeGated: boolean = true,
   service: string,
-  ampExpSearchOn: boolean = false
+  ampExpSearchOn: boolean = false,
+  searchWithSharedAuthorizerEnabled: boolean = false
 ) {
+  // We use this flag to determine if we should use the shared authorizer lambda for search
+  // this is temporary for testing and should be removed as soon testing is complete
+  const searchSuffix = searchWithSharedAuthorizerEnabled ? 'SharedAuth' : '';
+
   const searchPath = ampExpSearchOn
-    ? `${SEARCH_ENDPOINT}/expSearch`
-    : `${SEARCH_ENDPOINT}/newSearch`;
+    ? `${SEARCH_ENDPOINT}/expSearch${searchSuffix}`
+    : `${SEARCH_ENDPOINT}/newSearch${searchSuffix}`;
 
   const data = {
     searchTerm: he.escape(queryRaw),

@@ -100,6 +100,10 @@ export const TokenisedSearch: NextPage = () => {
   );
   const searchV5Experiment = useAmplitudeExperiment('search_v5', 'control');
   const offersCmsExperiment = useAmplitudeExperiment('cms-offers', 'off');
+  const searchWithSharedAuthorizerExperiment = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.ENABLE_SEARCH_WITH_SHARED_AUTHORIZER,
+    'off'
+  );
   const { viewOffer } = useOfferDetails();
   const { categories } = useFetchCompaniesOrCategories(userCtx);
   const platformAdapter = usePlatformAdapter();
@@ -127,7 +131,8 @@ export const TokenisedSearch: NextPage = () => {
           // isAgeGated flipped to turn off allowAgeGated, fallback to false if ageGated is not set
           userCtx.isAgeGated !== undefined ? !userCtx.isAgeGated : false,
           userCtx.user?.profile.organisation ?? '',
-          categoryLevelThreeSearchExperiment.data?.variantName === 'treatment'
+          categoryLevelThreeSearchExperiment.data?.variantName === 'treatment',
+          searchWithSharedAuthorizerExperiment.data?.variantName === 'on'
         );
 
       const experimentMakeSearchFunction = async () =>
@@ -189,6 +194,7 @@ export const TokenisedSearch: NextPage = () => {
     searchV5Experiment,
     offersCmsExperiment,
     platformAdapter,
+    searchWithSharedAuthorizerExperiment,
   ]);
 
   useEffect(() => {

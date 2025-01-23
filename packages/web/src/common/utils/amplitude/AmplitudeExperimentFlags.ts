@@ -13,4 +13,5 @@ export enum AmplitudeExperimentFlags {
   MODERN_ELIGIBILITY_ENABLED = 'modern-eligibility-enabled',
   BLT_TICKET_SHEET = 'blt-ticket-sheet',
   MODERN_MY_ACCOUNT = 'web-myaccount',
+  ENABLE_SEARCH_WITH_SHARED_AUTHORIZER = 'enable-search-with-shared-authorizer',
 }

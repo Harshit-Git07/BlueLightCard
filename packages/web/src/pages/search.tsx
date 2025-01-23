@@ -26,6 +26,7 @@ import { PlatformVariant, useOfferDetails } from '@bluelightcard/shared-ui';
 import AmplitudeContext from '../common/context/AmplitudeContext';
 import { z } from 'zod';
 import { TokenisedSearch } from './tokenised-search';
+import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 
 const he = require('he');
 
@@ -71,6 +72,10 @@ const Search: NextPage = () => {
   const amplitude = useContext(AmplitudeContext);
 
   const searchExperiment = useAmplitudeExperiment('category_level_three_search', 'control');
+  const searchWithSharedAuthorizerExperiment = useAmplitudeExperiment(
+    AmplitudeExperimentFlags.ENABLE_SEARCH_WITH_SHARED_AUTHORIZER,
+    'off'
+  );
   const { viewOffer } = useOfferDetails();
 
   useEffect(() => {
@@ -84,7 +89,8 @@ const Search: NextPage = () => {
         // isAgeGated flipped to turn off allowAgeGated, fallback to false if ageGated is not set
         userCtx.isAgeGated !== undefined ? !userCtx.isAgeGated : false,
         userCtx.user?.profile.organisation ?? '',
-        searchExperiment.data?.variantName === 'treatment'
+        searchExperiment.data?.variantName === 'treatment',
+        searchWithSharedAuthorizerExperiment.data?.variantName === 'on'
       );
 
       if (searchResults.results) {

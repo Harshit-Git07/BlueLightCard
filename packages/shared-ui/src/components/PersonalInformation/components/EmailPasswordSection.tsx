@@ -15,8 +15,10 @@ export const EmailPasswordSection: FC = () => {
   const { memberProfile } = useMemberProfileGet(memberId);
   const { open: openDrawer } = useDrawer();
 
+  const isEmailDisabled = !memberProfile?.email;
+
   const onChangeEmailClick = () => {
-    if (memberProfile?.email) {
+    if (!isEmailDisabled) {
       openDrawer(<ChangeEmailAddress memberUuid={memberId} email={memberProfile.email} />);
     }
   };
@@ -36,6 +38,7 @@ export const EmailPasswordSection: FC = () => {
           variant={ThemeVariant.Tertiary}
           size={'Small'}
           className={'!justify-start w-fit !px-0'}
+          disabled={isEmailDisabled}
           onClick={onChangeEmailClick}
         >
           {copy.email.buttonText}

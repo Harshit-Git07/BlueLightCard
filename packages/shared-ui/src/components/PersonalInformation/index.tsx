@@ -126,7 +126,7 @@ export const FormFieldSet: FC<FormFieldSetProps> = ({
   divisionId,
   onDivisionChange,
 }) => {
-  const { platform } = usePlatformAdapter();
+  const { platform, navigate } = usePlatformAdapter();
 
   const mobileRowStyles = (compact: boolean) => `flex flex-col ${compact ? 'gap-3' : 'gap-[24px]'}`;
   const laptopRowStyles = `min-[821px]:grid min-[821px]:grid-cols-2 min-[821px]:auto-rows-auto min-[821px]:gap-x-[12px] min-[821px]:gap-y-[8px]`;
@@ -166,6 +166,7 @@ export const FormFieldSet: FC<FormFieldSetProps> = ({
             variant={ThemeVariant.Tertiary}
             size="Small"
             iconRight={faArrowUpRightFromSquare}
+            onClick={() => navigate('/biometric')}
           >
             {copy.biometrics.buttonText}
           </Button>

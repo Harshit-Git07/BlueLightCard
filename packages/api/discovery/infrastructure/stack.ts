@@ -45,7 +45,7 @@ async function DiscoveryStack({ stack, app }: StackContext) {
     environment: {
       BRAND: getBrandFromEnv(),
       IDENTITY_TABLE_NAME: identityTableName,
-      region: stack.region,
+      REGION: stack.region,
       SERVICE: SERVICE_NAME,
       DD_VERSION: process.env.DD_VERSION ?? '',
       DD_ENV: process.env.SST_STAGE ?? 'undefined',

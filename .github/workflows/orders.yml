@@ -188,6 +188,7 @@ jobs:
           DDS_COGNITO_USER_POOL_ID: 'eu-west-2_VdsvVVUrI'
           DDS_OLD_COGNITO_USER_POOL_ID: 'eu-west-2_jbLX0JEdN'
           BLC_UK_IDENTITY_API_ID: 'tr1afrar24'
+          IDENTITY_TABLE_NAME: 'staging-blc-mono-identityTable'
         run: npx sst deploy global --stage ${{ matrix.deployment.stage }} --region ${{matrix.deployment.region}} && npx sst deploy orders --stage ${{ matrix.deployment.stage }} --region ${{matrix.deployment.region}}
       - name: Datadog deployment metrics
         uses: ./.github/actions/datadog

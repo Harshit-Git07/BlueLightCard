@@ -129,6 +129,7 @@ jobs:
             ddsCognitoUserPoolId: 'eu-west-2_VdsvVVUrI'
             ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
             blcUkIdentityApiId: 'tr1afrar24'
+            identityTableName: 'staging-blc-mono-identityTable'
             userProfileEndpoint: https://staging-identity.blcshine.io/user
             companyLocationDwhStream: 'staging-dds-dwh-dds-uk-company-location'
             menuDwhStream: 'staging-dds-dwh-dds-uk-menu'
@@ -163,6 +164,7 @@ jobs:
       DDS_COGNITO_USER_POOL_ID: ${{ matrix.ddsCognitoUserPoolId }}
       DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
       BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
+      IDENTITY_TABLE_NAME: ${{ matrix.identityTableName }}
       OFFERS_DISCOVERY_EVENT_BUS_NAME: ${{ matrix.discoveryEventBusName }}
       OFFERS_CMS_ACCOUNT: ${{ matrix.cmsAccount }}
       USER_PROFILE_ENDPOINT: ${{ matrix.userProfileEndpoint }}

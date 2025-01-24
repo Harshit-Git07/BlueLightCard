@@ -46,6 +46,7 @@ jobs:
             ddsCognitoUserPoolId: 'eu-west-2_3WlS5ZkAh'
             ddsOldCognitoUserPoolId: 'eu-west-2_y2KyCUbVT'
             blcUkIdentityApiId: 'ue8dcieh75'
+            blcIdentityTableName: 'production-blc-mono-identityTable'
             # auth0_domain: DDS_UK_SERVICE_LAYER_AUTH0_DOMAIN
             # auth0_api_client_id: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_ID
             # auth0_api_client_secret: DDS_UK_SERVICE_LAYER_AUTH0_API_CLIENT_SECRET
@@ -88,6 +89,7 @@ jobs:
           DDS_COGNITO_USER_POOL_ID: ${{ matrix.ddsCognitoUserPoolId }}
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.ddsOldCognitoUserPoolId }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.blcUkIdentityApiId }}
+          IDENTITY_TABLE_NAME: ${{ matrix.blcIdentityTableName }}
           # SERVICE_LAYER_AUTH0_DOMAIN: ${{ secrets[matrix.auth0_domain] }}
           # SERVICE_LAYER_AUTH0_API_CLIENT_ID: ${{ secrets[matrix.auth0_api_client_id] }}
           # SERVICE_LAYER_AUTH0_API_CLIENT_SECRET: ${{ secrets[matrix.auth0_api_client_secret] }}

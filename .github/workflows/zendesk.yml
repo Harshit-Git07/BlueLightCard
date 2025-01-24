@@ -162,7 +162,7 @@ jobs:
           DDS_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsCognitoUserPoolId }}
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsOldCognitoUserPoolId }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.deployment.blcUkIdentityApiId }}
-          IDENTITY_TABLE_NAME: ${{ matrix.identityTableName }}
+          IDENTITY_TABLE_NAME: ${{ matrix.deployment.identityTableName }}
           DD_VERSION: '${{ env.DD_VERSION }}'
           DD_ENV: '${{ env.DD_ENV }}'
           DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'
@@ -214,6 +214,7 @@ jobs:
             ddsCognitoUserPoolId: 'eu-west-2_3WlS5ZkAh'
             ddsOldCognitoUserPoolId: 'eu-west-2_y2KyCUbVT'
             blcUkIdentityApiId: 'ue8dcieh75'
+            identityTableName: 'production-blc-mono-identityTable'
     needs:
       - install
       - test
@@ -246,6 +247,7 @@ jobs:
           DDS_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsCognitoUserPoolId }}
           DDS_OLD_COGNITO_USER_POOL_ID: ${{ matrix.deployment.ddsOldCognitoUserPoolId }}
           BLC_UK_IDENTITY_API_ID: ${{ matrix.deployment.blcUkIdentityApiId }}
+          IDENTITY_TABLE_NAME: ${{ matrix.deployment.identityTableName }}
           DD_VERSION: '${{ env.DD_VERSION }}'
           DD_ENV: '${{ env.DD_ENV }}'
           DD_GIT_COMMIT_SHA: '${{ env.DD_GIT_COMMIT_SHA }}'

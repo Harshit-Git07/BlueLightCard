@@ -30,10 +30,8 @@ export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
   }, []);
 
   const makeAPaymentCardHasButton = useMemo(() => {
-    if (eligibilityDetails.emailVerification) return true;
-
-    return eligibilityDetails.fileVerification && eligibilityDetails.fileVerification.length > 0;
-  }, [eligibilityDetails.emailVerification, eligibilityDetails.fileVerification]);
+    return eligibilityDetails.hasJumpedStraightToPayment;
+  }, [eligibilityDetails.hasJumpedStraightToPayment]);
 
   const showVerifyEligibilityCard = useMemo(() => {
     return !makeAPaymentCardHasButton;

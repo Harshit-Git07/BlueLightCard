@@ -32,17 +32,13 @@ export const RenewalInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
 
   const fuzzyFrontEndButtons = useFuzzyFrontendButtons(eligibilityDetailsState);
 
-  const makeAPaymentCardHasButton = useMemo(() => {
-    if (eligibilityDetails.emailVerification) return true;
-
-    return eligibilityDetails.fileVerification && eligibilityDetails.fileVerification.length > 0;
-  }, [eligibilityDetails.emailVerification, eligibilityDetails.fileVerification]);
-
   const reviewEmploymentDetailsCardHasButton = useMemo(() => {
-    if (makeAPaymentCardHasButton) return false;
+    return eligibilityDetails.hasSkippedAccountDetails;
+  }, [eligibilityDetails.hasSkippedAccountDetails]);
 
-    return eligibilityDetails.address;
-  }, [eligibilityDetails.address, makeAPaymentCardHasButton]);
+  const makeAPaymentCardHasButton = useMemo(() => {
+    return reviewEmploymentDetailsCardHasButton && eligibilityDetails.hasJumpedStraightToPayment;
+  }, [eligibilityDetails.hasJumpedStraightToPayment, reviewEmploymentDetailsCardHasButton]);
 
   const showReviewEmploymentDetailsCard = useMemo(() => {
     return !makeAPaymentCardHasButton;

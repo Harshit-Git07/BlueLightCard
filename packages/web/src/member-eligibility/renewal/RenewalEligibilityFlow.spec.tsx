@@ -537,6 +537,7 @@ describe('given a signing up member that needs to renew eligibility to use the s
             flow: 'Renewal',
             currentScreen: 'Interstitial Screen',
             address: ukAddressStub,
+            hasSkippedAccountDetails: true,
           }}
         />
       );
@@ -582,6 +583,8 @@ describe('given a signing up member that needs to renew eligibility to use the s
             currentScreen: 'Interstitial Screen',
             address: ukAddressStub,
             emailVerification: 'test@test.com',
+            hasSkippedAccountDetails: true,
+            hasJumpedStraightToPayment: true,
           }}
         />
       );

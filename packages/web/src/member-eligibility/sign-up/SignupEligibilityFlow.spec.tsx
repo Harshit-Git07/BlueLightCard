@@ -623,6 +623,7 @@ describe('given a signing up member that needs to prove their eligibility to use
             flow: 'Sign Up',
             currentScreen: 'Interstitial Screen',
             emailVerification: 'test@test.com',
+            hasJumpedStraightToPayment: true,
           }}
         />
       );

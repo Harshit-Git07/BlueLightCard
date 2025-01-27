@@ -31,10 +31,11 @@ export async function mapToEligibilityDetails(
   const organisation = await getOrganisation(memberProfile, employmentStatus);
   const employer = await getEmployer(memberProfile);
   const promoCode = getPromoCode(memberProfile);
+  const address = getAddressDetails(memberProfile);
 
   return {
     member: getMemberDetails(memberProfile),
-    address: getAddressDetails(memberProfile),
+    address,
     employmentStatus,
     organisation,
     employer,
@@ -44,6 +45,8 @@ export async function mapToEligibilityDetails(
     jobDetailsAus: getJobDetailsAus(memberProfile),
     canSkipIdVerification: getCanSkipIdVerification(organisation, employer, promoCode),
     canSkipPayment: getCanSkipPaymentVerification(organisation, employer, promoCode),
+    hasSkippedAccountDetails: address !== undefined,
+    hasJumpedStraightToPayment: canSkipStraightToPayment(memberProfile),
   };
 }
 
@@ -219,4 +222,14 @@ function getCanSkipPaymentVerification(
   }
 
   return false;
+}
+
+function canSkipStraightToPayment(memberProfile: ServiceLayerMemberProfile): boolean {
+  const lastApplication = memberProfile.applications?.at(-1);
+  if (!lastApplication) return false;
+
+  return (
+    lastApplication.trustedDomainValidated ||
+    (lastApplication.documents !== undefined && lastApplication.documents.length > 0)
+  );
 }

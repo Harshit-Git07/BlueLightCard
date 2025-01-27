@@ -35,5 +35,5 @@ describe('createInternalBatch handler', () => {
 });
 
 async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-  return await (await import('../createInternalBatch')).handler(event, emptyContextStub);
+  return await (await import('../adminBatchHandler')).handler(event, emptyContextStub);
 }

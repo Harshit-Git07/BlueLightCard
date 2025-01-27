@@ -5,18 +5,14 @@ import { emptyContextStub } from '@blc-mono/members/application/utils/testing/em
 
 describe('fixBatch handler', () => {
   const batchId = uuidv4();
-  const event = { pathParameters: { batchId: batchId } } as unknown as APIGatewayProxyEvent;
+  const event: APIGatewayProxyEvent = {
+    httpMethod: 'POST',
+    pathParameters: { batchId: batchId },
+    path: `/admin/cards/batches/${batchId}/fix`,
+  } as unknown as APIGatewayProxyEvent;
 
   beforeEach(() => {
     BatchService.prototype.fixBatch = jest.fn();
-  });
-
-  it('should return 400 if batchId is missing', async () => {
-    const event = { pathParameters: {} } as unknown as APIGatewayProxyEvent;
-
-    const response = await handler(event);
-
-    expect(response.statusCode).toEqual(400);
   });
 
   it('should return 204 on successful update', async () => {
@@ -28,5 +24,5 @@ describe('fixBatch handler', () => {
 });
 
 async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-  return await (await import('../fixBatch')).handler(event, emptyContextStub);
+  return await (await import('../adminBatchHandler')).handler(event, emptyContextStub);
 }

@@ -22,10 +22,10 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<unknown> =
   }
 };
 
-function isGetBrazeAttributesEvent(event: APIGatewayProxyEvent) {
+function isGetBrazeAttributesEvent(event: APIGatewayProxyEvent): boolean {
   return (
-    event.pathParameters &&
-    event.pathParameters.memberId &&
+    event.pathParameters !== null &&
+    event.pathParameters.memberId !== undefined &&
     event.path === `/admin/members/${event.pathParameters.memberId}/marketing/braze`
   );
 }
@@ -44,10 +44,10 @@ async function getBrazeAttributes(event: APIGatewayProxyEvent): Promise<Record<s
   return await service.getAttributes(memberId, model.attributes);
 }
 
-function isGetMarketingPreferencesEvent(event: APIGatewayProxyEvent) {
+function isGetMarketingPreferencesEvent(event: APIGatewayProxyEvent): boolean {
   return (
-    event.pathParameters &&
-    event.pathParameters.memberId &&
+    event.pathParameters !== null &&
+    event.pathParameters.memberId !== undefined &&
     event.path ===
       `/admin/members/${event.pathParameters.memberId}/marketing/preferences/${event.pathParameters.environment}`
   );
@@ -68,10 +68,10 @@ async function getMarketingPreferences(
   return await service.getPreferences(memberId, environment);
 }
 
-function isUpdateMarketingPreferencesEvent(event: APIGatewayProxyEvent) {
+function isUpdateMarketingPreferencesEvent(event: APIGatewayProxyEvent): boolean {
   return (
-    event.pathParameters &&
-    event.pathParameters.memberId &&
+    event.pathParameters !== null &&
+    event.pathParameters.memberId !== undefined &&
     event.path === `/admin/members/${event.pathParameters.memberId}/marketing/braze/update`
   );
 }

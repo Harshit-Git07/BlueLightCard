@@ -19,7 +19,7 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<unknown> =
   }
 };
 
-function isInitiatePaymentEvent(event: APIGatewayProxyEvent) {
+function isInitiatePaymentEvent(event: APIGatewayProxyEvent): boolean {
   return event.path === '/admin/payments/initiate';
 }
 
@@ -29,7 +29,7 @@ function initiatePayment(event: APIGatewayProxyEvent): void {
   // TODO: Implement handler
 }
 
-function isCompletePaymentEvent(event: APIGatewayProxyEvent) {
+function isCompletePaymentEvent(event: APIGatewayProxyEvent): boolean {
   return event.path === '/admin/payments/checkout';
 }
 
@@ -39,10 +39,10 @@ function completePayment(event: APIGatewayProxyEvent): void {
   // TODO: Implement handler
 }
 
-function isRefundPaymentEvent(event: APIGatewayProxyEvent) {
+function isRefundPaymentEvent(event: APIGatewayProxyEvent): boolean {
   return (
-    event.pathParameters &&
-    event.pathParameters.transactionId &&
+    event.pathParameters !== null &&
+    event.pathParameters.transactionId !== undefined &&
     event.path === `/admin/payments/refund/${event.pathParameters.transactionId}`
   );
 }
@@ -53,10 +53,10 @@ function refundPayment(event: APIGatewayProxyEvent): void {
   // TODO: Implement handler
 }
 
-function isPaymentHistoryEvent(event: APIGatewayProxyEvent) {
+function isPaymentHistoryEvent(event: APIGatewayProxyEvent): boolean {
   return (
-    event.pathParameters &&
-    event.pathParameters.memberId &&
+    event.pathParameters !== null &&
+    event.pathParameters.memberId !== undefined &&
     event.path === `/admin/payments/history/${event.pathParameters.memberId}`
   );
 }

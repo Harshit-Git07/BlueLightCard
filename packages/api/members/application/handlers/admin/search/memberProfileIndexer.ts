@@ -5,7 +5,12 @@ import {
   AttributeValue as StreamAttributeValue,
   DynamoDBRecord,
 } from 'aws-lambda/trigger/dynamodb-stream';
-import { APPLICATION, CARD, PROFILE } from '@blc-mono/members/application/repositories/repository';
+import {
+  APPLICATION,
+  CARD,
+  NOTE,
+  PROFILE,
+} from '@blc-mono/members/application/repositories/repository';
 import { MemberDocumentModel } from '@blc-mono/shared/models/members/memberDocument';
 import { MembersOpenSearchService } from '@blc-mono/members/application/handlers/admin/search/service/membersOpenSearchService';
 import { createMemberProfileOpenSearchDocuments } from '@blc-mono/members/application/handlers/admin/search/service/opensearchMemberProfileDocument';
@@ -15,8 +20,7 @@ import {
   getDocumentFromProfileRecord,
 } from '@blc-mono/members/application/handlers/admin/search/service/parseDocumentFromRecord';
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
-
-type StreamRecordTypes = 'Profile' | 'Application' | 'Card';
+import { StreamRecordTypes } from '@blc-mono/members/application/types/StreamRecordTypes';
 
 const openSearchService = new MembersOpenSearchService();
 const organisationService = new OrganisationService();
@@ -36,7 +40,7 @@ const unwrappedHandler = async (event: SQSEvent) => {
     let profileEmployerName: string | undefined;
 
     switch (recordType) {
-      case 'Profile': {
+      case 'PROFILE': {
         const {
           memberDocument,
           employerIdChanged,
@@ -49,11 +53,14 @@ const unwrappedHandler = async (event: SQSEvent) => {
         profileEmployerName = employerName;
         break;
       }
-      case 'Application':
+      case 'APPLICATION':
         memberProfileDocument = getDocumentFromApplicationRecord(dynamoDBStreamRecord);
         break;
-      case 'Card':
+      case 'CARD':
         memberProfileDocument = getDocumentFromCardRecord(dynamoDBStreamRecord);
+        break;
+      case 'NOTE':
+        // TODO: Implement note related functionality
         break;
     }
 
@@ -92,11 +99,13 @@ const getStreamRecordType = (sortKey: string | undefined): StreamRecordTypes => 
   if (!sortKey) throw new Error('Stream record missing sortKey: sk');
 
   if (sortKey.startsWith(PROFILE)) {
-    return 'Profile';
+    return 'PROFILE';
   } else if (sortKey.startsWith(APPLICATION)) {
-    return 'Application';
+    return 'APPLICATION';
   } else if (sortKey.startsWith(CARD)) {
-    return 'Card';
+    return 'CARD';
+  } else if (sortKey.startsWith(NOTE)) {
+    return 'NOTE';
   }
 
   throw new Error(`Unknown sortKey prefix: ${sortKey}`);

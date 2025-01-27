@@ -8,7 +8,8 @@ import { ApplicationBatchApprovalModel } from '@blc-mono/shared/models/members/a
 const service = new ApplicationService();
 
 const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<void> => {
-  const adminId = event.requestContext?.authorizer?.adminId;
+  // TODO: Admin Role Based Access needs to be implemented; currently using memberId as adminId
+  const adminId = event.requestContext?.authorizer?.memberId;
   if (!adminId) {
     throw new UnauthorizedError('Could not determine Admin ID from authentication context');
   }
@@ -22,7 +23,7 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<void> => {
     throw new ValidationError('No Application IDs provided');
   }
 
-  await service.releaseApplicationBatch(adminId, allocation.applicationIds);
+  await service.releaseApplicationBatch(adminId, allocation);
 };
 
 export const handler = middleware(unwrappedHandler);

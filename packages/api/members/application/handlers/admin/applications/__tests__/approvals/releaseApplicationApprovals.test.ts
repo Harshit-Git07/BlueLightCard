@@ -6,11 +6,11 @@ import { emptyContextStub } from '@blc-mono/members/application/utils/testing/em
 jest.mock('@blc-mono/members/application/services/applicationService');
 
 describe('releaseApplicationApprovals handler', () => {
-  const adminId = uuidv4();
+  const memberId = uuidv4();
   const applicationIds = [uuidv4(), uuidv4()];
   const allocation = { applicationIds };
   const event = {
-    requestContext: { authorizer: { adminId } },
+    requestContext: { authorizer: { memberId } },
     body: JSON.stringify(allocation),
   } as unknown as APIGatewayProxyEvent;
 
@@ -28,7 +28,7 @@ describe('releaseApplicationApprovals handler', () => {
 
   it('should return 400 if request body is missing', async () => {
     const event = {
-      requestContext: { authorizer: { adminId } },
+      requestContext: { authorizer: { memberId } },
     } as unknown as APIGatewayProxyEvent;
 
     const response = await handler(event);

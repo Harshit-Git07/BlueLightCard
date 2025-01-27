@@ -9,8 +9,7 @@ import { DwhEventsService } from '@blc-mono/members/application/events/DwhEvents
 import { EmailEventsService } from '@blc-mono/members/application/events/EmailEventsService';
 import { LegacyEventsService } from '@blc-mono/members/application/events/LegacyEventsService';
 import { SystemEventsService } from '@blc-mono/members/application/events/SystemEventsService';
-
-type StreamRecordTypes = 'PROFILE' | 'APPLICATION' | 'CARD';
+import { StreamRecordTypes } from '../../types/StreamRecordTypes';
 
 export const unwrappedHandler = async (event: DynamoDBStreamEvent): Promise<void> => {
   if (getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_GLOBAL) !== 'true') return;
@@ -47,6 +46,8 @@ const processDynamoDBRecord = (record: DynamoDBRecord) => {
         dwhEventsService.isSendCardCreateToDwh(record.dynamodb);
         legacyEventsService.isSendCardCreateToLegacy(record.dynamodb);
         break;
+      case 'NOTE':
+        break;
     }
   }
 
@@ -70,6 +71,9 @@ const processDynamoDBRecord = (record: DynamoDBRecord) => {
         dwhEventsService.isSendCardUpdateToDwh(record.dynamodb);
         legacyEventsService.isSendCardUpdateToLegacy(record.dynamodb);
         break;
+      case 'NOTE':
+        // TODO: Implement note update events
+        break;
     }
   }
 };
@@ -84,6 +88,8 @@ const parseRecordSortKey = (sortKey: StreamAttributeValue | undefined): StreamRe
     return 'APPLICATION';
   } else if (sortKey.S.startsWith('CARD')) {
     return 'CARD';
+  } else if (sortKey.S.startsWith('NOTE')) {
+    return 'NOTE';
   }
 
   throw new Error(`Unknown sortKey prefix: ${sortKey}`);

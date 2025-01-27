@@ -2,6 +2,7 @@ import {
   DynamoDBDocumentClient,
   GetCommand,
   GetCommandInput,
+  NativeAttributeValue,
   PutCommand,
   QueryCommand,
   ScanCommand,
@@ -20,6 +21,7 @@ import {
   CreateApplicationModel,
 } from '@blc-mono/shared/models/members/applicationModel';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
+import { TransactWriteItem } from '@aws-sdk/client-dynamodb';
 
 export class ApplicationRepository extends Repository {
   constructor(
@@ -144,57 +146,89 @@ export class ApplicationRepository extends Repository {
     return ApplicationModel.parse(result.Item);
   }
 
-  async assignApplicationBatch(
-    adminId: string,
-    adminName: string,
-    applicationIds: string[],
-  ): Promise<string[]> {
-    const updates = applicationIds.map((applicationId) => {
-      return {
-        Update: {
+  async assignApplicationBatch(adminId: string, applicationIds: string[]): Promise<string[]> {
+    const applicationsToAssign: TransactWriteItem[] = [];
+
+    for (const applicationId of applicationIds) {
+      const queryResult = await this.dynamoDB.send(
+        new QueryCommand({
           TableName: this.tableName,
           IndexName: 'gsi1',
-          Key: {
-            pk: applicationKey(applicationId),
-            sk: MEMBER,
-          },
-          KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
-          UpdateExpression: 'SET assignedTo = :adminId, assignedToName = :adminName',
+          KeyConditionExpression: 'sk = :sk AND begins_with(pk, :pk)',
           ExpressionAttributeValues: {
-            ':adminId': adminId,
-            ':adminName': adminName,
-            ':eligibilityStatus': EligibilityStatus.ASSIGNED_FOR_APPROVAL,
+            ':sk': applicationKey(applicationId),
+            ':pk': MEMBER,
+          },
+          Limit: 1,
+        }),
+      );
+
+      if (!queryResult.Items || queryResult.Items.length === 0) {
+        throw new Error(`No item found for applicationId: ${applicationId}`);
+      }
+
+      const fullPrimaryKey = queryResult.Items[0].pk;
+      const fullSecondaryKey = queryResult.Items[0].sk;
+
+      applicationsToAssign.push({
+        Update: {
+          TableName: this.tableName,
+          Key: {
+            pk: fullPrimaryKey,
+            sk: fullSecondaryKey,
+          },
+          UpdateExpression: 'SET assignedTo = :adminId, eligibilityStatus = :eligibilityStatus',
+          ExpressionAttributeValues: {
+            ':adminId': adminId as NativeAttributeValue,
+            ':eligibilityStatus': EligibilityStatus.ASSIGNED_FOR_APPROVAL as NativeAttributeValue,
           },
         },
-      };
-    });
+      });
+    }
 
-    await this.dynamoDB.send(new TransactWriteCommand({ TransactItems: updates }));
+    await this.dynamoDB.send(new TransactWriteCommand({ TransactItems: applicationsToAssign }));
 
     return applicationIds;
   }
 
-  async releaseApplicationBatch(adminId: string, applicationIds: string[]): Promise<void> {
-    const updates = applicationIds.map((applicationId) => {
-      return {
-        Update: {
+  async releaseApplicationBatch(applicationIds: string[]): Promise<void> {
+    const applicationsToRelease: TransactWriteItem[] = [];
+
+    for (const applicationId of applicationIds) {
+      const applicationQueryResult = await this.dynamoDB.send(
+        new QueryCommand({
           TableName: this.tableName,
           IndexName: 'gsi1',
-          Key: {
-            pk: applicationKey(applicationId),
-            sk: MEMBER,
-          },
-          KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
-          UpdateExpression: 'SET assignedTo = :adminId, assignedToName = :adminName',
+          KeyConditionExpression: 'sk = :skVal AND begins_with(pk, :pkVal)',
           ExpressionAttributeValues: {
-            ':adminId': null,
-            ':adminName': null,
-            ':eligibilityStatus': EligibilityStatus.AWAITING_ID_APPROVAL,
+            ':skVal': applicationKey(applicationId),
+            ':pkVal': MEMBER,
+          },
+          Limit: 1,
+        }),
+      );
+
+      if (!applicationQueryResult.Items || applicationQueryResult.Items.length === 0) {
+        throw new Error(`No item found for applicationId: ${applicationId}`);
+      }
+
+      const fullPrimaryKey = applicationQueryResult.Items[0].pk;
+      const fullSecondaryKey = applicationQueryResult.Items[0].sk;
+
+      applicationsToRelease.push({
+        Update: {
+          TableName: this.tableName,
+          Key: {
+            pk: fullPrimaryKey,
+            sk: fullSecondaryKey,
+          },
+          UpdateExpression: 'REMOVE assignedTo SET eligibilityStatus = :eligibilityStatus',
+          ExpressionAttributeValues: {
+            ':eligibilityStatus': EligibilityStatus.AWAITING_ID_APPROVAL as NativeAttributeValue,
           },
         },
-      };
-    });
-
-    await this.dynamoDB.send(new TransactWriteCommand({ TransactItems: updates }));
+      });
+    }
+    await this.dynamoDB.send(new TransactWriteCommand({ TransactItems: applicationsToRelease }));
   }
 }

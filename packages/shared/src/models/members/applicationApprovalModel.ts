@@ -21,6 +21,7 @@ export const ApplicationBatchApprovalModel = createZodNamedType(
     applicationIds: z.string().uuid().array().optional(),
     organisationId: z.string().uuid().optional(),
     employerId: z.string().uuid().optional(),
+    allocationRemovalReason: z.string().optional(),
   }),
 );
 export type ApplicationBatchApprovalModel = z.infer<typeof ApplicationBatchApprovalModel>;

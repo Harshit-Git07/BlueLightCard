@@ -10,10 +10,10 @@ const service = new ApplicationService();
 const unwrappedHandler = async (
   event: APIGatewayProxyEvent,
 ): Promise<ApplicationBatchApprovalModel> => {
-  const adminId = event.requestContext?.authorizer?.adminId;
-  const adminName = event.requestContext?.authorizer?.adminName;
-  if (!adminId || !adminName) {
-    throw new UnauthorizedError('Could not determine Admin ID or Name from authentication context');
+  // TODO: Admin Role Based Access needs to be implemented; currently using memberId as adminId
+  const adminId = event.requestContext?.authorizer?.memberId;
+  if (!adminId) {
+    throw new UnauthorizedError('Could not determine Admin ID from authentication context');
   }
 
   if (!event.body) {
@@ -21,7 +21,7 @@ const unwrappedHandler = async (
   }
 
   const allocation = ApplicationBatchApprovalModel.parse(JSON.parse(event.body));
-  const applicationIds = await service.assignApplicationBatch(adminId, adminName, allocation);
+  const applicationIds = await service.assignApplicationBatch(adminId, allocation);
   return ApplicationBatchApprovalModel.parse({ applicationIds });
 };
 

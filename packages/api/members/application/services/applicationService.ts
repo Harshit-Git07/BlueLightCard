@@ -216,12 +216,10 @@ export class ApplicationService {
 
   async assignApplicationBatch(
     adminId: string,
-    adminName: string,
     batch: ApplicationBatchApprovalModel,
   ): Promise<string[]> {
     try {
       logger.debug({ message: 'Assigning applications for approval', adminId, batch });
-
       let applicationIds: string[];
       if (batch.organisationId) {
         applicationIds = (
@@ -242,7 +240,7 @@ export class ApplicationService {
         ).map((application) => application.applicationId);
       }
 
-      await this.repository.assignApplicationBatch(adminId, adminName, applicationIds);
+      await this.repository.assignApplicationBatch(adminId, applicationIds);
       return applicationIds;
     } catch (error) {
       logger.error({ message: 'Error assigning applications for approval', error });
@@ -250,10 +248,20 @@ export class ApplicationService {
     }
   }
 
-  async releaseApplicationBatch(adminId: string, applicationIds: string[]): Promise<void> {
+  async releaseApplicationBatch(
+    adminId: string,
+    allocation: ApplicationBatchApprovalModel,
+  ): Promise<void> {
     try {
-      logger.debug({ message: 'Removing application approvals', adminId, applicationIds });
-      await this.repository.releaseApplicationBatch(adminId, applicationIds);
+      logger.debug({ message: `Releasing applications with IDs: ${allocation.applicationIds}` });
+      await this.repository.releaseApplicationBatch(allocation.applicationIds!);
+      await this.profileService.createNote(adminId, {
+        text: `Application approval released. Reason: ${allocation.allocationRemovalReason}}`,
+        source: NoteSource.ADMIN,
+        category: 'Application Approval Released',
+        pinned: false,
+        creator: adminId,
+      });
     } catch (error) {
       logger.error({ message: 'Error removing application approvals', error });
       throw error;

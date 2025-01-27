@@ -57,6 +57,7 @@ describe('Web Platform Adapter', () => {
           Authorization: 'Bearer null',
           'Content-Type': 'application/json',
           'x-brand': header,
+          'x-client-type': 'web',
         },
         method: 'GET',
       });
@@ -71,6 +72,7 @@ describe('Web Platform Adapter', () => {
           Authorization: 'Bearer null',
           'Content-Type': 'application/json',
           'x-brand': expect.any(String),
+          'x-client-type': 'web',
         },
         method: 'GET',
       });
@@ -90,6 +92,7 @@ describe('Web Platform Adapter', () => {
             Authorization: 'Bearer null',
             'Content-Type': 'application/json',
             'x-brand': expect.any(String),
+            'x-client-type': 'web',
           },
           method: 'GET',
         }

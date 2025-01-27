@@ -5,7 +5,6 @@ import type { QueryClient } from '@tanstack/react-query';
 import type { CategoryData, PaginatedCategoryData } from '@bluelightcard/shared-ui';
 import { useAtomValue } from 'jotai';
 import { experimentsAndFeatureFlags, FeatureFlags } from '@/components/AmplitudeProvider';
-import { userProfile } from '@/components/UserProfileProvider/store';
 
 // Create cache entries of paginated category data
 const createPaginatedCache = (
@@ -46,25 +45,13 @@ const useCategoryData = (categoryId: string, page: number, pageSize: number) => 
   const experimentsAndFlags = useAtomValue(experimentsAndFeatureFlags);
   const queryClient = useQueryClient();
   const platformAdapter = usePlatformAdapter();
-  const profile = useAtomValue(userProfile);
 
   const v5Flag = experimentsAndFlags[FeatureFlags.V5_API_INTEGRATION] ?? 'off';
-
-  const dob = profile?.dob ?? '';
-  const organisation = profile?.organisation ?? '';
 
   if (!categoryId || categoryId === '' || categoryId === 'undefined')
     throw new Error('Valid category ID not provided');
 
-  const queryKey = [
-    'categoryData',
-    categoryId,
-    pageSize,
-    `v5-${v5Flag}`,
-    `dob-${dob}`,
-    `org-${organisation}`,
-    page,
-  ];
+  const queryKey = ['categoryData', categoryId, pageSize, `v5-${v5Flag}`, page];
 
   return useSuspenseQuery({
     queryKey,
@@ -94,10 +81,6 @@ const useCategoryData = (categoryId: string, page: number, pageSize: number) => 
             V5_API_URL.Categories + `/${categoryId}`,
             {
               method: 'GET',
-              queryParameters: {
-                dob,
-                organisation,
-              },
             },
           );
 

@@ -30,15 +30,11 @@ export type SearchResultsType = {
  */
 export async function experimentMakeSearch(
   queryRaw: string,
-  dateOfBirth: string,
-  service: string,
   platFormAdapter: WebPlatformAdapter,
   useLegacyId = true
 ) {
   const params = {
     query: he.escape(queryRaw),
-    dob: dateOfBirth,
-    organisation: service,
   };
   const output: SearchResultsType = {};
 

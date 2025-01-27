@@ -138,8 +138,6 @@ export const TokenisedSearch: NextPage = () => {
       const experimentMakeSearchFunction = async () =>
         experimentMakeSearch(
           query,
-          userCtx.user?.profile.dob ?? '',
-          userCtx.user?.profile.organisation ?? '',
           platformAdapter,
           offersCmsExperiment.data?.variantName !== 'on'
         );

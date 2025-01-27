@@ -69,10 +69,6 @@ const useCategoryData = (categoryId: string, page: number, pageSize: number) => 
             V5_API_URL.Categories + `/${categoryId}`,
             {
               method: 'GET',
-              queryParameters: {
-                dob: '2001-01-01',
-                organisation: 'DEN',
-              },
             }
           );
 

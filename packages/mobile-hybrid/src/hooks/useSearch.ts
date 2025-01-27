@@ -4,8 +4,6 @@ import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { darkRead, IPlatformAdapter } from '@bluelightcard/shared-ui';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { AmplitudeExperimentState } from '@/components/AmplitudeProvider/types';
-import { useAtomValue } from 'jotai/index';
-import { userProfile } from '@/components/UserProfileProvider/store';
 
 export interface SearchResult {
   id: number | string;
@@ -75,7 +73,6 @@ const useSearch = (platformAdapter: IPlatformAdapter) => {
   const [status, setStatus] = useAtom(statusAtom);
   const [searchTerm, setSearchTerm] = useAtom(searchTermAtom);
   const [searchResults, setSearchResults] = useAtom(searchResultsAtom);
-  const userProfileValue = useAtomValue(userProfile);
 
   const doSearch = async (term: string) => {
     setSearchTerm(term);
@@ -97,8 +94,6 @@ const useSearch = (platformAdapter: IPlatformAdapter) => {
           v5Search(
             platformAdapter,
             term,
-            userProfileValue?.service,
-            userProfileValue?.dob,
             platformAdapter.getAmplitudeFeatureFlag(FeatureFlags.CMS_OFFERS) !== 'on',
           ),
       );
@@ -141,16 +136,12 @@ const v4Search = async (term: string): Promise<SearchResultResponse> => {
 const v5Search = async (
   platformAdapter: IPlatformAdapter,
   term: string,
-  organisation: string = '',
-  dob: string = '',
   useLegacyId = true,
 ): Promise<SearchResultResponse> => {
   const results = await platformAdapter.invokeV5Api(V5_API_URL.Search, {
     method: 'GET',
     queryParameters: {
       query: term,
-      organisation,
-      dob,
     },
     cachePolicy: 'auto',
   });

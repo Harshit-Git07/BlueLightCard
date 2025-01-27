@@ -8,7 +8,7 @@ import { useAmplitudeExperiment } from '@/context/AmplitudeExperiment';
 import { V5_API_URL } from '@/globals/apiUrl';
 import { usePlatformAdapter } from '@bluelightcard/shared-ui/adapters';
 import { AmplitudeExperimentFlags } from '../utils/amplitude/AmplitudeExperimentFlags';
-import { User, UserContextType } from '@/context/User/UserContext';
+import { UserContextType } from '@/context/User/UserContext';
 import { WebPlatformAdapter } from '@/utils/WebPlatformAdapter';
 
 export type CompanyType = {
@@ -82,8 +82,8 @@ const useFetchCompaniesOrCategories = (userCtx: UserContextType) => {
         setIsLoading(true);
 
         const [companies, categories] = await Promise.all([
-          getCompanies(userCtx.user, platformAdapter, useLegacyIds),
-          getCategories(userCtx.user, platformAdapter),
+          getCompanies(platformAdapter, useLegacyIds),
+          getCategories(platformAdapter),
         ]);
 
         setCompanies(companies);
@@ -106,8 +106,6 @@ const useFetchCompaniesOrCategories = (userCtx: UserContextType) => {
     userCtx.error,
     userCtx.isAgeGated,
     userCtx.user,
-    userCtx.user?.profile.dob,
-    userCtx.user?.profile.organisation,
     modernCategoriesEnabled.data?.variantName,
     offersCmsExperiment.status,
     modernCategoriesEnabled.status,
@@ -118,19 +116,9 @@ const useFetchCompaniesOrCategories = (userCtx: UserContextType) => {
   return { categories, companies, isLoading };
 };
 
-const getCompanies = async (
-  user: User | undefined,
-  platformAdapter: WebPlatformAdapter,
-  useLegacyIds: boolean
-) => {
-  const params = {
-    dob: user?.profile.dob ?? '',
-    organisation: user?.profile.organisation ?? '',
-  };
-
+const getCompanies = async (platformAdapter: WebPlatformAdapter, useLegacyIds: boolean) => {
   const companiesResponse = await platformAdapter.invokeV5Api(V5_API_URL.Companies, {
     method: 'GET',
-    queryParameters: params,
   });
 
   const companiesCollection = JSON.parse(companiesResponse.data);
@@ -142,15 +130,9 @@ const getCompanies = async (
   return [];
 };
 
-const getCategories = async (user: User | undefined, platformAdapter: WebPlatformAdapter) => {
-  const params = {
-    dob: user?.profile.dob ?? '',
-    organisation: user?.profile.organisation ?? '',
-  };
-
+const getCategories = async (platformAdapter: WebPlatformAdapter) => {
   const categoriesResponse = await platformAdapter.invokeV5Api(V5_API_URL.Categories, {
     method: 'GET',
-    queryParameters: params,
   });
   return JSON.parse(categoriesResponse.data).data as CategoryType[];
 };

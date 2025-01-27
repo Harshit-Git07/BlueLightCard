@@ -41,22 +41,17 @@ const getMenusParams = (event: APIGatewayEvent) => {
       throw new Error(queryValidation.error.errors[0]?.message || `Invalid query string parameter 'id'`);
     }
   }
-  logger.info({ message: `Extracting headers` });
   const { authToken, platform } = extractHeaders(event.headers);
-  logger.info({ message: `Extracted headers: ${JSON.stringify({ authToken, platform })}` });
   return { menusRequested, authToken, platform };
 };
 
 const handlerUnwrapped = async (event: APIGatewayEvent) => {
   try {
-    logger.info({ message: `Received event: ${JSON.stringify(event)}` });
     const { menusRequested, authToken } = getMenusParams(event);
-    logger.info({ message: `Menus requested: ${JSON.stringify(menusRequested)}` });
     const parsedBearerToken = unpackJWT(authToken);
-    logger.info({ message: `Parsed bearer token: ${JSON.stringify(parsedBearerToken)}` });
 
     const userProfile = await getUserDetails(parsedBearerToken['custom:blc_old_uuid']);
-    logger.info({ message: `User profile found: ${JSON.stringify(userProfile)}` });
+
     if (!userProfile) {
       logger.error({ message: 'User profile not found' });
       return Response.Unauthorized({ message: 'User profile not found' });

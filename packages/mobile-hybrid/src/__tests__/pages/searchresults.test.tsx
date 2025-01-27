@@ -129,8 +129,6 @@ describe('Search Results', () => {
           method: 'GET',
           queryParameters: {
             query: 'test search value',
-            organisation: 'test-organisation',
-            dob: '1990-01-01',
           },
           cachePolicy: 'auto',
         });

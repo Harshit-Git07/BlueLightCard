@@ -39,20 +39,12 @@ describe('Experiment make search', () => {
   });
 
   it('should invoke V5 API with correct parameters', async () => {
-    const result = await experimentMakeSearch(
-      'apple',
-      '1990-01-01',
-      'service',
-      mockPlatformAdapter,
-      false
-    );
+    const result = await experimentMakeSearch('apple', mockPlatformAdapter, false);
 
     expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(V5_API_URL.Search, {
       method: 'GET',
       queryParameters: {
         query: 'apple',
-        dob: '1990-01-01',
-        organisation: 'service',
       },
     });
     expect(result).toEqual({
@@ -61,13 +53,7 @@ describe('Experiment make search', () => {
   });
 
   it('should invoke map legacy IDs to IDs when "useLegacyId" is true', async () => {
-    const result = await experimentMakeSearch(
-      'apple',
-      '1990-01-01',
-      'service',
-      mockPlatformAdapter,
-      true
-    );
+    const result = await experimentMakeSearch('apple', mockPlatformAdapter, true);
 
     expect(result).toEqual({
       results: searchResultsLegacy,

@@ -167,13 +167,7 @@ describe('SearchPage', () => {
       whenSearchPageIsRendered();
 
       expect(makeSearchMock).not.toHaveBeenCalled();
-      expect(experimentMakeSearchMock).toHaveBeenCalledWith(
-        'Apple',
-        'mock-dob',
-        'mock-organisation',
-        expect.anything(),
-        false
-      );
+      expect(experimentMakeSearchMock).toHaveBeenCalledWith('Apple', expect.anything(), false);
     });
 
     it('should call "experimentMakeSearch" with useLegacyId as true when offers cms is disabled', () => {
@@ -182,13 +176,7 @@ describe('SearchPage', () => {
       whenSearchPageIsRendered();
 
       expect(makeSearchMock).not.toHaveBeenCalled();
-      expect(experimentMakeSearchMock).toHaveBeenCalledWith(
-        'Apple',
-        'mock-dob',
-        'mock-organisation',
-        expect.anything(),
-        true
-      );
+      expect(experimentMakeSearchMock).toHaveBeenCalledWith('Apple', expect.anything(), true);
     });
   });
 

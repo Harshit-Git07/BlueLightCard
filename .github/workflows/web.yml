@@ -92,7 +92,7 @@ jobs:
           packageName: web
           brandDeployments: true
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          
+
   deploy:
     name: 'Deploy ${{matrix.environment}} [${{matrix.brand}}]'
     strategy:
@@ -204,4 +204,3 @@ jobs:
           body: |
             :sparkles: Commit deployed!
             ${{matrix.brand}} (${{matrix.environment}}): ${{ steps.deploy.outputs.deployment-url }}
-

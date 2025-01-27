@@ -40,6 +40,7 @@ export class WebPlatformAdapter implements IPlatformAdapter {
       : '';
 
     const headers: HeadersInit = {
+      'x-client-type': 'web',
       'Content-Type': 'application/json',
       Authorization: `Bearer ${idToken}`,
     };

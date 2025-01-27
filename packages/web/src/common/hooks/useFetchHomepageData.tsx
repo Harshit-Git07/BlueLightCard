@@ -162,14 +162,8 @@ const getMenus = async (
   platformAdapter: WebPlatformAdapter,
   useLegacyIds: boolean
 ) => {
-  const params = {
-    dob: user?.profile.dob ?? '',
-    organisation: user?.profile.organisation ?? '',
-  };
-
   const menusResponse = await platformAdapter.invokeV5Api(V5_API_URL.Menus, {
     method: 'GET',
-    queryParameters: params,
   });
 
   return mapMenusResponse(JSON.parse(menusResponse.data).data, useLegacyIds);

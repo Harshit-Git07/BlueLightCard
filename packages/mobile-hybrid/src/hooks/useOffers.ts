@@ -14,7 +14,6 @@ import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { spinner } from '@/modules/Spinner/store';
 import { useCallback } from 'react';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
-import { userProfile } from '@/components/UserProfileProvider/store';
 import { AmplitudeFeatureFlagState } from '@/components/AmplitudeProvider/types';
 
 export interface OffersResultResponse {
@@ -32,7 +31,6 @@ const invokeNativeApiCall = new InvokeNativeAPICall();
 const useOffers = (platformAdapter: IPlatformAdapter) => {
   const [offerPromos, setOfferPromos] = useAtom(offerPromosAtom);
   const amplitudeExperiments = useAtomValue(experimentsAndFeatureFlags);
-  const userProfileValue = useAtomValue(userProfile);
   const setSpinner = useSetAtom(spinner);
 
   const getOfferPromos = useCallback(async () => {
@@ -49,8 +47,6 @@ const useOffers = (platformAdapter: IPlatformAdapter) => {
           v5Offers(
             platformAdapter,
             platformAdapter.getAmplitudeFeatureFlag(FeatureFlags.CMS_OFFERS) !== 'on',
-            userProfileValue?.service,
-            userProfileValue?.dob,
           ),
       );
 
@@ -59,13 +55,7 @@ const useOffers = (platformAdapter: IPlatformAdapter) => {
     } catch (err) {
       console.error('Error requesting offer promos', err);
     }
-  }, [
-    platformAdapter,
-    setOfferPromos,
-    amplitudeExperiments,
-    userProfileValue?.service,
-    userProfileValue?.dob,
-  ]);
+  }, [platformAdapter, setOfferPromos, amplitudeExperiments]);
 
   return {
     offerPromos,
@@ -88,16 +78,10 @@ const v4Offers = async (): Promise<OffersResultResponse> => {
 const v5Offers = async (
   platformAdapter: IPlatformAdapter,
   useLegacyIds = true,
-  organisation: string = '',
-  dob: string = '',
 ): Promise<OffersResultResponse> => {
   const results = await platformAdapter.invokeV5Api(V5_API_URL.Menus, {
     method: 'GET',
     cachePolicy: 'auto',
-    queryParameters: {
-      organisation,
-      dob,
-    },
   });
 
   const parsedSearchResults = JSON.parse(results.data).data;

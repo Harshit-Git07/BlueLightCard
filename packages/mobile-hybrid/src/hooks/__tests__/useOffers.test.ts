@@ -3,7 +3,6 @@ import { act } from 'react';
 import { useHydrateAtoms } from 'jotai/utils';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import { IPlatformAdapter, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
-import { userProfile } from '@/components/UserProfileProvider/store';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import useOffers from '@/hooks/useOffers';
 
@@ -59,15 +58,7 @@ describe('useOffers', () => {
         data: mockV5Response,
       });
 
-      state = renderWithHydratedAtoms(mockPlatformAdapter, [
-        [
-          userProfile,
-          {
-            service: 'test-organisation',
-            dob: '1990-01-01',
-          },
-        ],
-      ]);
+      state = renderWithHydratedAtoms(mockPlatformAdapter, []);
     });
 
     it('executes V5 menu data request with legacy IDs', async () => {
@@ -86,10 +77,6 @@ describe('useOffers', () => {
 
       expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith('/eu/discovery/menus', {
         method: 'GET',
-        queryParameters: {
-          organisation: 'test-organisation',
-          dob: '1990-01-01',
-        },
         cachePolicy: 'auto',
       });
       expect(state.result.current.offerPromos.deal).toEqual([
@@ -217,15 +204,7 @@ describe('useOffers', () => {
         return 'off';
       });
 
-      const state = renderWithHydratedAtoms(mockPlatformAdapter, [
-        [
-          userProfile,
-          {
-            service: 'test-organisation',
-            dob: '1990-01-01',
-          },
-        ],
-      ]);
+      const state = renderWithHydratedAtoms(mockPlatformAdapter, []);
 
       await act(async () => {
         await state.result.current.getOfferPromos();

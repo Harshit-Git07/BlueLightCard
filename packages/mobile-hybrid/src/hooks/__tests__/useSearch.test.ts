@@ -4,7 +4,6 @@ import { useHydrateAtoms } from 'jotai/utils';
 import InvokeNativeAPICall from '@/invoke/apiCall';
 import useSearch, { statusAtom, searchTermAtom, searchResultsAtom } from '../useSearch';
 import { IPlatformAdapter, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
-import { userProfile } from '@/components/UserProfileProvider/store';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 
 const renderWithHydratedAtoms = (mockPlatformAdapter: IPlatformAdapter, atomValues: any[] = []) => {
@@ -112,15 +111,7 @@ describe('useSearch', () => {
     it('executes V5 searches for searchV5 experiment', async () => {
       mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('treatment');
 
-      const state = renderWithHydratedAtoms(mockPlatformAdapter, [
-        [
-          userProfile,
-          {
-            service: 'test-organisation',
-            dob: '1990-01-01',
-          },
-        ],
-      ]);
+      const state = renderWithHydratedAtoms(mockPlatformAdapter, []);
 
       await act(async () => {
         await state.result.current.doSearch('test V5 search value');
@@ -130,8 +121,6 @@ describe('useSearch', () => {
         method: 'GET',
         queryParameters: {
           query: 'test V5 search value',
-          organisation: 'test-organisation',
-          dob: '1990-01-01',
         },
         cachePolicy: 'auto',
       });
@@ -160,15 +149,7 @@ describe('useSearch', () => {
         return 'off';
       });
 
-      const state = renderWithHydratedAtoms(mockPlatformAdapter, [
-        [
-          userProfile,
-          {
-            service: 'test-organisation',
-            dob: '1990-01-01',
-          },
-        ],
-      ]);
+      const state = renderWithHydratedAtoms(mockPlatformAdapter, []);
 
       await act(async () => {
         await state.result.current.doSearch('test V5 search value');

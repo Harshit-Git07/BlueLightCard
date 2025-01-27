@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.23.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.22.1...bluelightcard/discovery-v1.23.0) (2025-01-27)
+
+
+### Features
+
+* Disco - 1393 Update other backend endpoints ([#3592](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3592)) ([15067c7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/15067c783dac07334365387b719c885550ef9f46))
+* disco 1418 ([#3565](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3565)) ([a4ef32d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a4ef32df00dc98a17534e3e4d36e90ab334bbc3b))
+* Move zod models to shared folder and use it throughout the frontend instead of the generated openAPI types ([#3554](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3554)) ([f6ae220](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f6ae220bc5f13846cb234b69e02f9b4cc62a7919))
+
+
+### Bug Fixes
+
+* fix environment variable capitalisation discovery stack ([#3613](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3613)) ([85672c2](https://github.com/bluelightcard/BlueLightCard-2.0/commit/85672c2a7e337a9fe79f58a8ee27dc71986bb753))
+
 ## [1.22.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.22.0...bluelightcard/discovery-v1.22.1) (2025-01-20)
 
 

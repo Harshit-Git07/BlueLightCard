@@ -1,22 +1,21 @@
 import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
-import { refreshIdTokenIfRequired } from '@/utils/refreshIdTokenIfRequired';
 import { serviceLayerUrl } from '@/root/src/member-eligibility/constants/ServiceLayerUrl';
+import { fetchWithAuth } from '@/root/src/member-eligibility/shared/utils/FetchWithAuth';
+import { DocumentUploadLocation } from '@blc-mono/shared/models/members/documentUpload';
 
 export async function uploadFileToServiceLayer(
   eligibilityDetails: EligibilityDetails,
   file: File
-): Promise<void> {
-  const presignedUrl = await getPresignedUrl(eligibilityDetails);
-  if (!presignedUrl) {
-    throw new Error('Failed to upload file to service layer as getting the pre-signed url failed');
-  }
+): Promise<string> {
+  const result = await getDocumentToUploadDetails(eligibilityDetails);
 
-  await uploadFileTo(presignedUrl, file);
+  await uploadFileTo(result.preSignedUrl, file);
+  return result.documentId;
 }
 
-async function getPresignedUrl(
+async function getDocumentToUploadDetails(
   eligibilityDetails: EligibilityDetails
-): Promise<string | undefined> {
+): Promise<DocumentUploadLocation> {
   if (!eligibilityDetails.member?.id) {
     throw new Error('No member id available so cannot get presigned url to upload file to');
   }
@@ -24,23 +23,17 @@ async function getPresignedUrl(
     throw new Error('No application id available so cannot get presigned url to upload file to');
   }
 
-  const idToken = await refreshIdTokenIfRequired();
-  const result = await fetch(
+  const result: DocumentUploadLocation = await fetchWithAuth(
     `${serviceLayerUrl}/members/${eligibilityDetails.member?.id}/applications/${eligibilityDetails.member.application.id}/uploadDocument`,
     {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${idToken}`,
-      },
     }
   );
-
-  if (!result.ok || !result.body) {
-    console.error('Failed to get pre-signed url for unknown reason', result.body);
-    throw new Error('Failed to get pre-signed url for unknown reason');
+  if (!result) {
+    throw new Error('Failed to upload file');
   }
 
-  return JSON.parse(await result.text()).preSignedUrl;
+  return result;
 }
 
 async function uploadFileTo(presignedUrl: string, file: File): Promise<void> {

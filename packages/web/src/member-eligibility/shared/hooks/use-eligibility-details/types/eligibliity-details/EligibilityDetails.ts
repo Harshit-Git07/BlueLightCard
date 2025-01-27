@@ -2,7 +2,7 @@ import { DropdownOption } from '@bluelightcard/shared-ui/components/Dropdown/typ
 
 export interface EligibilityDetails {
   flow: 'Sign Up' | 'Renewal';
-  currentScreen: EligibilityScreen;
+  currentScreen: EligibilityScreenName;
   hasJumpedStraightToPayment?: boolean;
   hasSkippedAccountDetails?: boolean;
   accountDetailsChanged?: boolean;
@@ -20,11 +20,16 @@ export interface EligibilityDetails {
   canSkipPayment?: boolean;
   emailVerification?: string;
   fileVerificationType?: string | [string, string];
-  fileVerification?: Blob[];
+  fileVerification?: UploadedDocuments;
   currentIdRequirementDetails?: IdRequirementDetails[];
 }
 
-export type EligibilityScreen =
+export type UploadedDocuments = {
+  documentId: string;
+  fileName?: string;
+}[];
+
+export type EligibilityScreenName =
   | 'Interstitial Screen'
   | 'Renewal Account Details Screen'
   | 'Job Details Screen'

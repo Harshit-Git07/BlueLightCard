@@ -13,10 +13,7 @@ import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 import { useFuzzyFrontendButtons } from './hooks/FuzzyFrontendButtons';
 import { useVerificationMethodDetails } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/hooks/VeificationMethodDetails';
 import { usePrivacyPolicyUrl } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/hooks/PrivacyPolicyUrl';
-import {
-  EligibilityFileUpload,
-  OnFilesChanged,
-} from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/components/EligibilityFileUpload';
+import { EligibilityFileUpload } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/components/EligibilityFileUpload';
 import {
   defaultScreenTitle,
   idUploadSubTitle,
@@ -25,13 +22,17 @@ import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils
 import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
 import { fileUploadVerificationEvents } from '@/root/src/member-eligibility/shared/screens/file-upload-verification-screen/amplitude-events/FileUploadVerificationEvents';
 import { useUpdateMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/UseUpdateMemberProfile';
-import { EligibilityDetails } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
+import {
+  EligibilityDetails,
+  EligibilityScreenName,
+} from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { requiresMultipleIds } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/utils/RequiresMultipleIds';
 
 export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
 }) => {
   const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
+  const multipleIdsNeeded = requiresMultipleIds(eligibilityDetails);
 
   const logAnalyticsEvent = useLogAmplitudeEvent();
   useLogAnalyticsPageView(eligibilityDetails);
@@ -69,39 +70,31 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
   }, [eligibilityDetails.fileVerificationType, firstVerificationMethod.title]);
 
   const enoughFilesSelectedForUpload = useMemo(() => {
-    if (typeof eligibilityDetails.fileVerificationType === 'string') {
-      return selectedFiles.length === 1;
+    if (multipleIdsNeeded) {
+      return selectedFiles.length === 2;
     }
-
-    return selectedFiles.length === 2;
-  }, [eligibilityDetails.fileVerificationType, selectedFiles.length]);
+    return selectedFiles.length === 1;
+  }, [multipleIdsNeeded, selectedFiles.length]);
 
   const verificationMethodsHeader = useMemo(() => {
-    const optionalPlural = requiresMultipleIds(eligibilityDetails) ? 'S' : '';
+    const optionalPlural = multipleIdsNeeded ? 'S' : '';
 
     return `UPLOAD THE FOLLOWING DOCUMENT${optionalPlural}`;
-  }, [eligibilityDetails]);
+  }, [multipleIdsNeeded]);
 
-  const onFilesChanged: OnFilesChanged = useCallback(
-    (files) => {
-      const fileVerification = files?.length !== 0 ? files : undefined;
-      if (eligibilityDetails.fileVerification === fileVerification) return;
-
-      setEligibilityDetails({
-        ...eligibilityDetails,
-        fileVerification,
-      });
-    },
-    [eligibilityDetails, setEligibilityDetails]
-  );
+  function getNextScreen(): EligibilityScreenName {
+    if (eligibilityDetails.canSkipPayment) {
+      return 'Delivery Address Screen';
+    }
+    return eligibilityDetails.flow === 'Sign Up' ? 'Delivery Address Screen' : 'Payment Screen';
+  }
 
   const onNext = useCallback(async () => {
     logAnalyticsEvent(fileUploadVerificationEvents.onSubmitClicked(eligibilityDetails));
 
     const updatedEligibilityDetails: EligibilityDetails = {
       ...eligibilityDetails,
-      currentScreen:
-        eligibilityDetails.flow === 'Sign Up' ? 'Delivery Address Screen' : 'Payment Screen',
+      currentScreen: getNextScreen(),
     };
 
     setEligibilityDetails(updatedEligibilityDetails);
@@ -172,7 +165,6 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
             <EligibilityFileUpload
               eligibilityDetailsState={eligibilityDetailsState}
-              onFilesChanged={onFilesChanged}
               maxNumberOfFilesToUpload={maxNumberOfFilesToUpload}
             />
           </div>

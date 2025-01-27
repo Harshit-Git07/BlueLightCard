@@ -23,7 +23,7 @@ export function useFileUploadState(
   eligibilityDetailsState: EligibilityDetailsState,
   maxNumberOfFiles: number
 ): FileUploadState {
-  const [eligibilityDetails] = eligibilityDetailsState;
+  const [eligibilityDetails, setEligibilityDetails] = eligibilityDetailsState;
 
   const [selectedFiles, setSelectedFiles] = useState<FileDetails[]>([]);
   const [fileSelectionError, setFileSelectionError] = useState<string | undefined>(undefined);
@@ -35,7 +35,14 @@ export function useFileUploadState(
   const handleFileUploadResult = useCallback(
     async (file: File) => {
       try {
-        await uploadFileToServiceLayer(eligibilityDetails, file);
+        const documentId = await uploadFileToServiceLayer(eligibilityDetails, file);
+        const documentIds = eligibilityDetails.fileVerification ?? [];
+        documentIds.push({ documentId: documentId, fileName: file.name });
+
+        setEligibilityDetails({
+          ...eligibilityDetails,
+          fileVerification: documentIds,
+        });
         setSelectedFiles((files) => {
           const index = files.findIndex((fileDetails) => fileDetails.file === file);
           if (index === -1) return files;
@@ -101,12 +108,21 @@ export function useFileUploadState(
     [maxNumberOfFiles, selectedFilesAsFiles, uploadNewFiles]
   );
 
-  const onFileRemoved: OnFileRemoved = useCallback((fileToRemove) => {
-    setSelectedFiles((selectedFiles) => {
-      return selectedFiles.filter((fileDetails) => fileDetails.file !== fileToRemove.file);
-    });
-    setFileSelectionError(undefined);
-  }, []);
+  const onFileRemoved: OnFileRemoved = useCallback(
+    (fileToRemove) => {
+      setSelectedFiles((selectedFiles) => {
+        return selectedFiles.filter((fileDetails) => fileDetails.file !== fileToRemove.file);
+      });
+      setFileSelectionError(undefined);
+      setEligibilityDetails({
+        ...eligibilityDetails,
+        fileVerification: eligibilityDetails.fileVerification?.filter(
+          (document) => document.fileName !== fileToRemove.file.name
+        ),
+      });
+    },
+    [eligibilityDetails, setEligibilityDetails]
+  );
 
   return {
     selectedFiles,

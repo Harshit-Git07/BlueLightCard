@@ -80,7 +80,15 @@ export const VerificationMethodScreen: FC<VerifyEligibilityScreenProps> = ({
 
             <div className="flex flex-col gap-[16px]">
               {supportingMethods.map((method) => (
-                <ListSelector key={method.title} {...method} />
+                <ListSelector
+                  key={method.title}
+                  {...method}
+                  tag={
+                    method.title === 'Work Email' ? (
+                      <Tag state="Success" infoMessage="Fast" iconLeft={faCircleBolt} />
+                    ) : undefined
+                  }
+                />
               ))}
             </div>
           </div>

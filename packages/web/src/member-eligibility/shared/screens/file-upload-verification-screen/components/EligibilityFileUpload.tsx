@@ -1,5 +1,5 @@
 import FileSelectionBody from '@bluelightcard/shared-ui/components/FileUpload/FileSelectionBody';
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useMemo } from 'react';
 import { colours, fonts } from '@bluelightcard/shared-ui/tailwind/theme';
 import FileUploadCounter from '@bluelightcard/shared-ui/components/FileUpload/FileUploadCounter';
 import FileUploadStatusCard from '@bluelightcard/shared-ui/components/FileUpload/FileUploadStatusCard';
@@ -10,7 +10,6 @@ import { fileUploadVerificationEvents } from '@/root/src/member-eligibility/shar
 
 interface Props {
   eligibilityDetailsState: EligibilityDetailsState;
-  onFilesChanged: OnFilesChanged;
   maxNumberOfFilesToUpload: number;
 }
 
@@ -21,7 +20,6 @@ const maxFileSizeInBytes = 20_000_000;
 
 export const EligibilityFileUpload: FC<Props> = ({
   eligibilityDetailsState,
-  onFilesChanged,
   maxNumberOfFilesToUpload,
 }) => {
   const [eligibilityDetails] = eligibilityDetailsState;
@@ -36,16 +34,6 @@ export const EligibilityFileUpload: FC<Props> = ({
   const disableFileUpload = useMemo(() => {
     return selectedFiles.length >= maxNumberOfFilesToUpload;
   }, [maxNumberOfFilesToUpload, selectedFiles.length]);
-
-  const validFiles = useMemo(() => {
-    return selectedFiles
-      .filter((fileDetails) => fileDetails.status === 'success')
-      .map((fileDetails) => fileDetails.file);
-  }, [selectedFiles]);
-
-  useEffect(() => {
-    onFilesChanged(validFiles);
-  }, [validFiles, onFilesChanged]);
 
   return (
     <div className="flex flex-col gap-[12px]">

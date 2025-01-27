@@ -23,6 +23,7 @@ export async function updateServiceLayerApplication(
       city: eligibilityDetails.address?.city,
       postcode: eligibilityDetails.address?.postcode,
       trustedDomainEmail: eligibilityDetails.emailVerification,
+      documents: eligibilityDetails.fileVerification?.map((file) => file.documentId),
     };
 
     return await fetchWithAuth(

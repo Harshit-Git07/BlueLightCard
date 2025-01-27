@@ -4,7 +4,7 @@ import { MouseEventHandler, useCallback } from 'react';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import {
   EligibilityDetails,
-  EligibilityScreen,
+  EligibilityScreenName,
 } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { applyPromoCode } from '@/root/src/member-eligibility/shared/screens/job-details-screen/components/JobDetailsForm/components/normal-job-details/hooks/use-on-promocode-applied/service-layer/ApplyPromoCode';
 
@@ -35,7 +35,9 @@ export function useOnNext(eligibilityDetailsState: EligibilityDetailsState): Mou
   }, [logAnalyticsEvent, eligibilityDetails, setEligibilityDetails]);
 }
 
-async function getNextScreen(eligibilityDetails: EligibilityDetails): Promise<EligibilityScreen> {
+async function getNextScreen(
+  eligibilityDetails: EligibilityDetails
+): Promise<EligibilityScreenName> {
   if (!eligibilityDetails.promoCode) return 'Verification Method Screen';
 
   try {

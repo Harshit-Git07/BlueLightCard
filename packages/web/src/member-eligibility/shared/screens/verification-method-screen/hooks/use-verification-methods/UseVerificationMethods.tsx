@@ -6,7 +6,7 @@ import { verificationMethodEvents } from '@/root/src/member-eligibility/shared/s
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import { requiresMultipleIds } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/utils/RequiresMultipleIds';
 
-interface VerificationMethod
+export interface VerificationMethod
   extends Pick<
     ListSelectorProps,
     'title' | 'description' | 'tag' | 'onClick' | 'showTrailingIcon'
@@ -77,7 +77,9 @@ export function useVerificationMethods(
     });
 
     const primaryMethod = methods.find((method) => method.primary);
-    const supportingMethods = methods.filter((method) => !method.primary);
+    const supportingMethods = moveWorkEmailToFirstItemOfArray(
+      methods.filter((method) => !method.primary)
+    );
 
     return {
       primaryMethod,
@@ -89,4 +91,13 @@ export function useVerificationMethods(
     handleFileUploadVerification,
     isMobile,
   ]);
+}
+
+function moveWorkEmailToFirstItemOfArray(items: VerificationMethod[]): VerificationMethod[] {
+  const index = items.findIndex((item) => item.title === 'Work Email');
+  if (index > -1) {
+    const [workEmailItem] = items.splice(index, 1);
+    items.unshift(workEmailItem);
+  }
+  return items;
 }

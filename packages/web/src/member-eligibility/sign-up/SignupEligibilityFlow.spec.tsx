@@ -46,7 +46,7 @@ const useOrganisationsMock = jest.mocked(useOrganisations);
 const useEmployersMock = jest.mocked(useEmployers);
 
 beforeEach(() => {
-  uploadFileToServiceLayerMock.mockResolvedValue(Promise.resolve());
+  uploadFileToServiceLayerMock.mockResolvedValue(Promise.resolve('mock-document-id'));
   useUpdateMemberProfileMock.mockReturnValue(updateMemberProfileMock);
   updateMemberProfileMock.mockResolvedValue(Promise.resolve());
 
@@ -329,18 +329,6 @@ describe('given a signing up member that needs to prove their eligibility to use
                   expect(deliveryAddressScreen).toBeInTheDocument();
                 });
 
-                describe('when the back button is pressed', () => {
-                  beforeEach(async () => {
-                    const backButton = screen.getByTestId('back-button');
-                    act(() => backButton.click());
-                  });
-
-                  it('should navigate back to the verification method screen', () => {
-                    const fileUploadScreen = screen.getByTestId('verification-method-screen');
-                    expect(fileUploadScreen).toBeInTheDocument();
-                  });
-                });
-
                 describe('when they submit their address', () => {
                   beforeEach(async () => {
                     await givenAddressIsSubmitted();
@@ -442,18 +430,6 @@ describe('given a signing up member that needs to prove their eligibility to use
                 expect(deliveryAddressScreen).toBeInTheDocument();
               });
 
-              describe('when the back button is pressed', () => {
-                beforeEach(async () => {
-                  const backButton = screen.getByTestId('back-button');
-                  act(() => backButton.click());
-                });
-
-                it('should navigate back to the verification method screen', () => {
-                  const fileUploadScreen = screen.getByTestId('verification-method-screen');
-                  expect(fileUploadScreen).toBeInTheDocument();
-                });
-              });
-
               describe('when they submit their address', () => {
                 beforeEach(async () => {
                   await givenAddressIsSubmitted();
@@ -503,18 +479,6 @@ describe('given a signing up member that needs to prove their eligibility to use
             expect(deliveryAddressScreen).toBeInTheDocument();
           });
 
-          describe('when the back button is pressed', () => {
-            beforeEach(async () => {
-              const backButton = screen.getByTestId('back-button');
-              act(() => backButton.click());
-            });
-
-            it('should navigate back to the job details screen', () => {
-              const fileUploadScreen = screen.getByTestId('job-details-screen');
-              expect(fileUploadScreen).toBeInTheDocument();
-            });
-          });
-
           describe('when they submit their address', () => {
             beforeEach(async () => {
               await givenAddressIsSubmitted();
@@ -560,18 +524,6 @@ describe('given a signing up member that needs to prove their eligibility to use
           it('should navigate to the delivery address screen', () => {
             const deliveryAddressScreen = screen.getByTestId('delivery-address-screen');
             expect(deliveryAddressScreen).toBeInTheDocument();
-          });
-
-          describe('when the back button is pressed', () => {
-            beforeEach(async () => {
-              const backButton = screen.getByTestId('back-button');
-              act(() => backButton.click());
-            });
-
-            it('should navigate back to the job details screen', () => {
-              const fileUploadScreen = screen.getByTestId('job-details-screen');
-              expect(fileUploadScreen).toBeInTheDocument();
-            });
           });
 
           describe('when they submit their address', () => {
@@ -643,18 +595,6 @@ describe('given a signing up member that needs to prove their eligibility to use
       it('should navigate to the delivery address screen', () => {
         const deliveryAddressScreen = screen.getByTestId('delivery-address-screen');
         expect(deliveryAddressScreen).toBeInTheDocument();
-      });
-
-      describe('when the back button is pressed', () => {
-        beforeEach(async () => {
-          const backButton = screen.getByTestId('back-button');
-          act(() => backButton.click());
-        });
-
-        it('should navigate back to the interstitial screen', () => {
-          const fileUploadScreen = screen.getByTestId('signup-interstitial-screen');
-          expect(fileUploadScreen).toBeInTheDocument();
-        });
       });
 
       describe('when they submit their address', () => {

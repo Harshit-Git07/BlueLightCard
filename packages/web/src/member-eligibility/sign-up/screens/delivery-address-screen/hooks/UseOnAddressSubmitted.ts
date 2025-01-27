@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import {
   EligibilityDetails,
   EligibilityDetailsAddress,
-  EligibilityScreen,
+  EligibilityScreenName,
 } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/types/eligibliity-details/EligibilityDetails';
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
@@ -45,7 +45,7 @@ export function useOnAddressSubmitted(eligibilityDetailsState: EligibilityDetail
   ]);
 }
 
-function getNextScreen(eligibilityDetails: EligibilityDetails): EligibilityScreen {
+function getNextScreen(eligibilityDetails: EligibilityDetails): EligibilityScreenName {
   if (eligibilityDetails.canSkipPayment) {
     return 'Success Screen';
   }

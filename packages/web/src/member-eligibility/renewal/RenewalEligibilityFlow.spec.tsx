@@ -47,7 +47,7 @@ const useOrganisationsMock = jest.mocked(useOrganisations);
 const useEmployersMock = jest.mocked(useEmployers);
 
 beforeEach(() => {
-  uploadFileToServiceLayerMock.mockResolvedValue(Promise.resolve());
+  uploadFileToServiceLayerMock.mockResolvedValue(Promise.resolve('mocked-document-id'));
   useUpdateMemberProfileMock.mockReturnValue(updateMemberProfileMock);
   updateMemberProfileMock.mockResolvedValue(Promise.resolve());
 

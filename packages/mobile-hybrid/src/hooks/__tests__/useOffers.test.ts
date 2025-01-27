@@ -182,7 +182,7 @@ describe('useOffers', () => {
             id: 'flexible-item-1',
             title: 'Flexible Item 1',
             imagehome: 'image-1',
-            imagedetail: '',
+            imagedetail: 'image-1',
             navtitle: '',
             intro: '',
             footer: '',

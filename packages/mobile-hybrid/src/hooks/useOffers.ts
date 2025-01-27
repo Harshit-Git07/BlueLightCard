@@ -128,7 +128,7 @@ const mapFlexibleItem = (item: any): OfferFlexibleItemModel => {
     id: item.id,
     title: item.title,
     imagehome: item.imageURL,
-    imagedetail: '',
+    imagedetail: item.imageURL,
     navtitle: '',
     intro: '',
     footer: '',

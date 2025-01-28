@@ -24,7 +24,7 @@ export async function updateServiceLayerProfile(
       employmentStatus: getEmploymentStatus(eligibilityDetails),
       organisationId: eligibilityDetails.organisation?.id,
       employerId: eligibilityDetails.employer?.id,
-      employerName: undefined, // TODO: Add AUS specific employer name here?
+      employerName: eligibilityDetails.jobDetailsAus?.employerAus,
       jobTitle: eligibilityDetails.jobTitle,
       jobReference: eligibilityDetails.jobReference,
     };
@@ -37,7 +37,7 @@ export async function updateServiceLayerProfile(
     );
   } catch (error) {
     console.error('Failed to create member application', error);
-    return undefined;
+    throw error;
   }
 }
 

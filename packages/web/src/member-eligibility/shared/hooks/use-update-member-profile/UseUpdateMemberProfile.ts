@@ -29,8 +29,9 @@ export function useUpdateMemberProfile(eligibilityDetailsState: EligibilityDetai
           return;
         }
 
-        await updateServiceLayerApplication(applicationId, eligibilityDetails);
+        // Need to update the profile first as service layer expects the org / employer to be on the profile for trusted domain checks
         await updateServiceLayerProfile(eligibilityDetails);
+        await updateServiceLayerApplication(applicationId, eligibilityDetails);
 
         const updatedProfile = await getMemberProfile();
         if (!updatedProfile) return;
@@ -45,6 +46,8 @@ export function useUpdateMemberProfile(eligibilityDetailsState: EligibilityDetai
         if (eligibilityDetailsOverrides) {
           setEligibilityDetails(eligibilityDetailsOverrides);
         }
+
+        throw error;
       }
     },
     [eligibilityDetailsFromState, getMemberProfile, setEligibilityDetails]

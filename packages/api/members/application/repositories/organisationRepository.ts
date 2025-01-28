@@ -140,7 +140,7 @@ export class OrganisationRepository extends Repository {
     const result = await this.dynamoDB.send(new GetCommand(params));
 
     if (!result.Item) {
-      throw new NotFoundError(`Organisation with ID ${organisationId} not found`);
+      throw new NotFoundError(`Organisation with ID '${organisationId}' not found`);
     }
 
     return OrganisationModel.parse(result.Item);

@@ -1,5 +1,5 @@
 import { EventBridgeEvent, StreamRecord } from 'aws-lambda';
-import { eventBusMiddleware } from '../../middleware';
+import { eventBusMiddleware, logger } from '../../middleware';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { EmailService } from '@blc-mono/members/application/email/emailService';
 import { MemberEvent } from '@blc-mono/shared/models/members/enums/MemberEvent';
@@ -10,6 +10,7 @@ export const unwrappedHandler = async (
   event: EventBridgeEvent<string, StreamRecord>,
 ): Promise<void> => {
   if (getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_EMAIL) !== 'true') {
+    logger.info({ message: 'Email events disabled, skipping...' });
     return;
   }
 

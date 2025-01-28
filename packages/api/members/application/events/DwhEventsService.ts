@@ -1,20 +1,27 @@
 import { StreamRecord } from 'aws-lambda';
-import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge';
-import { getEnv } from '@blc-mono/core/utils/getEnv';
-import { logger } from '@blc-mono/members/application/middleware';
 import { EventBusSource } from '@blc-mono/shared/models/members/enums/EventBusSource';
 import { MemberEvent } from '@blc-mono/shared/models/members/enums/MemberEvent';
 import { hasAttributeChanged } from '@blc-mono/members/application/utils/dynamoDb/attibuteManagement';
-import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
+import { EventsService } from '@blc-mono/members/application/events/base/EventsService';
 
-export class DwhEventsService {
-  constructor() {}
+export class DwhEventsService extends EventsService {
+  constructor() {
+    super(EventBusSource.DWH);
+  }
 
-  isSendProfileCreateToDwh = (dynamoStream: StreamRecord | undefined) => {
-    this.sendEventBusMessage(EventBusSource.DWH, MemberEvent.DWH_PROFILE_CREATED, dynamoStream);
-  };
+  public async emitProfileCreatedEvent(dynamoStream: StreamRecord | undefined): Promise<void> {
+    await this.sendEventBusMessage(MemberEvent.DWH_PROFILE_CREATED, dynamoStream);
+  }
 
-  isSendProfileUpdateToDwh = (dynamoStream: StreamRecord | undefined) => {
+  public async emitApplicationCreatedEvent(dynamoStream: StreamRecord | undefined): Promise<void> {
+    await this.sendEventBusMessage(MemberEvent.DWH_APPLICATION_CREATED, dynamoStream);
+  }
+
+  public async emitCardCreatedEvent(dynamoStream: StreamRecord | undefined): Promise<void> {
+    await this.sendEventBusMessage(MemberEvent.DWH_CARD_CREATED, dynamoStream);
+  }
+
+  public async emitProfileUpdatedEvent(dynamoStream: StreamRecord | undefined): Promise<void> {
     if (
       hasAttributeChanged('dateOfBirth', dynamoStream) ||
       hasAttributeChanged('gender', dynamoStream) ||
@@ -31,15 +38,11 @@ export class DwhEventsService {
       hasAttributeChanged('organisationId', dynamoStream) ||
       hasAttributeChanged('employerId', dynamoStream)
     ) {
-      this.sendEventBusMessage(EventBusSource.DWH, MemberEvent.DWH_PROFILE_UPDATED, dynamoStream);
+      await this.sendEventBusMessage(MemberEvent.DWH_PROFILE_UPDATED, dynamoStream);
     }
-  };
+  }
 
-  isSendApplicationCreateToDwh = (dynamoStream: StreamRecord | undefined) => {
-    this.sendEventBusMessage(EventBusSource.DWH, MemberEvent.DWH_APPLICATION_CREATED, dynamoStream);
-  };
-
-  isSendApplicationUpdateToDwh = (dynamoStream: StreamRecord | undefined) => {
+  public async emitApplicationUpdatedEvent(dynamoStream: StreamRecord | undefined): Promise<void> {
     if (
       hasAttributeChanged('eligibilityStatus', dynamoStream) ||
       hasAttributeChanged('paymentStatus', dynamoStream) ||
@@ -47,48 +50,17 @@ export class DwhEventsService {
       hasAttributeChanged('idS3LocationPrimary', dynamoStream) ||
       hasAttributeChanged('idS3LocationSecondary', dynamoStream)
     ) {
-      this.sendEventBusMessage(
-        EventBusSource.DWH,
-        MemberEvent.DWH_APPLICATION_UPDATED,
-        dynamoStream,
-      );
+      await this.sendEventBusMessage(MemberEvent.DWH_APPLICATION_UPDATED, dynamoStream);
     }
-  };
+  }
 
-  isSendCardCreateToDwh = (dynamoStream: StreamRecord | undefined) => {
-    this.sendEventBusMessage(EventBusSource.DWH, MemberEvent.DWH_CARD_CREATED, dynamoStream);
-  };
-
-  isSendCardUpdateToDwh = (dynamoStream: StreamRecord | undefined) => {
+  public async emitCardUpdatedEvent(dynamoStream: StreamRecord | undefined): Promise<void> {
     if (
       hasAttributeChanged('expiryDate', dynamoStream) ||
       hasAttributeChanged('cardStatus', dynamoStream) ||
       hasAttributeChanged('paymentStatus', dynamoStream)
     ) {
-      this.sendEventBusMessage(EventBusSource.DWH, MemberEvent.DWH_CARD_UPDATED, dynamoStream);
+      await this.sendEventBusMessage(MemberEvent.DWH_CARD_UPDATED, dynamoStream);
     }
-  };
-
-  sendEventBusMessage = (
-    source: string,
-    messageType: string,
-    dynamoStream: StreamRecord | undefined,
-  ) => {
-    const events = new PutEventsCommand({
-      Entries: [
-        {
-          Detail: JSON.stringify(dynamoStream),
-          DetailType: messageType,
-          Resources: [],
-          Source: source,
-          EventBusName: getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENT_BUS_NAME),
-        },
-      ],
-    });
-
-    const client = new EventBridgeClient({});
-    client.send(events).catch((err) => {
-      logger.error(err);
-    });
-  };
+  }
 }

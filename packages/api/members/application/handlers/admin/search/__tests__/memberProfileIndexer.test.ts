@@ -216,13 +216,13 @@ describe('memberProfileIndexer handler', () => {
   it('should throw an error if sortKey is not recognised', async () => {
     const event = buildSQSEventFor('Unknown');
 
-    await expect(handler(event)).rejects.toThrow('Unknown sortKey prefix: Unknown#1234');
+    await expect(handler(event)).rejects.toThrow("Unknown sortKey prefix: 'Unknown#1234'");
   });
 
   it('should throw an error if no sortKey on record', async () => {
     const event = buildSQSEventWithoutSortKey();
 
-    await expect(handler(event)).rejects.toThrow('Stream record missing sortKey: sk');
+    await expect(handler(event)).rejects.toThrow("Stream record missing sortKey: 'undefined'");
   });
 
   it('should call opensearch service with documents', async () => {

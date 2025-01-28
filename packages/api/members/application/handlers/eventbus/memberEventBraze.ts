@@ -17,6 +17,7 @@ export const unwrappedHandler = async (
   event: EventBridgeEvent<string, StreamRecord>,
 ): Promise<void> => {
   if (getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_BRAZE) !== 'true') {
+    logger.info({ message: 'Braze events disabled, skipping...' });
     return;
   }
 
@@ -24,30 +25,30 @@ export const unwrappedHandler = async (
   switch (event['detail-type']) {
     case MemberEvent.BRAZE_PROFILE_CREATED: {
       const { newImage: newProfile } = unmarshallStreamImages<ProfileModel>(dynamoStream);
-      sendBrazeProfileCreated(newProfile);
+      await sendBrazeProfileCreated(newProfile);
       break;
     }
     case MemberEvent.BRAZE_PROFILE_UPDATED:
-      isSendBrazeProfileUpdated(dynamoStream);
+      await isSendBrazeProfileUpdated(dynamoStream);
       break;
     case MemberEvent.BRAZE_APPLICATION_CREATED: {
       const { newImage: newApplication } = unmarshallStreamImages<ApplicationModel>(dynamoStream);
-      sendBrazeApplicationCreated(newApplication);
+      await sendBrazeApplicationCreated(newApplication);
       break;
     }
     case MemberEvent.BRAZE_APPLICATION_UPDATED:
-      isSendBrazeApplicationUpdated(dynamoStream);
+      await isSendBrazeApplicationUpdated(dynamoStream);
       break;
     case MemberEvent.BRAZE_APPLICATION_DELETED:
-      isSendBrazeApplicationDeleted(dynamoStream);
+      await isSendBrazeApplicationDeleted(dynamoStream);
       break;
     case MemberEvent.BRAZE_CARD_CREATED: {
       const { newImage: newCard } = unmarshallStreamImages<CardModel>(dynamoStream);
-      sendBrazeCardCreated(newCard);
+      await sendBrazeCardCreated(newCard);
       break;
     }
     case MemberEvent.BRAZE_CARD_UPDATED:
-      isSendBrazeCardUpdated(dynamoStream);
+      await isSendBrazeCardUpdated(dynamoStream);
       break;
     case MemberEvent.BRAZE_USER_ANON:
     case MemberEvent.BRAZE_USER_GDPR:
@@ -56,7 +57,7 @@ export const unwrappedHandler = async (
   }
 };
 
-const sendBrazeProfileCreated = (profile: ProfileModel | undefined) => {
+async function sendBrazeProfileCreated(profile: ProfileModel | undefined): Promise<void> {
   const payload = {
     external_id: profile?.memberId,
     first_name: profile?.firstName,
@@ -71,10 +72,12 @@ const sendBrazeProfileCreated = (profile: ProfileModel | undefined) => {
     sign_up_date: profile?.signupDate,
   };
 
-  sendBrazeSQSMessage('userprofile.created', payload);
-};
+  await sendBrazeSQSMessage('userprofile.created', payload);
+}
 
-const sendBrazeApplicationCreated = (application: ApplicationModel | undefined) => {
+async function sendBrazeApplicationCreated(
+  application: ApplicationModel | undefined,
+): Promise<void> {
   const payload = {
     external_id: application?.memberId,
     card_requested: application?.startDate,
@@ -82,10 +85,10 @@ const sendBrazeApplicationCreated = (application: ApplicationModel | undefined) 
     card_holder: false,
   };
 
-  sendBrazeSQSMessage('privcard.create', payload);
-};
+  await sendBrazeSQSMessage('privcard.create', payload);
+}
 
-const sendBrazeCardCreated = (card: CardModel | undefined) => {
+async function sendBrazeCardCreated(card: CardModel | undefined): Promise<void> {
   const payload = {
     external_id: card?.memberId,
     card_requested: card?.createdDate,
@@ -95,10 +98,10 @@ const sendBrazeCardCreated = (card: CardModel | undefined) => {
     card_holder: true,
   };
 
-  sendBrazeSQSMessage('privcard.update', payload);
-};
+  await sendBrazeSQSMessage('privcard.update', payload);
+}
 
-const isSendBrazeProfileUpdated = (dynamoStream: StreamRecord | undefined) => {
+async function isSendBrazeProfileUpdated(dynamoStream: StreamRecord | undefined): Promise<void> {
   const { newImage: newProfile } = unmarshallStreamImages<ProfileModel>(dynamoStream);
 
   const payload: Record<string, unknown> = {};
@@ -140,10 +143,12 @@ const isSendBrazeProfileUpdated = (dynamoStream: StreamRecord | undefined) => {
     payload.trust = newProfile?.employerId;
   }
 
-  sendBrazeSQSMessage('userprofile.update', payload);
-};
+  await sendBrazeSQSMessage('userprofile.update', payload);
+}
 
-const isSendBrazeApplicationUpdated = (dynamoStream: StreamRecord | undefined) => {
+async function isSendBrazeApplicationUpdated(
+  dynamoStream: StreamRecord | undefined,
+): Promise<void> {
   const { oldImage: oldApplication, newImage: newApplication } =
     unmarshallStreamImages<ApplicationModel>(dynamoStream);
 
@@ -174,16 +179,18 @@ const isSendBrazeApplicationUpdated = (dynamoStream: StreamRecord | undefined) =
     );
   }
 
-  sendBrazeSQSMessage('privcard.update', payload);
-};
+  await sendBrazeSQSMessage('privcard.update', payload);
+}
 
-// TODO: When implemlented remove this eslint disable
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const isSendBrazeApplicationDeleted = (dynamoStream: StreamRecord | undefined) => {
+async function isSendBrazeApplicationDeleted(
+  // TODO: When implemlented remove this eslint disable
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  dynamoStream: StreamRecord | undefined,
+): Promise<void> {
   // TODO: send something to braze when application deleted?
-};
+}
 
-const isSendBrazeCardUpdated = (dynamoStream: StreamRecord | undefined) => {
+async function isSendBrazeCardUpdated(dynamoStream: StreamRecord | undefined): Promise<void> {
   const { newImage: newCard } = unmarshallStreamImages<CardModel>(dynamoStream);
 
   const payload: Record<string, unknown> = {};
@@ -214,30 +221,31 @@ const isSendBrazeCardUpdated = (dynamoStream: StreamRecord | undefined) => {
     payload.card_posted = newCard?.postedDate;
   }
 
-  sendBrazeSQSMessage('privcard.update', payload);
-};
-
-function sendBrazeSQSMessage(eventType: string, payload: Record<string, unknown>): void {
-  const client = new SQSClient({ region: getEnv(MemberStackEnvironmentKeys.REGION) });
-  const command = new SendMessageCommand({
-    QueueUrl: getBrazeSQSQueue(),
-    DelaySeconds: 10,
-    MessageAttributes: {
-      Type: {
-        DataType: 'String',
-        StringValue: eventType,
-      },
-    },
-    MessageBody: JSON.stringify(payload),
-  });
-
-  client.send(command).catch((err) => {
-    logger.error(err);
-  });
+  await sendBrazeSQSMessage('privcard.update', payload);
 }
 
-const getBrazeSQSQueue = () => {
-  return getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_BRAZE_SQS_QUEUE);
-};
+async function sendBrazeSQSMessage(
+  eventType: string,
+  payload: Record<string, unknown>,
+): Promise<void> {
+  try {
+    const command = new SendMessageCommand({
+      QueueUrl: getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_BRAZE_SQS_QUEUE),
+      DelaySeconds: 10,
+      MessageAttributes: {
+        Type: {
+          DataType: 'String',
+          StringValue: eventType,
+        },
+      },
+      MessageBody: JSON.stringify(payload),
+    });
+
+    const client = new SQSClient({ region: getEnv(MemberStackEnvironmentKeys.REGION) });
+    await client.send(command);
+  } catch (error) {
+    logger.error({ message: 'Failed to send SQS message', error });
+  }
+}
 
 export const handler = eventBusMiddleware(unwrappedHandler);

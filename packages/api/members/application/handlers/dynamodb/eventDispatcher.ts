@@ -1,98 +1,86 @@
 import { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
 import { AttributeValue as StreamAttributeValue } from 'aws-lambda/trigger/dynamodb-stream';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
-import { dynamoDBMiddleware } from '@blc-mono/members/application/middleware';
+import { dynamoDBMiddleware, logger } from '@blc-mono/members/application/middleware';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
-import { BrazeEventsService } from '@blc-mono/members/application/events/BrazeEventsService';
-import { DwhEventsService } from '@blc-mono/members/application/events/DwhEventsService';
-import { EmailEventsService } from '@blc-mono/members/application/events/EmailEventsService';
-import { LegacyEventsService } from '@blc-mono/members/application/events/LegacyEventsService';
-import { SystemEventsService } from '@blc-mono/members/application/events/SystemEventsService';
-import { StreamRecordTypes } from '../../types/StreamRecordTypes';
+import {
+  brazeEventsService,
+  dwhEventsService,
+  emailEventsService,
+  legacyEventsService,
+  systemEventsService,
+} from '@blc-mono/members/application/events/providers/EventServiceProviders';
+import {
+  getStreamRecordType,
+  StreamRecordTypes,
+} from '@blc-mono/members/application/types/steamRecordTypes';
 
 export const unwrappedHandler = async (event: DynamoDBStreamEvent): Promise<void> => {
   if (getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_GLOBAL) !== 'true') return;
 
-  event.Records.forEach((record) => {
-    processDynamoDBRecord(record);
-  });
+  await Promise.all(event.Records.map(processDynamoDBRecord));
 };
 
-const processDynamoDBRecord = (record: DynamoDBRecord) => {
-  const brazeEventsService: BrazeEventsService = new BrazeEventsService();
-  const dwhEventsService: DwhEventsService = new DwhEventsService();
-  const emailEventsService: EmailEventsService = new EmailEventsService();
-  const legacyEventsService: LegacyEventsService = new LegacyEventsService();
-  const systemEventsService: SystemEventsService = new SystemEventsService();
-
+async function processDynamoDBRecord(record: DynamoDBRecord): Promise<void> {
   const recordType = parseRecordSortKey(record.dynamodb?.Keys?.sk);
+  logger.info({ message: `Processing record type '${recordType}'` });
 
   if (record.eventName === 'INSERT') {
     switch (recordType) {
-      case 'PROFILE':
-        emailEventsService.isSendProfileCreateToEmail(record.dynamodb);
-        brazeEventsService.isSendProfileCreateToBraze(record.dynamodb);
-        dwhEventsService.isSendProfileCreateToDwh(record.dynamodb);
-        legacyEventsService.isSendProfileCreateToLegacy(record.dynamodb);
+      case 'Profile':
+        await emailEventsService().emitEmailSignupEvent(record.dynamodb);
+        await brazeEventsService().emitProfileCreatedEvent(record.dynamodb);
+        await dwhEventsService().emitProfileCreatedEvent(record.dynamodb);
+        await legacyEventsService().emitProfileCreatedEvent(record.dynamodb);
         break;
-      case 'APPLICATION':
-        brazeEventsService.isSendApplicationCreateToBraze(record.dynamodb);
-        dwhEventsService.isSendApplicationCreateToDwh(record.dynamodb);
+      case 'Application':
+        await brazeEventsService().emitApplicationCreatedEvent(record.dynamodb);
+        await dwhEventsService().emitApplicationCreatedEvent(record.dynamodb);
         break;
-      case 'CARD':
-        emailEventsService.isSendCardCreateToEmail(record.dynamodb);
-        brazeEventsService.isSendCardCreateToBraze(record.dynamodb);
-        dwhEventsService.isSendCardCreateToDwh(record.dynamodb);
-        legacyEventsService.isSendCardCreateToLegacy(record.dynamodb);
+      case 'Card':
+        await emailEventsService().emitCardCreatedEvent(record.dynamodb);
+        await brazeEventsService().emitCardCreatedEvent(record.dynamodb);
+        await dwhEventsService().emitCardCreatedEvent(record.dynamodb);
+        await legacyEventsService().emitCardCreatedEvent(record.dynamodb);
         break;
-      case 'NOTE':
+      case 'Note':
+        // TODO: Implement note related events
         break;
     }
   }
 
   if (record.eventName === 'MODIFY') {
     switch (recordType) {
-      case 'PROFILE':
-        systemEventsService.isSendProfileUpdateToSystem(record.dynamodb);
-        brazeEventsService.isSendProfileUpdateToBraze(record.dynamodb);
-        dwhEventsService.isSendProfileUpdateToDwh(record.dynamodb);
-        legacyEventsService.isSendProfileUpdateToLegacy(record.dynamodb);
+      case 'Profile':
+        await systemEventsService().emitProfileCreatedEvent(record.dynamodb);
+        await brazeEventsService().emitProfileUpdatedEvents(record.dynamodb);
+        await dwhEventsService().emitProfileUpdatedEvent(record.dynamodb);
+        await legacyEventsService().emitProfileUpdatedEvent(record.dynamodb);
         break;
-      case 'APPLICATION':
-        systemEventsService.isSendApplicationUpdateToSystem(record.dynamodb);
-        emailEventsService.isSendApplicationUpdateToEmail(record.dynamodb);
-        brazeEventsService.isSendApplicationUpdateToBraze(record.dynamodb);
-        dwhEventsService.isSendApplicationUpdateToDwh(record.dynamodb);
+      case 'Application':
+        await systemEventsService().emitApplicationUpdatedEvent(record.dynamodb);
+        await emailEventsService().emitApplicationUpdatedEvents(record.dynamodb);
+        await brazeEventsService().emitApplicationUpdatedEvents(record.dynamodb);
+        await dwhEventsService().emitApplicationUpdatedEvent(record.dynamodb);
         break;
-      case 'CARD':
-        emailEventsService.isSendCardUpdateToEmail(record.dynamodb);
-        brazeEventsService.isSendCardUpdateToBraze(record.dynamodb);
-        dwhEventsService.isSendCardUpdateToDwh(record.dynamodb);
-        legacyEventsService.isSendCardUpdateToLegacy(record.dynamodb);
+      case 'Card':
+        await emailEventsService().emitCardUpdatedEvents(record.dynamodb);
+        await brazeEventsService().emitCardUpdatedEvents(record.dynamodb);
+        await dwhEventsService().emitCardUpdatedEvent(record.dynamodb);
+        await legacyEventsService().emitCardUpdatedEvent(record.dynamodb);
         break;
-      case 'NOTE':
-        // TODO: Implement note update events
+      case 'Note':
+        // TODO: Implement note related events
         break;
     }
   }
-};
+}
 
-const parseRecordSortKey = (sortKey: StreamAttributeValue | undefined): StreamRecordTypes => {
-  if (!sortKey) throw new ValidationError('Stream record missing sortKey: sk');
-  if (!sortKey.S) throw new ValidationError('Stream record missing sortKey: sk');
+function parseRecordSortKey(sortKey: StreamAttributeValue | undefined): StreamRecordTypes {
+  if (!sortKey || !sortKey.S) throw new ValidationError('Stream record missing sortKey: sk');
 
-  if (sortKey.S.startsWith('PROFILE')) {
-    return 'PROFILE';
-  } else if (sortKey.S.startsWith('APPLICATION')) {
-    return 'APPLICATION';
-  } else if (sortKey.S.startsWith('CARD')) {
-    return 'CARD';
-  } else if (sortKey.S.startsWith('NOTE')) {
-    return 'NOTE';
-  }
-
-  throw new Error(`Unknown sortKey prefix: ${sortKey}`);
-};
+  return getStreamRecordType(sortKey.S);
+}
 
 export const handler = dynamoDBMiddleware(unwrappedHandler);

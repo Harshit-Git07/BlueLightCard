@@ -14,6 +14,7 @@ export const unwrappedHandler = async (
   event: EventBridgeEvent<string, StreamRecord>,
 ): Promise<void> => {
   if (getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_DWH) !== 'true') {
+    logger.info({ message: 'DWH events disabled, skipping...' });
     return;
   }
 
@@ -24,36 +25,36 @@ export const unwrappedHandler = async (
       const lastUpdated = getLastUpdated(dynamoStream);
       if (!lastUpdated) return;
 
-      sendDwhUserUuid(newProfile, lastUpdated);
-      sendDwhUsersNew(newProfile, lastUpdated);
-      sendDwhUsersConfirmed(newProfile, lastUpdated);
-      sendDwhUsesValidated(newProfile, lastUpdated);
-      sendDwhUsersTrustMember(newProfile, lastUpdated);
-      sendDwhUsersServiceMember(newProfile, lastUpdated);
-      sendDwhUsersCounty(newProfile, lastUpdated);
-      sendDwhUsersEmail(newProfile, lastUpdated);
-      sendDwhUserProfiles(newProfile, lastUpdated);
-      sendDwhUserChanges(newProfile);
+      await sendDwhUserUuid(newProfile, lastUpdated);
+      await sendDwhUsersNew(newProfile, lastUpdated);
+      await sendDwhUsersConfirmed(newProfile, lastUpdated);
+      await sendDwhUsesValidated(newProfile, lastUpdated);
+      await sendDwhUsersTrustMember(newProfile, lastUpdated);
+      await sendDwhUsersServiceMember(newProfile, lastUpdated);
+      await sendDwhUsersCounty(newProfile, lastUpdated);
+      await sendDwhUsersEmail(newProfile, lastUpdated);
+      await sendDwhUserProfiles(newProfile, lastUpdated);
+      await sendDwhUserChanges(newProfile);
       break;
     }
     case MemberEvent.DWH_PROFILE_UPDATED:
-      isSendProfileUpdateToDwh(dynamoStream);
+      await sendProfileUpdateToDwh(dynamoStream);
       break;
     case MemberEvent.DWH_APPLICATION_CREATED: {
       const { newImage: newApplication } = unmarshallStreamImages<ApplicationModel>(dynamoStream);
-      sendDwhPrivCardsActionsApplication(newApplication);
+      await sendDwhPrivCardsActionsApplication(newApplication);
       break;
     }
     case MemberEvent.DWH_APPLICATION_UPDATED:
-      isSendApplicationUpdateToDwh(dynamoStream);
+      await sendApplicationUpdateToDwh(dynamoStream);
       break;
     case MemberEvent.DWH_CARD_CREATED: {
       const { newImage: newCard } = unmarshallStreamImages<CardModel>(dynamoStream);
-      sendDwhPrivCardsActionsCard(newCard);
+      await sendDwhPrivCardsActionsCard(newCard);
       break;
     }
     case MemberEvent.DWH_CARD_UPDATED:
-      isSendCardUpdateToDwh(dynamoStream);
+      await sendCardUpdateToDwh(dynamoStream);
       break;
     case MemberEvent.DWH_USER_ANON:
     case MemberEvent.DWH_USER_GDPR:
@@ -62,33 +63,33 @@ export const unwrappedHandler = async (
   }
 };
 
-function isSendProfileUpdateToDwh(dynamoStream: StreamRecord | undefined): void {
+async function sendProfileUpdateToDwh(dynamoStream: StreamRecord | undefined): Promise<void> {
   const { newImage: newProfile } = unmarshallStreamImages<ProfileModel>(dynamoStream);
   const lastUpdated = getLastUpdated(dynamoStream);
   if (!lastUpdated) return;
 
   if (hasAttributeChanged('status', dynamoStream)) {
-    sendDwhUsersConfirmed(newProfile, lastUpdated);
+    await sendDwhUsersConfirmed(newProfile, lastUpdated);
   }
 
   if (hasAttributeChanged('emailValidated', dynamoStream)) {
-    sendDwhUsesValidated(newProfile, lastUpdated);
+    await sendDwhUsesValidated(newProfile, lastUpdated);
   }
 
   if (hasAttributeChanged('employerId', dynamoStream)) {
-    sendDwhUsersTrustMember(newProfile, lastUpdated);
+    await sendDwhUsersTrustMember(newProfile, lastUpdated);
   }
 
   if (hasAttributeChanged('organisationId', dynamoStream)) {
-    sendDwhUsersServiceMember(newProfile, lastUpdated);
+    await sendDwhUsersServiceMember(newProfile, lastUpdated);
   }
 
   if (hasAttributeChanged('email', dynamoStream)) {
-    sendDwhUsersCounty(newProfile, lastUpdated);
+    await sendDwhUsersCounty(newProfile, lastUpdated);
   }
 
   if (hasAttributeChanged('county', dynamoStream)) {
-    sendDwhUsersEmail(newProfile, lastUpdated);
+    await sendDwhUsersEmail(newProfile, lastUpdated);
   }
 
   if (
@@ -96,30 +97,33 @@ function isSendProfileUpdateToDwh(dynamoStream: StreamRecord | undefined): void 
     hasAttributeChanged('gender', dynamoStream) ||
     hasAttributeChanged('phoneNumber', dynamoStream)
   ) {
-    sendDwhUserProfiles(newProfile, lastUpdated);
+    await sendDwhUserProfiles(newProfile, lastUpdated);
   }
 
   if (
     hasAttributeChanged('lastIpAddress', dynamoStream) ||
     hasAttributeChanged('lastLogin', dynamoStream)
   ) {
-    sendDwhUserChanges(newProfile);
+    await sendDwhUserChanges(newProfile);
   }
 }
 
 // TODO: When implemlented remove this eslint disable
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const isSendApplicationUpdateToDwh = (dynamoStream: StreamRecord | undefined) => {
+async function sendApplicationUpdateToDwh(dynamoStream: StreamRecord | undefined): Promise<void> {
   // TODO: Pending conversation with DWH about revised app payload with no card #
-};
+}
 
 // TODO: When implemlented remove this eslint disable
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const isSendCardUpdateToDwh = (dynamoStream: StreamRecord | undefined) => {
+async function sendCardUpdateToDwh(dynamoStream: StreamRecord | undefined): Promise<void> {
   // TODO: Pending conversation with DWH about revised card payload with new format
-};
+}
 
-const sendDwhUserUuid = (profile: ProfileModel | undefined, lastUpdated: string) => {
+async function sendDwhUserUuid(
+  profile: ProfileModel | undefined,
+  lastUpdated: string,
+): Promise<void> {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERUUID,
   );
@@ -130,10 +134,13 @@ const sendDwhUserUuid = (profile: ProfileModel | undefined, lastUpdated: string)
     last_updated: lastUpdated,
   };
 
-  sendDwhFirehoseStream(firehoseStream, payload);
-};
+  await sendDwhFirehoseStream(firehoseStream, payload);
+}
 
-const sendDwhUsersNew = (profile: ProfileModel | undefined, lastUpdated: string) => {
+async function sendDwhUsersNew(
+  profile: ProfileModel | undefined,
+  lastUpdated: string,
+): Promise<void> {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERSNEW,
   );
@@ -147,10 +154,13 @@ const sendDwhUsersNew = (profile: ProfileModel | undefined, lastUpdated: string)
     last_updated: lastUpdated,
   };
 
-  sendDwhFirehoseStream(firehoseStream, payload);
-};
+  await sendDwhFirehoseStream(firehoseStream, payload);
+}
 
-const sendDwhUsersConfirmed = (profile: ProfileModel | undefined, lastUpdated: string) => {
+async function sendDwhUsersConfirmed(
+  profile: ProfileModel | undefined,
+  lastUpdated: string,
+): Promise<void> {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERSCONFIRMED,
   );
@@ -161,10 +171,13 @@ const sendDwhUsersConfirmed = (profile: ProfileModel | undefined, lastUpdated: s
     last_updated: lastUpdated,
   };
 
-  sendDwhFirehoseStream(firehoseStream, payload);
-};
+  await sendDwhFirehoseStream(firehoseStream, payload);
+}
 
-const sendDwhUsesValidated = (profile: ProfileModel | undefined, lastUpdated: string) => {
+async function sendDwhUsesValidated(
+  profile: ProfileModel | undefined,
+  lastUpdated: string,
+): Promise<void> {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERSVALIDATED,
   );
@@ -175,10 +188,13 @@ const sendDwhUsesValidated = (profile: ProfileModel | undefined, lastUpdated: st
     last_updated: lastUpdated,
   };
 
-  sendDwhFirehoseStream(firehoseStream, payload);
-};
+  await sendDwhFirehoseStream(firehoseStream, payload);
+}
 
-const sendDwhUsersServiceMember = (profile: ProfileModel | undefined, lastUpdated: string) => {
+async function sendDwhUsersServiceMember(
+  profile: ProfileModel | undefined,
+  lastUpdated: string,
+): Promise<void> {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERSSERVICEMEMBER,
   );
@@ -189,51 +205,63 @@ const sendDwhUsersServiceMember = (profile: ProfileModel | undefined, lastUpdate
     last_updated: lastUpdated,
   };
 
-  sendDwhFirehoseStream(firehoseStream, payload);
-};
+  await sendDwhFirehoseStream(firehoseStream, payload);
+}
 
-function sendDwhUsersTrustMember(profile: ProfileModel | undefined, lastUpdated: string): void {
+async function sendDwhUsersTrustMember(
+  profile: ProfileModel | undefined,
+  lastUpdated: string,
+): Promise<void> {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERSTRUSTMEMBER,
   );
 
-  sendDwhFirehoseStream(firehoseStream, {
+  await sendDwhFirehoseStream(firehoseStream, {
     id: profile?.memberId,
     trustmember: profile?.employerId,
     last_updated: lastUpdated,
   });
 }
 
-function sendDwhUsersCounty(profile: ProfileModel | undefined, lastUpdated: string): void {
+async function sendDwhUsersCounty(
+  profile: ProfileModel | undefined,
+  lastUpdated: string,
+): Promise<void> {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERSCOUNTY,
   );
 
-  sendDwhFirehoseStream(firehoseStream, {
+  await sendDwhFirehoseStream(firehoseStream, {
     id: profile?.memberId,
     county: profile?.county,
     last_updated: lastUpdated,
   });
 }
 
-function sendDwhUsersEmail(profile: ProfileModel | undefined, lastUpdated: string): void {
+async function sendDwhUsersEmail(
+  profile: ProfileModel | undefined,
+  lastUpdated: string,
+): Promise<void> {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERSEMAIL,
   );
 
-  sendDwhFirehoseStream(firehoseStream, {
+  await sendDwhFirehoseStream(firehoseStream, {
     id: profile?.memberId,
     email: profile?.email,
     last_updated: lastUpdated,
   });
 }
 
-function sendDwhUserProfiles(profile: ProfileModel | undefined, lastUpdated: string): void {
+async function sendDwhUserProfiles(
+  profile: ProfileModel | undefined,
+  lastUpdated: string,
+): Promise<void> {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERPROFILES,
   );
 
-  sendDwhFirehoseStream(firehoseStream, {
+  await sendDwhFirehoseStream(firehoseStream, {
     id: profile?.memberId,
     dob: profile?.dateOfBirth,
     gender: profile?.gender,
@@ -244,7 +272,7 @@ function sendDwhUserProfiles(profile: ProfileModel | undefined, lastUpdated: str
 
 // TODO: Verify what this is supposed to do, at the time of adding this eslint disable it didn't do very much...
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function sendDwhUserChanges(profile: ProfileModel | undefined): void {
+async function sendDwhUserChanges(profile: ProfileModel | undefined): Promise<void> {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_USERCHANGES,
   );
@@ -259,46 +287,49 @@ function sendDwhUserChanges(profile: ProfileModel | undefined): void {
   //   time: profile?.lastLogin,
   // };
 
-  sendDwhFirehoseStream(firehoseStream, {});
+  await sendDwhFirehoseStream(firehoseStream, {});
 }
 
-// TODO: Verify what this is supposed to do, at the time of adding this eslint disable it didn't do very much...
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function sendDwhPrivCardsActionsApplication(application: ApplicationModel | undefined): void {
+async function sendDwhPrivCardsActionsApplication(
+  // TODO: Verify what this is supposed to do, at the time of adding this eslint disable it didn't do very much...
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  application: ApplicationModel | undefined,
+): Promise<void> {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_PRIVCARDSACTIONS,
   );
 
   //TODO - update priv card actions for promo and id upload etc
 
-  sendDwhFirehoseStream(firehoseStream, {});
+  await sendDwhFirehoseStream(firehoseStream, {});
 }
 
 // TODO: Verify what this is supposed to do, at the time of adding this eslint disable it didn't do very much...
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function sendDwhPrivCardsActionsCard(card: CardModel | undefined): void {
+async function sendDwhPrivCardsActionsCard(card: CardModel | undefined): Promise<void> {
   const firehoseStream: string = getEnv(
     MemberStackEnvironmentKeys.SERVICE_LAYER_DWH_STREAM_PRIVCARDSACTIONS,
   );
 
   //TODO - update priv card actions for status change for batch, print, post etc
 
-  sendDwhFirehoseStream(firehoseStream, {});
+  await sendDwhFirehoseStream(firehoseStream, {});
 }
 
-function sendDwhFirehoseStream(streamName: string, payload: object): void {
-  const client = new FirehoseClient();
-  const input = {
-    DeliveryStreamName: streamName,
-    Record: {
-      Data: new TextEncoder().encode(JSON.stringify(payload)),
-    },
-  };
+async function sendDwhFirehoseStream(streamName: string, payload: object): Promise<void> {
+  try {
+    const command = new PutRecordCommand({
+      DeliveryStreamName: streamName,
+      Record: {
+        Data: new TextEncoder().encode(JSON.stringify(payload)),
+      },
+    });
 
-  const command = new PutRecordCommand(input);
-  client.send(command).catch((err) => {
-    logger.error(err);
-  });
+    const client = new FirehoseClient();
+    await client.send(command);
+  } catch (error) {
+    logger.error({ message: 'Failed to send firehose stream', error });
+  }
 }
 
 function getLastUpdated(dynamoStream: StreamRecord | undefined): string | undefined {

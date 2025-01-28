@@ -68,10 +68,10 @@ describe('eventDispatcher handler', () => {
       }
     });
 
-    BrazeEventsService.prototype.isSendProfileCreateToBraze = mockIsSendProfileCreateToBraze;
-    DwhEventsService.prototype.isSendProfileCreateToDwh = mockIsSendProfileCreateToDwh;
-    EmailEventsService.prototype.isSendProfileCreateToEmail = mockIsSendProfileCreateToEmail;
-    LegacyEventsService.prototype.isSendProfileCreateToLegacy = mockIsSendProfileCreateToLegacy;
+    BrazeEventsService.prototype.emitProfileCreatedEvent = mockIsSendProfileCreateToBraze;
+    DwhEventsService.prototype.emitProfileCreatedEvent = mockIsSendProfileCreateToDwh;
+    EmailEventsService.prototype.emitEmailSignupEvent = mockIsSendProfileCreateToEmail;
+    LegacyEventsService.prototype.emitProfileCreatedEvent = mockIsSendProfileCreateToLegacy;
   });
 
   it('should process the event and send messages', async () => {

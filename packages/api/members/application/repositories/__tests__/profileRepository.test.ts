@@ -1,19 +1,21 @@
 import {
   DynamoDBDocumentClient,
-  TransactWriteCommand,
-  ScanCommand,
-  QueryCommand,
   PutCommand,
+  TransactWriteCommand,
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
 import { ProfileRepository } from '../profileRepository';
 import { v4 as uuidv4 } from 'uuid';
-import { ProfileModel, CreateProfileModel } from '@blc-mono/shared/models/members/profileModel';
+import {
+  CreateProfileModel,
+  ProfileModel,
+  UpdateProfileModel,
+} from '@blc-mono/shared/models/members/profileModel';
 import { NotFoundError } from '../../errors/NotFoundError';
 import { memberKey, noteKey } from '../repository';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
-import { NoteModel, CreateNoteModel } from '@blc-mono/shared/models/members/noteModel';
+import { CreateNoteModel, NoteModel } from '@blc-mono/shared/models/members/noteModel';
 import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 
 jest.mock('@aws-sdk/lib-dynamodb');
@@ -70,6 +72,7 @@ describe('ProfileRepository', () => {
         email: 'john.doe@example.com',
         dateOfBirth: '1990-01-01',
       };
+
       const result = await repository.createProfile(createProfile);
 
       expect(result).toBe(memberId);
@@ -108,7 +111,8 @@ describe('ProfileRepository', () => {
   describe('updateProfile', () => {
     it('should update an existing profile', async () => {
       dynamoDBMock.send.mockResolvedValue({});
-      const updateData = { firstName: 'Jane' };
+      const updateData: Partial<UpdateProfileModel> = { firstName: 'Jane' };
+
       await repository.updateProfile(memberId, updateData);
 
       expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(UpdateCommand));
@@ -134,14 +138,18 @@ describe('ProfileRepository', () => {
   describe('getProfiles', () => {
     it('should return an empty array if no profiles are found', async () => {
       dynamoDBMock.send.mockResolvedValue({ Items: [] });
+
       const result = await repository.getProfiles();
+
       expect(result).toEqual([]);
     });
 
     it('should return profiles', async () => {
       const items = [profile];
       dynamoDBMock.send.mockResolvedValue({ Items: items });
+
       const result = await repository.getProfiles();
+
       expect(result).toEqual(items.map((item) => ProfileModel.parse(item)));
     });
   });
@@ -149,6 +157,7 @@ describe('ProfileRepository', () => {
   describe('getProfile', () => {
     it('should throw NotFoundError if profile is not found', async () => {
       dynamoDBMock.send.mockResolvedValue({ Items: [] });
+
       await expect(repository.getProfile(memberId)).rejects.toThrow(NotFoundError);
     });
 
@@ -167,7 +176,9 @@ describe('ProfileRepository', () => {
           },
         ],
       });
+
       const result = await repository.getProfile(memberId);
+
       expect(result).toEqual(
         ProfileModel.parse({ ...profile, applications: [application], cards: [] }),
       );
@@ -177,7 +188,9 @@ describe('ProfileRepository', () => {
   describe('getNotes', () => {
     it('should return an empty array if no notes are found', async () => {
       dynamoDBMock.send.mockResolvedValue({ Items: [] });
+
       const result = await repository.getNotes(memberId);
+
       expect(result).toEqual([]);
     });
 
@@ -190,7 +203,9 @@ describe('ProfileRepository', () => {
       };
       const items = [note];
       dynamoDBMock.send.mockResolvedValue({ Items: items });
+
       const result = await repository.getNotes(memberId);
+
       expect(result).toEqual(items.map((item) => NoteModel.parse(item)));
     });
   });
@@ -202,6 +217,7 @@ describe('ProfileRepository', () => {
       const createNote: CreateNoteModel = {
         text: 'Test note',
       };
+
       const result = await repository.createNote(memberId, createNote);
 
       expect(result).toBe(noteId);
@@ -224,6 +240,7 @@ describe('ProfileRepository', () => {
     it('should update an existing note', async () => {
       dynamoDBMock.send.mockResolvedValue({});
       const updateData = { text: 'Updated note' };
+
       await repository.updateNote(memberId, noteId, updateData);
 
       expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(UpdateCommand));

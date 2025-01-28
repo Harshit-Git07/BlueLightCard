@@ -35,6 +35,6 @@ export async function updateServiceLayerApplication(
     );
   } catch (error) {
     console.error('Failed to create member application', error);
-    return undefined;
+    throw error;
   }
 }

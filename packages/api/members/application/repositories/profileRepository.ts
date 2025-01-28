@@ -14,10 +14,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { CreateNoteModel, NoteModel } from '@blc-mono/shared/models/members/noteModel';
 import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
-import { CreateProfileModel, ProfileModel } from '@blc-mono/shared/models/members/profileModel';
+import {
+  CreateProfileModel,
+  ProfileModel,
+  UpdateProfileModel,
+} from '@blc-mono/shared/models/members/profileModel';
 import { APPLICATION, MEMBER, memberKey, NOTE, noteKey, PROFILE, Repository } from './repository';
 import { NotFoundError } from '../errors/NotFoundError';
-import { omit } from 'lodash';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 import { DeleteCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/DeleteCommand';
@@ -82,14 +85,13 @@ export class ProfileRepository extends Repository {
     await this.dynamoDB.send(new DeleteCommand(params));
   }
 
-  async updateProfile(memberId: string, profile: Partial<ProfileModel>): Promise<void> {
-    const profileWithoutApplicationsOrCards = omit(profile, ['applications', 'cards']);
+  async updateProfile(memberId: string, profile: Partial<UpdateProfileModel>): Promise<void> {
     await this.partialUpdate({
       tableName: this.tableName,
       pk: memberKey(memberId),
       sk: PROFILE,
       data: {
-        ...profileWithoutApplicationsOrCards,
+        ...profile,
         lastUpdated: new Date().toISOString(),
       },
     });

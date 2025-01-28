@@ -10,7 +10,6 @@ export function useOnWorkEmailChanged(eligibilityDetailsState: EligibilityDetail
     (event) => {
       const emailVerification = event.target.value;
 
-      // TODO: Need to do some email verification here
       setEligibilityDetailsState({
         ...eligibilityDetails,
         emailVerification,

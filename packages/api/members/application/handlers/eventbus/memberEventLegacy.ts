@@ -16,6 +16,7 @@ export const unwrappedHandler = async (
   event: EventBridgeEvent<string, StreamRecord>,
 ): Promise<void> => {
   if (getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_LEGACY) !== 'true') {
+    logger.info({ message: 'Legacy events disabled, skipping...' });
     return;
   }
 
@@ -24,27 +25,27 @@ export const unwrappedHandler = async (
   switch (event['detail-type']) {
     case MemberEvent.LEGACY_USER_PROFILE_CREATED: {
       const { newImage: newProfile } = unmarshallStreamImages<ProfileModel>(dynamoStream);
-      sendLegacyProfileCreated(newProfile);
+      await sendLegacyProfileCreated(newProfile);
       break;
     }
     case MemberEvent.LEGACY_USER_PROFILE_UPDATED:
-      isSendLegacyProfileUpdated(dynamoStream);
+      await isSendLegacyProfileUpdated(dynamoStream);
       break;
     case MemberEvent.LEGACY_USER_APPLICATION_CREATED: {
       const { newImage: newApplication } = unmarshallStreamImages<ApplicationModel>(dynamoStream);
-      sendLegacyApplicationCreated(newApplication);
+      await sendLegacyApplicationCreated(newApplication);
       break;
     }
     case MemberEvent.LEGACY_USER_APPLICATION_UPDATED:
-      isSendLegacyApplicationUpdated(dynamoStream);
+      await isSendLegacyApplicationUpdated(dynamoStream);
       break;
     case MemberEvent.LEGACY_USER_CARD_CREATED: {
       const { newImage: newCard } = unmarshallStreamImages<CardModel>(dynamoStream);
-      sendLegacyCardCreated(newCard);
+      await sendLegacyCardCreated(newCard);
       break;
     }
     case MemberEvent.LEGACY_USER_CARD_UPDATED:
-      isSendLegacyCardUpdated(dynamoStream);
+      await isSendLegacyCardUpdated(dynamoStream);
       break;
     case MemberEvent.LEGACY_USER_GDPR_REQUESTED:
     case MemberEvent.LEGACY_USER_ANON_REQUESTED:
@@ -54,7 +55,7 @@ export const unwrappedHandler = async (
   }
 };
 
-function sendLegacyProfileCreated(profile: ProfileModel | undefined): void {
+async function sendLegacyProfileCreated(profile: ProfileModel | undefined): Promise<void> {
   const payload = {
     uuid: profile?.memberId,
     brand: getEnv(MemberStackEnvironmentKeys.BRAND),
@@ -75,10 +76,14 @@ function sendLegacyProfileCreated(profile: ProfileModel | undefined): void {
     merged_uid: 0,
   };
 
-  sendEventBusMessage('user.profile.updated', `${payload.brand} User profile updated`, payload);
+  await sendEventBusMessage(
+    'user.profile.updated',
+    `${payload.brand} User profile updated`,
+    payload,
+  );
 }
 
-function isSendLegacyProfileUpdated(dynamoStream: StreamRecord | undefined): void {
+async function isSendLegacyProfileUpdated(dynamoStream: StreamRecord | undefined): Promise<void> {
   const { newImage: newProfile } = unmarshallStreamImages<ProfileModel>(dynamoStream);
 
   const payloadProfile: Record<string, unknown> = {};
@@ -129,7 +134,7 @@ function isSendLegacyProfileUpdated(dynamoStream: StreamRecord | undefined): voi
     payloadProfile.spare_email_validated = newProfile?.spareEmailValidated;
   }
 
-  sendEventBusMessage(
+  await sendEventBusMessage(
     'user.profile.updated',
     payloadProfile.brand + ' User profile updated',
     payloadProfile,
@@ -140,7 +145,7 @@ function isSendLegacyProfileUpdated(dynamoStream: StreamRecord | undefined): voi
     payloadSurname.uuid = newProfile?.memberId;
     payloadSurname.brand = 'BLC_UK';
     payloadSurname.surname = newProfile?.lastName;
-    sendEventBusMessage(
+    await sendEventBusMessage(
       'user.surname.updated',
       `${payloadSurname.brand} User Surname updated`,
       payloadProfile,
@@ -154,7 +159,7 @@ function isSendLegacyProfileUpdated(dynamoStream: StreamRecord | undefined): voi
     payloadStatus.cardNumber = null;
     payloadStatus.userStatus = newProfile?.status;
 
-    sendEventBusMessage(
+    await sendEventBusMessage(
       'user.status.updated',
       `${payloadStatus.brand} User Status updated`,
       payloadProfile,
@@ -162,19 +167,23 @@ function isSendLegacyProfileUpdated(dynamoStream: StreamRecord | undefined): voi
   }
 }
 
-// TODO: Implement this and then remove the eslint disable
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function sendLegacyApplicationCreated(application: ApplicationModel | undefined): void {
+async function sendLegacyApplicationCreated(
+  // TODO: Implement this and then remove the eslint disable
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  application: ApplicationModel | undefined,
+): Promise<void> {
   // TODO - All legacy card stuff (idupload, promo use etc) needs card number, but we dont have card number at this point... so dont send anything..?
 }
 
-// TODO: Implement this and then remove the eslint disable
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function isSendLegacyApplicationUpdated(dynamoStream: StreamRecord | undefined): void {
+async function isSendLegacyApplicationUpdated(
+  // TODO: Implement this and then remove the eslint disable
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  dynamoStream: StreamRecord | undefined,
+): Promise<void> {
   // TODO - All legacy card stuff (idupload, promo use etc) needs card number, but we dont have card number at this point... so dont send anything..?
 }
 
-function sendLegacyCardCreated(card: CardModel | undefined): void {
+async function sendLegacyCardCreated(card: CardModel | undefined): Promise<void> {
   const payload = {
     uuid: card?.memberId,
     brand: getEnv(MemberStackEnvironmentKeys.BRAND),
@@ -183,10 +192,14 @@ function sendLegacyCardCreated(card: CardModel | undefined): void {
     expires: card?.expiryDate,
   };
 
-  sendEventBusMessage('user.card.status.created', `${payload.brand} User Card Created`, payload);
+  await sendEventBusMessage(
+    'user.card.status.created',
+    `${payload.brand} User Card Created`,
+    payload,
+  );
 }
 
-function isSendLegacyCardUpdated(dynamoStream: StreamRecord | undefined): void {
+async function isSendLegacyCardUpdated(dynamoStream: StreamRecord | undefined): Promise<void> {
   const { newImage: newCard } = unmarshallStreamImages<CardModel>(dynamoStream);
 
   const payload: Record<string, unknown> = {};
@@ -205,13 +218,21 @@ function isSendLegacyCardUpdated(dynamoStream: StreamRecord | undefined): void {
     payload.posted = newCard?.postedDate;
   }
 
-  sendEventBusMessage('user.card.status.updated', `${payload.brand} User Card Updated`, payload);
+  await sendEventBusMessage(
+    'user.card.status.updated',
+    `${payload.brand} User Card Updated`,
+    payload,
+  );
 }
 
-function sendEventBusMessage(source: string, messageType: string, payload: object): void {
-  const client = new EventBridgeClient();
-  client
-    .send(
+async function sendEventBusMessage(
+  source: string,
+  messageType: string,
+  payload: object,
+): Promise<void> {
+  try {
+    const client = new EventBridgeClient();
+    await client.send(
       new PutEventsCommand({
         Entries: [
           {
@@ -223,10 +244,10 @@ function sendEventBusMessage(source: string, messageType: string, payload: objec
           },
         ],
       }),
-    )
-    .catch((err) => {
-      logger.error(err);
-    });
+    );
+  } catch (error) {
+    logger.error({ message: 'Failed to send event bus message', error });
+  }
 }
 
 function getLegacyCardStatus(

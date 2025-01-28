@@ -10,17 +10,17 @@ import { ApplicationReason } from '@blc-mono/shared/models/members/enums/Applica
 
 const repository = new ApplicationRepository(
   defaultDynamoDbClient,
-  'pr-3501-blc-mono-blc-mono-memberProfiles',
+  'pr-3617-blc-mono-blc-mono-memberProfiles',
 );
 
 const applicationService = new ApplicationService(repository);
 
 it('should create an application for signup', async () => {
-  const memberId = 'e57d0310-140c-4487-abe5-71e30f4efac7'; // Update this to whatever member id you want to create
+  const memberId = 'd0d279e1-a1e0-4805-a5b9-9e9ed988b7bb'; // Update this to whatever member id you want to create
 
   const applicationId = await applicationService.createApplication(memberId, {
     startDate: '2024-07-25T22:49:42.134Z',
-    eligibilityStatus: EligibilityStatus.INELIGIBLE,
+    eligibilityStatus: EligibilityStatus.ELIGIBLE,
     applicationReason: ApplicationReason.SIGNUP,
   });
 

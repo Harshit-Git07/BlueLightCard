@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC, MouseEventHandler, useCallback, useMemo, useState } from 'react';
 import { VerifyEligibilityScreenProps } from '@/root/src/member-eligibility/shared/screens/shared/types/VerifyEligibilityScreenProps';
 import { EligibilityScreen } from '@/root/src/member-eligibility/shared/screens/shared/components/screen/EligibilityScreen';
 import { EligibilityBody } from '@/root/src/member-eligibility/shared/screens/shared/components/body/EligibilityBody';
@@ -22,9 +22,30 @@ export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
   useLogAnalyticsPageView(eligibilityDetails);
 
+  const [emailThatCausedError, setEmailThatCausedError] = useState<string | undefined>(undefined);
+
   const onBack = useOnBack(eligibilityDetailsState);
   const onWorkEmailChanged = useOnWorkEmailChanged(eligibilityDetailsState);
   const sendVerificationLink = useOnSendVerificationLink(eligibilityDetailsState);
+
+  const onNext = useCallback<MouseEventHandler<HTMLButtonElement>>(
+    (event) => {
+      event.preventDefault();
+
+      (async () => {
+        try {
+          await sendVerificationLink();
+          setEmailThatCausedError(undefined);
+        } catch (error) {
+          console.log(
+            `Email address '${eligibilityDetails.emailVerification}' is not a trusted domain`
+          );
+          setEmailThatCausedError(eligibilityDetails.emailVerification);
+        }
+      })();
+    },
+    [eligibilityDetails.emailVerification, sendVerificationLink]
+  );
 
   const numberOfCompletedSteps = useMemo(() => {
     switch (eligibilityDetails.flow) {
@@ -35,14 +56,15 @@ export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
     }
   }, [eligibilityDetails.flow]);
 
-  //TODO: This value of this boolean needs to be set by the logic of the API when verifying the email address - functionality/usage will remain the same
   const canSendVerificationEmail = useMemo(() => {
     const emailVerification = eligibilityDetails.emailVerification;
     if (!emailVerification) return false;
 
+    if (emailThatCausedError === emailVerification) return false;
+
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(emailVerification);
-  }, [eligibilityDetails]);
+  }, [eligibilityDetails.emailVerification, emailThatCausedError]);
 
   return (
     <EligibilityScreen data-testid="work-email-verification-screen">
@@ -80,7 +102,7 @@ export const WorkEmailVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
           size="Large"
           variant={ThemeVariant.Primary}
           disabled={!canSendVerificationEmail}
-          onClick={sendVerificationLink}
+          onClick={onNext}
           data-testid="send-verification-link-button"
         >
           Send verification link

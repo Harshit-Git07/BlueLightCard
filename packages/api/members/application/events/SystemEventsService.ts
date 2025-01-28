@@ -1,25 +1,24 @@
 import { StreamRecord } from 'aws-lambda';
-import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge';
-import { getEnv } from '@blc-mono/core/utils/getEnv';
-import { logger } from '@blc-mono/members/application/middleware';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { EventBusSource } from '@blc-mono/shared/models/members/enums/EventBusSource';
 import { MemberEvent } from '@blc-mono/shared/models/members/enums/MemberEvent';
 import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 import { unmarshallStreamImages } from '@blc-mono/members/application/utils/dynamoDb/unmarshallStreamImages';
 import { hasAttributeChanged } from '@blc-mono/members/application/utils/dynamoDb/attibuteManagement';
-import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
+import { EventsService } from '@blc-mono/members/application/events/base/EventsService';
 
-export class SystemEventsService {
-  constructor() {}
+export class SystemEventsService extends EventsService {
+  constructor() {
+    super(EventBusSource.SYSTEM);
+  }
 
   // TODO: This needs implemented?
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  isSendProfileUpdateToSystem = (dynamoStream: StreamRecord | undefined) => {
+  public async emitProfileCreatedEvent(dynamoStream: StreamRecord | undefined): Promise<void> {
     // TODO - confirm no triggered events sent to self for profile updates
-  };
+  }
 
-  isSendApplicationUpdateToSystem = (dynamoStream: StreamRecord | undefined) => {
+  public async emitApplicationUpdatedEvent(dynamoStream: StreamRecord | undefined): Promise<void> {
     const { oldImage: oldApplication, newImage: newApplication } =
       unmarshallStreamImages<ApplicationModel>(dynamoStream);
 
@@ -31,11 +30,7 @@ export class SystemEventsService {
         newApplication?.paymentStatus?.startsWith('PAID') ||
         oldApplication?.paymentStatus?.startsWith('PAID')
       ) {
-        this.sendEventBusMessage(
-          EventBusSource.SYSTEM,
-          MemberEvent.SYSTEM_APPLICATION_APPROVED,
-          dynamoStream,
-        );
+        await this.sendEventBusMessage(MemberEvent.SYSTEM_APPLICATION_APPROVED, dynamoStream);
       }
     } else if (
       hasAttributeChanged('paymentStatus', dynamoStream) &&
@@ -45,35 +40,8 @@ export class SystemEventsService {
         newApplication?.eligibilityStatus === EligibilityStatus.ELIGIBLE ||
         oldApplication?.eligibilityStatus === EligibilityStatus.ELIGIBLE
       ) {
-        this.sendEventBusMessage(
-          EventBusSource.SYSTEM,
-          MemberEvent.SYSTEM_APPLICATION_APPROVED,
-          dynamoStream,
-        );
+        await this.sendEventBusMessage(MemberEvent.SYSTEM_APPLICATION_APPROVED, dynamoStream);
       }
     }
-  };
-
-  sendEventBusMessage = (
-    source: string,
-    messageType: string,
-    dynamoStream: StreamRecord | undefined,
-  ) => {
-    const events = new PutEventsCommand({
-      Entries: [
-        {
-          Detail: JSON.stringify(dynamoStream),
-          DetailType: messageType,
-          Resources: [],
-          Source: source,
-          EventBusName: getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENT_BUS_NAME),
-        },
-      ],
-    });
-
-    const client = new EventBridgeClient({});
-    client.send(events).catch((err) => {
-      logger.error(err);
-    });
-  };
+  }
 }

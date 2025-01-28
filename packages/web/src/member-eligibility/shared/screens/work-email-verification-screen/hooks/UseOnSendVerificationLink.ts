@@ -1,10 +1,10 @@
 import { EligibilityDetailsState } from '@/root/src/member-eligibility/shared/hooks/use-eligibility-details/UseEligibilityDetails';
-import { MouseEventHandler, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import { workEmailVerificationEvents } from '@/root/src/member-eligibility/shared/screens/work-email-verification-screen/amplitude-events/WorkEmailVerificationEvents';
 import { useUpdateMemberProfile } from '@/root/src/member-eligibility/shared/hooks/use-update-member-profile/UseUpdateMemberProfile';
 
-type Callback = MouseEventHandler<HTMLButtonElement>;
+type Callback = () => Promise<void>;
 
 export function useOnSendVerificationLink(
   eligibilityDetailsState: EligibilityDetailsState
@@ -14,20 +14,14 @@ export function useOnSendVerificationLink(
   const logAnalyticsEvent = useLogAmplitudeEvent();
   const updateMemberProfile = useUpdateMemberProfile(eligibilityDetailsState);
 
-  return useCallback<MouseEventHandler<HTMLButtonElement>>(
-    (event) => {
-      event.preventDefault();
+  return useCallback(async () => {
+    logAnalyticsEvent(workEmailVerificationEvents.onEmailAdded(eligibilityDetails));
+    logAnalyticsEvent(workEmailVerificationEvents.onSendClicked(eligibilityDetails));
 
-      logAnalyticsEvent(workEmailVerificationEvents.onEmailAdded(eligibilityDetails));
-      logAnalyticsEvent(workEmailVerificationEvents.onSendClicked(eligibilityDetails));
-
-      updateMemberProfile().then(() => {
-        setEligibilityDetailsState({
-          ...eligibilityDetails,
-          currentScreen: 'Work Email Retry Screen',
-        });
-      });
-    },
-    [eligibilityDetails, logAnalyticsEvent, setEligibilityDetailsState, updateMemberProfile]
-  );
+    await updateMemberProfile();
+    setEligibilityDetailsState({
+      ...eligibilityDetails,
+      currentScreen: 'Work Email Retry Screen',
+    });
+  }, [eligibilityDetails, logAnalyticsEvent, setEligibilityDetailsState, updateMemberProfile]);
 }

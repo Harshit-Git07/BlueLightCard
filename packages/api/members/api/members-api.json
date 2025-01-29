@@ -2,7 +2,7 @@
   "openapi" : "3.0.1",
   "info" : {
     "title" : "staging-blc-mono-members-api",
-    "version" : "2025-01-22T10:13:35Z"
+    "version" : "2025-01-29T15:03:07Z"
   },
   "servers" : [ {
     "url" : "https://staging-members-api.blcshine.io"
@@ -54,6 +54,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -68,8 +69,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -140,10 +140,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetOrganisationFun-P42paadBGRqR/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -184,6 +184,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -198,8 +199,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -242,6 +242,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -256,8 +257,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -328,10 +328,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetProfileFunction-uVSV2JG04m0p/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "put" : {
@@ -348,10 +348,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberUpdateProfileFunct-aTd5HHDC7YxX/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -392,6 +392,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -406,8 +407,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -450,6 +450,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -464,8 +465,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -486,67 +486,15 @@
             "type" : "string"
           }
         } ],
-        "responses" : {
-          "404" : {
-            "description" : "404 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
-          "400" : {
-            "description" : "400 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BadRequestModel"
-                }
-              }
-            }
-          },
-          "401" : {
-            "description" : "401 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
-          "500" : {
-            "description" : "500 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          },
-          "403" : {
-            "description" : "403 response",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/GenericModel"
-                }
-              }
-            }
-          }
-        },
         "security" : [ {
           "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
-          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--ApplyPromoCodeFunction5F-w98d2iVme6lG/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberApplicationHandler-tt3WVsKPgr6k/invocations",
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -594,6 +542,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -608,8 +557,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -644,6 +592,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -658,8 +607,99 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
+        }
+      }
+    },
+    "/members/{memberId}/applications/{applicationId}/paymentConfirmed" : {
+      "put" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "security" : [ {
+          "stagingblcmonomembersapimemberAuthorizerE01DF115" : [ ]
+        } ],
+        "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
+        "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberApplicationHandler-tt3WVsKPgr6k/invocations",
+          "passthroughBehavior" : "when_no_match"
+        }
+      },
+      "options" : {
+        "parameters" : [ {
+          "name" : "memberId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "applicationId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "204 response",
+            "headers" : {
+              "Access-Control-Allow-Origin" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Methods" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Credentials" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              },
+              "Access-Control-Allow-Headers" : {
+                "schema" : {
+                  "type" : "string"
+                }
+              }
+            },
+            "content" : { }
+          }
+        },
+        "x-amazon-apigateway-integration" : {
+          "type" : "mock",
+          "responses" : {
+            "default" : {
+              "statusCode" : "204",
+              "responseParameters" : {
+                "method.response.header.Access-Control-Allow-Credentials" : "'true'",
+                "method.response.header.Access-Control-Allow-Methods" : "'GET,POST,PUT,DELETE,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Headers" : "'*'",
+                "method.response.header.Access-Control-Allow-Origin" : "'*'"
+              }
+            }
+          },
+          "requestTemplates" : {
+            "application/json" : "{ statusCode: 200 }"
+          },
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -737,10 +777,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
-          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetApplicationFunc-77XUT9A2WqbA/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberApplicationHandler-tt3WVsKPgr6k/invocations",
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "put" : {
@@ -764,10 +804,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
-          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberUpdateApplicationF-zLoNabzT4yZJ/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberApplicationHandler-tt3WVsKPgr6k/invocations",
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -815,6 +855,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -829,8 +870,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -865,6 +905,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -879,8 +920,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -958,10 +998,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
-          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberUploadDocumentFunc-TLttp9UqBgBv/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberApplicationHandler-tt3WVsKPgr6k/invocations",
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -1009,6 +1049,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -1023,8 +1064,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -1043,10 +1083,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberChangeEmailRequest-j8SdSzmwO9X8/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -1087,6 +1127,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -1101,8 +1142,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -1180,10 +1220,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetEmployerFunctio-4omeOFDybLNc/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -1231,6 +1271,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -1245,8 +1286,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -1331,10 +1371,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
-          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--ValidatePromoCodeFunctio-01c5pkkttTKu/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberApplicationHandler-tt3WVsKPgr6k/invocations",
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -1389,6 +1429,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -1403,8 +1444,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -1423,10 +1463,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberFetchBrazeAttribut-KxBxrS311fVt/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -1467,6 +1507,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -1481,8 +1522,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -1553,10 +1593,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetEmployersFuncti-YF14l2yemz5M/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -1597,6 +1637,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -1611,8 +1652,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -1690,10 +1730,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetMarketingPrefer-h685nt5z5v9a/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -1741,6 +1781,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -1755,8 +1796,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -1819,10 +1859,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetOrganisationsFu-BCS77JaNS3WB/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -1855,6 +1895,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -1869,8 +1910,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -1933,10 +1973,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetProfileForAuthe-EgT988jHxogl/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "post" : {
@@ -1997,10 +2037,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberCreateProfileFunct-rzZ482Mp2pPG/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -2033,6 +2073,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -2047,8 +2088,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -2119,10 +2159,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
-          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberGetApplicationsFun-l1zNcnq7jKaw/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberApplicationHandler-tt3WVsKPgr6k/invocations",
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "post" : {
@@ -2191,10 +2231,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
-          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberCreateApplicationF-LotJdaPtkMjb/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberApplicationHandler-tt3WVsKPgr6k/invocations",
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -2235,6 +2275,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -2249,8 +2290,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -2269,10 +2309,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberUpdateMarketingPre-AWPUdzHLu4hq/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -2313,6 +2353,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -2327,8 +2368,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -2371,6 +2411,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -2385,8 +2426,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -2405,10 +2445,10 @@
         } ],
         "x-amazon-apigateway-request-validator" : "membersapiapirequestvalidatore1d60f54-usqx29brupqi",
         "x-amazon-apigateway-integration" : {
+          "type" : "aws_proxy",
           "httpMethod" : "POST",
           "uri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-members--MemberChangePasswordFunc-7uwywIl1g8cG/invocations",
-          "passthroughBehavior" : "when_no_match",
-          "type" : "aws_proxy"
+          "passthroughBehavior" : "when_no_match"
         }
       },
       "options" : {
@@ -2449,6 +2489,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -2463,8 +2504,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     },
@@ -2514,6 +2554,7 @@
           }
         },
         "x-amazon-apigateway-integration" : {
+          "type" : "mock",
           "responses" : {
             "default" : {
               "statusCode" : "204",
@@ -2528,8 +2569,7 @@
           "requestTemplates" : {
             "application/json" : "{ statusCode: 200 }"
           },
-          "passthroughBehavior" : "when_no_match",
-          "type" : "mock"
+          "passthroughBehavior" : "when_no_match"
         }
       }
     }
@@ -2596,10 +2636,10 @@
         "in" : "header",
         "x-amazon-apigateway-authtype" : "custom",
         "x-amazon-apigateway-authorizer" : {
+          "type" : "request",
           "authorizerUri" : "arn:aws:apigateway:eu-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-2:314658777488:function:staging-blc-mono-identity-AuthorizerBD825682-T6tcOUaVCdhv/invocations",
           "authorizerResultTtlInSeconds" : 0,
-          "identitySource" : "method.request.header.Authorization",
-          "type" : "request"
+          "identitySource" : "method.request.header.Authorization"
         }
       }
     }

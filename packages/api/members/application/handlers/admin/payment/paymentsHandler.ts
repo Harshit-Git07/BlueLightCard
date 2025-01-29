@@ -1,70 +1,38 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '../../../middleware';
+import {
+  initiatePaymentHandler,
+  isInitiatePaymentEvent,
+} from '@blc-mono/members/application/handlers/admin/payment/handlers/initiatePaymentHandler';
+import {
+  completePaymentHandler,
+  isCompletePaymentEvent,
+} from '@blc-mono/members/application/handlers/admin/payment/handlers/completePaymentHandler';
+import {
+  isRefundPaymentEvent,
+  refundPaymentHandler,
+} from '@blc-mono/members/application/handlers/admin/payment/handlers/refundPaymentHandler';
+import {
+  isPaymentHistoryEvent,
+  paymentHistoryHandler,
+} from '@blc-mono/members/application/handlers/admin/payment/handlers/paymentHistoryHandler';
 
 const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<unknown> => {
   if (isInitiatePaymentEvent(event)) {
-    return initiatePayment(event);
+    return initiatePaymentHandler(event);
   }
 
   if (isCompletePaymentEvent(event)) {
-    return completePayment(event);
+    return completePaymentHandler(event);
   }
 
   if (isRefundPaymentEvent(event)) {
-    return refundPayment(event);
+    return refundPaymentHandler(event);
   }
 
   if (isPaymentHistoryEvent(event)) {
-    return paymentHistory(event);
+    return paymentHistoryHandler(event);
   }
 };
-
-function isInitiatePaymentEvent(event: APIGatewayProxyEvent): boolean {
-  return event.path === '/admin/payments/initiate';
-}
-
-// TODO: Implement this and then remove the eslint disable
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function initiatePayment(event: APIGatewayProxyEvent): void {
-  // TODO: Implement handler
-}
-
-function isCompletePaymentEvent(event: APIGatewayProxyEvent): boolean {
-  return event.path === '/admin/payments/checkout';
-}
-
-// TODO: Implement this and then remove the eslint disable
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function completePayment(event: APIGatewayProxyEvent): void {
-  // TODO: Implement handler
-}
-
-function isRefundPaymentEvent(event: APIGatewayProxyEvent): boolean {
-  return (
-    event.pathParameters !== null &&
-    event.pathParameters.transactionId !== undefined &&
-    event.path === `/admin/payments/refund/${event.pathParameters.transactionId}`
-  );
-}
-
-// TODO: Implement this and then remove the eslint disable
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function refundPayment(event: APIGatewayProxyEvent): void {
-  // TODO: Implement handler
-}
-
-function isPaymentHistoryEvent(event: APIGatewayProxyEvent): boolean {
-  return (
-    event.pathParameters !== null &&
-    event.pathParameters.memberId !== undefined &&
-    event.path === `/admin/payments/history/${event.pathParameters.memberId}`
-  );
-}
-
-// TODO: Implement this and then remove the eslint disable
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function paymentHistory(event: APIGatewayProxyEvent): void {
-  // TODO: Implement handler
-}
 
 export const handler = middleware(unwrappedHandler);

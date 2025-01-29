@@ -11,6 +11,8 @@ import {
   PromoCodeResponseModel,
 } from '@blc-mono/shared/models/members/promoCodeModel';
 
+let promoCodeServiceSingleton: PromoCodesService;
+
 export class PromoCodesService {
   constructor(
     private repository: PromoCodesRepository = new PromoCodesRepository(),
@@ -22,7 +24,7 @@ export class PromoCodesService {
     applicationId: string,
     promoCode: string,
     promoCodeApplied: boolean,
-  ) {
+  ): Promise<void> {
     logger.debug({ message: 'Applying promo code to application', applicationId });
     const promoCodeResponse = await this.validatePromoCode(memberId, promoCode);
 
@@ -225,4 +227,12 @@ export class PromoCodesService {
       });
     }
   }
+}
+
+export function promoCodeService(): PromoCodesService {
+  if (!promoCodeServiceSingleton) {
+    promoCodeServiceSingleton = new PromoCodesService();
+  }
+
+  return promoCodeServiceSingleton;
 }

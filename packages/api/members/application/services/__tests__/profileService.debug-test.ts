@@ -12,11 +12,11 @@ import { OrganisationRepository } from '@blc-mono/members/application/repositori
 
 const organisationRepository = new OrganisationRepository(
   defaultDynamoDbClient,
-  'pr-3617-blc-mono-blc-mono-memberOrganisations',
+  'pr-3629-blc-mono-blc-mono-memberOrganisations',
 );
 const profileRepository = new ProfileRepository(
   defaultDynamoDbClient,
-  'pr-3617-blc-mono-blc-mono-memberProfiles',
+  'pr-3629-blc-mono-blc-mono-memberProfiles',
 );
 
 const organisationService = new OrganisationService(organisationRepository);

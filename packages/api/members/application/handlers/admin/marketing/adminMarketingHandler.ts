@@ -1,93 +1,30 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { middleware } from '../../../middleware';
-import MarketingService from '@blc-mono/members/application/services/marketingService';
-import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { BrazeAttributesModel } from '@blc-mono/shared/models/members/brazeAttributesModel';
-import { BrazeUpdateModel } from '@blc-mono/shared/models/members/brazeUpdateModel';
-import { isMarketingPreferencesEnvironment } from '@blc-mono/members/application/types/marketingPreferencesEnvironment';
-
-const service = new MarketingService();
+import {
+  getBrazeAttributesHandler,
+  isGetBrazeAttributesEvent,
+} from '@blc-mono/members/application/handlers/admin/marketing/handlers/getBrazeAtributesHandler';
+import {
+  getMarketingPreferencesHandler,
+  isGetMarketingPreferencesEvent,
+} from '@blc-mono/members/application/handlers/admin/marketing/handlers/getMarketingPreferencesHandler';
+import {
+  isUpdateMarketingPreferencesEvent,
+  updateMarketingPreferencesHandler,
+} from '@blc-mono/members/application/handlers/admin/marketing/handlers/updateMarketingPreferencesHandler';
 
 const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<unknown> => {
   if (isGetBrazeAttributesEvent(event)) {
-    return await getBrazeAttributes(event);
+    return await getBrazeAttributesHandler(event);
   }
 
   if (isGetMarketingPreferencesEvent(event)) {
-    return await getMarketingPreferences(event);
+    return await getMarketingPreferencesHandler(event);
   }
 
   if (isUpdateMarketingPreferencesEvent(event)) {
-    return await updateMarketingPreferences(event);
+    return await updateMarketingPreferencesHandler(event);
   }
 };
-
-function isGetBrazeAttributesEvent(event: APIGatewayProxyEvent): boolean {
-  return (
-    event.pathParameters !== null &&
-    event.pathParameters.memberId !== undefined &&
-    event.path === `/admin/members/${event.pathParameters.memberId}/marketing/braze`
-  );
-}
-
-async function getBrazeAttributes(event: APIGatewayProxyEvent): Promise<Record<string, unknown>> {
-  const { memberId } = event.pathParameters || {};
-  if (!memberId) {
-    throw new ValidationError('Member ID is required');
-  }
-
-  if (!event.body) {
-    throw new ValidationError('Missing request body');
-  }
-
-  const model = BrazeAttributesModel.parse(JSON.parse(event.body));
-  return await service.getAttributes(memberId, model.attributes);
-}
-
-function isGetMarketingPreferencesEvent(event: APIGatewayProxyEvent): boolean {
-  return (
-    event.pathParameters !== null &&
-    event.pathParameters.memberId !== undefined &&
-    event.path ===
-      `/admin/members/${event.pathParameters.memberId}/marketing/preferences/${event.pathParameters.environment}`
-  );
-}
-
-async function getMarketingPreferences(
-  event: APIGatewayProxyEvent,
-): Promise<Record<string, unknown> | Record<string, unknown>[]> {
-  const { memberId, environment } = event.pathParameters || {};
-  if (!memberId || !environment) {
-    throw new ValidationError('Member ID and Environment is required');
-  }
-
-  if (!isMarketingPreferencesEnvironment(environment)) {
-    throw new ValidationError('Environment must be either "web" or "mobile"');
-  }
-
-  return await service.getPreferences(memberId, environment);
-}
-
-function isUpdateMarketingPreferencesEvent(event: APIGatewayProxyEvent): boolean {
-  return (
-    event.pathParameters !== null &&
-    event.pathParameters.memberId !== undefined &&
-    event.path === `/admin/members/${event.pathParameters.memberId}/marketing/braze/update`
-  );
-}
-
-async function updateMarketingPreferences(event: APIGatewayProxyEvent): Promise<void> {
-  const { memberId } = event.pathParameters || {};
-  if (!memberId) {
-    throw new ValidationError('Member ID is required');
-  }
-
-  if (!event.body) {
-    throw new ValidationError('Missing request body');
-  }
-
-  const model = BrazeUpdateModel.parse(JSON.parse(event.body));
-  await service.updateBraze(memberId, model.attributes);
-}
 
 export const handler = middleware(unwrappedHandler);

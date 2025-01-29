@@ -26,6 +26,8 @@ import {
   UpdateApplicationModel,
 } from '@blc-mono/shared/models/members/applicationModel';
 
+let applicationServiceSingleton: ApplicationService;
+
 export interface ApplicationSearch {
   eligibilityStatus?: EligibilityStatus;
   organisationId?: string;
@@ -400,4 +402,12 @@ export class ApplicationService {
     });
     return applicationOnDynamo;
   }
+}
+
+export function applicationService(): ApplicationService {
+  if (!applicationServiceSingleton) {
+    applicationServiceSingleton = new ApplicationService();
+  }
+
+  return applicationServiceSingleton;
 }

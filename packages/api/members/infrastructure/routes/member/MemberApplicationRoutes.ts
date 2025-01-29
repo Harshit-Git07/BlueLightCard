@@ -4,65 +4,81 @@ import {
   ApplicationModel,
   CreateApplicationModel,
   CreateApplicationModelResponse,
-  UpdateApplicationModel,
 } from '@blc-mono/shared/models/members/applicationModel';
 import { PromoCodeResponseModel } from '@blc-mono/shared/models/members/promoCodeModel';
 import { DocumentUploadLocation } from '@blc-mono/shared/models/members/documentUpload';
+import { Function } from 'sst/constructs';
+import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
 
 export function memberApplicationRoutes(
   defaultRouteProps: DefaultRouteProps,
 ): Record<string, ApiGatewayV1ApiFunctionRouteProps<'memberAuthorizer'>> {
+  const handlerFunction = new Function(
+    defaultRouteProps.stack,
+    'MemberApplicationHandlerFunction',
+    {
+      bind: defaultRouteProps.bind,
+      permissions: defaultRouteProps.permissions,
+      handler:
+        'packages/api/members/application/handlers/member/applications/memberApplicationHandler.handler',
+      environment: {
+        [MemberStackEnvironmentKeys.SERVICE]: 'members',
+        ...defaultRouteProps.environment,
+        [MemberStackEnvironmentKeys.API_DEFAULT_ALLOWED_ORIGINS]: JSON.stringify(
+          defaultRouteProps.defaultAllowedOrigins,
+        ),
+      },
+      vpc: defaultRouteProps.vpc,
+    },
+  );
+
   return {
     'POST /members/{memberId}/applications': Route.createRoute({
       ...defaultRouteProps,
+      handlerFunction,
       name: 'MemberCreateApplication',
-      handler:
-        'packages/api/members/application/handlers/member/applications/createApplication.handler',
       requestModelType: CreateApplicationModel,
       responseModelType: CreateApplicationModelResponse,
     }),
     'PUT /members/{memberId}/applications/{applicationId}': Route.createRoute({
       ...defaultRouteProps,
+      handlerFunction,
       name: 'MemberUpdateApplication',
-      handler:
-        'packages/api/members/application/handlers/member/applications/updateApplication.handler',
-      requestModelType: UpdateApplicationModel,
     }),
     'GET /members/{memberId}/applications': Route.createRoute({
       ...defaultRouteProps,
+      handlerFunction,
       name: 'MemberGetApplications',
-      handler:
-        'packages/api/members/application/handlers/member/applications/getApplications.handler',
       responseModelType: ApplicationModel,
     }),
     'GET /members/{memberId}/applications/{applicationId}': Route.createRoute({
       ...defaultRouteProps,
+      handlerFunction,
       name: 'MemberGetApplication',
-      handler:
-        'packages/api/members/application/handlers/member/applications/getApplication.handler',
       responseModelType: ApplicationModel,
     }),
     'POST /members/{memberId}/applications/{applicationId}/uploadDocument': Route.createRoute({
       ...defaultRouteProps,
+      handlerFunction,
       name: 'MemberUploadDocument',
-      handler:
-        'packages/api/members/application/handlers/member/applications/uploadDocument.handler',
       responseModelType: DocumentUploadLocation,
     }),
     'POST /members/{memberId}/applications/{applicationId}/code/validate/{promoCode}':
       Route.createRoute({
         ...defaultRouteProps,
+        handlerFunction,
         name: 'ValidatePromoCode',
-        handler:
-          'packages/api/members/application/handlers/member/applications/validatePromoCode.handler',
         responseModelType: PromoCodeResponseModel,
       }),
     'PUT /members/{memberId}/applications/{applicationId}/code/apply': Route.createRoute({
       ...defaultRouteProps,
+      handlerFunction,
       name: 'ApplyPromoCode',
-      handler:
-        'packages/api/members/application/handlers/member/applications/applyPromoCode.handler',
-      responseModelType: UpdateApplicationModel,
+    }),
+    'PUT /members/{memberId}/applications/{applicationId}/paymentConfirmed': Route.createRoute({
+      ...defaultRouteProps,
+      handlerFunction,
+      name: 'PaymentConfirmed',
     }),
   };
 }

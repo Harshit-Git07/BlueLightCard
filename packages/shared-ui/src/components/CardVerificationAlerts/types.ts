@@ -41,6 +41,7 @@ export const allowedPaymentStatusValues = [
   PaymentStatus.PAID_ADMIN,
   PaymentStatus.PENDING_REFUND,
   PaymentStatus.REFUNDED,
+  PaymentStatus.AWAITING_PAYMENT_CONFIRMATION,
   undefined,
 ] as const;
 export type PaymentStatusSchema = (typeof allowedPaymentStatusValues)[number];

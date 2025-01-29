@@ -3,6 +3,8 @@ import BrazeClient from '../braze/brazeClient';
 import { MarketingPreferencesEnvironment } from '@blc-mono/members/application/types/marketingPreferencesEnvironment';
 import { BrazeUpdateModel } from '@blc-mono/shared/models/members/brazeUpdateModel';
 
+let marketingServiceSingleton: MarketingService;
+
 export default class MarketingService {
   constructor(private readonly brazeClient: BrazeClient = new BrazeClient()) {}
 
@@ -38,4 +40,12 @@ export default class MarketingService {
       throw error;
     }
   }
+}
+
+export function marketingService(): MarketingService {
+  if (!marketingServiceSingleton) {
+    marketingServiceSingleton = new MarketingService();
+  }
+
+  return marketingServiceSingleton;
 }

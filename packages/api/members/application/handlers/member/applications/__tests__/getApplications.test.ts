@@ -1,32 +1,43 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
-import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
+import {
+  applicationService,
+  ApplicationService,
+} from '@blc-mono/members/application/services/applicationService';
 import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
+import { jest } from '@jest/globals';
 
 jest.mock('@blc-mono/members/application/services/applicationService');
 
-describe('getApplications handler', () => {
-  const memberId = uuidv4();
-  const applicationId = uuidv4();
-  const applications: ApplicationModel[] = [
-    {
-      memberId,
-      applicationId,
-      applicationReason: ApplicationReason.SIGNUP,
-    },
-  ];
-  const event = {
-    pathParameters: { memberId },
-  } as unknown as APIGatewayProxyEvent;
+const memberId = uuidv4();
+const path = `/members/${memberId}/applications`;
+const httpMethod = 'GET';
 
+const applicationId = uuidv4();
+
+const applications: ApplicationModel[] = [
+  {
+    memberId,
+    applicationId,
+    applicationReason: ApplicationReason.SIGNUP,
+  },
+];
+
+const applicationServiceMock = jest.mocked(applicationService);
+const getApplicationsMock = jest.fn<typeof ApplicationService.prototype.getApplications>();
+
+describe('getApplications handler', () => {
   beforeEach(() => {
-    ApplicationService.prototype.getApplications = jest.fn().mockResolvedValue(applications);
+    applicationServiceMock.mockReturnValue({
+      getApplications: getApplicationsMock,
+    } as unknown as ApplicationService);
+    getApplicationsMock.mockResolvedValue(applications);
   });
 
   it('should return 400 if memberId is missing', async () => {
-    const event = { pathParameters: {} } as unknown as APIGatewayProxyEvent;
+    const event = { path, httpMethod, pathParameters: {} } as unknown as APIGatewayProxyEvent;
 
     const response = await handler(event);
 
@@ -34,6 +45,12 @@ describe('getApplications handler', () => {
   });
 
   it('should return 200 with applications on success', async () => {
+    const event = {
+      path,
+      httpMethod,
+      pathParameters: { memberId },
+    } as unknown as APIGatewayProxyEvent;
+
     const response = await handler(event);
 
     expect(response.statusCode).toEqual(200);
@@ -42,5 +59,5 @@ describe('getApplications handler', () => {
 });
 
 async function handler(event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> {
-  return await (await import('../getApplications')).handler(event, emptyContextStub);
+  return await (await import('../memberApplicationHandler')).handler(event, emptyContextStub);
 }

@@ -72,6 +72,7 @@ export class EmailService {
           'incorrect_addresss_reminder',
           'validate_renewal',
           'verify_new_email',
+          'trusted_domain_work_email',
         ];
         if (emailTypesVerification.includes(emailType)) {
           const { url } = await this.verifyEmailSteps(payload);
@@ -131,7 +132,8 @@ export class EmailService {
   }
 
   private async sendViaSes(emailType: string, payload: EmailPayload): Promise<void> {
-    const { email } = payload;
+    const { email, workEmail } = payload;
+    const emailToSendTo = workEmail ?? email;
     const template = await getEmailTemplate(
       this.bucketName,
       brandConversion[brand],
@@ -147,7 +149,7 @@ export class EmailService {
       await this.sesClient.sendEmail({
         Source: this.sourceEmail,
         Destination: {
-          ToAddresses: [email],
+          ToAddresses: [emailToSendTo],
         },
         Message: {
           Body: {

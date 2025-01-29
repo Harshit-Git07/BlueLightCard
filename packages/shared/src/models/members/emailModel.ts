@@ -5,6 +5,7 @@ import { createZodNamedType } from '@blc-mono/shared/utils/zodNamedType';
 export const EmailPayloadSchema = z.object({
   email: z.string(),
   newEmail: z.string().optional(),
+  workEmail: z.string().optional(),
   subject: z.string(),
   content: z.object({
     F_Name: z.string(),

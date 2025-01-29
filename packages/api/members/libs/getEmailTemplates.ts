@@ -40,10 +40,11 @@ export const emailTypes: emailTemplates = {
     incorrect_address_reminder: 'incorrect_address_reminder.html', // bit confused by this one, seems to be reminding again about an address update, but also mentions you accidently put a home address????
     validate_renewal: 'validateRenewal.html', // i think this is for retired renewal as it says you do not need to upload id, possibly deprecate though?
     verify_new_email: 'verify_new_email.html', // changed email so validate this one (needs to be updated as hits validate.php)
+    trusted_domain_work_email: 'confirm_eligibility.html', //F_Name / confirming your work email
 
     // actions to account //
     account_suspended: 'account_suspended.html', // we have just suspended your account
-    approve_account_after_checks: 'approve_account_after_checks.html', // confirmed maybe? genie stuff, if not in, can deprecate?
+    //approve_account_after_checks: 'approve_account_after_checks.html', // confirmed maybe? genie stuff, if not in, can deprecate?
     card_posted: 'card_posted.html', //sent when card is posted
     expire_card: 'expire_card.html', // sent when a card expires - my card bit needs updating as sends to highstreetcard.php
     id_approved: 'ID_approved.html', // general id approved, also contains if not paid pay here which might need to be updated - highstreetcard.php
@@ -125,10 +126,43 @@ export const emailTypes: emailTemplates = {
     await_pay_id_approved_day_2: 'ID_Approved_Not_Paid_Day_2.html', // id approved but need to pay - think we have this above so could get rid of, if not needs updating from F_NAME to F_Name
 
     //unknown
-    confirm_eligibility: 'confirm_eligibility.html', //confirming your work email - link doesnt work?
     refund: 'refund.html', // unable to process refund, please provide extra details email (for manual refunds)
   },
-  ddsuk: {},
+  ddsuk: {
+    // request action from user //
+    // all of the following are verification emails and get the link from auth0 based on email address provided
+    activation_email: 'activation_email.html', //F_Name
+    activation_reminder: 'activation_email.html', //F_Name
+    trusted_domain_work_email: 'confirm_eligibility.html', //F_Name
+    validate_renewal: 'activation_email.html', //F_Name
+    verify_new_email: 'verify_new_email.html', //F_Name
+
+    // actions to account //
+    account_suspended: 'account_suspended.html', // F_Name
+    card_posted: 'card_posted.html', //F_Name/Link (your_card section of 'my account')
+    expire_card: 'expire_card.html', //F_Name
+    id_approved: 'ID_approved.html', //F_Name
+    virtual_card_enabled: 'virtual_card_enabled.html', //F_Name
+    payment_made: 'payment_made.html', //F_Name/Link(transaction reference)
+    promo_payment: 'promo_payment.html', //F_Name
+    renew_expired: 'renew_expired.html', //F_Name
+
+    //new
+    refund_failed: 'refund_failed.html', //F_Name  // this email needs to be redesigned with the manual send to finance form we had before
+    //dds specific for confirmed
+    account_confirmed: 'account_confirmed.html', //F_Name //dds specific approved confirm
+    account_declined: 'account_declined.html', //F_name // declined confirm
+
+    //declines
+    id_decline_generic: 'id_decline_generic.html', //F_Name
+    id_decline_blurry: 'id_decline_blurry.html', //F_Name
+
+    // complete application //
+    await_id_paid: 'await_pay_id_approved.html', //F_Name/Link(link to eligibility)
+    await_id_paid_day_7: 'await_pay_id_approved.html', //F_Name/Link(link to eligibility)
+    await_pay_id_approved: 'card-content-id-approved-not-paid.html', //F_Name/Link(eligibility url),
+    await_pay_id_approved_day_2: 'ID_Approved_Not_Paid_Day_2.html', //F_Name/Link(link to eligibility)
+  },
   blcau: {
     // request action from user //
     activation_email_new_journey: 'activation_email_new_journey.html', //F_Name // request action from user // needs updating with verify link

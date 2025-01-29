@@ -73,7 +73,9 @@ export const SignupInterstitialScreen: FC<VerifyEligibilityScreenProps> = ({
 
           setEligibilityDetails({
             ...eligibilityDetails,
-            currentScreen: 'Delivery Address Screen',
+            currentScreen: eligibilityDetails?.address
+              ? 'Payment Screen'
+              : 'Delivery Address Screen',
             hasJumpedStraightToPayment: true,
           });
         }}

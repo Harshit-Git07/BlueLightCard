@@ -47,6 +47,7 @@ export async function mapToEligibilityDetails(
     canSkipPayment: getCanSkipPaymentVerification(organisation, employer, promoCode),
     hasSkippedAccountDetails: address !== undefined,
     hasJumpedStraightToPayment: canSkipStraightToPayment(memberProfile),
+    currentIdRequirementDetails: employer?.idRequirements ?? organisation?.idRequirements,
   };
 }
 

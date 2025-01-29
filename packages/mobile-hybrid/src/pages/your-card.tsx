@@ -12,13 +12,13 @@ import {
   useMemberId,
   useMemberProfileGet,
   YourCard,
+  RequestNewCardButton,
 } from '@bluelightcard/shared-ui';
 import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
 import useRouterReady from '@/hooks/useRouterReady';
-import { SyntheticEvent } from 'react';
 import AccountPagesHeader from '@/page-components/account/AccountPagesHeader';
 import InvokeNativeNavigation from '@/invoke/navigation';
-import { BRANDS } from '@/types/brands.enum';
+import { BRAND_WEB_URL } from '@/globals';
 
 const MyCardPage: NextPage = () => {
   useRouterReady();
@@ -29,19 +29,6 @@ const MyCardPage: NextPage = () => {
 
   const navigation = new InvokeNativeNavigation();
 
-  const isDev = ['local', 'staging', 'preview'].includes(process.env.NEXT_PUBLIC_ENV ?? '');
-  const baseUrl: Record<BRANDS, string> = {
-    [BRANDS.BLC_UK]: isDev
-      ? 'https://www.staging.bluelightcard.co.uk'
-      : 'https://www.bluelightcard.co.uk',
-    [BRANDS.BLC_AU]: isDev
-      ? 'https://www.develop.bluelightcard.com.au'
-      : 'https://www.bluelightcard.com.au',
-    [BRANDS.DDS_UK]: isDev
-      ? 'https://www.ddsstaging.bluelightcard.tech'
-      : 'https://www.defencediscountservice.co.uk',
-  };
-
   if (isFetching) {
     return null;
   }
@@ -51,52 +38,40 @@ const MyCardPage: NextPage = () => {
   const hasNotGenerated = !hasGenerated && memberProfile?.applications?.length;
   const hasNoCard = !hasGenerated && !hasNotGenerated;
 
-  const eligibilityUrl = `${baseUrl[BRAND as BRANDS]}/eligibility`;
-  const onRequestNewCard = (e: SyntheticEvent) => {
-    e.preventDefault();
-    // [TODO] implement later
-  };
+  const eligibilityUrl = `https://${BRAND_WEB_URL}/eligibility`;
 
   if (!hasNoCard) {
     return (
       <>
         <AccountPagesHeader title="Your Card" hasBackButton={false} />
         <CardVerificationAlerts memberUuid={memberId} />
-        <div className="relative flex justify-center h-[calc(100vh-113px)]">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <YourCard
-              brand={BRAND}
-              firstName={memberProfile?.firstName ?? ''}
-              lastName={memberProfile?.lastName ?? ''}
-              accountNumber={card?.cardNumber}
-              expiryDate={card?.expiryDate}
-            />
-          </div>
-        </div>
-        {hasGenerated ? (
-          <div className={`absolute bottom-0 pb-[24px] flex flex-col items-center w-full`}>
-            <div className="w-[327px] flex flex-col gap-2">
-              <CopyButton
-                variant={ThemeVariant.Primary}
-                label="Copy card number"
-                size="Large"
-                copyText={card?.cardNumber!}
-                fullWidth={true}
+        <div className="flex flex-col w-full items-center overflow-hidden">
+          <div className="relative flex flex-col justify-center h-[calc(100vh-125px)]">
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <YourCard
+                brand={BRAND}
+                firstName={memberProfile?.firstName ?? ''}
+                lastName={memberProfile?.lastName ?? ''}
+                accountNumber={card?.cardNumber}
+                expiryDate={card?.expiryDate}
               />
-
-              <Button
-                className="w-full"
-                variant={ThemeVariant.Secondary}
-                iconRight={faCreditCardBlank}
-                type="button"
-                size="Large"
-                onClick={onRequestNewCard}
-              >
-                Request new card
-              </Button>
             </div>
           </div>
-        ) : null}
+          {hasGenerated ? (
+            <div className={`absolute bottom-[24px] flex flex-col items-center w-full px-[16px]`}>
+              <div className="flex flex-col max-w-[327px] w-full gap-2">
+                <CopyButton
+                  variant={ThemeVariant.Primary}
+                  label="Copy card number"
+                  size="Large"
+                  copyText={card?.cardNumber!}
+                  fullWidth={true}
+                />
+                <RequestNewCardButton />
+              </div>
+            </div>
+          ) : null}
+        </div>
       </>
     );
   }
@@ -105,26 +80,30 @@ const MyCardPage: NextPage = () => {
     <>
       <AccountPagesHeader title="Your Card" hasBackButton={false} />
       <CardVerificationAlerts memberUuid={memberId} />
-      <div className="mt-[24px] flex flex-col items-center justify-center">
-        <div className="flex flex-col items-center justify-center">
+      <div className="mt-[24px] flex flex-col items-center justify-center w-full px-[16px]">
+        <div className="flex flex-col items-center justify-center w-full">
           <NoCardImage />
         </div>
 
-        <div className="w-[327px] mt-[32px] flex flex-col items-center justify-center gap-[12px]">
-          <p className={`mt-[24px] ${fonts.titleMediumSemiBold}`}>You don&apos;t have a card yet</p>
+        <div className="w-full max-w-[327px] mt-[32px] flex flex-col items-center justify-center gap-[12px]">
+          <p className={`mt-[24px] text-center ${fonts.titleMediumSemiBold}`}>
+            You don&apos;t have a card yet
+          </p>
 
           <p className={`${fonts.body} text-center`}>{strapline}</p>
         </div>
       </div>
 
-      <div className="absolute bottom-[24px] flex flex-col items-center w-full">
+      <div className="absolute bottom-[24px] flex flex-col items-center w-full px-[16px]">
         <Button
-          className="w-[327px]"
+          className="w-full max-w-[327px]"
           variant={ThemeVariant.Primary}
           iconRight={faCreditCardBlank}
           type="button"
           size="Large"
-          onClick={() => navigation.navigateExternal(eligibilityUrl)}
+          onClick={() => {
+            navigation.navigateExternal(eligibilityUrl);
+          }}
         >
           Get your card
         </Button>

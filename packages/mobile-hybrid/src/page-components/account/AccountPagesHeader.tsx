@@ -21,7 +21,7 @@ const AccountPagesHeader = ({ title, hasBackButton = true }: AccountPagesHeaderP
 
   return (
     <div
-      className={`w-full grid grid-cols-12 p-[16px] border-[1px] ${colours.borderOnSurfaceOutlineSubtle}`}
+      className={`w-full grid grid-cols-12 p-[16px] border-b-[1px] ${colours.borderOnSurfaceOutlineSubtle}`}
     >
       <Drawer />
       <Toaster />
@@ -39,7 +39,7 @@ const AccountPagesHeader = ({ title, hasBackButton = true }: AccountPagesHeaderP
         </button>
       ) : null}
       <h2
-        className={`text-center ${colours.textOnSurface} ${fonts.titleMedium}
+        className={`text-center self-center ${colours.textOnSurface} ${fonts.titleMedium}
         ${hasBackButton ? 'col-span-8' : 'col-span-12'}`}
       >
         {title}

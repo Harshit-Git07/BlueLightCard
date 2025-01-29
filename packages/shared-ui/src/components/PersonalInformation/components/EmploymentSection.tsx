@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { PersonalInfoFormState } from '../hooks/usePersonalInfoState';
-import { getBrandedSupportLink, ThemeVariant, usePlatformAdapter } from '../../..';
+import { getBrandedSupportLink, PlatformVariant, ThemeVariant, usePlatformAdapter } from '../../..';
 import { copy } from '../copy';
 import Button from '../../Button-V2';
 import { useGetEmployers } from '../../../hooks/useGetEmployers';
@@ -28,6 +28,8 @@ export const EmploymentSection: FC<EmploymentSectionProps> = ({ divisionId, onDi
   const { platform, navigate } = usePlatformAdapter();
   const zendeskUrl = getBrandedSupportLink();
 
+  const isMobile = platform === PlatformVariant.MobileHybrid;
+
   const divisionOptions: DropdownOptions =
     employerDetails && employerDetails?.length > 0
       ? employerDetails.map((employer) => ({ id: employer.employerId, label: employer.name }))
@@ -47,9 +49,9 @@ export const EmploymentSection: FC<EmploymentSectionProps> = ({ divisionId, onDi
           variant={ThemeVariant.Tertiary}
           size={'Small'}
           className={'!justify-start w-fit !px-0'}
-          href={platform !== 'mobile-hybrid' ? zendeskUrl : ''}
+          href={!isMobile ? zendeskUrl : ''}
           onClick={() => {
-            if (platform === 'mobile-hybrid') {
+            if (isMobile) {
               navigate('/chat');
             }
           }}

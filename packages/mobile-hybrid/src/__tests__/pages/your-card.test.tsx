@@ -13,6 +13,9 @@ import * as globals from '@/globals';
 import { mockMemberProfileResponse } from '@bluelightcard/shared-ui/components/MyAccountDebugTools/mocks/mockMemberProfileGet';
 import { PlatformVariant } from '@bluelightcard/shared-ui/types';
 
+const mockProfileNoApplication = { ...mockMemberProfileResponse };
+mockProfileNoApplication.applications = [];
+
 const mockProfileNoCard = { ...mockMemberProfileResponse };
 mockProfileNoCard.cards = [];
 
@@ -71,13 +74,26 @@ describe('YourCard Page', () => {
     return mockPlatformAdapter;
   };
 
-  test('displays generated card page', async () => {
-    await whenPageIsRendered(mockMemberProfileResponse);
+  test('displays request new card button when no application in progress', async () => {
+    await whenPageIsRendered(mockProfileNoApplication);
 
     const requestNewCardBtn = await screen.findByRole('button', {
       name: 'Request new card',
     });
     expect(requestNewCardBtn).toBeInTheDocument();
+  });
+
+  test('displays continue card request button when no application in progress', async () => {
+    await whenPageIsRendered(mockMemberProfileResponse);
+
+    const requestNewCardBtn = await screen.findByRole('button', {
+      name: 'Continue card request',
+    });
+    expect(requestNewCardBtn).toBeInTheDocument();
+  });
+
+  test('displays generated card page', async () => {
+    await whenPageIsRendered(mockMemberProfileResponse);
 
     const name = await screen.findByText(
       `${mockMemberProfileResponse.firstName} ${mockMemberProfileResponse.lastName}`,

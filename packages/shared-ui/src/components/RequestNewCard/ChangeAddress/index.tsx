@@ -37,7 +37,7 @@ const ChangeAddress: FC = () => {
     if (memberProfile) {
       setAddress((prevAddress) => ({
         ...prevAddress,
-        county: memberProfile?.county ?? '',
+        county: memberProfile.county ?? '',
       }));
     }
   }, [application, memberProfile]);

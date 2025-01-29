@@ -8,12 +8,12 @@ import { mockClientSecret } from './mockClientSecret';
 import { mockOrganisationGet } from './mockOrganisationGet';
 import { s3UploadConf, S3UploadOptions } from '../../../hooks/useS3Upload';
 
-const matchProfile = /members\/[^/]+\/profile$/i;
-const matchApplication = /members\/[^/]+\/applications(\/[^/]+)?$/i;
-const matchApplicationUpload = /members\/[^/]+\/applications\/[^/]+\/uploadDocument/i;
+const matchProfile = /members\/members\/[^/]+\/profile$/i;
+const matchApplication = /members\/members\/[^/]+\/applications(\/[^/]+)?$/i;
+const matchApplicationUpload = /members\/members\/[^/]+\/applications\/[^/]+\/uploadDocument/i;
 const matchS3PreSigned = /s3uploads/i;
 const matchClientSecret = /eu\/orders\/checkout/i;
-const matchOrgs = /orgs\/[^/]+/i;
+const matchOrgs = /members\/orgs\/[^/]+/i;
 
 const originals: { invokeV5Api?: IPlatformAdapter['invokeV5Api']; counter: number } = {
   invokeV5Api: undefined,

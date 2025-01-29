@@ -39,12 +39,8 @@ const YourCard: FC<Props> = ({
   const textClasses = 'absolute top-[180px] left-[40px]';
 
   return (
-    <div className={'relative w-[322px] h-[512px] tablet-xl:w-[512px] tablet-xl:h-[322px] '}>
-      <div
-        className={
-          'absolute top-0 left-0 rotate-90 origin-top-left translate-x-[322px] tablet-xl:rotate-0 tablet-xl:translate-x-0'
-        }
-      >
+    <div className="relative w-[322px] h-[512px] tablet-xl:w-[512px] tablet-xl:h-[322px] max-[350px]:scale-[85%]">
+      <div className="absolute top-0 left-0 rotate-90 origin-top-left translate-x-[322px] tablet-xl:rotate-0 tablet-xl:translate-x-0">
         <div className={classes}>
           <Card className={svgClasses} />
 

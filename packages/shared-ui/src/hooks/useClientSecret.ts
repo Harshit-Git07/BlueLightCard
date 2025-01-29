@@ -5,7 +5,7 @@ import { v4 as createUuid } from 'uuid';
 //We need unique idempotency key so that we do not create duplicate payment intents.
 // It makes sense for this to be application id if such a thing exists as that is unique to each application per user
 // anything we pass down in the metadata will go into Stripe so think what makes sense to be in stripe for back office users
-const applicationId = 'bluelight-eligibility-flow';
+const applicationId = 'bluelight-new-card-flow';
 const idempotencyKey = createUuid();
 
 type Result = Success | Failure;

@@ -1,10 +1,8 @@
 import { useMutation } from '@tanstack/react-query';
 import { usePlatformAdapter } from '../adapters';
 import { jsonOrNull } from '../utils/jsonUtils';
-
-export interface MemberApplicationUploadDocumentResponse {
-  preSignedUrl: string;
-}
+import { V5_API_URL } from '../constants';
+import { DocumentUploadLocation } from '@blc-mono/shared/models/members/documentUpload';
 
 const useMemberApplicationUploadDocumentPost = (memberId: string, applicationId: string) => {
   const adapter = usePlatformAdapter();
@@ -12,14 +10,14 @@ const useMemberApplicationUploadDocumentPost = (memberId: string, applicationId:
     mutationFn: async (): Promise<any> => {
       try {
         const { status, data } = await adapter.invokeV5Api(
-          `/members/${memberId}/applications/${applicationId}/uploadDocument`,
+          V5_API_URL.DocumentUpload(memberId, applicationId),
           {
             method: 'POST',
           },
         );
         return {
           status,
-          data: jsonOrNull<MemberApplicationUploadDocumentResponse>(data),
+          data: jsonOrNull<DocumentUploadLocation>(data),
         };
       } catch (e) {
         return {

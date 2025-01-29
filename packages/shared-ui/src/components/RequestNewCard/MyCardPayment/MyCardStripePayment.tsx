@@ -11,14 +11,8 @@ interface Props {
   className?: string;
 }
 
-// handle secrets?
 const MyCardStripePayment: FC<Props> = ({ onFormLoaded, onFormChange, className }) => {
   const stripeClient = useStripeClient();
-  // const getClientSecretResult = {
-  //   "clientSecret": "pi_3QgkJcS9N5NHrlGY1I2YPMuW_secret_ir0T31zr4i6osijAp8Xrlntum",
-  //   "publishableKey": "pk_test_51QACN4S9N5NHrlGYTj7qmy768u9A2lqFqL2AWQbOX3tbJhJO3tjDS74KuBcOwyiz6Dov35tox4aMi97bWX4Z2MCM00boCBdcYs",
-  //   "externalCustomer": "cus_RZu7DYjPbNWxSk"
-  // }
   const getClientSecretResult = useClientSecret();
 
   const clientSecret = useMemo(() => {

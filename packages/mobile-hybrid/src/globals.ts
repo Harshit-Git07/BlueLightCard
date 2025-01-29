@@ -34,6 +34,7 @@ export const V5_API_URL = {
 
 export const CDN_URL = process.env.NEXT_PUBLIC_APP_CDN_URL ?? 'https://cdn.bluelightcard.co.uk';
 export const BRAND = process.env.NEXT_PUBLIC_APP_BRAND ?? 'blc-uk';
+export const BRAND_WEB_URL = process.env.NEXT_PUBLIC_BRAND_URL ?? 'https://www.bluelightcard.co.uk';
 export const IS_SSR = typeof window === 'undefined';
 export const USE_NATIVE_MOCK = process.env.NEXT_PUBLIC_USE_NATIVE_MOCK === 'true';
 export const USE_DEV_TOOLS = process.env.NEXT_PUBLIC_USE_DEV_TOOLS === 'true';

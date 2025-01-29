@@ -33,5 +33,9 @@ export const V5_API_URL = {
   Organisation: (orgId?: string) => `/${V5_REGION}/members/orgs/${orgId}`,
   Profile: (memberId: string) => `/${V5_REGION}/members/members/${memberId}/profile`,
   Application: (memberId: string) => `/${V5_REGION}/members/members/${memberId}/applications`,
+  DocumentUpload: (memberId: string, applicationId: string) =>
+    `/${V5_REGION}/members/members/${memberId}/applications/${applicationId}/uploadDocument`,
   User: `/${V5_REGION}/members/user`,
 } as const;
+
+export const BRAND_WEB_URL = process.env.NEXT_PUBLIC_BRAND_URL ?? 'https://www.bluelightcard.co.uk';

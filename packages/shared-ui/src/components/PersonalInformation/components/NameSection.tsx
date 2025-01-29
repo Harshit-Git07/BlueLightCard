@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { copy } from '../copy';
 import Button from '../../Button-V2';
-import { ThemeVariant } from '../../../types';
+import { PlatformVariant, ThemeVariant } from '../../../types';
 import useMemberId from '../../../hooks/useMemberId';
 import useMemberProfileGet from '../../../hooks/useMemberProfileGet';
 import TextInput from '../../MyAccountDuplicatedComponents/TextInput';
@@ -14,6 +14,9 @@ export const NameSection: FC = () => {
 
   const { platform, navigate } = usePlatformAdapter();
   const zendeskUrl = getBrandedSupportLink();
+
+  const isMobile = platform === PlatformVariant.MobileHybrid;
+
   return (
     <>
       <TextInput
@@ -32,9 +35,9 @@ export const NameSection: FC = () => {
         variant={ThemeVariant.Tertiary}
         size={'Small'}
         className={'!justify-start !w-fit !px-0'}
-        href={platform !== 'mobile-hybrid' ? zendeskUrl : ''}
+        href={!isMobile ? zendeskUrl : ''}
         onClick={() => {
-          if (platform === 'mobile-hybrid') {
+          if (isMobile) {
             navigate('/chat');
           }
         }}

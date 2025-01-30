@@ -211,23 +211,22 @@ const OfferSheetDetailsPage: FC = () => {
   };
 
   async function copyCodeAndRedirect(code: string | undefined, url: string | undefined) {
-    if (code) {
-      await platformAdapter.writeTextToClipboard(code);
-    }
+    if (!code || !url) return;
 
     setIsModalOpen(true);
+    await platformAdapter.writeTextToClipboard(code);
 
-    if (url) {
+    if (flag('conv-blc-4-0-interstitial') && flag('conv-blc-4-0-interstitial') === 'treatment') {
       setTimeout(() => {
-        handleRedirect(url);
+        setTimeout(() => setIsModalOpen(false), 750);
+        return handleRedirect(url);
+      }, 2500);
 
-        setTimeout(() => {
-          setIsModalOpen(false);
-        }, 1000);
-      }, 3000);
+      return;
     }
+
+    handleRedirect(url);
   }
-  // ----- END of Mobile Hybrid single button click handler
 
   // Web first button click handler
   const webDiscountClickHandler = async () => {

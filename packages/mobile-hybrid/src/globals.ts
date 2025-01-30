@@ -1,3 +1,5 @@
+import { getBrandedDiscoveryPath } from '@bluelightcard/shared-ui';
+
 export const PAGE_SIZE = 20;
 export const CATEGORY_PAGE_SIZE = 10;
 
@@ -23,13 +25,15 @@ export const NAVIGATE_NEWS_URL =
     ? '/defencediscountservicenewsdetails.php'
     : '/bluelightcardnewsdetails.php';
 
+const DISCOVERY_PATH = getBrandedDiscoveryPath();
+
 export const V5_API_URL = {
-  Categories: `/${V5_REGION}/discovery/categories`,
-  Search: `/${V5_REGION}/discovery/search`,
-  CampaignEvents: `/${V5_REGION}/discovery/campaigns`,
+  Categories: `${DISCOVERY_PATH}/categories`,
+  Search: `${DISCOVERY_PATH}/search`,
+  CampaignEvents: `${DISCOVERY_PATH}/campaigns`,
   User: `/${V5_REGION}/identity/user`,
-  FlexibleOffers: `/${V5_REGION}/discovery/menus/flexible`,
-  Menus: `/${V5_REGION}/discovery/menus`,
+  FlexibleOffers: `${DISCOVERY_PATH}/menus/flexible`,
+  Menus: `${DISCOVERY_PATH}/menus`,
 } as const;
 
 export const CDN_URL = process.env.NEXT_PUBLIC_APP_CDN_URL ?? 'https://cdn.bluelightcard.co.uk';

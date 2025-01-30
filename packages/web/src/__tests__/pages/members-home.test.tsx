@@ -54,6 +54,7 @@ jest.mock('@bluelightcard/shared-ui', () => {
     PlatformVariant: {
       Web: 'web',
     },
+    getBrandedDiscoveryPath: jest.fn(() => '/eu/discovery'),
     getCDNUrl: jest.fn((path) => path),
     cssUtil: {
       injectCss: jest.fn(),

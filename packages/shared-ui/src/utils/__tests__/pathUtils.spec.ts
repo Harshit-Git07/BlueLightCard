@@ -3,6 +3,7 @@ import {
   getBrandedOffersPath,
   getBrandedIdentityPath,
   getBrandedRedemptionsPath,
+  getBrandedDiscoveryPath,
 } from '../pathUtils';
 
 describe('getPathFromUrl', () => {
@@ -112,6 +113,28 @@ describe.each([
 
     it(`should return ${expected}`, () => {
       expect(getBrandedIdentityPath()).toBe(expected);
+    });
+  });
+});
+
+describe.each([
+  ['blc-uk', '/eu/discovery'],
+  ['blc-au', '/au/discovery'],
+  ['dds-uk', '/eu/discovery/dds'],
+])('getBrandedDiscoveryPath', (brand, expected) => {
+  const originalEnv = process.env;
+
+  afterAll(() => {
+    process.env = originalEnv;
+  });
+
+  describe(`when the brand is '${brand}'`, () => {
+    beforeEach(() => {
+      process.env = { ...originalEnv, NEXT_PUBLIC_APP_BRAND: brand };
+    });
+
+    it(`should return ${expected}`, () => {
+      expect(getBrandedDiscoveryPath()).toBe(expected);
     });
   });
 });

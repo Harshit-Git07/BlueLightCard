@@ -63,3 +63,15 @@ export const getBrandedIdentityPath = (): string => {
 
   return `/${region}/identity`;
 };
+
+/**
+ * Generate the base path for the Discovery API for a V5 API request.
+ * Considers the current brand.
+ *
+ * @returns {string} The base Discovery API path for the current brand
+ */
+export const getBrandedDiscoveryPath = (): string => {
+  const [region, brandSuffix] = getBrandedPathData();
+
+  return `/${region}/discovery${brandSuffix}`;
+};

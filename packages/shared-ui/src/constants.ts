@@ -1,4 +1,5 @@
 import { resolve } from 'path';
+import { getBrandedDiscoveryPath } from './utils/pathUtils';
 
 export const TOKENS_ROOT_DIR = resolve(process.cwd(), '../shared-ui/tokens');
 
@@ -26,10 +27,12 @@ export const focusableElements = ['button', 'a', 'input', 'textarea', 'select'];
 
 const V5_REGION = process.env.NEXT_PUBLIC_APP_BRAND === 'blc-au' ? 'au' : 'eu';
 
+const DISCOVERY_PATH = getBrandedDiscoveryPath();
+
 export const V5_API_URL = {
   Employers: (orgId?: string) => `/${V5_REGION}/members/orgs/${orgId}/employers`,
   MarketingPreferences: `/${V5_REGION}/members/members/preferences`,
-  Menus: `/${V5_REGION}/discovery/menus`,
+  Menus: `${DISCOVERY_PATH}/menus`,
   Organisation: (orgId?: string) => `/${V5_REGION}/members/orgs/${orgId}`,
   Profile: (memberId: string) => `/${V5_REGION}/members/members/${memberId}/profile`,
   Application: (memberId: string) => `/${V5_REGION}/members/members/${memberId}/applications`,

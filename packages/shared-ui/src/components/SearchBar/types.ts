@@ -8,4 +8,5 @@ export interface SearchProps {
   onFocus?: () => void;
   placeholderText?: string;
   experimentalSearchVariant?: string;
+  className?: string;
 }

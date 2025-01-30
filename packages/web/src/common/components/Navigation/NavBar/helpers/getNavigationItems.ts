@@ -8,7 +8,10 @@ import {
   UNAUTHENTICATED_NAVIGATION_DDS,
 } from '../constants/ddsNavigation';
 import { ZENDESK_V1_BLC_UK_URL } from '@/root/global-vars';
-import { AUTHENTICATED_NAVIGATION_UK } from '@/root/src/common/components/Navigation/NavBar/constants/ukNavigation';
+import {
+  AUTHENTICATED_NAVIGATION_UK,
+  UNAUTHENTICATED_NAVIGATION_UK,
+} from '../constants/ukNavigation';
 import { NavigationItem } from '@/root/src/common/components/Navigation/NavBar/types';
 import { AuthProviderFlags, getLogoutUrl } from '@/root/src/common/auth/authUrls';
 
@@ -22,15 +25,15 @@ export const getNavigationItems = (
     case BRANDS.BLC_UK:
       return authenticated
         ? mapNavItems(authProviderFlags, AUTHENTICATED_NAVIGATION_UK, isZendeskV1BlcUkEnabled)
-        : [];
+        : mapNavItems(authProviderFlags, UNAUTHENTICATED_NAVIGATION_UK, isZendeskV1BlcUkEnabled);
     case BRANDS.BLC_AU:
       return authenticated
         ? mapNavItems(authProviderFlags, AUTHENTICATED_NAVIGATION_AUS, false)
-        : UNAUTHENTICATED_NAVIGATION_AUS;
+        : mapNavItems(authProviderFlags, UNAUTHENTICATED_NAVIGATION_AUS, false);
     case BRANDS.DDS_UK:
       return authenticated
         ? mapNavItems(authProviderFlags, AUTHENTICATED_NAVIGATION_DDS, false)
-        : UNAUTHENTICATED_NAVIGATION_DDS;
+        : mapNavItems(authProviderFlags, UNAUTHENTICATED_NAVIGATION_DDS, false);
   }
 };
 
@@ -52,7 +55,7 @@ const mapNavItems = (
       return {
         id: 'sign-out',
         label: 'Logout',
-        url: getLogoutUrl(authProviderFlags),
+        url: getLogoutUrl(authProviderFlags, navItem.url),
       };
     }
 

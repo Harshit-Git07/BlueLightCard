@@ -83,7 +83,7 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
       <Drawer />
       <Toaster />
       <div className="sticky top-0 z-40">
-        <Navigation onToggleMobileSideBar={toggleDrawer} />
+        <Navigation onAccountClick={toggleDrawer} />
         <CardVerificationAlerts memberUuid={memberId} />
       </div>
       <div className="mt-[32px] flex flex-col hidden tablet:block desktop:container mx-[20px] desktop:mx-auto">

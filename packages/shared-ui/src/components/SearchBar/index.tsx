@@ -21,6 +21,7 @@ const SearchBar: FC<SearchProps> = ({
   value,
   showBackArrow,
   experimentalSearchVariant,
+  className = '',
 }) => {
   const initialValue = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -179,7 +180,7 @@ const SearchBar: FC<SearchProps> = ({
     experimentalBorderVariant(),
   ];
 
-  const formClasses = ['p-4', 'z-10', 'w-full'];
+  const formClasses = ['p-4', 'z-10', 'w-full', className];
 
   if (
     experimentalFormVariant(experimentalSearchVariant) !== '' &&

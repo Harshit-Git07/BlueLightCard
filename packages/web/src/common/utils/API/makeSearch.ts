@@ -35,16 +35,13 @@ export async function makeSearch(
   idToken: string,
   allowAgeGated: boolean = true,
   service: string,
-  ampExpSearchOn: boolean = false,
   searchWithSharedAuthorizerEnabled: boolean = false
 ) {
   // We use this flag to determine if we should use the shared authorizer lambda for search
   // this is temporary for testing and should be removed as soon testing is complete
   const searchSuffix = searchWithSharedAuthorizerEnabled ? 'SharedAuth' : '';
 
-  const searchPath = ampExpSearchOn
-    ? `${SEARCH_ENDPOINT}/expSearch${searchSuffix}`
-    : `${SEARCH_ENDPOINT}/newSearch${searchSuffix}`;
+  const searchPath = `${SEARCH_ENDPOINT}/expSearch${searchSuffix}`;
 
   const data = {
     searchTerm: he.escape(queryRaw),

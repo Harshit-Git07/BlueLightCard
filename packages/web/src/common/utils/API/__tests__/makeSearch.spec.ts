@@ -17,26 +17,12 @@ describe('Search api requests', () => {
     axiosMockRequest = axios.request as jest.Mock;
   });
 
-  it('should request /newSearch api if experiment argument false', async () => {
+  it('should request /expSearch api', async () => {
     axiosMockRequest.mockResolvedValue({
       results: {},
     });
 
-    await makeSearch('apple', 'sasas', true, 'service', false);
-
-    expect(axiosMockRequest).toHaveBeenCalledWith(
-      expect.objectContaining({
-        url: 'https://mockdomain.co.uk/production/newSearch',
-      })
-    );
-  });
-
-  it('should request /expSearch api if experiment argument true', async () => {
-    axiosMockRequest.mockResolvedValue({
-      results: {},
-    });
-
-    await makeSearch('apple', 'sasas', true, 'service', true);
+    await makeSearch('apple', 'sasas', true, 'service');
 
     expect(axiosMockRequest).toHaveBeenCalledWith(
       expect.objectContaining({

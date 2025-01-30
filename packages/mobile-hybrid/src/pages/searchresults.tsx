@@ -18,7 +18,7 @@ const SearchResultsPage: NextPage = () => {
   const setSpinner = useSetAtom(spinner);
 
   const platformAdapter = usePlatformAdapter();
-  const { doSearch, searchResults, status } = useSearch(platformAdapter);
+  const { doSearch } = useSearch(platformAdapter);
 
   const onCategoryClick = (category: SimpleCategoryData) => {
     platformAdapter.navigate(`/category?id=${category.id}`);

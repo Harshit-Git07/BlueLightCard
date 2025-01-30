@@ -1,0 +1,104 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TrendingSearches renders the component 1`] = `
+<div>
+  <div
+    class="ml-2"
+  >
+    <h2
+      class="text-2xl text-heading-colour dark:text-heading-colour-dark mb-2 font-typography-title-large font-typography-title-large-weight text-typography-title-large leading-typography-title-large tracking-typography-title-large text-colour-onSurface-light dark:text-colour-onSurface-dark
+    tablet:font-typography-headline-weight tablet:font-typography-headline tablet:text-typography-headline tablet:tracking-typography-headline tablet:leading-typography-headline mb-2 text-base text-neutral-grey-900 dark:text-neutral-white pl-3 font-bold"
+    >
+      Trending searches
+    </h2>
+    <div>
+      <button
+        class="pl-3 py-3 dark:text-neutral-white text-base w-full h-full text-left"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-magnifying-glass fa-lg pr-3 text-primary-dukeblue-700 dark:text-colour-primary-dark"
+          data-icon="magnifying-glass"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 512 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+            fill="currentColor"
+          />
+        </svg>
+        Debenhams
+      </button>
+    </div>
+    <div>
+      <button
+        class="pl-3 py-3 dark:text-neutral-white text-base w-full h-full text-left"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-magnifying-glass fa-lg pr-3 text-primary-dukeblue-700 dark:text-colour-primary-dark"
+          data-icon="magnifying-glass"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 512 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+            fill="currentColor"
+          />
+        </svg>
+        JD Sports
+      </button>
+    </div>
+    <div>
+      <button
+        class="pl-3 py-3 dark:text-neutral-white text-base w-full h-full text-left"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-magnifying-glass fa-lg pr-3 text-primary-dukeblue-700 dark:text-colour-primary-dark"
+          data-icon="magnifying-glass"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 512 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+            fill="currentColor"
+          />
+        </svg>
+        LOOKFANTASTIC
+      </button>
+    </div>
+    <div>
+      <button
+        class="pl-3 py-3 dark:text-neutral-white text-base w-full h-full text-left"
+      >
+        <svg
+          aria-hidden="true"
+          class="svg-inline--fa fa-magnifying-glass fa-lg pr-3 text-primary-dukeblue-700 dark:text-colour-primary-dark"
+          data-icon="magnifying-glass"
+          data-prefix="fas"
+          focusable="false"
+          role="img"
+          viewBox="0 0 512 512"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+            fill="currentColor"
+          />
+        </svg>
+        Jet2Holidays
+      </button>
+    </div>
+  </div>
+</div>
+`;

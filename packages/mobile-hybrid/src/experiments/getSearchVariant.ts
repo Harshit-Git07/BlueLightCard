@@ -7,6 +7,8 @@ export function GetSearchVariant(): string {
 
   if (is(Experiments.SEARCH_UI_CONTRAST, 'border-variant')) {
     return 'border-variant';
+  } else if (is(Experiments.TRENDING_SEARCHES, 'treatment')) {
+    return 'trending-searches';
   } else if (is(Experiments.SEARCH_UI_CONTRAST, 'background-variant-dark')) {
     return 'background-variant-dark';
   } else if (is(Experiments.SEARCH_UI_CONTRAST, 'background-variant-light')) {

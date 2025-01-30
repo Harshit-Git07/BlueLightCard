@@ -131,13 +131,17 @@ const SearchBar: FC<SearchProps> = ({
     </button>
   );
 
-  const experimentalFormVariant = (): string => {
-    if (experimentalSearchVariant === 'background-variant-dark') {
-      return 'bg-colour-primary-light shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]';
-    } else if (experimentalSearchVariant === 'background-variant-light') {
-      return 'bg-[#F6F9FF] shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]';
-    }
-    return '';
+  const experimentalFormVariant = (variant: string | undefined): string => {
+    type Variants = 'background-variant-dark' | 'background-variant-light';
+
+    const experimentStyles = {
+      'background-variant-dark':
+        'bg-colour-primary-light shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]',
+      'background-variant-light': 'bg-[#F6F9FF] shadow-[0_4px_4px_4px_rgba(42,42,42,0.16)]',
+      default: '',
+    };
+
+    return experimentStyles[variant as Variants] ?? experimentStyles['default'];
   };
 
   const experimentalBorderVariant = (): string => {
@@ -177,8 +181,11 @@ const SearchBar: FC<SearchProps> = ({
 
   const formClasses = ['p-4', 'z-10', 'w-full'];
 
-  if (experimentalFormVariant() !== '') {
-    formClasses.push(experimentalFormVariant());
+  if (
+    experimentalFormVariant(experimentalSearchVariant) !== '' &&
+    experimentalSearchVariant !== 'trending-searches'
+  ) {
+    formClasses.push(experimentalFormVariant(experimentalSearchVariant));
   }
 
   return (

@@ -23,6 +23,7 @@ export enum Experiments {
   NEW_COMPANY_PAGE = 'app-new-company-page',
   OFFER_INTERSTITIAL = 'conv-blc-4-0-interstitial',
   SEARCH_UI_CONTRAST = 'conv-blc-5-0-search-ui',
+  TRENDING_SEARCHES = 'conv-blc-2-2-trending-searches',
   POPULAR_BRANDS_INLINE_LAYOUT = 'conv-blc-2-3-popular-brands-inline-layout-ab-test',
 }
 

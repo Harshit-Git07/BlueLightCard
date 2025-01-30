@@ -1,0 +1,114 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PopularBrandsButtons renders the component 1`] = `
+<div>
+  <button
+    aria-label="Gym King"
+    class="imageWrapperClass"
+  >
+    <img
+      alt="Gym King"
+      blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+      class="imageClass"
+      placeholder="blur"
+      src="/images/image.jpg"
+    />
+  </button>
+  <button
+    aria-label="M&S"
+    class="imageWrapperClass"
+  >
+    <img
+      alt="M&S"
+      blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+      class="imageClass"
+      placeholder="blur"
+      src="/images/image.jpg"
+    />
+  </button>
+  <button
+    aria-label="Asda"
+    class="imageWrapperClass"
+  >
+    <img
+      alt="Asda"
+      blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+      class="imageClass"
+      placeholder="blur"
+      src="/images/image.jpg"
+    />
+  </button>
+  <button
+    aria-label="Burger King"
+    class="imageWrapperClass"
+  >
+    <img
+      alt="Burger King"
+      blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+      class="imageClass"
+      placeholder="blur"
+      src="/images/image.jpg"
+    />
+  </button>
+  <button
+    aria-label="Toyota"
+    class="imageWrapperClass"
+  >
+    <img
+      alt="Toyota"
+      blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+      class="imageClass"
+      placeholder="blur"
+      src="/images/image.jpg"
+    />
+  </button>
+  <button
+    aria-label="McDonalds"
+    class="imageWrapperClass"
+  >
+    <img
+      alt="McDonalds"
+      blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+      class="imageClass"
+      placeholder="blur"
+      src="/images/image.jpg"
+    />
+  </button>
+  <button
+    aria-label="Superdry"
+    class="imageWrapperClass"
+  >
+    <img
+      alt="Superdry"
+      blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+      class="imageClass"
+      placeholder="blur"
+      src="/images/image.jpg"
+    />
+  </button>
+  <button
+    aria-label="Sainsburys"
+    class="imageWrapperClass"
+  >
+    <img
+      alt="Sainsburys"
+      blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+      class="imageClass"
+      placeholder="blur"
+      src="/images/image.jpg"
+    />
+  </button>
+  <button
+    aria-label="David Lloyd"
+    class="imageWrapperClass"
+  >
+    <img
+      alt="David Lloyd"
+      blurdataurl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mPs7+9bAQAFtwJW4mO4owAAAABJRU5ErkJggg=="
+      class="imageClass"
+      placeholder="blur"
+      src="/images/image.jpg"
+    />
+  </button>
+</div>
+`;

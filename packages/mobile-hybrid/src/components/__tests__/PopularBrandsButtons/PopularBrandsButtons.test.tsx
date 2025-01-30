@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, within, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import PopularBrands from '@/components/PopularBrands/PopularBrands';
+import PopularBrandsButtons from '@/components/PopularBrands/PopularBrandsButtons';
 
 const brands = [
   {
@@ -61,39 +61,38 @@ jest.mock('next/image', () => {
 
 jest.useFakeTimers(); // Use fake timers for testing
 
-describe('PopularBrands', () => {
+describe('PopularBrandsButtons', () => {
   const mockProps = {
-    rounded: false,
-    title: 'Popular brands test',
     brands: brands,
-    text: 'Some of your favourite brands',
+    imageWrapperClass: 'imageWrapperClass',
+    imageClass: 'imageClass',
   };
 
   it('renders the component', () => {
-    const { container } = render(<PopularBrands {...mockProps} />);
+    const { container } = render(<PopularBrandsButtons {...mockProps} />);
 
     window.scrollY = 100;
     window.dispatchEvent(new Event('scroll'));
 
     jest.advanceTimersByTime(750);
 
-    expect(screen.getByText('Popular brands test')).toBeInTheDocument();
-    expect(screen.getByText('Some of your favourite brands')).toBeInTheDocument();
-
     expect(container).toMatchSnapshot();
   });
 
-  it('is rounded', () => {
-    const { container } = render(<PopularBrands {...mockProps} rounded={true} />);
-    const button = container.querySelectorAll('.popular-brands') as unknown as HTMLButtonElement[];
+  it('calls onClick when button is clicked', () => {
+    const handleClick = jest.fn(); // Create a mock function
+    render(
+      <PopularBrandsButtons {...mockProps} onButtonClick={() => handleClick('Test message')} />,
+    );
 
-    const image = within(button[0]).getByAltText('Gym King');
+    const button = screen.getByLabelText(/Gym King/i);
+    fireEvent.click(button);
 
-    expect(image).toBeInTheDocument();
+    expect(handleClick).toHaveBeenCalledTimes(1); // Check if the mock function was called once
   });
 
   it('renders buttons with images', () => {
-    const { getByAltText } = render(<PopularBrands {...mockProps} />);
+    const { getByAltText } = render(<PopularBrandsButtons {...mockProps} />);
 
     brands.forEach((brand) => {
       const image = getByAltText(brand.brandName) as HTMLImageElement;
@@ -104,11 +103,13 @@ describe('PopularBrands', () => {
   });
 
   it('renders when it has at least 8 items', () => {
-    const { container } = render(<PopularBrands {...mockProps} />);
-    const buttons = container.querySelectorAll('.popular-brands') as unknown as HTMLButtonElement[];
+    const { container } = render(<PopularBrandsButtons {...mockProps} limit={7} />);
+    const buttons = container.querySelectorAll(
+      '.imageWrapperClass',
+    ) as unknown as HTMLButtonElement[];
 
     expect(buttons[0]).toBeInTheDocument();
 
-    expect(buttons).toHaveLength(9);
+    expect(buttons).toHaveLength(8);
   });
 });

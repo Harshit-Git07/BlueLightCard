@@ -110,7 +110,6 @@ jobs:
             stage: staging
             discoveryEventBusName: 'staging-blc-mono-eventBus'
             cmsAccount: '971422711515'
-            userProfileEndpoint: https://staging-identity.blcshine.io/user
             companyLocationDwhStream: 'staging-dwh-blc-uk-company-location'
             menuDwhStream: 'staging-dwh-blc-uk-menu'
             themedMenuDwhStream: 'staging-dwh-blc-uk-themed-menu'
@@ -130,7 +129,6 @@ jobs:
             ddsOldCognitoUserPoolId: 'eu-west-2_jbLX0JEdN'
             blcUkIdentityApiId: 'tr1afrar24'
             identityTableName: 'staging-blc-mono-identityTable'
-            userProfileEndpoint: https://staging-identity.blcshine.io/user
             companyLocationDwhStream: 'staging-dds-dwh-dds-uk-company-location'
             menuDwhStream: 'staging-dds-dwh-dds-uk-menu'
             themedMenuDwhStream: 'staging-dds-dwh-dds-uk-themed-menu'
@@ -144,7 +142,6 @@ jobs:
             brand: BLC_AU
             stage: staging
             discoveryEventBusName: 'staging-blc-mono-eventBus'
-            userProfileEndpoint: https://staging-identity-au.blcshine.io/user
             companyLocationDwhStream: 'staging-dwh-blc-au-company-location'
             menuDwhStream: 'staging-dwh-blc-au-menu'
             themedMenuDwhStream: 'staging-dwh-blc-au-themed-menu'
@@ -171,6 +168,7 @@ jobs:
       DWH_FIREHOSE_COMPANY_LOCATION_STREAM_NAME: ${{ matrix.companyLocationDwhStream }}
       DWH_FIREHOSE_MENU_STREAM_NAME: ${{ matrix.menuDwhStream }}
       DWH_FIREHOSE_THEMED_MENU_STREAM_NAME: ${{ matrix.themedMenuDwhStream }}
+      OFFERS_USER_PROFILE_ENDPOINT: 'https://staging-identity.blcshine.io/user'
     steps:
       - name: Checkout
         uses: actions/checkout@v4

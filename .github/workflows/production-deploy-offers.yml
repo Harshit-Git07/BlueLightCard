@@ -44,7 +44,6 @@ jobs:
             ddsOldCognitoUserPoolId: 'eu-west-2_y2KyCUbVT'
             blcUkIdentityApiId: 'ue8dcieh75'
             blcIdentityTableName: 'production-blc-mono-identityTable'
-            userProfileEndpoint: https://identity.blcshine.io/user
             companyLocationDwhStream: 'production-dds-dwh-dds-uk-company-location'
           - namespace: 'blc-aus-production'
             region: 'ap-southeast-2'
@@ -56,7 +55,6 @@ jobs:
             stage: production
             discoveryEventBusName: 'production-blc-mono-eventBus'
             cmsAccount: '084375547292'
-            userProfileEndpoint: https://identity-au.blcshine.io/user
             companyLocationDwhStream: 'production-dwh-blc-au-company-location'
     env:
       PROD_BASE_URL: ${{matrix.prodBaseUrl}}
@@ -73,6 +71,7 @@ jobs:
       USER_PROFILE_ENDPOINT: ${{ matrix.userProfileEndpoint }}
       OFFERS_DISCOVERY_EVENT_BUS_NAME: ${{ matrix.discoveryEventBusName }}
       OFFERS_CMS_ACCOUNT: ${{ matrix.cmsAccount }}
+      OFFERS_USER_PROFILE_ENDPOINT: 'https://identity.blcshine.io/user'
     steps:
       - name: Checkout
         uses: actions/checkout@v4

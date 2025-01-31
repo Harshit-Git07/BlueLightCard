@@ -1,8 +1,10 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import invariant from 'tiny-invariant';
 
-import { getOffer } from '../../cms/data/offer';
+import { trustIsEligible } from '../../lib/utils';
 import { isValidOffer } from '../../lib/utils';
+import { getOffer } from '../data/offer';
+import { getUser } from '../data/user';
 import { notFound } from '../errors/helpers';
 import { openApiErrorResponses } from '../errors/openapi_responses';
 import type { App } from '../hono/app';
@@ -49,6 +51,18 @@ export const registerV2OffersGetOffer = (app: App) =>
     }
 
     if (!isValidOffer(item)) {
+      notFound();
+    }
+
+    const user = await getUser(c.req.header('Authorization')!);
+
+    const isEligible = trustIsEligible(
+      item.includedTrusts,
+      item.excludedTrusts,
+      user.data.profile.organisation,
+    );
+
+    if (!isEligible) {
       notFound();
     }
 

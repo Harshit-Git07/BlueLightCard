@@ -1,9 +1,11 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import invariant from 'tiny-invariant';
 
-import { getCompany } from '../../cms/data/company';
-import { getOffersByCompanyId } from '../../cms/data/offer';
+import { trustIsEligible } from '../../lib/utils';
 import { coerceNumber, isValidOffer } from '../../lib/utils';
+import { getCompany } from '../data/company';
+import { getOffersByCompanyId } from '../data/offer';
+import { getUser } from '../data/user';
 import { notFound } from '../errors/helpers';
 import { openApiErrorResponses } from '../errors/openapi_responses';
 import type { App } from '../hono/app';
@@ -60,8 +62,15 @@ export const registerV2CompaniesGetCompanyOffers = (app: App) =>
       notFound();
     }
 
+    const user = await getUser(c.req.header('Authorization')!);
+
     const offers = items
       .filter((offer) => isValidOffer(offer))
+      .filter((offer) => offer.status === 'live')
+      .filter((offer) => !offer.expires || new Date(offer.expires) > new Date())
+      .filter((offer) =>
+        trustIsEligible(offer.includedTrusts, offer.excludedTrusts, user.data.profile.organisation),
+      )
       .map((offer) => {
         invariant(offer.name, 'Missing `offer.name`');
         invariant(offer.offerType?.offerType, 'Missing `offer.offerType`');

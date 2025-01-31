@@ -1,7 +1,7 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import invariant from 'tiny-invariant';
 
-import { extractBrand, getCompany } from '../../cms/data/company';
+import { extractBrand, getCompany } from '../data/company';
 import { notFound } from '../errors/helpers';
 import { openApiErrorResponses } from '../errors/openapi_responses';
 import type { App } from '../hono/app';

@@ -178,8 +178,11 @@ export class BallotService implements IBallotService {
         offset,
       );
 
+      const memberStatus = ballotEntryStatus === 'unconfirmed' ? 'successful' : ballotEntryStatus;
+      const processStatus = entriesBatch.length > 0 ? 'processing' : 'exiting';
+
       this.logger.info({
-        message: `Found ${entriesBatch.length} successful entries`,
+        message: `Found ${entriesBatch.length} ${memberStatus} entries: ${processStatus}`,
         context: { ballotId, offset, ballotEntryStatus },
       });
 

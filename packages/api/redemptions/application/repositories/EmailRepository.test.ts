@@ -31,6 +31,7 @@ describe('EmailRepository', () => {
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID] = 'test';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_VERIFY_EMAIL_CAMPAIGN_ID] = 'verify_env_val';
     process.env[RedemptionsStackEnvironmentKeys.BRAZE_BALLOT_EMAIL_CAMPAIGN_ID] = 'ballot_env_val';
+    process.env.BRAND = 'BLC_UK';
   });
 
   afterEach(() => {
@@ -43,6 +44,7 @@ describe('EmailRepository', () => {
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_SHOW_CARD_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_VERIFY_EMAIL_CAMPAIGN_ID];
     delete process.env[RedemptionsStackEnvironmentKeys.BRAZE_BALLOT_EMAIL_CAMPAIGN_ID];
+    delete process.env.BRAND;
   });
 
   describe('sendVaultOrGenericTransactionalEmail', () => {
@@ -495,8 +497,8 @@ describe('EmailRepository', () => {
         memberId: 'test',
         offerName: 'test',
         url: 'test',
-        eventDate: 'test',
-        drawDate: 'test',
+        eventDate: '2025-02-02T10:00:00.000Z',
+        drawDate: '2025-01-31T22:00:00.000Z',
         totalTickets: 1,
       } as const;
 
@@ -509,10 +511,12 @@ describe('EmailRepository', () => {
       );
 
       expect(mockEmailClient.campaigns.trigger.send.mock.lastCall![0].trigger_properties).toEqual({
+        eventDate: '2 Feb 2025',
+        eventTime: '10:00 am',
+        drawDate: '31 Jan 2025',
+        drawTime: '10:00 pm',
         eventName: payload.offerName,
-        eventDate: payload.eventDate,
-        drawDate: payload.drawDate,
-        totalTickets: payload.totalTickets,
+        venueName: payload.companyName,
       });
     });
 

@@ -46,7 +46,7 @@ export class RedeemBallotStrategy implements IRedeemStrategy {
     params: RedeemParams,
   ): Promise<RedeemBallotStrategyResult> {
     const { id, redemptionType } = redemptionConfigEntity;
-    const memberId = params.memberId;
+    const memberId = params.brazeExternalUserId;
     const entryDate = new Date();
 
     if (redemptionType !== 'ballot') {
@@ -116,7 +116,7 @@ export class RedeemBallotStrategy implements IRedeemStrategy {
       });
     });
 
-    return Promise.resolve({
+    return {
       kind: 'Ok',
       redemptionType: 'ballot',
       redemptionDetails: {
@@ -128,6 +128,6 @@ export class RedeemBallotStrategy implements IRedeemStrategy {
           offerName: ballot.offerName,
         },
       },
-    });
+    };
   }
 }

@@ -160,9 +160,7 @@ export const PostBallotModel = createZodNamedType(
   z
     .object({
       redemptionType: z.literal(REDEMPTION_TYPES[5]),
-      // TODO:
-      // Is the URL required for `ballot`s, or is it copy/pasta from `pre-applied`?
-      url: z.string().url().optional(),
+      url: z.string().url().optional().nullable(),
       ballot: BallotModel,
     })
     .strict(),

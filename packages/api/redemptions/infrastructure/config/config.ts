@@ -170,7 +170,7 @@ export class RedemptionsStackConfigResolver {
           brazeVaultQrCodeEmailCampaignId: '31172aa1-2e31-4a77-b9ac-43896f511beb',
           brazeShowCardEmailCampaignId: 'bf54574e-f31e-418b-bd10-649762b74e6a',
           brazeVerifyEmailCampaignId: '3f33aec9-f493-4542-a190-db9e091118a4',
-          brazeBallotEmailCampaignId: '',
+          brazeBallotEmailCampaignId: 'ecdc4259-3f5b-461b-a14e-f5399f34fb01',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
           brazeRedemptionVaultPushNotificationCampaignId: 'add3d84e-0ed2-447f-a2f8-a61fed443927',
@@ -180,7 +180,7 @@ export class RedemptionsStackConfigResolver {
           brazeRedemptionShowCardPushNotificationCampaignId: '90df7afd-5d1d-48d5-a4a5-a71c9279c1d0',
           brazeRedemptionGiftCardPushNotificationCampaignId: '656a2dc3-7350-48cd-b492-eaa91c59e6e4',
           brazeRedemptionVerifyPushNotificationCampaignId: '62072665-5906-4bfd-b432-3e7bd15f1729',
-          brazeRedemptionBallotPushNotificationCampaignId: '',
+          brazeRedemptionBallotPushNotificationCampaignId: '7b7dfdec-82b1-4b7f-8479-a2cd38477c85',
         },
         sesConfig: {
           redemptionsEmailFrom: 'noreply@bluelightcard.co.uk',
@@ -355,7 +355,7 @@ export class RedemptionsStackConfigResolver {
           brazeVaultQrCodeEmailCampaignId: 'eb6dac40-f99b-4634-889b-2f6451beaa82',
           brazeShowCardEmailCampaignId: '27928c2b-3d29-4837-8b62-4989da1383a9',
           brazeVerifyEmailCampaignId: 'd9e80016-85d3-4e73-a76e-022a96fa8f0d',
-          brazeBallotEmailCampaignId: '11189170-53b3-4a22-8175-8d4ee7111a2b',
+          brazeBallotEmailCampaignId: '7555755c-9980-4fe9-9a42-c3e8487cf855',
         },
         brazePushNotificationRedemptionCampaignsConfig: {
           brazeRedemptionVaultPushNotificationCampaignId: '96d2da22-654d-418d-9184-28d6d01a08c2',
@@ -541,7 +541,7 @@ export class RedemptionsStackConfigResolver {
         brazeVaultEmailCampaignId: 'e9c16843-2f74-a0d4-f63d-82610b0cc3a4',
         brazeVaultQrCodeEmailCampaignId: 'eb6dac40-f99b-4634-889b-2f6451beaa82',
         brazeVerifyEmailCampaignId: 'd9e80016-85d3-4e73-a76e-022a96fa8f0d',
-        brazeBallotEmailCampaignId: '11189170-53b3-4a22-8175-8d4ee7111a2b',
+        brazeBallotEmailCampaignId: '7555755c-9980-4fe9-9a42-c3e8487cf855',
       },
       brazePushNotificationRedemptionCampaignsConfig: {
         brazeRedemptionVaultPushNotificationCampaignId: '96d2da22-654d-418d-9184-28d6d01a08c2',

@@ -200,7 +200,7 @@ export const PatchBallotModel = createZodNamedType(
   z
     .object({
       redemptionType: z.literal(REDEMPTION_TYPES[5]),
-      url: z.string().url(),
+      url: z.string().url().optional().nullable(),
       ballot: BallotModelForPatch,
     })
     .strict(),

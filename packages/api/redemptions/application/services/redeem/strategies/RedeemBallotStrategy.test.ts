@@ -187,7 +187,7 @@ describe('BallotRedemptioStrategy', () => {
       expect(mockedBallotEntriesRepository.create).toHaveBeenCalledWith({
         ballotId: ballot.id,
         entryDate: date,
-        memberId: defaultParams.memberId,
+        memberId: defaultParams.brazeExternalUserId,
         status: ballotEntryStatusEnum.enumValues[0],
       });
 

@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { GIFTCARD, PREAPPLIED, VERIFY } from '@blc-mono/core/constants/redemptions';
 import { OfferData } from '@blc-mono/core/types/offerdata';
+import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ILogger, Logger } from '@blc-mono/core/utils/logger/logger';
 import {
@@ -377,6 +378,11 @@ export class EmailRepository implements IEmailRepository {
       throw new Error('RedemptionType error, expects ballot');
     }
 
+    //emails require dates/time in format: 31 Jan 2025 at 10:00 pm
+    const locales = getBrandFromEnv().includes('AU') ? 'en-AU' : 'en-GB';
+    const eventDate = new Date(params.eventDate);
+    const drawDate = new Date(params.drawDate);
+
     const emailPayload: CampaignsTriggerSendObject = {
       campaign_id: getEnv(RedemptionsStackEnvironmentKeys.BRAZE_BALLOT_EMAIL_CAMPAIGN_ID),
       recipients: [
@@ -385,10 +391,12 @@ export class EmailRepository implements IEmailRepository {
         },
       ],
       trigger_properties: {
-        eventDate: params.eventDate,
-        drawDate: params.drawDate,
+        eventDate: this.formatBallotDate(eventDate, locales),
+        eventTime: this.formatBallotTime(eventDate, locales),
+        drawDate: this.formatBallotDate(drawDate, locales),
+        drawTime: this.formatBallotTime(drawDate, locales),
         eventName: params.offerName,
-        totalTickets: params.totalTickets,
+        venueName: params.companyName,
       },
     };
 
@@ -405,6 +413,24 @@ export class EmailRepository implements IEmailRepository {
     this.logger.info({
       message: `successfully sent ${redemptionType} email`,
       context: emailServiceResponse,
+    });
+  }
+
+  private formatBallotDate(date: Date, locales: string): string {
+    //example: 31 Jan 2025
+    return date.toLocaleString(locales, {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+    });
+  }
+
+  private formatBallotTime(date: Date, locales: string): string {
+    //example: 10:00 pm
+    return date.toLocaleString(locales, {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
     });
   }
 

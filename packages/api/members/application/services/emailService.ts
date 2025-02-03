@@ -12,24 +12,9 @@ import {
   getUserAuth0IdByEmail,
   unverifyOrChangeEmail,
 } from '../auth0/auth0Clients';
-import { auth0LinkReturn } from '../types/emailTypes';
-import { Brand } from '@blc-mono/core/schemas/common';
+import { auth0LinkReturn, emailFrom, EmailTemplate } from '../types/emailTypes';
 import { secretsObject } from '../types/auth0types';
 import { EmailPayload } from '@blc-mono/shared/models/members/emailModel';
-
-const brand: Brand = (process.env.EMAIL_SERVICE_BRAND as Brand) ?? 'BLC_UK';
-
-const emailFrom: Record<Brand, string> = {
-  BLC_UK: 'noreply@bluelightcard.co.uk',
-  DDS_UK: 'noreply@defencediscountservice.co.uk',
-  BLC_AU: 'noreply@bluelightcard.com.au',
-};
-
-const brandConversion: Record<Brand, string> = {
-  BLC_UK: 'blcuk',
-  DDS_UK: 'ddsuk',
-  BLC_AU: 'blcau',
-};
 
 const secrets: secretsObject = {
   domain: getEnvOrDefault(MemberStackEnvironmentKeys.SERVICE_LAYER_AUTH0_DOMAIN, ''),
@@ -53,13 +38,10 @@ export class EmailService {
   );
 
   constructor(private readonly sesClient = new SES({ region: process.env.REGION ?? 'eu-west-2' })) {
-    this.sourceEmail = getEnvOrDefault(
-      MemberStackEnvironmentKeys.MEMBERS_EMAIL_FROM,
-      emailFrom[brand] ?? '',
-    );
+    this.sourceEmail = getEnvOrDefault(MemberStackEnvironmentKeys.MEMBERS_EMAIL_FROM, emailFrom);
   }
 
-  public async sendEmail(emailType: string, payload: EmailPayload): Promise<void> {
+  public async sendEmail(emailType: EmailTemplate, payload: EmailPayload): Promise<void> {
     switch (emailType) {
       case 'auth0_verification':
         await this.triggerAuth0Email(payload);
@@ -131,15 +113,10 @@ export class EmailService {
     await this.sendViaBraze(url, memberId, this.brazeVerificationCampaignId);
   }
 
-  private async sendViaSes(emailType: string, payload: EmailPayload): Promise<void> {
+  private async sendViaSes(emailType: EmailTemplate, payload: EmailPayload): Promise<void> {
     const { email, workEmail } = payload;
     const emailToSendTo = workEmail ?? email;
-    const template = await getEmailTemplate(
-      this.bucketName,
-      brandConversion[brand],
-      emailType,
-      payload,
-    );
+    const template = await getEmailTemplate(this.bucketName, emailType, payload);
     if (!template) {
       logger.error({ message: 'no template found' });
       return;

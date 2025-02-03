@@ -3,6 +3,7 @@ import { middleware } from '@blc-mono/members/application/middleware';
 import { EmailModel } from '@blc-mono/shared/models/members/emailModel';
 import { EmailService } from '@blc-mono/members/application/services/emailService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
+import { isEmailTemplate } from '@blc-mono/members/application/types/emailTypes';
 
 const service = new EmailService();
 
@@ -12,7 +13,7 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent) => {
   }
   const { emailType, payload }: EmailModel = JSON.parse(event.body);
 
-  if (!emailType) {
+  if (!isEmailTemplate(emailType)) {
     throw new ValidationError('Email Type not found in body');
   }
 

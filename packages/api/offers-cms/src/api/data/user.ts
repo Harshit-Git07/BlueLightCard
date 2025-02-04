@@ -11,7 +11,7 @@ type User = {
 
 export async function getUser(authToken: string) {
   return ky
-    .get(`${env.USER_PROFILE_ENDPOINT}/user`, {
+    .get(`${env.USER_PROFILE_ENDPOINT}`, {
       headers: {
         Authorization: authToken,
       },

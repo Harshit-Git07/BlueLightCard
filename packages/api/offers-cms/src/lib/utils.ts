@@ -44,7 +44,7 @@ export function trustIsEligible(
   }
 
   // If no inclusions specified, trust is eligible (as long as not excluded)
-  if (!includedTrusts) {
+  if (!includedTrusts || includedTrusts.length === 0) {
     return true;
   }
 

@@ -66,8 +66,6 @@ export const registerV2CompaniesGetCompanyOffers = (app: App) =>
 
     const offers = items
       .filter((offer) => isValidOffer(offer))
-      .filter((offer) => offer.status === 'live')
-      .filter((offer) => !offer.expires || new Date(offer.expires) > new Date())
       .filter((offer) =>
         trustIsEligible(offer.includedTrusts, offer.excludedTrusts, user.data.profile.organisation),
       )

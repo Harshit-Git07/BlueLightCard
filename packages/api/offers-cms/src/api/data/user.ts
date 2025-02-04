@@ -1,5 +1,5 @@
 import ky from 'ky';
-import { ApiGatewayV1Api } from 'sst/node/api';
+import { env } from 'src/lib/env';
 
 type User = {
   data: {
@@ -11,7 +11,7 @@ type User = {
 
 export async function getUser(authToken: string) {
   return ky
-    .get(`${ApiGatewayV1Api['identity'].url}/user`, {
+    .get(`${env.USER_PROFILE_ENDPOINT}/user`, {
       headers: {
         Authorization: authToken,
       },

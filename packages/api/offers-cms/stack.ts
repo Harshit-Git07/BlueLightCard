@@ -19,7 +19,7 @@ const EVENT_BUS_ID = 'Discovery Event Bus';
 const cliLogger = new CliLogger();
 
 export function OffersCMS({ stack }: StackContext) {
-  const { authorizer, identityApi } = use(Identity);
+  const { authorizer } = use(Identity);
   const { dwhKenisisFirehoseStreams } = use(Shared);
 
   const discoveryBusName = env.OFFERS_DISCOVERY_EVENT_BUS_NAME || '';
@@ -74,7 +74,7 @@ export function OffersCMS({ stack }: StackContext) {
 
   const hono = new Function(stack, 'OffersApi', {
     handler: 'packages/api/offers-cms/lambda/api.handler',
-    bind: [offersDataTable, companyDataTable, eventsDataTable, identityApi],
+    bind: [offersDataTable, companyDataTable, eventsDataTable],
     environment: env,
   });
 

@@ -9,6 +9,7 @@ export const env = createEnv({
     DWH_FIREHOSE_COMPANY_LOCATION_STREAM_NAME: z.string().optional(),
     DWH_FIREHOSE_MENU_STREAM_NAME: z.string().optional(),
     DWH_FIREHOSE_THEMED_MENU_STREAM_NAME: z.string().optional(),
+    USER_PROFILE_ENDPOINT: z.string().optional(),
   },
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,

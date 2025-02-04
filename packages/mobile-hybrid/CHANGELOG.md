@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.57.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.56.0...bluelightcard/mobile-hybrid-v1.57.0) (2025-01-31)
+
+
+### Features
+
+* conv blc 2.2 trending brands ([#3420](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3420)) ([4fa9c51](https://github.com/bluelightcard/BlueLightCard-2.0/commit/4fa9c51a9508d1ccb963e0dfca155927f643d843))
+* conv blc 2.3 improvements ([#3423](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3423)) ([43906f7](https://github.com/bluelightcard/BlueLightCard-2.0/commit/43906f7b28df3bd66afde3084b8b36823c8ffdc6))
+* conv blc 4.0 interstitial experiment ([#3132](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3132)) ([481e1fb](https://github.com/bluelightcard/BlueLightCard-2.0/commit/481e1fb76f59a6f4da7c30f1572dc0adb148d901))
+* disco 1418 ([#3565](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3565)) ([a4ef32d](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a4ef32df00dc98a17534e3e4d36e90ab334bbc3b))
+* Move zod models to shared folder and use it throughout the frontend instead of the generated openAPI types ([#3554](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3554)) ([f6ae220](https://github.com/bluelightcard/BlueLightCard-2.0/commit/f6ae220bc5f13846cb234b69e02f9b4cc62a7919))
+* Updated mobile-hybrid content and added CardFlow with branding urls ([#3627](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3627)) ([089627c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/089627c671632cd2984abbb0d3f9af545d12c3b0))
+
+
+### Bug Fixes
+
+* [MAMA-329] - Adjusted account header sizing and deeplinks ([#3568](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3568)) ([c1e2bec](https://github.com/bluelightcard/BlueLightCard-2.0/commit/c1e2bec80bfddbaa6363de31c0a5015c76b72dfd))
+* DISCO-1389 Fixed flexi menu images on Hybrid Home ([#3606](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3606)) ([2e560db](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2e560db85a1b310797c0e458881ff4e8a0e60191))
+* DISCO-1453 Fixed Discovery API calls for DDS ([#3618](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3618)) ([75525a4](https://github.com/bluelightcard/BlueLightCard-2.0/commit/75525a4f6ef40fde35493fbb6b5284bebf4b2196))
+
 ## [1.56.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.55.0...bluelightcard/mobile-hybrid-v1.56.0) (2025-01-15)
 
 

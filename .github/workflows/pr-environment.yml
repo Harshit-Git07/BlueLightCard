@@ -445,6 +445,12 @@ jobs:
         run: |
           echo ${{ steps.sst-members-outputs.outputs.membersApiUrl }}
           echo ${{ steps.sst-members-outputs.outputs.membersAdminApiUrl }}
+      - name: Load Test data
+        working-directory: packages/api/members
+        env:
+          SST_STAGE: ${{ env.PR_PREFIX }}
+        run: |
+          npm run loadTestData
 
   backend-members-dds:
     needs:
@@ -910,12 +916,6 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::982534385136:role/github-actions-role
           aws-region: eu-west-2
-      - name: Load Test data
-        working-directory: packages/api/members/testdata
-        env:
-          SST_STAGE: ${{ env.PR_PREFIX }}
-        run: |
-          npm run load:ci
       - name: Run E2E tests
         working-directory: packages/api/members
         env:

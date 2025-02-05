@@ -22,16 +22,14 @@ export class PromoCodesRepository extends Repository {
     super(dynamoDB);
   }
 
-  async getMultiUseOrSingleUseChildPromoCode(
-    promoCodeId: string,
-  ): Promise<PromoCodeModel[] | null> {
+  async getMultiUseOrSingleUseChildPromoCode(promoCode: string): Promise<PromoCodeModel[] | null> {
     const queryCommand = new QueryCommand({
       TableName: this.tableName,
       IndexName: 'PromoCodeIndex',
       KeyConditionExpression: 'code = :code',
       FilterExpression: 'sk = :multiCodeSk OR begins_with(sk, :singleCodeChildSk)',
       ExpressionAttributeValues: {
-        ':code': promoCodeId,
+        ':code': promoCode,
         ':multiCodeSk': 'MULTI_USE',
         ':singleCodeChildSk': 'SINGLE_USE#',
       },

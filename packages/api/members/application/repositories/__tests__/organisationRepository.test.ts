@@ -11,7 +11,7 @@ import {
 } from '@blc-mono/shared/models/members/organisationModel';
 import { NotFoundError } from '../../errors/NotFoundError';
 import { v4 as uuidv4 } from 'uuid';
-import { IdRequirementModel } from '@blc-mono/shared/models/members/idRequirementsModel';
+import { GetIdRequirementDocsModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 import { EmployerModel } from '@blc-mono/shared/models/members/employerModel';
 import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
@@ -49,7 +49,7 @@ const organisation: OrganisationModel = {
   bypassId: false,
   lastUpdated: '2023-01-01T00:00:00Z',
 };
-const idRequirement: IdRequirementModel = {
+const idRequirement: GetIdRequirementDocsModel = {
   type: IdType.IMAGE_UPLOAD,
   idKey: 'passportNumber',
   description: 'Passport ID',
@@ -98,7 +98,7 @@ describe('OrganisationRepository', () => {
       const items = [idRequirement];
       dynamoDBMock.send.mockResolvedValue({ Items: items });
       const result = await repository.getIdRequirementDocs();
-      expect(result).toEqual(items.map((item) => IdRequirementModel.parse(item)));
+      expect(result).toEqual(items.map((item) => GetIdRequirementDocsModel.parse(item)));
     });
   });
 

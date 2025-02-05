@@ -3,7 +3,6 @@
   "description": "Shared types for frontend/backend, keep the footprint low here",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "format": "prettier . --write",
     "lint": "npm run lint:eslint && npm run lint:typecheck && npm run lint:prettier",

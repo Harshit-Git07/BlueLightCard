@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { EmploymentStatus } from './enums/EmploymentStatus';
-import { IdType } from './enums/IdType';
 import { createZodNamedType } from '@blc-mono/shared/utils/zodNamedType';
+import { IdRequirementsModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 
 export const EmployerModel = createZodNamedType(
   'EmployerModel',
@@ -22,51 +22,9 @@ export const EmployerModel = createZodNamedType(
       return val;
     }, z.array(z.string()).default([])),
     employmentStatus: z.array(z.nativeEnum(EmploymentStatus)).optional(),
-    employedIdRequirements: z
-      .object({
-        minimumRequired: z.number().default(1),
-        supportedDocuments: z.array(
-          z.object({
-            idKey: z.string(),
-            type: z.nativeEnum(IdType),
-            title: z.string(),
-            guidelines: z.string(),
-            description: z.string(),
-            required: z.boolean().default(false),
-          }),
-        ),
-      })
-      .optional(),
-    retiredIdRequirements: z
-      .object({
-        minimumRequired: z.number().default(1),
-        supportedDocuments: z.array(
-          z.object({
-            idKey: z.string(),
-            type: z.nativeEnum(IdType),
-            title: z.string(),
-            guidelines: z.string(),
-            description: z.string(),
-            required: z.boolean().default(false),
-          }),
-        ),
-      })
-      .optional(),
-    volunteerIdRequirements: z
-      .object({
-        minimumRequired: z.number().default(1),
-        supportedDocuments: z.array(
-          z.object({
-            idKey: z.string(),
-            type: z.nativeEnum(IdType),
-            title: z.string(),
-            guidelines: z.string(),
-            description: z.string(),
-            required: z.boolean().default(false),
-          }),
-        ),
-      })
-      .optional(),
+    employedIdRequirements: IdRequirementsModel.optional(),
+    retiredIdRequirements: IdRequirementsModel.optional(),
+    volunteerIdRequirements: IdRequirementsModel.optional(),
     isJobTitleMandatory: z.boolean().default(true).optional(),
     isJobReferenceMandatory: z.boolean().default(false).optional(),
     idUploadCount: z.number().default(0).optional(),
@@ -107,36 +65,3 @@ export const UpdateEmployerModel = createZodNamedType(
   }),
 );
 export type UpdateEmployerModel = z.infer<typeof UpdateEmployerModel>;
-
-export const IdRequirementsModel = createZodNamedType(
-  'IdRequirementsModel',
-  z.object({
-    minimumRequired: z.number().default(1),
-    supportedDocuments: z.array(
-      z.object({
-        idKey: z.string(),
-        type: z.nativeEnum(IdType),
-        title: z.string(),
-        guidelines: z.string(),
-        description: z.string(),
-        required: z.boolean().default(false),
-      }),
-    ),
-  }),
-);
-
-export type IdRequirementsModel = z.infer<typeof IdRequirementsModel>;
-
-export const SupportedDocumentModel = createZodNamedType(
-  'SupportedDocumentModel',
-  z.object({
-    idKey: z.string(),
-    type: z.nativeEnum(IdType),
-    title: z.string(),
-    guidelines: z.string(),
-    description: z.string(),
-    required: z.boolean().default(false),
-  }),
-);
-
-export type SupportedDocumentModel = z.infer<typeof SupportedDocumentModel>;

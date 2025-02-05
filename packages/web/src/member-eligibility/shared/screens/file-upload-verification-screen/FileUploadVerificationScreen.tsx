@@ -99,7 +99,13 @@ export const FileUploadVerificationScreen: FC<VerifyEligibilityScreenProps> = ({
 
     setEligibilityDetails(updatedEligibilityDetails);
     await updateMemberProfile(updatedEligibilityDetails);
-  }, [eligibilityDetails, logAnalyticsEvent, setEligibilityDetails, updateMemberProfile]);
+  }, [
+    eligibilityDetails,
+    getNextScreen,
+    logAnalyticsEvent,
+    setEligibilityDetails,
+    updateMemberProfile,
+  ]);
 
   const onBack = useCallback(() => {
     logAnalyticsEvent(fileUploadVerificationEvents.onEditClicked(eligibilityDetails));

@@ -1,16 +1,16 @@
 import { parseCsvFile } from '@blc-mono/members/application/utils/csvParser';
 import path from 'path';
 import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
-import {
-  CreateEmployerModel,
-  IdRequirementsModel,
-  SupportedDocumentModel,
-} from '@blc-mono/shared/models/members/employerModel';
+import { CreateEmployerModel } from '@blc-mono/shared/models/members/employerModel';
 import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 import { v4 as uuidv4 } from 'uuid';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 import { logger } from '../middleware';
+import {
+  SupportedDocumentModel,
+  IdRequirementsModel,
+} from '@blc-mono/shared/models/members/idRequirementsModel';
 
 export interface OrganisationIdMapping {
   brand: string;
@@ -27,6 +27,7 @@ export interface OrganisationIdMapping {
   idGuidelines: string;
   idDescription: string;
 }
+
 export async function getOrganisationIdMappings(): Promise<Map<string, OrganisationIdMapping[]>> {
   const organisationIdMappings = new Map<string, OrganisationIdMapping[]>();
   try {

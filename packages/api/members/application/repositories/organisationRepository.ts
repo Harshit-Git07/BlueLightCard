@@ -21,7 +21,7 @@ import {
   Repository,
 } from './repository';
 import { v4 as uuidv4 } from 'uuid';
-import { IdRequirementModel } from '@blc-mono/shared/models/members/idRequirementsModel';
+import { GetIdRequirementDocsModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 import { NativeAttributeValue } from '@aws-sdk/util-dynamodb';
 
 export class OrganisationRepository extends Repository {
@@ -34,7 +34,7 @@ export class OrganisationRepository extends Repository {
     super(dynamoDB);
   }
 
-  async getIdRequirementDocs(): Promise<IdRequirementModel[]> {
+  async getIdRequirementDocs(): Promise<GetIdRequirementDocsModel[]> {
     const queryParams = {
       TableName: this.tableName,
       KeyConditionExpression: 'sk = :sk AND begins_with(pk, :pk)',
@@ -51,7 +51,7 @@ export class OrganisationRepository extends Repository {
       return [];
     }
 
-    return result.Items.map((org) => IdRequirementModel.parse(org));
+    return result.Items.map((org) => GetIdRequirementDocsModel.parse(org));
   }
 
   async createOrganisation(organisation: CreateOrganisationModel): Promise<string> {

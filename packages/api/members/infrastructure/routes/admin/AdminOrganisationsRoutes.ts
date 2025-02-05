@@ -12,7 +12,7 @@ import {
   OrganisationModel,
   UpdateOrganisationModel,
 } from '@blc-mono/shared/models/members/organisationModel';
-import { IdRequirementModel } from '@blc-mono/shared/models/members/idRequirementsModel';
+import { GetIdRequirementDocsModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 
 export function adminOrganisationsRoutes(
   defaultRouteProps: DefaultRouteProps,
@@ -23,7 +23,7 @@ export function adminOrganisationsRoutes(
       name: 'AdminGetIdRequirementDocs',
       handler:
         'packages/api/members/application/handlers/admin/organisations/getIdRequirementDocs.handler',
-      responseModelType: IdRequirementModel,
+      responseModelType: GetIdRequirementDocsModel,
     }),
     'POST /admin/orgs': Route.createRoute({
       ...defaultRouteProps,

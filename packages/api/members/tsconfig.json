@@ -1,7 +1,12 @@
 {
-  "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
+    "lib": ["es2021"],
+    "target": "es2021",
     "module": "CommonJS",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
       "@blc-mono/members/*": ["./*"],
@@ -13,9 +18,10 @@
     "resolveJsonModule": true
   },
   "ts-node": {
-    "target": "ES6",
+    "target": "es2021",
     "module": "CommonJS",
-    "lib": ["DOM", "ES5"],
-    "esModuleInterop": true
+    "lib": ["es2021"],
+    "esModuleInterop": true,
+    "require": ["tsconfig-paths/register"]
   }
 }

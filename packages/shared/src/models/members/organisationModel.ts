@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { EmploymentStatus } from './enums/EmploymentStatus';
-import { IdType } from './enums/IdType';
 import { createZodNamedType } from '@blc-mono/shared/utils/zodNamedType';
+import { IdRequirementsModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 
 export const OrganisationModel = createZodNamedType(
   'OrganisationModel',
@@ -21,51 +21,9 @@ export const OrganisationModel = createZodNamedType(
       return val;
     }, z.array(z.string()).default([])),
     employmentStatus: z.array(z.nativeEnum(EmploymentStatus)).optional(),
-    employedIdRequirements: z
-      .object({
-        minimumRequired: z.number().default(1),
-        supportedDocuments: z.array(
-          z.object({
-            idKey: z.string(),
-            type: z.nativeEnum(IdType),
-            title: z.string(),
-            guidelines: z.string(),
-            description: z.string(),
-            required: z.boolean().default(false),
-          }),
-        ),
-      })
-      .optional(),
-    retiredIdRequirements: z
-      .object({
-        minimumRequired: z.number().default(1),
-        supportedDocuments: z.array(
-          z.object({
-            idKey: z.string(),
-            type: z.nativeEnum(IdType),
-            title: z.string(),
-            guidelines: z.string(),
-            description: z.string(),
-            required: z.boolean().default(false),
-          }),
-        ),
-      })
-      .optional(),
-    volunteerIdRequirements: z
-      .object({
-        minimumRequired: z.number().default(1),
-        supportedDocuments: z.array(
-          z.object({
-            idKey: z.string(),
-            type: z.nativeEnum(IdType),
-            title: z.string(),
-            guidelines: z.string(),
-            description: z.string(),
-            required: z.boolean().default(false),
-          }),
-        ),
-      })
-      .optional(),
+    employedIdRequirements: IdRequirementsModel.optional(),
+    retiredIdRequirements: IdRequirementsModel.optional(),
+    volunteerIdRequirements: IdRequirementsModel.optional(),
     isSelfEmployed: z.boolean().default(false).optional(),
     isCustomEmployerName: z.boolean().default(false).optional(),
     idUploadCount: z.number().default(0).optional(),

@@ -10,7 +10,7 @@ import {
   EmployerModel,
   UpdateEmployerModel,
 } from '@blc-mono/shared/models/members/employerModel';
-import { IdRequirementModel } from '@blc-mono/shared/models/members/idRequirementsModel';
+import { GetIdRequirementDocsModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 import {
   getOrganisationIdMappings,
   mapOrganisationsAndEmployers,
@@ -19,7 +19,7 @@ import {
 export class OrganisationService {
   constructor(private repository: OrganisationRepository = new OrganisationRepository()) {}
 
-  async getIdRequirementDocs(): Promise<IdRequirementModel[]> {
+  async getIdRequirementDocs(): Promise<GetIdRequirementDocsModel[]> {
     try {
       logger.debug({ message: 'Fetching ID requirement docs' });
       return await this.repository.getIdRequirementDocs();

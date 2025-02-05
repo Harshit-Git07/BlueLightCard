@@ -15,7 +15,6 @@ type Details = Pick<ListSelectorProps, 'title' | 'description' | 'tag' | 'showTr
 export function useVerificationMethodDetails(
   eligibilityDetails: EligibilityDetails
 ): VerificationMethodDetails {
-  // TODO: This should come from the service layer, but for now it is stubbed out
   return {
     firstVerificationMethod: useFirstVerificationMethodDetails(eligibilityDetails),
     secondVerificationMethod: useSecondVerificationMethodDetails(eligibilityDetails),
@@ -32,22 +31,8 @@ function useFirstVerificationMethodDetails(eligibilityDetails: EligibilityDetail
   }, [eligibilityDetails.fileVerificationType]);
 
   const description = useMemo(() => {
-    if (title === 'NHS Smart Card') {
-      return (
-        <>
-          Must show NHS/HSC
-          <br />
-          Must show your full name
-        </>
-      );
-    }
-
-    if (title === 'SPPA Headed Letter') {
-      return <>This must show your full name and organisation</>;
-    }
-
     return getGuidelinesDescription(eligibilityDetails);
-  }, [eligibilityDetails, title]);
+  }, [eligibilityDetails]);
 
   const tag = useMemo(() => {
     if (title === 'SPPA Headed Letter') {
@@ -81,10 +66,6 @@ function useSecondVerificationMethodDetails(
   eligibilityDetails: EligibilityDetails
 ): Details | undefined {
   const title = useMemo(() => {
-    if (eligibilityDetails.fileVerificationType === 'SPPA Headed Letter') {
-      return 'Secondary document';
-    }
-
     if (
       !Array.isArray(eligibilityDetails.fileVerificationType) ||
       eligibilityDetails.fileVerificationType.length !== 2
@@ -92,11 +73,15 @@ function useSecondVerificationMethodDetails(
       return undefined;
     }
 
+    if (eligibilityDetails.fileVerificationType[0] === 'SPPA Headed Letter') {
+      return 'Secondary document';
+    }
+
     return eligibilityDetails.fileVerificationType[1];
   }, [eligibilityDetails.fileVerificationType]);
 
   const description = useMemo(() => {
-    if (eligibilityDetails.fileVerificationType === 'SPPA Headed Letter') {
+    if (eligibilityDetails.fileVerificationType?.[0] === 'SPPA Headed Letter') {
       return (
         <>
           One of:
@@ -113,12 +98,8 @@ function useSecondVerificationMethodDetails(
       );
     }
 
-    if (title === 'Payslip') {
-      return 'Must show the social care department within the council\nMust show your full name';
-    }
-
-    return getGuidelinesDescription(eligibilityDetails);
-  }, [eligibilityDetails, title]);
+    return getGuidelinesDescription(eligibilityDetails, 1);
+  }, [eligibilityDetails]);
 
   const tag = useMemo(() => {
     return <VerificationMethodDetailsTag infoMessage="Supporting document" />;
@@ -138,10 +119,21 @@ function useSecondVerificationMethodDetails(
   };
 }
 
-function getGuidelinesDescription(eligibilityDetails: EligibilityDetails): string | undefined {
-  const matchedGuidelines = eligibilityDetails.currentIdRequirementDetails?.find(
-    (detail) => detail.title === eligibilityDetails.fileVerificationType
-  )?.guidelines;
+function getGuidelinesDescription(
+  eligibilityDetails: EligibilityDetails,
+  index = 0
+): string | undefined {
+  if (!eligibilityDetails.fileVerificationType || !eligibilityDetails.currentIdRequirementDetails) {
+    return undefined;
+  }
+
+  const matchedGuidelines = eligibilityDetails.currentIdRequirementDetails.find((detail) => {
+    if (typeof eligibilityDetails.fileVerificationType === 'string') {
+      return detail.title === eligibilityDetails.fileVerificationType;
+    }
+
+    return detail.title === eligibilityDetails.fileVerificationType?.[index];
+  })?.guidelines;
   if (matchedGuidelines === undefined) return undefined;
 
   return matchedGuidelines;

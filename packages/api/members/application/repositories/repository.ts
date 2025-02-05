@@ -20,6 +20,7 @@ export const APPLICATION = 'APPLICATION';
 export const CARD = 'CARD';
 export const NOTE = 'NOTE';
 export const PROMO_CODE = 'PROMO_CODE';
+export const SINGLE_USE_PROMO_CODE = 'SINGLE_USE';
 export const BATCH = 'BATCH';
 
 export function organisationKey(organisationId: string): string {
@@ -52,6 +53,10 @@ export function idRequirementKey(idRequirementCode: string): string {
 
 export function promoCodeKey(promoCodeId: string): string {
   return `${PROMO_CODE}#${promoCodeId}`;
+}
+
+export function singleUsePromoCodeKey(promoCodeId: string): string {
+  return `${SINGLE_USE_PROMO_CODE}#${promoCodeId}`;
 }
 
 export function batchKey(batchId: string): string {

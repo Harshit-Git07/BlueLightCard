@@ -40,6 +40,10 @@ describe('IdentityStackConfigResolver', () => {
       graphQlConfig: {
         auth0OidcProvider: 'https://access.blcshine.io/'
       },
+      auth0EventBusConfig: {
+        auth0EventBusArn: 'arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/blc-uk-production-53dea5ab-60b5-4b05-94aa-d9e83d24e915/auth0.logs',
+        auth0EventSourcePrefix: 'aws.partner/auth0.com',
+      },
     });
   });
 
@@ -58,6 +62,10 @@ describe('IdentityStackConfigResolver', () => {
       },
       graphQlConfig: {
         auth0OidcProvider: 'https://staging-access-au.blcshine.io/'
+      },
+      auth0EventBusConfig: {
+        auth0EventBusArn: 'arn:aws:events:ap-southeast-2::event-source/aws.partner/auth0.com/blc-au-staging-6e1e2e95-c0d2-4854-b9d3-ed1128b8edfa/auth0.logs',
+        auth0EventSourcePrefix: 'aws.partner/auth0.com',
       },
     });
   });
@@ -80,6 +88,10 @@ describe('IdentityStackConfigResolver', () => {
       graphQlConfig: {
         auth0OidcProvider: 'https://staging-access.blcshine.io/'
       },
+      auth0EventBusConfig: {
+        auth0EventBusArn: 'arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/blc-uk-staging-cf96e736-222f-4756-aedd-b60db97c426c/auth0.logs',
+        auth0EventSourcePrefix: 'aws.partner/auth0.com',
+      },
     });
   });
 
@@ -99,6 +111,10 @@ describe('IdentityStackConfigResolver', () => {
       graphQlConfig: {
         auth0OidcProvider: 'https://staging-access-dds.blcshine.io/'
       },
+      auth0EventBusConfig:  {
+        "auth0EventBusArn": "arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/dds-uk-staging-f4a71aa0-572b-48f4-b2e1-4c50ff8860b8/auth0.logs",
+        "auth0EventSourcePrefix": "aws.partner/auth0.com",
+      },
     });
   });
 
@@ -111,6 +127,7 @@ describe('IdentityStackConfigResolver', () => {
     getEnvMock.mockImplementation((key: string) => {
       if (key === IdentityStackEnvironmentKeys.AUTH0_ISSUER) return 'https://custom-env-domain.com/';
       if (key === IdentityStackEnvironmentKeys.AUTH0_EXTRA_ISSUER) return 'https://custom-dds-env-domain.com/';
+      if (key === IdentityStackEnvironmentKeys.AUTH0_EVENT_BUS_ARN) return 'arn:aws:events::::event-source/aws.partner/auth0.com/custom-dev/auth0.logs';
       return '';
     });
 
@@ -123,6 +140,10 @@ describe('IdentityStackConfigResolver', () => {
       },
       graphQlConfig: {
         auth0OidcProvider: 'https://custom-env-domain.com/'
+      },
+      auth0EventBusConfig:  {
+        "auth0EventBusArn": "arn:aws:events::::event-source/aws.partner/auth0.com/custom-dev/auth0.logs",
+        "auth0EventSourcePrefix": "aws.partner/auth0.com",
       },
     });
   });

@@ -18,9 +18,15 @@ type GraphQlConfig = {
   auth0OidcProvider: string;
 };
 
+type Auth0EventBusConfig = {
+  auth0EventBusArn: string;
+  auth0EventSourcePrefix: string;
+};
+
 export type IdentityStackConfig = {
   lambdaAuthorizerConfig: LambdaAuthorizerConfig;
   graphQlConfig: GraphQlConfig;
+  auth0EventBusConfig: Auth0EventBusConfig;
 };
 
 export class IdentityStackConfigResolver {
@@ -47,6 +53,10 @@ export class IdentityStackConfigResolver {
         graphQlConfig: {
           auth0OidcProvider: 'https://access.blcshine.io/',
         },
+        auth0EventBusConfig: {
+          auth0EventBusArn: 'arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/blc-uk-production-53dea5ab-60b5-4b05-94aa-d9e83d24e915/auth0.logs',
+          auth0EventSourcePrefix: 'aws.partner/auth0.com',
+        },
       },
       [BLC_AU_BRAND]: {
         lambdaAuthorizerConfig: {
@@ -55,6 +65,10 @@ export class IdentityStackConfigResolver {
         graphQlConfig: {
           auth0OidcProvider: 'https://access-au.blcshine.io/',
         },
+        auth0EventBusConfig: {
+          auth0EventBusArn: 'arn:aws:events:ap-southeast-2::event-source/aws.partner/auth0.com/blc-au-production-6be7a852-1149-46c1-80b5-b408ddc3c270/auth0.logs',
+          auth0EventSourcePrefix: 'aws.partner/auth0.com',
+        },
       },
       [DDS_UK_BRAND]: {
         lambdaAuthorizerConfig: {
@@ -62,6 +76,10 @@ export class IdentityStackConfigResolver {
         },
         graphQlConfig: {
           auth0OidcProvider: 'https://access-dds.blcshine.io/',
+        },
+        auth0EventBusConfig: {
+          auth0EventBusArn: 'arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/dds-uk-production-6e66f117-cdb5-477e-8aa4-89deba2d8522/auth0.logs',
+          auth0EventSourcePrefix: 'aws.partner/auth0.com',
         },
       },
     };
@@ -77,7 +95,11 @@ export class IdentityStackConfigResolver {
         },
         graphQlConfig: {
           auth0OidcProvider: 'https://staging-access.blcshine.io/',
-        }
+        },
+        auth0EventBusConfig: {
+          auth0EventBusArn: 'arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/blc-uk-staging-cf96e736-222f-4756-aedd-b60db97c426c/auth0.logs',
+          auth0EventSourcePrefix: 'aws.partner/auth0.com',
+        },
       },
       [BLC_AU_BRAND]: {
         lambdaAuthorizerConfig: {
@@ -85,7 +107,11 @@ export class IdentityStackConfigResolver {
         },
         graphQlConfig: {
           auth0OidcProvider: 'https://staging-access-au.blcshine.io/',
-        }
+        },
+        auth0EventBusConfig: {
+          auth0EventBusArn: 'arn:aws:events:ap-southeast-2::event-source/aws.partner/auth0.com/blc-au-staging-6e1e2e95-c0d2-4854-b9d3-ed1128b8edfa/auth0.logs',
+          auth0EventSourcePrefix: 'aws.partner/auth0.com',
+        },
       },
       [DDS_UK_BRAND]: {
         lambdaAuthorizerConfig: {
@@ -93,7 +119,11 @@ export class IdentityStackConfigResolver {
         },
         graphQlConfig: {
           auth0OidcProvider: 'https://staging-access-dds.blcshine.io/',
-        }
+        },
+        auth0EventBusConfig: {
+          auth0EventBusArn: 'arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/dds-uk-staging-f4a71aa0-572b-48f4-b2e1-4c50ff8860b8/auth0.logs',
+          auth0EventSourcePrefix: 'aws.partner/auth0.com',
+        },
       },
     };
   }
@@ -106,7 +136,11 @@ export class IdentityStackConfigResolver {
       },
       graphQlConfig: {
         auth0OidcProvider: getEnv(IdentityStackEnvironmentKeys.AUTH0_ISSUER),
-      }
+      },
+      auth0EventBusConfig: {
+        auth0EventBusArn: getEnv(IdentityStackEnvironmentKeys.AUTH0_EVENT_BUS_ARN),
+        auth0EventSourcePrefix: 'aws.partner/auth0.com',
+      },
     };
   }
 }

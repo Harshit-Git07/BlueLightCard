@@ -44,6 +44,11 @@ import { userEmailUpdatedRule } from './src/eventRules/userEmailUpdated';
 import { UserPool } from 'aws-cdk-lib/aws-cognito';
 import { isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
 import { isProduction } from '@blc-mono/core/utils/checkEnvironment';
+import { EventBus, Rule, } from 'aws-cdk-lib/aws-events';
+import * as events from 'aws-cdk-lib/aws-events';
+import { auth0LogsRule } from './src/eventRules/auth0LogsRule';
+import { Auth0EventTypes } from './src/auth0/auth0EventTypes.enum';
+
 import {
   getCognitoUserPoolIdStackOutputName,
   getNewCognitoUserPoolIdStackOutputName,
@@ -62,7 +67,7 @@ const USE_DATADOG_AGENT: string = getEnvOrDefault(
 export function Identity({ stack }: StackContext) {
   const globalConfig = GlobalConfigResolver.for(stack.stage);
   const identityConfig = IdentityStackConfigResolver.for(stack);
-  const { certificateArn, bus, webACL } = use(Shared);
+  const { certificateArn, bus, webACL, dwhKenisisFirehoseStreams } = use(Shared);
 
   // https://docs.datadoghq.com/serverless/aws_lambda/installation/nodejs/?tab=custom
   const layers =
@@ -96,6 +101,7 @@ export function Identity({ stack }: StackContext) {
   if (isDdsUkBrand()) {
     // Only specific resources allowed to deploy to DDS due to dependency with BLC UK Identity stack
     return deployDdsSpecificResources(stack);
+    
   } else {
     //Region
     const region = stack.region;
@@ -522,6 +528,32 @@ export function Identity({ stack }: StackContext) {
       ),
     );
 
+    const auth0EventHandlerRule = auth0LogsRule(
+      stack,
+      region,
+      SERVICE_NAME,
+      dwhKenisisFirehoseStreams.auth0EventLogsStream.getPutRecordPolicyStatement(),
+      dlq.queueUrl,
+      dwhKenisisFirehoseStreams.auth0EventLogsStream.getStreamName(),
+      false,
+    )
+  
+    // Load existing EventBus using ARN
+    const auth0EventBus = EventBus.fromEventBusArn(stack, 'auth0EventBus', identityConfig.auth0EventBusConfig.auth0EventBusArn);
+
+    // Create a new rule with a pattern
+    new Rule(stack, 'auth0EventRule', {
+      eventBus: auth0EventBus,
+      eventPattern: {
+        source: events.Match.prefix(identityConfig.auth0EventBusConfig.auth0EventSourcePrefix),
+        detail: {
+          data: {
+            type: Object.keys(Auth0EventTypes),
+          }
+        }
+      },
+    }).addTarget(auth0EventHandlerRule);
+
     return {
       identityApi,
       identityTableName: identityTable.tableName,
@@ -532,6 +564,8 @@ export function Identity({ stack }: StackContext) {
 
 function deployDdsSpecificResources(stack: Stack) {
   const identityConfig = IdentityStackConfigResolver.for(stack);
+  const { dwhKenisisFirehoseStreams } = use(Shared);
+
   // All user pools currently in use until authorizer is split by brand
   const BLC_UK_COGNITO_USER_POOL_ID = getEnv(
     IdentityStackEnvironmentKeys.BLC_UK_COGNITO_USER_POOL_ID,
@@ -595,6 +629,33 @@ function deployDdsSpecificResources(stack: Stack) {
       restApi: RestApi.fromRestApiId(stack, 'IdentityApi', BLC_UK_IDENTITY_API_ID),
     },
   });
+
+  const dlq = new Queue(stack, 'DLQDds');
+    const auth0EventHandlerRule = auth0LogsRule(
+      stack,
+      stack.region,
+      SERVICE_NAME,
+      dwhKenisisFirehoseStreams.auth0EventLogsStream.getPutRecordPolicyStatement(),
+      dlq.queueUrl,
+      dwhKenisisFirehoseStreams.auth0EventLogsStream.getStreamName(),
+      true,
+    )
+  
+    // Load existing EventBus using ARN
+    const auth0EventBus = EventBus.fromEventBusArn(stack, 'auth0EventBusDds', identityConfig.auth0EventBusConfig.auth0EventBusArn);
+
+    // Create a new rule with a pattern
+    new Rule(stack, 'auth0EventRuleDds', {
+      eventBus: auth0EventBus,
+      eventPattern: {
+        source: events.Match.prefix(identityConfig.auth0EventBusConfig.auth0EventSourcePrefix),
+        detail: {
+          data: {
+            type: Object.keys(Auth0EventTypes),
+          }
+        }
+      },
+    }).addTarget(auth0EventHandlerRule);
 
   stack.addOutputs({
     CognitoUserPoolMembersClient: cognitoUserPool.userPoolId,

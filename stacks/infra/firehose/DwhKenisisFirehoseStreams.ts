@@ -77,6 +77,7 @@ export class DwhKenisisFirehoseStreams {
   public readonly vaultStockStream: IFirehoseStreamAdapter;
   public readonly vaultBatchStockStream: IFirehoseStreamAdapter;
   public readonly searchRequestsStream: IFirehoseStreamAdapter;
+  public readonly auth0EventLogsStream: IFirehoseStreamAdapter;
 
   constructor(stack: Stack) {
     // Creates Firehose stream references. Mocked in Production environments if present within `UNMANAGED_STREAMS` list.
@@ -198,6 +199,14 @@ export class DwhKenisisFirehoseStreams {
       `dwh-${brandPrefix}-searchRequests`,
       {
         tableName: redshiftSchemaName ? `${redshiftSchemaName}.search` : undefined,
+      },
+    ).setup();
+    this.auth0EventLogsStream = new KenisisFirehoseStream(
+      stack,
+      'dwh-auth0EventLogs',
+      `dwh-${MAP_BRAND[getBrandFromEnv()]}-auth0-event-logs`,
+      {
+        tableName: redshiftSchemaName ? `${redshiftSchemaName}.auth0_events` : undefined,
       },
     ).setup();
   }

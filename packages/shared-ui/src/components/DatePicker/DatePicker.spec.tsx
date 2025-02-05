@@ -35,10 +35,10 @@ describe('DatePicker component', () => {
     const dayDropdown = getByLabelText('Day');
     await userEvent.click(dayDropdown);
 
-    const day31 = getByText('31');
-    await userEvent.click(day31);
+    const day = getByText('20');
+    await userEvent.click(day);
 
-    expect(dayDropdown).toHaveValue('31');
+    expect(dayDropdown).toHaveValue('20');
   });
 
   it('should not allow user interactions when disabled', async () => {
@@ -54,8 +54,8 @@ describe('DatePicker component', () => {
 
     await userEvent.click(dayDropdown);
 
-    const day31 = queryByText('31');
-    expect(day31).not.toBeInTheDocument();
+    const day = queryByText('20');
+    expect(day).not.toBeInTheDocument();
   });
 
   it('should call onChange with selected date', async () => {

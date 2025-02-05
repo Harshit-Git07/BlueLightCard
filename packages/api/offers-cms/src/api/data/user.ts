@@ -1,5 +1,6 @@
 import ky from 'ky';
-import { env } from 'src/lib/env';
+
+import { env } from '../../lib/env';
 
 type User = {
   data: {

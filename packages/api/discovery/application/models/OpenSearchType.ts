@@ -6,6 +6,12 @@ export type OpenSearchCommand = {
   create: object;
 };
 
+type CompanyLocation = {
+  geo_point: { lat: number; lon: number };
+  location_id: string;
+  store_name?: string;
+};
+
 export type OpenSearchBody = {
   offer_id: string;
   legacy_offer_id?: number;
@@ -20,6 +26,7 @@ export type OpenSearchBody = {
   offer_tags: string[];
   company_id: string;
   legacy_company_id?: number;
+  company_locations: CompanyLocation[];
   company_name: string;
   company_name_stripped: string;
   company_small_logo: string;
@@ -47,6 +54,11 @@ export const mapOfferToOpenSearchBody = (offer: Offer): OpenSearchBody => ({
   offer_start: offer.offerStart,
   offer_tags: offer.tags,
   company_id: offer.company.id,
+  company_locations: offer.company.locations.map((location) => ({
+    location_id: location.id,
+    geo_point: location.location,
+    store_name: location.storeName,
+  })),
   legacy_company_id: offer.company.legacyCompanyId,
   company_name: offer.company.name,
   company_name_stripped: offer.company.name.trim() || '',
@@ -73,6 +85,7 @@ export const mapEventToOpenSearchBody = (event: EventOffer): OpenSearchBody => (
   offer_tags: [],
   company_id: '',
   company_name: '',
+  company_locations: [],
   company_name_stripped: '',
   company_small_logo: '',
   company_tags: [],

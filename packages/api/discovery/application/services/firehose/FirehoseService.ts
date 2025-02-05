@@ -14,7 +14,7 @@ type SearchRequestFirehoseEvent = {
   search_id: string;
   event_time: string;
   search_term: string;
-  platform: string;
+  client_type: string;
   member_id: string;
   brand: string;
 };
@@ -30,10 +30,10 @@ export class FirehoseService {
   private static mapToSearchRequestFirehoseEvent(context: DiscoverySearchContext): SearchRequestFirehoseEvent {
     return {
       search_id: v4(),
-      event_time: new Date().toUTCString(),
+      event_time: new Date().toISOString(),
       brand: getBrandFromEnv(),
       member_id: context.memberId,
-      platform: context.platform,
+      client_type: context.platform,
       search_term: context.term,
     };
   }

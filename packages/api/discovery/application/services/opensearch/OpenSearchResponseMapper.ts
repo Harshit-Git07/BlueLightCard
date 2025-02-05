@@ -27,6 +27,22 @@ export interface EventSearchResult {
   venueName: string;
 }
 
+export interface NearestOfferSearchResultResponse {
+  locationId: string;
+  lat: number;
+  lon: number;
+  distance: number;
+  storeName?: string;
+  legacyCompanyId?: number;
+  companyId: string;
+  companyName: string;
+  companyLogo: string;
+}
+export interface NearestOfferSearchResult extends NearestOfferSearchResultResponse {
+  includedTrusts: string[];
+  excludedTrusts: string[];
+}
+
 export type SearchResult = OfferSearchResult | EventSearchResult;
 
 export type InternalSearchResult = SearchResult & {
@@ -111,4 +127,67 @@ export const mapAllCompanies = (result: SearchResponse): CompanySummary[] => {
   }
 
   return mappedResults;
+};
+
+export interface NearestOffersSearchResponse {
+  hits: {
+    hits: Array<{
+      _source: {
+        offer_id: string;
+        company_id: string;
+        company_name: string;
+        company_small_logo: string;
+        legacy_company_id?: number;
+        included_trusts: string[];
+        excluded_trusts: string[];
+      };
+      inner_hits: {
+        company_locations: {
+          hits: {
+            hits: Array<{
+              _source: {
+                location_id: string;
+                store_name?: string;
+                geo_point: {
+                  lat: number;
+                  lon: number;
+                };
+              };
+              fields?: {
+                distance?: number[];
+              };
+            }>;
+          };
+        };
+      };
+    }>;
+  };
+}
+
+export const mapToNearestOfferSearchResult = (response: NearestOffersSearchResponse): NearestOfferSearchResult[] => {
+  const uniqueCompanyLocations = new Map<string, NearestOfferSearchResult>();
+
+  response.hits.hits.forEach((hit) => {
+    hit.inner_hits?.company_locations?.hits?.hits.forEach((location) => {
+      const locationId = location._source?.location_id ?? '';
+
+      if (!uniqueCompanyLocations.has(locationId)) {
+        uniqueCompanyLocations.set(locationId, {
+          locationId,
+          lon: location._source?.geo_point?.lon ?? 0,
+          lat: location._source?.geo_point?.lat ?? 0,
+          distance: location.fields?.distance?.[0] ?? 0,
+          storeName: location._source?.store_name,
+          legacyCompanyId: hit._source?.legacy_company_id,
+          companyId: hit._source?.company_id,
+          companyName: hit._source?.company_name,
+          companyLogo: hit._source?.company_small_logo,
+          includedTrusts: hit._source?.included_trusts || [],
+          excludedTrusts: hit._source?.excluded_trusts || [],
+        });
+      }
+    });
+  });
+
+  return [...uniqueCompanyLocations.values()].sort((a, b) => a.distance - b.distance);
 };

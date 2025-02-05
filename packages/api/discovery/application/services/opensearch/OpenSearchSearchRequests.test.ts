@@ -3,6 +3,8 @@ import { QueryDslQueryContainer, SearchRequest } from '@opensearch-project/opens
 import * as getEnvModule from '@blc-mono/core/utils/getEnv';
 import { OpenSearchSearchRequests } from '@blc-mono/discovery/application/services/opensearch/OpenSearchSearchRequests';
 
+import { DistanceUnit } from '../../handlers/locations/locations.enum';
+
 jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 
 jest.mock('@blc-mono/discovery/application/models/AgeRestrictions', () => {
@@ -188,6 +190,12 @@ describe('OpenSearchSearchRequests', () => {
     },
   };
 
+  const expectedCompanyIDQuery: QueryDslQueryContainer = {
+    term: {
+      company_id: '1',
+    },
+  };
+
   const expectedOfferNameQuery: QueryDslQueryContainer = {
     match: {
       offer_name: searchTerm,
@@ -332,6 +340,103 @@ describe('OpenSearchSearchRequests', () => {
       const result = target.buildAllCompaniesRequest();
 
       expect(result).toEqual(expectedSearch);
+    });
+  });
+
+  describe('buildLocationSearchRequest', () => {
+    const lat = 51.5074;
+    const lon = -0.1278;
+    const distance = 30;
+    const distanceUnit = DistanceUnit.MILES;
+    const limit = 10;
+    const companyId = '1';
+    const companyName = searchTerm;
+
+    const expectedLocationQuery = {
+      nested: {
+        path: 'company_locations',
+        ignore_unmapped: true,
+        query: {
+          geo_distance: {
+            distance: `${distance}${distanceUnit}`,
+            'company_locations.geo_point': {
+              lat,
+              lon,
+            },
+          },
+        },
+        inner_hits: {
+          _source: {
+            includes: ['company_locations.location_id', 'company_locations.geo_point', 'company_locations.store_name'],
+          },
+          script_fields: {
+            distance: {
+              script: {
+                source: `doc['company_locations.geo_point'].arcDistance(params.lat, params.lon)${distanceUnit === DistanceUnit.MILES ? ' * 0.000621371' : ''}`,
+                params: {
+                  lat,
+                  lon,
+                },
+              },
+            },
+          },
+          size: limit < 100 ? limit : 100,
+        },
+      },
+    };
+
+    const expectedLocationSearch = (mustQueries: QueryDslQueryContainer[]) => ({
+      index: indexName,
+      body: {
+        query: {
+          bool: {
+            must: mustQueries,
+          },
+        },
+        size: limit,
+        _source: [
+          'company_id',
+          'legacy_company_id',
+          'company_name',
+          'company_small_logo',
+          'included_trusts',
+          'excluded_trusts',
+        ],
+      },
+    });
+
+    it('should return a Company Location Search Request', () => {
+      const result = target.buildLocationSearchRequest({ limit, lon, lat, distance, distanceUnit });
+
+      expect(result).toEqual(
+        expectedLocationSearch([expectedLocationQuery, expectedAgeRestrictedQuery, expectedOfferIsLive]),
+      );
+    });
+
+    it('should return company name query if company name is passed', () => {
+      const result = target.buildLocationSearchRequest({ limit, lon, lat, distance, distanceUnit, companyName });
+
+      expect(result).toEqual(
+        expectedLocationSearch([
+          expectedLocationQuery,
+          expectedAgeRestrictedQuery,
+          expectedOfferIsLive,
+          expectedCompanyNameFuzzyQuery,
+        ]),
+      );
+    });
+
+    it('should return company id query if company id is passed', () => {
+      const result = target.buildLocationSearchRequest({ limit, lon, lat, distance, distanceUnit, companyId });
+
+      expect(result).toEqual(
+        expectedLocationSearch([
+          expectedLocationQuery,
+          expectedAgeRestrictedQuery,
+          expectedOfferIsLive,
+          expectedCompanyIDQuery,
+        ]),
+      );
     });
   });
 });

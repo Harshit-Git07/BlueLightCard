@@ -1,9 +1,12 @@
+import { RequestParams } from '@opensearch-project/opensearch/.';
 import { SearchRequest } from '@opensearch-project/opensearch/api/types';
 
 import { AgeRestriction, getAgeRestrictions } from '@blc-mono/discovery/application/models/AgeRestrictions';
 import {
   ageRestrictionsQuery,
   categoryIdQuery,
+  companyIdQuery,
+  companyLocationQuery,
   companyNameFuzzyQuery,
   companyNameInCompaniesAllQuery,
   companyNameQuery,
@@ -14,7 +17,19 @@ import {
   offerTypeQuery,
 } from '@blc-mono/discovery/application/services/opensearch/OpenSearchQueries';
 
+import { DistanceUnit } from '../../handlers/locations/locations.enum';
+
 const MAX_RESULTS = 10000;
+
+type LocationSearchRequestInput = {
+  limit: number;
+  lon: number;
+  lat: number;
+  distance: number;
+  distanceUnit: DistanceUnit;
+  companyId?: string;
+  companyName?: string;
+};
 
 export class OpenSearchSearchRequests {
   private readonly index: string;
@@ -81,6 +96,47 @@ export class OpenSearchSearchRequests {
             must: mustQueries,
           },
         },
+      },
+    };
+  }
+
+  public buildLocationSearchRequest({
+    limit,
+    lon,
+    lat,
+    distance,
+    distanceUnit,
+    companyId,
+    companyName,
+  }: LocationSearchRequestInput): RequestParams.Search {
+    const mustQueries = [
+      companyLocationQuery(lon, lat, distance, distanceUnit, limit),
+      ageRestrictionsQuery(this.ageRestrictions),
+      offerIsLiveQuery(),
+    ];
+    if (companyName) {
+      mustQueries.push(companyNameFuzzyQuery(companyName));
+    }
+    if (companyId) {
+      mustQueries.push(companyIdQuery(companyId));
+    }
+    return {
+      index: this.index,
+      body: {
+        query: {
+          bool: {
+            must: mustQueries,
+          },
+        },
+        size: limit,
+        _source: [
+          'company_id',
+          'legacy_company_id',
+          'company_name',
+          'company_small_logo',
+          'included_trusts',
+          'excluded_trusts',
+        ],
       },
     };
   }

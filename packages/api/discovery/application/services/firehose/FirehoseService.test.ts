@@ -46,7 +46,7 @@ describe('FirehoseService', () => {
         event_time: expect.any(String),
         brand: 'BLC_UK',
         member_id: 'memberId',
-        platform: 'mobile',
+        client_type: 'mobile',
         search_term: 'searchTerm',
       });
     });

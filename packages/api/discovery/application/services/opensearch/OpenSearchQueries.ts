@@ -2,6 +2,8 @@ import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types
 
 import { AgeRestriction } from '@blc-mono/discovery/application/models/AgeRestrictions';
 
+import { DistanceUnit } from '../../handlers/locations/locations.enum';
+
 export const offerTypeQuery = (offerType?: string): QueryDslQueryContainer => {
   if (offerType) {
     return {
@@ -243,10 +245,59 @@ export const companyNameFuzzyQuery = (searchTerm: string): QueryDslQueryContaine
   };
 };
 
+export const companyIdQuery = (companyId: string): QueryDslQueryContainer => {
+  return {
+    term: {
+      company_id: companyId,
+    },
+  };
+};
+
 export const categoryIdQuery = (categoryId: string): QueryDslQueryContainer => {
   return {
     match: {
       category_id: categoryId,
+    },
+  };
+};
+
+export const companyLocationQuery = (
+  lon: number,
+  lat: number,
+  distance: number,
+  distanceUnit: DistanceUnit,
+  limit: number,
+): QueryDslQueryContainer => {
+  return {
+    nested: {
+      path: 'company_locations',
+      ignore_unmapped: true,
+      query: {
+        geo_distance: {
+          distance: `${distance}${distanceUnit}`,
+          'company_locations.geo_point': {
+            lat,
+            lon,
+          },
+        },
+      },
+      inner_hits: {
+        _source: {
+          includes: ['company_locations.location_id', 'company_locations.geo_point', 'company_locations.store_name'],
+        },
+        script_fields: {
+          distance: {
+            script: {
+              source: `doc['company_locations.geo_point'].arcDistance(params.lat, params.lon)${distanceUnit === DistanceUnit.MILES ? ' * 0.000621371' : ''}`,
+              params: {
+                lat,
+                lon,
+              },
+            },
+          },
+        },
+        size: limit < 100 ? limit : 100,
+      },
     },
   };
 };

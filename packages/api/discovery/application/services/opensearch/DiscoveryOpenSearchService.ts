@@ -1,6 +1,6 @@
 import { Client } from '@opensearch-project/opensearch';
 import { SearchResponse } from '@opensearch-project/opensearch/api/types';
-import { isBefore, subWeeks } from 'date-fns';
+import { isBefore, subDays, subWeeks } from 'date-fns';
 
 import { OpenSearchService } from '@blc-mono/core/aws/opensearch/OpenSearchService';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
@@ -13,12 +13,16 @@ import {
   mapAllCompanies,
   mapInternalSearchResult,
   mapSearchResults,
+  mapToNearestOfferSearchResult,
+  NearestOfferSearchResultResponse,
+  NearestOffersSearchResponse,
   SearchResult,
 } from '@blc-mono/discovery/application/services/opensearch/OpenSearchResponseMapper';
 import { OpenSearchSearchRequests } from '@blc-mono/discovery/application/services/opensearch/OpenSearchSearchRequests';
 import { isValidTrust } from '@blc-mono/discovery/application/utils/trustRules';
 import { DiscoveryStackEnvironmentKeys } from '@blc-mono/discovery/infrastructure/constants/environment';
 
+import { DistanceUnit } from '../../handlers/locations/locations.enum';
 import { FirehoseService } from '../firehose/FirehoseService';
 
 export const draftIndexPrefix = 'draft-';
@@ -42,6 +46,19 @@ export type DiscoverySearchContext = {
   offerType?: string;
   memberId: string;
   platform: 'mobile' | 'web';
+};
+
+export type LocationQueryInput = {
+  indexName: string;
+  dob: string;
+  organisation: string;
+  limit: number;
+  lon: number;
+  lat: number;
+  distance: number;
+  distanceUnit: DistanceUnit;
+  companyId?: string;
+  companyName?: string;
 };
 
 export class DiscoveryOpenSearchService extends OpenSearchService {
@@ -107,6 +124,35 @@ export class DiscoveryOpenSearchService extends OpenSearchService {
 
     return this.buildUniqueSearchResults(
       allSearchResults.filter((result) => isValidTrust(organisation, result.IncludedTrusts, result.ExcludedTrusts)),
+    );
+  }
+
+  public async queryByLocation(locationInput: LocationQueryInput): Promise<NearestOfferSearchResultResponse[]> {
+    const { distance, distanceUnit, dob, indexName, lat, limit, lon, organisation, companyId, companyName } =
+      locationInput;
+    logger.info({ message: `Querying by location - ${JSON.stringify(locationInput)}` });
+    const locationSearchRequest = new OpenSearchSearchRequests(indexName, dob).buildLocationSearchRequest({
+      limit,
+      lon,
+      lat,
+      distance,
+      distanceUnit,
+      companyId,
+      companyName,
+    });
+
+    logger.info({ message: `Location search request - ${JSON.stringify(locationSearchRequest)}` });
+
+    const searchResults = await this.openSearchClient.search(locationSearchRequest);
+    logger.info({ message: `Location search results - ${JSON.stringify(searchResults.body)}` });
+
+    const mappedResults = mapToNearestOfferSearchResult(searchResults.body as NearestOffersSearchResponse);
+    logger.info({ message: `Mapped location search results - ${JSON.stringify(mappedResults)}` });
+    return (
+      mappedResults
+        .filter((result) => isValidTrust(organisation, result.includedTrusts, result.excludedTrusts))
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        .map(({ includedTrusts, excludedTrusts, ...rest }) => rest)
     );
   }
 
@@ -210,9 +256,9 @@ export class DiscoveryOpenSearchService extends OpenSearchService {
 
   public async getPrEnvironmentIndicesForDeletion(): Promise<string[]> {
     await this.initializeIndicesList();
-
+    logger.info({ message: `Total indicies within opensearch: [${this.indicesList.length}]` });
     return this.indicesList
-      .filter((index: OpenSearchIndex) => index.indexName.startsWith(`${service}-pr-`) && indexOlderThan7Days(index))
+      .filter((index: OpenSearchIndex) => indexOlderThan2Days(index))
       .map((index: OpenSearchIndex) => index.indexName);
   }
 
@@ -256,4 +302,8 @@ const getOfferIndexNamesByLatest = (indices: OpenSearchIndex[]): string[] => {
 
 const indexOlderThan7Days = (index: OpenSearchIndex): boolean => {
   return isBefore(new Date(index.creationDate), subWeeks(new Date(), 1));
+};
+
+const indexOlderThan2Days = (index: OpenSearchIndex): boolean => {
+  return isBefore(new Date(index.creationDate), subDays(new Date(), 2));
 };

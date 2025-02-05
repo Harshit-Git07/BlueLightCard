@@ -47,6 +47,7 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       IDENTITY_TABLE_NAME: identityTableName,
       REGION: stack.region,
       SERVICE: SERVICE_NAME,
+      STAGE: stack.stage,
       DD_VERSION: process.env.DD_VERSION ?? '',
       DD_ENV: process.env.SST_STAGE ?? 'undefined',
       DD_API_KEY: process.env.DD_API_KEY ?? '',
@@ -114,7 +115,6 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       permissions: ['es', 'firehose:PutRecord', 'dynamodb:Query'],
       environment: {
         OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomain,
-        STAGE: stack.stage,
       },
       vpc,
     }),
@@ -173,6 +173,18 @@ async function DiscoveryStack({ stack, app }: StackContext) {
       environment: {
         MENUS_TABLE_NAME: menusTable.tableName,
       },
+    }),
+    'GET /nearest': Route.createRoute({
+      ...baseRouteParams,
+      functionName: 'GetNearestCompaniesHandler',
+      handler: 'packages/api/discovery/application/handlers/locations/getNearestCompanies.handler',
+      requestValidatorName: 'GetNearestCompaniesValidator',
+      permissions: ['es', 'dynamodb:Query'],
+      environment: {
+        SEARCH_OFFER_COMPANY_TABLE_NAME: searchOfferCompanyTable.tableName,
+        OPENSEARCH_DOMAIN_ENDPOINT: config.openSearchDomainEndpoint ?? openSearchDomain,
+      },
+      vpc,
     }),
   });
 

@@ -5,9 +5,11 @@ import * as getEnvModule from '@blc-mono/core/utils/getEnv';
 jest.spyOn(getEnvModule, 'getEnv').mockImplementation((input: string) => input.toLowerCase());
 import { openSearchFieldMapping } from '@blc-mono/discovery/application/models/OpenSearchFieldMapping';
 
+import { DistanceUnit } from '../../handlers/locations/locations.enum';
 import * as Firehose from '../firehose/FirehoseService';
 
-import { DiscoveryOpenSearchService, DiscoverySearchContext } from './DiscoveryOpenSearchService';
+import { DiscoveryOpenSearchService, DiscoverySearchContext, LocationQueryInput } from './DiscoveryOpenSearchService';
+import { NearestOffersSearchResponse } from './OpenSearchResponseMapper';
 
 jest.mock('../firehose/FirehoseService');
 
@@ -611,6 +613,132 @@ describe('OpenSearchService', () => {
   it('should get the latest index name', async () => {
     const result = await openSearchService.getLatestIndexName();
     expect(result).toEqual('service-stage-offers-010202001');
+  });
+
+  describe('queryByLocation', () => {
+    const mockLocationInput: LocationQueryInput = {
+      distance: 100,
+      distanceUnit: DistanceUnit.KILOMETERS,
+      lat: 51.5074,
+      limit: 10,
+      lon: -0.1278,
+      indexName,
+      dob: '2001-01-01',
+      organisation: 'NHS',
+      companyId: '123',
+      companyName: 'Company',
+    };
+
+    const baseMockLocationResult: NearestOffersSearchResponse = {
+      hits: {
+        hits: [
+          {
+            _source: {
+              company_id: 'mockCompanyID',
+              company_name: 'mockCompanyName',
+              company_small_logo: 'mockCompanyLogo',
+              excluded_trusts: [],
+              included_trusts: [],
+              offer_id: 'mockOfferId',
+              legacy_company_id: 1,
+            },
+            inner_hits: {
+              company_locations: {
+                hits: {
+                  hits: [
+                    {
+                      _source: {
+                        geo_point: {
+                          lat: 51.5074,
+                          lon: -0.1278,
+                        },
+                        location_id: 'mockLocationId',
+                        store_name: 'mockStoreName',
+                      },
+                      fields: {
+                        distance: [0],
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        ],
+      },
+    };
+
+    const nhsExcludedMockLocationResult: NearestOffersSearchResponse = {
+      hits: {
+        hits: [
+          {
+            _source: {
+              company_id: 'mockCompanyID',
+              company_name: 'mockCompanyName',
+              company_small_logo: 'mockCompanyLogo',
+              excluded_trusts: ['NHS'],
+              included_trusts: [],
+              offer_id: 'mockOfferId',
+              legacy_company_id: 1,
+            },
+            inner_hits: {
+              company_locations: {
+                hits: {
+                  hits: [
+                    {
+                      _source: {
+                        geo_point: {
+                          lat: 51.5074,
+                          lon: -0.1278,
+                        },
+                        location_id: 'mockLocationId',
+                        store_name: 'mockStoreName',
+                      },
+                      fields: {
+                        distance: [0],
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        ],
+      },
+    };
+
+    it('should query by location and mapped to the expected NearestOfferSearchResult object', async () => {
+      const mockLocationSearch = jest.fn().mockResolvedValue({
+        body: baseMockLocationResult,
+      });
+      jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockLocationSearch);
+      const results = await openSearchService.queryByLocation(mockLocationInput);
+      expect(mockLocationSearch).toHaveBeenCalled();
+      expect(results[0]).toMatchObject({
+        companyId: baseMockLocationResult.hits.hits[0]._source.company_id,
+        companyName: baseMockLocationResult.hits.hits[0]._source.company_name,
+        companyLogo: baseMockLocationResult.hits.hits[0]._source.company_small_logo,
+        distance:
+          baseMockLocationResult.hits.hits[0].inner_hits?.company_locations?.hits?.hits[0]?.fields?.distance?.[0] ?? 0,
+        legacyCompanyId: baseMockLocationResult.hits.hits[0]._source.legacy_company_id,
+        locationId:
+          baseMockLocationResult.hits.hits[0].inner_hits?.company_locations?.hits?.hits[0]?._source.location_id ?? '',
+        lat:
+          baseMockLocationResult.hits.hits[0].inner_hits?.company_locations?.hits?.hits[0]?._source.geo_point.lat ?? 0,
+        lon:
+          baseMockLocationResult.hits.hits[0].inner_hits?.company_locations?.hits?.hits[0]?._source.geo_point.lon ?? 0,
+        storeName: baseMockLocationResult.hits.hits[0].inner_hits?.company_locations?.hits?.hits[0]?._source.store_name,
+      });
+    });
+
+    it('should filter out locations if organisation is excluded', async () => {
+      const mockLocationSearch = jest.fn().mockResolvedValue({
+        body: nhsExcludedMockLocationResult,
+      });
+      jest.spyOn(openSearchService['openSearchClient'], 'search').mockImplementation(mockLocationSearch);
+      const results = await openSearchService.queryByLocation(mockLocationInput);
+      expect(results).toEqual([]);
+    });
   });
 });
 

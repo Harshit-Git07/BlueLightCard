@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.57.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.57.0...bluelightcard/mobile-hybrid-v1.57.1) (2025-02-05)
+
+
+### Other Changes
+
+* Updated Hybrid README to trigger new release ([#3648](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3648)) ([2ef2aa3](https://github.com/bluelightcard/BlueLightCard-2.0/commit/2ef2aa354e424aeee5de54fb417e4b77729d80e0))
+
 ## [1.57.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.56.0...bluelightcard/mobile-hybrid-v1.57.0) (2025-01-31)
 
 

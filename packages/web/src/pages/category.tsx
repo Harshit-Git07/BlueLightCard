@@ -25,8 +25,11 @@ import getI18nStaticProps from '@/utils/i18nStaticProps';
 import useCategoryData from '@/hooks/useCategoryData';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 
-const CategorySkeleton: FC = () => {
-  const isMobile = useMobileMediaQuery();
+type CategorySkeletonProps = {
+  isMobile?: boolean;
+};
+
+const CategorySkeleton: FC<CategorySkeletonProps> = ({ isMobile = false }) => {
   const viewBox = '0 0 300 10';
 
   return (
@@ -54,17 +57,18 @@ const CategorySkeleton: FC = () => {
 
 type CategoryContentProps = {
   categoryId: string;
+  isMobile?: boolean;
   onCategoryView(category: PaginatedCategoryData): void;
   onOfferClick(category: PaginatedCategoryData): OfferEventHandler;
 };
 
 const CategoryContent: FC<CategoryContentProps> = ({
   categoryId,
+  isMobile = false,
   onCategoryView,
   onOfferClick,
 }) => {
   const categoryViewLogged = useRef<string>('');
-  const isMobile = useMobileMediaQuery();
 
   const [page, setPage] = useState(1);
   const pageSize = isMobile ? 6 : 12;
@@ -101,6 +105,7 @@ const CategoryContent: FC<CategoryContentProps> = ({
 };
 
 const CategoryPage: NextPage = () => {
+  const isMobile = useMobileMediaQuery();
   const platformAdapter = usePlatformAdapter();
   const router = useRouter();
   const { viewOffer } = useOfferDetails();
@@ -176,9 +181,10 @@ const CategoryPage: NextPage = () => {
       nestedClassName="mx-0 px-0 laptop:mx-auto laptop:px-5 flex flex-col gap-6"
     >
       <ErrorBoundary key={categoryId} fallback={<ErrorState page="flexi_menu" />}>
-        <Suspense fallback={<CategorySkeleton />}>
+        <Suspense fallback={<CategorySkeleton isMobile={isMobile} />}>
           <CategoryContent
             categoryId={categoryId}
+            isMobile={isMobile}
             onCategoryView={onCategoryView}
             onOfferClick={onCategoryOfferClick}
           />

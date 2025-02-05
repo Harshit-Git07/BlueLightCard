@@ -21,9 +21,11 @@ import getI18nStaticProps from '@/utils/i18nStaticProps';
 import useFlexibleOffersData from '@/hooks/useFlexibleOffersData';
 import withAuthProviderLayout from '@/hoc/withAuthProviderLayout';
 
-const FlexibleOffersSkeleton: FC = () => {
-  const isMobile = useMobileMediaQuery();
+type FlexibleOffersProps = {
+  isMobile?: boolean;
+};
 
+const FlexibleOffersSkeleton: FC<FlexibleOffersProps> = ({ isMobile = false }) => {
   const viewBox = isMobile ? '0 0 300 300' : '0 0 300 180';
 
   return (
@@ -51,9 +53,8 @@ const FlexibleOffersSkeleton: FC = () => {
   );
 };
 
-const FlexibleOffersContent: FC = () => {
+const FlexibleOffersContent: FC<FlexibleOffersProps> = ({ isMobile = false }) => {
   const router = useRouter();
-  const isMobile = useMobileMediaQuery();
   const platformAdapter = usePlatformAdapter();
   const { viewOffer } = useOfferDetails();
 
@@ -135,14 +136,16 @@ const FlexibleOffersContent: FC = () => {
 };
 
 const FlexibleOffersPage: NextPage = () => {
+  const isMobile = useMobileMediaQuery();
+
   return (
     <Container
       className="py-0 mb-0 laptop:py-6"
       nestedClassName="mx-0 px-0 laptop:mx-auto laptop:px-5 flex flex-col gap-6"
     >
       <ErrorBoundary fallback={<ErrorState page="flexi_menu" />}>
-        <Suspense fallback={<FlexibleOffersSkeleton />}>
-          <FlexibleOffersContent />
+        <Suspense fallback={<FlexibleOffersSkeleton isMobile={isMobile} />}>
+          <FlexibleOffersContent isMobile={isMobile} />
         </Suspense>
       </ErrorBoundary>
     </Container>

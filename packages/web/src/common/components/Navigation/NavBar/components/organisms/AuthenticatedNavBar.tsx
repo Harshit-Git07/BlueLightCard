@@ -6,6 +6,7 @@ import AccountButton from '../atoms/AccountButton';
 import DesktopNavigation from './DesktopNavigation';
 import Logo from '@/components/Logo';
 import MobileNavigation from './MobileNavigation';
+import MobileNavToggleButton from '../atoms/MobileNavToggleButton';
 import SearchDropDown from '@/page-components/SearchDropDown/SearchDropDown';
 
 const AuthenticatedNavBar = ({
@@ -16,7 +17,7 @@ const AuthenticatedNavBar = ({
   onSearchCompanyChange,
   onAccountClick,
 }: AuthenticatedNavBarProps) => {
-  const [accountOverlayOpen, setAccountOverlayOpen] = useState<boolean>(false);
+  const [mobileOverlayOpen, setMobileOverlayOpen] = useState<boolean>(false);
   const [searchOverlayOpen, setSearchOverlayOpen] = useState<boolean>(false);
   const [term, setTerm] = useState('');
 
@@ -39,8 +40,10 @@ const AuthenticatedNavBar = ({
       platformAdapter.navigate('/your-card');
       return;
     }
+  };
 
-    setAccountOverlayOpen((isOpen) => !isOpen);
+  const onMobileNavButtonClick = () => {
+    setMobileOverlayOpen((isOpen) => !isOpen);
   };
 
   const onSearchInputFocus = useCallback(() => {
@@ -109,13 +112,13 @@ const AuthenticatedNavBar = ({
             : ''
         }`}
       >
-        <div className="pt-4 tablet:pt-0 h-auto desktop:h-[72px] px-4 tablet:px-14 laptop:container laptop:mx-auto flex flex-wrap content-center items-center">
+        <div className="pt-4 tablet:pt-0 h-auto px-4 laptop:container laptop:mx-auto flex flex-wrap desktop:flex-nowrap content-center items-center">
           <div className="h-[35px] tablet:h-[42px] desktop:h-[55px] grow flex">
             <Logo url="/members-home" />
           </div>
 
           {!useModernAccountNavigation && (
-            <div className="w-auto hidden tablet:block tablet:w-full h-[72px] desktop:w-auto order-none tablet:order-last desktop:order-none desktop:mx-7">
+            <div className="w-auto hidden tablet:block tablet:w-full h-[72px] desktop:w-auto order-none tablet:order-last desktop:order-none mx-0 mx-4 2xl:mx-7 grow 2xl:grow-0">
               <DesktopNavigation navigationItems={navigationItems} />
             </div>
           )}
@@ -133,13 +136,22 @@ const AuthenticatedNavBar = ({
             />
           </div>
 
-          <div className={!useModernAccountNavigation ? 'tablet:hidden' : ''}>
-            <AccountButton
-              isToggled={!useModernAccountNavigation && accountOverlayOpen}
-              onClick={onAccountButtonClick}
-            />
+          <div className="flex gap-4">
+            <div className={!useModernAccountNavigation ? 'hidden' : ''}>
+              <AccountButton
+                isToggled={!useModernAccountNavigation && mobileOverlayOpen}
+                onClick={onAccountButtonClick}
+              />
+            </div>
 
-            {!useModernAccountNavigation && accountOverlayOpen && (
+            <div className={!useModernAccountNavigation ? 'tablet:hidden' : 'hidden'}>
+              <MobileNavToggleButton
+                isMenuOpen={mobileOverlayOpen}
+                onIconClick={onMobileNavButtonClick}
+              />
+            </div>
+
+            {!useModernAccountNavigation && mobileOverlayOpen && (
               <MobileNavigation navigationItems={navigationItems} />
             )}
           </div>

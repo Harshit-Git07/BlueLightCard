@@ -13,7 +13,7 @@ const AccountButton = ({ isToggled, onClick }: Props) => {
       aria-label="My Account"
       className={`flex h-full justify-center items-center gap-1 cursor-pointer text-NavBar-icon-colour dark:text-NavBar-icon-colour-dark`}
       onClick={onClick}
-      data-testid="mobile-nav-toggle-button"
+      data-testid="mobile-account-toggle-button"
     >
       <FontAwesomeIcon
         className="fa-lg"

@@ -14,7 +14,7 @@ const MobileNavToggleButton = ({ isMenuOpen, onIconClick }: Props) => {
       onClick={onIconClick}
       data-testid="mobile-nav-toggle-button"
     >
-      <FontAwesomeIcon icon={isMenuOpen ? faClose : faBars} />
+      <FontAwesomeIcon icon={isMenuOpen ? faClose : faBars} width={24} height={24} />
     </button>
   );
 };

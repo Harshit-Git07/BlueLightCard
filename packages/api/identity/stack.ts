@@ -659,11 +659,11 @@ function deployDdsSpecificResources(stack: Stack) {
     * 1. Add the corresponding tenants in Auth0 for each AWS account.
     * 2. Update the Event Bus ARN and the source prefix in the IdentityStackConfigResolver.
     * 
-    * This rule will be enabled only for the **production** and **staging** stages.
+    * This rule will be enabled only for the **production-dds** and **staging-dds** stages.
     * If you need to enable the rule for other stages, please update the condition in the configuration accordingly.
     */
 
-    if(stack.stage === STAGES.PRODUCTION || stack.stage === STAGES.STAGING) {
+    if(stack.stage === STAGES.DDSPRODUCTION || stack.stage === STAGES.DDSSTAGING) {
       // Load existing EventBus using ARN
       const auth0EventBus = EventBus.fromEventBusArn(stack, 'auth0EventBusDds', identityConfig.auth0EventBusConfig.auth0EventBusArn);
 

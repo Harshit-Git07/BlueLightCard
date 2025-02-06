@@ -1,4 +1,3 @@
-import { PortableTextBlock, toPlainText } from '@portabletext/react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useSetAtom } from 'jotai';
 import { type NextPage } from 'next';
@@ -58,11 +57,7 @@ function CompanyAboutWrapper({ companyId }: Readonly<{ companyId: string }>) {
     <div className="mt-4">
       <CompanyAbout
         CompanyName={`About ${name}`}
-        CompanyDescription={
-          cmsEnabled && description
-            ? toPlainText(description as PortableTextBlock)
-            : description ?? ''
-        }
+        CompanyDescription={description}
         platform={PlatformVariant.MobileHybrid}
       />
     </div>
@@ -71,8 +66,7 @@ function CompanyAboutWrapper({ companyId }: Readonly<{ companyId: string }>) {
 
 const SheetHandler = ({ companyId }: { companyId: string }) => {
   const setSpinner = useSetAtom(spinner);
-  const { is } = useAmplitude();
-  const cmsEnabled = is(FeatureFlags.CMS_OFFERS, AmplitudeFeatureFlagState.On);
+  const cmsEnabled = useCmsEnabled();
 
   const { viewOffer } = useOfferDetails();
   const router = useRouter();

@@ -73,7 +73,7 @@ export function getOfferQuery(id: string | undefined | null, useCms: boolean, is
 
   return queryOptions({
     enabled: !!id && isEnabled,
-    queryKey: ['offer', id],
+    queryKey: ['offer', id, useCms],
     queryFn: () => getOffer(adapter, id, useCms),
     retry: false,
   });
@@ -84,7 +84,7 @@ export function getCompanyQuery(id: string, useCms: boolean, isEnabled = true) {
 
   return queryOptions({
     enabled: !!id && isEnabled,
-    queryKey: ['company', id],
+    queryKey: ['company', id, useCms],
     queryFn: () => getCompany(adapter, id, useCms),
   });
 }
@@ -94,7 +94,7 @@ export function getCompanyOffersQuery(id: string, useCms: boolean, isEnabled = t
 
   return queryOptions({
     enabled: !!id && isEnabled,
-    queryKey: ['company-offers', id],
+    queryKey: ['company-offers', id, useCms],
     queryFn: () => getOffersByCompany(adapter, id, useCms),
   });
 }

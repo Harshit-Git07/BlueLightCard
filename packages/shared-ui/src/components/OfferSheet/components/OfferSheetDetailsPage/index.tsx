@@ -216,7 +216,10 @@ const OfferSheetDetailsPage: FC = () => {
     setIsModalOpen(true);
     await platformAdapter.writeTextToClipboard(code);
 
-    if (flag('conv-blc-4-0-interstitial') && flag('conv-blc-4-0-interstitial') === 'treatment') {
+    if (
+      flag('conv-blc-4-0-interstitial-v2') &&
+      flag('conv-blc-4-0-interstitial-v2') === 'treatment'
+    ) {
       setTimeout(() => {
         setTimeout(() => setIsModalOpen(false), 750);
         return handleRedirect(url);
@@ -581,7 +584,7 @@ const OfferSheetDetailsPage: FC = () => {
 
   return (
     <div className={css}>
-      {flag('conv-blc-4-0-interstitial') && (
+      {flag('conv-blc-4-0-interstitial-v2') && (
         <OfferInterstitial
           isOpen={isModalOpen}
           imageSource={offer.image}

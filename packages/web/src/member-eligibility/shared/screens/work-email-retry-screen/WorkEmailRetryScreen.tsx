@@ -14,6 +14,8 @@ import { defaultScreenTitle } from '@/root/src/member-eligibility/shared/constan
 import { useLogAnalyticsPageView } from '@/root/src/member-eligibility/shared/hooks/use-ampltude-event-log/UseAmplitudePageLog';
 import { useLogAmplitudeEvent } from '@/root/src/member-eligibility/shared/utils/LogAmplitudeEvent';
 import { workEmailRetryEvents } from '@/root/src/member-eligibility/shared/screens/work-email-retry-screen/amplitude-events/WorkEmailRetryEvents';
+import { fetchWithAuth } from '@/root/src/member-eligibility/shared/utils/FetchWithAuth';
+import { serviceLayerUrl } from '@/root/src/member-eligibility/constants/ServiceLayerUrl';
 
 export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
   eligibilityDetailsState,
@@ -35,9 +37,16 @@ export const WorkEmailRetryScreen: FC<VerifyEligibilityScreenProps> = ({
     }
   }, [eligibilityDetails.flow]);
 
-  // TODO: This will need to be updated to add with the logic to resend the email via API
-  const resendVerificationEmail = useCallback(() => {
+  const resendVerificationEmail = useCallback(async () => {
     logAnalyticsEvent(workEmailRetryEvents.onResendClicked(eligibilityDetails));
+
+    await fetchWithAuth(
+      `${serviceLayerUrl}/members/${eligibilityDetails.member?.id}/applications/${eligibilityDetails.member?.application?.id}/resendTrustedDomainEmail`,
+      {
+        method: 'POST',
+      }
+    );
+
     restartTimer();
   }, [eligibilityDetails, logAnalyticsEvent, restartTimer]);
 

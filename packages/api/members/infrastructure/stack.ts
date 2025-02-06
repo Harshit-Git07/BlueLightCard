@@ -63,7 +63,6 @@ const SERVICE_NAME = 'members';
 export async function MembersStack({ app, stack }: StackContext) {
   stack.tags.setTag('service', SERVICE_NAME);
   stack.setDefaultFunctionProps(getDefaultFunctionProps(stack.region));
-
   const { vpc } = use(Shared);
 
   // Profile table - profiles, cards, notes, applications, promo codes
@@ -223,7 +222,7 @@ export async function MembersApiStack({ app, stack }: StackContext) {
     }),
     ...memberApplicationRoutes({
       ...defaultRouteProps,
-      bind: [profilesTable, organisationsTable, documentUploadBucket],
+      bind: [profilesTable, organisationsTable, documentUploadBucket, emailTemplatesBucket],
     }),
     ...memberOrganisationsRoutes({ ...defaultRouteProps, bind: [organisationsTable] }),
     ...memberMarketingRoutes({ ...defaultRouteProps, bind: [emailTemplatesBucket] }),

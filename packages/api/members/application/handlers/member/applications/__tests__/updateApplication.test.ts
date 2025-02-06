@@ -9,6 +9,7 @@ import { emptyContextStub } from '@blc-mono/members/application/utils/testing/em
 import { jest } from '@jest/globals';
 
 jest.mock('@blc-mono/members/application/services/applicationService');
+jest.mock('@blc-mono/members/application/services/emailService');
 
 const memberId = uuidv4();
 const applicationId = uuidv4();

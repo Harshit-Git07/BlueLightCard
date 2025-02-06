@@ -18,7 +18,7 @@ export function memberApplicationRoutes(
     'MemberApplicationHandlerFunction',
     {
       bind: defaultRouteProps.bind,
-      permissions: defaultRouteProps.permissions,
+      permissions: [...(defaultRouteProps.permissions ?? []), 'ses:SendEmail', 's3:GetObject'],
       handler:
         'packages/api/members/application/handlers/member/applications/memberApplicationHandler.handler',
       environment: {
@@ -80,5 +80,18 @@ export function memberApplicationRoutes(
       handlerFunction,
       name: 'PaymentConfirmed',
     }),
+    'POST /members/{memberId}/applications/{applicationId}/resendTrustedDomainEmail':
+      Route.createRoute({
+        ...defaultRouteProps,
+        handlerFunction,
+        name: 'ResendTrustedDomainEmail',
+      }),
+    'GET /members/{memberId}/applications/{applicationId}/verifyTrustedDomain/{trustedDomainVerificationUid}':
+      Route.createRoute({
+        ...defaultRouteProps,
+        authorizer: undefined,
+        handlerFunction,
+        name: 'VerifyTrustedDomain',
+      }),
   };
 }

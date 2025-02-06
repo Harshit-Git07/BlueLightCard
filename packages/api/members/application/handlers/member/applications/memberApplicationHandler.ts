@@ -33,6 +33,14 @@ import {
   paymentConfirmedHandler,
 } from '@blc-mono/members/application/handlers/member/applications/handlers/paymentConfirmedHandler';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
+import {
+  isResendTrustedDomainEmailEvent,
+  resendTrustedDomainEmailHandler,
+} from '@blc-mono/members/application/handlers/member/applications/handlers/resendTrustedDomainEmailHandler';
+import {
+  isVerifyTrustedDomainHandlerEvent,
+  verifyTrustedDomainHandler,
+} from '@blc-mono/members/application/handlers/member/applications/handlers/verifyTrustedDomainHandler';
 
 const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<unknown> => {
   if (isApplyPromoCodeEvent(event)) {
@@ -65,6 +73,14 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<unknown> =
 
   if (isValidatePromoCodeEvent(event)) {
     return await validatePromoCodeHandler(event);
+  }
+
+  if (isResendTrustedDomainEmailEvent(event)) {
+    return await resendTrustedDomainEmailHandler(event);
+  }
+
+  if (isVerifyTrustedDomainHandlerEvent(event)) {
+    return await verifyTrustedDomainHandler(event);
   }
 
   throw new ValidationError('Invalid route or event');

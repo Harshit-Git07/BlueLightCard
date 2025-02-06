@@ -15,6 +15,9 @@ import {
 import { auth0LinkReturn, emailFrom, EmailTemplate } from '../types/emailTypes';
 import { secretsObject } from '../types/auth0types';
 import { EmailPayload } from '@blc-mono/shared/models/members/emailModel';
+import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
+import { applicationService } from '@blc-mono/members/application/services/applicationService';
+import { v4 as uuidv4 } from 'uuid';
 
 const secrets: secretsObject = {
   domain: getEnvOrDefault(MemberStackEnvironmentKeys.SERVICE_LAYER_AUTH0_DOMAIN, ''),
@@ -41,6 +44,27 @@ export class EmailService {
     this.sourceEmail = getEnvOrDefault(MemberStackEnvironmentKeys.MEMBERS_EMAIL_FROM, emailFrom);
   }
 
+  public async sendTrustedDomainEmail(
+    payload: EmailPayload,
+    memberId: string,
+    applicationId: string,
+    baseUrl: string,
+  ): Promise<void> {
+    const trustedDomainVerificationUid = await this.addTrustedDomainUuidToApplication(
+      memberId,
+      applicationId,
+    );
+    const emailPayload = this.generatePayloadFromTrustedDomainEmail(
+      trustedDomainVerificationUid,
+      memberId,
+      applicationId,
+      payload,
+      baseUrl,
+    );
+
+    await this.sendViaSes('trusted_domain_work_email', emailPayload);
+  }
+
   public async sendEmail(emailType: EmailTemplate, payload: EmailPayload): Promise<void> {
     switch (emailType) {
       case 'auth0_verification':
@@ -54,7 +78,6 @@ export class EmailService {
           'incorrect_addresss_reminder',
           'validate_renewal',
           'verify_new_email',
-          'trusted_domain_work_email',
         ];
         if (emailTypesVerification.includes(emailType)) {
           const { url } = await this.verifyEmailSteps(payload);
@@ -66,10 +89,44 @@ export class EmailService {
             },
           };
         }
+
         await this.sendViaSes(emailType, payload);
         break;
       }
     }
+  }
+
+  private async addTrustedDomainUuidToApplication(
+    memberId: string,
+    applicationId: string,
+  ): Promise<string> {
+    const application = await applicationService().getApplication(memberId, applicationId);
+
+    if (!application) {
+      throw new ValidationError('Application not found');
+    }
+    const trustedDomainVerificationUid = uuidv4();
+    application.trustedDomainVerificationUid = trustedDomainVerificationUid;
+
+    await applicationService().updateApplication(memberId, applicationId, application);
+
+    return trustedDomainVerificationUid;
+  }
+
+  private generatePayloadFromTrustedDomainEmail(
+    trustedDomainVerificationUid: string,
+    memberId: string,
+    applicationId: string,
+    payload: EmailPayload,
+    baseUrl: string,
+  ): EmailPayload {
+    return {
+      ...payload,
+      content: {
+        ...payload.content,
+        Link: `${baseUrl}/members/${memberId}/applications/${applicationId}/verifyTrustedDomain/${trustedDomainVerificationUid}`,
+      },
+    };
   }
 
   public async sendEmailChangeRequest(newEmail: string): Promise<void> {
@@ -114,8 +171,7 @@ export class EmailService {
   }
 
   private async sendViaSes(emailType: EmailTemplate, payload: EmailPayload): Promise<void> {
-    const { email, workEmail } = payload;
-    const emailToSendTo = workEmail ?? email;
+    const { email } = payload;
     const template = await getEmailTemplate(this.bucketName, emailType, payload);
     if (!template) {
       logger.error({ message: 'no template found' });
@@ -126,7 +182,7 @@ export class EmailService {
       await this.sesClient.sendEmail({
         Source: this.sourceEmail,
         Destination: {
-          ToAddresses: [emailToSendTo],
+          ToAddresses: [email],
         },
         Message: {
           Body: {

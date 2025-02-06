@@ -35,6 +35,7 @@ export const ApplicationModel = createZodNamedType(
     rejectionReason: z.nativeEnum(RejectionReason).nullable().optional(),
     cardNumber: z.string().optional(),
     ingestionLastTriggered: z.string().datetime().optional(),
+    trustedDomainVerificationUid: z.string().optional(),
   }),
 );
 export type ApplicationModel = z.infer<typeof ApplicationModel>;

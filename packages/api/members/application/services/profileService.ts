@@ -17,6 +17,8 @@ import { Auth0ClientService } from '@blc-mono/members/application/auth0/auth0Cli
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
 import { EmailService } from '@blc-mono/members/application/email/emailService';
 
+let profileServiceSingleton: ProfileService;
+
 export class ProfileService {
   constructor(
     private readonly repository: ProfileRepository = new ProfileRepository(),
@@ -175,4 +177,12 @@ export class ProfileService {
       throw error;
     }
   }
+}
+
+export function profileService(): ProfileService {
+  if (!profileServiceSingleton) {
+    profileServiceSingleton = new ProfileService();
+  }
+
+  return profileServiceSingleton;
 }

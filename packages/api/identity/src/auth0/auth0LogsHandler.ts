@@ -37,6 +37,9 @@ export const handler = async (event: EventBridgeEvent<any, any>) : Promise<objec
   const brand: string = getEnv(IdentityStackEnvironmentKeys.BRAND);
 
   const eventLog = event.detail.data as LogData;
+  if(!eventLog.client_name){
+    return Response.OK({ message: '' });
+  }
 
   const command = new PutRecordCommand({
     DeliveryStreamName: streamName,

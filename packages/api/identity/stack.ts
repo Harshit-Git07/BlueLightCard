@@ -538,21 +538,33 @@ export function Identity({ stack }: StackContext) {
       false,
     )
   
-    // Load existing EventBus using ARN
-    const auth0EventBus = EventBus.fromEventBusArn(stack, 'auth0EventBus', identityConfig.auth0EventBusConfig.auth0EventBusArn);
+     /*
+      * To enable the following Auth0 event rule for multiple AWS accounts:
+      * 
+      * 1. Add the corresponding tenants in Auth0 for each AWS account.
+      * 2. Update the Event Bus ARN and the source prefix in the IdentityStackConfigResolver.
+      * 
+      * This rule will be enabled only for the **production** and **staging** stages.
+      * If you need to enable the rule for other stages, please update the condition in the configuration accordingly.
+      */
 
-    // Create a new rule with a pattern
-    new Rule(stack, 'auth0EventRule', {
-      eventBus: auth0EventBus,
-      eventPattern: {
-        source: events.Match.prefix(identityConfig.auth0EventBusConfig.auth0EventSourcePrefix),
-        detail: {
-          data: {
-            type: Object.keys(Auth0EventTypes),
+     if(stack.stage === STAGES.PRODUCTION || stack.stage === STAGES.STAGING) {
+      // Load existing EventBus using ARN
+      const auth0EventBus = EventBus.fromEventBusArn(stack, 'auth0EventBus', identityConfig.auth0EventBusConfig.auth0EventBusArn);
+
+      // Create a new rule with a pattern
+      new Rule(stack, 'auth0EventRule', {
+        eventBus: auth0EventBus,
+        eventPattern: {
+          source: events.Match.prefix(identityConfig.auth0EventBusConfig.auth0EventSourcePrefix),
+          detail: {
+            data: {
+              type: Object.keys(Auth0EventTypes),
+            }
           }
-        }
-      },
-    }).addTarget(auth0EventHandlerRule);
+        },
+      }).addTarget(auth0EventHandlerRule);
+    }
 
     return {
       identityApi,
@@ -641,21 +653,33 @@ function deployDdsSpecificResources(stack: Stack) {
       true,
     )
   
-    // Load existing EventBus using ARN
-    const auth0EventBus = EventBus.fromEventBusArn(stack, 'auth0EventBusDds', identityConfig.auth0EventBusConfig.auth0EventBusArn);
+    /*
+    * To enable the following Auth0 event rule for multiple AWS accounts:
+    * 
+    * 1. Add the corresponding tenants in Auth0 for each AWS account.
+    * 2. Update the Event Bus ARN and the source prefix in the IdentityStackConfigResolver.
+    * 
+    * This rule will be enabled only for the **production** and **staging** stages.
+    * If you need to enable the rule for other stages, please update the condition in the configuration accordingly.
+    */
 
-    // Create a new rule with a pattern
-    new Rule(stack, 'auth0EventRuleDds', {
-      eventBus: auth0EventBus,
-      eventPattern: {
-        source: events.Match.prefix(identityConfig.auth0EventBusConfig.auth0EventSourcePrefix),
-        detail: {
-          data: {
-            type: Object.keys(Auth0EventTypes),
+    if(stack.stage === STAGES.PRODUCTION || stack.stage === STAGES.STAGING) {
+      // Load existing EventBus using ARN
+      const auth0EventBus = EventBus.fromEventBusArn(stack, 'auth0EventBusDds', identityConfig.auth0EventBusConfig.auth0EventBusArn);
+
+      // Create a new rule with a pattern
+      new Rule(stack, 'auth0EventRuleDds', {
+        eventBus: auth0EventBus,
+        eventPattern: {
+          source: events.Match.prefix(identityConfig.auth0EventBusConfig.auth0EventSourcePrefix),
+          detail: {
+            data: {
+              type: Object.keys(Auth0EventTypes),
+            }
           }
-        }
-      },
-    }).addTarget(auth0EventHandlerRule);
+        },
+      }).addTarget(auth0EventHandlerRule);
+    }
 
   stack.addOutputs({
     CognitoUserPoolMembersClient: cognitoUserPool.userPoolId,

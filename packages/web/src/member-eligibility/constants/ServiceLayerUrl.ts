@@ -18,5 +18,4 @@
 // members-admin-api-au.blcshine.io
 // members-admin-api-dds.blcshine.io
 
-// export const serviceLayerUrl = 'https://staging-members-api.blcshine.io';
-export const serviceLayerUrl = 'https://so9ztslp40.execute-api.eu-west-2.amazonaws.com/v1';
+export const serviceLayerUrl = 'https://staging-members-api.blcshine.io';

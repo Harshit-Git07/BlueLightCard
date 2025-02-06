@@ -113,7 +113,7 @@ jobs:
         brand: ['blc-uk', 'blc-au', 'dds-uk']
         environment: ['preview', 'production']
         sanityId: ['td1j6hke']
-        exclude: ${{ github.ref != 'refs/heads/main' && fromJSON('[{"environment":"production"}]') || fromJSON('[{"environment":"preview"}]') }}
+        exclude: ${{ github.ref != 'refs/heads/main' && fromJSON('[{"environment":"production"}]') || fromJSON('[]') }}
     environment:
       name: cms-pages-${{ matrix.brand }} (${{ matrix.environment }})
       url: ${{ steps.deploy.outputs.deployment-url }}
@@ -217,14 +217,8 @@ jobs:
           NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ matrix.sanityId }}
           NEXT_PUBLIC_SANITY_DATASET_NAME: ${{ matrix.environment == 'preview' && 'staging' || matrix.environment }}
           NEXT_PUBLIC_APP_BRAND: ${{ matrix.brand }}
+          NEXT_PUBLIC_SANITY_TOKEN: ${{ secrets.SANITY_API_TOKEN }}
+          NEXT_PUBLIC_SANITY_STUDIO_URL: ${{ matrix.environment == 'preview' && 'https://cms-staging.blcshine.io' || 'https://cms.blcshine.io' }}
         working-directory: ./packages/cms-pages
         # Extract the url from the deployed output and add it to the outputs of the job
-        run: |
-          npm run build:worker
-          if [ "${{ matrix.environment }}" = "preview" ]; then
-            output=$(npm run upload-version:worker -- --tag ${{ github.ref }})
-          else
-            output=$(npm run deploy:worker)
-          fi
-          URL=$(echo "$output" | grep -o -P "\s*(https?://[^\s\"'>]+)")
-          echo "deployment-url=$URL" >> $GITHUB_OUTPUT
+        run: bash ../../.github/scripts/deploy-worker-with-previews.sh ${{ (github.ref == 'refs/heads/main' && matrix.environment == 'preview') && 'staging' || matrix.environment }} "${{ github.ref }}" blc-mono-${{ matrix.brand }}-cms-pages-${{ matrix.environment }}

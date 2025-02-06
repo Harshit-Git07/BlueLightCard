@@ -4,6 +4,7 @@ import client from '@/lib/sanity/client';
 import dev from '@/lib/env';
 import { draftMode } from 'next/headers';
 import type { QueryParams, ResponseQueryOptions } from 'next-sanity';
+import { getRevalidationValue } from '../utils';
 
 export { default as groq } from 'groq';
 
@@ -36,7 +37,7 @@ export async function fetchSanity<T = any>(
           perspective: 'published',
           useCdn: false,
           next: {
-            revalidate: Number(process.env.NEXT_PUBLIC_REVALIDATE) || false,
+            revalidate: getRevalidationValue(),
             ...next,
           },
         },
@@ -56,7 +57,7 @@ export async function fetchSanityStatic<T = any>(
     perspective: 'published',
     useCdn: false,
     next: {
-      revalidate: Number(process.env.NEXT_PUBLIC_REVALIDATE) || false,
+      revalidate: getRevalidationValue(),
       ...next,
     },
   });

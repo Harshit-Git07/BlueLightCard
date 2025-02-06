@@ -14,3 +14,8 @@ export function slug(str: string) {
     .replace(/[\s\W]+/g, '-')
     .replace(/-$/, '');
 }
+
+export function getRevalidationValue() {
+  const revalidateTime = Number(process.env.NEXT_PUBLIC_REVALIDATE);
+  return !isNaN(revalidateTime) ? revalidateTime : false;
+}

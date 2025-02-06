@@ -1,4 +1,3 @@
-import { draftMode } from 'next/headers';
 import AccordionList from './AccordionList';
 import BlogRollup from './blog/Rollup';
 import CreativeModule from './CreativeModule';
@@ -19,13 +18,9 @@ import MenuOffer from './MenuOffer';
 import Content from './RichtextModule/Content';
 
 export default function Modules({ modules, title }: { modules?: Sanity.Module[]; title?: string }) {
-  // console.log("Rendering modules", modules?.map(module => module._type));
-  const isDraftMode = draftMode();
   return (
     <>
-      {isDraftMode && <div className="p-2 text-sm">{title}</div>}
       {modules?.map((module) => {
-        // console.log("Attempting to render module of type:", module);
         switch (module._type) {
           case 'accordion-list':
             return <AccordionList {...module} key={module._key} />;

@@ -41,7 +41,7 @@ describe('IdentityStackConfigResolver', () => {
         auth0OidcProvider: 'https://access.blcshine.io/'
       },
       auth0EventBusConfig: {
-        auth0EventBusArn: 'arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/blc-uk-production-53dea5ab-60b5-4b05-94aa-d9e83d24e915/auth0.logs',
+        auth0EventBusArn: 'arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/blc-uk-production-78006d0a-740a-43f6-a86f-fe998722f4fe/auth0.logs',
         auth0EventSourcePrefix: 'aws.partner/auth0.com',
       },
     });

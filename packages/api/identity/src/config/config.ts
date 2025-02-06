@@ -54,7 +54,7 @@ export class IdentityStackConfigResolver {
           auth0OidcProvider: 'https://access.blcshine.io/',
         },
         auth0EventBusConfig: {
-          auth0EventBusArn: 'arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/blc-uk-production-53dea5ab-60b5-4b05-94aa-d9e83d24e915/auth0.logs',
+          auth0EventBusArn: 'arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/blc-uk-production-78006d0a-740a-43f6-a86f-fe998722f4fe/auth0.logs',
           auth0EventSourcePrefix: 'aws.partner/auth0.com',
         },
       },
@@ -66,7 +66,7 @@ export class IdentityStackConfigResolver {
           auth0OidcProvider: 'https://access-au.blcshine.io/',
         },
         auth0EventBusConfig: {
-          auth0EventBusArn: 'arn:aws:events:ap-southeast-2::event-source/aws.partner/auth0.com/blc-au-production-6be7a852-1149-46c1-80b5-b408ddc3c270/auth0.logs',
+          auth0EventBusArn: 'arn:aws:events:ap-southeast-2::event-source/aws.partner/auth0.com/blc-au-production-39c0ecb7-cd2b-45fe-b756-01dfbbb1b4b0/auth0.logs',
           auth0EventSourcePrefix: 'aws.partner/auth0.com',
         },
       },
@@ -78,7 +78,7 @@ export class IdentityStackConfigResolver {
           auth0OidcProvider: 'https://access-dds.blcshine.io/',
         },
         auth0EventBusConfig: {
-          auth0EventBusArn: 'arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/dds-uk-production-6e66f117-cdb5-477e-8aa4-89deba2d8522/auth0.logs',
+          auth0EventBusArn: 'arn:aws:events:eu-west-2::event-source/aws.partner/auth0.com/dds-uk-production-012a7bcd-7326-494a-aab8-fcaab05c90dc/auth0.logs',
           auth0EventSourcePrefix: 'aws.partner/auth0.com',
         },
       },

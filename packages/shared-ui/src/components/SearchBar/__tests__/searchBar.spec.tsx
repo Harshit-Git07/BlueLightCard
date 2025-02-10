@@ -6,10 +6,10 @@ const {
   Default,
   Edited,
   Submitted,
+  SubmittedAndCleared,
   Cleared,
   Reset,
-  SubmittedError,
-  EditedError,
+  Error,
   ExperimentalDark,
   ExperimentalLight,
 } = composeStories(stories);
@@ -63,6 +63,23 @@ it('submits the search bar', async () => {
 
   await act(() => Submitted.play({ canvasElement: container }));
 
+  const searchBar = screen.getByLabelText('Search bar');
+  expect(searchBar).toHaveValue('Nike');
+
+  expect(onSearch).toHaveBeenCalledWith('Nike');
+  expect(container).toMatchSnapshot();
+});
+
+it('submits and clears the search bar', async () => {
+  const onSearch = jest.fn();
+
+  const { container } = render(<SubmittedAndCleared onSearch={onSearch} />);
+
+  await act(() => SubmittedAndCleared.play({ canvasElement: container }));
+
+  const searchBar = screen.getByLabelText('Search bar');
+  expect(searchBar).toHaveValue('');
+
   expect(onSearch).toHaveBeenCalledWith('Nike');
   expect(container).toMatchSnapshot();
 });
@@ -92,22 +109,10 @@ it('resets the search bar', async () => {
 describe('displays an error', () => {
   jest.restoreAllMocks();
 
-  it('edits the search bar with incorrect value', async () => {
-    const onFocus = jest.fn();
-
-    const { container } = render(<EditedError onFocus={onFocus} />);
-
-    await act(() => EditedError.play({ canvasElement: container }));
-
-    expect(onFocus).toHaveBeenCalled();
-    expect(container).toMatchSnapshot();
-  });
-  it('shows an error when submitting less than the required characters', async () => {
+  it('shows the given error message', async () => {
     const onSearch = jest.fn();
 
-    const { container } = render(<SubmittedError onSearch={onSearch} />);
-
-    await act(() => SubmittedError.play({ canvasElement: container }));
+    const { container } = render(<Error onSearch={onSearch} />);
 
     const errorMessage = screen.getByText('Enter 3 or more characters to search.');
     expect(errorMessage).toHaveClass('error-message');

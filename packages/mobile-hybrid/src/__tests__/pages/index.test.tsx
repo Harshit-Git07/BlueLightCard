@@ -1,6 +1,7 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import Home from '@/pages';
+import InvokeNativeNavigation from '@/invoke/navigation';
 import '@testing-library/jest-dom';
 import useOffers from '@/hooks/useOffers';
 import * as globals from '@/globals';
@@ -19,6 +20,15 @@ jest.mock('@/invoke/apiCall');
 jest.mock('@/modules/popularbrands/brands');
 jest.mock('@/hooks/useOffers');
 jest.mock('@/hooks/useFavouritedBrands');
+
+jest.mock('@/invoke/navigation', () => {
+  const navigateMock = jest.fn();
+  return jest.fn().mockImplementation(() => ({
+    navigate: navigateMock,
+  }));
+});
+
+const invokeNavigation = new InvokeNativeNavigation();
 
 jest.mock('swiper/react', () => ({
   Swiper: () => null,
@@ -92,6 +102,19 @@ describe('Home', () => {
     it('should render when home page is rendered', () => {
       const searchBar = screen.queryByPlaceholderText(placeholderText);
       expect(searchBar).toBeInTheDocument();
+    });
+
+    it('should navigate and clear on submit', async () => {
+      const searchBar = screen.getByPlaceholderText(placeholderText);
+
+      fireEvent.focusIn(searchBar);
+      await userEvent.type(searchBar, 'Nike');
+      fireEvent.keyDown(searchBar, { key: 'Enter' });
+
+      expect(invokeNavigation.navigate).toHaveBeenCalledWith(
+        '/offers.php?type=1&opensearch=1&search=Nike',
+      );
+      expect(searchBar).toHaveValue('');
     });
   });
 

@@ -14,6 +14,7 @@ import { GetSearchVariant } from '@/experiments/getSearchVariant';
 const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
   const router = useRouter();
   const [searchOverlayOpen, setSearchOverlayOpen] = useState<boolean>(false);
+  const [searchErrorMessage, setSearchErrorMessage] = useState<string>('');
 
   const platformAdapter = usePlatformAdapter();
   const { searchTerm, resetSearch } = useSearch(platformAdapter);
@@ -24,15 +25,26 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
     setSearchOverlayOpen(true);
   }, []);
 
+  const onSearchInputBlur = useCallback(() => {
+    setSearchOverlayOpen(false);
+  }, []);
+
   const onBack = useCallback(() => {
     setSearchOverlayOpen(false);
     if (canBackNav) {
+      resetSearch();
       router.replace('/search');
     }
-  }, [canBackNav, router]);
+  }, [resetSearch, canBackNav, router]);
 
   const onSearch = useCallback<SearchProps['onSearch']>(
     (termInput: string) => {
+      if (termInput.length < 3) {
+        setSearchErrorMessage('Enter 3 or more characters to search.');
+        return;
+      }
+
+      setSearchErrorMessage('');
       setSearchOverlayOpen(false);
       router.push(`/searchresults?search=${termInput}`);
     },
@@ -41,6 +53,7 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
   );
 
   const onClear = useCallback(() => {
+    setSearchErrorMessage('');
     resetSearch();
   }, [resetSearch]);
 
@@ -52,6 +65,7 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
         {/* Conversion experiment */}
         <SearchBar
           onFocus={onSearchInputFocus}
+          onBlur={onSearchInputBlur}
           onBackButtonClick={onBack}
           onClear={onClear}
           placeholderText={placeholder}
@@ -59,6 +73,7 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
           showBackArrow={canBackNav}
           onSearch={onSearch}
           experimentalSearchVariant={searchVariant}
+          errorMessage={searchErrorMessage}
         />
       </div>
       {searchOverlayOpen && (

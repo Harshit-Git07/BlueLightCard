@@ -108,6 +108,7 @@ const Home: NextPage<any> = () => {
         </Amplitude>
 
         <SearchBar
+          clearOnSubmit
           onSearch={(searchTerm) =>
             navigation.navigate(
               `/offers.php?type=1&opensearch=1&search=${encodeURIComponent(searchTerm)}`,

@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.57.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.57.1...bluelightcard/mobile-hybrid-v1.57.2) (2025-02-06)
+
+
+### Bug Fixes
+
+* reload queries when flags load in ([#3499](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3499)) ([22d66e8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/22d66e85d8680fb2a0ab0f4da386a026ec960559))
+
 ## [1.57.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.57.0...bluelightcard/mobile-hybrid-v1.57.1) (2025-02-05)
 
 

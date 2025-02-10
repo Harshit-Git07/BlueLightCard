@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.123.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.122.0...bluelightcard/identity-v1.123.0) (2025-02-06)
+
+
+### Features
+
+* add auth0 logs event bus rules ([#3650](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3650)) ([a96d67c](https://github.com/bluelightcard/BlueLightCard-2.0/commit/a96d67c1bd022d0c311a6d392440bdd748174e69))
+* check stages for auth0 logs rule ([#3657](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3657)) ([5ec6293](https://github.com/bluelightcard/BlueLightCard-2.0/commit/5ec6293495cbd3898f1804548f368e71b27785eb))
+* stage name different for dds ([#3662](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3662)) ([855b867](https://github.com/bluelightcard/BlueLightCard-2.0/commit/855b8670361c1e4225e5bc559b42ceef66731ec2))
+* update event bus arn ([#3659](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3659)) ([31f9db8](https://github.com/bluelightcard/BlueLightCard-2.0/commit/31f9db82da735d91b5e0b54d9a4b9434e75f0113))
+
+
+### Other Changes
+
+* Update shared authoriser ([#3596](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3596)) ([39b0d68](https://github.com/bluelightcard/BlueLightCard-2.0/commit/39b0d6894d12971a56a26e3e82539d1ea41ec3f0))
+
 ## [1.122.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/identity-v1.121.0...bluelightcard/identity-v1.122.0) (2025-01-22)
 
 

@@ -31,15 +31,20 @@ const Heading6Mock = createTypographyMock('h6');
 const BlockquoteMock = createTypographyMock('blockquote');
 
 const meta: Meta<typeof RichtextModule> = {
-  title: 'Modules/RichtextModule',
+  title: 'Modules/Richtext Module',
   component: RichtextModule,
+  parameters: {
+    status: 'done',
+    design: {
+      type: 'figma',
+      url: 'https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/2bUphiHBRlDyoRoctxwgGC/Static-Landing-Pages?node-id=2183-3902&t=vQH3YaYlBUUy83cT-0',
+    },
+  },
 };
-
-export default meta;
 
 type Story = StoryObj<typeof RichtextModule>;
 
-export const Normal: Story = {
+export const Default: Story = {
   args: {
     content: normalMock,
   },
@@ -92,3 +97,5 @@ export const Blockquote: Story = {
     tableOfContents: false,
   },
 };
+
+export default meta;

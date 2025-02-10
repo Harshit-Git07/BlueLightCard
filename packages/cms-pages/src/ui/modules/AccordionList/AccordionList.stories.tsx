@@ -82,7 +82,7 @@ const meta: Meta<typeof AccordionList> = {
     items,
   },
   parameters: {
-    status: 'wip',
+    status: 'done',
     design: {
       type: 'figma',
       url: 'https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/2bUphiHBRlDyoRoctxwgGC/Static-Landing-Pages?node-id=2143-4328&m=dev',

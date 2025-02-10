@@ -19,7 +19,7 @@ export async function generateMetadata() {
 
 async function getPage() {
   const brand = await getBrand();
-  return await fetchSanity<Sanity.Page>(
+  const page = await fetchSanity<Sanity.Page>(
     groq`*[_type == 'page' && brand->.code == $brand && metadata.slug.current == 'index'][0]{
 			...,
 			modules[]{
@@ -48,4 +48,5 @@ async function getPage() {
       tags: ['homepage'],
     },
   );
+  return page;
 }

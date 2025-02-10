@@ -2,12 +2,12 @@ import { composeStories } from '@storybook/react';
 import { render } from '@testing-library/react';
 import * as stories from './RichtextModule.stories';
 
-const { Normal, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Blockquote } =
+const { Default, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Blockquote } =
   composeStories(stories);
 
 describe('Richtext Module', () => {
   describe.each([
-    { Story: Normal },
+    { Story: Default },
     { Story: Heading1 },
     { Story: Heading2 },
     { Story: Heading3 },

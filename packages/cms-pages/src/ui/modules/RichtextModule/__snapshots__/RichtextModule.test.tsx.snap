@@ -18,6 +18,24 @@ exports[`Richtext Module Blockquote should match snapshot 1`] = `
 </div>
 `;
 
+exports[`Richtext Module Default should match snapshot 1`] = `
+<div>
+  <section
+    class="section grid gap-8 lg:grid-cols-[1fr,auto]"
+  >
+    <div
+      class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0 max-w-screen-lg"
+    >
+      <p
+        class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
+      >
+        This is a NORMAL text
+      </p>
+    </div>
+  </section>
+</div>
+`;
+
 exports[`Richtext Module Heading1 should match snapshot 1`] = `
 <div>
   <section
@@ -121,24 +139,6 @@ exports[`Richtext Module Heading6 should match snapshot 1`] = `
       >
         This is a H6 text
       </h6>
-    </div>
-  </section>
-</div>
-`;
-
-exports[`Richtext Module Normal should match snapshot 1`] = `
-<div>
-  <section
-    class="section grid gap-8 lg:grid-cols-[1fr,auto]"
-  >
-    <div
-      class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0 max-w-screen-lg"
-    >
-      <p
-        class="mb-2 dark:text-colour-onSurface-dark text-typography-body font-typography-body-weight leading-typography-body tracking-typography-body"
-      >
-        This is a NORMAL text
-      </p>
     </div>
   </section>
 </div>

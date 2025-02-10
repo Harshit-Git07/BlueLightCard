@@ -104,7 +104,7 @@ const meta: Meta<typeof Hero> = {
   title: 'Modules / Hero',
   component: Hero,
   parameters: {
-    status: 'wip',
+    status: 'done',
     design: {
       type: 'figma',
       url: 'https://www.figma.com/embed?embed_host=share&url=https://www.figma.com/design/2bUphiHBRlDyoRoctxwgGC/Static-Landing-Pages?node-id=2176-3456&t=ksjA8aI6DH6X7r8N-0',

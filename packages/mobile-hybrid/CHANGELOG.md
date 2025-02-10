@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.57.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.57.2...bluelightcard/mobile-hybrid-v1.57.3) (2025-02-10)
+
+
+### Bug Fixes
+
+* DISCO-1327 Hybrid Search fixes ([#3540](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3540)) ([bdb30ad](https://github.com/bluelightcard/BlueLightCard-2.0/commit/bdb30ad2e4303c525d858e46aa4e70a06df29956))
+
 ## [1.57.2](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.57.1...bluelightcard/mobile-hybrid-v1.57.2) (2025-02-06)
 
 

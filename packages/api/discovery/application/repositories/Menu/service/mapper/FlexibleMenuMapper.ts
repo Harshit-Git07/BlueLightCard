@@ -2,7 +2,7 @@ import { FlexibleMenuResponse } from '@blc-mono/discovery/application/models/Fle
 import { ThemedSubMenuWithOffers } from '@blc-mono/discovery/application/models/ThemedMenu';
 
 import { mapEventToMenuEventResponse } from './MenuEventMapper';
-import { mapOfferToMenuOfferResponse } from './MenuOfferMapper';
+import { mapMenuOfferToMenuOfferResponse } from './MenuOfferMapper';
 
 export function mapThemedSubMenuWithOffersToFlexibleMenuResponse(menu: ThemedSubMenuWithOffers): FlexibleMenuResponse {
   return {
@@ -10,7 +10,7 @@ export function mapThemedSubMenuWithOffersToFlexibleMenuResponse(menu: ThemedSub
     title: menu.title,
     description: menu.description,
     imageURL: menu.imageURL,
-    offers: menu.offers.map(mapOfferToMenuOfferResponse),
+    offers: menu.offers.map(mapMenuOfferToMenuOfferResponse),
     events: menu.events.map(mapEventToMenuEventResponse),
   };
 }

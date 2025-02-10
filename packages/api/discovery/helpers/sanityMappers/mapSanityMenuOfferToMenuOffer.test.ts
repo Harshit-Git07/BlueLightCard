@@ -6,7 +6,7 @@ import {
 } from '@bluelightcard/sanity-types';
 
 import { getSiteConfig } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/SiteEventHandler';
-import { MenuOffer } from '@blc-mono/discovery/application/models/Menu';
+import { IngestedMenuOffer } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import { Site } from '@blc-mono/discovery/application/models/Site';
 
@@ -90,158 +90,166 @@ const richTextModuleData = {
   tocPosition: 'left' as const,
 };
 
-export const validSanityOffer: SanityOffer = {
-  _id: '1',
-  offerId: 123,
-  _type: 'offer',
-  _createdAt: '2023-01-01T00:00:00Z',
-  _updatedAt: '2023-01-02T00:00:00Z',
-  _rev: 'rev-id',
-  name: 'Test Offer',
-  status: 'live',
-  offerType: { _type: 'offer.type', offerType: 'online' },
-  offerDescription: richTextModuleData,
-  image: {
-    default: {
-      asset: {
-        _id: 'image-id',
-        url: 'https://example.com/image.jpg',
-        _type: 'sanity.imageAsset',
-        _createdAt: '2023-01-01T00:00:00Z',
-        _updatedAt: '2023-01-02T00:00:00Z',
-        _rev: 'image-revision-id',
-      },
-      _type: 'image',
-    },
-  },
-  start: '2023-01-01',
-  expires: '2023-12-31',
-  evergreen: true,
-  tags: [
-    {
-      _key: 'tag1',
-      _type: 'tag.category',
-      tagCategoryName: 'Category 1',
-      tags: [
-        {
-          _id: 'tag-id-1',
-          _type: 'tag',
-          tagName: 'Tag 1',
-          _createdAt: '2023-01-01',
-          _updatedAt: '2023-01-01',
-          _rev: 'rev1',
-        },
-        {
-          _id: 'tag-id-2',
-          _type: 'tag',
-          tagName: 'Tag 2',
-          _createdAt: '2023-01-01',
-          _updatedAt: '2023-01-01',
-          _rev: 'rev2',
-        },
-      ],
-    },
-    {
-      _key: 'tag2',
-      _type: 'tag.category',
-      tagCategoryName: 'Category 2',
-      tags: [
-        {
-          _id: 'tag-id-3',
-          _type: 'tag',
-          tagName: 'Tag 3',
-          _createdAt: '2023-01-01',
-          _updatedAt: '2023-01-01',
-          _rev: 'rev3',
-        },
-      ],
-    },
-  ],
-  company: {
-    _id: 'company1',
-    _type: 'company',
+export const validSanityMenuOffer: {
+  offer?: SanityOffer;
+  start?: string;
+  end?: string;
+  _key: string;
+} = {
+  _key: 'mock-key',
+  offer: {
+    _id: '1',
+    offerId: 123,
+    _type: 'offer',
     _createdAt: '2023-01-01T00:00:00Z',
     _updatedAt: '2023-01-02T00:00:00Z',
     _rev: 'rev-id',
-    includedTrust: [
-      {
-        _id: 'service-id',
-        _type: 'trust',
-        _createdAt: '2023-01-01T00:00:00Z',
-        _updatedAt: '2023-01-02T00:00:00Z',
-        _rev: 'rev-id',
-        name: 'Trust Service Name',
-        code: 'trust-service-code',
-      },
-    ],
-    excludedTrust: [],
-    brandCompanyDetails: [
-      {
-        _key: 'unique-key-1',
-        companyName: 'Test Company',
-        companyLogo: {
-          default: {
-            _type: 'image',
-            asset: {
-              _id: 'logo-asset-id',
-              _type: 'sanity.imageAsset',
-              _createdAt: '2023-01-01T00:00:00Z',
-              _updatedAt: '2023-01-02T00:00:00Z',
-              _rev: 'rev-id',
-              url: 'logo-ref',
-            },
-          },
+    name: 'Test Offer',
+    status: 'live',
+    offerType: { _type: 'offer.type', offerType: 'online' },
+    offerDescription: richTextModuleData,
+    image: {
+      default: {
+        asset: {
+          _id: 'image-id',
+          url: 'https://example.com/image.jpg',
+          _type: 'sanity.imageAsset',
+          _createdAt: '2023-01-01T00:00:00Z',
+          _updatedAt: '2023-01-02T00:00:00Z',
+          _rev: 'image-revision-id',
         },
-        ageRestrictions: [],
-      },
-    ],
-  },
-  categorySelection: [
-    {
-      _key: 'key',
-      category1: {
-        _id: 'category-id',
-        _type: 'category',
-        _createdAt: '2023-01-01',
-        _updatedAt: '2023-01-01',
-        _rev: 'rev-id',
-        level: 1,
-      },
-      categoryItem: {
-        _id: 'item-id',
-        _type: 'category.item',
-        _createdAt: '2023-01-01T00:00:00Z',
-        _updatedAt: '2023-01-02T00:00:00Z',
-        _rev: 'rev-id',
-        id: 1,
-        name: 'Category Item Name',
+        _type: 'image',
       },
     },
-  ],
-  local: false,
-  discountDetails: {
-    discountType: 'percentage',
-    discountDescription: 'free-entry',
-    discountCoverage: 'all-site',
-  } as SanityDiscountType,
-  commonExclusions: {
-    _type: 'common.exclusion.type',
-    commonExclusions: [
-      {
-        _id: 'exclusion-id',
-        _type: 'common.exclusion',
-        _createdAt: '2023-01-01T00:00:00Z',
-        _updatedAt: '2023-01-02T00:00:00Z',
-        _rev: 'rev-id',
-        name: 'Exclusion Name',
-      },
-    ],
-  },
-  boostDetails: {
-    _type: 'boost.type',
     start: '2023-01-01',
     expires: '2023-12-31',
-  } as SanityBoostType,
+    evergreen: true,
+    tags: [
+      {
+        _key: 'tag1',
+        _type: 'tag.category',
+        tagCategoryName: 'Category 1',
+        tags: [
+          {
+            _id: 'tag-id-1',
+            _type: 'tag',
+            tagName: 'Tag 1',
+            _createdAt: '2023-01-01',
+            _updatedAt: '2023-01-01',
+            _rev: 'rev1',
+          },
+          {
+            _id: 'tag-id-2',
+            _type: 'tag',
+            tagName: 'Tag 2',
+            _createdAt: '2023-01-01',
+            _updatedAt: '2023-01-01',
+            _rev: 'rev2',
+          },
+        ],
+      },
+      {
+        _key: 'tag2',
+        _type: 'tag.category',
+        tagCategoryName: 'Category 2',
+        tags: [
+          {
+            _id: 'tag-id-3',
+            _type: 'tag',
+            tagName: 'Tag 3',
+            _createdAt: '2023-01-01',
+            _updatedAt: '2023-01-01',
+            _rev: 'rev3',
+          },
+        ],
+      },
+    ],
+    company: {
+      _id: 'company1',
+      _type: 'company',
+      _createdAt: '2023-01-01T00:00:00Z',
+      _updatedAt: '2023-01-02T00:00:00Z',
+      _rev: 'rev-id',
+      includedTrust: [
+        {
+          _id: 'service-id',
+          _type: 'trust',
+          _createdAt: '2023-01-01T00:00:00Z',
+          _updatedAt: '2023-01-02T00:00:00Z',
+          _rev: 'rev-id',
+          name: 'Trust Service Name',
+          code: 'trust-service-code',
+        },
+      ],
+      excludedTrust: [],
+      brandCompanyDetails: [
+        {
+          _key: 'unique-key-1',
+          companyName: 'Test Company',
+          companyLogo: {
+            default: {
+              _type: 'image',
+              asset: {
+                _id: 'logo-asset-id',
+                _type: 'sanity.imageAsset',
+                _createdAt: '2023-01-01T00:00:00Z',
+                _updatedAt: '2023-01-02T00:00:00Z',
+                _rev: 'rev-id',
+                url: 'logo-ref',
+              },
+            },
+          },
+          ageRestrictions: [],
+        },
+      ],
+    },
+    categorySelection: [
+      {
+        _key: 'key',
+        category1: {
+          _id: 'category-id',
+          _type: 'category',
+          _createdAt: '2023-01-01',
+          _updatedAt: '2023-01-01',
+          _rev: 'rev-id',
+          level: 1,
+        },
+        categoryItem: {
+          _id: 'item-id',
+          _type: 'category.item',
+          _createdAt: '2023-01-01T00:00:00Z',
+          _updatedAt: '2023-01-02T00:00:00Z',
+          _rev: 'rev-id',
+          id: 1,
+          name: 'Category Item Name',
+        },
+      },
+    ],
+    local: false,
+    discountDetails: {
+      discountType: 'percentage',
+      discountDescription: 'free-entry',
+      discountCoverage: 'all-site',
+    } as SanityDiscountType,
+    commonExclusions: {
+      _type: 'common.exclusion.type',
+      commonExclusions: [
+        {
+          _id: 'exclusion-id',
+          _type: 'common.exclusion',
+          _createdAt: '2023-01-01T00:00:00Z',
+          _updatedAt: '2023-01-02T00:00:00Z',
+          _rev: 'rev-id',
+          name: 'Exclusion Name',
+        },
+      ],
+    },
+    boostDetails: {
+      _type: 'boost.type',
+      start: '2023-01-01',
+      expires: '2023-12-31',
+    } as SanityBoostType,
+  },
 };
 
 const sanityMenuOffer: SanityMenuOffer = {
@@ -253,12 +261,12 @@ const sanityMenuOffer: SanityMenuOffer = {
   end: '2023-12-31T00:00:00Z',
   _updatedAt: '2023-01-02T00:00:00Z',
   _createdAt: '2023-01-02T00:00:00Z',
-  inclusions: [validSanityOffer],
+  inclusions: [validSanityMenuOffer],
 };
 
 describe('mapSanityMenuOfferToOffer', () => {
   getSiteConfigMock.mockResolvedValue(undefined);
-  const expectedDefaultResponse: MenuOffer = {
+  const expectedDefaultResponse: IngestedMenuOffer = {
     id: 'menu1',
     name: 'Test Menu',
     startTime: '2023-01-01T00:00:00Z',
@@ -271,6 +279,7 @@ describe('mapSanityMenuOfferToOffer', () => {
         company: {
           id: 'company1',
         },
+        position: 0,
       },
     ],
   };
@@ -290,19 +299,35 @@ describe('mapSanityMenuOfferToOffer', () => {
       },
     },
     {
+      field: 'offer',
+      menuOffer: {
+        ...sanityMenuOffer,
+        inclusions: [
+          {
+            ...validSanityMenuOffer,
+            offer: undefined,
+          },
+        ],
+      },
+    },
+    {
       field: 'company',
       menuOffer: {
         ...sanityMenuOffer,
         inclusions: [
           {
-            ...validSanityOffer,
-            company: undefined,
+            ...validSanityMenuOffer,
+            offer: {
+              ...validSanityMenuOffer.offer,
+              company: undefined,
+            },
           },
         ],
       },
     },
   ];
   it.each(errorCases)('should throw an error if %s is not present', async ({ field, menuOffer }) => {
+    // @ts-expect-error menu offer dereferencing not ideal
     await expect(mapSanityMenuOfferToMenuOffer(menuOffer)).rejects.toThrow(`Missing sanity field: ${field}`);
   });
 

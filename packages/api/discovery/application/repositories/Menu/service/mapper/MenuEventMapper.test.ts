@@ -1,11 +1,10 @@
-import { eventFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
+import { menuEventOfferFactory } from '@blc-mono/discovery/application/factories/MenuOfferFactory';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
-import { EventOffer } from '@blc-mono/discovery/application/models/Offer';
 import { MenuEventEntity } from '@blc-mono/discovery/application/repositories/schemas/MenuOfferEntity';
 
 import { mapEventToMenuEventEntity, mapMenuEventEntityToEvent } from './MenuEventMapper';
 
-const event: EventOffer = eventFactory.build();
+const event = menuEventOfferFactory.build();
 
 const defaultMenuEventEntity: MenuEventEntity = {
   ...event,

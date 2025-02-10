@@ -16,7 +16,7 @@ export function mapSanityEventThemedMenuToEventThemedMenu(themedMenu: SanityThem
     menuType: MenuType.FLEXIBLE,
     name: themedMenu.title,
     themedMenusEvents:
-      themedMenu.inclusions?.map((themedEventCollection) => {
+      themedMenu.inclusions?.map((themedEventCollection, index) => {
         if (!themedEventCollection.eventCollectionName) {
           throw new Error('Missing sanity field: eventCollectionName');
         }
@@ -28,13 +28,15 @@ export function mapSanityEventThemedMenuToEventThemedMenu(themedMenu: SanityThem
           title: themedEventCollection.eventCollectionName,
           description: getBlockText(themedEventCollection.eventCollectionDescription),
           imageURL: themedEventCollection.eventCollectionImage?.default?.asset?.url ?? '',
+          position: index,
           events:
-            themedEventCollection.events?.map((event) => {
+            themedEventCollection.events?.map((event, i) => {
               return {
                 id: event._id,
                 venue: {
                   id: event.venue?._id ?? '',
                 },
+                position: i,
               };
             }) ?? [],
         };

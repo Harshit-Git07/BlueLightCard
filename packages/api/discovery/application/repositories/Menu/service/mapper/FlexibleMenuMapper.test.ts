@@ -1,13 +1,13 @@
-import { eventFactory, offerFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
+import { menuEventOfferFactory, menuOfferFactory } from '@blc-mono/discovery/application/factories/MenuOfferFactory';
 import { subMenuFactory } from '@blc-mono/discovery/application/factories/SubMenuFactory';
 
 import { mapThemedSubMenuWithOffersToFlexibleMenuResponse } from './FlexibleMenuMapper';
 import { mapEventToMenuEventResponse } from './MenuEventMapper';
-import { mapOfferToMenuOfferResponse } from './MenuOfferMapper';
+import { mapMenuOfferToMenuOfferResponse } from './MenuOfferMapper';
 
 const subMenu = subMenuFactory.build();
-const offers = offerFactory.buildList(2);
-const events = eventFactory.buildList(2);
+const offers = menuOfferFactory.buildList(2);
+const events = menuEventOfferFactory.buildList(2);
 
 describe('mapThemedSubMenuWithOffersToFlexibleMenuResponse', () => {
   it('should map ThemedSubMenuWithOffers to FlexibleMenuResponse', () => {
@@ -17,7 +17,7 @@ describe('mapThemedSubMenuWithOffersToFlexibleMenuResponse', () => {
       title: subMenu.title,
       description: subMenu.description,
       imageURL: subMenu.imageURL,
-      offers: offers.map(mapOfferToMenuOfferResponse),
+      offers: offers.map(mapMenuOfferToMenuOfferResponse),
       events: events.map(mapEventToMenuEventResponse),
     });
   });

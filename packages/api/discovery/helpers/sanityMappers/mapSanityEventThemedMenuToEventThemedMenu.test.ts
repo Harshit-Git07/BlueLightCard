@@ -265,12 +265,14 @@ describe('mapSanityThemedMenuToThemedMenu', () => {
           description: expect.any(String),
           id: 'inclusion-key',
           imageURL: 'url',
+          position: 0,
           events: [
             {
               venue: {
                 id: 'dc1adf94-f6f5-4d77-a155-65f72928fb77',
               },
               id: '1',
+              position: 0,
             },
           ],
           title: 'collection name',

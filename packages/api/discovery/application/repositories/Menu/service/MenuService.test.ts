@@ -1,7 +1,6 @@
 import { menuFactory } from '@blc-mono/discovery/application/factories/MenuFactory';
-import { eventFactory, offerFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
+import { menuEventOfferFactory, menuOfferFactory } from '@blc-mono/discovery/application/factories/MenuOfferFactory';
 import { subMenuFactory } from '@blc-mono/discovery/application/factories/SubMenuFactory';
-import { MenuWithOffers } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import * as MenuRepositoryFile from '@blc-mono/discovery/application/repositories/Menu/MenuRepository';
 
@@ -9,27 +8,24 @@ import { MenuEntity, MenuEntityWithOfferEntities } from '../../schemas/MenuEntit
 
 import { mapEventToMenuEventEntity } from './mapper/MenuEventMapper';
 import { mapMenuToMenuEntity } from './mapper/MenuMapper';
-import { mapOfferToMenuOfferEntity } from './mapper/MenuOfferMapper';
+import { mapMenuOfferToMenuOfferEntity } from './mapper/MenuOfferMapper';
 import { mapSubMenuToSubMenuEntity } from './mapper/SubMenuMapper';
 import * as target from './MenuService';
 
 jest.mock('@blc-mono/discovery/application/repositories/Menu/MenuRepository');
 
 const menu = menuFactory.build();
-const offer = offerFactory.build();
-const event = eventFactory.build();
+const offer = menuOfferFactory.build();
+const event = menuEventOfferFactory.build();
 const menuEntity = mapMenuToMenuEntity(menu);
-const menuOfferEntity = mapOfferToMenuOfferEntity(offer, menu.id, menu.menuType);
+const menuOfferEntity = mapMenuOfferToMenuOfferEntity(offer, menu.id, menu.menuType);
 const menuEventEntity = mapEventToMenuEventEntity(event, menu.id, menu.menuType);
-const featuredMenu = { ...menu, menuType: MenuType.FEATURED, id: '1234' };
-const featuredMenuEntity = mapMenuToMenuEntity(featuredMenu);
-const featuredOfferEntity = mapOfferToMenuOfferEntity(offer, featuredMenu.id, featuredMenu.menuType);
 
 const flexibleMenu = { ...menu, menuType: MenuType.FLEXIBLE, id: '5678' };
 const flexibleMenuEntity = mapMenuToMenuEntity(flexibleMenu);
 const flexibleSubMenu = subMenuFactory.build();
 const flexibleSubMenuEntity = mapSubMenuToSubMenuEntity(flexibleMenu.id, flexibleSubMenu);
-const flexibleSubMenuOfferEntity = mapOfferToMenuOfferEntity(
+const flexibleSubMenuOfferEntity = mapMenuOfferToMenuOfferEntity(
   offer,
   flexibleMenu.id,
   MenuType.FLEXIBLE,
@@ -400,7 +396,7 @@ describe('Menu Service', () => {
 
       expect(retrieveMenusByMenuTypeSpy).toHaveBeenCalledWith(menu.menuType);
       expect(retrieveThemedMenusWithSubMenusSpy).not.toHaveBeenCalled();
-      expect(result).toEqual({ [menu.menuType]: [{ ...menu, offers: [offer] }] });
+      expect(result).toEqual([{ ...menu, offers: [offer] }]);
     });
 
     it('should get flexible menus by menu type successfully', async () => {
@@ -418,7 +414,7 @@ describe('Menu Service', () => {
       const result = await target.getMenusByMenuType(flexibleMenu.menuType);
       expect(retrieveThemedMenusWithSubMenusSpy).toHaveBeenCalled();
       expect(retrieveMenusByMenuTypeSpy).not.toHaveBeenCalled();
-      expect(result).toEqual({ [flexibleMenu.menuType]: [{ ...flexibleMenu, subMenus: [flexibleSubMenu] }] });
+      expect(result).toEqual([{ ...flexibleMenu, subMenus: [flexibleSubMenu] }]);
     });
 
     it('should throw error when menus by menu type failed to get', async () => {
@@ -436,70 +432,9 @@ describe('Menu Service', () => {
     });
   });
 
-  describe('getMenusByMenuTypes', () => {
-    it('should get all menus by default successfully', async () => {
-      jest
-        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'retrieveAllTopLevelMenuData')
-        .mockResolvedValue([menuEntity, menuOfferEntity, featuredMenuEntity, featuredOfferEntity]);
-      jest.spyOn(MenuRepositoryFile, 'groupMenusWithTopLevelData').mockReturnValue([
-        { ...menuEntity, offers: [menuOfferEntity] },
-        { ...featuredMenuEntity, offers: [featuredOfferEntity] },
-        { ...featuredMenuEntity, offers: [featuredOfferEntity] },
-      ]);
-
-      const result = await target.getMenusByMenuTypes([]);
-      expect(result).toEqual({
-        [MenuType.MARKETPLACE]: [{ ...menu, offers: [offer] }],
-        [MenuType.FEATURED]: [
-          { ...featuredMenu, offers: [offer] },
-          { ...featuredMenu, offers: [offer] },
-        ],
-        [MenuType.FLEXIBLE]: [],
-        [MenuType.DEALS_OF_THE_WEEK]: [],
-      });
-    });
-
-    it('should only return menu types passed successfully', async () => {
-      jest
-        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'retrieveAllTopLevelMenuData')
-        .mockResolvedValue([menuEntity, menuOfferEntity, featuredMenuEntity, featuredOfferEntity]);
-      jest.spyOn(MenuRepositoryFile, 'groupMenusWithTopLevelData').mockReturnValue([
-        { ...menuEntity, offers: [menuOfferEntity] },
-        { ...featuredMenuEntity, offers: [featuredOfferEntity] },
-        { ...featuredMenuEntity, offers: [featuredOfferEntity] },
-      ]);
-
-      const result = await target.getMenusByMenuTypes([menu.menuType]);
-      expect(result).toEqual({
-        [menu.menuType]: [{ ...menu, offers: [offer] }],
-      });
-    });
-
-    it('should return an empty array for a menu type thats passed', async () => {
-      jest
-        .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'retrieveAllTopLevelMenuData')
-        .mockResolvedValue([menuEntity, menuOfferEntity, featuredMenuEntity, featuredOfferEntity]);
-      jest.spyOn(MenuRepositoryFile, 'groupMenusWithTopLevelData').mockReturnValue([
-        { ...menuEntity, offers: [menuOfferEntity] },
-        { ...featuredMenuEntity, offers: [featuredOfferEntity] },
-        { ...featuredMenuEntity, offers: [featuredOfferEntity] },
-      ]);
-
-      const result = await target.getMenusByMenuTypes([MenuType.DEALS_OF_THE_WEEK]);
-      expect(result).toEqual({
-        [MenuType.DEALS_OF_THE_WEEK]: [],
-      });
-    });
-
-    it('should throw an error when menus by menu types failed to get', async () => {
-      givenMenuOfferRepositoryThrowsAnError('retrieveAllTopLevelMenuData');
-      await expect(target.getMenusByMenuTypes([])).rejects.toThrow(`Error occurred retrieving all menus.`);
-    });
-  });
-
   describe('updateMenuOfferEntities', () => {
     it('should update menu offer entities with the new offer records but keeping the partition key, sort key & gsi keys', () => {
-      const newOfferRecord = offerFactory.build();
+      const newOfferRecord = menuOfferFactory.build();
       const updatedMenuOfferEntities = target.updateMenuOfferEntities([menuOfferEntity], newOfferRecord);
 
       expect(updatedMenuOfferEntities).toEqual([
@@ -603,38 +538,6 @@ describe('Menu Service', () => {
 
       expect(mockDeleteMenuWithSubMenuAndOffers).not.toHaveBeenCalled();
       expect(mockTransactWrite).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('groupByMenuType', () => {
-    it('should group menu and offers by menu type successfully', () => {
-      const menuWithOffers: MenuWithOffers[] = [
-        { ...menu, offers: [offer] },
-        { ...featuredMenu, offers: [offer] },
-        { ...menu, offers: [offer] },
-      ];
-      const result = target.groupByMenuType(menuWithOffers);
-      expect(result).toEqual({
-        [menu.menuType]: [
-          { ...menu, offers: [offer] },
-          { ...menu, offers: [offer] },
-        ],
-        [featuredMenu.menuType]: [{ ...featuredMenu, offers: [offer] }],
-      });
-    });
-  });
-
-  describe('mapMenuAndDataEntitiesToMenusAndData', () => {
-    const menuEntitiesWithTopLevelData = [
-      { ...flexibleMenuEntity, subMenus: [flexibleSubMenuEntity] },
-      { ...menuEntity, offers: [menuOfferEntity] },
-    ];
-    it('should map menu and data entities to menus and data successfully', () => {
-      const result = target.mapMenuAndDataEntitiesToMenusAndData(menuEntitiesWithTopLevelData);
-      expect(result).toStrictEqual([
-        { ...flexibleMenu, subMenus: [flexibleSubMenu] },
-        { ...menu, offers: [offer] },
-      ]);
     });
   });
 });

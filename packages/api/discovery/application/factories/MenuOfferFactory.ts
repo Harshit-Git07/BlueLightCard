@@ -1,14 +1,28 @@
 import * as Factory from 'factory.ts';
 
-import { MenuOffer } from '../models/Menu';
-
 import { menuFactory } from './MenuFactory';
+import { eventFactory, offerFactory } from './OfferFactory';
 
-const offerFactory = Factory.Sync.makeFactory({
+const ingestedOfferFactory = Factory.Sync.makeFactory({
   id: Factory.each((i) => `${i + 1}`),
   company: Factory.each((i) => ({ id: `${i + 1}` })),
+  start: '2021-09-01T00:00:00Z',
+  end: '2021-09-01T00:00:00Z',
+  position: Factory.each((i) => i),
 });
 
-export const menuOfferFactory: Factory.Sync.Factory<MenuOffer> = Factory.Sync.makeFactory({
-  offers: offerFactory.buildList(3),
+export const ingestedMenuOfferFactory = Factory.Sync.makeFactory({
+  offers: ingestedOfferFactory.buildList(3),
 }).combine(menuFactory);
+
+export const menuOfferFactory = Factory.Sync.makeFactory({
+  start: '2021-09-01T00:00:00Z',
+  end: '2021-09-01T00:00:00Z',
+  position: Factory.each((i) => i),
+}).combine(offerFactory);
+
+export const menuEventOfferFactory = Factory.Sync.makeFactory({
+  start: '2021-09-01T00:00:00Z',
+  end: '2021-09-01T00:00:00Z',
+  position: Factory.each((i) => i),
+}).combine(eventFactory);

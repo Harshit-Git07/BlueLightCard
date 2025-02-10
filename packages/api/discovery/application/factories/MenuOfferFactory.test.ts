@@ -1,10 +1,10 @@
 import { MenuType } from '../models/MenuResponse';
 
-import { menuOfferFactory } from './MenuOfferFactory';
+import { ingestedMenuOfferFactory } from './MenuOfferFactory';
 
 describe('MenuOfferFactory', () => {
   it('should create a menu offer', () => {
-    const menuOffer = menuOfferFactory.build();
+    const menuOffer = ingestedMenuOfferFactory.build();
     expect(menuOffer).toStrictEqual({
       id: '1',
       name: 'Sample Menu',
@@ -16,21 +16,30 @@ describe('MenuOfferFactory', () => {
         {
           id: '1',
           company: { id: '1' },
+          start: '2021-09-01T00:00:00Z',
+          end: '2021-09-01T00:00:00Z',
+          position: 0,
         },
         {
           id: '2',
           company: { id: '2' },
+          start: '2021-09-01T00:00:00Z',
+          end: '2021-09-01T00:00:00Z',
+          position: 1,
         },
         {
           id: '3',
           company: { id: '3' },
+          start: '2021-09-01T00:00:00Z',
+          end: '2021-09-01T00:00:00Z',
+          position: 2,
         },
       ],
     });
   });
 
   it('should create a menu offer with overridden menuType', () => {
-    const menuOffer = menuOfferFactory.build({ menuType: MenuType.DEALS_OF_THE_WEEK });
+    const menuOffer = ingestedMenuOfferFactory.build({ menuType: MenuType.DEALS_OF_THE_WEEK });
     expect(menuOffer.menuType).toBe(MenuType.DEALS_OF_THE_WEEK);
   });
 });

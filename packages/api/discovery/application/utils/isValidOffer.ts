@@ -3,7 +3,9 @@ import { isActiveEventOffer, isActiveOffer } from '@blc-mono/discovery/applicati
 import { isValidAge } from '@blc-mono/discovery/application/utils/ageRestrictionRules';
 import { isValidTrust } from '@blc-mono/discovery/application/utils/trustRules';
 
-export const isValidOffer = (offer: Offer, dob: string, organisation: string): boolean => {
+import { MenuEventOffer, MenuOffer } from '../models/Menu';
+
+export const isValidOffer = (offer: Offer | MenuOffer, dob: string, organisation: string): boolean => {
   return (
     isValidTrust(organisation, offer.includedTrusts, offer.excludedTrusts) &&
     isValidAge(dob, offer.company.ageRestrictions) &&
@@ -11,7 +13,7 @@ export const isValidOffer = (offer: Offer, dob: string, organisation: string): b
   );
 };
 
-export const isValidEvent = (event: EventOffer, dob: string, organisation: string): boolean => {
+export const isValidEvent = (event: EventOffer | MenuEventOffer, dob: string, organisation: string): boolean => {
   return (
     isValidTrust(organisation, event.includedTrusts, event.excludedTrusts) &&
     isValidAge(dob, event.ageRestrictions) &&

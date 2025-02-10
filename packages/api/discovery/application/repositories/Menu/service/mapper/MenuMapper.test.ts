@@ -1,6 +1,6 @@
 import { menuEntityFactory } from '@blc-mono/discovery/application/factories/MenuEntityFactory';
 import { menuFactory } from '@blc-mono/discovery/application/factories/MenuFactory';
-import { offerFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
+import { menuOfferFactory } from '@blc-mono/discovery/application/factories/MenuOfferFactory';
 import { subMenuFactory } from '@blc-mono/discovery/application/factories/SubMenuFactory';
 import { Menu } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
@@ -16,16 +16,16 @@ import {
   mapMenuWithOffersToMarketplaceMenuResponses,
   mapMenuWithSubMenusToFlexibleMenuResponse,
 } from './MenuMapper';
-import { mapOfferToMenuOfferEntity, mapOfferToMenuOfferResponse } from './MenuOfferMapper';
+import { mapMenuOfferToMenuOfferEntity, mapMenuOfferToMenuOfferResponse } from './MenuOfferMapper';
 import { mapSubMenuToSubMenuEntity } from './SubMenuMapper';
 
 const menu: Menu = menuFactory.build();
 
 const menuEntity: MenuEntity = menuEntityFactory.build();
 
-const offer = offerFactory.build();
+const offer = menuOfferFactory.build();
 
-const offerEntity = mapOfferToMenuOfferEntity(offer, menu.id, menu.menuType);
+const offerEntity = mapMenuOfferToMenuOfferEntity(offer, menu.id, menu.menuType);
 
 const subMenu = subMenuFactory.build();
 
@@ -71,7 +71,7 @@ describe('MenuMapper', () => {
       const result = mapMenuAndOfferToSingletonMenuResponse([{ ...menu, offers: [offer] }]);
       expect(result).toEqual({
         id: menu.id,
-        offers: [mapOfferToMenuOfferResponse(offer)],
+        offers: [mapMenuOfferToMenuOfferResponse(offer)],
       });
     });
 
@@ -97,7 +97,7 @@ describe('MenuMapper', () => {
         {
           id: menu.id,
           title: menu.name,
-          offers: [mapOfferToMenuOfferResponse(offer)],
+          offers: [mapMenuOfferToMenuOfferResponse(offer)],
         },
       ]);
     });

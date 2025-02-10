@@ -7,7 +7,7 @@ import {
   MenuKeyBuilders,
 } from '@blc-mono/discovery/application/repositories/schemas/MenuEntity';
 
-import { mapMenuOfferEntityToOffer, mapOfferToMenuOfferResponse } from './MenuOfferMapper';
+import { mapMenuOfferEntityToMenuOffer, mapMenuOfferToMenuOfferResponse } from './MenuOfferMapper';
 import { mapSubMenuEntityToSubMenu } from './SubMenuMapper';
 
 export function mapMenuEntityToMenu(menuEntity: MenuEntity): Menu {
@@ -52,7 +52,7 @@ export function mapMenuEntityWithOfferEntitiesToMenuWithOffers(
   const { offers, ...menu } = menuEntityWithOfferEntities;
   return {
     ...mapMenuEntityToMenu(menu),
-    offers: offers.map(mapMenuOfferEntityToOffer),
+    offers: offers.map(mapMenuOfferEntityToMenuOffer),
   };
 }
 
@@ -65,7 +65,7 @@ export function mapMenuAndOfferToSingletonMenuResponse(menuWithOffers: MenuWithO
   }
   return {
     id: menuWithOffers[0].id,
-    offers: menuWithOffers[0].offers.map(mapOfferToMenuOfferResponse),
+    offers: menuWithOffers[0].offers.map(mapMenuOfferToMenuOfferResponse),
   };
 }
 
@@ -81,7 +81,7 @@ export function mapMenuWithOffersToMarketplaceMenuResponses(menuWithOffers: Menu
   return menuWithOffers.map(({ offers, ...menu }) => ({
     id: menu.id,
     title: menu.name,
-    offers: offers.map(mapOfferToMenuOfferResponse),
+    offers: offers.map(mapMenuOfferToMenuOfferResponse),
   }));
 }
 

@@ -16,7 +16,7 @@ export function mapSanityThemedMenuToThemedMenu(themedMenu: SanityThemedMenu): T
     menuType: MenuType.FLEXIBLE,
     name: themedMenu.title,
     themedMenusOffers:
-      themedMenu.inclusions?.map((collection) => {
+      themedMenu.inclusions?.map((collection, index) => {
         if (!collection.collectionName) {
           throw new Error('Missing sanity field: collectionName');
         }
@@ -28,10 +28,11 @@ export function mapSanityThemedMenuToThemedMenu(themedMenu: SanityThemedMenu): T
           title: collection.collectionName,
           description: collection.collectionDescription,
           imageURL: collection.offerCollectionImage?.default?.asset?.url ?? '',
+          position: index,
           offers:
             collection.contents
               ?.filter((content) => content._type === 'offerReference')
-              .map((offer) => {
+              .map((offer, i) => {
                 if (!offer.reference) {
                   throw new Error('Missing sanity field: reference');
                 }
@@ -43,6 +44,7 @@ export function mapSanityThemedMenuToThemedMenu(themedMenu: SanityThemedMenu): T
                   company: {
                     id: offer.reference?.company?._id ?? '',
                   },
+                  position: i,
                 };
               }) ?? [],
         };

@@ -6,7 +6,7 @@ import * as JWTUtils from '@blc-mono/core/utils/unpackJWT';
 import { JWT } from '@blc-mono/core/utils/unpackJWT';
 import { isValidEvent, isValidOffer } from '@blc-mono/discovery/application/utils/isValidOffer';
 
-import { eventFactory, offerFactory } from '../../factories/OfferFactory';
+import { menuEventOfferFactory, menuOfferFactory } from '../../factories/MenuOfferFactory';
 import { subMenuFactory } from '../../factories/SubMenuFactory';
 import { ThemedSubMenuWithOffers } from '../../models/ThemedMenu';
 import { mapThemedSubMenuWithOffersToFlexibleMenuResponse } from '../../repositories/Menu/service/mapper/FlexibleMenuMapper';
@@ -38,8 +38,8 @@ const isValidOfferMock = jest.mocked(isValidOffer);
 const isValidEventMock = jest.mocked(isValidEvent);
 
 const subMenu = subMenuFactory.build();
-const offers = offerFactory.buildList(2);
-const events = eventFactory.buildList(2);
+const offers = menuOfferFactory.buildList(2);
+const events = menuEventOfferFactory.buildList(2);
 
 const mockGetOfferFlexibleMenusResponse: ThemedSubMenuWithOffers = { ...subMenu, offers, events: [] };
 const mockGetEventFlexibleMenusResponse: ThemedSubMenuWithOffers = { ...subMenu, offers: [], events };

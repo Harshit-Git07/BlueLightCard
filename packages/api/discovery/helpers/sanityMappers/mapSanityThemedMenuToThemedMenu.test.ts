@@ -1,6 +1,6 @@
 import { MenuThemedOffer as SanityThemedMenuOffer } from '@bluelightcard/sanity-types';
 
-import { validSanityOffer } from './mapSanityMenuOfferToMenuOffer.test';
+import { validSanityMenuOffer } from './mapSanityMenuOfferToMenuOffer.test';
 import { mapSanityThemedMenuToThemedMenu } from './mapSanityThemedMenuToThemedMenu';
 
 const validInclusion = {
@@ -16,7 +16,7 @@ const validInclusion = {
     {
       _key: 'content-key',
       _type: 'offerReference',
-      reference: validSanityOffer,
+      reference: validSanityMenuOffer.offer,
     },
   ],
 };
@@ -52,9 +52,11 @@ describe('mapSanityThemedMenuToThemedMenu', () => {
                 id: 'company1',
               },
               id: '1',
+              position: 0,
             },
           ],
           title: 'collection name',
+          position: 0,
         },
       ],
       updatedAt: '2021-09-01T00:00:00Z',
@@ -134,7 +136,7 @@ describe('mapSanityThemedMenuToThemedMenu', () => {
               {
                 _key: 'content-key',
                 _type: 'offerReference',
-                reference: { ...validSanityOffer, company: undefined },
+                reference: { ...validSanityMenuOffer, company: undefined },
               },
             ],
           },

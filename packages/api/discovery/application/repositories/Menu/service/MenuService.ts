@@ -1,13 +1,18 @@
 import { LambdaLogger } from '@blc-mono/core/utils/logger';
-import { Menu, MenuWithOffers, MenuWithSubMenus } from '@blc-mono/discovery/application/models/Menu';
-import { AVAILABLE_MENU_TYPES, MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
+import {
+  Menu,
+  MenuEventOffer,
+  MenuOffer,
+  MenuWithOffers,
+  MenuWithSubMenus,
+} from '@blc-mono/discovery/application/models/Menu';
+import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import { EventOffer, Offer } from '@blc-mono/discovery/application/models/Offer';
 import { SubMenu, ThemedSubMenuWithOffers } from '@blc-mono/discovery/application/models/ThemedMenu';
 
 import { buildErrorMessage } from '../../Company/service/utils/ErrorMessageBuilder';
-import { MenuEntityWithOfferEntities, MenuEntityWithSubMenuEntities } from '../../schemas/MenuEntity';
 import { MenuEventEntity, MenuOfferEntity } from '../../schemas/MenuOfferEntity';
-import { groupMenusWithTopLevelData, MenuRepository } from '../MenuRepository';
+import { MenuRepository } from '../MenuRepository';
 
 import { mapEventToMenuEventEntity, mapMenuEventEntityToEvent } from './mapper/MenuEventMapper';
 import {
@@ -16,14 +21,16 @@ import {
   mapMenuEntityWithSubMenuEntitiesToMenuWithSubMenus,
   mapMenuToMenuEntity,
 } from './mapper/MenuMapper';
-import { mapMenuOfferEntityToOffer, mapOfferToMenuOfferEntity } from './mapper/MenuOfferMapper';
+import { mapMenuOfferEntityToMenuOffer, mapMenuOfferToMenuOfferEntity } from './mapper/MenuOfferMapper';
 import { mapSubMenuEntityToSubMenu, mapSubMenuToSubMenuEntity } from './mapper/SubMenuMapper';
 
 const logger = new LambdaLogger({ serviceName: 'menu-service' });
 
-export async function insertMenuWithOffers(menu: Menu, menuOffers: Offer[]): Promise<void> {
+export async function insertMenuWithOffers(menu: Menu, menuOffers: MenuOffer[]): Promise<void> {
   const menuEntity = mapMenuToMenuEntity(menu);
-  const menuOffersEntity = menuOffers.map((menuOffer) => mapOfferToMenuOfferEntity(menuOffer, menu.id, menu.menuType));
+  const menuOffersEntity = menuOffers.map((menuOffer) =>
+    mapMenuOfferToMenuOfferEntity(menuOffer, menu.id, menu.menuType),
+  );
   const itemsToInsert = [menuEntity, ...menuOffersEntity];
   try {
     await new MenuRepository().batchInsert(itemsToInsert);
@@ -42,12 +49,12 @@ export async function insertMenuWithOffers(menu: Menu, menuOffers: Offer[]): Pro
 export async function insertThemedMenuWithSubMenusAndOffers(
   menu: Menu,
   subMenus: SubMenu[],
-  menuOffers: { subMenuId: string; offer: Offer }[],
+  menuOffers: { subMenuId: string; offer: MenuOffer }[],
 ): Promise<void> {
   const menuEntity = mapMenuToMenuEntity(menu);
   const subMenuEntities = subMenus.map((subMenu) => mapSubMenuToSubMenuEntity(menu.id, subMenu));
   const offerEntities = menuOffers.map(({ offer, subMenuId }) =>
-    mapOfferToMenuOfferEntity(offer, menu.id, menu.menuType, subMenuId),
+    mapMenuOfferToMenuOfferEntity(offer, menu.id, menu.menuType, subMenuId),
   );
   const itemsToInsert = [menuEntity, ...subMenuEntities, ...offerEntities];
   try {
@@ -69,7 +76,7 @@ export async function insertThemedMenuWithSubMenusAndOffers(
 export async function insertThemedMenuWithSubMenusAndEvents(
   menu: Menu,
   subMenus: SubMenu[],
-  menuEvents: { subMenuId: string; event: EventOffer }[],
+  menuEvents: { subMenuId: string; event: MenuEventOffer }[],
 ): Promise<void> {
   const menuEntity = mapMenuToMenuEntity(menu);
   const subMenuEntities = subMenus.map((subMenu) => mapSubMenuToSubMenuEntity(menu.id, subMenu));
@@ -117,7 +124,10 @@ export async function getMenuAndOffersByMenuId(menuId: string): Promise<MenuWith
     const result = await new MenuRepository().retrieveMenuWithOffers(menuId);
     if (!result) return;
     const { offers, ...menu } = result;
-    return { ...mapMenuEntityToMenu(menu), offers: offers.map(mapMenuOfferEntityToOffer) };
+    return {
+      ...mapMenuEntityToMenu(menu),
+      offers: offers.map(mapMenuOfferEntityToMenuOffer).sort((a, b) => a.position - b.position),
+    };
   } catch (error) {
     throw new Error(
       buildErrorMessage(logger, error, `Error occurred getting menu with id: [${menuId}] and its offers`),
@@ -134,8 +144,8 @@ export async function getThemedMenuAndOffersBySubMenuId(
     const { offers, events, ...menu } = result;
     return {
       ...mapSubMenuEntityToSubMenu(menu),
-      offers: offers.map(mapMenuOfferEntityToOffer),
-      events: events.map(mapMenuEventEntityToEvent),
+      offers: offers.map(mapMenuOfferEntityToMenuOffer).sort((a, b) => a.position - b.position),
+      events: events.map(mapMenuEventEntityToEvent).sort((a, b) => a.position - b.position),
     };
   } catch (error) {
     throw new Error(
@@ -204,48 +214,19 @@ export async function updateEventInMenus(newEventRecord: EventOffer): Promise<vo
   }
 }
 
-export async function getMenusByMenuType(
-  menuType: MenuType,
-): Promise<{ [menuType: string]: (MenuWithOffers | MenuWithSubMenus)[] }> {
+export async function getMenusByMenuType(menuType: MenuType): Promise<(MenuWithOffers | MenuWithSubMenus)[]> {
   try {
     if (menuType === MenuType.FLEXIBLE) {
       const menuWithSubMenus = await new MenuRepository().retrieveThemedMenusWithSubMenus();
       logger.info({ message: `Got menus with menuType: [${menuType}]` });
-      return { [MenuType.FLEXIBLE]: menuWithSubMenus.map(mapMenuEntityWithSubMenuEntitiesToMenuWithSubMenus) };
+      return sortMenusWithSubMenus(menuWithSubMenus.map(mapMenuEntityWithSubMenuEntitiesToMenuWithSubMenus));
     } else {
       const menuWithOffers = await new MenuRepository().retrieveMenusWithOffersByMenuType(menuType);
       logger.info({ message: `Got menus with menuType: [${menuType}]` });
-      return { [menuType]: menuWithOffers.map(mapMenuEntityWithOfferEntitiesToMenuWithOffers) };
+      return sortMenusWithOffers(menuWithOffers.map(mapMenuEntityWithOfferEntitiesToMenuWithOffers));
     }
   } catch (error) {
     throw new Error(buildErrorMessage(logger, error, `Error occurred getting menu with menu type: [${menuType}]`));
-  }
-}
-
-export async function getMenusByMenuTypes(
-  menuTypes: MenuType[],
-): Promise<{ [menuType: string]: (MenuWithOffers | MenuWithSubMenus)[] }> {
-  try {
-    const menusWithTopLevelData = await new MenuRepository().retrieveAllTopLevelMenuData();
-    const groupedMenusWithTopLevelEntities = groupMenusWithTopLevelData(menusWithTopLevelData);
-    const groupedMenusWithTopLevelData = mapMenuAndDataEntitiesToMenusAndData(groupedMenusWithTopLevelEntities);
-    if (menuTypes.length === 0) {
-      const groupedByMenuType = groupByMenuType(groupedMenusWithTopLevelData);
-      const menusByMenuType: { [menuType: string]: (MenuWithOffers | MenuWithSubMenus)[] } = {};
-      AVAILABLE_MENU_TYPES.forEach((menuType) => {
-        menusByMenuType[menuType] = groupedByMenuType[menuType] || [];
-      });
-      return menusByMenuType;
-    }
-    const filteredMenusAndOffers = groupedMenusWithTopLevelData.filter((menu) => menuTypes.includes(menu.menuType));
-    const groupedByMenuType = groupByMenuType(filteredMenusAndOffers);
-    const menusByMenuType: { [menuType: string]: (MenuWithOffers | MenuWithSubMenus)[] } = {};
-    menuTypes.forEach((menuType) => {
-      menusByMenuType[menuType] = groupedByMenuType[menuType] || [];
-    });
-    return menusByMenuType;
-  } catch (error) {
-    throw new Error(buildErrorMessage(logger, error, `Error occurred retrieving all menus.`));
   }
 }
 
@@ -260,6 +241,9 @@ export function updateMenuOfferEntities(menuOffers: MenuOfferEntity[], newOfferR
       gsi2SortKey,
       gsi3PartitionKey,
       gsi3SortKey,
+      position,
+      start,
+      end,
     }) => ({
       partitionKey,
       sortKey,
@@ -269,6 +253,9 @@ export function updateMenuOfferEntities(menuOffers: MenuOfferEntity[], newOfferR
       gsi2SortKey,
       gsi3PartitionKey,
       gsi3SortKey,
+      position,
+      start,
+      end,
       ...newOfferRecord,
     }),
   );
@@ -285,6 +272,9 @@ export function updateMenuEventEntities(menuEvents: MenuEventEntity[], newEventR
       gsi2SortKey,
       gsi3PartitionKey,
       gsi3SortKey,
+      position,
+      start,
+      end,
     }) => ({
       partitionKey,
       sortKey,
@@ -294,6 +284,9 @@ export function updateMenuEventEntities(menuEvents: MenuEventEntity[], newEventR
       gsi2SortKey,
       gsi3PartitionKey,
       gsi3SortKey,
+      position,
+      start,
+      end,
       ...newEventRecord,
     }),
   );
@@ -306,13 +299,12 @@ export async function updateSingletonMenuId(
   const retrievedMenu = await getMenuById(newMenuId);
   const retrievedMenuByType = await getMenusByMenuType(menuType);
 
-  if (!retrievedMenu && retrievedMenuByType[menuType].length === 0) {
+  if (!retrievedMenu && retrievedMenuByType.length === 0) {
     return;
   }
 
   const menusToUpdate = retrievedMenu ? [mapMenuToMenuEntity({ ...retrievedMenu, menuType })] : [];
-  const menusToDelete =
-    retrievedMenuByType[menuType].length > 0 ? [mapMenuToMenuEntity(retrievedMenuByType[menuType][0])] : [];
+  const menusToDelete = retrievedMenuByType.length > 0 ? [mapMenuToMenuEntity(retrievedMenuByType[0])] : [];
 
   await new MenuRepository().transactWrite(menusToUpdate, menusToDelete);
 
@@ -321,33 +313,32 @@ export async function updateSingletonMenuId(
   }
 }
 
-export function groupByMenuType(
-  menusAndItems: (MenuWithOffers | MenuWithSubMenus)[],
-): Record<string, (MenuWithOffers | MenuWithSubMenus)[]> {
-  const groupedMenus = {} as Record<string, (MenuWithOffers | MenuWithSubMenus)[]>;
-  menusAndItems.forEach((menuWithOffer) => {
-    if (!groupedMenus[menuWithOffer.menuType]) {
-      groupedMenus[menuWithOffer.menuType] = [menuWithOffer];
-    } else {
-      groupedMenus[menuWithOffer.menuType].push(menuWithOffer);
-    }
+export const sortMenusWithSubMenus = (menusWithSubMenus: MenuWithSubMenus[]): MenuWithSubMenus[] => {
+  const menusWithSubMenusSorted = menusWithSubMenus.map((menuWithSubMenus) => {
+    const { subMenus, ...menu } = menuWithSubMenus;
+    return {
+      ...menu,
+      subMenus: subMenus.toSorted((a, b) => a.position - b.position),
+    };
   });
-  return groupedMenus;
-}
+  return menusWithSubMenusSorted.sort((a, b) => {
+    if (a.position === undefined) return 1;
+    if (b.position === undefined) return -1;
+    return a.position - b.position;
+  });
+};
 
-export function mapMenuAndDataEntitiesToMenusAndData(
-  menuEntitiesWithTopLevelData: (MenuEntityWithSubMenuEntities | MenuEntityWithOfferEntities)[],
-): (MenuWithOffers | MenuWithSubMenus)[] {
-  const menusWithTopLevelData = menuEntitiesWithTopLevelData.reduce(
-    (mappedMenus, menu) => {
-      if (menu.menuType === MenuType.FLEXIBLE) {
-        mappedMenus.push(mapMenuEntityWithSubMenuEntitiesToMenuWithSubMenus(menu as MenuEntityWithSubMenuEntities));
-      } else {
-        mappedMenus.push(mapMenuEntityWithOfferEntitiesToMenuWithOffers(menu as MenuEntityWithOfferEntities));
-      }
-      return mappedMenus;
-    },
-    [] as (MenuWithOffers | MenuWithSubMenus)[],
-  );
-  return menusWithTopLevelData;
-}
+export const sortMenusWithOffers = (menusWithOffers: MenuWithOffers[]) => {
+  const menusWithOffersSorted = menusWithOffers.map((menuWithOffers) => {
+    const { offers, ...menu } = menuWithOffers;
+    return {
+      ...menu,
+      offers: offers.toSorted((a, b) => a.position - b.position),
+    };
+  });
+  return menusWithOffersSorted.sort((a, b) => {
+    if (a.position === undefined) return 1;
+    if (b.position === undefined) return -1;
+    return a.position - b.position;
+  });
+};

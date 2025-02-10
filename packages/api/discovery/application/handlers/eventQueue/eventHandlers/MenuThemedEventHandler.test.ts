@@ -1,5 +1,5 @@
 import { menuFactory } from '@blc-mono/discovery/application/factories/MenuFactory';
-import { offerFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
+import { menuOfferFactory } from '@blc-mono/discovery/application/factories/MenuOfferFactory';
 import { subMenuFactory } from '@blc-mono/discovery/application/factories/SubMenuFactory';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import { ThemedMenuOffer } from '@blc-mono/discovery/application/models/ThemedMenu';
@@ -18,8 +18,8 @@ jest.mock('@blc-mono/discovery/application/repositories/Offer/service/OfferServi
 const menu = menuFactory.build();
 const subMenu = subMenuFactory.build();
 const secondSubMenu = subMenuFactory.build({ id: '2' });
-const offer = offerFactory.build({ id: 'offer-1' });
-const secondOffer = offerFactory.build({ id: 'offer-2' });
+const offer = menuOfferFactory.build({ id: 'offer-1' });
+const secondOffer = menuOfferFactory.build({ id: 'offer-2' });
 
 const insertThemedMenuWithSubMenusAndOffersMock = jest.mocked(insertThemedMenuWithSubMenusAndOffers);
 const deleteMenuWithSubMenusAndOffersMock = jest.mocked(deleteMenuWithSubMenusAndOffers);
@@ -30,8 +30,8 @@ const themedMenuOffer: ThemedMenuOffer = {
   ...menu,
   menuType: MenuType.FLEXIBLE,
   themedMenusOffers: [
-    { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' } }] },
-    { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' } }] },
+    { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0 }] },
+    { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0 }] },
   ],
 };
 
@@ -56,8 +56,8 @@ describe('MenuThemedEventHandler', () => {
         { ...menu, menuType: MenuType.FLEXIBLE },
         [subMenu, secondSubMenu],
         [
-          { subMenuId: '1', offer: offer },
-          { subMenuId: '2', offer: secondOffer },
+          { subMenuId: '1', offer: { ...offer, start: undefined, end: undefined, position: 0 } },
+          { subMenuId: '2', offer: { ...secondOffer, start: undefined, end: undefined, position: 0 } },
         ],
       );
     });
@@ -71,8 +71,8 @@ describe('MenuThemedEventHandler', () => {
           ...newerMenu,
           menuType: MenuType.FLEXIBLE,
           themedMenusOffers: [
-            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' } }] },
-            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' } }] },
+            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0 }] },
+            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0 }] },
           ],
         };
 
@@ -82,8 +82,8 @@ describe('MenuThemedEventHandler', () => {
           { ...newerMenu, menuType: MenuType.FLEXIBLE },
           [subMenu, secondSubMenu],
           [
-            { subMenuId: '1', offer: offer },
-            { subMenuId: '2', offer: secondOffer },
+            { subMenuId: '1', offer: { ...offer, start: undefined, end: undefined, position: 0 } },
+            { subMenuId: '2', offer: { ...secondOffer, start: undefined, end: undefined, position: 0 } },
           ],
         );
       });
@@ -95,8 +95,8 @@ describe('MenuThemedEventHandler', () => {
           ...menu,
           menuType: MenuType.FLEXIBLE,
           themedMenusOffers: [
-            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' } }] },
-            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' } }] },
+            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0 }] },
+            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0 }] },
           ],
           updatedAt: new Date(2021, 12, 30).toISOString(),
         };
@@ -123,8 +123,8 @@ describe('MenuThemedEventHandler', () => {
           ...newerMenu,
           menuType: MenuType.FLEXIBLE,
           themedMenusOffers: [
-            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' } }] },
-            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' } }] },
+            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0 }] },
+            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0 }] },
           ],
         };
 
@@ -138,8 +138,8 @@ describe('MenuThemedEventHandler', () => {
           ...menu,
           menuType: MenuType.FLEXIBLE,
           themedMenusOffers: [
-            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' } }] },
-            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' } }] },
+            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0 }] },
+            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0 }] },
           ],
           updatedAt: new Date(2021, 12, 30).toISOString(),
         };

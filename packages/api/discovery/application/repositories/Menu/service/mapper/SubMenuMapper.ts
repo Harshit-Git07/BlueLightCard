@@ -9,6 +9,7 @@ export function mapSubMenuEntityToSubMenu(subMenuEntity: SubMenuEntity): SubMenu
     title: subMenuEntity.title,
     description: subMenuEntity.description,
     imageURL: subMenuEntity.imageURL,
+    position: subMenuEntity.position,
   };
 }
 
@@ -24,5 +25,6 @@ export function mapSubMenuToSubMenuEntity(menuId: string, subMenu: SubMenu): Sub
     title: subMenu.title,
     description: subMenu.description,
     imageURL: subMenu.imageURL,
+    position: subMenu.position,
   };
 }

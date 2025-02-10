@@ -1,5 +1,5 @@
 import { MenuType } from './MenuResponse';
-import { Offer } from './Offer';
+import { EventOffer, Offer } from './Offer';
 import { SubMenu } from './ThemedMenu';
 
 export type Menu = {
@@ -9,16 +9,32 @@ export type Menu = {
   startTime?: string;
   endTime?: string;
   updatedAt: string;
+  // Position not required with featured & dotw, only marketplace
+  position?: number;
 };
 
-// Expected ingestion type from the CMS events
-export type MenuOffer = Menu & {
+export type IngestedMenuOffer = Menu & {
   offers: {
     id: string;
     company: {
       id: string;
     };
+    start?: string;
+    end?: string;
+    position: number;
   }[];
+};
+
+export type MenuOffer = Offer & {
+  start?: string;
+  end?: string;
+  position: number;
+};
+
+export type MenuEventOffer = EventOffer & {
+  start?: string;
+  end?: string;
+  position: number;
 };
 
 export type MenuWithSubMenus = Menu & {
@@ -27,10 +43,10 @@ export type MenuWithSubMenus = Menu & {
 
 export type MenuWithSubMenuAndOffers = Menu & {
   subMenus: SubMenu[];
-  offers: Offer[];
+  offers: MenuOffer[];
 };
 
 // Expected internal type
 export type MenuWithOffers = Menu & {
-  offers: Offer[];
+  offers: MenuOffer[];
 };

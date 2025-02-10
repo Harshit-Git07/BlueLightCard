@@ -1,12 +1,12 @@
+import { MenuOffer } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
-import { Offer } from '@blc-mono/discovery/application/models/Offer';
 import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
 import {
   MenuOfferEntity,
   MenuOfferKeyBuilders,
 } from '@blc-mono/discovery/application/repositories/schemas/MenuOfferEntity';
 
-export function mapMenuOfferEntityToOffer(menuOfferEntity: MenuOfferEntity): Offer {
+export function mapMenuOfferEntityToMenuOffer(menuOfferEntity: MenuOfferEntity): MenuOffer {
   return {
     id: menuOfferEntity.id,
     legacyOfferId: menuOfferEntity.legacyOfferId,
@@ -28,29 +28,32 @@ export function mapMenuOfferEntityToOffer(menuOfferEntity: MenuOfferEntity): Off
     commonExclusions: menuOfferEntity.commonExclusions,
     boost: menuOfferEntity.boost,
     updatedAt: menuOfferEntity.updatedAt,
+    position: menuOfferEntity.position,
+    start: menuOfferEntity.start,
+    end: menuOfferEntity.end,
   };
 }
 
-export function mapOfferToMenuOfferEntity(
-  offer: Offer,
+export function mapMenuOfferToMenuOfferEntity(
+  menuOffer: MenuOffer,
   menuId: string,
   menuType: MenuType,
   subMenuId?: string,
 ): MenuOfferEntity {
   return {
-    ...offer,
+    ...menuOffer,
     partitionKey: MenuOfferKeyBuilders.buildPartitionKey(menuId),
-    sortKey: MenuOfferKeyBuilders.buildSortKey(offer.id),
+    sortKey: MenuOfferKeyBuilders.buildSortKey(menuOffer.id),
     gsi1PartitionKey: menuType !== MenuType.FLEXIBLE ? MenuOfferKeyBuilders.buildGsi1PartitionKey(menuType) : undefined,
     gsi1SortKey: menuType !== MenuType.FLEXIBLE ? MenuOfferKeyBuilders.buildGsi1SortKey(menuType) : undefined,
     gsi2PartitionKey: subMenuId ? MenuOfferKeyBuilders.buildGsi2PartitionKey(subMenuId) : undefined,
-    gsi2SortKey: subMenuId ? MenuOfferKeyBuilders.buildGsi2SortKey(offer.id) : undefined,
-    gsi3PartitionKey: MenuOfferKeyBuilders.buildGsi3PartitionKey(offer.id),
+    gsi2SortKey: subMenuId ? MenuOfferKeyBuilders.buildGsi2SortKey(menuOffer.id) : undefined,
+    gsi3PartitionKey: MenuOfferKeyBuilders.buildGsi3PartitionKey(menuOffer.id),
     gsi3SortKey: MenuOfferKeyBuilders.buildGsi3SortKey(menuId),
   };
 }
 
-export function mapOfferToMenuOfferResponse(offer: Offer): OfferResponse {
+export function mapMenuOfferToMenuOfferResponse(offer: MenuOffer): OfferResponse {
   return {
     offerID: offer.id,
     legacyOfferID: offer.legacyOfferId,

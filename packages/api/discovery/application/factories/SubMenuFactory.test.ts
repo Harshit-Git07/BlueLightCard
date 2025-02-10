@@ -8,6 +8,7 @@ describe('SubMenu Factory', () => {
       description: 'Sample description',
       imageURL: 'https://cdn.bluelightcard.co.uk/offerimages/1724052659175.jpg',
       title: 'Sample SubMenu title',
+      position: 0,
     });
   });
 

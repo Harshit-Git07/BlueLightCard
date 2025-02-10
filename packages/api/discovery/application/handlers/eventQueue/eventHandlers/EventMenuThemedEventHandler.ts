@@ -18,14 +18,25 @@ export async function handleEventMenuThemedUpdated(newThemedMenuRecord: ThemedMe
     const newSubMenus: SubMenu[] = [];
     const eventsToRetrieve = themedMenusEvents.flatMap(({ events }) => events);
     const eventToSubMenuIDMap: Record<string, string> = {};
+    const eventMenuOfferData: Record<string, { position: number; start?: string; end?: string }> = {};
     themedMenusEvents.forEach(({ events, ...subMenu }) => {
       newSubMenus.push(subMenu);
-      events.forEach(({ id }) => {
+      events.forEach(({ id, position, start, end }) => {
         eventToSubMenuIDMap[id] = subMenu.id;
+        eventMenuOfferData[`${subMenu.id}#${id}`] = { position, start, end };
       });
     });
     const events = await getEventsByIds(eventsToRetrieve.map((event) => ({ id: event.id, venueId: event.venue.id })));
-    const eventsWithMenuId = events.map((event) => ({ subMenuId: eventToSubMenuIDMap[event.id], event }));
+    const eventsWithMenuId = events.map((event) => {
+      const subMenuId = eventToSubMenuIDMap[event.id];
+      return {
+        subMenuId,
+        event: {
+          ...event,
+          ...eventMenuOfferData[`${subMenuId}#${event.id}`],
+        },
+      };
+    });
     if (currentThemedMenu) {
       await deleteMenuWithSubMenusAndOffers(newThemedMenuRecord.id);
     }

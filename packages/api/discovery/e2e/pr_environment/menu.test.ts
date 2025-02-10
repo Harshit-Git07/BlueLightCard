@@ -105,7 +105,7 @@ const events: SanityEvent[] = [
     ],
   }),
 ];
-const offers: SanityOffer[] = [
+const offers = [
   buildTestSanityOffer({
     id: generatedOfferUUID,
     companyId: generatedCompanyUUID,
@@ -126,9 +126,11 @@ const offers: SanityOffer[] = [
     status: 'expired',
   }),
 ];
-const marketplaceSanityMenuOffer = buildTestSanityMenuOffer(offers, marketplaceGeneratedMenuUUID);
-const dealsOfTheWeekSanityMenuOffer = buildTestSanityMenuOffer(offers, dealsOfTheWeekGeneratedMenuUUID);
-const featuredOffersSanityMenuOffer = buildTestSanityMenuOffer(offers, featuredOffersGeneratedMenuUUID);
+const menuOffers = offers.map((offer) => ({ offer, _key: offer._id }));
+
+const marketplaceSanityMenuOffer = buildTestSanityMenuOffer(menuOffers, marketplaceGeneratedMenuUUID);
+const dealsOfTheWeekSanityMenuOffer = buildTestSanityMenuOffer(menuOffers, dealsOfTheWeekGeneratedMenuUUID);
+const featuredOffersSanityMenuOffer = buildTestSanityMenuOffer(menuOffers, featuredOffersGeneratedMenuUUID);
 const flexibleSanityThemedMenuOffer = buildTestSanityMenuThemedOffer(
   offers,
   flexibleGeneratedMenuUUID,
@@ -176,9 +178,9 @@ describe('Menu', async () => {
       await sendTestEvents({
         source: Events.MENU_OFFER_DELETED,
         events: [
-          buildTestSanityMenuOffer(offers, marketplaceGeneratedMenuUUID),
-          buildTestSanityMenuOffer(offers, dealsOfTheWeekGeneratedMenuUUID),
-          buildTestSanityMenuOffer(offers, featuredOffersGeneratedMenuUUID),
+          buildTestSanityMenuOffer(menuOffers, marketplaceGeneratedMenuUUID),
+          buildTestSanityMenuOffer(menuOffers, dealsOfTheWeekGeneratedMenuUUID),
+          buildTestSanityMenuOffer(menuOffers, featuredOffersGeneratedMenuUUID),
         ],
       });
       await sendTestEvents({

@@ -1,5 +1,4 @@
-import { menuOfferFactory } from '@blc-mono/discovery/application/factories/MenuOfferFactory';
-import { offerFactory } from '@blc-mono/discovery/application/factories/OfferFactory';
+import { ingestedMenuOfferFactory, menuOfferFactory } from '@blc-mono/discovery/application/factories/MenuOfferFactory';
 import {
   deleteMenuWithSubMenusAndOffers,
   getMenuById,
@@ -16,10 +15,10 @@ const insertMenuWithOffersMock = jest.mocked(insertMenuWithOffers);
 const deleteMenuWithSubMenusAndOffersMock = jest.mocked(deleteMenuWithSubMenusAndOffers);
 const getOffersByIdsMock = jest.mocked(getOffersByIds);
 const getMenuByIdMock = jest.mocked(getMenuById);
-const menuOffer = menuOfferFactory.build();
-const olderMenuOffer = menuOfferFactory.build({ updatedAt: new Date(2021, 12, 30).toISOString() });
-const newerMenuOffer = menuOfferFactory.build({ updatedAt: new Date(2023, 12, 30).toISOString() });
-const offers = offerFactory.buildList(1);
+const menuOffer = ingestedMenuOfferFactory.build();
+const olderMenuOffer = ingestedMenuOfferFactory.build({ updatedAt: new Date(2021, 12, 30).toISOString() });
+const newerMenuOffer = ingestedMenuOfferFactory.build({ updatedAt: new Date(2023, 12, 30).toISOString() });
+const offers = menuOfferFactory.buildList(1);
 const { offers: _menuOffers, ...menu } = menuOffer;
 
 describe('MenusEventHandler', () => {

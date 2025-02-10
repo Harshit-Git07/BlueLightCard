@@ -132,8 +132,6 @@ export function buildTestSanityOffer(testOfferConfig?: TestOfferConfig): SanityO
           style: 'normal',
         },
       ],
-      tableOfContents: false,
-      tocPosition: 'right',
     },
     offerType: {
       _type: 'offer.type',
@@ -145,8 +143,6 @@ export function buildTestSanityOffer(testOfferConfig?: TestOfferConfig): SanityO
     status: testOfferConfig?.status ?? 'live',
     termsAndConditions: {
       _type: 'richtext-module',
-      tableOfContents: false,
-      tocPosition: 'right',
     },
   };
 }

@@ -34,6 +34,9 @@ describe('Offer Entity Factory', () => {
       commonExclusions: ['none'],
       boost: expect.any(Object),
       updatedAt: '2024-09-01T00:00:00',
+      start: '2021-09-01T00:00:00Z',
+      end: '2021-09-01T00:00:00Z',
+      position: 0,
     });
   });
 

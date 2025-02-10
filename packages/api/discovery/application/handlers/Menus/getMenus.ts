@@ -11,13 +11,14 @@ import { Response } from '@blc-mono/core/utils/restResponse/response';
 import { unpackJWT } from '@blc-mono/core/utils/unpackJWT';
 import { MenuWithSubMenus } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
-import { isValidOffer } from '@blc-mono/discovery/application/utils/isValidOffer';
 
 import { MenuWithOffers } from '../../models/Menu';
 import { mapMenusAndOffersToMenuResponse } from '../../repositories/Menu/service/mapper/MenuMapper';
-import { getMenusByMenuType, getMenusByMenuTypes } from '../../repositories/Menu/service/MenuService';
+import { getMenusByMenuType } from '../../repositories/Menu/service/MenuService';
 import { extractHeaders } from '../../utils/extractHeaders';
 import { getUserDetails } from '../../utils/getUserDetails';
+import { isValidMenu } from '../../utils/isValidMenu';
+import { isValidMenuOffer } from '../../utils/isValidMenuOffer';
 
 const logger = new LambdaLogger({ serviceName: 'menu-get' });
 
@@ -63,12 +64,25 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
 
     const { dob, organisation } = userProfile;
 
-    const menusAndOffers =
-      menusRequested.length === 1
-        ? await getMenusByMenuType(menusRequested[0])
-        : await getMenusByMenuTypes(menusRequested);
+    const menusToRetrieve =
+      menusRequested.length > 0
+        ? menusRequested
+        : [MenuType.DEALS_OF_THE_WEEK, MenuType.FEATURED, MenuType.MARKETPLACE, MenuType.FLEXIBLE];
 
-    const filteredMenusAndOffers = filterInvalidOffers(menusAndOffers, dob, organisation);
+    const menusAndOffers: {
+      [menuType: string]: (MenuWithOffers | MenuWithSubMenus)[];
+    } = {};
+
+    await Promise.all(
+      menusToRetrieve.map(async (menuType) => {
+        const menuData = await getMenusByMenuType(menuType);
+        if (menuData && menuData.length > 0) {
+          menusAndOffers[menuType] = menuData;
+        }
+      }),
+    );
+
+    const filteredMenusAndOffers = filterInvalidMenuOffers(menusAndOffers, dob, organisation);
 
     return Response.OK({
       message: `successful`,
@@ -82,7 +96,7 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
 
 export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;
 
-const filterInvalidOffers = (
+const filterInvalidMenuOffers = (
   menusAndOffers: Partial<Record<MenuType, MenuWithOffers[] | MenuWithSubMenus[]>>,
   dob: string,
   organisation: string,
@@ -98,9 +112,9 @@ const filterInvalidOffers = (
       filteredMenusAndOffers[type] = (filteredMenusAndOffers[type] as MenuWithOffers[])
         .map((menu) => ({
           ...menu,
-          offers: menu.offers.filter((offer) => isValidOffer(offer, dob, organisation)),
+          offers: menu.offers.filter((offer) => isValidMenuOffer(offer, dob, organisation)),
         }))
-        .filter((menu) => menu.offers.length > 0);
+        .filter((menu) => isValidMenu(menu) && menu.offers.length > 0);
     }
   });
 

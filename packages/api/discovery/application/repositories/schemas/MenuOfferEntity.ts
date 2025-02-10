@@ -1,4 +1,4 @@
-import { EventOffer, Offer } from '../../models/Offer';
+import { MenuEventOffer, MenuOffer } from '../../models/Menu';
 import {
   EVENT_PREFIX,
   MENU_PREFIX,
@@ -7,7 +7,7 @@ import {
   SUB_MENU_PREFIX,
 } from '../constants/PrimaryKeyPrefixes';
 
-export type MenuOfferEntity = Offer & {
+export type MenuOfferEntity = MenuOffer & {
   partitionKey: string;
   sortKey: string;
   gsi1PartitionKey?: string;
@@ -36,7 +36,7 @@ export class MenuOfferKeyBuilders {
   static readonly buildGsi3SortKey = (menuId: string): string => `${MENU_PREFIX}${menuId}`;
 }
 
-export type MenuEventEntity = EventOffer & {
+export type MenuEventEntity = MenuEventOffer & {
   partitionKey: string;
   sortKey: string;
   gsi1PartitionKey?: string;

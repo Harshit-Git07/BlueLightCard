@@ -17,17 +17,31 @@ export async function handleMenuThemedUpdated(newThemedMenuRecord: ThemedMenuOff
     const { themedMenusOffers, ...newThemedMenu } = newThemedMenuRecord;
     const newSubMenus: SubMenu[] = [];
     const offersToRetrieve = themedMenusOffers.flatMap(({ offers }) => offers);
+
     const offerToSubMenuIDMap: Record<string, string> = {};
+    const menuOfferData: Record<string, { position: number; start?: string; end?: string }> = {};
+
     themedMenusOffers.forEach(({ offers, ...subMenu }) => {
       newSubMenus.push(subMenu);
-      offers.forEach(({ id }) => {
+      offers.forEach(({ id, position, start, end }) => {
         offerToSubMenuIDMap[id] = subMenu.id;
+        menuOfferData[`${subMenu.id}#${id}`] = { position, start, end };
       });
     });
+
     const offers = await getOffersByIds(
       offersToRetrieve.map((offer) => ({ id: offer.id, companyId: offer.company.id })),
     );
-    const offersWithMenuId = offers.map((offer) => ({ subMenuId: offerToSubMenuIDMap[offer.id], offer }));
+    const offersWithMenuId = offers.map((offer) => {
+      const subMenuId = offerToSubMenuIDMap[offer.id];
+      return {
+        subMenuId,
+        offer: {
+          ...offer,
+          ...menuOfferData[`${subMenuId}#${offer.id}`],
+        },
+      };
+    });
     if (currentThemedMenu) {
       await deleteMenuWithSubMenusAndOffers(newThemedMenuRecord.id);
     }

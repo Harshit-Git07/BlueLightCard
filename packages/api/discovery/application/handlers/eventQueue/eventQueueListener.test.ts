@@ -24,7 +24,7 @@ import { mapSanityThemedMenuToThemedMenu } from '@blc-mono/discovery/helpers/san
 import { DetailTypes, Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
 import { menuFactory } from '../../factories/MenuFactory';
-import { menuOfferFactory } from '../../factories/MenuOfferFactory';
+import { ingestedMenuOfferFactory } from '../../factories/MenuOfferFactory';
 import { siteFactory } from '../../factories/SiteFactory';
 import { MenuType } from '../../models/MenuResponse';
 import { ThemedMenuOffer } from '../../models/ThemedMenu';
@@ -158,7 +158,7 @@ describe('eventQueueListener', () => {
 
   it.each([Events.MENU_OFFER_CREATED, Events.MENU_OFFER_UPDATED])('should handle %s event', async (eventSource) => {
     const menuRecord = buildSQSRecord(eventSource);
-    const menuOffer = menuOfferFactory.build();
+    const menuOffer = ingestedMenuOfferFactory.build();
     mapSanityMenuOfferToMenuOfferMock.mockResolvedValue(menuOffer);
     await handler({ Records: [menuRecord] });
 
@@ -168,7 +168,7 @@ describe('eventQueueListener', () => {
 
   it('should handle "menu.deleted" event', async () => {
     const menuDeletedRecord = buildSQSRecord(Events.MENU_OFFER_DELETED);
-    const menuOffer = menuOfferFactory.build();
+    const menuOffer = ingestedMenuOfferFactory.build();
     mapSanityMenuOfferToMenuOfferMock.mockResolvedValue(menuOffer);
     await handler({ Records: [menuDeletedRecord] });
 

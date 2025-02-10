@@ -1,12 +1,12 @@
 import { EventResponse } from '@blc-mono/discovery/application/models/EventResponse';
+import { MenuEventOffer } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
-import { EventOffer } from '@blc-mono/discovery/application/models/Offer';
 import {
   MenuEventEntity,
   MenuEventKeyBuilders,
 } from '@blc-mono/discovery/application/repositories/schemas/MenuOfferEntity';
 
-export function mapMenuEventEntityToEvent(menuEventEntity: MenuEventEntity): EventOffer {
+export function mapMenuEventEntityToEvent(menuEventEntity: MenuEventEntity): MenuEventOffer {
   return {
     id: menuEventEntity.id,
     offerType: menuEventEntity.offerType,
@@ -25,11 +25,14 @@ export function mapMenuEventEntityToEvent(menuEventEntity: MenuEventEntity): Eve
     guestlistCompleteByDate: menuEventEntity.guestlistCompleteByDate,
     ageRestrictions: menuEventEntity.ageRestrictions,
     updatedAt: menuEventEntity.updatedAt,
+    position: menuEventEntity.position,
+    start: menuEventEntity.start,
+    end: menuEventEntity.end,
   };
 }
 
 export function mapEventToMenuEventEntity(
-  eventOffer: EventOffer,
+  eventOffer: MenuEventOffer,
   menuId: string,
   menuType: MenuType,
   subMenuId?: string,
@@ -47,7 +50,7 @@ export function mapEventToMenuEventEntity(
   };
 }
 
-export function mapEventToMenuEventResponse(event: EventOffer): EventResponse {
+export function mapEventToMenuEventResponse(event: MenuEventOffer): EventResponse {
   return {
     eventID: event.id,
     eventName: event.name,

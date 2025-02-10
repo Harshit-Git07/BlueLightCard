@@ -3,14 +3,16 @@ import { APIGatewayEvent } from 'aws-lambda';
 import { Response } from '@blc-mono/core/utils/restResponse/response';
 import * as JWTUtils from '@blc-mono/core/utils/unpackJWT';
 import { JWT } from '@blc-mono/core/utils/unpackJWT';
-import { isValidOffer } from '@blc-mono/discovery/application/utils/isValidOffer';
+import { isValidMenu } from '@blc-mono/discovery/application/utils/isValidMenu';
+import { isValidMenuOffer } from '@blc-mono/discovery/application/utils/isValidMenuOffer';
 
 import { menuFactory } from '../../factories/MenuFactory';
-import { offerFactory } from '../../factories/OfferFactory';
+import { menuOfferFactory } from '../../factories/MenuOfferFactory';
 import { subMenuFactory } from '../../factories/SubMenuFactory';
+import { MenuWithOffers, MenuWithSubMenus } from '../../models/Menu';
 import { MenuType } from '../../models/MenuResponse';
 import { mapMenusAndOffersToMenuResponse } from '../../repositories/Menu/service/mapper/MenuMapper';
-import { getMenusByMenuType, getMenusByMenuTypes } from '../../repositories/Menu/service/MenuService';
+import { getMenusByMenuType } from '../../repositories/Menu/service/MenuService';
 import * as UserDetails from '../../utils/getUserDetails';
 import { getUserInHandlersSharedTests } from '../getUserInHandlersTests';
 
@@ -20,7 +22,8 @@ jest.mock('../../services/opensearch/DiscoveryOpenSearchService');
 jest.mock('@blc-mono/core/utils/getEnv');
 jest.mock('@blc-mono/core/utils/unpackJWT');
 jest.mock('../../repositories/Menu/service/MenuService');
-jest.mock('@blc-mono/discovery/application/utils/isValidOffer');
+jest.mock('@blc-mono/discovery/application/utils/isValidMenuOffer');
+jest.mock('@blc-mono/discovery/application/utils/isValidMenu');
 
 const mockStandardToken: JWT = {
   sub: '123456',
@@ -33,43 +36,40 @@ const mockStandardToken: JWT = {
 };
 
 const getMenusByMenuTypeMock = jest.mocked(getMenusByMenuType);
-const getMenusByMenuTypesMock = jest.mocked(getMenusByMenuTypes);
-const isValidOfferMock = jest.mocked(isValidOffer);
+const isValidMenuOfferMock = jest.mocked(isValidMenuOffer);
+const isValidMenuMock = jest.mocked(isValidMenu);
 
-const mockGetMenusResponse = {
-  dealsOfTheWeek: [
-    {
-      ...menuFactory.build({ menuType: MenuType.DEALS_OF_THE_WEEK }),
-      offers: offerFactory.buildList(2),
-    },
-  ],
-  featured: [{ ...menuFactory.build({ menuType: MenuType.FEATURED }), offers: offerFactory.buildList(2) }],
-  marketplace: [
-    { ...menuFactory.build({ menuType: MenuType.MARKETPLACE }), offers: offerFactory.buildList(2) },
-    { ...menuFactory.build({ menuType: MenuType.MARKETPLACE }), offers: offerFactory.buildList(2) },
-  ],
-  flexible: [
-    { ...menuFactory.build({ menuType: MenuType.FLEXIBLE }), subMenus: subMenuFactory.buildList(2) },
-    { ...menuFactory.build({ menuType: MenuType.FLEXIBLE }), subMenus: subMenuFactory.buildList(2) },
-  ],
-};
-const mockDealsOfTheWeekResponse = {
-  ...mockGetMenusResponse,
-  featured: [],
-  marketplace: [],
-  flexible: [],
-};
+const dealsOfTheWeekMock: MenuWithOffers[] = [
+  {
+    ...menuFactory.build({ menuType: MenuType.DEALS_OF_THE_WEEK }),
+    offers: menuOfferFactory.buildList(2),
+  },
+];
+
+const featuredMock: MenuWithOffers[] = [
+  { ...menuFactory.build({ menuType: MenuType.FEATURED }), offers: menuOfferFactory.buildList(2) },
+];
+
+const marketplaceMock: MenuWithOffers[] = [
+  { ...menuFactory.build({ menuType: MenuType.MARKETPLACE }), offers: menuOfferFactory.buildList(2) },
+  { ...menuFactory.build({ menuType: MenuType.MARKETPLACE }), offers: menuOfferFactory.buildList(2) },
+];
+
+const flexibleMock: MenuWithSubMenus[] = [
+  { ...menuFactory.build({ menuType: MenuType.FLEXIBLE }), subMenus: subMenuFactory.buildList(2) },
+  { ...menuFactory.build({ menuType: MenuType.FLEXIBLE }), subMenus: subMenuFactory.buildList(2) },
+];
 
 describe('getMenus handler', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    isValidOfferMock.mockReturnValue(true);
+    isValidMenuOfferMock.mockReturnValue(true);
     jest.spyOn(UserDetails, 'getUserDetails').mockResolvedValue({ dob: '2001-01-01', organisation: 'DEN' });
 
     jest.spyOn(JWTUtils, 'unpackJWT').mockImplementation(() => mockStandardToken);
   });
-  it('should call the getMenusByMenuTypes when no ids are provided', async () => {
-    getMenusByMenuTypesMock.mockResolvedValue(mockGetMenusResponse);
+  it('should call the getMenusByMenuType for all menu types when no ids are provided', async () => {
+    getMenusByMenuTypeMock.mockResolvedValue([]);
 
     const event: Partial<APIGatewayEvent> = {
       queryStringParameters: {},
@@ -83,17 +83,29 @@ describe('getMenus handler', () => {
 
     const expectedResponse = Response.OK({
       message: 'successful',
-      data: mapMenusAndOffersToMenuResponse(mockGetMenusResponse),
+      data: {},
     });
 
     expect(result).toEqual(expectedResponse);
-    expect(getMenusByMenuTypesMock).toHaveBeenCalled();
-    expect(getMenusByMenuTypeMock).not.toHaveBeenCalled();
+    expect(getMenusByMenuTypeMock).toHaveBeenCalledTimes(4);
   });
 
   describe('and menus are found', () => {
     beforeEach(() => {
-      getMenusByMenuTypesMock.mockResolvedValue(mockDealsOfTheWeekResponse);
+      getMenusByMenuTypeMock.mockImplementation((menuType: MenuType) => {
+        switch (menuType) {
+          case MenuType.DEALS_OF_THE_WEEK:
+            return Promise.resolve(dealsOfTheWeekMock);
+          case MenuType.FEATURED:
+            return Promise.resolve(featuredMock);
+          case MenuType.MARKETPLACE:
+            return Promise.resolve(marketplaceMock);
+          case MenuType.FLEXIBLE:
+            return Promise.resolve(flexibleMock);
+          default:
+            return Promise.resolve([]);
+        }
+      });
     });
 
     const event: Partial<APIGatewayEvent> = {
@@ -105,96 +117,74 @@ describe('getMenus handler', () => {
     };
 
     it('should filter out the menu if no valid offers', async () => {
-      isValidOfferMock.mockReturnValue(false);
+      isValidMenuOfferMock.mockReturnValue(false);
+      isValidMenuMock.mockReturnValue(true);
 
       const result = await handler(event as APIGatewayEvent);
 
       const expectedResponse = Response.OK({
         message: 'successful',
         data: mapMenusAndOffersToMenuResponse({
-          ...mockDealsOfTheWeekResponse,
           dealsOfTheWeek: [],
+          marketplace: [],
+          flexible: flexibleMock,
         }),
       });
       expect(result).toEqual(expectedResponse);
     });
 
     it('should filter out invalid offers', async () => {
-      isValidOfferMock.mockReturnValueOnce(false);
-      isValidOfferMock.mockReturnValue(true);
+      isValidMenuOfferMock.mockReturnValueOnce(false);
+      isValidMenuOfferMock.mockReturnValue(true);
+      const dealsOfTheWeekEvent: Partial<APIGatewayEvent> = {
+        queryStringParameters: {
+          id: 'dealsOfTheWeek',
+        },
+        headers: {
+          Authorization: 'idToken',
+          'x-client-type': 'web',
+        },
+      };
 
-      const result = await handler(event as APIGatewayEvent);
+      const result = await handler(dealsOfTheWeekEvent as APIGatewayEvent);
 
       const expectedResponse = Response.OK({
         message: 'successful',
         data: mapMenusAndOffersToMenuResponse({
-          ...mockDealsOfTheWeekResponse,
           dealsOfTheWeek: [
             {
-              ...mockGetMenusResponse.dealsOfTheWeek[0],
-              offers: [mockGetMenusResponse.dealsOfTheWeek[0].offers[1]],
+              ...dealsOfTheWeekMock[0],
+              offers: [dealsOfTheWeekMock[0].offers[1]],
             },
           ],
         }),
       });
       expect(result).toEqual(expectedResponse);
-      expect(isValidOfferMock).toHaveBeenCalledTimes(2);
-    });
-  });
-
-  it('should call the getMenusByMenuTypes when more than one id is provided', async () => {
-    const filteredMenuReponse = {
-      dealsOfTheWeek: mockGetMenusResponse.dealsOfTheWeek,
-      featured: mockGetMenusResponse.featured,
-    };
-
-    getMenusByMenuTypesMock.mockResolvedValue(filteredMenuReponse);
-
-    const event: Partial<APIGatewayEvent> = {
-      queryStringParameters: {
-        id: 'dealsOfTheWeek,featured',
-      },
-      headers: {
-        Authorization: 'idToken',
-        'x-client-type': 'web',
-      },
-    };
-
-    const result = await handler(event as APIGatewayEvent);
-
-    const expectedResponse = Response.OK({
-      message: 'successful',
-      data: mapMenusAndOffersToMenuResponse(filteredMenuReponse),
+      expect(isValidMenuOfferMock).toHaveBeenCalledTimes(2);
     });
 
-    expect(result).toEqual(expectedResponse);
-    expect(getMenusByMenuTypesMock).toHaveBeenCalled();
-    expect(getMenusByMenuTypeMock).not.toHaveBeenCalled();
-  });
+    it('should filter out invalid menus', async () => {
+      isValidMenuMock.mockReturnValue(false);
+      const dealsOfTheWeekEvent: Partial<APIGatewayEvent> = {
+        queryStringParameters: {
+          id: 'dealsOfTheWeek',
+        },
+        headers: {
+          Authorization: 'idToken',
+          'x-client-type': 'web',
+        },
+      };
 
-  it('should call the getMenusByMenuType if only one id is provided', async () => {
-    const filteredMenuReponse = {
-      dealsOfTheWeek: mockGetMenusResponse.dealsOfTheWeek,
-    };
-    getMenusByMenuTypeMock.mockResolvedValue(filteredMenuReponse);
-    const event: Partial<APIGatewayEvent> = {
-      queryStringParameters: {
-        id: 'dealsOfTheWeek',
-      },
-      headers: {
-        Authorization: 'idToken',
-        'x-client-type': 'web',
-      },
-    };
+      const result = await handler(dealsOfTheWeekEvent as APIGatewayEvent);
 
-    const result = await handler(event as APIGatewayEvent);
-
-    const expectedResponse = Response.OK({
-      message: 'successful',
-      data: mapMenusAndOffersToMenuResponse(filteredMenuReponse),
+      const expectedResponse = Response.OK({
+        message: 'successful',
+        data: mapMenusAndOffersToMenuResponse({
+          dealsOfTheWeek: [],
+        }),
+      });
+      expect(result).toEqual(expectedResponse);
     });
-
-    expect(result).toEqual(expectedResponse);
   });
 
   const userTestProps = {

@@ -1,10 +1,11 @@
+import { MenuOffer } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
-import { Offer, OfferStatus, OfferType } from '@blc-mono/discovery/application/models/Offer';
+import { OfferStatus, OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { MenuOfferEntity } from '@blc-mono/discovery/application/repositories/schemas/MenuOfferEntity';
 
-import { mapMenuOfferEntityToOffer, mapOfferToMenuOfferEntity } from './MenuOfferMapper';
+import { mapMenuOfferEntityToMenuOffer, mapMenuOfferToMenuOfferEntity } from './MenuOfferMapper';
 
-const offer: Offer = {
+const offer: MenuOffer = {
   id: 'offer1',
   legacyOfferId: 1,
   name: 'Test Offer',
@@ -46,6 +47,9 @@ const offer: Offer = {
     boosted: true,
   },
   updatedAt: new Date().toLocaleDateString(),
+  position: 1,
+  end: new Date().toLocaleDateString(),
+  start: new Date().toLocaleDateString(),
 };
 
 const defaultMenuOfferEntity: MenuOfferEntity = {
@@ -76,13 +80,13 @@ describe('MenuOfferMapper', () => {
   it.each(mapOffersToMenuOfferEntitiesTestCases)(
     'should map Offer to MenuOfferEntity',
     ({ menuType, menuOfferEntity, subMenuId }) => {
-      const result = mapOfferToMenuOfferEntity(offer, 'menu1', menuType, subMenuId);
+      const result = mapMenuOfferToMenuOfferEntity(offer, 'menu1', menuType, subMenuId);
       expect(result).toEqual(menuOfferEntity);
     },
   );
 
   it('should map MenuOfferEntity to Offer', () => {
-    const result = mapMenuOfferEntityToOffer(defaultMenuOfferEntity);
+    const result = mapMenuOfferEntityToMenuOffer(defaultMenuOfferEntity);
     expect(result).toEqual(offer);
   });
 });

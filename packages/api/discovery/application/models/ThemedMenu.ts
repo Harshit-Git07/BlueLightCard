@@ -1,39 +1,46 @@
 // Also known as Flexible menu
 
+import { MenuEventOffer, MenuOffer } from './Menu';
 import { MenuType } from './MenuResponse';
-import { EventOffer, Offer } from './Offer';
 
 export type SubMenu = {
   id: string;
   title: string;
   description: string;
   imageURL: string;
+  position: number;
 };
 
 // Expected ingestion type from the CMS events
-export type ThemedSubMenuOffer = SubMenu & {
+export type IngestedThemedSubMenuOffer = SubMenu & {
   offers: {
     id: string;
     company: {
       id: string;
     };
+    position: number;
+    start?: string;
+    end?: string;
   }[];
 };
 
 // Expected ingestion type from the CMS events
-export type ThemedSubMenuEvent = SubMenu & {
+export type IngestedThemedSubMenuEvent = SubMenu & {
   events: {
     id: string;
     venue: {
       id: string;
     };
+    position: number;
+    start?: string;
+    end?: string;
   }[];
 };
 
 // Expected internal type
 export type ThemedSubMenuWithOffers = SubMenu & {
-  offers: Offer[];
-  events: EventOffer[];
+  offers: MenuOffer[];
+  events: MenuEventOffer[];
 };
 
 type ThemedMenu = {
@@ -46,9 +53,9 @@ type ThemedMenu = {
 };
 
 export type ThemedMenuOffer = ThemedMenu & {
-  themedMenusOffers: ThemedSubMenuOffer[];
+  themedMenusOffers: IngestedThemedSubMenuOffer[];
 };
 
 export type ThemedMenuEvent = ThemedMenu & {
-  themedMenusEvents: ThemedSubMenuEvent[];
+  themedMenusEvents: IngestedThemedSubMenuEvent[];
 };

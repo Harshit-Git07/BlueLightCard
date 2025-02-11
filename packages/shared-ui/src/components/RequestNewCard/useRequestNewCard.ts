@@ -32,8 +32,8 @@ const useRequestNewCard = () => {
   const { mutateAsync: mutateConfirmPayment, isPending: isPendingConfirmPayment } =
     useMemberApplicationConfirmPaymentPut(memberId, applicationId);
   //
-  const previousStep = Math.max(currentStep ?? 0 - 1, 0);
-  const nextStep = Math.min(currentStep ?? 0 + 1, sequence.length - 1);
+  const previousStep = Math.max((currentStep ?? 0) - 1, 0);
+  const nextStep = Math.min((currentStep ?? 0) + 1, sequence.length - 1);
 
   const goBack = () =>
     setAtom((prev) => ({

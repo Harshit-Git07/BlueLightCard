@@ -8,6 +8,8 @@ import {
   ScanCommand,
   ScanCommandInput,
   TransactWriteCommand,
+  UpdateCommand,
+  UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { S3 } from 'aws-sdk';
 import { defaultDynamoDbClient } from './dynamoClient';
@@ -22,6 +24,7 @@ import {
 } from '@blc-mono/shared/models/members/applicationModel';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { TransactWriteItem } from '@aws-sdk/client-dynamodb';
+import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
 
 export class ApplicationRepository extends Repository {
   constructor(
@@ -167,15 +170,15 @@ export class ApplicationRepository extends Repository {
         throw new Error(`No item found for applicationId: ${applicationId}`);
       }
 
-      const fullPrimaryKey = queryResult.Items[0].pk;
-      const fullSecondaryKey = queryResult.Items[0].sk;
+      const fullPartitionKey = queryResult.Items[0].pk;
+      const fullSortKey = queryResult.Items[0].sk;
 
       applicationsToAssign.push({
         Update: {
           TableName: this.tableName,
           Key: {
-            pk: fullPrimaryKey,
-            sk: fullSecondaryKey,
+            pk: fullPartitionKey,
+            sk: fullSortKey,
           },
           UpdateExpression: 'SET assignedTo = :adminId, eligibilityStatus = :eligibilityStatus',
           ExpressionAttributeValues: {
@@ -212,15 +215,15 @@ export class ApplicationRepository extends Repository {
         throw new Error(`No item found for applicationId: ${applicationId}`);
       }
 
-      const fullPrimaryKey = applicationQueryResult.Items[0].pk;
-      const fullSecondaryKey = applicationQueryResult.Items[0].sk;
+      const fullPartitionKey = applicationQueryResult.Items[0].pk;
+      const fullSortKey = applicationQueryResult.Items[0].sk;
 
       applicationsToRelease.push({
         Update: {
           TableName: this.tableName,
           Key: {
-            pk: fullPrimaryKey,
-            sk: fullSecondaryKey,
+            pk: fullPartitionKey,
+            sk: fullSortKey,
           },
           UpdateExpression: 'REMOVE assignedTo SET eligibilityStatus = :eligibilityStatus',
           ExpressionAttributeValues: {
@@ -230,5 +233,43 @@ export class ApplicationRepository extends Repository {
       });
     }
     await this.dynamoDB.send(new TransactWriteCommand({ TransactItems: applicationsToRelease }));
+  }
+
+  async approveApplication(memberId: string, applicationId: string): Promise<void> {
+    const params: UpdateCommandInput = {
+      TableName: this.tableName,
+      Key: {
+        pk: memberKey(memberId),
+        sk: applicationKey(applicationId),
+      },
+      UpdateExpression: 'REMOVE assignedTo SET eligibilityStatus = :eligibilityStatus',
+      ExpressionAttributeValues: {
+        ':eligibilityStatus': EligibilityStatus.ELIGIBLE,
+      },
+    };
+
+    await this.dynamoDB.send(new UpdateCommand(params));
+  }
+
+  async rejectApplication(
+    memberId: string,
+    applicationId: string,
+    applicationRejectionReason: RejectionReason,
+  ): Promise<void> {
+    const params: UpdateCommandInput = {
+      TableName: this.tableName,
+      Key: {
+        pk: memberKey(memberId),
+        sk: applicationKey(applicationId),
+      },
+      UpdateExpression:
+        'REMOVE assignedTo SET eligibilityStatus = :eligibilityStatus, rejectionReason = :rejectionReason',
+      ExpressionAttributeValues: {
+        ':eligibilityStatus': EligibilityStatus.INELIGIBLE,
+        ':rejectionReason': applicationRejectionReason,
+      },
+    };
+
+    await this.dynamoDB.send(new UpdateCommand(params));
   }
 }

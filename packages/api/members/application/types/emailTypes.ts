@@ -1,7 +1,9 @@
+import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
 import { Brand } from '@blc-mono/core/schemas/common';
 
 const brand: Brand =
   (process.env.EMAIL_SERVICE_BRAND as Brand) ?? (process.env.BRAND as Brand) ?? 'BLC_UK';
+
 const brandConversionMapping: Record<Brand, EmailBrand> = {
   BLC_UK: 'blcuk',
   DDS_UK: 'ddsuk',
@@ -201,6 +203,11 @@ export type EmailTemplate =
   | keyof (typeof emailTypes)['blcau']
   | 'auth0_verification'; // This comes from braze rather than s3
 
+export type applicationRejectionEmailTemplates = Record<
+  EmailBrand,
+  { [key in RejectionReason]: EmailTemplate }
+>;
+
 export const emailFrom = emailFromMapping[brand] ?? '';
 
 export function isEmailTemplate(emailType: string): emailType is EmailTemplate {
@@ -211,4 +218,42 @@ export function getEmailTemplateFileName(emailType: EmailTemplate): string | und
   const brandTemplates = emailTypes[emailBrand] as Record<string, string>;
 
   return brandTemplates[emailType] as string | undefined;
+}
+
+export const applicationRejectionReasonEmailType: applicationRejectionEmailTemplates = {
+  blcuk: {
+    DECLINE_INCORRECT_ID: 'id_decline_invalid',
+    PICTURE_DECLINE_ID: 'id_decline_selfie',
+    DL_PP_DECLINE_ID: 'id_decline_generic',
+    DATE_DECLINE_ID: 'id_decline_date',
+    BLURRY_IMAGE_DECLINE_ID: 'id_decline_blurry',
+    DIFFERENT_NAME_DECLINE_ID: 'id_decline_generic',
+    PASSWORD_PROTECTED_DECLINE_ID: 'id_decline_automated_email_file_password_protected',
+    DECLINE_NOT_ELIGIBLE: 'id_decline_generic',
+  },
+  blcau: {
+    DECLINE_INCORRECT_ID: 'id_decline_invalid',
+    PICTURE_DECLINE_ID: 'id_decline_selfie',
+    DL_PP_DECLINE_ID: 'id_decline_generic',
+    DATE_DECLINE_ID: 'id_decline_date',
+    BLURRY_IMAGE_DECLINE_ID: 'id_decline_blurry',
+    DIFFERENT_NAME_DECLINE_ID: 'id_decline_name',
+    PASSWORD_PROTECTED_DECLINE_ID: 'id_decline_password_file',
+    DECLINE_NOT_ELIGIBLE: 'id_decline_generic',
+  },
+  ddsuk: {
+    DECLINE_INCORRECT_ID: 'id_decline_generic',
+    PICTURE_DECLINE_ID: 'id_decline_generic',
+    DL_PP_DECLINE_ID: 'id_decline_generic',
+    DATE_DECLINE_ID: 'id_decline_generic',
+    BLURRY_IMAGE_DECLINE_ID: 'id_decline_blurry',
+    DIFFERENT_NAME_DECLINE_ID: 'id_decline_generic',
+    PASSWORD_PROTECTED_DECLINE_ID: 'id_decline_generic',
+    DECLINE_NOT_ELIGIBLE: 'id_decline_generic',
+  },
+};
+
+export function getEmailTypeForApplicationRejectionReason(reason: RejectionReason): EmailTemplate {
+  const brandTemplates = applicationRejectionReasonEmailType[emailBrand];
+  return brandTemplates[reason];
 }

@@ -8,7 +8,13 @@ jest.mock('@blc-mono/members/application/services/applicationService');
 describe('approveApplication handler', () => {
   const memberId = uuidv4();
   const applicationId = uuidv4();
+  const requestContext = {
+    authorizer: {
+      memberId,
+    },
+  };
   const event = {
+    requestContext: requestContext,
     pathParameters: { memberId, applicationId },
   } as unknown as APIGatewayProxyEvent;
 
@@ -17,7 +23,10 @@ describe('approveApplication handler', () => {
   });
 
   it('should return 400 if memberId or applicationId is missing', async () => {
-    const event = { pathParameters: {} } as unknown as APIGatewayProxyEvent;
+    const event = {
+      requestContext: requestContext,
+      pathParameters: {},
+    } as unknown as APIGatewayProxyEvent;
 
     const response = await handler(event);
 

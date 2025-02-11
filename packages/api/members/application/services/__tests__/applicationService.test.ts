@@ -18,11 +18,14 @@ import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { ReorderCardReason } from '@blc-mono/shared/models/members/enums/ReorderCardReason';
 import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
+import { EmailService } from '@blc-mono/members/application/services/emailService';
+import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
 
 jest.mock('../../repositories/applicationRepository');
 jest.mock('../promoCodesService');
 jest.mock('../profileService');
 jest.mock('../../repositories/cardRepository');
+jest.mock('../emailService');
 jest.mock('../trustedDomainService');
 jest.mock('aws-sdk', () => ({
   S3: jest.fn().mockImplementation(() => ({
@@ -50,6 +53,10 @@ const mockedUuidv4 = jest.mocked(uuidv4);
 
 describe('ApplicationService', () => {
   const memberId = '7d92ad80-8691-4fc7-839a-715384a8a5e0';
+  const email = 'john.dow@nhs.com';
+  const firstName = 'John';
+  const lastName = 'Doe';
+  const dateOfBirth = '1990-01-01';
   const applicationId = '9d2632fb-8983-4f09-bfa1-f652b17e9ca1';
   const createApplication: CreateApplicationModel = {
     applicationReason: ApplicationReason.SIGNUP,
@@ -73,6 +80,7 @@ describe('ApplicationService', () => {
   let profileServiceMock: jest.Mocked<ProfileService>;
   let promoCodeServiceMock: jest.Mocked<PromoCodesService>;
   let trustedDomainServiceMock: jest.Mocked<TrustedDomainService>;
+  let emailServiceMock: jest.Mocked<EmailService>;
   let cardRepositoryMock: jest.Mocked<CardRepository>;
   let s3ClientMock: jest.Mocked<S3>;
 
@@ -85,6 +93,7 @@ describe('ApplicationService', () => {
     profileServiceMock = new ProfileService() as jest.Mocked<ProfileService>;
     promoCodeServiceMock = new PromoCodesService() as jest.Mocked<PromoCodesService>;
     trustedDomainServiceMock = new TrustedDomainService() as jest.Mocked<TrustedDomainService>;
+    emailServiceMock = new EmailService() as jest.Mocked<EmailService>;
     cardRepositoryMock = new CardRepository() as jest.Mocked<CardRepository>;
     s3ClientMock = new S3() as jest.Mocked<S3>;
 
@@ -93,6 +102,7 @@ describe('ApplicationService', () => {
       profileServiceMock,
       promoCodeServiceMock,
       trustedDomainServiceMock,
+      emailServiceMock,
       cardRepositoryMock,
       s3ClientMock,
       'mockBucketName',
@@ -380,6 +390,79 @@ describe('ApplicationService', () => {
       const result = await applicationService.getApplication(memberId, applicationId);
 
       expect(result).toBe(application);
+    });
+  });
+
+  describe('approveApplication', () => {
+    it('should throw error if approving application fails', async () => {
+      const error = new Error('Repository error');
+
+      repositoryMock.approveApplication.mockRejectedValue(error);
+
+      await expect(
+        applicationService.approveApplication(memberId, memberId, applicationId),
+      ).rejects.toThrow(error);
+    });
+
+    it('should approve an application successfully', async () => {
+      profileServiceMock.getProfile.mockResolvedValue({
+        memberId,
+        email,
+        firstName,
+        lastName,
+        dateOfBirth,
+      });
+
+      await applicationService.approveApplication(memberId, memberId, applicationId);
+
+      expect(repositoryMock.approveApplication).toHaveBeenCalledWith(memberId, applicationId);
+    });
+  });
+
+  describe('rejectApplication', () => {
+    it('should throw error if rejecting application fails', async () => {
+      const error = new Error('Repository error');
+      profileServiceMock.getProfile.mockResolvedValue({
+        memberId,
+        email,
+        firstName,
+        lastName,
+        dateOfBirth,
+      });
+
+      repositoryMock.rejectApplication.mockRejectedValue(error);
+
+      await expect(
+        applicationService.rejectApplication(
+          memberId,
+          memberId,
+          applicationId,
+          RejectionReason.DIFFERENT_NAME_DECLINE_ID,
+        ),
+      ).rejects.toThrow(error);
+    });
+
+    it('should reject an application successfully', async () => {
+      profileServiceMock.getProfile.mockResolvedValue({
+        memberId,
+        email,
+        firstName,
+        lastName,
+        dateOfBirth,
+      });
+
+      await applicationService.rejectApplication(
+        memberId,
+        memberId,
+        applicationId,
+        RejectionReason.DIFFERENT_NAME_DECLINE_ID,
+      );
+
+      expect(repositoryMock.rejectApplication).toHaveBeenCalledWith(
+        memberId,
+        applicationId,
+        RejectionReason.DIFFERENT_NAME_DECLINE_ID,
+      );
     });
   });
 });

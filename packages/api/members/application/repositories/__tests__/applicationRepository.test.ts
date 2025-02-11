@@ -8,6 +8,8 @@ import { NotFoundError } from '../../errors/NotFoundError';
 import { v4 as uuidv4 } from 'uuid';
 import { applicationKey, memberKey } from '../repository';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
+import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
+import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 
 jest.mock('@aws-sdk/lib-dynamodb');
 jest.mock('@aws-sdk/client-s3', () => {
@@ -159,6 +161,61 @@ describe('ApplicationRepository', () => {
       const result = await repository.getDocumentsFromApplication(memberId, applicationId);
 
       expect(result).toEqual(['doc1', 'doc2']);
+    });
+  });
+
+  describe('approveApplication', () => {
+    it('should update the application with eligibility status', async () => {
+      dynamoDBMock.send.mockResolvedValue({});
+
+      await repository.approveApplication(memberId, applicationId);
+
+      expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(UpdateCommand));
+      expect(updateCommandMock).toHaveBeenCalledWith({
+        TableName: 'memberProfiles',
+        Key: {
+          pk: memberKey(memberId),
+          sk: applicationKey(applicationId),
+        },
+        UpdateExpression: 'REMOVE assignedTo SET eligibilityStatus = :eligibilityStatus',
+        ExpressionAttributeValues: {
+          ':eligibilityStatus': EligibilityStatus.ELIGIBLE,
+        },
+      });
+    });
+  });
+
+  describe('rejectApplication', () => {
+    [
+      RejectionReason.PICTURE_DECLINE_ID,
+      RejectionReason.PASSWORD_PROTECTED_DECLINE_ID,
+      RejectionReason.DL_PP_DECLINE_ID,
+      RejectionReason.DIFFERENT_NAME_DECLINE_ID,
+      RejectionReason.DECLINE_NOT_ELIGIBLE,
+      RejectionReason.DATE_DECLINE_ID,
+      RejectionReason.DECLINE_INCORRECT_ID,
+      RejectionReason.BLURRY_IMAGE_DECLINE_ID,
+    ].forEach((rejectionReason) => {
+      it('should update the application with rejection reason', async () => {
+        dynamoDBMock.send.mockResolvedValue({});
+
+        await repository.rejectApplication(memberId, applicationId, rejectionReason);
+
+        expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(UpdateCommand));
+        expect(updateCommandMock).toHaveBeenCalledWith({
+          TableName: 'memberProfiles',
+          Key: {
+            pk: memberKey(memberId),
+            sk: applicationKey(applicationId),
+          },
+          UpdateExpression:
+            'REMOVE assignedTo SET eligibilityStatus = :eligibilityStatus, rejectionReason = :rejectionReason',
+          ExpressionAttributeValues: {
+            ':eligibilityStatus': EligibilityStatus.INELIGIBLE,
+            ':rejectionReason': rejectionReason,
+          },
+        });
+      });
     });
   });
 });

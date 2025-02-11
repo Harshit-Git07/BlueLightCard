@@ -25,6 +25,9 @@ import {
   CreateApplicationModel,
   UpdateApplicationModel,
 } from '@blc-mono/shared/models/members/applicationModel';
+import { EmailService } from './emailService';
+import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
+import { EmailTemplate, getEmailTypeForApplicationRejectionReason } from '../types/emailTypes';
 
 let applicationServiceSingleton: ApplicationService;
 
@@ -56,6 +59,7 @@ export class ApplicationService {
       new ProfileRepository(),
       new OrganisationRepository(),
     ),
+    private readonly emailService = new EmailService(),
     private readonly cardRepository: CardRepository = new CardRepository(),
     private readonly s3Client: S3 = new S3({ region: process.env.REGION ?? 'eu-west-2' }),
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -310,27 +314,69 @@ export class ApplicationService {
     }
   }
 
-  async approveApplication(memberId: string, applicationId: string): Promise<void> {
+  async approveApplication(
+    adminId: string,
+    memberId: string,
+    applicationId: string,
+  ): Promise<void> {
     try {
       logger.debug({ message: 'Approving application', memberId, applicationId });
-      await this.repository.updateApplication(memberId, applicationId, {
-        eligibilityStatus: EligibilityStatus.ELIGIBLE,
+      await this.repository.approveApplication(memberId, applicationId);
+      await this.profileService.createNote(memberId, {
+        text: `Application Approved. Application ID ${applicationId}`,
+        source: NoteSource.ADMIN,
+        category: 'Application Approved',
+        pinned: false,
+        creator: adminId,
       });
+      await this.sendEmailForApplicationDecision(memberId, 'id_approved');
     } catch (error) {
       logger.error({ message: 'Error approving application', error });
       throw error;
     }
   }
 
-  async rejectApplication(memberId: string, applicationId: string): Promise<void> {
+  async rejectApplication(
+    adminId: string,
+    memberId: string,
+    applicationId: string,
+    applicationRejectionReason: RejectionReason,
+  ): Promise<void> {
     try {
       logger.debug({ message: 'Rejecting application', memberId, applicationId });
-      await this.repository.updateApplication(memberId, applicationId, {
-        eligibilityStatus: EligibilityStatus.INELIGIBLE,
+      await this.repository.rejectApplication(memberId, applicationId, applicationRejectionReason);
+      await this.profileService.createNote(memberId, {
+        text: `Application rejected. Reason: ${applicationRejectionReason}`,
+        source: NoteSource.ADMIN,
+        category: 'Application Rejected',
+        pinned: false,
+        creator: adminId,
       });
+      await this.sendEmailForApplicationDecision(
+        memberId,
+        getEmailTypeForApplicationRejectionReason(applicationRejectionReason),
+      );
     } catch (error) {
       logger.error({ message: 'Error rejecting application', error });
       throw error;
+    }
+  }
+
+  private async sendEmailForApplicationDecision(
+    memberId: string,
+    emailType: EmailTemplate,
+  ): Promise<void> {
+    try {
+      const profile = await this.profileService.getProfile(memberId);
+      await this.emailService.sendEmail(emailType, {
+        email: profile.email,
+        subject: 'Application Approved',
+        content: {
+          F_Name: profile.firstName,
+        },
+      });
+    } catch (error) {
+      logger.error({ message: 'Error sending email for application decision', error });
     }
   }
 

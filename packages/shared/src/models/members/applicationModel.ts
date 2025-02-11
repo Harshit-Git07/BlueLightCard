@@ -33,6 +33,7 @@ export const ApplicationModel = createZodNamedType(
     nameChangeLastName: z.string().nullable().optional(),
     nameChangeDocType: z.string().nullable().optional(),
     rejectionReason: z.nativeEnum(RejectionReason).nullable().optional(),
+    assignedTo: z.string().uuid().nullable().optional(),
     cardNumber: z.string().optional(),
     ingestionLastTriggered: z.string().datetime().optional(),
     trustedDomainVerificationUid: z.string().optional(),
@@ -68,6 +69,14 @@ export const UpdateApplicationModel = createZodNamedType(
   }),
 );
 export type UpdateApplicationModel = z.infer<typeof UpdateApplicationModel>;
+
+export const RejectApplicationModel = createZodNamedType(
+  'RejectApplicationModel',
+  z.object({
+    rejectionReason: z.nativeEnum(RejectionReason),
+  }),
+);
+export type RejectApplicationModel = z.infer<typeof RejectApplicationModel>;
 
 export const ApplyPromoCodeApplicationModel = createZodNamedType(
   'ApplyPromoCodeApplicationModel',

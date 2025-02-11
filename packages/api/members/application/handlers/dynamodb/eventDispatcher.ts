@@ -53,7 +53,7 @@ async function processDynamoDBRecord(record: DynamoDBRecord): Promise<void> {
   if (record.eventName === 'MODIFY') {
     switch (recordType) {
       case 'Profile':
-        await systemEventsService().emitProfileCreatedEvent(record.dynamodb);
+        await systemEventsService().emitProfileUpdatedEvent(record.dynamodb);
         await brazeEventsService().emitProfileUpdatedEvents(record.dynamodb);
         await dwhEventsService().emitProfileUpdatedEvent(record.dynamodb);
         await legacyEventsService().emitProfileUpdatedEvent(record.dynamodb);

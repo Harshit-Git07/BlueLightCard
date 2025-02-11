@@ -5,7 +5,6 @@ import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/con
 import { emailChangeRequestBody } from '@blc-mono/members/libs/emailTemplates/emailChangeRequest';
 import { getEmailTemplate } from '@blc-mono/members/libs/getEmailTemplates';
 import { Braze } from 'braze-api';
-import { Config } from 'sst/node/config';
 import {
   getEmailVerificationUrl,
   getToken,
@@ -15,6 +14,7 @@ import {
 import { auth0LinkReturn, emailFrom, EmailTemplate } from '../types/emailTypes';
 import { secretsObject } from '../types/auth0types';
 import { EmailPayload } from '@blc-mono/shared/models/members/emailModel';
+import { emailBucket } from '@blc-mono/members/application/utils/emails/emailConstants';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { applicationService } from '@blc-mono/members/application/services/applicationService';
 import { v4 as uuidv4 } from 'uuid';
@@ -30,7 +30,7 @@ const secrets: secretsObject = {
 
 export class EmailService {
   private readonly sourceEmail: string;
-  private readonly bucketName: string = Config['email-templates-bucket'];
+  private readonly bucketName: string = emailBucket;
   private readonly brazeApiKey: string = getEnvOrDefault(
     MemberStackEnvironmentKeys.EMAIL_SERVICE_BRAZE_API_KEY,
     '',

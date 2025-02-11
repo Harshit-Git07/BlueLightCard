@@ -15,7 +15,7 @@ import { ValidationError } from '@blc-mono/members/application/errors/Validation
 import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
 import { Auth0ClientService } from '@blc-mono/members/application/auth0/auth0ClientService';
 import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
-import { EmailService } from '@blc-mono/members/application/email/emailService';
+import { EmailService } from '@blc-mono/members/application/services/emailService';
 
 let profileServiceSingleton: ProfileService;
 
@@ -24,7 +24,7 @@ export class ProfileService {
     private readonly repository: ProfileRepository = new ProfileRepository(),
     private readonly organisationService: OrganisationService = new OrganisationService(),
     private readonly auth0Client: Auth0ClientService = new Auth0ClientService(),
-    private readonly emailClient: EmailService = new EmailService(),
+    private readonly emailService: EmailService = new EmailService(),
   ) {}
 
   async createProfile(profile: CreateProfileModel): Promise<string> {
@@ -114,8 +114,9 @@ export class ProfileService {
         'Error sending change email: email in payload does not match current email does not match',
       );
     }
+
     try {
-      await this.emailClient.sendEmailChangeRequest(newEmail);
+      await this.emailService.sendEmailChangeRequest(newEmail);
     } catch (error) {
       logger.error({ message: 'Error sending changing email', error });
       throw error;

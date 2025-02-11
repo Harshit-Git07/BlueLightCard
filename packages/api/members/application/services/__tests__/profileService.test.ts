@@ -13,12 +13,12 @@ import { NoteModel } from '@blc-mono/shared/models/members/noteModel';
 import { NoteSource } from '@blc-mono/shared/models/members/enums/NoteSource';
 import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 import { TokenSet } from 'auth0';
-import { EmailService } from '@blc-mono/members/application/email/emailService';
+import { EmailService } from '@blc-mono/members/application/services/emailService';
 
 jest.mock('../../repositories/profileRepository');
 jest.mock('../organisationService');
 jest.mock('../../auth0/auth0ClientService');
-jest.mock('@blc-mono/members/application/email/emailService');
+jest.mock('@blc-mono/members/application/services/emailService');
 
 describe('ProfileService', () => {
   const memberId = '7d92ad80-8691-4fc7-839a-715384a8a5e0';

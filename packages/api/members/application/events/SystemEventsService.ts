@@ -14,7 +14,7 @@ export class SystemEventsService extends EventsService {
 
   // TODO: This needs implemented?
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public async emitProfileCreatedEvent(dynamoStream: StreamRecord | undefined): Promise<void> {
+  public async emitProfileUpdatedEvent(dynamoStream: StreamRecord | undefined): Promise<void> {
     // TODO - confirm no triggered events sent to self for profile updates
   }
 

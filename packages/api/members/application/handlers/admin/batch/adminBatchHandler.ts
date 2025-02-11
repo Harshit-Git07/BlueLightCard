@@ -9,7 +9,7 @@ import {
 } from '@blc-mono/shared/models/members/batchModel';
 import { CardPrintBatchModel } from '@blc-mono/shared/models/members/cardPrintBatchModel';
 
-const service = new BatchService();
+const batchService = new BatchService();
 
 const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<unknown> => {
   if (isCreateInternalBatchEvent(event)) {
@@ -61,7 +61,7 @@ async function createInternalBatch(
   }
 
   const { name, cardNumbers } = JSON.parse(event.body);
-  return await service.createInternalBatch(name, cardNumbers);
+  return await batchService.createInternalBatch(name, cardNumbers);
 }
 
 function isUpdateInternalBatch(event: APIGatewayProxyEvent): boolean {
@@ -76,7 +76,7 @@ async function updateInternalBatch(
   }
 
   const { batchId, cardNumbers } = JSON.parse(event.body);
-  return await service.updateInternalBatch(batchId, cardNumbers);
+  return await batchService.updateInternalBatch(batchId, cardNumbers);
 }
 
 function isOpenInternalBatches(event: APIGatewayProxyEvent): boolean {
@@ -84,7 +84,7 @@ function isOpenInternalBatches(event: APIGatewayProxyEvent): boolean {
 }
 
 async function openInternalBatches(): Promise<BatchModel[]> {
-  return await service.openInternalBatches();
+  return await batchService.openInternalBatches();
 }
 
 function isGetBatches(event: APIGatewayProxyEvent): boolean {
@@ -92,7 +92,7 @@ function isGetBatches(event: APIGatewayProxyEvent): boolean {
 }
 
 async function getBatches(): Promise<ExtendedBatchModel[]> {
-  return await service.getBatches();
+  return await batchService.getBatches();
 }
 
 function isGetCardPrintBatches(event: APIGatewayProxyEvent): boolean {
@@ -168,7 +168,7 @@ async function fixCardPrintBatch(event: APIGatewayProxyEvent): Promise<void> {
     throw new ValidationError('Batch ID is required');
   }
 
-  return await service.fixBatch(batchId);
+  return await batchService.fixBatch(batchId);
 }
 
 export const handler = middleware(unwrappedHandler);

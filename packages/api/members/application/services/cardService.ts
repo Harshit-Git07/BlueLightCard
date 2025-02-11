@@ -7,13 +7,9 @@ import {
 } from '@blc-mono/shared/models/members/cardModel';
 import { CardRepository } from '../repositories/cardRepository';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
-import { ProfileService } from '@blc-mono/members/application/services/profileService';
 
 export class CardService {
-  constructor(
-    private readonly repository: CardRepository = new CardRepository(),
-    private readonly profileService: ProfileService = new ProfileService(),
-  ) {}
+  constructor(private readonly repository: CardRepository = new CardRepository()) {}
 
   async getCards(memberId: string): Promise<CardModel[]> {
     try {

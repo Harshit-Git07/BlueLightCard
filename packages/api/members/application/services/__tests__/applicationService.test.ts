@@ -20,6 +20,7 @@ import { ReorderCardReason } from '@blc-mono/shared/models/members/enums/Reorder
 import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
 import { EmailService } from '@blc-mono/members/application/services/emailService';
 import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
+import { NoteSource } from '@blc-mono/shared/models/members/enums/NoteSource';
 
 jest.mock('../../repositories/applicationRepository');
 jest.mock('../promoCodesService');
@@ -30,6 +31,7 @@ jest.mock('../trustedDomainService');
 jest.mock('aws-sdk', () => ({
   S3: jest.fn().mockImplementation(() => ({
     getSignedUrlPromise: jest.fn(),
+    deleteObject: jest.fn(),
   })),
 }));
 jest.mock('sst/node/bucket', () => ({
@@ -405,6 +407,7 @@ describe('ApplicationService', () => {
     });
 
     it('should approve an application successfully', async () => {
+      repositoryMock.getDocumentsFromApplication.mockResolvedValue([documentId]);
       profileServiceMock.getProfile.mockResolvedValue({
         memberId,
         email,
@@ -416,10 +419,23 @@ describe('ApplicationService', () => {
       await applicationService.approveApplication(memberId, memberId, applicationId);
 
       expect(repositoryMock.approveApplication).toHaveBeenCalledWith(memberId, applicationId);
+      expect(profileServiceMock.createNote).toHaveBeenCalledWith(memberId, {
+        category: 'Application Approved',
+        creator: memberId,
+        pinned: false,
+        source: NoteSource.ADMIN,
+        text: `Application Approved. Application ID ${applicationId}`,
+      });
+      expect(s3ClientMock.deleteObject).toHaveBeenCalledWith({
+        Bucket: 'mockBucketName',
+        Key: `UPLOADS/${memberId}/${applicationId}/${documentId}`,
+      });
     });
   });
 
   describe('rejectApplication', () => {
+    const rejectionReason = RejectionReason.DIFFERENT_NAME_DECLINE_ID;
+
     it('should throw error if rejecting application fails', async () => {
       const error = new Error('Repository error');
       profileServiceMock.getProfile.mockResolvedValue({
@@ -433,16 +449,12 @@ describe('ApplicationService', () => {
       repositoryMock.rejectApplication.mockRejectedValue(error);
 
       await expect(
-        applicationService.rejectApplication(
-          memberId,
-          memberId,
-          applicationId,
-          RejectionReason.DIFFERENT_NAME_DECLINE_ID,
-        ),
+        applicationService.rejectApplication(memberId, memberId, applicationId, rejectionReason),
       ).rejects.toThrow(error);
     });
 
     it('should reject an application successfully', async () => {
+      repositoryMock.getDocumentsFromApplication.mockResolvedValue([documentId]);
       profileServiceMock.getProfile.mockResolvedValue({
         memberId,
         email,
@@ -461,8 +473,19 @@ describe('ApplicationService', () => {
       expect(repositoryMock.rejectApplication).toHaveBeenCalledWith(
         memberId,
         applicationId,
-        RejectionReason.DIFFERENT_NAME_DECLINE_ID,
+        rejectionReason,
       );
+      expect(profileServiceMock.createNote).toHaveBeenCalledWith(memberId, {
+        category: 'Application Rejected',
+        creator: memberId,
+        pinned: false,
+        source: NoteSource.ADMIN,
+        text: `Application rejected. Reason: ${rejectionReason}`,
+      });
+      expect(s3ClientMock.deleteObject).toHaveBeenCalledWith({
+        Bucket: 'mockBucketName',
+        Key: `UPLOADS/${memberId}/${applicationId}/${documentId}`,
+      });
     });
   });
 });

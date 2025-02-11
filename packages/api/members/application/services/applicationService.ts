@@ -329,6 +329,7 @@ export class ApplicationService {
         pinned: false,
         creator: adminId,
       });
+      await this.deleteDocumentsForApplication(memberId, applicationId);
       await this.sendEmailForApplicationDecision(memberId, 'id_approved');
     } catch (error) {
       logger.error({ message: 'Error approving application', error });
@@ -352,12 +353,34 @@ export class ApplicationService {
         pinned: false,
         creator: adminId,
       });
+      await this.deleteDocumentsForApplication(memberId, applicationId);
       await this.sendEmailForApplicationDecision(
         memberId,
         getEmailTypeForApplicationRejectionReason(applicationRejectionReason),
       );
     } catch (error) {
       logger.error({ message: 'Error rejecting application', error });
+      throw error;
+    }
+  }
+
+  private async deleteDocumentsForApplication(memberId: string, applicationId: string) {
+    try {
+      const retrievedDocuments = await this.repository.getDocumentsFromApplication(
+        memberId,
+        applicationId,
+      );
+
+      if (!retrievedDocuments) return;
+
+      for (const documentId of retrievedDocuments) {
+        await this.s3Client.deleteObject({
+          Bucket: this.uploadBucketName,
+          Key: `UPLOADS/${memberId}/${applicationId}/${documentId}`,
+        });
+      }
+    } catch (error) {
+      logger.error({ message: 'Error deleting documents for application', error });
       throw error;
     }
   }

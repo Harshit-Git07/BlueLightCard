@@ -294,7 +294,7 @@ export async function MembersAdminApiStack({ app, stack }: StackContext) {
         EMAIL_SERVICE_AUTH0_LOGIN_URL: process.env.AUTH0_LOGIN_URL,
         EMAIL_SERVICE_BRAND: process.env.BRAND,
       },
-      permissions: ['ses:SendEmail', 's3:GetObject'],
+      permissions: ['ses:SendEmail', 's3:GetObject', 's3:DeleteObject'],
       bind: [profilesTable, organisationsTable, documentUploadBucket, emailTemplatesBucket],
     }),
     ...adminOrganisationsRoutes({

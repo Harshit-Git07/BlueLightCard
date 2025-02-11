@@ -113,8 +113,8 @@ const AuthenticatedNavBar = ({
         }`}
       >
         <div className="pt-4 tablet:pt-0 h-auto px-4 laptop:container laptop:mx-auto flex flex-wrap desktop:flex-nowrap content-center items-center">
-          <div className="h-[35px] tablet:h-[42px] desktop:h-[55px] grow flex">
-            <Logo url="/members-home" />
+          <div className="h-[35px] tablet:h-[42px] desktop:h-[55px] inline-block grow">
+            <Logo className="inline-block h-full" url="/members-home" />
           </div>
 
           {!useModernAccountNavigation && (

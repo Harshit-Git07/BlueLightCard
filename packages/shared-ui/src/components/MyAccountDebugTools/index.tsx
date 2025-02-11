@@ -1,6 +1,6 @@
 import { usePlatformAdapter } from '../../adapters';
 import { useQueryClient } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ToggleInput from '../ToggleInput';
 import Button from '../Button-V2';
 import { mockApplication, mockCard, mockMemberProfileResponse } from './mocks/mockMemberProfileGet';

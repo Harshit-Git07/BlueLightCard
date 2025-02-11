@@ -31,11 +31,16 @@ const DISCOVERY_PATH = getBrandedDiscoveryPath();
 
 export const V5_API_URL = {
   Employers: (orgId?: string) => `/${V5_REGION}/members/orgs/${orgId}/employers`,
-  MarketingPreferences: `/${V5_REGION}/members/members/preferences`,
+  MarketingPreferences: (memberId: string, platform: 'web' | 'mobile') =>
+    `/${V5_REGION}/members/members/${memberId}/marketing/preferences/${platform}`,
+  BrazePreferences: (memberId: string) =>
+    `/${V5_REGION}/members/members/${memberId}/marketing/braze`,
   Menus: `${DISCOVERY_PATH}/menus`,
   Organisation: (orgId?: string) => `/${V5_REGION}/members/orgs/${orgId}`,
   Profile: (memberId: string) => `/${V5_REGION}/members/members/${memberId}/profile`,
   Application: (memberId: string) => `/${V5_REGION}/members/members/${memberId}/applications`,
+  PaymentConfirmed: (memberId: string, applicationId: string) =>
+    `/${V5_REGION}/members/members/${memberId}/applications/${applicationId}/paymentConfirmed`,
   DocumentUpload: (memberId: string, applicationId: string) =>
     `/${V5_REGION}/members/members/${memberId}/applications/${applicationId}/uploadDocument`,
   User: `/${V5_REGION}/members/user`,

@@ -10,7 +10,7 @@ const WalletPage: NextPage = () => {
 
   return (
     <>
-      <AccountPagesHeader title="Wallet" />
+      <AccountPagesHeader title="Wallet" hasBackButton={false} />
       <CardVerificationAlerts memberUuid={memberUuid} />
       <div className="flex justify-center p-[16px]">
         <h2>Coming Soon...</h2>

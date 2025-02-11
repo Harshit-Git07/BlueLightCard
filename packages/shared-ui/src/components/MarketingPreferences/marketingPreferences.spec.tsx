@@ -7,13 +7,14 @@ import {
   defaultPrefBlazeData,
   MarketingPreferencesBlazeData,
   preferenceDefinitions,
-} from './MarketingPreferencesTypes';
+} from './types';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '../../adapters';
 import userEvent from '@testing-library/user-event';
 import { createStore, Provider } from 'jotai';
 import { initializeToastAtom, toastAtom } from '../Toast/toastState';
-import { getMarketingPreferencesUrl } from './marketingPreferencesUtils';
+import { V5_API_URL } from '../../constants';
+import { PlatformVariant } from '../../types';
 
 const store = createStore();
 
@@ -26,10 +27,11 @@ const createTestQueryClient = () =>
     },
   });
 
-const marketingPreferencesUrl = getMarketingPreferencesUrl('foobar');
+const getMarketingPreferenceURL = V5_API_URL.MarketingPreferences('foobar', 'web');
+const updateMarketingPreferencesURL = `${V5_API_URL.BrazePreferences('foobar')}/update`;
 
 const testRender = (status = 200, body = { success: true, data: { ...defaultPrefBlazeData } }) => {
-  const mockPlatformAdapter = useMockPlatformAdapter(status, body);
+  const mockPlatformAdapter = useMockPlatformAdapter(status, body, PlatformVariant.Web);
   const updated = store.get(toastAtom);
   clearTimeout(updated.timer?.getTimerId());
   store.set(toastAtom, initializeToastAtom());
@@ -60,11 +62,8 @@ describe('MarketingPreferences', () => {
 
   it('should call the api', () => {
     const mockPlatformAdapter = testRender();
-    expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(marketingPreferencesUrl, {
+    expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(getMarketingPreferenceURL, {
       method: 'GET',
-      queryParameters: {
-        preferenceType: 'marketing',
-      },
     });
   });
 
@@ -94,11 +93,8 @@ describe('MarketingPreferences', () => {
     it('should submit the checkboxes that have been chosen', async () => {
       const mockPlatformAdapter = testRender();
       await waitFor(() => {
-        expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(marketingPreferencesUrl, {
+        expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(getMarketingPreferenceURL, {
           method: 'GET',
-          queryParameters: {
-            preferenceType: 'marketing',
-          },
         });
       });
 
@@ -140,14 +136,19 @@ describe('MarketingPreferences', () => {
       });
 
       await waitFor(() => {
-        expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(marketingPreferencesUrl, {
-          method: 'PUT',
-          body: JSON.stringify({
-            preferences: Object.keys(preferenceDefinitions).map((name) => {
-              return { name, value: name === 'sms_subscribe' ? 'opted_in' : 'unsubscribed' };
+        expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(
+          updateMarketingPreferencesURL,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              attributes: Object.fromEntries(
+                Object.keys(preferenceDefinitions).map((key) => {
+                  return [key, key === 'sms_subscribe' ? 'opted_in' : 'unsubscribed'];
+                }),
+              ),
             }),
-          }),
-        });
+          },
+        );
       });
 
       // if success then the submit button should be disabled again - until something changes
@@ -165,11 +166,8 @@ describe('MarketingPreferences', () => {
     it('should show an error message when something goes wrong', async () => {
       const mockPlatformAdapter = testRender();
 
-      expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(marketingPreferencesUrl, {
+      expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(getMarketingPreferenceURL, {
         method: 'GET',
-        queryParameters: {
-          preferenceType: 'marketing',
-        },
       });
 
       mockPlatformAdapter.invokeV5Api.mockClear();

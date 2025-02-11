@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent } from 'react';
+import { FC, SyntheticEvent, useState } from 'react';
 import AccountDrawer from '../../../../AccountDrawer';
 import IdVerificationTitle from '../IdVerificationTitle';
 import IdVerificationDocumentOption from './IdVerificationDocumentOption';
@@ -6,23 +6,21 @@ import IdVerificationTag from '../IdVerificationTag';
 import IdVerificationText from '../IdVerificationText';
 import { idVerificationText } from '../../IdVerificationConfig';
 import useRequestNewCard from '../../../useRequestNewCard';
-import { useSetAtom } from 'jotai/index';
-import { requestNewCardAtom } from '../../../requestNewCardAtom';
 import IdOrgMethods from './IdOrgMethods';
 import { SupportedDocument } from '../../../../../api/types';
 
 const IdVerificationMethods: FC = () => {
-  const { isPending, goBack, goNext, verificationMethod, supportingDocs, mandatory } =
-    useRequestNewCard();
-  const setAtom = useSetAtom(requestNewCardAtom);
+  const { mutateAsync, isPending, goBack, goNext, supportingDocs, mandatory } = useRequestNewCard();
+  const [verificationMethod, setVerificationMethod] = useState<string | undefined>(undefined);
 
   const onClick = (doc?: SupportedDocument) => {
     if (!doc) return;
-    setAtom((prev) => ({ ...prev, verificationMethod: doc.idKey }));
+    setVerificationMethod(doc.idKey);
   };
 
   const onSubmit = async () => {
     if (!verificationMethod) return;
+    await mutateAsync({ verificationMethod });
     goNext();
   };
 

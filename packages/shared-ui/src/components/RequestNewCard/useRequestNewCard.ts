@@ -7,15 +7,15 @@ import useRequestNewCardSequence from './useRequestNewCardSequence';
 import useMemberApplication from '../../hooks/useMemberApplication';
 import { isStepComplete } from './requestNewCardStep';
 import { useEffect } from 'react';
-import useMemberCard from '../../hooks/useMemberCard';
 import useSupportedDocs from './IdVerification/components/IdVerificationMethods/useSupportedDocs';
 import useMemberProfileGet from '../../hooks/useMemberProfileGet';
 import useMemberProfilePut from '../../hooks/useMemberProfilePut';
+import useMemberApplicationConfirmPaymentPut from '../../hooks/useMemberApplicationConfirmPaymentPut';
 
 const useRequestNewCard = () => {
   const memberId = useMemberId();
   const setAtom = useSetAtom(requestNewCardAtom);
-  const { sequence, currentStep, preferredStep, verificationMethod } = useRequestNewCardSequence();
+  const { sequence, currentStep, preferredStep } = useRequestNewCardSequence();
   const { memberProfile } = useMemberProfileGet(memberId);
   const { applicationId, application } = useMemberApplication(memberId);
   const supportingDocs = useSupportedDocs(
@@ -23,15 +23,17 @@ const useRequestNewCard = () => {
     memberProfile?.employmentStatus ?? '',
   );
   const { isDoubleId } = supportingDocs;
-  const { card } = useMemberCard(memberId);
+  const verificationMethod = application?.verificationMethod;
   //
   const mutatePost = useMemberApplicationPost(memberId);
   const mutatePut = useMemberApplicationPut(memberId, applicationId);
   const { mutateAsync: mutateMemberProfile, isPending: isPendingMemberProfilePUT } =
     useMemberProfilePut(memberId);
+  const { mutateAsync: mutateConfirmPayment, isPending: isPendingConfirmPayment } =
+    useMemberApplicationConfirmPaymentPut(memberId, applicationId);
   //
-  const previousStep = Math.max(currentStep - 1, 0);
-  const nextStep = Math.min(currentStep + 1, sequence.length - 1);
+  const previousStep = Math.max(currentStep ?? 0 - 1, 0);
+  const nextStep = Math.min(currentStep ?? 0 + 1, sequence.length - 1);
 
   const goBack = () =>
     setAtom((prev) => ({
@@ -45,14 +47,8 @@ const useRequestNewCard = () => {
   const mutation = applicationId ? mutatePut : mutatePost;
   const { mutateAsync, isPending: isPendingApplicationMutation } = mutation;
 
-  const currentStepId = sequence[currentStep];
-  const isCurrentStepComplete = isStepComplete(
-    currentStepId,
-    application,
-    isDoubleId,
-    card,
-    verificationMethod,
-  );
+  const currentStepId = sequence[currentStep ?? 0];
+  const isCurrentStepComplete = isStepComplete(currentStepId, application, isDoubleId);
 
   useEffect(() => {
     if (!isCurrentStepComplete || !preferredStep) return;
@@ -62,10 +58,12 @@ const useRequestNewCard = () => {
 
   return {
     mutateAsync,
-    isPending: isPendingApplicationMutation || isPendingMemberProfilePUT,
+    mutateConfirmPayment,
+    isPending: isPendingApplicationMutation || isPendingMemberProfilePUT || isPendingConfirmPayment,
     mutateMemberProfile,
     memberId,
     applicationId,
+    application,
     previousStep,
     nextStep,
     goBack,

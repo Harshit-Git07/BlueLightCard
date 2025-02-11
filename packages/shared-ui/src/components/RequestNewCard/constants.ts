@@ -6,4 +6,5 @@ export const completedPaymentStatuses: Array<PaymentStatus> = [
   PaymentStatus.PAID_PROMO_CODE,
   PaymentStatus.PAID_CHEQUE,
   PaymentStatus.PAID_ADMIN,
+  PaymentStatus.AWAITING_PAYMENT_CONFIRMATION,
 ];

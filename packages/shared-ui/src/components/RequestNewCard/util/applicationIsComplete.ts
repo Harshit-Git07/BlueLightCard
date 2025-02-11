@@ -37,7 +37,7 @@ export const applicationIsComplete = (
 ) => {
   const { applicationReason } = application;
 
-  return applicationReason === 'RENEWAL'
+  return applicationReason === 'REPRINT'
     ? renewalApplicationIsComplete(application, county)
     : lostCardApplicationIsComplete(application, county);
 };

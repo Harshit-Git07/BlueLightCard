@@ -1,7 +1,7 @@
 import Button from '../Button-V2';
 import { MarketingPreferencesInput } from './MarketingPreferencesInput';
 import { SyntheticEvent } from 'react';
-import { MarketingPreferencesData, preferenceDefinitions } from './MarketingPreferencesTypes';
+import { MarketingPreferencesData, preferenceDefinitions } from './types';
 import { colours, fonts } from '../../tailwind/theme';
 import useMarketingPreferencesState from './useMarketingPreferencesState';
 import Toast from '../Toast';

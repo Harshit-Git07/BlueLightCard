@@ -4,19 +4,15 @@ import {
   marketingPreferencesDefault,
   MarketingPreferencesGetBlazeResponse,
   MarketingPreferencesGetResponse,
-  MarketingPreferencesPutPayload,
-  MarketingPreferencesPutResponse,
+  MarketingPreferencesOptInOut,
+  MarketingPreferencesPostModel,
+  MarketingPreferencesPostResponse,
   preferenceDefinitions,
-} from './MarketingPreferencesTypes';
+} from './types';
 import { jsonOrNull } from '../../utils/jsonUtils';
 import { compareStringsAlphabetically } from '../../utils/compareStringsWithLocale';
-import { V5_API_URL } from '../../constants';
 
-export const marketingPreferencesQueryKey = 'members/preferences/memberUuid';
-
-export const getMarketingPreferencesUrl = (memberUuid: string) => {
-  return `${V5_API_URL.MarketingPreferences}/${memberUuid}`;
-};
+export const marketingPreferencesQueryKey = 'members/memberUuid/marketing/braze';
 
 export const getBooleanPrefsFromBlaze = (data: MarketingPreferencesBlazeData) => {
   const preferences = marketingPreferencesDefault();
@@ -27,14 +23,21 @@ export const getBooleanPrefsFromBlaze = (data: MarketingPreferencesBlazeData) =>
   return preferences;
 };
 
-export const getStringyPrefsForBlaze = (data: MarketingPreferencesData) => {
-  const blazePrefs: MarketingPreferencesPutPayload = {
-    preferences: Object.keys(preferenceDefinitions).map((id) => {
-      const name = id as keyof MarketingPreferencesData;
-      return { name, value: data[name] ? 'opted_in' : 'unsubscribed' };
+export const getStringyPrefsForBraze = (
+  data: MarketingPreferencesData,
+): MarketingPreferencesPostModel => {
+  const attributes: Record<string, MarketingPreferencesOptInOut> = Object.fromEntries(
+    Object.keys(preferenceDefinitions).map((key) => {
+      const attribute = key as keyof MarketingPreferencesData;
+      return [attribute, data[attribute] ? 'opted_in' : 'unsubscribed'];
     }),
+  );
+
+  const brazePrefs: MarketingPreferencesPostModel = {
+    attributes: attributes,
   };
-  return blazePrefs;
+
+  return brazePrefs;
 };
 
 export const convertGetResponseToJson = (
@@ -53,17 +56,17 @@ export const convertGetResponseToJson = (
   };
 };
 
-export const covertPutResponseToJson = (
+export const covertPostResponseToJson = (
   status: number,
   data: string,
-): MarketingPreferencesPutResponse => {
-  const json = jsonOrNull<MarketingPreferencesPutResponse>(data);
+): MarketingPreferencesPostResponse => {
+  const json = jsonOrNull<MarketingPreferencesPostResponse>(data);
   if (!json) return { status, data: { errors: [] } };
 
   return {
     status,
     data: json,
-  } as MarketingPreferencesPutResponse;
+  } as MarketingPreferencesPostResponse;
 };
 
 export const optedInKeys = (data: MarketingPreferencesData | undefined) => {

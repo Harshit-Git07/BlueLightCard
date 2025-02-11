@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, SyntheticEvent, useEffect, useRef, useState } from 'react';
 import AccountDrawer from '../../../../AccountDrawer';
 import { colours, fonts } from '../../../../../tailwind/theme';
 import TextInput from '../../../../TextInput';
@@ -8,12 +8,12 @@ import IdVerificationTitle from '../IdVerificationTitle';
 import { idVerificationText } from '../../IdVerificationConfig';
 import useRequestNewCard from '../../../useRequestNewCard';
 import IdVerificationDocumentOption from '../IdVerificationMethods/IdVerificationDocumentOption';
+import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 
 const validation = z.string().email('The email provided is not valid. Please try again.');
 
 const IdVerificationEmail: FC = () => {
-  const { mutateAsync, isPending, goBack, supportingDocs, verificationMethod } =
-    useRequestNewCard();
+  const { mutateAsync, isPending, goBack, supportingDocs, mandatory } = useRequestNewCard();
   const [email, setEmail] = useState<string>('');
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [countDown, setCountDown, getCountDown] = useStateSync<number>(0);
@@ -56,7 +56,9 @@ const IdVerificationEmail: FC = () => {
   const error = !validationResult.success ? validationResult.error : null;
   const { _errors: errors = [] } = error ? error.format() : {};
 
-  const selectedDoc = supportingDocs.find((doc) => doc.idKey === verificationMethod);
+  const selectedDoc = mandatory
+    ? mandatory
+    : supportingDocs.find((doc) => doc.type === IdType.TRUSTED_DOMAIN);
 
   return (
     <form onSubmit={onSubmit} className={'h-full'}>

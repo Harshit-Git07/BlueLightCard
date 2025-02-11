@@ -4,11 +4,7 @@ import Toaster from '../Toast/Toaster';
 import { PlatformAdapterProvider, storybookPlatformAdapter } from '../../adapters';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { createQueryClient } from '../../utils/storyUtils';
-import {
-  defaultPrefBlazeData,
-  MarketingPreferencesPutPayload,
-  MarketingPreferencesPutPayloadNameValue,
-} from './MarketingPreferencesTypes';
+import { defaultPrefBlazeData, MarketingPreferencesPostModel } from './types';
 import { jsonOrNull } from '../../utils/jsonUtils';
 import { useState } from 'react';
 import { fonts } from '../../tailwind/theme';
@@ -26,30 +22,28 @@ export default componentMeta;
 
 export const Example: StoryFn<typeof MarketingPreferences> = () => {
   const [getResponse, setGetResponse] = useState<Response>();
-  const [putPayload, setPutPayload] = useState<MarketingPreferencesPutPayload>();
-  const [putResponse, setPutResponse] = useState<Response>();
+  const [postPayload, setPostPayload] = useState<MarketingPreferencesPostModel>();
+  const [postResponse, setPostResponse] = useState<Response>();
   const adapter = { ...storybookPlatformAdapter };
-  adapter.invokeV5Api = async (url, options) => {
-    if (options.method === 'PUT') {
-      const json = jsonOrNull<MarketingPreferencesPutPayload>(options?.body ?? '');
-      setPutPayload(json ?? undefined);
-      const analytics = json?.preferences.find(
-        (p: MarketingPreferencesPutPayloadNameValue) => p.name === 'sms_subscribe',
-      );
+  adapter.invokeV5Api = async (_, options) => {
+    if (options.method === 'POST') {
+      const json = jsonOrNull<MarketingPreferencesPostModel>(options?.body ?? '');
+      setPostPayload(json ?? undefined);
+      const sms = json?.attributes['sms_subscribe'];
 
-      if (analytics?.value === 'opted_in') {
+      if (sms === 'opted_in') {
         const result = {
           status: 400,
           data: JSON.stringify({ errors: [] }),
         };
-        setPutResponse(result);
+        setPostResponse(result);
         return Promise.resolve(result);
       }
       const result = {
         status: 200,
         data: JSON.stringify({ messages: [] }),
       };
-      setPutResponse(result);
+      setPostResponse(result);
       return Promise.resolve(result);
     }
 
@@ -75,11 +69,11 @@ export const Example: StoryFn<typeof MarketingPreferences> = () => {
           <p>GET response</p>
           <pre>{JSON.stringify(getResponse, null, '  ')}</pre>
 
-          <p>PUT payload</p>
-          <pre>{JSON.stringify(putPayload, null, '  ')}</pre>
+          <p>POST payload</p>
+          <pre>{JSON.stringify(postPayload, null, '  ')}</pre>
 
-          <p>PUT response</p>
-          <pre>{JSON.stringify(putResponse, null, '  ')}</pre>
+          <p>POST response</p>
+          <pre>{JSON.stringify(postResponse, null, '  ')}</pre>
         </div>
       </QueryClientProvider>
     </PlatformAdapterProvider>

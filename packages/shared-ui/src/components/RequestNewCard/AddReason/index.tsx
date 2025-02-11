@@ -35,13 +35,13 @@ export const radioOptions: RadioGroupItems = [
 ];
 
 const RequestNewCardReason: FC = () => {
-  const { mutateAsync, isPending, goNext, memberId } = useRequestNewCard();
+  const { mutateAsync, isPending, goNext, memberId, application } = useRequestNewCard();
   const { insideReprintPeriod } = useMemberCard(memberId);
 
   const { close } = useDrawer();
 
   const [applicationReason, setApplicationReason] = useState<ReorderCardReason | undefined>(
-    undefined,
+    application?.reorderCardReason,
   );
 
   const onReasonChange = (_: SyntheticEvent, id?: string) => {
@@ -59,13 +59,7 @@ const RequestNewCardReason: FC = () => {
   };
 
   const onSave = async () => {
-    await mutateAsync({
-      applicationReason: insideReprintPeriod
-        ? ApplicationReason.REPRINT
-        : ApplicationReason.LOST_CARD,
-      reorderCardReason: applicationReason,
-    });
-
+    await onSubmit();
     close();
   };
 

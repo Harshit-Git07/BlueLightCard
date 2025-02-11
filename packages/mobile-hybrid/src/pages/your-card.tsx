@@ -40,11 +40,12 @@ const MyCardPage: NextPage = () => {
 
   const eligibilityUrl = `https://${BRAND_WEB_URL}/eligibility`;
 
-  if (!hasNoCard) {
-    return (
-      <>
-        <AccountPagesHeader title="Your Card" hasBackButton={false} />
-        <CardVerificationAlerts memberUuid={memberId} />
+  return (
+    <>
+      <AccountPagesHeader title="Your Card" hasBackButton={false} />
+      <CardVerificationAlerts memberUuid={memberId} />
+
+      {!hasNoCard ? (
         <div className="flex flex-col w-full items-center overflow-hidden">
           <div className="relative flex flex-col justify-center h-[calc(100vh-125px)]">
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -72,42 +73,38 @@ const MyCardPage: NextPage = () => {
             </div>
           ) : null}
         </div>
-      </>
-    );
-  }
+      ) : (
+        <>
+          <div className="mt-[24px] flex flex-col items-center justify-center w-full px-[16px]">
+            <div className="flex flex-col items-center justify-center w-full">
+              <NoCardImage />
+            </div>
 
-  return (
-    <>
-      <AccountPagesHeader title="Your Card" hasBackButton={false} />
-      <CardVerificationAlerts memberUuid={memberId} />
-      <div className="mt-[24px] flex flex-col items-center justify-center w-full px-[16px]">
-        <div className="flex flex-col items-center justify-center w-full">
-          <NoCardImage />
-        </div>
+            <div className="w-full max-w-[327px] mt-[32px] flex flex-col items-center justify-center gap-[12px]">
+              <p className={`mt-[24px] text-center ${fonts.titleMediumSemiBold}`}>
+                You don&apos;t have a card yet
+              </p>
 
-        <div className="w-full max-w-[327px] mt-[32px] flex flex-col items-center justify-center gap-[12px]">
-          <p className={`mt-[24px] text-center ${fonts.titleMediumSemiBold}`}>
-            You don&apos;t have a card yet
-          </p>
+              <p className={`${fonts.body} text-center`}>{strapline}</p>
+            </div>
+          </div>
 
-          <p className={`${fonts.body} text-center`}>{strapline}</p>
-        </div>
-      </div>
-
-      <div className="absolute bottom-[24px] flex flex-col items-center w-full px-[16px]">
-        <Button
-          className="w-full max-w-[327px]"
-          variant={ThemeVariant.Primary}
-          iconRight={faCreditCardBlank}
-          type="button"
-          size="Large"
-          onClick={() => {
-            navigation.navigateExternal(eligibilityUrl);
-          }}
-        >
-          Get your card
-        </Button>
-      </div>
+          <div className="absolute bottom-[24px] flex flex-col items-center w-full px-[16px]">
+            <Button
+              className="w-full max-w-[327px]"
+              variant={ThemeVariant.Primary}
+              iconRight={faCreditCardBlank}
+              type="button"
+              size="Large"
+              onClick={() => {
+                navigation.navigateExternal(eligibilityUrl);
+              }}
+            >
+              Get your card
+            </Button>
+          </div>
+        </>
+      )}
     </>
   );
 };

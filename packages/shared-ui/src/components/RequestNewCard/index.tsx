@@ -21,19 +21,22 @@ const {
 const RequestNewCard: FC = () => {
   const { currentStepId } = useRequestNewCard();
 
-  if (currentStepId === ADDRESS) return <ChangeAddress />;
-
-  if (currentStepId === ID_VERIFICATION_METHOD) return <IdVerificationMethods />;
-
-  if (currentStepId === ID_VERIFICATION_EMAIL) return <IdVerificationEmail />;
-
-  if (currentStepId === ID_VERIFICATION_UPLOAD) return <IdVerificationUpload />;
-
-  if (currentStepId === PAYMENT) return <MyCardPayment />;
-
-  if (currentStepId === DONE) return <DoneScreen />;
-
-  return <RequestNewCardReason />;
+  switch (currentStepId) {
+    case ADDRESS:
+      return <ChangeAddress />;
+    case ID_VERIFICATION_METHOD:
+      return <IdVerificationMethods />;
+    case ID_VERIFICATION_UPLOAD:
+      return <IdVerificationUpload />;
+    case ID_VERIFICATION_EMAIL:
+      return <IdVerificationEmail />;
+    case PAYMENT:
+      return <MyCardPayment />;
+    case DONE:
+      return <DoneScreen />;
+    default:
+      return <RequestNewCardReason />;
+  }
 };
 
 export default RequestNewCard;

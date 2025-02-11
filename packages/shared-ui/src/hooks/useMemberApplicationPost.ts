@@ -14,13 +14,14 @@ const useMemberApplicationPost = (memberId: string) => {
 
   return useMutation({
     mutationFn: async (updates: Partial<ApplicationSchema>) => {
-      const { applicationReason } = updates;
+      const { applicationReason, reorderCardReason } = updates;
       try {
         const { status, data } = await adapter.invokeV5Api(V5_API_URL.Application(memberId), {
           method: 'POST',
           body: JSON.stringify({
             eligibilityStatus: applicationReason === 'REPRINT' ? 'ELIGIBLE' : 'INELIGIBLE',
             applicationReason,
+            reorderCardReason,
             memberId,
           }),
         });

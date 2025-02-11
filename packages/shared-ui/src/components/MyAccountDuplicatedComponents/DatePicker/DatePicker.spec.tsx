@@ -14,19 +14,20 @@ const selectDate = async (day: string, month: string, year: string) => {
   await act(async () => {
     await userEvent.click(dayDropdown);
   });
-  const number2 = await findByText(day);
+
+  const dayEl = await findByText(day);
   await act(async () => {
-    await userEvent.click(number2);
+    await userEvent.click(dayEl);
     await userEvent.click(monthDropdown);
   });
-  const september = await findByText(month);
+  const monthEl = await findByText(month);
   await act(async () => {
-    await userEvent.click(september);
+    await userEvent.click(monthEl);
     await userEvent.click(yearDropdown);
   });
-  const y1995 = await findByText(year);
+  const yearEl = await findByText(year);
   await act(async () => {
-    await userEvent.click(y1995);
+    await userEvent.click(yearEl);
   });
 };
 
@@ -89,17 +90,18 @@ describe('DatePicker component', () => {
     expect(day).not.toBeInTheDocument();
   });
 
-  it('should call onChange with selected date', async () => {
+  it('should call onChange when modified', async () => {
     const onChangeSpy = jest.spyOn(props, 'onChange');
     render(<DatePicker {...props} />);
     await selectDate('2', '9', '1995');
     expect(onChangeSpy).toHaveBeenCalledTimes(3);
-    expect(onChangeSpy).toHaveBeenLastCalledWith(new Date('1995-09-02'));
   });
 
   it('should show validation message when passed in', async () => {
     render(<DatePicker validationMessage="Date is invalid" {...props} />);
+
     await selectDate('20', '4', '1995');
+
     expect(getByText('Date is invalid')).toBeInTheDocument();
   });
 

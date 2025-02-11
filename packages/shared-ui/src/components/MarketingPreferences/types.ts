@@ -1,3 +1,4 @@
+import { BrazeUpdateModel } from '../../../../shared/src/models/members/brazeUpdateModel';
 import { faAt, faEnvelope, faMobileScreenButton } from '@fortawesome/pro-solid-svg-icons';
 
 export const preferenceDefinitions = {
@@ -33,8 +34,8 @@ export const preferenceDefinitions = {
   // },
 };
 
+export type MarketingPreferencesPostModel = BrazeUpdateModel;
 export type MarketingPreferencesOptInOut = 'opted_in' | 'unsubscribed';
-
 export type MarketingPreferencesData = Record<keyof typeof preferenceDefinitions, boolean>;
 
 export type MarketingPreferencesBlazeData = Record<
@@ -65,24 +66,15 @@ export interface MarketingPreferencesGetBlazeResponse extends MarketingPreferenc
   data?: MarketingPreferencesBlazeData;
 }
 
-export interface MarketingPreferencesPutPayload {
-  preferences: MarketingPreferencesPutPayloadNameValue[];
-}
-
-export interface MarketingPreferencesPutPayloadNameValue {
-  name: keyof typeof preferenceDefinitions;
-  value: MarketingPreferencesOptInOut;
-}
-
-export interface MarketingPreferencesPutResponseMessage {
+export interface MarketingPreferencesPostResponseMessage {
   code: string;
   detail: string;
 }
 
-export interface MarketingPreferencesPutResponse {
+export interface MarketingPreferencesPostResponse {
   status: number;
   data: {
-    messages?: MarketingPreferencesPutResponseMessage[];
-    errors?: MarketingPreferencesPutResponseMessage[];
+    messages?: MarketingPreferencesPostResponseMessage[];
+    errors?: MarketingPreferencesPostResponseMessage[];
   };
 }

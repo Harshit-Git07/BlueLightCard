@@ -49,7 +49,7 @@ describe('applicationIsComplete util', () => {
   describe('lost card flow', () => {
     const lostCardApplication: ApplicationSchema = {
       ...defaultApplication,
-      applicationReason: ApplicationReason.RENEWAL,
+      applicationReason: ApplicationReason.REPRINT,
     };
 
     it('happy path works', () => {

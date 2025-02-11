@@ -4,17 +4,11 @@ import { AccountDrawer, BRAND, colours, fonts } from '../../../index';
 import MyCardStripePayment from './MyCardStripePayment';
 import { BRAND as envBrand } from '../../../global-vars';
 import useRequestNewCard from '../useRequestNewCard';
-import { useQueryClient } from '@tanstack/react-query';
-import useMemberId from '../../../hooks/useMemberId';
 
 const redirectUrl = '';
 
-// put it all in the account drawer
 const MyCardPayment: FC = () => {
-  const { isPending, goNext, goBack } = useRequestNewCard();
-  const memberId = useMemberId();
-  const queryClient = useQueryClient();
-
+  const { isPending, goNext, goBack, mutateConfirmPayment } = useRequestNewCard();
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined);
 
   const [stripe, setStripe] = useState<Stripe>();
@@ -44,9 +38,10 @@ const MyCardPayment: FC = () => {
     const errorMessage = result.error?.message;
     if (result.error) {
       setErrorMessage(errorMessage);
+      return;
     }
 
-    await queryClient.invalidateQueries({ queryKey: ['memberProfile', memberId] });
+    await mutateConfirmPayment();
     goNext();
   };
 

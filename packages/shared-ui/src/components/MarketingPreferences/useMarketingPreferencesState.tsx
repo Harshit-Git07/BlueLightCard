@@ -1,7 +1,7 @@
-import { MarketingPreferencesData, marketingPreferencesDefault } from './MarketingPreferencesTypes';
+import { MarketingPreferencesData, marketingPreferencesDefault } from './types';
 import { useEffect, useState } from 'react';
 import useMarketingPreferencesGet from './useMarketingPreferencesGet';
-import useMarketingPreferencesPut from './useMarketingPreferencesPut';
+import useMarketingPreferencesPost from './useMarketingPreferencesPost';
 import { useQueryClient } from '@tanstack/react-query';
 import { marketingPreferencesQueryKey, optedInKeys } from './marketingPreferencesUtils';
 
@@ -13,7 +13,7 @@ const useMarketingPreferencesState = (memberUuid: string) => {
     marketingPreferencesDefault(),
   );
   const { isLoading, data: responseData } = useMarketingPreferencesGet(memberUuid);
-  const saveMutation = useMarketingPreferencesPut(memberUuid);
+  const saveMutation = useMarketingPreferencesPost(memberUuid);
 
   const data = responseData?.data;
   useEffect(() => {

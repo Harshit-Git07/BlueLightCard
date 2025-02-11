@@ -1,8 +1,7 @@
 export interface RequestNewCardAtom {
-  preferredStep: number;
-  currentStep: number;
+  preferredStep: number | null;
+  currentStep: number | null;
   sequence: REQUEST_NEW_CARD_STEP[];
-  verificationMethod: string;
 }
 
 export interface Address {

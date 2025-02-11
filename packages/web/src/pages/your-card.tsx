@@ -1,4 +1,4 @@
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import { NextPage } from 'next';
 import {
   ButtonV2 as Button,
@@ -6,15 +6,14 @@ import {
   fonts,
   getBrandStrapline,
   NoCardImage,
-  RequestNewCard,
   RequestNewCardButton,
   ThemeVariant,
-  useDrawer,
   useMemberCard,
   useMemberId,
   useMemberProfileGet,
   usePlatformAdapter,
   YourCard,
+  useGetOrganisation,
 } from '@bluelightcard/shared-ui';
 
 import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
@@ -24,9 +23,11 @@ import withAccountLayout from '@/layouts/AccountBaseLayout/withAccountLayout';
 const YourCardPage: NextPage = () => {
   const memberId = useMemberId();
   const adapter = usePlatformAdapter();
-  const { open } = useDrawer();
   const { card } = useMemberCard(memberId);
   const { isLoading, memberProfile } = useMemberProfileGet(memberId);
+
+  //Prefetch orgs for faster sequence management
+  useGetOrganisation(memberProfile?.organisationId);
 
   if (isLoading) {
     return null;
@@ -37,11 +38,6 @@ const YourCardPage: NextPage = () => {
   const hasNotGenerated = !hasGenerated && memberProfile?.applications?.length;
   const hasNoCard = !hasGenerated && !hasNotGenerated;
 
-  const onRequestNewCard = (e: SyntheticEvent) => {
-    e.preventDefault();
-    open(<RequestNewCard />);
-  };
-
   return (
     <div className="flex flex-col gap-5">
       <div className="mt-[6px] flex justify-between items-center">
@@ -49,7 +45,7 @@ const YourCardPage: NextPage = () => {
 
         {hasGenerated ? (
           <div className="hidden tablet-xl:block">
-            <RequestNewCardButton />
+            <RequestNewCardButton isTertiary />
           </div>
         ) : null}
       </div>
@@ -77,17 +73,7 @@ const YourCardPage: NextPage = () => {
                     copyText={card?.cardNumber ?? ''}
                     fullWidth={true}
                   />
-
-                  <Button
-                    className="w-full"
-                    variant={ThemeVariant.Secondary}
-                    iconRight={faCreditCardBlank}
-                    type="button"
-                    size="Large"
-                    onClick={onRequestNewCard}
-                  >
-                    Request new card
-                  </Button>
+                  <RequestNewCardButton />
                 </div>
               </div>
             </div>

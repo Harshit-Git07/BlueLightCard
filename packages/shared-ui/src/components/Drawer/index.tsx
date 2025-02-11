@@ -39,8 +39,8 @@ const Drawer = () => {
       true,
     [sidebarMobile]: true,
     [sidebarLaptop]: true,
-    'top-[100%] tablet:top-0 right-0 tablet:-right-[384px]': !isOpen,
-    'top-[10%] tablet:top-0 right-0': isOpen,
+    'top-[100%] tablet:top-0 right-0 tablet:-right-[384px] opacity-0': !isOpen,
+    'top-[10%] tablet:top-0 right-0 opacity-100': isOpen,
   });
 
   return (

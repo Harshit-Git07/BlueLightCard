@@ -1,11 +1,6 @@
-import { PlatformVariant, ThemeVariant } from '../../types';
+import { ThemeVariant } from '../../types';
 import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
-import {
-  ButtonV2 as Button,
-  useDrawer,
-  useMemberProfileGet,
-  usePlatformAdapter,
-} from '../../index';
+import { ButtonV2 as Button, useDrawer, useMemberProfileGet } from '../../index';
 import { FC, SyntheticEvent } from 'react';
 import RequestNewCard from './index';
 import useMemberId from '../../hooks/useMemberId';
@@ -18,13 +13,15 @@ const getText = (applicationStarted: boolean, applicationCompleted: boolean) => 
   return 'Request new card';
 };
 
-const RequestNewCardButton: FC = () => {
+interface RequestNewCardButtonProps {
+  isTertiary?: boolean;
+}
+
+const RequestNewCardButton: FC<RequestNewCardButtonProps> = ({ isTertiary }) => {
   const { open } = useDrawer();
   const memberId = useMemberId();
   const { memberProfile } = useMemberProfileGet(memberId);
   const { hasApplication, application } = useMemberApplication(memberId);
-
-  const { platform } = usePlatformAdapter();
 
   const onRequestNewCard = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -36,9 +33,9 @@ const RequestNewCardButton: FC = () => {
     : undefined;
   const variant = hasApplication
     ? ThemeVariant.Primary
-    : platform === PlatformVariant.MobileHybrid
-      ? ThemeVariant.Secondary
-      : ThemeVariant.Tertiary;
+    : isTertiary
+      ? ThemeVariant.Tertiary
+      : ThemeVariant.Secondary;
 
   const text = getText(!!hasApplication, !!applicationCompleted);
   const className = hasApplication ? 'px-[24px]' : undefined;

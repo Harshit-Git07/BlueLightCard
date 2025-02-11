@@ -51,6 +51,7 @@ export { default as useMemberCard } from './hooks/useMemberCard';
 export { default as RequestNewCard } from './components/RequestNewCard';
 export { default as RequestNewCardButton } from './components/RequestNewCard/RequestNewCardButton';
 export { default as AccountDrawer } from './components/AccountDrawer';
+export { useGetOrganisation } from './hooks/useGetOrganisation';
 
 export * from './adapters';
 export * from './api';

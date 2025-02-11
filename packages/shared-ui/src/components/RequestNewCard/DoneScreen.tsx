@@ -12,7 +12,7 @@ const DoneScreen = () => {
   openToast(
     <Toast
       title={'Requested a new card'}
-      text={'It will be processed in 3-5 working days and deliver to you after.'}
+      text={'It will be processed in 3-5 working days and delivered to you after.'}
       status={ToastStatus.Success}
     />,
     {
@@ -20,7 +20,6 @@ const DoneScreen = () => {
     },
   );
   close();
-  return null;
   setAtom(initializeRequestNewCardAtom());
   return <></>;
 };

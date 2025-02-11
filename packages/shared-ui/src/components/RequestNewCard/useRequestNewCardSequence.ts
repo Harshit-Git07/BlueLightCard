@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import {
+  isStepComplete,
+  sequenceAll,
   sequenceEmailVerification,
   sequenceIdUpload,
   sequenceIdUploadOnly,
@@ -10,18 +12,24 @@ import useMemberCard from '../../hooks/useMemberCard';
 import { useAtomValue, useSetAtom } from 'jotai/index';
 import { requestNewCardAtom } from './requestNewCardAtom';
 import useMemberApplication from '../../hooks/useMemberApplication';
+import useSupportedDocs from './IdVerification/components/IdVerificationMethods/useSupportedDocs';
+import useMemberProfileGet from '../../hooks/useMemberProfileGet';
+import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 
 const useRequestNewCardSequence = () => {
   const memberId = useMemberId();
   const atomValue = useAtomValue(requestNewCardAtom);
-  const { verificationMethod } = atomValue;
-  const isEmail = verificationMethod.toLowerCase().includes('email');
   const setAtom = useSetAtom(requestNewCardAtom);
+
   const { application } = useMemberApplication(memberId);
   const { insideReprintPeriod } = useMemberCard(memberId);
+  const { memberProfile } = useMemberProfileGet(memberId);
+  const { mandatory } = useSupportedDocs(
+    memberProfile?.organisationId ?? '',
+    memberProfile?.employmentStatus ?? '',
+  );
+  const isEmail = application?.verificationMethod?.toLowerCase().includes('email');
   const rejected = application?.rejectionReason && application.applicationReason === 'LOST_CARD';
-
-  const applicationReason = application?.applicationReason ?? '';
 
   useEffect(() => {
     if (insideReprintPeriod) {
@@ -36,14 +44,30 @@ const useRequestNewCardSequence = () => {
       setAtom((prev) => ({ ...prev, sequence: sequenceIdUploadOnly }));
       return;
     }
-    setAtom((prev) => ({ ...prev, sequence: sequenceIdUpload }));
-  }, [isEmail, insideReprintPeriod]);
+    if (!mandatory || mandatory?.type !== IdType.TRUSTED_DOMAIN) {
+      setAtom((prev) => ({ ...prev, sequence: sequenceIdUpload }));
+      return;
+    }
+
+    setAtom((prev) => ({ ...prev, sequence: sequenceAll }));
+  }, [isEmail, rejected, insideReprintPeriod, mandatory]);
 
   useEffect(() => {
-    if (applicationReason === '') {
-      setAtom((prev) => ({ ...prev, currentStep: 0, preferredStep: 0 }));
+    if (atomValue.currentStep !== null || atomValue.sequence.length < 1) return;
+
+    const sequence = atomValue.sequence;
+
+    for (const step of sequence) {
+      if (!isStepComplete(step, application)) {
+        setAtom((prev) => ({
+          ...prev,
+          currentStep: sequence.indexOf(step),
+          preferredStep: sequence.indexOf(step),
+        }));
+        break;
+      }
     }
-  }, [applicationReason]);
+  }, [atomValue]);
 
   return { ...atomValue, isEmail };
 };

@@ -1,8 +1,11 @@
 import { BLC_AU_BRAND, BLC_UK_BRAND, DDS_UK_BRAND } from "../constants/common";
-import { BRAND_SCHEMA } from "../schemas/common";
+import { Brand, BRAND_SCHEMA } from '../schemas/common';
 
-export function getBrandFromEnv() {
-  return BRAND_SCHEMA.parse(process.env.BRAND);
+export function getBrandFromEnv(): Brand {
+  const parseResult = BRAND_SCHEMA.safeParse(process.env.BRAND);
+  if (!parseResult.success) return 'BLC_UK';
+
+  return parseResult.data;
 }
 
 export function isDdsUkBrand() {

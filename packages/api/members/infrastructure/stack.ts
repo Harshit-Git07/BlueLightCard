@@ -436,7 +436,6 @@ function getDefaultFunctionProps(region: string) {
         MemberStackEnvironmentKeys.SFTP_PATH_SEND_BATCH_FILE,
         '',
       ),
-      BRAZE_SERVICE_JSON: getEnvOrDefault(MemberStackEnvironmentKeys.BRAZE_SERVICE_JSON, '{}'),
       USE_DATADOG_AGENT: getEnvOrDefault(MemberStackEnvironmentKeys.USE_DATADOG_AGENT, 'false'),
       DD_API_KEY: getEnvOrDefault(MemberStackEnvironmentKeys.DD_API_KEY, ''),
       DD_ENV: process.env?.SST_STAGE || 'undefined',

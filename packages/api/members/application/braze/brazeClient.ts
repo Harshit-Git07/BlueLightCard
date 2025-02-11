@@ -6,11 +6,7 @@ import {
   BrazeUpdateAttributeValue,
   BrazeUpdateModel,
 } from '@blc-mono/shared/models/members/brazeUpdateModel';
-
-interface BrazeServiceJson {
-  BRAZE_SERVICE_API_KEY: string;
-  BRAZE_SERVICE_MARKETING_SMS_CAMPAIGN_ID: string;
-}
+import { brazeServiceJson } from '@blc-mono/members/application/braze/providers/brazeServiceJson';
 
 export interface CheckListResponse {
   users: CheckListResponseUser[];
@@ -22,34 +18,34 @@ interface CheckListResponseUser {
 }
 
 export default class BrazeClient {
-  constructor(
-    private readonly instanceUrl: string = 'rest.fra-02.braze.eu',
-    private readonly brazeJson: BrazeServiceJson = JSON.parse(
-      process.env.BRAZE_SERVICE_JSON ?? '{}',
-    ),
-  ) {}
+  constructor(private readonly instanceUrl: string = 'rest.fra-02.braze.eu') {}
 
   async getAttributes(memberId: string, attributes: string[]): Promise<Record<string, unknown>> {
+    const brazeJson = await brazeServiceJson();
+
+    if (!brazeJson) {
+      throw new Error(
+        'Braze service is not configured on this environment, update secrets manager',
+      );
+    }
+
     const checkListUrl = `https://${this.instanceUrl}/users/export/ids`;
-
-    const headers = {
-      Authorization: `Bearer ${this.brazeJson.BRAZE_SERVICE_API_KEY}`,
-      'Content-Type': 'application/json',
-    };
-
-    attributes[attributes.length] = 'custom_attributes';
-
     const body = {
       external_ids: [memberId],
       fields_to_export: attributes,
     };
+    const headers = {
+      Authorization: `Bearer ${brazeJson.BRAZE_SERVICE_API_KEY}`,
+      'Content-Type': 'application/json',
+    };
 
     try {
       const { data } = await axios.post<CheckListResponse>(checkListUrl, body, { headers });
-
       if (data.users[0] === undefined) {
         throw new NotFoundError('Braze user not found');
       }
+
+      attributes[attributes.length] = 'custom_attributes';
 
       return Object.entries(data.users[0]).reduce<Record<string, unknown>>(
         (options, [key, value]) => {
@@ -83,20 +79,24 @@ export default class BrazeClient {
     memberId: string,
     environment: MarketingPreferencesEnvironment,
   ): Promise<Record<string, unknown> | Record<string, unknown>[]> {
-    const checkListUrl = `https://${this.instanceUrl}/users/export/ids`;
-    const headers = {
-      Authorization: `Bearer ${this.brazeJson.BRAZE_SERVICE_API_KEY}`,
-      'Content-Type': 'application/json',
-    };
-
-    const arrayOfFieldsToExport = ['email_subscribe', 'push_subscribe', 'custom_attributes'];
-
-    const body = {
-      external_ids: [memberId],
-      fields_to_export: arrayOfFieldsToExport,
-    };
-
     try {
+      const brazeJson = await brazeServiceJson();
+      if (!brazeJson) {
+        throw new Error(
+          'Braze service is not configured on this environment, update secrets manager',
+        );
+      }
+
+      const checkListUrl = `https://${this.instanceUrl}/users/export/ids`;
+      const body = {
+        external_ids: [memberId],
+        fields_to_export: ['email_subscribe', 'push_subscribe', 'custom_attributes'],
+      };
+      const headers = {
+        Authorization: `Bearer ${brazeJson.BRAZE_SERVICE_API_KEY}`,
+        'Content-Type': 'application/json',
+      };
+
       const { data } = await axios.post<CheckListResponse>(checkListUrl, body, { headers });
       if (data.users[0] === undefined) {
         throw new NotFoundError('Braze user not found');
@@ -129,6 +129,7 @@ export default class BrazeClient {
             value.personalised_offers !== 'subscribed' && value.personalised_offers != null
               ? value.personalised_offers
               : 'unsubscribed';
+
           return options;
         },
         {},
@@ -136,9 +137,9 @@ export default class BrazeClient {
 
       if (environment === 'mobile') {
         return this.extendForMobile(options);
-      } else {
-        return options;
       }
+
+      return options;
     } catch (error) {
       logger.error({ message: 'Error fetching marketing status', error });
       throw error;
@@ -153,37 +154,42 @@ export default class BrazeClient {
   }
 
   async updateBraze(memberId: string, attributes: BrazeUpdateModel['attributes']): Promise<void> {
+    const brazeJson = await brazeServiceJson();
+    if (!brazeJson) {
+      throw new Error(
+        'Braze service is not configured on this environment, update secrets manager',
+      );
+    }
+
     const checkListUrl = `https://${this.instanceUrl}/users/track`;
-    const containsSmsSubscribe = attributes['sms_subscribe'] !== undefined;
-
-    const headers = {
-      Authorization: `Bearer ${this.brazeJson.BRAZE_SERVICE_API_KEY}`,
-      'Content-Type': 'application/json',
-    };
-
     const body = {
       attributes: [attributes],
+    };
+    const headers = {
+      Authorization: `Bearer ${brazeJson.BRAZE_SERVICE_API_KEY}`,
+      'Content-Type': 'application/json',
     };
 
     try {
       await axios.post(checkListUrl, body, { headers });
-      if (containsSmsSubscribe) {
-        //update subscription group
 
-        if (
-          this.brazeJson.BRAZE_SERVICE_MARKETING_SMS_CAMPAIGN_ID !== undefined &&
-          this.brazeJson.BRAZE_SERVICE_MARKETING_SMS_CAMPAIGN_ID !== ''
-        ) {
-          try {
-            await this.updateSubscriptionGroup(
-              memberId,
-              this.brazeJson.BRAZE_SERVICE_MARKETING_SMS_CAMPAIGN_ID,
-              attributes['sms_subscribe'],
-            );
-          } catch (error) {
-            logger.error({ message: 'Error updating Braze subscription group', error });
-            throw error;
-          }
+      const containsSmsSubscribe = attributes['sms_subscribe'] !== undefined;
+      if (!containsSmsSubscribe) return;
+
+      //update subscription group
+      if (
+        brazeJson.BRAZE_SERVICE_MARKETING_SMS_CAMPAIGN_ID !== undefined &&
+        brazeJson.BRAZE_SERVICE_MARKETING_SMS_CAMPAIGN_ID !== ''
+      ) {
+        try {
+          await this.updateSubscriptionGroup(
+            memberId,
+            brazeJson.BRAZE_SERVICE_MARKETING_SMS_CAMPAIGN_ID,
+            attributes['sms_subscribe'],
+          );
+        } catch (error) {
+          logger.error({ message: 'Error updating Braze subscription group', error });
+          throw error;
         }
       }
     } catch (error) {
@@ -197,18 +203,23 @@ export default class BrazeClient {
     groupId: string,
     value: BrazeUpdateAttributeValue,
   ): Promise<void> {
+    const brazeJson = await brazeServiceJson();
+    if (!brazeJson) {
+      throw new Error(
+        'Braze service is not configured on this environment, update secrets manager',
+      );
+    }
+
     const checkListUrl = `https://${this.instanceUrl}/subscription/status/set`;
     const subGroupStatus = value === 'opted_in' ? 'subscribed' : 'unsubscribed';
-
-    const headers = {
-      Authorization: `Bearer ${this.brazeJson.BRAZE_SERVICE_API_KEY}`,
-      'Content-Type': 'application/json',
-    };
-
     const body = {
       external_id: memberId,
       subscription_group_id: groupId,
       subscription_state: subGroupStatus,
+    };
+    const headers = {
+      Authorization: `Bearer ${brazeJson.BRAZE_SERVICE_API_KEY}`,
+      'Content-Type': 'application/json',
     };
 
     try {

@@ -1,0 +1,68 @@
+import { Meta, Canvas, Controls } from '@storybook/blocks';
+import * as NavBar from './NavBar.stories';
+import ComponentStatus from '../../../.storybook/blocks/ComponentStatus';
+import FigmaEmbed from '../../../.storybook/blocks/FigmaEmbed';
+
+<Meta of={NavBar} />
+
+# NavBar
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Variants and States](#variants-and-states)
+- [Implementation](#implementation)
+- [Usage Guidelines](#usage-guidelines)
+- [Design](#design)
+
+## Status
+
+<ComponentStatus />
+
+## Overview
+
+- Used for displaying navigation links on a page.
+- Displays link lists in a dropdown.
+
+## Props
+
+<Controls />
+
+## Implementation
+
+```jsx
+const Header: FC = () => {
+  const props: NavBarProps = {
+    links: [
+      { id: '1', label: 'Link 1', url: '/' },
+      { id: '2', label: 'Link 2', url: '/', links: [
+        { id: '1', label: 'Sub Link 1, url: '/'' },
+        { id: '2', label: 'Sub Link 2, url: '/'' }
+      ] }
+    ]
+  };
+
+  return <NavBar {...props} />;
+};
+```
+
+## Variants
+
+List of variants can be shown below here.
+
+### Default
+
+<Canvas of={NavBar.Default} />
+
+### Link List
+
+<Canvas of={NavBar.LinkList} />
+
+### Mobile View
+
+<Canvas of={NavBar.MobileView} />
+
+## Design
+
+<FigmaEmbed />

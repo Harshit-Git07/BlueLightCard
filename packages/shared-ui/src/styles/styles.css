@@ -12,3 +12,9 @@ input[type='search'].search-bar::-webkit-search-results-button,
 input[type='search'].search-bar::-webkit-search-results-decoration {
   display: none;
 }
+
+@layer base {
+  a {
+    @apply transition;
+  }
+}

@@ -53,6 +53,8 @@ export { default as RequestNewCardButton } from './components/RequestNewCard/Req
 export { default as AccountDrawer } from './components/AccountDrawer';
 export { useGetOrganisation } from './hooks/useGetOrganisation';
 
+export { default as NavBar } from './components/NavBar';
+
 export * from './adapters';
 export * from './api';
 export * from './components/OfferDetails';

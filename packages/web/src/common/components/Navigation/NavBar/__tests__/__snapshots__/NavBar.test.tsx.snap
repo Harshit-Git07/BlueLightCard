@@ -33,13 +33,19 @@ exports[`Navbar renders the authenticatedNavBar correctly when isAuthenticated i
             class="w-auto hidden tablet:block tablet:w-full h-[72px] desktop:w-auto order-none tablet:order-last desktop:order-none mx-0 mx-4 2xl:mx-7 grow 2xl:grow-0"
           >
             <div
-              class="flex flex-1 gap-5 h-full justify-between"
+              class="mobile-xl:flex mobile-xl:flex-1 mobile-xl:flex-row mobile-xl:gap-5 mobile-xl:h-[72px] mobile-xl:justify-between "
             >
               <div
-                class="font-['MuseoSans'] text-xs font-semibold cursor-pointer text-colour-primary dark:text-colour-primary-dark my-1"
-                data-testid="on-click-link"
+                class="relative"
               >
-                Mock Label
+                <a
+                  class="w-full h-10 px-5 flex min-w-fit items-center gap-1 border-b border-transparent transition mobile-xl:h-full mobile-xl:justify-center mobile-xl:px-0 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font leading-NavBar-link-font tracking-NavBar-link-font hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                  href="/"
+                >
+                  <p>
+                    Mock Label
+                  </p>
+                </a>
               </div>
             </div>
           </div>
@@ -175,13 +181,19 @@ exports[`Navbar renders the unauthenticated header when isAuthenticated if false
               class="hidden desktop:flex desktop:h-full"
             >
               <div
-                class="flex flex-1 gap-5 h-full justify-between"
+                class="mobile-xl:flex mobile-xl:flex-1 mobile-xl:flex-row mobile-xl:gap-5 mobile-xl:h-[72px] mobile-xl:justify-between "
               >
                 <div
-                  class="font-['MuseoSans'] text-xs font-semibold cursor-pointer text-colour-primary dark:text-colour-primary-dark my-1"
-                  data-testid="on-click-link"
+                  class="relative"
                 >
-                  Mock Label
+                  <a
+                    class="w-full h-10 px-5 flex min-w-fit items-center gap-1 border-b border-transparent transition mobile-xl:h-full mobile-xl:justify-center mobile-xl:px-0 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font leading-NavBar-link-font tracking-NavBar-link-font hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                    href="/"
+                  >
+                    <p>
+                      Mock Label
+                    </p>
+                  </a>
                 </div>
               </div>
             </div>
@@ -239,13 +251,19 @@ exports[`Navbar renders the unauthenticated header when isAuthenticated if false
           class="h-[72px] hidden tablet:px-14 tablet:flex desktop:hidden desktop:mx-auto"
         >
           <div
-            class="flex flex-1 gap-5 h-full justify-between"
+            class="mobile-xl:flex mobile-xl:flex-1 mobile-xl:flex-row mobile-xl:gap-5 mobile-xl:h-[72px] mobile-xl:justify-between "
           >
             <div
-              class="font-['MuseoSans'] text-xs font-semibold cursor-pointer text-colour-primary dark:text-colour-primary-dark my-1"
-              data-testid="on-click-link"
+              class="relative"
             >
-              Mock Label
+              <a
+                class="w-full h-10 px-5 flex min-w-fit items-center gap-1 border-b border-transparent transition mobile-xl:h-full mobile-xl:justify-center mobile-xl:px-0 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font leading-NavBar-link-font tracking-NavBar-link-font hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                href="/"
+              >
+                <p>
+                  Mock Label
+                </p>
+              </a>
             </div>
           </div>
         </div>

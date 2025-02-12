@@ -13,8 +13,8 @@ const tokens = {
     bgColor:
       'bg-dropDownItem-subitem-bg-colour dark:bg-dropDownItem-subitem-bg-colour-dark mobile-xl:bg-dropDownItem-bg-colour mobile-xl:dark:bg-dropDownItem-bg-colour-dark',
     border:
-      'border-t border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark rounded-t-none border-t-colour-primary dark:border-t-colour-primary-dark mobile-xl:border mobile-xl:border-t-2 mobile-xl:rounded',
-    shadow: 'shadow-dropdownTop',
+      'border-t border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark rounded-t-none rounded-b border-t-colour-primary dark:border-t-colour-primary-dark mobile-xl:border mobile-xl:border-t-2',
+    shadow: 'mobile-xl:shadow-dropdownTop',
   },
   link: {
     font: 'font-dropDownItem-label-font font-dropDownItem-label-font-weight',
@@ -37,7 +37,7 @@ const LinkList: FC<Props> = ({ links, className }, idx) => {
     <ul
       className={toClassNames([
         className,
-        'flex flex-1 flex-col',
+        'flex flex-1 flex-col z-20',
         tokens.ul.bgColor,
         tokens.ul.border,
         tokens.ul.shadow,
@@ -46,7 +46,7 @@ const LinkList: FC<Props> = ({ links, className }, idx) => {
       {links.map((link) => (
         <li key={link.id} className="flex h-[40px]">
           <Link
-            href={link.url as string}
+            href={link.url ?? ''}
             className={toClassNames([
               'w-full px-[20px] py-1 flex items-center justify-start',
               tokens.link.font,

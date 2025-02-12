@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { UnauthenticatedNavBarProps } from '../../types';
 import Logo from '@/components/Logo';
 import { BRAND } from '@/global-vars';
-import DesktopNavigation from './DesktopNavigation';
 import MobileNavToggleButton from '../atoms/MobileNavToggleButton';
 import Button from '@bluelightcard/shared-ui/components/Button-V2';
 import { ThemeVariant } from '@bluelightcard/shared-ui/types';
 import { BRANDS } from '@/root/src/common/types/brands.enum';
 import DDSLogos from '../molecules/DDSLogos';
 import MobileNavigation from './MobileNavigation';
+import { NavBar } from '@bluelightcard/shared-ui';
 
 const UnauthenticatedNavBar = ({ navigationItems, isSticky }: UnauthenticatedNavBarProps) => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -30,7 +30,7 @@ const UnauthenticatedNavBar = ({ navigationItems, isSticky }: UnauthenticatedNav
           <Logo className="h-[35px] tablet:h-[42px] laptop:h-[55px]" url="/members-home" />
           <div className="flex gap-7 h-full items-center">
             <div className="hidden desktop:flex desktop:h-full">
-              <DesktopNavigation navigationItems={navigationItems} />
+              <NavBar links={navigationItems} />
             </div>
             <div className="flex gap-2 items-center">
               <div className="hidden tablet:flex tablet:gap-2 tablet:items-center">
@@ -53,7 +53,7 @@ const UnauthenticatedNavBar = ({ navigationItems, isSticky }: UnauthenticatedNav
           </div>
         </div>
         <div className="h-[72px] hidden tablet:px-14 tablet:flex desktop:hidden desktop:mx-auto">
-          <DesktopNavigation navigationItems={navigationItems} />
+          <NavBar links={navigationItems} />
         </div>
       </div>
       {showMobileMenu && (

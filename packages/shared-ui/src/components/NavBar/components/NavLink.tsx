@@ -90,7 +90,7 @@ const NavLink: FC<Props> = ({ url, label, links, onClick }) => {
         </>
       ) : (
         <Link
-          href={url as string}
+          href={url ?? ''}
           className={toClassNames([
             tokens.link,
             tokens.font,

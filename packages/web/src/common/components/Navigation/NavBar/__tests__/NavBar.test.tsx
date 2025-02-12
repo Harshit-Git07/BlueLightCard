@@ -5,7 +5,7 @@ import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/
 
 jest.mock('../helpers/getNavigationItems', () => {
   return {
-    getNavigationItems: () => [{ id: 'mockNavItem', label: 'Mock Label' }],
+    getNavigationItems: () => [{ id: 'mockNavItem', label: 'Mock Label', url: '/' }],
   };
 });
 

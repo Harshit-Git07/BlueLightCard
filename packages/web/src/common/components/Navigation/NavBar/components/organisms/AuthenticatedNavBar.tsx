@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
 import { AuthenticatedNavBarProps } from '../../types';
-import { SearchBar, usePlatformAdapter } from '@bluelightcard/shared-ui';
+import { NavBar, SearchBar, usePlatformAdapter } from '@bluelightcard/shared-ui';
 import AccountButton from '../atoms/AccountButton';
-import DesktopNavigation from './DesktopNavigation';
 import Logo from '@/components/Logo';
 import MobileNavigation from './MobileNavigation';
 import MobileNavToggleButton from '../atoms/MobileNavToggleButton';
@@ -119,7 +118,7 @@ const AuthenticatedNavBar = ({
 
           {!useModernAccountNavigation && (
             <div className="w-auto hidden tablet:block tablet:w-full h-[72px] desktop:w-auto order-none tablet:order-last desktop:order-none mx-0 mx-4 2xl:mx-7 grow 2xl:grow-0">
-              <DesktopNavigation navigationItems={navigationItems} />
+              <NavBar links={navigationItems} />
             </div>
           )}
 

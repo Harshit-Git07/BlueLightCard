@@ -5,7 +5,7 @@ export const AUTHENTICATED_NAVIGATION_UK: NavigationItem[] = [
   {
     id: 'offers',
     label: 'Offers',
-    children: [
+    links: [
       {
         id: 'online-discounts',
         label: 'Online Discounts',
@@ -36,7 +36,7 @@ export const AUTHENTICATED_NAVIGATION_UK: NavigationItem[] = [
   {
     id: 'discover-savings',
     label: 'Discover Savings',
-    children: [
+    links: [
       {
         id: 'deal-finder',
         label: 'Deal Finder',
@@ -85,7 +85,7 @@ export const UNAUTHENTICATED_NAVIGATION_UK: NavigationItem[] = [
   {
     id: 'discover-savings',
     label: 'Discover Savings',
-    children: [
+    links: [
       {
         id: 'holiday-discounts',
         label: 'Holiday Discounts',

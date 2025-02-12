@@ -8,11 +8,12 @@ describe('UnauthenticaedNavBar', () => {
       {
         id: 'nav-one',
         label: 'Mock Navigation Item',
-        children: [{ id: 'nav-sub-item-one', label: 'Nav Sub Item' }],
+        links: [{ id: 'nav-sub-item-one', label: 'Nav Sub Item' }],
       },
       {
         id: 'nav-two',
         label: 'Mock Navigation Item Two',
+        url: '/',
       },
     ];
     const { container } = render(<UnauthenticatedNavBar navigationItems={mockNavigationItems} />);

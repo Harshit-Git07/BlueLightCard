@@ -4,7 +4,7 @@ export const AUTHENTICATED_NAVIGATION_AUS: NavigationItem[] = [
   {
     id: 'offers',
     label: 'Offers',
-    children: [
+    links: [
       {
         id: 'online-discounts',
         label: 'Online Discounts',

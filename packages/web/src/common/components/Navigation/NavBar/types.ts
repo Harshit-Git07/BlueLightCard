@@ -1,3 +1,4 @@
+import { Props as NavLink } from '@bluelightcard/shared-ui/components/NavBar/components/NavLink';
 import { BRANDS } from '../../../types/brands.enum';
 
 export type NavBarProps = {
@@ -22,14 +23,7 @@ export type UnauthenticatedNavBarProps = {
   isSticky?: boolean;
 };
 
-export type NavigationItem = {
-  id: string;
-  label: string;
-  ariaLabel?: string;
-  url?: string;
-  onClick?: () => void;
-  children?: NavigationItem[];
-};
+export type NavigationItem = NavLink;
 
 export type NavigationBarProps = {
   navigationItems: NavigationItem[];

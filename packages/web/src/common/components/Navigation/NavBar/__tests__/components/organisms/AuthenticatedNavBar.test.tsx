@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import AuthenticatedNavBar from '../../../components/organisms/AuthenticatedNavBar';
 import { NavigationItem } from '../../../types';
 import userEvent from '@testing-library/user-event';
@@ -23,11 +23,12 @@ describe('AuthenticatedNavBar', () => {
     {
       id: 'nav-one',
       label: 'Mock Navigation Item',
-      children: [{ id: 'nav-sub-item-one', label: 'Nav Sub Item' }],
+      links: [{ id: 'nav-sub-item-one', label: 'Nav Sub Item' }],
     },
     {
       id: 'nav-two',
       label: 'Mock Navigation Item Two',
+      url: '/',
     },
   ];
   it('renders correctly without error', async () => {
@@ -45,33 +46,6 @@ describe('AuthenticatedNavBar', () => {
     expect(screen.queryByTestId('mobile-navigation')).toBeDefined();
   });
 
-  it('calls onBack when navigationItems are clicked', async () => {
-    const mockOnBack = jest.fn();
-
-    await whenAuthenticatedNavBarIsRendered();
-
-    mockNavigationItems.forEach((item) => {
-      const navItems = screen.queryAllByText(`navigationLink-${item.id}`);
-      navItems.forEach((navItem) => {
-        userEvent.click(navItem);
-        expect(mockOnBack).toHaveBeenCalled();
-      });
-
-      if (item.children) {
-        item.children.forEach((child) => {
-          waitFor(async () => {
-            const desktopNavButton = screen.getByTestId(`navigation-dropdown-${item.id}`);
-            await userEvent.click(desktopNavButton as HTMLButtonElement);
-          });
-          const childNavItems = screen.queryAllByText(child.label);
-          childNavItems.forEach((childNavItem) => {
-            userEvent.click(childNavItem);
-            expect(mockOnBack).toHaveBeenCalled();
-          });
-        });
-      }
-    });
-  });
   const whenAuthenticatedNavBarIsRendered = async () => {
     const mockExperimentClient = {
       variant: jest.fn().mockReturnValue({ value: 'off' }),

@@ -29,48 +29,59 @@ exports[`UnauthenticaedNavBar renders 1`] = `
             class="hidden desktop:flex desktop:h-full"
           >
             <div
-              class="flex flex-1 gap-5 h-full justify-between"
+              class="mobile-xl:flex mobile-xl:flex-1 mobile-xl:flex-row mobile-xl:gap-5 mobile-xl:h-[72px] mobile-xl:justify-between "
             >
               <div
                 class="relative"
-                data-testid="navigation-dropdown-nav-one"
               >
                 <button
-                  aria-expanded="false"
-                  aria-haspopup="true"
+                  aria-haspopup="menu"
                   aria-label="Toggle dropdown"
-                  class="h-full w-full"
+                  class="w-full h-10 px-5 flex min-w-fit items-center gap-1 border-b border-transparent transition mobile-xl:h-full mobile-xl:justify-center mobile-xl:px-0 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font leading-NavBar-link-font tracking-NavBar-link-font hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
                 >
-                  <a
-                    class="flex h-full min-w-fit justify-center items-center gap-1 border-b border-transparent font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
-                    data-testid="anchor-link"
+                  Mock Navigation Item
+                  <svg
+                    aria-hidden="true"
+                    class="svg-inline--fa fa-chevron-down "
+                    data-icon="chevron-down"
+                    data-prefix="fas"
+                    focusable="false"
+                    role="img"
+                    viewBox="0 0 512 512"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <p>
-                      Mock Navigation Item
-                    </p>
-                    <svg
-                      aria-hidden="true"
-                      class="svg-inline--fa fa-chevron-down "
-                      data-icon="chevron-down"
-                      data-prefix="fas"
-                      focusable="false"
-                      role="img"
-                      viewBox="0 0 512 512"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-                        fill="currentColor"
-                      />
-                    </svg>
-                  </a>
+                    <path
+                      d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                      fill="currentColor"
+                    />
+                  </svg>
                 </button>
+                <ul
+                  class="w-full mobile-xl:w-max mobile-xl:absolute hidden flex flex-1 flex-col z-20 bg-dropDownItem-subitem-bg-colour dark:bg-dropDownItem-subitem-bg-colour-dark mobile-xl:bg-dropDownItem-bg-colour mobile-xl:dark:bg-dropDownItem-bg-colour-dark border-t border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark rounded-t-none rounded-b border-t-colour-primary dark:border-t-colour-primary-dark mobile-xl:border mobile-xl:border-t-2 mobile-xl:shadow-dropdownTop"
+                >
+                  <li
+                    class="flex h-[40px]"
+                  >
+                    <a
+                      class="w-full px-[20px] py-1 flex items-center justify-start font-dropDownItem-label-font font-dropDownItem-label-font-weight text-dropDownItem-label-font text-dropDownItem-text-colour dark:text-dropDownItem-text-colour-dark leading-dropDownItem-label-font tracking-dropDownItem-label-font focus:outline-none focus:text-dropDownItem-text-active-colour focus:border-b-dropDownItem-border-active-colour focus:border-b dark:focus:text-dropDownItem-text-active-colour-dark dark:focus:border-b-dropDownItem-border-active-colour-dark hover:bg-dropDownItem-bg-hover-colour hover:text-dropDownItem-text-hover-colour hover:border-b-dropDownItem-divider-hover-colour dark:hover:bg-dropDownItem-bg-hover-colour-dark dark:hover:text-dropDownItem-text-hover-colour-dark dark:hover:border-b-dropDownItem-divider-hover-colour-dark mobile-xl:hover:border-b mobile-xl:border-b border-b-dropDownItem-bg-colour dark:border-b-dropDownItem-bg-colour-dark"
+                      href=""
+                    >
+                      Nav Sub Item
+                    </a>
+                  </li>
+                </ul>
               </div>
               <div
-                class="font-['MuseoSans'] text-xs font-semibold cursor-pointer text-colour-primary dark:text-colour-primary-dark my-1"
-                data-testid="on-click-link"
+                class="relative"
               >
-                Mock Navigation Item Two
+                <a
+                  class="w-full h-10 px-5 flex min-w-fit items-center gap-1 border-b border-transparent transition mobile-xl:h-full mobile-xl:justify-center mobile-xl:px-0 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font leading-NavBar-link-font tracking-NavBar-link-font hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+                  href="/"
+                >
+                  <p>
+                    Mock Navigation Item Two
+                  </p>
+                </a>
               </div>
             </div>
           </div>
@@ -128,48 +139,59 @@ exports[`UnauthenticaedNavBar renders 1`] = `
         class="h-[72px] hidden tablet:px-14 tablet:flex desktop:hidden desktop:mx-auto"
       >
         <div
-          class="flex flex-1 gap-5 h-full justify-between"
+          class="mobile-xl:flex mobile-xl:flex-1 mobile-xl:flex-row mobile-xl:gap-5 mobile-xl:h-[72px] mobile-xl:justify-between "
         >
           <div
             class="relative"
-            data-testid="navigation-dropdown-nav-one"
           >
             <button
-              aria-expanded="false"
-              aria-haspopup="true"
+              aria-haspopup="menu"
               aria-label="Toggle dropdown"
-              class="h-full w-full"
+              class="w-full h-10 px-5 flex min-w-fit items-center gap-1 border-b border-transparent transition mobile-xl:h-full mobile-xl:justify-center mobile-xl:px-0 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font leading-NavBar-link-font tracking-NavBar-link-font hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
             >
-              <a
-                class="flex h-full min-w-fit justify-center items-center gap-1 border-b border-transparent font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font tracking-NavBar-link-font leading-NavBar-link-font cursor-pointer hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
-                data-testid="anchor-link"
+              Mock Navigation Item
+              <svg
+                aria-hidden="true"
+                class="svg-inline--fa fa-chevron-down "
+                data-icon="chevron-down"
+                data-prefix="fas"
+                focusable="false"
+                role="img"
+                viewBox="0 0 512 512"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <p>
-                  Mock Navigation Item
-                </p>
-                <svg
-                  aria-hidden="true"
-                  class="svg-inline--fa fa-chevron-down "
-                  data-icon="chevron-down"
-                  data-prefix="fas"
-                  focusable="false"
-                  role="img"
-                  viewBox="0 0 512 512"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-                    fill="currentColor"
-                  />
-                </svg>
-              </a>
+                <path
+                  d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+                  fill="currentColor"
+                />
+              </svg>
             </button>
+            <ul
+              class="w-full mobile-xl:w-max mobile-xl:absolute hidden flex flex-1 flex-col z-20 bg-dropDownItem-subitem-bg-colour dark:bg-dropDownItem-subitem-bg-colour-dark mobile-xl:bg-dropDownItem-bg-colour mobile-xl:dark:bg-dropDownItem-bg-colour-dark border-t border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark rounded-t-none rounded-b border-t-colour-primary dark:border-t-colour-primary-dark mobile-xl:border mobile-xl:border-t-2 mobile-xl:shadow-dropdownTop"
+            >
+              <li
+                class="flex h-[40px]"
+              >
+                <a
+                  class="w-full px-[20px] py-1 flex items-center justify-start font-dropDownItem-label-font font-dropDownItem-label-font-weight text-dropDownItem-label-font text-dropDownItem-text-colour dark:text-dropDownItem-text-colour-dark leading-dropDownItem-label-font tracking-dropDownItem-label-font focus:outline-none focus:text-dropDownItem-text-active-colour focus:border-b-dropDownItem-border-active-colour focus:border-b dark:focus:text-dropDownItem-text-active-colour-dark dark:focus:border-b-dropDownItem-border-active-colour-dark hover:bg-dropDownItem-bg-hover-colour hover:text-dropDownItem-text-hover-colour hover:border-b-dropDownItem-divider-hover-colour dark:hover:bg-dropDownItem-bg-hover-colour-dark dark:hover:text-dropDownItem-text-hover-colour-dark dark:hover:border-b-dropDownItem-divider-hover-colour-dark mobile-xl:hover:border-b mobile-xl:border-b border-b-dropDownItem-bg-colour dark:border-b-dropDownItem-bg-colour-dark"
+                  href=""
+                >
+                  Nav Sub Item
+                </a>
+              </li>
+            </ul>
           </div>
           <div
-            class="font-['MuseoSans'] text-xs font-semibold cursor-pointer text-colour-primary dark:text-colour-primary-dark my-1"
-            data-testid="on-click-link"
+            class="relative"
           >
-            Mock Navigation Item Two
+            <a
+              class="w-full h-10 px-5 flex min-w-fit items-center gap-1 border-b border-transparent transition mobile-xl:h-full mobile-xl:justify-center mobile-xl:px-0 font-NavBar-link-font font-NavBar-link-font-weight text-NavBar-link-font leading-NavBar-link-font tracking-NavBar-link-font hover:text-NavBar-link-hover-colour hover:border-b-NavBar-link-hover-colour dark:hover:text-NavBar-link-hover-colour-dark dark:hover:border-b-NavBar-link-hover-colour-dark"
+              href="/"
+            >
+              <p>
+                Mock Navigation Item Two
+              </p>
+            </a>
           </div>
         </div>
       </div>

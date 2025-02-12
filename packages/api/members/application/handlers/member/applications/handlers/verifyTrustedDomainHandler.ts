@@ -1,7 +1,7 @@
-import { APIGatewayProxyEvent, APIGatewayProxyStructuredResultV2 } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { applicationService } from '@blc-mono/members/application/services/applicationService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { isBlcUkBrand, isDdsUkBrand } from '@blc-mono/core/utils/checkBrand';
+import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
 
 export function isVerifyTrustedDomainHandlerEvent(event: APIGatewayProxyEvent): boolean {
   if (
@@ -20,9 +20,8 @@ export function isVerifyTrustedDomainHandlerEvent(event: APIGatewayProxyEvent): 
 
 export async function verifyTrustedDomainHandler(
   event: APIGatewayProxyEvent,
-): Promise<APIGatewayProxyStructuredResultV2> {
+): Promise<APIGatewayProxyResult> {
   const { memberId, applicationId, trustedDomainVerificationUid } = event.pathParameters || {};
-
   if (!memberId || !applicationId || !trustedDomainVerificationUid) {
     throw new ValidationError(
       'Member ID, Application ID and TrustedDomainVerificationUid are required',
@@ -30,16 +29,16 @@ export async function verifyTrustedDomainHandler(
   }
 
   const application = await applicationService().getApplication(memberId, applicationId);
-
   if (!application) {
     throw new ValidationError('Application not found');
   }
-
   if (
     !application.trustedDomainVerificationUid ||
     application.trustedDomainVerificationUid !== trustedDomainVerificationUid
   ) {
-    throw new ValidationError('trustedDomainVerifiedUid does not match the application');
+    throw new ValidationError(
+      'trusted domain verification id does not match what is stored on the application',
+    );
   }
 
   application.trustedDomainValidated = true;
@@ -51,15 +50,17 @@ export async function verifyTrustedDomainHandler(
       Location: returnHomeUrl(),
       'content-type': 'text/html',
     },
+    body: '',
   };
 }
 
 function returnHomeUrl(): string {
-  if (isBlcUkBrand()) {
-    return 'https://www.bluelightcard.co.uk/';
+  switch (getBrandFromEnv()) {
+    case 'BLC_UK':
+      return 'https://www.bluelightcard.co.uk/';
+    case 'BLC_AU':
+      return 'https://www.bluelightcard.com.au/';
+    case 'DDS_UK':
+      return 'https://www.defencediscountservice.co.uk/';
   }
-  if (isDdsUkBrand()) {
-    return 'https://www.defencediscountservice.co.uk/';
-  }
-  return 'https://www.bluelightcard.com.au/';
 }

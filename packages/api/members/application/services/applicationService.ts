@@ -14,7 +14,6 @@ import {
 } from '@blc-mono/shared/models/members/documentUpload';
 import { ApplicationBatchApprovalModel } from '@blc-mono/shared/models/members/applicationApprovalModel';
 import { NoteSource } from '@blc-mono/shared/models/members/enums/NoteSource';
-import { PromoCodesService } from './promoCodesService';
 import { TrustedDomainService } from './trustedDomainService';
 import { ProfileRepository } from '../repositories/profileRepository';
 import { OrganisationRepository } from '../repositories/organisationRepository';
@@ -52,16 +51,15 @@ export interface ApplicationSearchResult {
 
 export class ApplicationService {
   constructor(
-    private readonly repository: ApplicationRepository = new ApplicationRepository(),
-    private readonly profileService: ProfileService = new ProfileService(),
-    private readonly promoCodeService: PromoCodesService = new PromoCodesService(),
+    private readonly repository = new ApplicationRepository(),
+    private readonly profileService = new ProfileService(),
     private readonly trustedDomainService = new TrustedDomainService(
       new ProfileRepository(),
       new OrganisationRepository(),
     ),
     private readonly emailService = new EmailService(),
-    private readonly cardRepository: CardRepository = new CardRepository(),
-    private readonly s3Client: S3 = new S3({ region: process.env.REGION ?? 'eu-west-2' }),
+    private readonly cardRepository = new CardRepository(),
+    private readonly s3Client = new S3({ region: process.env.REGION ?? 'eu-west-2' }),
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     private readonly uploadBucketName: string = Bucket.documentUploadBucket.bucketName,
@@ -97,7 +95,7 @@ export class ApplicationService {
     try {
       logger.debug({ message: 'Creating application', application: applicationUpdates });
 
-      if (applicationUpdates.trustedDomainEmail) {
+      if (applicationUpdates.trustedDomainEmail && !applicationUpdates.trustedDomainValidated) {
         await this.trustedDomainService.validateTrustedDomainEmail(
           memberId,
           applicationUpdates.trustedDomainEmail,

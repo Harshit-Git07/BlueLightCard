@@ -89,7 +89,7 @@ export function memberApplicationRoutes(
     'GET /members/{memberId}/applications/{applicationId}/verifyTrustedDomain/{trustedDomainVerificationUid}':
       Route.createRoute({
         ...defaultRouteProps,
-        authorizer: undefined,
+        authorizer: 'none',
         handlerFunction,
         name: 'VerifyTrustedDomain',
       }),

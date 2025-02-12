@@ -17,13 +17,11 @@ import { ApplicationReason } from '@blc-mono/shared/models/members/enums/Applica
 import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { ReorderCardReason } from '@blc-mono/shared/models/members/enums/ReorderCardReason';
-import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
 import { EmailService } from '@blc-mono/members/application/services/emailService';
 import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
 import { NoteSource } from '@blc-mono/shared/models/members/enums/NoteSource';
 
 jest.mock('../../repositories/applicationRepository');
-jest.mock('../promoCodesService');
 jest.mock('../profileService');
 jest.mock('../../repositories/cardRepository');
 jest.mock('../emailService');
@@ -80,7 +78,6 @@ describe('ApplicationService', () => {
   let applicationService: ApplicationService;
   let repositoryMock: jest.Mocked<ApplicationRepository>;
   let profileServiceMock: jest.Mocked<ProfileService>;
-  let promoCodeServiceMock: jest.Mocked<PromoCodesService>;
   let trustedDomainServiceMock: jest.Mocked<TrustedDomainService>;
   let emailServiceMock: jest.Mocked<EmailService>;
   let cardRepositoryMock: jest.Mocked<CardRepository>;
@@ -93,7 +90,6 @@ describe('ApplicationService', () => {
 
     repositoryMock = new ApplicationRepository() as jest.Mocked<ApplicationRepository>;
     profileServiceMock = new ProfileService() as jest.Mocked<ProfileService>;
-    promoCodeServiceMock = new PromoCodesService() as jest.Mocked<PromoCodesService>;
     trustedDomainServiceMock = new TrustedDomainService() as jest.Mocked<TrustedDomainService>;
     emailServiceMock = new EmailService() as jest.Mocked<EmailService>;
     cardRepositoryMock = new CardRepository() as jest.Mocked<CardRepository>;
@@ -102,7 +98,6 @@ describe('ApplicationService', () => {
     applicationService = new ApplicationService(
       repositoryMock,
       profileServiceMock,
-      promoCodeServiceMock,
       trustedDomainServiceMock,
       emailServiceMock,
       cardRepositoryMock,

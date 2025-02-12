@@ -17,6 +17,7 @@ import { ForbiddenError } from './errors/ForbiddenError';
 import { UnauthorizedError } from './errors/UnauthorizedError';
 import { NotFoundError } from './errors/NotFoundError';
 import { ValidationError } from './errors/ValidationError';
+import { isAPIGatewayProxyResult } from '@blc-mono/members/application/types/apiGatewayProxyResult';
 
 const SERVICE = process.env.SERVICE as string;
 const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
@@ -27,7 +28,9 @@ export const logger = new Logger({ serviceName: SERVICE });
 
 type Handler = (event: APIGatewayProxyEvent, context: Context) => Promise<APIGatewayProxyResult>;
 
-export function middleware<T>(handler: (event: APIGatewayProxyEvent) => Promise<T>): Handler {
+export function middleware<LambdaResponse>(
+  handler: (event: APIGatewayProxyEvent) => Promise<LambdaResponse>,
+): Handler {
   const handlerUnwrapped = async (
     event: APIGatewayProxyEvent,
     context: Context,
@@ -57,6 +60,10 @@ export function middleware<T>(handler: (event: APIGatewayProxyEvent) => Promise<
       });
 
       if (returnValue) {
+        if (isAPIGatewayProxyResult(returnValue)) {
+          return returnValue;
+        }
+
         return Response.OK(returnValue);
       }
 

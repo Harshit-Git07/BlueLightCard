@@ -8,15 +8,17 @@ import { ApplicationRepository } from '@blc-mono/members/application/repositorie
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 
+jest.mock('../emailService');
+
 const repository = new ApplicationRepository(
   defaultDynamoDbClient,
-  'pr-3629-blc-mono-blc-mono-memberProfiles',
+  'pr-3666-blc-mono-blc-mono-memberProfiles',
 );
 
 const applicationService = new ApplicationService(repository);
 
 it('should create an application for signup', async () => {
-  const memberId = '3bb9a58b-4e80-4626-9285-fa3eddfff7fe'; // Update this to whatever member id you want to create
+  const memberId = '19921f4f-9d17-11ef-b68d-506b8d536548';
 
   const applicationId = await applicationService.createApplication(memberId, {
     startDate: '2024-07-25T22:49:42.134Z',
@@ -24,6 +26,16 @@ it('should create an application for signup', async () => {
     applicationReason: ApplicationReason.SIGNUP,
   });
 
-  expect(applicationId).toEqual(expect.any(String));
   console.log({ applicationId });
+  expect(applicationId).toEqual(expect.any(String));
+});
+
+it('should get an application', async () => {
+  const memberId = '19921f4f-9d17-11ef-b68d-506b8d536548';
+  const applicationId = '1f5d801f-44b1-4961-8b4e-df1d8c0c8572';
+
+  const application = await applicationService.getApplication(memberId, applicationId);
+
+  console.log({ application });
+  expect(application).not.toBeUndefined();
 });

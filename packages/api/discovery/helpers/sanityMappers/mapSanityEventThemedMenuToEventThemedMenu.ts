@@ -31,10 +31,13 @@ export function mapSanityEventThemedMenuToEventThemedMenu(themedMenu: SanityThem
           position: index,
           events:
             themedEventCollection.events?.map((event, i) => {
+              if (!event.event) {
+                throw new Error('Missing sanity field: event');
+              }
               return {
-                id: event._id,
+                id: event.event._id,
                 venue: {
-                  id: event.venue?._id ?? '',
+                  id: event.event.venue?._id ?? '',
                 },
                 position: i,
               };

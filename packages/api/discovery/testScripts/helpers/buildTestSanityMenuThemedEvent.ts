@@ -71,7 +71,7 @@ export function buildTestSanityMenuThemedEvent(
             },
           },
         },
-        events,
+        events: events.map((event) => ({ event, _key: event._id, _type: 'eventReference' })),
       },
     ],
     title: 'Test Menu Themed Event',

@@ -124,46 +124,7 @@ export const validSanityMenuOffer: {
     start: '2023-01-01',
     expires: '2023-12-31',
     evergreen: true,
-    tags: [
-      {
-        _key: 'tag1',
-        _type: 'tag.category',
-        tagCategoryName: 'Category 1',
-        tags: [
-          {
-            _id: 'tag-id-1',
-            _type: 'tag',
-            tagName: 'Tag 1',
-            _createdAt: '2023-01-01',
-            _updatedAt: '2023-01-01',
-            _rev: 'rev1',
-          },
-          {
-            _id: 'tag-id-2',
-            _type: 'tag',
-            tagName: 'Tag 2',
-            _createdAt: '2023-01-01',
-            _updatedAt: '2023-01-01',
-            _rev: 'rev2',
-          },
-        ],
-      },
-      {
-        _key: 'tag2',
-        _type: 'tag.category',
-        tagCategoryName: 'Category 2',
-        tags: [
-          {
-            _id: 'tag-id-3',
-            _type: 'tag',
-            tagName: 'Tag 3',
-            _createdAt: '2023-01-01',
-            _updatedAt: '2023-01-01',
-            _rev: 'rev3',
-          },
-        ],
-      },
-    ],
+    tags: ['tag1', 'tag2'],
     company: {
       _id: 'company1',
       _type: 'company',

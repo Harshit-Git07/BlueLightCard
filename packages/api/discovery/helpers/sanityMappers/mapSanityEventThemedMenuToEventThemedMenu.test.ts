@@ -236,7 +236,7 @@ const validInclusion = {
       },
     },
   },
-  events: [validSanityEvent],
+  events: [{ event: validSanityEvent }],
 };
 
 const validSanityThemedMenu = {
@@ -313,6 +313,18 @@ describe('mapSanityThemedMenuToThemedMenu', () => {
           {
             ...validInclusion,
             eventCollectionDescription: undefined,
+          },
+        ],
+      },
+    },
+    {
+      field: 'event',
+      menuThemedEvent: {
+        ...validSanityThemedMenu,
+        inclusions: [
+          {
+            ...validInclusion,
+            events: [{ event: undefined }],
           },
         ],
       },

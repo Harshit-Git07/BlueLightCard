@@ -9,15 +9,20 @@ type InclusionOffer = {
   _key: string;
 };
 
-export function buildTestSanityMenuOffer(offers: InclusionOffer[], id?: string): SanityMenuOffer {
+export function buildTestSanityMenuOffer(
+  offers: InclusionOffer[],
+  id?: string,
+  start?: string,
+  end?: string,
+): SanityMenuOffer {
   return {
     _createdAt: '2024-07-30T09:36:14Z',
     _id: id ?? v4(),
     _rev: 'HxAzVxEm31DYQTCb4WY0L5',
     _type: 'menu.offer',
     _updatedAt: new Date().toISOString(),
-    start: subMonths(new Date(), 1).toISOString(),
-    end: addMonths(new Date(), 1).toISOString(),
+    start: start ?? subMonths(new Date(), 1).toISOString(),
+    end: end ?? addMonths(new Date(), 1).toISOString(),
     inclusions: offers,
     title: 'Test Menu Offer',
   };

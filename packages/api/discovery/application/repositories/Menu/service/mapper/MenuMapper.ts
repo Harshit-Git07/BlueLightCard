@@ -18,6 +18,7 @@ export function mapMenuEntityToMenu(menuEntity: MenuEntity): Menu {
     endTime: menuEntity.endTime,
     updatedAt: menuEntity.updatedAt,
     menuType: menuEntity.menuType,
+    position: menuEntity.position,
   };
 }
 
@@ -33,6 +34,7 @@ export function mapMenuToMenuEntity(menu: Menu): MenuEntity {
     startTime: menu.startTime,
     endTime: menu.endTime,
     updatedAt: menu.updatedAt,
+    position: menu.position,
   };
 }
 

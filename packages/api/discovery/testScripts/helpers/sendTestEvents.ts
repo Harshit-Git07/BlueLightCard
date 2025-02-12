@@ -4,6 +4,7 @@ import { EventBridgeClient, PutEventsCommand, PutEventsCommandInput } from '@aws
 import {
   Company,
   Event as EventOffer,
+  Marketplace,
   MenuOffer,
   MenuThemedEvent,
   MenuThemedOffer,
@@ -27,7 +28,8 @@ interface TestEvents {
     | MenuThemedOffer[]
     | SanityCompanyLocationEventBody[]
     | EventOffer[]
-    | MenuThemedEvent[];
+    | MenuThemedEvent[]
+    | Marketplace[];
 }
 
 export async function sendTestEvents(testEvents: TestEvents, eventBusName?: string): Promise<void> {

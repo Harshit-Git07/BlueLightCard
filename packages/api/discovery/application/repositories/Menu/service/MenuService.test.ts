@@ -78,6 +78,21 @@ describe('Menu Service', () => {
     });
   });
 
+  describe('insertMenusWithOffers', () => {
+    it('should insert menus with offers successfully', async () => {
+      const mockInsert = jest.spyOn(MenuRepositoryFile.MenuRepository.prototype, 'batchInsert').mockResolvedValue();
+      await target.insertMenusWithOffers([{ menu, menuOffers: [offer] }]);
+      expect(mockInsert).toHaveBeenCalledWith([menuEntity, menuOfferEntity]);
+    });
+
+    it('should throw error when an menu or menu offer failed to insert', async () => {
+      givenMenuOfferRepositoryThrowsAnError('batchInsert');
+      await expect(target.insertMenuWithOffers(menu, [offer])).rejects.toThrow(
+        `Error occurred inserting menu with offers as batch, amount: [2]`,
+      );
+    });
+  });
+
   describe('insertThemedMenuWithSubMenusAndOffers', () => {
     it('should insert themed menu with sub menus and offers successfully', async () => {
       const mockInsert = jest.spyOn(MenuRepositoryFile.MenuRepository.prototype, 'batchInsert').mockResolvedValue();
@@ -141,6 +156,76 @@ describe('Menu Service', () => {
     });
   });
 
+  describe('deleteMenusByMenuType', () => {
+    describe('menuType Flexible Offers or Flexible Events', () => {
+      it.each([MenuType.FLEXIBLE])('should delete menus with sub menus successfully', async (menuType) => {
+        const retrieveThemedMenusWithSubMenus = jest
+          .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'retrieveThemedMenusWithSubMenus')
+          .mockResolvedValue([{ ...flexibleMenuEntity, subMenus: [flexibleSubMenuEntity] }]);
+
+        const batchDeleteSpy = jest.spyOn(MenuRepositoryFile.MenuRepository.prototype, 'batchDelete');
+        await target.deleteMenusByMenuType(menuType);
+        expect(retrieveThemedMenusWithSubMenus).toHaveBeenCalled();
+        expect(batchDeleteSpy).toHaveBeenCalledWith([flexibleMenuEntity, flexibleSubMenuEntity]);
+      });
+
+      it('should throw error when themed menus with sub menus fails to get', async () => {
+        givenMenuOfferRepositoryThrowsAnError('retrieveThemedMenusWithSubMenus');
+        await expect(target.deleteMenusByMenuType(MenuType.FLEXIBLE)).rejects.toThrow(
+          `Error occurred deleting menus by menu type: [flexible]: [Error: DynamoDB error]`,
+        );
+      });
+
+      it('should throw error when the batch Delete fails', async () => {
+        jest
+          .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'retrieveThemedMenusWithSubMenus')
+          .mockResolvedValue([{ ...flexibleMenuEntity, subMenus: [flexibleSubMenuEntity] }]);
+        givenMenuOfferRepositoryThrowsAnError('batchDelete');
+        await expect(target.deleteMenusByMenuType(MenuType.FLEXIBLE)).rejects.toThrow(
+          `Error occurred deleting menus by menu type: [flexible]: [Error: DynamoDB error]`,
+        );
+      });
+    });
+
+    describe('menuType Marketplace, Featured or DOTW', () => {
+      it.each([MenuType.MARKETPLACE])('should delete menus with offers successfully', async (menuType) => {
+        const retrieveMenusWithOffersByMenuType = jest
+          .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'retrieveMenusWithOffersByMenuType')
+          .mockResolvedValue([{ ...menuEntity, offers: [menuOfferEntity] }]);
+
+        const batchDeleteSpy = jest.spyOn(MenuRepositoryFile.MenuRepository.prototype, 'batchDelete');
+        batchDeleteSpy.mockResolvedValue();
+
+        await target.deleteMenusByMenuType(menuType);
+        expect(retrieveMenusWithOffersByMenuType).toHaveBeenCalled();
+        expect(batchDeleteSpy).toHaveBeenCalledWith([menuEntity, menuOfferEntity]);
+      });
+
+      it.each([MenuType.MARKETPLACE, MenuType.FEATURED, MenuType.DEALS_OF_THE_WEEK])(
+        'should throw error when menus with offers fails to get',
+        async (menuType) => {
+          givenMenuOfferRepositoryThrowsAnError('retrieveMenusWithOffersByMenuType');
+          await expect(target.deleteMenusByMenuType(menuType)).rejects.toThrow(
+            `Error occurred deleting menus by menu type: [${menuType}]: [Error: DynamoDB error]`,
+          );
+        },
+      );
+
+      it.each([MenuType.MARKETPLACE, MenuType.FEATURED, MenuType.DEALS_OF_THE_WEEK])(
+        'should throw error when the batch Delete fails',
+        async (menuType) => {
+          jest
+            .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'retrieveMenusWithOffersByMenuType')
+            .mockResolvedValue([{ ...menuEntity, offers: [menuOfferEntity] }]);
+          givenMenuOfferRepositoryThrowsAnError('batchDelete');
+          await expect(target.deleteMenusByMenuType(menuType)).rejects.toThrow(
+            `Error occurred deleting menus by menu type: [${menuType}]: [Error: DynamoDB error]`,
+          );
+        },
+      );
+    });
+  });
+
   describe('getMenuById', () => {
     it('should get menu by id successfully', async () => {
       const mockRetrieveMenuData = jest
@@ -148,7 +233,7 @@ describe('Menu Service', () => {
         .mockResolvedValue(menuEntity);
       const result = await target.getMenuById(menu.id);
       expect(mockRetrieveMenuData).toHaveBeenCalledWith(menu.id);
-      expect(result).toStrictEqual(menu);
+      expect(result).toEqual(menu);
     });
 
     it('should return undefined if retrieveMenuData returns undefined', async () => {
@@ -176,7 +261,7 @@ describe('Menu Service', () => {
         });
       const result = await target.getMenuAndOffersByMenuId(menu.id);
       expect(mockRetrieveMenuWithOffers).toHaveBeenCalledWith(menu.id);
-      expect(result).toStrictEqual({ ...menu, offers: [offer] });
+      expect(result).toEqual({ ...menu, offers: [offer] });
     });
 
     it('should return undefined if no menu with offers is found', async () => {

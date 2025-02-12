@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
 import { Event as SanityEvent, MenuOffer as SanityMenuOffer, Offer as SanityOffer } from '@bluelightcard/sanity-types';
-import { subDays } from 'date-fns';
+import { addMonths, subDays, subMonths } from 'date-fns';
 import { ApiGatewayV1Api } from 'sst/node/api';
 
 import { FlexibleMenuResponse } from '@blc-mono/discovery/application/models/FlexibleMenuResponse';
@@ -11,6 +11,7 @@ import { TestUser } from '@blc-mono/discovery/e2e/TestUser';
 import { ENDPOINTS } from '@blc-mono/discovery/infrastructure/constants/environment';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 import { buildTestSanityEventOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityEventOffer';
+import { buildTestSanityMarketplace } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMarketplace';
 import { buildTestSanityMenuOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMenuOffer';
 import { buildTestSanityMenuThemedEvent } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMenuThemedEvent';
 import { buildTestSanityMenuThemedOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMenuThemedOffer';
@@ -64,23 +65,31 @@ const whenFlexibleMenuIsCalledWith = async (
 
 const generatedOfferUUID = `test-${randomUUID().toString()}`;
 const generatedEventUUID = `test-${randomUUID().toString()}`;
-const generatedExpiredEventUUID = `test-${randomUUID().toString()}`;
-const generatedExcludedEventUUID = `test-${randomUUID().toString()}`;
-const generatedClosedGuestlistEventUUID = `test-${randomUUID().toString()}`;
+const generatedExpiredEventUUID = `test-expired-event-${randomUUID().toString()}`;
+const generatedExcludedEventUUID = `test-exclusive-event${randomUUID().toString()}`;
+const generatedClosedGuestlistEventUUID = `test-closed-guest-${randomUUID().toString()}`;
 const generatedCompanyUUID = `test-company-${randomUUID().toString()}`;
-const ageRestrictedOfferUUID = `test-${randomUUID().toString()}`;
-const ageRestrictedCompanyUUID = `test-company-${randomUUID().toString()}`;
-const trustRestrictedOfferUUID = `test-${randomUUID().toString()}`;
-const trustRestrictedCompanyUUID = `test-company-${randomUUID().toString()}`;
-const expiredOfferUUID = `test-${randomUUID().toString()}`;
-const expiredCompanyUUID = `test-company-${randomUUID().toString()}`;
-const marketplaceGeneratedMenuUUID = `test-${randomUUID().toString()}`;
-const dealsOfTheWeekGeneratedMenuUUID = `test-${randomUUID().toString()}`;
-const featuredOffersGeneratedMenuUUID = `test-${randomUUID().toString()}`;
-const flexibleGeneratedSubMenuUUID = `test-${randomUUID().toString()}`;
-const flexibleGeneratedMenuUUID = `test-${randomUUID().toString()}`;
-const flexibleGeneratedEventSubMenuUUID = `test-${randomUUID().toString()}`;
-const flexibleGeneratedEventMenuUUID = `test-${randomUUID().toString()}`;
+const ageRestrictedOfferUUID = `test-age-restrict-${randomUUID().toString()}`;
+const ageRestrictedCompanyUUID = `test-company-age-restrict-${randomUUID().toString()}`;
+const trustRestrictedOfferUUID = `test-trust-restrict${randomUUID().toString()}`;
+const trustRestrictedCompanyUUID = `test-company-trust-restrict${randomUUID().toString()}`;
+const expiredOfferUUID = `test-expired-${randomUUID().toString()}`;
+const expiredCompanyUUID = `test-company-expired-${randomUUID().toString()}`;
+const marketplaceMenuOfferGeneratedMenuUUID = `test-marketplace-${randomUUID().toString()}`;
+const inScheduleMarketplaceUUID = `test-mp-in-sched-${randomUUID().toString()}`;
+const inScheduleMarketplace2UUID = `test-mp-in-sched-2-${randomUUID().toString()}`;
+const futureScheduleMarketplaceUUID = `test-mp-fut-${randomUUID().toString()}`;
+const previousScheduleMarketplaceUUID = `test-mp-prev-${randomUUID().toString()}`;
+const previousScheduleOfferUUID = `test-off-prev${randomUUID().toString()}`;
+const futureScheduleOfferUUID = `test-off-fut${randomUUID().toString()}`;
+const inScheduleOfferUUID = `test-off-in-sched-${randomUUID().toString()}`;
+const dealsOfTheWeekGeneratedMenuUUID = `test-dotw-${randomUUID().toString()}`;
+const featuredOffersGeneratedMenuUUID = `test-feat-${randomUUID().toString()}`;
+const flexibleGeneratedSubMenuUUID = `test-flexi-sub-${randomUUID().toString()}`;
+const flexibleGeneratedMenuUUID = `test-flexi-menu-${randomUUID().toString()}`;
+const flexibleGeneratedEventSubMenuUUID = `test-flexi-sub-event${randomUUID().toString()}`;
+const flexibleGeneratedEventMenuUUID = `test-flexi-menu-event${randomUUID().toString()}`;
+
 const events: SanityEvent[] = [
   buildTestSanityEventOffer({ _id: generatedEventUUID }),
   buildTestSanityEventOffer({ _id: generatedExpiredEventUUID, status: 'expired' }),
@@ -105,6 +114,11 @@ const events: SanityEvent[] = [
     ],
   }),
 ];
+
+const previousScheduledOffer = buildTestSanityOffer({ id: previousScheduleOfferUUID, companyId: generatedCompanyUUID });
+const inScheduledOffer = buildTestSanityOffer({ id: inScheduleOfferUUID, companyId: generatedCompanyUUID });
+const futureScheduledOffer = buildTestSanityOffer({ id: futureScheduleOfferUUID, companyId: generatedCompanyUUID });
+
 const offers = [
   buildTestSanityOffer({
     id: generatedOfferUUID,
@@ -126,9 +140,65 @@ const offers = [
     status: 'expired',
   }),
 ];
+
 const menuOffers = offers.map((offer) => ({ offer, _key: offer._id }));
 
-const marketplaceSanityMenuOffer = buildTestSanityMenuOffer(menuOffers, marketplaceGeneratedMenuUUID);
+const scheduledMenuOffers = [
+  {
+    offer: previousScheduledOffer,
+    _key: previousScheduleOfferUUID,
+    start: subMonths(new Date(), 2).toISOString(),
+    end: subMonths(new Date(), 1).toISOString(),
+  },
+  {
+    offer: inScheduledOffer,
+    _key: inScheduleOfferUUID,
+    start: subMonths(new Date(), 1).toISOString(),
+    end: addMonths(new Date(), 1).toISOString(),
+  },
+  {
+    offer: futureScheduledOffer,
+    _key: futureScheduleOfferUUID,
+    start: addMonths(new Date(), 1).toISOString(),
+    end: addMonths(new Date(), 2).toISOString(),
+  },
+];
+
+const marketplaceMenus = [
+  buildTestSanityMenuOffer(
+    scheduledMenuOffers,
+    inScheduleMarketplaceUUID,
+    subMonths(new Date(), 1).toISOString(),
+    addMonths(new Date(), 1).toISOString(),
+  ),
+  buildTestSanityMenuOffer(
+    [
+      {
+        offer: inScheduledOffer,
+        _key: inScheduleOfferUUID,
+        start: subMonths(new Date(), 1).toISOString(),
+        end: addMonths(new Date(), 1).toISOString(),
+      },
+      ...menuOffers,
+    ],
+    inScheduleMarketplace2UUID,
+    subMonths(new Date(), 1).toISOString(),
+    addMonths(new Date(), 1).toISOString(),
+  ),
+  buildTestSanityMenuOffer(
+    scheduledMenuOffers,
+    futureScheduleMarketplaceUUID,
+    addMonths(new Date(), 1).toISOString(),
+    addMonths(new Date(), 2).toISOString(),
+  ),
+  buildTestSanityMenuOffer(
+    scheduledMenuOffers,
+    previousScheduleMarketplaceUUID,
+    subMonths(new Date(), 2).toISOString(),
+    subMonths(new Date(), 1).toISOString(),
+  ),
+];
+const marketplaceSanityMenuOffer = buildTestSanityMenuOffer(menuOffers, marketplaceMenuOfferGeneratedMenuUUID);
 const dealsOfTheWeekSanityMenuOffer = buildTestSanityMenuOffer(menuOffers, dealsOfTheWeekGeneratedMenuUUID);
 const featuredOffersSanityMenuOffer = buildTestSanityMenuOffer(menuOffers, featuredOffersGeneratedMenuUUID);
 const flexibleSanityThemedMenuOffer = buildTestSanityMenuThemedOffer(
@@ -147,6 +217,8 @@ const menus: SanityMenuOffer[] = [
   featuredOffersSanityMenuOffer,
 ];
 
+const marketplaceSanityEvent = buildTestSanityMarketplace(marketplaceMenus);
+
 describe('Menu', async () => {
   describe('Menu E2E Event Handling', async () => {
     const testUserTokens = await TestUser.authenticate();
@@ -158,10 +230,15 @@ describe('Menu', async () => {
       });
       await sendTestEvents({
         source: Events.OFFER_CREATED,
-        events: offers,
+        events: [...offers, previousScheduledOffer, inScheduledOffer, futureScheduledOffer],
       });
       await sendTestEvents({ source: Events.EVENT_CREATED, events });
       await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      await sendTestEvents({
+        source: Events.MARKETPLACE_MENUS_CREATED,
+        events: [marketplaceSanityEvent],
+      });
 
       await sendTestEvents({
         source: Events.MENU_OFFER_CREATED,
@@ -176,9 +253,13 @@ describe('Menu', async () => {
     });
     afterAll(async () => {
       await sendTestEvents({
+        source: Events.MARKETPLACE_MENUS_DELETED,
+        events: [buildTestSanityMarketplace(marketplaceMenus)],
+      });
+      await sendTestEvents({
         source: Events.MENU_OFFER_DELETED,
         events: [
-          buildTestSanityMenuOffer(menuOffers, marketplaceGeneratedMenuUUID),
+          buildTestSanityMenuOffer(menuOffers, marketplaceMenuOfferGeneratedMenuUUID),
           buildTestSanityMenuOffer(menuOffers, dealsOfTheWeekGeneratedMenuUUID),
           buildTestSanityMenuOffer(menuOffers, featuredOffersGeneratedMenuUUID),
         ],
@@ -212,6 +293,9 @@ describe('Menu', async () => {
             id: expiredOfferUUID,
             companyId: expiredCompanyUUID,
           }),
+          buildTestSanityOffer({ id: previousScheduleOfferUUID, companyId: generatedCompanyUUID }),
+          buildTestSanityOffer({ id: inScheduleOfferUUID, companyId: generatedCompanyUUID }),
+          buildTestSanityOffer({ id: futureScheduleOfferUUID, companyId: generatedCompanyUUID }),
         ],
       });
       await sendTestEvents({
@@ -228,7 +312,7 @@ describe('Menu', async () => {
       });
     });
 
-    it('should consume menu and offer events and return the single menu response with expired offers filtered out', async () => {
+    it('should consume menu and offer events from the correct events and return the single menu response with expired offers filtered out, in the correct order', async () => {
       const response = await whenMenuIsCalledWith(
         {
           id: 'marketplace',
@@ -238,22 +322,16 @@ describe('Menu', async () => {
 
       const result = (await response.json()) as { data: MenuResponse };
 
-      const expectedMarketplaceMenu = result.data.marketplace?.find(
-        (menu) => menu.id === marketplaceSanityMenuOffer._id,
-      );
-
-      expect(expectedMarketplaceMenu?.title).toEqual(marketplaceSanityMenuOffer.title);
-      expect(expectedMarketplaceMenu?.offers.length).toEqual(3);
-      expect(expectedMarketplaceMenu?.offers).toEqual(
-        expect.arrayContaining([
-          buildExpectedOfferFrom(offers[0]),
-          buildExpectedOfferFrom(offers[1]),
-          buildExpectedOfferFrom(offers[2]),
-        ]),
-      );
+      expect(
+        result.data.marketplace?.find((menu) => menu.id === marketplaceMenuOfferGeneratedMenuUUID),
+      ).not.toBeDefined();
+      expect(result.data.marketplace?.find((menu) => menu.id === futureScheduleMarketplaceUUID)).not.toBeDefined();
+      expect(result.data.marketplace?.find((menu) => menu.id === previousScheduleMarketplaceUUID)).not.toBeDefined();
+      expect(result.data.marketplace?.[0].id).toEqual(inScheduleMarketplaceUUID);
+      expect(result.data.marketplace?.[1].id).toEqual(inScheduleMarketplace2UUID);
     });
 
-    it('should filter out expired offers from the menu response', async () => {
+    it('should filter out expired offers from the menu response and return in the correct order', async () => {
       const response = await whenMenuIsCalledWith(
         {
           id: 'marketplace',
@@ -263,14 +341,14 @@ describe('Menu', async () => {
 
       const result = (await response.json()) as { data: MenuResponse };
 
-      const expectedMarketplaceMenu = result.data.marketplace?.find(
-        (menu) => menu.id === marketplaceSanityMenuOffer._id,
-      );
+      const expectedMarketplaceMenu = result.data.marketplace?.find((menu) => menu.id === inScheduleMarketplace2UUID);
       const expiredRestrictedOffer = expectedMarketplaceMenu?.offers.find(
         (offer) => offer.offerID === expiredOfferUUID,
       );
 
-      expect(expectedMarketplaceMenu?.offers.length).toEqual(3);
+      expect(expectedMarketplaceMenu?.offers.length).toEqual(4);
+      expect(expectedMarketplaceMenu?.id).toEqual(result.data.marketplace?.[1].id);
+      expect(expectedMarketplaceMenu?.offers[0].offerID).toEqual(inScheduleOfferUUID);
       expect(expiredRestrictedOffer).toBeUndefined();
     });
 
@@ -281,19 +359,19 @@ describe('Menu', async () => {
       expect(result.data).toEqual({
         dealsOfTheWeek: {
           id: dealsOfTheWeekGeneratedMenuUUID,
-          offers: expect.arrayContaining([
+          offers: [
             buildExpectedOfferFrom(offers[0]),
             buildExpectedOfferFrom(offers[1]),
             buildExpectedOfferFrom(offers[2]),
-          ]),
+          ],
         },
         featured: {
           id: featuredOffersGeneratedMenuUUID,
-          offers: expect.arrayContaining([
+          offers: [
             buildExpectedOfferFrom(offers[0]),
             buildExpectedOfferFrom(offers[1]),
             buildExpectedOfferFrom(offers[2]),
-          ]),
+          ],
         },
         flexible: expect.arrayContaining([
           {
@@ -323,13 +401,19 @@ describe('Menu', async () => {
         ]),
         marketplace: [
           {
-            id: marketplaceSanityMenuOffer._id,
-            title: menus[0].title,
-            offers: expect.arrayContaining([
+            id: marketplaceMenus[0]._id,
+            title: marketplaceMenus[0].title,
+            offers: [buildExpectedOfferFrom(scheduledMenuOffers[1].offer)],
+          },
+          {
+            id: marketplaceMenus[1]._id,
+            title: marketplaceMenus[1].title,
+            offers: [
+              buildExpectedOfferFrom(scheduledMenuOffers[1].offer),
               buildExpectedOfferFrom(offers[0]),
               buildExpectedOfferFrom(offers[1]),
               buildExpectedOfferFrom(offers[2]),
-            ]),
+            ],
           },
         ],
       });

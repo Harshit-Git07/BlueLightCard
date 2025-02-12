@@ -2,6 +2,7 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import {
   Company as SanityCompany,
   Event as SanityEvent,
+  Marketplace as SanityMarketplaceMenu,
   MenuOffer as SanityMenuOffer,
   MenuThemedEvent as SanityEventThemedMenu,
   MenuThemedOffer as SanityThemedMenu,
@@ -30,6 +31,7 @@ import {
 import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany';
 import { mapSanityEventThemedMenuToEventThemedMenu } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityEventThemedMenuToEventThemedMenu';
 import { mapSanityEventToEventOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityEventToEvent';
+import { mapSanityMarketPlaceMenusToMenuOffers } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMarketplaceMenusToMenus';
 import { mapSanityMenuOfferToMenuOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
 import { mapSanitySiteToSite } from '@blc-mono/discovery/helpers/sanityMappers/mapSanitySiteToSite';
@@ -37,6 +39,7 @@ import { mapSanityThemedMenuToThemedMenu } from '@blc-mono/discovery/helpers/san
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
 import { handleCompanyLocationsUpdated } from './eventHandlers/CompanyLocationEventHandler';
+import { handleMarketplaceMenusDeleted, handleMarketplaceMenusUpdated } from './eventHandlers/MarketplaceEventHandler';
 import { handleMenusDeleted, handleMenusUpdated } from './eventHandlers/MenusEventHandler';
 import { handleMenuThemedDeleted, handleMenuThemedUpdated } from './eventHandlers/MenuThemedEventHandler';
 import { handleSiteDeleted, handleSiteUpdated } from './eventHandlers/SiteEventHandler';
@@ -71,6 +74,17 @@ const unwrappedHandler = async (event: SQSEvent) => {
         case Events.COMPANY_LOCATION_BATCH_UPDATED:
           await handleCompanyLocationsUpdated(
             mapSanityCompanyLocationToCompanyLocationEvent(body.detail as SanityCompanyLocationEventBody),
+          );
+          break;
+        case Events.MARKETPLACE_MENUS_CREATED:
+        case Events.MARKETPLACE_MENUS_UPDATED:
+          await handleMarketplaceMenusUpdated(
+            mapSanityMarketPlaceMenusToMenuOffers(body.detail as SanityMarketplaceMenu),
+          );
+          break;
+        case Events.MARKETPLACE_MENUS_DELETED:
+          await handleMarketplaceMenusDeleted(
+            mapSanityMarketPlaceMenusToMenuOffers(body.detail as SanityMarketplaceMenu),
           );
           break;
         case Events.MENU_OFFER_CREATED:

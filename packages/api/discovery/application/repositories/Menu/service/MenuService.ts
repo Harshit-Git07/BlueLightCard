@@ -11,7 +11,9 @@ import { EventOffer, Offer } from '@blc-mono/discovery/application/models/Offer'
 import { SubMenu, ThemedSubMenuWithOffers } from '@blc-mono/discovery/application/models/ThemedMenu';
 
 import { buildErrorMessage } from '../../Company/service/utils/ErrorMessageBuilder';
+import { MenuEntity } from '../../schemas/MenuEntity';
 import { MenuEventEntity, MenuOfferEntity } from '../../schemas/MenuOfferEntity';
+import { SubMenuEntity } from '../../schemas/SubMenuEntity';
 import { MenuRepository } from '../MenuRepository';
 
 import { mapEventToMenuEventEntity, mapMenuEventEntityToEvent } from './mapper/MenuEventMapper';
@@ -41,6 +43,29 @@ export async function insertMenuWithOffers(menu: Menu, menuOffers: MenuOffer[]):
         logger,
         error,
         `Error occurred inserting menu with offers as batch, amount: [${itemsToInsert.length}]`,
+      ),
+    );
+  }
+}
+
+export async function insertMenusWithOffers(menusAndOffers: { menu: Menu; menuOffers: MenuOffer[] }[]): Promise<void> {
+  const itemsToInsert: (MenuEntity | MenuOfferEntity)[] = [];
+  menusAndOffers.forEach(({ menu, menuOffers }) => {
+    const menuEntity = mapMenuToMenuEntity(menu);
+    const menuOffersEntity = menuOffers.map((menuOffer) =>
+      mapMenuOfferToMenuOfferEntity(menuOffer, menu.id, menu.menuType),
+    );
+    itemsToInsert.push(menuEntity, ...menuOffersEntity);
+  });
+  try {
+    await new MenuRepository().batchInsert(itemsToInsert);
+    logger.info({ message: `Inserted menus with offers as batch, amount: [${itemsToInsert.length}]` });
+  } catch (error) {
+    throw new Error(
+      buildErrorMessage(
+        logger,
+        error,
+        `Error occurred inserting menus with offers as batch, amount: [${itemsToInsert.length}]`,
       ),
     );
   }
@@ -106,6 +131,26 @@ export async function deleteMenuWithSubMenusAndOffers(menuId: string): Promise<v
     logger.info({ message: `Deleted menu with id: [${menuId}]` });
   } catch (error) {
     throw new Error(buildErrorMessage(logger, error, `Error occurred deleting menu with id: [${menuId}]`));
+  }
+}
+
+export async function deleteMenusByMenuType(menuType: MenuType): Promise<void> {
+  try {
+    const itemsToDelete: (MenuEntity | SubMenuEntity | MenuOfferEntity)[] = [];
+    if (menuType === MenuType.FLEXIBLE) {
+      const menuWithSubMenus = await new MenuRepository().retrieveThemedMenusWithSubMenus();
+      menuWithSubMenus.forEach(({ subMenus, ...menu }) => {
+        itemsToDelete.push(menu, ...subMenus);
+      });
+    } else {
+      const menuWithOffers = await new MenuRepository().retrieveMenusWithOffersByMenuType(menuType);
+      menuWithOffers.forEach(({ offers, ...menu }) => {
+        itemsToDelete.push(menu, ...offers);
+      });
+    }
+    await new MenuRepository().batchDelete(itemsToDelete);
+  } catch (error) {
+    throw new Error(buildErrorMessage(logger, error, `Error occurred deleting menus by menu type: [${menuType}]`));
   }
 }
 
@@ -318,7 +363,7 @@ export const sortMenusWithSubMenus = (menusWithSubMenus: MenuWithSubMenus[]): Me
     const { subMenus, ...menu } = menuWithSubMenus;
     return {
       ...menu,
-      subMenus: subMenus.toSorted((a, b) => a.position - b.position),
+      subMenus: subMenus.sort((a, b) => a.position - b.position),
     };
   });
   return menusWithSubMenusSorted.sort((a, b) => {
@@ -333,7 +378,7 @@ export const sortMenusWithOffers = (menusWithOffers: MenuWithOffers[]) => {
     const { offers, ...menu } = menuWithOffers;
     return {
       ...menu,
-      offers: offers.toSorted((a, b) => a.position - b.position),
+      offers: offers.sort((a, b) => a.position - b.position),
     };
   });
   return menusWithOffersSorted.sort((a, b) => {

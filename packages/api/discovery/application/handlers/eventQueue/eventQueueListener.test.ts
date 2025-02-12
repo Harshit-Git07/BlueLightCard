@@ -17,6 +17,7 @@ import { mapSanityCompanyLocationToCompanyLocationEvent } from '@blc-mono/discov
 import { mapSanityCompanyToCompany } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany';
 import { mapSanityEventThemedMenuToEventThemedMenu } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityEventThemedMenuToEventThemedMenu';
 import { mapSanityEventToEventOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityEventToEvent';
+import { mapSanityMarketPlaceMenusToMenuOffers } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMarketplaceMenusToMenus';
 import { mapSanityMenuOfferToMenuOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
 import { mapSanitySiteToSite } from '@blc-mono/discovery/helpers/sanityMappers/mapSanitySiteToSite';
@@ -30,6 +31,7 @@ import { MenuType } from '../../models/MenuResponse';
 import { ThemedMenuOffer } from '../../models/ThemedMenu';
 
 import { handleCompanyLocationsUpdated } from './eventHandlers/CompanyLocationEventHandler';
+import { handleMarketplaceMenusDeleted, handleMarketplaceMenusUpdated } from './eventHandlers/MarketplaceEventHandler';
 import { handleMenusDeleted, handleMenusUpdated } from './eventHandlers/MenusEventHandler';
 import { handleMenuThemedDeleted, handleMenuThemedUpdated } from './eventHandlers/MenuThemedEventHandler';
 import { handleSiteDeleted, handleSiteUpdated } from './eventHandlers/SiteEventHandler';
@@ -40,6 +42,7 @@ jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/Eve
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/CompanyEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/CompanyLocationEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/MenusEventHandler');
+jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/MarketplaceEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/MenuThemedEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/SiteEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/EventMenuThemedEventHandler');
@@ -47,6 +50,7 @@ jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/Eve
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityEventThemedMenuToEventThemedMenu');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany');
+jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityMarketplaceMenusToMenus');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanitySiteToSite');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityThemedMenuToThemedMenu');
@@ -63,6 +67,8 @@ const handleMenuOfferUpdatedMock = jest.mocked(handleMenusUpdated);
 const handleMenuOfferDeletedMock = jest.mocked(handleMenusDeleted);
 const handleSiteUpdatedMock = jest.mocked(handleSiteUpdated);
 const handleSiteDeletedMock = jest.mocked(handleSiteDeleted);
+const handleMarketplaceMenusUpdatedMock = jest.mocked(handleMarketplaceMenusUpdated);
+const handleMarketplaceMenusDeletedMock = jest.mocked(handleMarketplaceMenusDeleted);
 const handleMenuThemedUpdatedMock = jest.mocked(handleMenuThemedUpdated);
 const handleMenuThemedDeletedMock = jest.mocked(handleMenuThemedDeleted);
 const handleEventMenuThemedUpdatedMock = jest.mocked(handleEventMenuThemedUpdated);
@@ -73,6 +79,7 @@ const mapSanityEventToEventMock = jest.mocked(mapSanityEventToEventOffer);
 
 const mapSanityCompanyToCompanyMock = jest.mocked(mapSanityCompanyToCompany);
 const mapSanityMenuOfferToMenuOfferMock = jest.mocked(mapSanityMenuOfferToMenuOffer);
+const mapSanityMarketPlaceMenusToMenuOffersMock = jest.mocked(mapSanityMarketPlaceMenusToMenuOffers);
 const mapSanitySiteToSiteMock = jest.mocked(mapSanitySiteToSite);
 const mapSanityThemedMenuToThemedMenuMock = jest.mocked(mapSanityThemedMenuToThemedMenu);
 const mapSanityCompanyLocationToCompanyLocationEventMock = jest.mocked(mapSanityCompanyLocationToCompanyLocationEvent);
@@ -155,6 +162,38 @@ describe('eventQueueListener', () => {
       expect(handleCompanyLocationsUpdatedMock).toHaveBeenCalled();
     },
   );
+
+  it.each([Events.MARKETPLACE_MENUS_CREATED, Events.MARKETPLACE_MENUS_UPDATED])('should handle %s event', async () => {
+    const marketplaceMenuRecord = buildSQSRecord(Events.MARKETPLACE_MENUS_UPDATED);
+    const menuOffer = ingestedMenuOfferFactory.build();
+    mapSanityMarketPlaceMenusToMenuOffersMock.mockReturnValue({
+      updatedAt: menuOffer.updatedAt,
+      ingestedMenuOffers: [menuOffer],
+    });
+    await handler({ Records: [marketplaceMenuRecord] });
+
+    expect(mapSanityMarketPlaceMenusToMenuOffersMock).toHaveBeenCalledWith('body');
+    expect(handleMarketplaceMenusUpdatedMock).toHaveBeenCalledWith({
+      updatedAt: menuOffer.updatedAt,
+      ingestedMenuOffers: [menuOffer],
+    });
+  });
+
+  it('should handle "marketplace.deleted" event', async () => {
+    const marketplaceMenuRecord = buildSQSRecord(Events.MARKETPLACE_MENUS_DELETED);
+    const menuOffer = ingestedMenuOfferFactory.build();
+    mapSanityMarketPlaceMenusToMenuOffersMock.mockReturnValue({
+      updatedAt: menuOffer.updatedAt,
+      ingestedMenuOffers: [menuOffer],
+    });
+    await handler({ Records: [marketplaceMenuRecord] });
+
+    expect(mapSanityMarketPlaceMenusToMenuOffersMock).toHaveBeenCalledWith('body');
+    expect(handleMarketplaceMenusDeletedMock).toHaveBeenCalledWith({
+      updatedAt: menuOffer.updatedAt,
+      ingestedMenuOffers: [menuOffer],
+    });
+  });
 
   it.each([Events.MENU_OFFER_CREATED, Events.MENU_OFFER_UPDATED])('should handle %s event', async (eventSource) => {
     const menuRecord = buildSQSRecord(eventSource);

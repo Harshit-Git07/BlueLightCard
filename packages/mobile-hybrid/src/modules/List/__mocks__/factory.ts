@@ -24,9 +24,7 @@ export const searchResultV5Factory = Factory.Sync.makeFactory<SearchResultV5>({
   CatID: Factory.each((i) => i),
   TypeID: Factory.each((i) => i),
   CompID: Factory.each((i) => i),
-  S3Logos: '',
-  Logos: '',
-  AbsoluteLogos: '',
-  CompanyName: '',
-  OfferName: '',
+  offerimg: Factory.each((i) => `https://cdn.bluelightcard.co.uk/offer-image-${i}`),
+  CompanyName: Factory.each((i) => `Company ${i}`),
+  OfferName: Factory.each((i) => `Offer name ${i}`),
 });

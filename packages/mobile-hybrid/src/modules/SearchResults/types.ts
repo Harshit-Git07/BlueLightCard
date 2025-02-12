@@ -11,15 +11,15 @@ export interface SearchResult {
 }
 
 export interface SearchResultV5 {
-  ID: number;
+  ID: number | string;
+  LegacyID?: number;
   CatID: number;
-  CompID: number;
+  CompID: number | string;
+  LegacyCompanyID?: number;
   TypeID: number;
   OfferName: string;
   CompanyName: string;
-  Logos: string;
-  AbsoluteLogos: string;
-  S3Logos: string;
+  offerimg: string;
 }
 
 export interface OfferListItem {

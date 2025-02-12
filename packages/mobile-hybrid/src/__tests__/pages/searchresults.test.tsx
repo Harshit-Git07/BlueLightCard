@@ -23,7 +23,8 @@ import { userProfile } from '@/components/UserProfileProvider/store';
 jest.mock('@/invoke/analytics');
 
 let searchValue = '';
-const testDataV5: SearchResultsV5 = searchResultV5Factory.buildList(1);
+const testDataV5: SearchResultsV5 = searchResultV5Factory.buildList(2);
+testDataV5[1].offerimg = '';
 const mockRouter: Partial<NextRouter> = {
   push: jest.fn(),
   query: {
@@ -160,6 +161,58 @@ describe('Search Results', () => {
         const spinner = screen.findByRole('progressbar');
         expect(spinner).toBeTruthy();
       });
+    });
+  });
+
+  describe('Offer results', () => {
+    beforeEach(async () => {
+      if (mockRouter.query) {
+        mockRouter.query.search = 'test search value';
+      }
+
+      const mockPlatformAdapter = useMockPlatformAdapter(200, {
+        data: testDataV5,
+      });
+      mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('treatment');
+
+      await whenPageIsRenderedWithFlags(
+        {
+          [Experiments.SEARCH_V5]: 'treatment',
+          [FeatureFlags.V5_API_INTEGRATION]: 'on',
+        },
+        mockPlatformAdapter,
+      );
+    });
+
+    afterEach(() => {
+      if (mockRouter.query) {
+        mockRouter.query.search = '';
+      }
+    });
+
+    it('should render the offer name', async () => {
+      const offerName = await screen.findByText(testDataV5[0].OfferName);
+      expect(offerName).toBeInTheDocument();
+    });
+
+    it('should render the company name', async () => {
+      const companyName = await screen.findByText(testDataV5[0].CompanyName);
+      expect(companyName).toBeInTheDocument();
+    });
+
+    it('should render the offer image', async () => {
+      const offerImage = await screen.findByAltText(testDataV5[0].OfferName);
+      expect(offerImage).toHaveAttribute('src', expect.stringContaining('offer-image-0'));
+    });
+
+    it('should render the company logo if the offer is missing an image', async () => {
+      const offerImage = await screen.findByAltText(testDataV5[1].OfferName);
+      expect(offerImage).toHaveAttribute(
+        'src',
+        expect.stringContaining(
+          'https%3A%2F%2Fcdn.bluelightcard.co.uk%2Fcompanyimages%2Fcomplarge%2Fretina%2F1.jpg',
+        ),
+      );
     });
   });
 

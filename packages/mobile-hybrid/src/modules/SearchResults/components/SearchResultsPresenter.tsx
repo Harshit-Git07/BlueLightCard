@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { OfferListItem, SearchResults } from '../types';
+import getCDNUrl from '@/utils/getCDNUrl';
 import ListItem from '@/components/ListItem/ListItem';
 
 export interface Props {
@@ -34,7 +35,11 @@ const SearchResultsPresenter: FC<Props> = ({ results, onOfferClick }) => {
                   searchResultNumber: index + 1,
                 })
               }
-              imageSrc={offer.s3logos}
+              imageSrc={
+                offer.s3logos
+                  ? offer.s3logos
+                  : getCDNUrl(`/companyimages/complarge/retina/${offer.compid}.jpg`)
+              }
               imageAlt={offer.offername}
             />
           </div>

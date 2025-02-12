@@ -41,6 +41,26 @@ export const UpdateCardModel = createZodNamedType(
 
 export type UpdateCardModel = z.infer<typeof UpdateCardModel>;
 
+export const CreateCardModel = createZodNamedType(
+  'CreateCardModel',
+  CardModel.omit({
+    memberId: true,
+    cardNumber: true,
+    cardStatus: true,
+    createdDate: true,
+    expiryDate: true,
+    postedDate: true,
+    printedDate: true,
+    refundedDate: true,
+    batchNumber: true,
+    printingErrorStatus: true,
+    promoCode: true,
+    ingestionLastTriggered: true,
+  }),
+);
+
+export type CreateCardModel = z.infer<typeof CreateCardModel>;
+
 export const AwaitingBatchingCardModel = createZodNamedType(
   'AwaitingBatchingCardModel',
   CardModel.omit({

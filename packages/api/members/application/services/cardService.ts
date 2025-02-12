@@ -3,10 +3,13 @@ import {
   AwaitingBatchingCardModel,
   BatchedCardModel,
   CardModel,
+  CreateCardModel,
   UpdateCardModel,
 } from '@blc-mono/shared/models/members/cardModel';
-import { CardRepository } from '../repositories/cardRepository';
+import { CardRepository, UpsertCardOptions } from '../repositories/cardRepository';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
+
+let cardServiceSingleton: CardService;
 
 export class CardService {
   constructor(private readonly repository: CardRepository = new CardRepository()) {}
@@ -86,6 +89,34 @@ export class CardService {
     }
   }
 
+  async createCard(memberId: string, cardNumber: string, card: CreateCardModel): Promise<void> {
+    try {
+      const createdDate = new Date();
+      const expiryDate = new Date(createdDate.getFullYear() + 2, createdDate.getMonth() + 1, 0);
+
+      const newCard: CardModel = {
+        memberId: memberId,
+        cardNumber: cardNumber,
+        nameOnCard: card.nameOnCard,
+        createdDate: createdDate.toISOString(),
+        expiryDate: expiryDate.toISOString(),
+        purchaseDate: card.purchaseDate,
+        cardStatus: CardStatus.AWAITING_BATCHING,
+        paymentStatus: card.paymentStatus,
+      };
+      const upsertCardOptions: UpsertCardOptions = {
+        memberId: memberId,
+        cardNumber: cardNumber,
+        card: newCard,
+        isInsert: true,
+      };
+      await this.repository.upsertCard(upsertCardOptions);
+    } catch (error) {
+      logger.error({ message: 'Error updating card', error });
+      throw error;
+    }
+  }
+
   async processPrintedCard(
     memberId: string,
     cardNumber: string,
@@ -101,4 +132,12 @@ export class CardService {
     // TODO: delete application for card and any remaining ID files if present
     // TODO: email user with card_posted template
   }
+}
+
+export function cardService(): CardService {
+  if (!cardServiceSingleton) {
+    cardServiceSingleton = new CardService();
+  }
+
+  return cardServiceSingleton;
 }

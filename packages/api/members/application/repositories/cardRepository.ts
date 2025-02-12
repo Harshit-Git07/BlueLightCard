@@ -142,11 +142,8 @@ export class CardRepository {
     card,
     isInsert = false,
   }: UpsertCardOptions): Promise<void> {
-    const updateExpression: string[] = ['memberId = :memberId', 'cardNumber = :cardNumber'];
-    const expressionAttributeValues: Record<string, unknown> = {
-      ':memberId': memberId,
-      ':cardNumber': cardNumber,
-    };
+    const updateExpression: string[] = [];
+    const expressionAttributeValues: Record<string, unknown> = {};
 
     for (const field of Object.keys(card) as (keyof CardModel)[]) {
       if (card[field] !== undefined) {
@@ -155,19 +152,26 @@ export class CardRepository {
       }
     }
 
+    updateExpression.push('lastUpdated = :lastUpdated');
+    expressionAttributeValues[':lastUpdated'] = new Date().toISOString();
+
     const params = {
       TableName: this.tableName,
       Key: {
         pk: memberKey(memberId),
         sk: cardKey(cardNumber),
       },
-      ConditionExpression: isInsert ? '' : 'pk = :pk AND sk = :sk',
       UpdateExpression: `SET ${updateExpression.join(', ')} `,
-      ExpressionAttributeValues: {
-        ':pk': memberKey(memberId),
-        ':sk': cardKey(cardNumber),
-        ...expressionAttributeValues,
-      },
+      ConditionExpression: isInsert
+        ? 'attribute_not_exists(pk) AND attribute_not_exists(sk)'
+        : 'pk = :pk AND sk = :sk',
+      ExpressionAttributeValues: isInsert
+        ? { ...expressionAttributeValues }
+        : {
+            ':pk': memberKey(memberId),
+            ':sk': cardKey(cardNumber),
+            ...expressionAttributeValues,
+          },
     };
 
     await this.dynamoDB.send(new UpdateCommand(params));

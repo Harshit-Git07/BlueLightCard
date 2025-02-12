@@ -36,6 +36,12 @@ export const profiles: ProfileModelForDynamo[] = [
     firstName: 'Muhammad',
     lastName: 'Shahrukh',
   }),
+  buildProfile({
+    memberId: 'de8e13c6-51f8-45be-b771-29f1bae35651',
+    email: 'kevinoconnor@bluelightcard.co.uk',
+    firstName: 'Kevin',
+    lastName: "O'Connor",
+  }),
 ];
 
 interface ProfileModelBuilder

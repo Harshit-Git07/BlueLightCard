@@ -106,7 +106,7 @@ export async function MembersStack({ app, stack }: StackContext) {
     ],
     destinationBucket: emailTemplatesBucket,
   });
-  const bucketName = new Config.Parameter(stack, 'email-templates-bucket', {
+  const emailTemplatesBucketName = new Config.Parameter(stack, 'email-templates-bucket', {
     value: emailTemplatesBucket.bucketName,
   });
 
@@ -172,7 +172,15 @@ export async function MembersStack({ app, stack }: StackContext) {
   createProfilesSeedSearchIndexPipeline(stack, profilesTable, profilesSeedSearchIndexTable);
 
   const { bus } = use(Shared);
-  bus.addRules(stack, memberEventRules(profilesTable));
+  bus.addRules(
+    stack,
+    memberEventRules(
+      profilesTable,
+      organisationsTable,
+      documentUpload.bucket,
+      emailTemplatesBucketName,
+    ),
+  );
 
   return {
     profilesTable,
@@ -180,7 +188,7 @@ export async function MembersStack({ app, stack }: StackContext) {
     adminTable,
     documentUploadBucket: documentUpload.bucket,
     batchFilesBucket: batchFilesBucket,
-    emailTemplatesBucket: bucketName,
+    emailTemplatesBucket: emailTemplatesBucketName,
     openSearchDomain,
   };
 }

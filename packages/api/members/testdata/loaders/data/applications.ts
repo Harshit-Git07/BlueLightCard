@@ -28,6 +28,11 @@ export const applications: ApplicationModelForDynamo[] = [
     memberId: '11c998b8-de52-11ef-b2c8-506b8d536548',
     applicationId: 'ee4193b1-08b2-485b-8d5b-3261b0e8f1c0',
   }),
+  // kevinoconnor@bluelightcard.co.uk
+  buildApplication({
+    memberId: 'de8e13c6-51f8-45be-b771-29f1bae35651',
+    applicationId: '9dfd261e-4bd7-4da1-a167-6b5c0bdad4b9',
+  }),
 ];
 
 interface ApplicationModelBuilder

@@ -33,6 +33,9 @@ const queryCommandMock = QueryCommand as jest.MockedClass<typeof QueryCommand>;
 
 describe('CardRepository', () => {
   beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date(2023, 0, 1));
     repository = new CardRepository(
       dynamoDBMock as any as DynamoDBDocumentClient,
       'memberProfiles',
@@ -139,9 +142,9 @@ describe('CardRepository', () => {
           pk: memberKey(memberId),
           sk: cardKey(cardNumber),
         },
-        ConditionExpression: '',
+        ConditionExpression: 'attribute_not_exists(pk) AND attribute_not_exists(sk)',
         UpdateExpression:
-          'SET memberId = :memberId, cardNumber = :cardNumber, memberId = :memberId, cardNumber = :cardNumber, nameOnCard = :nameOnCard, cardStatus = :cardStatus, createdDate = :createdDate, expiryDate = :expiryDate, postedDate = :postedDate, purchaseDate = :purchaseDate, paymentStatus = :paymentStatus ',
+          'SET memberId = :memberId, cardNumber = :cardNumber, nameOnCard = :nameOnCard, cardStatus = :cardStatus, createdDate = :createdDate, expiryDate = :expiryDate, postedDate = :postedDate, purchaseDate = :purchaseDate, paymentStatus = :paymentStatus, lastUpdated = :lastUpdated ',
         ExpressionAttributeValues: {
           ':memberId': memberId,
           ':cardNumber': cardNumber,
@@ -149,11 +152,10 @@ describe('CardRepository', () => {
           ':cardStatus': 'PHYSICAL_CARD',
           ':createdDate': '2023-01-01T00:00:00Z',
           ':expiryDate': '2023-12-31T23:59:59Z',
+          ':lastUpdated': '2023-01-01T00:00:00.000Z',
           ':postedDate': '2023-01-01T00:00:00Z',
           ':purchaseDate': '2023-01-01T00:00:00Z',
           ':paymentStatus': 'PAID_CARD',
-          ':pk': memberKey(memberId),
-          ':sk': cardKey(cardNumber),
         },
       });
     });
@@ -164,6 +166,7 @@ describe('CardRepository', () => {
         memberId: memberId,
         cardNumber: cardNumber,
         card: card,
+        isInsert: false,
       });
 
       expect(result).toBeUndefined();
@@ -176,7 +179,7 @@ describe('CardRepository', () => {
         },
         ConditionExpression: 'pk = :pk AND sk = :sk',
         UpdateExpression:
-          'SET memberId = :memberId, cardNumber = :cardNumber, memberId = :memberId, cardNumber = :cardNumber, nameOnCard = :nameOnCard, cardStatus = :cardStatus, createdDate = :createdDate, expiryDate = :expiryDate, postedDate = :postedDate, purchaseDate = :purchaseDate, paymentStatus = :paymentStatus ',
+          'SET memberId = :memberId, cardNumber = :cardNumber, nameOnCard = :nameOnCard, cardStatus = :cardStatus, createdDate = :createdDate, expiryDate = :expiryDate, postedDate = :postedDate, purchaseDate = :purchaseDate, paymentStatus = :paymentStatus, lastUpdated = :lastUpdated ',
         ExpressionAttributeValues: {
           ':memberId': memberId,
           ':cardNumber': cardNumber,
@@ -184,6 +187,7 @@ describe('CardRepository', () => {
           ':cardStatus': 'PHYSICAL_CARD',
           ':createdDate': '2023-01-01T00:00:00Z',
           ':expiryDate': '2023-12-31T23:59:59Z',
+          ':lastUpdated': '2023-01-01T00:00:00.000Z',
           ':postedDate': '2023-01-01T00:00:00Z',
           ':purchaseDate': '2023-01-01T00:00:00Z',
           ':paymentStatus': 'PAID_CARD',

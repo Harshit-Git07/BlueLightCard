@@ -1,6 +1,11 @@
-import { EventBusRuleProps, Table } from 'sst/constructs';
+import { Bucket, Config, EventBusRuleProps, Table } from 'sst/constructs';
 
-export function memberEventRules(profilesTable: Table): Record<string, EventBusRuleProps> {
+export function memberEventRules(
+  profilesTable: Table,
+  organisationsTable: Table,
+  documentUploadBucket: Bucket,
+  emailTemplatesBucketName: Config.Parameter,
+): Record<string, EventBusRuleProps> {
   return {
     memberEventSystemRule: {
       pattern: { source: ['member.event.system'] },
@@ -8,6 +13,13 @@ export function memberEventRules(profilesTable: Table): Record<string, EventBusR
         target: {
           function: {
             handler: 'packages/api/members/application/handlers/eventbus/memberEventSystem.handler',
+            timeout: 10,
+            bind: [
+              profilesTable,
+              organisationsTable,
+              documentUploadBucket,
+              emailTemplatesBucketName,
+            ],
           },
         },
       },

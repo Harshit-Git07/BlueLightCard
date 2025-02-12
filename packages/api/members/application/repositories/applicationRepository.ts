@@ -11,12 +11,10 @@ import {
   UpdateCommand,
   UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb';
-import { S3 } from 'aws-sdk';
 import { defaultDynamoDbClient } from './dynamoClient';
 import { Table } from 'sst/node/table';
 import { APPLICATION, applicationKey, MEMBER, memberKey, Repository } from './repository';
 import { v4 as uuidv4 } from 'uuid';
-import { Bucket } from 'sst/node/bucket';
 import { NotFoundError } from '../errors/NotFoundError';
 import {
   ApplicationModel,
@@ -29,11 +27,7 @@ import { RejectionReason } from '@blc-mono/shared/models/members/enums/Rejection
 export class ApplicationRepository extends Repository {
   constructor(
     dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     private readonly tableName: string = Table.memberProfiles.tableName,
-    private readonly uploadBucketName: string = Bucket.documentUploadBucket.bucketName,
-    private readonly s3Client: S3 = new S3({ region: process.env.REGION ?? 'eu-west-2' }),
   ) {
     super(dynamoDB);
   }

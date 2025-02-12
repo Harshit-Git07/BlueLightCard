@@ -3,10 +3,12 @@ import { CardRepository } from '../../repositories/cardRepository';
 import {
   AwaitingBatchingCardModel,
   CardModel,
+  CreateCardModel,
   UpdateCardModel,
 } from '@blc-mono/shared/models/members/cardModel';
 import { v4 as uuidv4 } from 'uuid';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
+import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 
@@ -34,6 +36,16 @@ describe('CardService', () => {
   };
   const updateCard: UpdateCardModel = {
     cardStatus: CardStatus.PHYSICAL_CARD,
+  };
+  const createCard: CardModel = {
+    memberId,
+    cardNumber: cardNumber,
+    cardStatus: CardStatus.AWAITING_BATCHING,
+    nameOnCard: 'John Doe',
+    createdDate: '2025-01-01T00:00:00.000Z',
+    expiryDate: '2027-01-31T00:00:00.000Z',
+    purchaseDate: '2025-01-10T00:00:00.000Z',
+    paymentStatus: PaymentStatus.PAID_CARD,
   };
   let cardService: CardService;
   let repositoryMock: jest.Mocked<CardRepository>;
@@ -162,6 +174,30 @@ describe('CardService', () => {
       );
 
       expect(repositoryMock.upsertCard).toHaveBeenCalled();
+    });
+  });
+
+  describe('createCard', () => {
+    it('should throw error if creating card fails', async () => {
+      repositoryMock.upsertCard.mockRejectedValue(new Error('Create error'));
+
+      await expect(cardService.createCard(memberId, cardNumber, createCard)).rejects.toThrow(
+        'Create error',
+      );
+    });
+
+    it('should create card successfully', async () => {
+      jest.useFakeTimers();
+      jest.setSystemTime(new Date(2025, 0, 1));
+
+      await cardService.createCard(memberId, cardNumber, createCard as CreateCardModel);
+
+      expect(repositoryMock.upsertCard).toHaveBeenCalledWith({
+        memberId,
+        cardNumber,
+        card: createCard,
+        isInsert: true,
+      });
     });
   });
 });

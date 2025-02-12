@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.57.4](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.57.3...bluelightcard/mobile-hybrid-v1.57.4) (2025-02-12)
+
+
+### Bug Fixes
+
+* DISCO-1480 Updated mobile search to fallback to company logo for offers missing images ([#3689](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3689)) ([7491b3f](https://github.com/bluelightcard/BlueLightCard-2.0/commit/7491b3fad06ddae386a110ccbe2edc11c9499a35))
+* DISCO-487 Removed mobile search validation for CMS ([#3690](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3690)) ([3df5afa](https://github.com/bluelightcard/BlueLightCard-2.0/commit/3df5afa1963f583f65a58e65adc7fbf3327e2178))
+* WiP: Updated card flow sequence, added new auth0 memberUuid ([#3639](https://github.com/bluelightcard/BlueLightCard-2.0/issues/3639)) ([5828198](https://github.com/bluelightcard/BlueLightCard-2.0/commit/582819858630e1d0825a84009c9fef90f87bac80))
+
 ## [1.57.3](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/mobile-hybrid-v1.57.2...bluelightcard/mobile-hybrid-v1.57.3) (2025-02-10)
 
 

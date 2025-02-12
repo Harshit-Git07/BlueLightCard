@@ -111,6 +111,25 @@ describe('SearchModule', () => {
       });
     });
 
+    it('should navigate if searching for less than 3 characters with Search V5', async () => {
+      const mockPlatformAdapter = useMockPlatformAdapter();
+      mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue('treatment');
+      givenSearchModuleIsRenderedWith(mockPlatformAdapter, {
+        [FeatureFlags.SEARCH_RECENT_SEARCHES]: 'on',
+        [FeatureFlags.SEARCH_V5_ENABLED]: 'treatment',
+      });
+
+      const searchInput = screen.getByRole('searchbox');
+
+      await act(() => userEvent.type(searchInput, 'te'));
+
+      await waitFor(() => {
+        expect(searchInput).toHaveValue('te');
+        fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter', charCode: 13 });
+        expect(pushMockFn).toHaveBeenCalledWith('/searchresults?search=te');
+      });
+    });
+
     it('should navigate to searchresults on submit search', async () => {
       const mockPlatformAdapter = useMockPlatformAdapter();
       givenSearchModuleIsRenderedWith(mockPlatformAdapter, {

@@ -20,6 +20,8 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
   const { searchTerm, resetSearch } = useSearch(platformAdapter);
 
   const canBackNav = backNavagationalPaths.includes(router.route) && !searchOverlayOpen;
+  const isSearchV5Enabled =
+    platformAdapter.getAmplitudeFeatureFlag(FeatureFlags.SEARCH_V5_ENABLED) === 'treatment';
 
   const onSearchInputFocus = useCallback(() => {
     setSearchOverlayOpen(true);
@@ -39,7 +41,7 @@ const SearchModule: FC<SearchModuleProps> = ({ placeholder }) => {
 
   const onSearch = useCallback<SearchProps['onSearch']>(
     (termInput: string) => {
-      if (termInput.length < 3) {
+      if (!isSearchV5Enabled && termInput.length < 3) {
         setSearchErrorMessage('Enter 3 or more characters to search.');
         return;
       }

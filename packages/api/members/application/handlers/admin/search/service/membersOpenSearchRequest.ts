@@ -10,14 +10,20 @@ import {
 } from '@blc-mono/shared/models/members/memberDocument';
 import { logger } from '@blc-mono/members/application/middleware';
 
-const PAGE_SIZE = 50;
-
 export function buildOpenSearchRequest(filterParams: MemberDocumentsSearchModel): SearchRequest {
+  const pageIndex = filterParams.pageIndex;
+  const pageSize = filterParams.pageSize;
   const mustQueries: QueryDslQueryContainer[] = [];
 
   const filterParamsKeys = (
     Object.keys(filterParams) as (keyof MemberDocumentsSearchModel)[]
-  ).filter((key) => key !== 'pageIndex' && key !== 'signupDateStart' && key !== 'signupDateEnd');
+  ).filter(
+    (key) =>
+      key !== 'pageIndex' &&
+      key !== 'signupDateStart' &&
+      key !== 'signupDateEnd' &&
+      key !== 'pageSize',
+  );
 
   filterParamsKeys.forEach((key) => {
     if (filterParams[key]) {
@@ -36,12 +42,12 @@ export function buildOpenSearchRequest(filterParams: MemberDocumentsSearchModel)
     });
   }
 
-  const from = PAGE_SIZE * (filterParams.pageIndex - 1);
+  const from = pageSize * (pageIndex - 1);
 
   return {
     body: {
       from,
-      size: PAGE_SIZE,
+      size: pageSize,
       query: {
         bool: {
           must: mustQueries,

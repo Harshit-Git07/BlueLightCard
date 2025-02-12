@@ -4,6 +4,8 @@ import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStat
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { createZodNamedType } from '@blc-mono/shared/utils/zodNamedType';
 
+const DEFAULT_PAGE_SIZE = 10;
+
 export const MemberDocumentModel = createZodNamedType(
   'MemberDocumentModel',
   z.object({
@@ -32,7 +34,8 @@ export type MemberDocumentModel = z.infer<typeof MemberDocumentModel>;
 export const MemberDocumentsSearchModel = createZodNamedType(
   'MemberDocumentsSearchModel',
   z.object({
-    pageIndex: z.number(),
+    pageIndex: z.coerce.number().default(1),
+    pageSize: z.coerce.number().default(DEFAULT_PAGE_SIZE),
     memberId: z.string().uuid().optional(),
     organisationId: z.string().uuid().optional(),
     employerId: z.string().uuid().optional(),

@@ -6,18 +6,23 @@ import {
 } from '@blc-mono/shared/models/members/memberDocument';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { MembersOpenSearchService } from './service/membersOpenSearchService';
+import { LambdaLogger } from '@blc-mono/core/utils/logger';
 
 const openSearchService = new MembersOpenSearchService();
+
+const logger = new LambdaLogger({ serviceName: 'MemberSearch' });
 
 const unwrappedHandler = async (
   event: APIGatewayProxyEvent,
 ): Promise<MemberDocumentsSearchResponseModel> => {
-  if (!event.body) throw new ValidationError('Missing request body');
+  const parsedFilterParams = MemberDocumentsSearchModel.safeParse(event.queryStringParameters);
 
-  const filterParams = MemberDocumentsSearchModel.safeParse(JSON.parse(event.body));
-  if (!filterParams.success) throw new ValidationError('Invalid request body');
+  if (parsedFilterParams.error?.message)
+    logger.error({ message: parsedFilterParams.error?.message });
 
-  return await openSearchService.searchProfiles(filterParams.data);
+  if (!parsedFilterParams.success) throw new ValidationError('Invalid query parameters');
+
+  return await openSearchService.searchProfiles(parsedFilterParams.data);
 };
 
 export const handler = middleware(unwrappedHandler);

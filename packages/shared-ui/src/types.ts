@@ -2,7 +2,7 @@
  * Shared types go in this file
  */
 
-import type { V2ApisGetOfferResponse } from '@blc-mono/offers-cms/api';
+import type { V2ApisGetEventResponse, V2ApisGetOfferResponse } from '@blc-mono/offers-cms/api';
 import { ChangeEventHandler } from 'react';
 
 export enum PlatformVariant {
@@ -76,6 +76,18 @@ export type Offer = {
   offerDescription?: string;
 };
 
+export type EventTypeStrLiterals = V2ApisGetEventResponse['type'];
+
+export type EventOffer = {
+  eventID: string;
+  venueID: string;
+  venueName: string;
+  offerType: EventTypeStrLiterals;
+  eventName: string;
+  imageURL: string;
+  eventDescription: string;
+};
+
 export type OfferEventHandler = (offer: Offer) => void;
 
 export type FlexibleOfferData = {
@@ -84,6 +96,7 @@ export type FlexibleOfferData = {
   description: string;
   imageURL: string;
   offers: Offer[];
+  events: EventOffer[];
 };
 
 export type SimpleCategoryData = {
@@ -93,6 +106,10 @@ export type SimpleCategoryData = {
 
 export type CategoryData = SimpleCategoryData & {
   data: Offer[];
+};
+
+export type EventCategoryData = SimpleCategoryData & {
+  data: EventOffer[];
 };
 
 export type CategoriesData = SimpleCategoryData[];

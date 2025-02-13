@@ -1,5 +1,10 @@
 import { V5_API_URL } from '@/globals/apiUrl';
-import { usePlatformAdapter, withClientSidePagination } from '@bluelightcard/shared-ui';
+import {
+  usePlatformAdapter,
+  withClientSidePagination,
+  isEventCategoryData,
+  mapCategoryEventsToOffers,
+} from '@bluelightcard/shared-ui';
 import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import type { QueryClient } from '@tanstack/react-query';
 import type { CategoryData, PaginatedCategoryData } from '@bluelightcard/shared-ui';
@@ -76,8 +81,11 @@ const useCategoryData = (categoryId: string, page: number, pageSize: number) => 
             throw new Error('Received error when trying to retrieve category');
 
           try {
-            const category = JSON.parse(response?.data)?.data as CategoryData;
-            return category;
+            let category: unknown = JSON.parse(response?.data)?.data;
+            if (isEventCategoryData(category)) {
+              category = mapCategoryEventsToOffers(category);
+            }
+            return category as CategoryData;
           } catch (err) {
             console.error(err);
             throw new Error('Invalid category data received');

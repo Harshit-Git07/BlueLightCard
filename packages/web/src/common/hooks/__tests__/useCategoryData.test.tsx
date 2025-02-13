@@ -5,10 +5,16 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   PlatformAdapterProvider,
   categoryMock,
+  eventCategoryDataMock,
   useMockPlatformAdapter,
 } from '@bluelightcard/shared-ui';
 import { ErrorBoundary } from 'react-error-boundary';
 import useCategoryData from '../useCategoryData';
+import * as offerTransformationsModule from '../../../../../shared-ui/src/utils/offers/offerTransformations';
+
+jest.mock('../../../../../shared-ui/src/utils/offers/offerTransformations', () => ({
+  mapCategoryEventsToOffers: jest.fn(),
+}));
 
 let mockPlatformAdapter: ReturnType<typeof useMockPlatformAdapter>;
 
@@ -25,6 +31,9 @@ const wrapper: RenderOptions['wrapper'] = ({ children }) => {
 };
 
 describe('useCategoryData', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   describe('it calls the category V5 API', () => {
     beforeEach(() => {
       mockPlatformAdapter = useMockPlatformAdapter();
@@ -117,6 +126,50 @@ describe('useCategoryData', () => {
             totalPages: 1,
           },
         });
+      });
+    });
+  });
+
+  describe('Mapping API response data for the view', () => {
+    test(`it maps EventCategoryData when it's returned from the API`, async () => {
+      const mockMapCategoryEventsToOffers = offerTransformationsModule.mapCategoryEventsToOffers;
+
+      mockPlatformAdapter = useMockPlatformAdapter();
+      mockPlatformAdapter.invokeV5Api.mockReturnValue(
+        Promise.resolve({
+          status: 200,
+          data: JSON.stringify({
+            data: eventCategoryDataMock,
+          }),
+        })
+      );
+      renderHook(() => useCategoryData('test-category-id-1', 1, 12), {
+        wrapper,
+      });
+
+      await waitFor(() => {
+        expect(mockMapCategoryEventsToOffers).toHaveBeenCalledWith(eventCategoryDataMock);
+      });
+    });
+
+    test(`it DOES NOT normalise CategoryData when it's returned from the API`, async () => {
+      const mockMapCategoryEventsToOffers = offerTransformationsModule.mapCategoryEventsToOffers;
+
+      mockPlatformAdapter = useMockPlatformAdapter();
+      mockPlatformAdapter.invokeV5Api.mockReturnValue(
+        Promise.resolve({
+          status: 200,
+          data: JSON.stringify({
+            data: categoryMock,
+          }),
+        })
+      );
+      renderHook(() => useCategoryData('test-category-id-1', 1, 12), {
+        wrapper,
+      });
+
+      await waitFor(() => {
+        expect(mockMapCategoryEventsToOffers).not.toHaveBeenCalled();
       });
     });
   });

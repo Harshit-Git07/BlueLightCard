@@ -9,7 +9,7 @@ import { JotaiTestProvider } from '@/utils/jotaiTestProvider';
 import { NextRouter } from 'next/router';
 import { userProfile, UserProfile } from '@/components/UserProfileProvider/store';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
-import { Experiments } from '@/components/AmplitudeProvider/amplitudeKeys';
+import { Experiments, FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import {
   IPlatformAdapter,
   PlatformAdapterProvider,
@@ -66,6 +66,10 @@ let userProfileValue: UserProfile = { uuid: 'mock-uuid-1', canRedeemOffer: true,
 let amplitudeFlagsAndExperiments: Record<string, string>;
 let mockPlatformAdapter: IPlatformAdapter;
 
+const fakeSingleFlexibleOfferCarouselTitle = 'fakeSingleFlexibleOfferCarouselTitle';
+const fakeAllFlexibleOfferCarouselTitle1 = 'fakeAllFlexibleOfferCarouselTitle1';
+const fakeAllFlexibleOfferCarouselTitle2 = 'fakeAllFlexibleOfferCarouselTitle2';
+
 describe('Home', () => {
   mockPlatformAdapter = useMockPlatformAdapter();
 
@@ -75,11 +79,25 @@ describe('Home', () => {
     useOffersMock.mockReturnValue({
       offerPromos: {
         flexible: {
-          title: 'Flexible offer carousel',
+          title: fakeSingleFlexibleOfferCarouselTitle,
           random: false,
           subtitle: '',
           items: [],
         },
+        allFlexible: [
+          {
+            title: fakeAllFlexibleOfferCarouselTitle1,
+            random: false,
+            subtitle: '',
+            items: [],
+          },
+          {
+            title: fakeAllFlexibleOfferCarouselTitle2,
+            random: false,
+            subtitle: '',
+            items: [],
+          },
+        ],
         deal: [],
         groups: [
           {
@@ -131,8 +149,15 @@ describe('Home', () => {
     });
 
     it("should render 'Flexible offer carousel' when home page is rendered", () => {
-      const flexibleOfferCarousel = screen.getByText('Flexible offer carousel');
+      const flexibleOfferCarousel = screen.getByText(fakeSingleFlexibleOfferCarouselTitle);
       expect(flexibleOfferCarousel).toBeInTheDocument();
+    });
+
+    it("should NOT render 'All Flexible offer carousel' when home page is rendered", () => {
+      const allFlexibleOfferCarousel1 = screen.queryByText(fakeAllFlexibleOfferCarouselTitle1);
+      const allFlexibleOfferCarousel2 = screen.queryByText(fakeAllFlexibleOfferCarouselTitle2);
+      expect(allFlexibleOfferCarousel1).not.toBeInTheDocument();
+      expect(allFlexibleOfferCarousel2).not.toBeInTheDocument();
     });
 
     it("should render 'Standard offer carousel' when home page is rendered", () => {
@@ -152,7 +177,7 @@ describe('Home', () => {
     it('should render popular brands, offer carousels, latest news in descending order when home page is rendered', () => {
       const popularBrandsTitle = screen.queryByText('Popular brands');
       const standardOfferCarousel = screen.getByText('Standard offer carousel');
-      const flexibleOfferCarousel = screen.getByText('Flexible offer carousel');
+      const flexibleOfferCarousel = screen.getByText(fakeSingleFlexibleOfferCarouselTitle);
       const newsTitle = screen.getByText('Latest news');
 
       expect(elementIsBeneath(popularBrandsTitle, standardOfferCarousel)).toBe(true);
@@ -289,6 +314,79 @@ describe('Home', () => {
     });
   });
 });
+describe('Home when enable all flexible menus feature flag is "on"', () => {
+  mockPlatformAdapter = useMockPlatformAdapter();
+
+  beforeEach(() => {
+    jest.resetAllMocks();
+
+    useOffersMock.mockReturnValue({
+      offerPromos: {
+        flexible: {
+          title: fakeSingleFlexibleOfferCarouselTitle,
+          random: false,
+          subtitle: '',
+          items: [],
+        },
+        allFlexible: [
+          {
+            title: fakeAllFlexibleOfferCarouselTitle1,
+            random: false,
+            subtitle: '',
+            items: [],
+          },
+          {
+            title: fakeAllFlexibleOfferCarouselTitle2,
+            random: false,
+            subtitle: '',
+            items: [],
+          },
+        ],
+        deal: [],
+        groups: [
+          {
+            title: 'Standard offer carousel',
+            random: false,
+            items: [],
+          },
+        ],
+      },
+      getOfferPromos: jest.fn(),
+    });
+    amplitudeFlagsAndExperiments = {
+      [Experiments.POPULAR_OFFERS]: 'treatment',
+      [FeatureFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_HYBRID]: 'on',
+    };
+
+    whenHomePageIsRendered();
+  });
+
+  describe('Offers', () => {
+    it("should NOT render 'Flexible offer carousel' when home page is rendered", () => {
+      const flexibleOfferCarousel = screen.queryByText('Flexible offer carousel');
+      expect(flexibleOfferCarousel).not.toBeInTheDocument();
+    });
+
+    it("should render 'All Flexible offer carousel' when home page is rendered", () => {
+      const allFlexibleOfferCarousels1 = screen.queryByText(fakeAllFlexibleOfferCarouselTitle1);
+      const allFlexibleOfferCarousels2 = screen.queryByText(fakeAllFlexibleOfferCarouselTitle2);
+      expect(allFlexibleOfferCarousels1).toBeInTheDocument();
+      expect(allFlexibleOfferCarousels2).toBeInTheDocument();
+    });
+  });
+
+  describe('Home page ordering ', () => {
+    it('should render popular brands, offer carousels, latest news in descending order when home page is rendered', () => {
+      const popularBrandsTitle = screen.queryByText('Popular brands');
+      const standardOfferCarousel = screen.queryByText('Standard offer carousel');
+      const flexibleOfferCarousel = screen.queryByText(fakeAllFlexibleOfferCarouselTitle1);
+      const newsTitle = screen.queryByText('Latest news');
+
+      expect(elementIsBeneath(popularBrandsTitle, standardOfferCarousel)).toBe(true);
+      expect(elementIsBeneath(flexibleOfferCarousel, newsTitle)).toBe(true);
+    });
+  });
+});
 
 // This test is only needed until popular brands are introduced to blc-au & dds, after that it can be deleted.
 describe('Popular brands blc-aus & dds ', () => {
@@ -298,7 +396,7 @@ describe('Popular brands blc-aus & dds ', () => {
     useOffersMock.mockReturnValue({
       offerPromos: {
         flexible: {
-          title: 'Flexible offer carousel',
+          title: fakeSingleFlexibleOfferCarouselTitle,
           random: false,
           subtitle: '',
           items: [],

@@ -18,4 +18,5 @@ export const flexibleOfferMock: FlexibleOfferData = {
       legacyOfferID: 54321,
     },
   ],
+  events: [],
 };

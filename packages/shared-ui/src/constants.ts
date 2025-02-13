@@ -47,3 +47,29 @@ export const V5_API_URL = {
 } as const;
 
 export const BRAND_WEB_URL = process.env.NEXT_PUBLIC_BRAND_URL ?? 'https://www.bluelightcard.co.uk';
+
+export const CATEGORY_ID = {
+  event: '19',
+} satisfies Readonly<Record<string, string>>;
+
+/**
+ * This constant supplies the titles of the flexibles to display on the home page.
+ * It is used to filter out all other flexibles before passing the data to the
+ * home page for display.
+ *
+ * The order in the array of these titles is meaningful: the flexible menus are
+ * sorted in the same order and corresponds to the order they are displayed on
+ * the home page.
+ *
+ * When the "enable-all-flexible-menus" flag is enabled, both flexible menus will
+ * be displayed.
+ *
+ * When the "enable-all-flexible-menus" flag is NOT enabled, only the first
+ * flexible menus will be displayed.
+ *
+ * The case of these titles MUST be lowercase.
+ */
+export const FLEXIBLE_MENUS_DATA_TITLE_ALLOWLIST = [
+  'ways to save',
+  'free events',
+] satisfies Readonly<string[]>;

@@ -19,13 +19,7 @@ import {
 import PromoBannerPlaceholder from '@/offers/components/PromoBanner/PromoBannerPlaceholder';
 import AlertBox from '@/components/AlertBox/AlertBox';
 import Container from '@/components/Container/Container';
-import {
-  Button,
-  PlatformVariant,
-  SwiperCarousel,
-  useOfferDetails,
-  usePlatformAdapter,
-} from '@bluelightcard/shared-ui';
+import { PlatformVariant, SwiperCarousel, useOfferDetails } from '@bluelightcard/shared-ui';
 import { NextPage } from 'next';
 import getI18nStaticProps from '@/utils/i18nStaticProps';
 import inTimePeriod from '@/utils/inTimePeriod';
@@ -42,6 +36,10 @@ const BLACK_FRIDAY_TIMELOCK_SETTINGS = {
   endTime: BLACK_FRIDAY_TIME_LOCK_END_DATE,
 };
 
+/**
+ *
+ * @deprecated use src/common/utils/cleanText.ts
+ */
 function cleanText(text: string | null | undefined) {
   if (!text) return ''; // Return an empty string if the text is null or undefined
   return text
@@ -78,6 +76,9 @@ const HomePage: NextPage<any> = () => {
     AmplitudeExperimentFlags.MODERN_FLEXI_MENUS,
     'off'
   );
+  const isAllFlexibleMenusEnabled =
+    useAmplitudeExperiment(AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB, 'off')
+      .data?.variantName === 'on';
 
   const amplitude = useContext(AmplitudeContext);
 
@@ -96,7 +97,13 @@ const HomePage: NextPage<any> = () => {
     flexibleMenu,
     hasLoaded,
     loadingError,
+    flexibleMenusDataTransformedForView,
   } = useFetchHomepageData();
+
+  const shouldShowAllFlexibleOffersCarousels =
+    isAllFlexibleMenusEnabled &&
+    (!hasLoaded ||
+      (flexibleMenusDataTransformedForView && flexibleMenusDataTransformedForView.length > 0));
 
   useEffect(() => {
     logMembersHomePage();
@@ -243,16 +250,7 @@ const HomePage: NextPage<any> = () => {
           <TenancyBanner title="homepage_sponsor_banner" variant="large" />
         </Container>
       )}
-      {usePlatformAdapter().getAmplitudeFeatureFlag(AmplitudeExperimentFlags.BLT_TICKET_SHEET) ===
-        'on' && (
-        <Button
-          onClick={async () => {
-            await onSelectOffer('cb0db35f-c3b3-44bf-bb67-4295bd0c11a7', '', 'Ticket');
-          }}
-        >
-          BLT Test
-        </Button>
-      )}
+
       {/* Deals of the week carousel */}
       {(dealsOfTheWeekOffersData.length > 0 || !hasLoaded) && (
         <Container
@@ -270,8 +268,8 @@ const HomePage: NextPage<any> = () => {
           />
         </Container>
       )}
-      {/* Flexible offers carousel */}
-      {(flexibleOffersData.length > 0 || !hasLoaded) && (
+      {/* Flexible offers carousel without "show all" feature flag */}
+      {(flexibleOffersData.length > 0 || !hasLoaded) && !isAllFlexibleMenusEnabled && (
         <Container
           className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
           addBottomHorizontalLine
@@ -288,6 +286,30 @@ const HomePage: NextPage<any> = () => {
           />
         </Container>
       )}
+
+      {/* Flexible offers carousel with "show all" feature flag */}
+      {shouldShowAllFlexibleOffersCarousels &&
+        flexibleMenusDataTransformedForView?.map((transformedFlexibleMenuData) => {
+          return (
+            <Container
+              key={transformedFlexibleMenuData.id}
+              className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
+              addBottomHorizontalLine
+              data-testid="all-flexible-carousel-display"
+            >
+              <CardCarousel
+                title={transformedFlexibleMenuData.title}
+                itemsToShow={transformedFlexibleMenuData.menus.length}
+                offers={transformedFlexibleMenuData.menus}
+                useSmallCards
+                onCarouselInteracted={() => {
+                  trackHomepageCarouselInteraction('flexi_menu', transformedFlexibleMenuData.title);
+                }}
+              />
+            </Container>
+          );
+        })}
+
       {/* Marketplace carousels */}
       {marketplaceMenus.length > 0 &&
         marketplaceMenus.map((menu: MarketPlaceMenuType, index: number) => {

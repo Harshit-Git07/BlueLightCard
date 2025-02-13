@@ -10,6 +10,7 @@ import { makeNavbarQueryWithDislikeRestrictions } from '@/root/src/graphql/makeQ
 import { NetworkStatus } from '@apollo/client';
 import { NextRouter } from 'next/router';
 import { redirectToLogin } from '@/hoc/requireAuth';
+import * as excludeEventCategoryModule from '../../../../../shared-ui/src/utils/excludeEventCategory';
 
 let mockPlatformAdapter: ReturnType<typeof useMockPlatformAdapter>;
 
@@ -28,6 +29,19 @@ jest.mock('@/context/AmplitudeExperiment', () => ({
 }));
 jest.mock('@/root/src/graphql/makeQuery');
 jest.mock('@/hoc/requireAuth');
+
+jest.mock('../../../../../shared-ui/src/utils/excludeEventCategory', () => ({
+  excludeEventCategory: jest.fn().mockReturnValue([
+    {
+      id: '1',
+      name: 'Test Category 1',
+    },
+    {
+      id: '2',
+      name: 'Test Category 2',
+    },
+  ]),
+}));
 
 const makeNavbarQueryMock = jest.mocked(makeNavbarQueryWithDislikeRestrictions);
 const redirectToLoginMock = jest.mocked(redirectToLogin);
@@ -61,7 +75,7 @@ describe('useFetchCompaniesOrCategories', () => {
 
   describe('it calls the companies or categories V5 API', () => {
     beforeEach(() => {
-      jest.resetAllMocks();
+      jest.clearAllMocks();
       mockPlatformAdapter.invokeV5Api.mockImplementation((path: string) => {
         if (path.includes('/companies')) {
           return Promise.resolve({
@@ -116,8 +130,14 @@ describe('useFetchCompaniesOrCategories', () => {
           { id: 'test-company-id-2', legacyId: '5678', name: 'Test Company 2' },
         ]);
         expect(result.current.categories).toEqual([
-          { id: '1', name: 'Test Category 1' },
-          { id: '2', name: 'Test Category 2' },
+          {
+            id: '1',
+            name: 'Test Category 1',
+          },
+          {
+            id: '2',
+            name: 'Test Category 2',
+          },
         ]);
       });
     });
@@ -146,8 +166,14 @@ describe('useFetchCompaniesOrCategories', () => {
 
       await waitFor(() => {
         expect(result.current.categories).toEqual([
-          { id: '1', name: 'Test Category 1' },
-          { id: '2', name: 'Test Category 2' },
+          {
+            id: '1',
+            name: 'Test Category 1',
+          },
+          {
+            id: '2',
+            name: 'Test Category 2',
+          },
         ]);
       });
     });
@@ -202,6 +228,49 @@ describe('useFetchCompaniesOrCategories', () => {
         expect(mockPlatformAdapter.invokeV5Api).not.toHaveBeenCalled();
       });
     });
+
+    it.each([
+      [
+        'on',
+        true,
+        [
+          { id: '1', name: 'Test Category 1' },
+          { id: '2', name: 'Test Category 2' },
+        ],
+      ],
+      [
+        'someOtherValue',
+        false,
+        [
+          { id: '1', name: 'Test Category 1' },
+          { id: '2', name: 'Test Category 2' },
+        ],
+      ],
+    ])(
+      'should transform categories for view when feature flag "ENABLE_EVENTS_AS_OFFERS" is: %s',
+      async (flagValue, expectedShouldIncludeEvents, expectedTransformedCategories) => {
+        const mockexcludeEventCategoryModule = excludeEventCategoryModule.excludeEventCategory;
+
+        givenExperimentsReturn('on', 'on');
+        mockPlatformAdapter.getAmplitudeFeatureFlag.mockReturnValue(flagValue);
+
+        const { result } = renderHook(() => useFetchCompaniesOrCategories(mockUserContext), {
+          wrapper,
+        });
+
+        await waitFor(() => {
+          expect(mockexcludeEventCategoryModule).toHaveBeenCalledWith(
+            [
+              { id: '1', name: 'Test Category 1' },
+              { id: '2', name: 'Test Category 2' },
+            ],
+            expectedShouldIncludeEvents
+          );
+
+          expect(result.current.categories).toEqual(expectedTransformedCategories);
+        });
+      }
+    );
   });
 
   describe('it calls the "companiesCategories" V4 query', () => {
@@ -249,8 +318,14 @@ describe('useFetchCompaniesOrCategories', () => {
           { id: '5678', name: 'Test Company 2' },
         ]);
         expect(result.current.categories).toEqual([
-          { id: '1', name: 'Test Category 1' },
-          { id: '2', name: 'Test Category 2' },
+          {
+            id: '1',
+            name: 'Test Category 1',
+          },
+          {
+            id: '2',
+            name: 'Test Category 2',
+          },
         ]);
       });
     });

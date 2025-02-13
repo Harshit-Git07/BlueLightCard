@@ -9,7 +9,9 @@ import {
 } from '@bluelightcard/shared-ui';
 import { ErrorBoundary } from 'react-error-boundary';
 import useFlexibleOffersData from '../useFlexibleOffersData';
+import { mapFlexibleEventsToOffers } from '../../../../../shared-ui/src/utils/offers/offerTransformations';
 
+jest.mock('../../../../../shared-ui/src/utils/offers/offerTransformations');
 let mockPlatformAdapter: ReturnType<typeof useMockPlatformAdapter>;
 
 const wrapper: RenderOptions['wrapper'] = ({ children }) => {
@@ -27,6 +29,9 @@ const wrapper: RenderOptions['wrapper'] = ({ children }) => {
 describe('useFlexibleOffersData', () => {
   describe('it calls the flexible offers V5 API', () => {
     beforeEach(() => {
+      (mapFlexibleEventsToOffers as jest.Mock).mockImplementation(
+        (flexibleOfferData) => flexibleOfferData
+      );
       mockPlatformAdapter = useMockPlatformAdapter();
       mockPlatformAdapter.invokeV5Api.mockReturnValue(
         Promise.resolve({
@@ -101,6 +106,16 @@ describe('useFlexibleOffersData', () => {
             detail: new Error('Invalid flexible offers data received'),
           });
         });
+      });
+    });
+
+    test('and normalise the flexible offer data for the view', async () => {
+      renderHook(() => useFlexibleOffersData('test-menu-id-1'), {
+        wrapper,
+      });
+
+      await waitFor(() => {
+        expect(mapFlexibleEventsToOffers).toHaveBeenCalledWith(flexibleOfferMock);
       });
     });
 

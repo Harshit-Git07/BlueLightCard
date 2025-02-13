@@ -6,6 +6,7 @@ import {
   BannerType,
   DealsOfTheWeekType,
   FeaturedOffersType,
+  FlexibleMenusDataTransformedForView,
   FlexibleMenuType,
   MarketPlaceItemType,
   MarketPlaceMenuType,
@@ -19,12 +20,16 @@ import { WebPlatformAdapter } from '@/utils/WebPlatformAdapter';
 import { V5_API_URL } from '@/globals/apiUrl';
 import AuthContext from '../context/Auth/AuthContext';
 import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentFlags';
+import { MenusData } from '@bluelightcard/shared-ui';
+import { transformFlexibleMenuDataForView } from '../utils/transformFlexibleMenuDataForView';
 
 const useFetchHomepageData = () => {
   const [banners, setBanners] = useState<BannerType[]>([]);
   const [dealsOfTheWeek, setDealsOfTheWeek] = useState<DealsOfTheWeekType[]>([]);
   const [marketplaceMenus, setMarketplaceMenus] = useState<MarketPlaceMenuType[]>([]);
   const [flexibleMenu, setFlexibleMenu] = useState<FlexibleMenuType[]>([]);
+  const [flexibleMenusDataTransformedForView, setFlexibleMenusDataTransformedForView] =
+    useState<FlexibleMenusDataTransformedForView>([]);
   const [featuredOffers, setFeaturedOffers] = useState<FeaturedOffersType[]>([]);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [loadingError, setLoadingError] = useState(false);
@@ -105,6 +110,7 @@ const useFetchHomepageData = () => {
         setDealsOfTheWeek(menusData.dealsOfTheWeek);
         setMarketplaceMenus(menusData.marketplaceMenus);
         setFlexibleMenu(menusData.flexibleMenu);
+        setFlexibleMenusDataTransformedForView(menusData.flexibleMenusDataTransformedForView);
         setFeaturedOffers(menusData.featuredOffers);
         setLoadingError(false);
 
@@ -142,6 +148,7 @@ const useFetchHomepageData = () => {
     dealsOfTheWeek,
     marketplaceMenus,
     flexibleMenu,
+    flexibleMenusDataTransformedForView,
     featuredOffers,
     hasLoaded,
     loadingError,
@@ -166,7 +173,29 @@ const getMenus = async (
     method: 'GET',
   });
 
-  return mapMenusResponse(JSON.parse(menusResponse.data).data, useLegacyIds);
+  const responseData = JSON.parse(menusResponse.data).data;
+  const mappedMenusResponse = mapMenusResponse(responseData, useLegacyIds);
+  const flexibleMenusDataTransformedForView = transformFlexibleMenuDataForView(
+    (responseData as MenusData).flexible,
+    platformAdapter
+  );
+
+  /**
+   * The `ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB` feature flag controls how many
+   * flexible menus (ie, carousels) will be displayed on the homepage.
+   *
+   * When this feature flag is off:
+   * - homepage will use mappedMenusResponse.flexibleMenu as data
+   * => only the first flexible menu will be displayed
+   *
+   * When this feature flag is on:
+   * - homepage will use flexibleMenusDataTransformedForView as data
+   * => all flexible menus filtered by an allowlist will be displayed
+   */
+  return {
+    ...mappedMenusResponse,
+    flexibleMenusDataTransformedForView,
+  };
 };
 
 const mapMenusResponse = (

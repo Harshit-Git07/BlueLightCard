@@ -15,7 +15,14 @@ const useMenusData = (menuIds: Array<keyof MenusData> = []) => {
     refetchOnWindowFocus: false,
     retry: false,
     queryFn: async () => {
-      const queryParameters: { id?: string } = {};
+      /**
+       * TODO: DISCO-1392 & DISCO-1393. These should be actual user values.
+       */
+      const queryParameters: Record<string, string> = {
+        dob: '1984-01-24',
+        organisation: ' ',
+      };
+
       if (menuIds.length) queryParameters.id = menuIds.join(',');
 
       const response = await platformAdapter.invokeV5Api(V5_API_URL.Menus, {

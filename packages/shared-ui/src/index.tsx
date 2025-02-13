@@ -69,6 +69,7 @@ export * from './utils/storyUtils';
 export * from './utils/getCDNUrl';
 export * from './utils/pathUtils';
 export * from './utils/ageUtils';
+export * from './utils/typeGuards';
 export * from './utils/withClientSidePagination';
 export * from './utils/getBrandedSupportLink';
 export * from './lib/rewriters';
@@ -83,5 +84,8 @@ export * from './env';
 export * from './utils/darkRead/darkRead';
 export * from './mocks';
 export * from './tailwind/theme';
+export * from './utils/excludeEventCategory';
+export * from './utils/cleanText';
+export * from './utils/offers/offerTransformations';
 
 // import { conditionalStrings } from '../../../shared-ui/src/utils/conditionalStrings';

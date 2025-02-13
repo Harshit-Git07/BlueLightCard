@@ -10,6 +10,7 @@ import { usePlatformAdapter } from '@bluelightcard/shared-ui/adapters';
 import { AmplitudeExperimentFlags } from '../utils/amplitude/AmplitudeExperimentFlags';
 import { UserContextType } from '@/context/User/UserContext';
 import { WebPlatformAdapter } from '@/utils/WebPlatformAdapter';
+import { CategoriesData, SimpleCategoryData, excludeEventCategory } from '@bluelightcard/shared-ui';
 
 export type CompanyType = {
   id: string;
@@ -17,19 +18,17 @@ export type CompanyType = {
   name: string;
 };
 
-export type CategoryType = {
-  id: string;
-  name: string;
-};
-
-const sortByAlphabeticalOrder = (a: CategoryType | CompanyType, b: CategoryType | CompanyType) => {
+const sortByAlphabeticalOrder = (
+  a: SimpleCategoryData | CompanyType,
+  b: SimpleCategoryData | CompanyType
+) => {
   if (a.name.toLowerCase() < b.name.toLowerCase()) return -1;
   else if (a.name.toLowerCase() > b.name.toLowerCase()) return 1;
   return 0;
 };
 
 const useFetchCompaniesOrCategories = (userCtx: UserContextType) => {
-  const [categories, setCategories] = useState<CategoryType[]>([]);
+  const [categories, setCategories] = useState<CategoriesData>([]);
   const [companies, setCompanies] = useState<CompanyType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -134,7 +133,15 @@ const getCategories = async (platformAdapter: WebPlatformAdapter) => {
   const categoriesResponse = await platformAdapter.invokeV5Api(V5_API_URL.Categories, {
     method: 'GET',
   });
-  return JSON.parse(categoriesResponse.data).data as CategoryType[];
+
+  const shouldIncludeEvents =
+    platformAdapter.getAmplitudeFeatureFlag(AmplitudeExperimentFlags.ENABLE_EVENTS_AS_OFFERS) ===
+    'on';
+
+  return excludeEventCategory(
+    JSON.parse(categoriesResponse.data).data as CategoriesData,
+    shouldIncludeEvents
+  );
 };
 
 const mapCompanyResponse = (data: any[], useLegacyIds: boolean): CompanyType[] => {

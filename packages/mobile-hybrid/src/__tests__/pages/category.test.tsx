@@ -15,6 +15,19 @@ import * as stories from '../../page-stories/category.stories';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
 import { NextRouter } from 'next/router';
 
+/**
+ * We should really mock the whole globals module but doing so caused unexpected
+ * problems ... probably other unmocked dependencies of `category.tsx` are relying
+ * on the globals.
+ */
+jest.mock('../../globals', () => {
+  const originalGlobalsModule = jest.requireActual('../../globals');
+  return {
+    ...originalGlobalsModule,
+    BRAND: 'fakeBrand',
+  };
+});
+
 const viewOfferMock = jest.fn();
 
 expect.extend(toHaveNoViolations);
@@ -78,7 +91,7 @@ const thenOfferSheetIsOpened = (args: any = {}) => {
 
 const thenAnalyticsEventIsLogged = (event: string, args: any = {}) => {
   expect(storybookPlatformAdapter.logAnalyticsEvent).toHaveBeenCalledWith(event, {
-    brand: 'blc-uk',
+    brand: 'fakeBrand',
     ...args,
   });
 };

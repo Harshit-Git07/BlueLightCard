@@ -1,5 +1,5 @@
 import { V5_API_URL } from '@/globals';
-import { usePlatformAdapter } from '@bluelightcard/shared-ui';
+import { mapFlexibleEventsToOffers, usePlatformAdapter } from '@bluelightcard/shared-ui';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import type { FlexibleOfferData } from '@bluelightcard/shared-ui';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
@@ -37,7 +37,7 @@ const useFlexibleOffersData = (flexiMenuId: string) => {
 
       try {
         const flexibleOffers = JSON.parse(response?.data)?.data as FlexibleOfferData;
-        return flexibleOffers;
+        return mapFlexibleEventsToOffers(flexibleOffers);
       } catch (err) {
         throw new Error('Invalid flexible offers data received');
       }

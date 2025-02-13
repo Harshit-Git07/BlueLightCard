@@ -1,3 +1,5 @@
+import { CardCarouselOffer } from '../../offers/components/CardCarousel/types';
+
 export type BannerType = {
   imageSource: string;
   link: string;
@@ -31,6 +33,12 @@ export type MarketPlaceMenuType = {
   items: MarketPlaceItemType[];
 };
 
+export type FlexibleMenusDataTransformedForView = {
+  id: string;
+  title: string;
+  menus: CardCarouselOffer[];
+}[];
+
 export type FlexibleMenuType = {
   id?: string;
   title: string;
@@ -45,14 +53,4 @@ export type FeaturedOffersType = {
   logos?: string;
   compid: number | string;
   id: number | string;
-};
-
-export type CompanyType = {
-  id: string;
-  name: string;
-};
-
-export type CategoryType = {
-  id: string;
-  name: string;
 };

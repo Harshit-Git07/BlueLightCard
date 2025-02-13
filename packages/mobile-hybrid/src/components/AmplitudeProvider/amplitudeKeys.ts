@@ -7,6 +7,8 @@ export enum FeatureFlags {
   SEARCH_V5_ENABLED = 'search_v5',
   MODERN_FLEXI_MENU_HYBRID = 'modern-flexi-menu-hybrid',
   MODERN_CATEGORIES_HYBRID = 'modern-category-pages-hybrid',
+  ENABLE_EVENTS_AS_OFFERS_HYBRID = 'enable-events-as-offers-hybrid',
+  ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_HYBRID = 'enable-all-flexible-menus-homepage-hybrid',
 }
 
 export enum Experiments {

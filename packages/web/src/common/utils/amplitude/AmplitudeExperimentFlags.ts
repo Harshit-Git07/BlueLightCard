@@ -11,6 +11,8 @@ export enum AmplitudeExperimentFlags {
   MODERN_FLEXI_MENUS = 'modern-flexi-menus-web',
   MODERN_CATEGORIES = 'modern-category-pages-web',
   MODERN_ELIGIBILITY_ENABLED = 'modern-eligibility-enabled',
+  ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB = 'enable-all-flexible-menus-homepage-web',
+  ENABLE_EVENTS_AS_OFFERS = 'enable-events-as-offers-web',
   BLT_TICKET_SHEET = 'blt-ticket-sheet',
   MODERN_MY_ACCOUNT = 'web-myaccount',
   ENABLE_SEARCH_WITH_SHARED_AUTHORIZER = 'enable-search-with-shared-authorizer',

@@ -8,13 +8,14 @@ import {
 import { APIUrl, V5_API_URL } from '@/globals';
 import { useAtom, useAtomValue } from 'jotai';
 import InvokeNativeAPICall from '@/invoke/apiCall';
-import { darkRead, IPlatformAdapter } from '@bluelightcard/shared-ui';
+import { darkRead, IPlatformAdapter, MenusData } from '@bluelightcard/shared-ui';
 import { atom, useSetAtom } from 'jotai/index';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import { spinner } from '@/modules/Spinner/store';
 import { useCallback } from 'react';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { AmplitudeFeatureFlagState } from '@/components/AmplitudeProvider/types';
+import { transformFlexibleMenuDataForView } from '../utils/transformFlexibleMenuDataForView';
 
 export interface OffersResultResponse {
   success: boolean;
@@ -100,6 +101,7 @@ const mapV5MenuResults = (data: any, useLegacyIds: boolean): OfferDataModel => {
   return {
     deal: mapDealsOfTheWeek(data.dealsOfTheWeek, useLegacyIds),
     flexible: data.flexible.length > 0 ? mapFlexibleMenu(data.flexible[0]) : undefined,
+    allFlexible: transformFlexibleMenuDataForView((data as MenusData).flexible),
     groups: [...marketplaceMenus, featuredOffersMenu],
   };
 };

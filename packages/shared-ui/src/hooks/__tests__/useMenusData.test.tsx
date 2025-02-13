@@ -98,7 +98,10 @@ describe('useMenusData', () => {
 
         expect(mockPlatformAdapter.invokeV5Api).toHaveBeenCalledWith(V5_API_URL.Menus, {
           method: 'GET',
-          queryParameters: {},
+          queryParameters: {
+            dob: '1984-01-24',
+            organisation: ' ',
+          },
         });
 
         await waitFor(() => {
@@ -125,6 +128,8 @@ describe('useMenusData', () => {
           method: 'GET',
           queryParameters: {
             id: 'dealsOfTheWeek',
+            dob: '1984-01-24',
+            organisation: ' ',
           },
         });
 

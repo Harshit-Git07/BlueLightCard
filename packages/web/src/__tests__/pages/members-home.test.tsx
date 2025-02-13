@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import AuthContext, { AuthContextType } from '@/context/Auth/AuthContext';
 import { as } from '@core/utils/testing';
 import _noop from 'lodash/noop';
-import { ExperimentClient } from '@amplitude/experiment-js-client';
+import { ExperimentClient, Variant } from '@amplitude/experiment-js-client';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import UserContext, { UserContextType } from '@/context/User/UserContext';
@@ -17,6 +17,13 @@ import AmplitudeContext from '@/root/src/common/context/AmplitudeContext';
 import useFetchHomepageData from '@/hooks/useFetchHomepageData';
 import { BannerType, FeaturedOffersType, FlexibleMenuType } from '@/page-types/members-home';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui/adapters';
+import { AmplitudeExperimentFlags } from '../../common/utils/amplitude/AmplitudeExperimentFlags';
+import { CardCarouselOffer } from '../../offers/components/CardCarousel/types';
+
+/**
+ * GOTCHA: the describe blocks in this file won't always pass in isolation so run
+ * them all at once.
+ */
 
 jest.mock('@bluelightcard/shared-ui', () => {
   const eventBus = {
@@ -189,6 +196,7 @@ describe('Members-Home Page', () => {
       dealsOfTheWeek: [],
       featuredOffers: [],
       flexibleMenu: [],
+      flexibleMenusDataTransformedForView: [],
       marketplaceMenus: [],
       banners: [
         {
@@ -204,23 +212,32 @@ describe('Members-Home Page', () => {
 
   describe('Tenancy Banner', () => {
     it('renders a promo banner placeholder while Braze experiment is loading', async () => {
-      whenMembersHomePageIsRendered('control');
-
+      whenMembersHomePageIsRendered({
+        [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'control',
+        [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+        [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+      });
       const placeholder = screen.getByTestId('tenancy-banner-experiment-placeholder');
       expect(placeholder).toBeInTheDocument();
     });
 
     describe('GraphQL banner', () => {
       it('renders when Braze experiment is control', async () => {
-        whenMembersHomePageIsRendered('control');
-
+        whenMembersHomePageIsRendered({
+          [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'control',
+          [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+          [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+        });
         const graphQLCarousel = await screen.findByTestId('homepage-sponsor-banners');
         expect(graphQLCarousel).toBeInTheDocument();
       });
 
       it('does not render the Braze banner', async () => {
-        whenMembersHomePageIsRendered('control');
-
+        whenMembersHomePageIsRendered({
+          [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'control',
+          [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+          [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+        });
         await screen.findByTestId('homepage-sponsor-banners');
         const brazeCarousel = screen.queryByTestId('braze-tenancy-banner');
         expect(brazeCarousel).not.toBeInTheDocument();
@@ -229,7 +246,11 @@ describe('Members-Home Page', () => {
 
     describe('Braze banner', () => {
       beforeEach(() => {
-        whenMembersHomePageIsRendered('treatment');
+        whenMembersHomePageIsRendered({
+          [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'treatment',
+          [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+          [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'treatment',
+        });
       });
 
       it('renders when Braze experiment is treatment', async () => {
@@ -241,6 +262,164 @@ describe('Members-Home Page', () => {
         await screen.findByTestId('braze-tenancy-banner');
         const graphQLCarousel = screen.queryByTestId('homepage-sponsor-banners');
         expect(graphQLCarousel).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Showing ALL flexible carousels', () => {
+    it('should show all flexible carousels when the flag is on', async () => {
+      const cardCarouselOffer: CardCarouselOffer = {
+        imageUrl: 'mock/image/url',
+        href: 'mock/href',
+      };
+
+      useFetchHomepageDataMock.mockReturnValue({
+        dealsOfTheWeek: [],
+        featuredOffers: [],
+        flexibleMenu: [],
+        flexibleMenusDataTransformedForView: [
+          {
+            id: 'first-flexible-carousel-id',
+            title: 'first-flexible-carousel-title',
+            menus: [cardCarouselOffer],
+          },
+          {
+            id: 'second-flexible-carousel-id',
+            title: 'second-flexible-carousel-title',
+            menus: [cardCarouselOffer],
+          },
+        ],
+        marketplaceMenus: [],
+        banners: [],
+        hasLoaded: true,
+        loadingError: false,
+      });
+
+      whenMembersHomePageIsRendered({
+        [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'on',
+        [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'on',
+        [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+      });
+      await waitFor(() => {
+        const flexibleCarousels = screen.queryAllByTestId('all-flexible-carousel-display');
+        expect(flexibleCarousels.length).toBe(2);
+      });
+    });
+
+    it('should NOT show any flexible carousels when the flag is off', async () => {
+      const cardCarouselOffer: CardCarouselOffer = {
+        imageUrl: 'mock/image/url',
+        href: 'mock/href',
+      };
+
+      useFetchHomepageDataMock.mockReturnValue({
+        dealsOfTheWeek: [],
+        featuredOffers: [],
+        flexibleMenu: [],
+        flexibleMenusDataTransformedForView: [
+          {
+            id: 'first-flexible-carousel-id',
+            title: 'first-flexible-carousel-title',
+            menus: [cardCarouselOffer],
+          },
+          {
+            id: 'second-flexible-carousel-id',
+            title: 'second-flexible-carousel-title',
+            menus: [cardCarouselOffer],
+          },
+        ],
+        marketplaceMenus: [],
+        banners: [],
+        hasLoaded: true,
+        loadingError: false,
+      });
+
+      whenMembersHomePageIsRendered({
+        [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'on',
+        [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+        [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+      });
+      await waitFor(() => {
+        const flexibleCarousels = screen.queryAllByTestId('all-flexible-carousel-display');
+        expect(flexibleCarousels.length).toBe(0);
+      });
+    });
+
+    it('should NOT show any flexible carousels when the flag is on and the modern flexi menu flag is off', async () => {
+      const cardCarouselOffer: CardCarouselOffer = {
+        imageUrl: 'mock/image/url',
+        href: 'mock/href',
+      };
+
+      useFetchHomepageDataMock.mockReturnValue({
+        dealsOfTheWeek: [],
+        featuredOffers: [],
+        flexibleMenu: [],
+        flexibleMenusDataTransformedForView: [
+          {
+            id: 'first-flexible-carousel-id',
+            title: 'first-flexible-carousel-title',
+            menus: [cardCarouselOffer],
+          },
+          {
+            id: 'second-flexible-carousel-id',
+            title: 'second-flexible-carousel-title',
+            menus: [cardCarouselOffer],
+          },
+        ],
+        marketplaceMenus: [],
+        banners: [],
+        hasLoaded: true,
+        loadingError: false,
+      });
+
+      whenMembersHomePageIsRendered({
+        [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'off',
+        [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'on',
+        [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+      });
+      await waitFor(() => {
+        const flexibleCarousels = screen.queryAllByTestId('all-flexible-carousel-display');
+        expect(flexibleCarousels.length).toBe(0);
+      });
+    });
+
+    it('should NOT show the single flexible carousel when the show all flag is on', async () => {
+      const cardCarouselOffer: CardCarouselOffer = {
+        imageUrl: 'mock/image/url',
+        href: 'mock/href',
+      };
+
+      useFetchHomepageDataMock.mockReturnValue({
+        dealsOfTheWeek: [],
+        featuredOffers: [],
+        flexibleMenu: [],
+        flexibleMenusDataTransformedForView: [
+          {
+            id: 'first-flexible-carousel-id',
+            title: 'first-flexible-carousel-title',
+            menus: [cardCarouselOffer],
+          },
+          {
+            id: 'second-flexible-carousel-id',
+            title: 'second-flexible-carousel-title',
+            menus: [cardCarouselOffer],
+          },
+        ],
+        marketplaceMenus: [],
+        banners: [],
+        hasLoaded: true,
+        loadingError: false,
+      });
+
+      whenMembersHomePageIsRendered({
+        [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'on',
+        [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'on',
+        [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+      });
+      await waitFor(() => {
+        const flexibleCarousels = screen.queryAllByTestId('flexi-menu-carousel');
+        expect(flexibleCarousels.length).toBe(0);
       });
     });
   });
@@ -269,14 +448,18 @@ describe('Members-Home Page Tracking', () => {
       dealsOfTheWeek: [dealOfTheWeek],
       featuredOffers: [],
       flexibleMenu: [],
+      flexibleMenusDataTransformedForView: [],
       marketplaceMenus: [],
       banners: [],
       hasLoaded: true,
       loadingError: false,
     });
 
-    whenMembersHomePageIsRendered('control');
-
+    whenMembersHomePageIsRendered({
+      [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'control',
+      [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+      [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+    });
     const interactionButton = await screen.findByTestId('carousel-interaction-deals-of-the-week');
     fireEvent.click(interactionButton);
 
@@ -303,14 +486,18 @@ describe('Members-Home Page Tracking', () => {
       dealsOfTheWeek: [dealOfTheWeek],
       featuredOffers: [],
       flexibleMenu: [],
+      flexibleMenusDataTransformedForView: [],
       marketplaceMenus: [],
       banners: [],
       hasLoaded: true,
       loadingError: false,
     });
 
-    whenMembersHomePageIsRendered('control');
-
+    whenMembersHomePageIsRendered({
+      [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'control',
+      [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+      [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+    });
     const offerCard = await screen.findByTestId('offer-card-0');
     fireEvent.click(offerCard);
 
@@ -336,14 +523,18 @@ describe('Members-Home Page Tracking', () => {
       dealsOfTheWeek: [],
       featuredOffers: [],
       flexibleMenu: [],
+      flexibleMenusDataTransformedForView: [],
       marketplaceMenus: [],
       banners: [banner],
       hasLoaded: true,
       loadingError: false,
     });
 
-    whenMembersHomePageIsRendered('control');
-
+    whenMembersHomePageIsRendered({
+      [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'control',
+      [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+      [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+    });
     const promoBanner = await screen.findByTestId('promo-banner-promoBanner0');
     fireEvent.click(promoBanner);
 
@@ -357,14 +548,18 @@ describe('Members-Home Page Tracking', () => {
       dealsOfTheWeek: [],
       featuredOffers: [],
       flexibleMenu: [],
+      flexibleMenusDataTransformedForView: [],
       marketplaceMenus: [],
       banners: [],
       hasLoaded: true,
       loadingError: false,
     });
 
-    whenMembersHomePageIsRendered('treatment');
-
+    whenMembersHomePageIsRendered({
+      [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'control',
+      [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+      [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'treatment',
+    });
     const brazeBanner = await screen.findByAltText('Test Braze Card banner');
     fireEvent.click(brazeBanner);
 
@@ -384,14 +579,18 @@ describe('Members-Home Page Tracking', () => {
       dealsOfTheWeek: [],
       featuredOffers: [],
       flexibleMenu: [flexibleItem],
+      flexibleMenusDataTransformedForView: [],
       marketplaceMenus: [],
       banners: [],
       hasLoaded: true,
       loadingError: false,
     });
 
-    whenMembersHomePageIsRendered('control');
-
+    whenMembersHomePageIsRendered({
+      [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'control',
+      [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+      [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+    });
     const interactionButton = await screen.findByTestId('carousel-interaction-ways-to-save');
     fireEvent.click(interactionButton);
 
@@ -416,6 +615,7 @@ describe('Members-Home Page Tracking', () => {
     useFetchHomepageDataMock.mockReturnValue({
       dealsOfTheWeek: [],
       featuredOffers: [featuredOffer],
+      flexibleMenusDataTransformedForView: [],
       flexibleMenu: [],
       marketplaceMenus: [],
       banners: [],
@@ -423,8 +623,11 @@ describe('Members-Home Page Tracking', () => {
       loadingError: false,
     });
 
-    whenMembersHomePageIsRendered('control');
-
+    whenMembersHomePageIsRendered({
+      [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'control',
+      [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+      [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+    });
     const interactionButton = await screen.findByTestId('carousel-interaction-featured-offers');
     fireEvent.click(interactionButton);
 
@@ -464,14 +667,18 @@ describe('Members-Home Page Carousels', () => {
           dealsOfTheWeek: [],
           featuredOffers: [],
           flexibleMenu: [flexibleItem],
+          flexibleMenusDataTransformedForView: [],
           marketplaceMenus: [],
           banners: [],
           hasLoaded: true,
           loadingError: false,
         });
 
-        whenMembersHomePageIsRendered('control');
-
+        whenMembersHomePageIsRendered({
+          [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'control',
+          [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+          [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+        });
         const flexibleOfferLink = await screen.findByText('Flexible Offer');
         expect(flexibleOfferLink).toHaveAttribute('href', '/flexibleOffers.php?id=0');
       });
@@ -490,14 +697,18 @@ describe('Members-Home Page Carousels', () => {
           dealsOfTheWeek: [],
           featuredOffers: [],
           flexibleMenu: [flexibleItem],
+          flexibleMenusDataTransformedForView: [],
           marketplaceMenus: [],
           banners: [],
           hasLoaded: true,
           loadingError: false,
         });
 
-        whenMembersHomePageIsRendered('on');
-
+        whenMembersHomePageIsRendered({
+          [AmplitudeExperimentFlags.MODERN_FLEXI_MENUS]: 'on',
+          [AmplitudeExperimentFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_WEB]: 'off',
+          [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
+        });
         const flexibleOfferLink = await screen.findByText('Flexible Offer');
         expect(flexibleOfferLink).toHaveAttribute(
           'href',
@@ -508,7 +719,11 @@ describe('Members-Home Page Carousels', () => {
   });
 });
 
-const WhenMembersHomePageIsRendered = ({ variant }: { variant: string }) => {
+const WhenMembersHomePageIsRendered = ({
+  mockFlagValues,
+}: {
+  mockFlagValues: Partial<Record<AmplitudeExperimentFlags, string>>;
+}) => {
   const mockAuthContext: Partial<AuthContextType> = {
     authState: {
       idToken: '23123',
@@ -523,7 +738,9 @@ const WhenMembersHomePageIsRendered = ({ variant }: { variant: string }) => {
   const userContext = userContextTypeFactory.build();
 
   const mockExperimentClient = {
-    variant: jest.fn().mockReturnValue({ value: variant }),
+    variant: jest.fn().mockImplementation((flagName: AmplitudeExperimentFlags): Variant => {
+      return { value: mockFlagValues[flagName] };
+    }),
   } satisfies Pick<ExperimentClient, 'variant'>;
 
   const experimentClientMock: () => Promise<ExperimentClient> = () =>
@@ -566,5 +783,6 @@ const WhenMembersHomePageIsRendered = ({ variant }: { variant: string }) => {
   );
 };
 
-const whenMembersHomePageIsRendered = (variant: string) =>
-  render(<WhenMembersHomePageIsRendered variant={variant} />);
+const whenMembersHomePageIsRendered = (
+  mockFlagValues: Partial<Record<AmplitudeExperimentFlags, string>>
+) => render(<WhenMembersHomePageIsRendered mockFlagValues={mockFlagValues} />);

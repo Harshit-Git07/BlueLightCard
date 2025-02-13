@@ -1,4 +1,4 @@
-import type { CategoriesData, CategoryData } from '../types';
+import type { CategoriesData, CategoryData, EventCategoryData } from '../types';
 
 export const categoriesMock: CategoriesData = [
   {
@@ -20,6 +20,22 @@ export const categoryMock: CategoryData = {
       companyName: 'Company 1',
       legacyCompanyID: 12345,
       legacyOfferID: 54321,
+    },
+  ],
+};
+
+export const eventCategoryDataMock: EventCategoryData = {
+  id: 'category19',
+  name: 'Events',
+  data: [
+    {
+      eventID: '424242',
+      venueID: '1984',
+      venueName: 'Some great venue',
+      offerType: 'ticket',
+      eventName: 'Some great event',
+      imageURL: 'http://example.com/image2.jpg',
+      eventDescription: 'Description of some great event',
     },
   ],
 };

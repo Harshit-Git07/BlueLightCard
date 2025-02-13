@@ -1,5 +1,5 @@
 import { V5_API_URL } from '@/globals';
-import { usePlatformAdapter } from '@bluelightcard/shared-ui';
+import { excludeEventCategory, usePlatformAdapter } from '@bluelightcard/shared-ui';
 import { useQuery } from '@tanstack/react-query';
 import type { CategoriesData } from '@bluelightcard/shared-ui';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
@@ -11,6 +11,8 @@ const useCategoriesData = () => {
   const platformAdapter = usePlatformAdapter();
 
   const v5ApiFlag = amplitudeExperiments[FeatureFlags.V5_API_INTEGRATION] ?? 'off';
+  const shouldIncludeEvents =
+    amplitudeExperiments[FeatureFlags.ENABLE_EVENTS_AS_OFFERS_HYBRID] === 'on';
 
   return useQuery({
     queryKey: ['categoriesData', `v5-${v5ApiFlag}`],
@@ -27,10 +29,9 @@ const useCategoriesData = () => {
 
       if (response.status !== 200)
         throw new Error('Received error when trying to retrieve categories');
-
       try {
         const categories = JSON.parse(response?.data)?.data as CategoriesData;
-        return categories;
+        return excludeEventCategory(categories, shouldIncludeEvents);
       } catch (err) {
         throw new Error('Invalid categories data received');
       }

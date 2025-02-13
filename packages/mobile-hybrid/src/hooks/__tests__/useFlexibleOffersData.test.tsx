@@ -3,12 +3,28 @@ import { Suspense, act } from 'react';
 import { RenderOptions, renderHook, waitFor, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
+  FlexibleOfferData,
   PlatformAdapterProvider,
   flexibleOfferMock,
   useMockPlatformAdapter,
 } from '@bluelightcard/shared-ui';
 import { ErrorBoundary } from 'react-error-boundary';
 import useFlexibleOffersData from '../useFlexibleOffersData';
+import * as offerTransformationsModule from '../../../../shared-ui/src/utils/offers/offerTransformations';
+
+jest.mock('../../../../shared-ui/src/utils/offers/offerTransformations');
+const offerTransformationsModuleMock = jest.mocked(
+  jest.requireMock('../../../../shared-ui/src/utils/offers/offerTransformations'),
+) as jest.Mocked<typeof offerTransformationsModule>;
+
+const fakeFlexibleOfferDataForView: FlexibleOfferData = {
+  id: 'fakeFlexibleOfferDataForViewID',
+  title: 'fakeFlexibleOfferDataForViewTitle',
+  description: 'fakeFlexibleOfferDataForViewDescription',
+  imageURL: 'fakeFlexibleOfferDataForViewImageUrl',
+  offers: [],
+  events: [],
+};
 
 let mockPlatformAdapter: ReturnType<typeof useMockPlatformAdapter>;
 
@@ -26,7 +42,17 @@ const wrapper: RenderOptions['wrapper'] = ({ children }) => {
 
 describe('useFlexibleOffersData', () => {
   describe('it calls the flexible offers V5 API', () => {
+    let mapFlexibleEventsToOffersSpy: jest.SpyInstance<
+      FlexibleOfferData,
+      [flexibleOfferData: FlexibleOfferData],
+      any
+    >;
+
     beforeEach(() => {
+      mapFlexibleEventsToOffersSpy = jest
+        .spyOn(offerTransformationsModuleMock, 'mapFlexibleEventsToOffers')
+        .mockReturnValue(fakeFlexibleOfferDataForView);
+
       mockPlatformAdapter = useMockPlatformAdapter();
       mockPlatformAdapter.invokeV5Api.mockReturnValue(
         Promise.resolve({
@@ -36,6 +62,10 @@ describe('useFlexibleOffersData', () => {
           }),
         }),
       );
+    });
+
+    afterAll(() => {
+      mapFlexibleEventsToOffersSpy.mockReset();
     });
 
     describe('and throws an error', () => {
@@ -110,8 +140,9 @@ describe('useFlexibleOffersData', () => {
 
       await waitFor(() => {
         expect(result.current.isSuccess).toEqual(true);
+        expect(mapFlexibleEventsToOffersSpy).toHaveBeenCalledWith(flexibleOfferMock);
 
-        expect(result.current.data).toEqual(flexibleOfferMock);
+        expect(result.current.data).toEqual(fakeFlexibleOfferDataForView);
       });
     });
   });

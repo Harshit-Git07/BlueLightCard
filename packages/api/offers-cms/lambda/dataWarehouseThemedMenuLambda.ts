@@ -18,6 +18,7 @@ export async function handler(event: EventBridgeEvent<'SanityChangeEvent', Sanit
       create_time: record._createdAt,
       update_time: record._updatedAt,
     };
+
     const records = record.inclusions?.flatMap((item) => {
       const baseRecord = {
         ...baseFields,
@@ -28,9 +29,20 @@ export async function handler(event: EventBridgeEvent<'SanityChangeEvent', Sanit
       return (
         item.contents?.map((content) => ({
           ...baseRecord,
-          offer_id: content.reference?._id,
+          offer_id:
+            content._type === 'offerReference'
+              ? {
+                  old_offer_id: null,
+                  new_offer_id: content.reference?._id,
+                }
+              : null,
           company_id:
-            content.reference?._type === 'offer' ? content.reference?.company?._id?.toString() : '',
+            content._type === 'companyOfferReference'
+              ? {
+                  old_company_id: null,
+                  new_company_id: content.reference?._id,
+                }
+              : null,
         })) ?? [baseRecord]
       );
     }) ?? [baseFields];

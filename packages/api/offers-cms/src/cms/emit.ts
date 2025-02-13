@@ -1,6 +1,6 @@
 import { PutEventsCommand } from '@aws-sdk/client-eventbridge';
-import { type WebhookEventResult } from '@bluelightcard/sanity-types';
-import { type CompanyLocationBatch } from 'src/lib/events';
+import { type CompanyLocationBatch, type WebhookResultRecord } from 'src/lib/events';
+import invariant from 'tiny-invariant';
 
 import { type ILogger } from '@blc-mono/core/utils/logger';
 
@@ -8,22 +8,14 @@ import { eventBridge } from '../lib/eventbridge';
 
 const EB_DETAIL_TYPE = 'sanityEvent';
 
-type ArrayElement<ArrayType> = ArrayType extends readonly (infer ElementType)[]
-  ? ElementType
-  : never;
-
-const generateSource = (
-  record: ArrayElement<WebhookEventResult> | CompanyLocationBatch,
-): string => {
-  return `${record._type}.${record.operation}d`;
-};
-
 export async function publishToEventBus(
-  record: ArrayElement<WebhookEventResult> | CompanyLocationBatch,
+  record: WebhookResultRecord | CompanyLocationBatch,
   busName: string,
   logger: ILogger,
 ) {
-  const source = generateSource(record);
+  invariant('operation' in record, 'Published record requires operation');
+
+  const source = `${record._type}.${record.operation}d`;
   const putOutput = await eventBridge.send(
     new PutEventsCommand({
       Entries: [

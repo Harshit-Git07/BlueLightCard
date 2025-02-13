@@ -3,11 +3,35 @@ import type { EventBridgeEvent } from 'aws-lambda/trigger/eventbridge';
 import { extractRecord } from 'src/cms/ingest';
 
 import { env } from '../src/lib/env';
-import type { SanityChangeEvent } from '../src/lib/events';
+import type { SanityChangeEvent, WebhookResultRecord } from '../src/lib/events';
+
+type ReceivedEvent = EventBridgeEvent<'SanityChangeEvent', SanityChangeEvent>;
 
 const client = new FirehoseClient();
 
-export async function handler(event: EventBridgeEvent<'SanityChangeEvent', SanityChangeEvent>) {
+const extractIds = (record: WebhookResultRecord) => {
+  if (record._type === 'menu.campaign') {
+    return record.inclusions?.map((inclusion) => inclusion.campaign?._id) ?? [];
+  }
+
+  if (record._type === 'menu.company') {
+    return record.inclusions?.map((inclusion) => ({
+      old_company_id: null,
+      new_company_id: inclusion.reference?._id,
+    }));
+  }
+
+  if (record._type === 'menu.offer') {
+    return record.inclusions?.map((inclusion) => ({
+      new_offer_id: inclusion.offer?._id,
+      old_offer_id: inclusion.offer?.offerId,
+    }));
+  }
+
+  throw new Error(`Unrecognised menu type: ${record._type}`);
+};
+
+export async function handler(event: ReceivedEvent) {
   const record = extractRecord(event.detail);
 
   if (
@@ -15,10 +39,7 @@ export async function handler(event: EventBridgeEvent<'SanityChangeEvent', Sanit
     record._type === 'menu.campaign' ||
     record._type === 'menu.company'
   ) {
-    const offerId =
-      record.inclusions?.map((inclusion) => {
-        return inclusion._id;
-      }) ?? [];
+    const offerId = extractIds(record);
 
     const messageBody = {
       menu_id: record._id,
@@ -43,4 +64,6 @@ export async function handler(event: EventBridgeEvent<'SanityChangeEvent', Sanit
 
     await client.send(command);
   }
+
+  throw new Error(`Unrecognised menu type: ${record._type}`);
 }

@@ -1,6 +1,7 @@
 import type {
   CompanyLocation,
   MenuThemedOffer,
+  OffersMenusWebhookEventResult,
   WebhookEventResult,
 } from '@bluelightcard/sanity-types';
 
@@ -17,10 +18,8 @@ export type CompanyLocationBatch = {
 };
 
 export type WebhookResultRecord =
-  | ArrayElement<WebhookEventResult>
-  | CompanyLocationBatch
-  | MenuThemedOffer;
-
+  | ArrayElement<WebhookEventResult | OffersMenusWebhookEventResult>
+  | CompanyLocationBatch;
 type RecordType =
   | WebhookResultRecord['_type']
   | CompanyLocationBatch['_type']

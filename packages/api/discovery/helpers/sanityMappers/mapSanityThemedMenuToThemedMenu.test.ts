@@ -17,6 +17,23 @@ const validInclusion = {
       _key: 'content-key',
       _type: 'offerReference',
       reference: validSanityMenuOffer.offer,
+      overrides: {
+        description: 'Override description',
+        image: {
+          default: {
+            asset: {
+              url: 'http://test.com',
+              _id: '',
+              _type: 'sanity.imageAsset',
+              _createdAt: '',
+              _updatedAt: '',
+              _rev: '',
+            },
+            _type: 'image',
+          },
+        },
+        title: 'Override title',
+      },
     },
   ],
 };
@@ -53,6 +70,11 @@ describe('mapSanityThemedMenuToThemedMenu', () => {
               },
               id: '1',
               position: 0,
+              overrides: {
+                description: 'Override description',
+                image: 'http://test.com',
+                title: 'Override title',
+              },
             },
           ],
           title: 'collection name',

@@ -21,6 +21,11 @@ export type IngestedThemedSubMenuOffer = SubMenu & {
     position: number;
     start?: string;
     end?: string;
+    overrides: {
+      title?: string;
+      image?: string;
+      description?: string;
+    };
   }[];
 };
 
@@ -34,6 +39,11 @@ export type IngestedThemedSubMenuEvent = SubMenu & {
     position: number;
     start?: string;
     end?: string;
+    overrides: {
+      title?: string;
+      image?: string;
+      description?: string;
+    };
   }[];
 };
 

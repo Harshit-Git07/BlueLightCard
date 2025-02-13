@@ -22,6 +22,11 @@ export type IngestedMenuOffer = Menu & {
     start?: string;
     end?: string;
     position: number;
+    overrides: {
+      title?: string;
+      image?: string;
+      description?: string;
+    };
   }[];
 };
 
@@ -29,12 +34,22 @@ export type MenuOffer = Offer & {
   start?: string;
   end?: string;
   position: number;
+  overrides: {
+    title?: string;
+    image?: string;
+    description?: string;
+  };
 };
 
 export type MenuEventOffer = EventOffer & {
   start?: string;
   end?: string;
   position: number;
+  overrides: {
+    title?: string;
+    image?: string;
+    description?: string;
+  };
 };
 
 export type MenuWithSubMenus = Menu & {

@@ -30,8 +30,8 @@ const themedMenuOffer: ThemedMenuOffer = {
   ...menu,
   menuType: MenuType.FLEXIBLE,
   themedMenusOffers: [
-    { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0 }] },
-    { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0 }] },
+    { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0, overrides: {} }] },
+    { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0, overrides: {} }] },
   ],
 };
 
@@ -71,8 +71,8 @@ describe('MenuThemedEventHandler', () => {
           ...newerMenu,
           menuType: MenuType.FLEXIBLE,
           themedMenusOffers: [
-            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0 }] },
-            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0 }] },
+            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0, overrides: {} }] },
+            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0, overrides: {} }] },
           ],
         };
 
@@ -95,8 +95,8 @@ describe('MenuThemedEventHandler', () => {
           ...menu,
           menuType: MenuType.FLEXIBLE,
           themedMenusOffers: [
-            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0 }] },
-            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0 }] },
+            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0, overrides: {} }] },
+            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0, overrides: {} }] },
           ],
           updatedAt: new Date(2021, 12, 30).toISOString(),
         };
@@ -123,8 +123,8 @@ describe('MenuThemedEventHandler', () => {
           ...newerMenu,
           menuType: MenuType.FLEXIBLE,
           themedMenusOffers: [
-            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0 }] },
-            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0 }] },
+            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0, overrides: {} }] },
+            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0, overrides: {} }] },
           ],
         };
 
@@ -138,8 +138,8 @@ describe('MenuThemedEventHandler', () => {
           ...menu,
           menuType: MenuType.FLEXIBLE,
           themedMenusOffers: [
-            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0 }] },
-            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0 }] },
+            { ...subMenu, offers: [{ id: 'offer-1', company: { id: 'company-1' }, position: 0, overrides: {} }] },
+            { ...secondSubMenu, offers: [{ id: 'offer-2', company: { id: 'company-2' }, position: 0, overrides: {} }] },
           ],
           updatedAt: new Date(2021, 12, 30).toISOString(),
         };

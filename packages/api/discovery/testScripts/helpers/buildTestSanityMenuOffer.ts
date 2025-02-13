@@ -1,4 +1,10 @@
-import { MenuOffer as SanityMenuOffer, Offer as SanityOffer } from '@bluelightcard/sanity-types';
+import {
+  MenuOffer as SanityMenuOffer,
+  Offer as SanityOffer,
+  SanityImageAsset,
+  SanityImageCrop,
+  SanityImageHotspot,
+} from '@bluelightcard/sanity-types';
 import { addMonths, subMonths } from 'date-fns';
 import { v4 } from 'uuid';
 
@@ -7,6 +13,30 @@ type InclusionOffer = {
   start?: string;
   end?: string;
   _key: string;
+  overrides?: {
+    title?: string;
+    description?: string;
+    image?: {
+      default?: {
+        asset?: SanityImageAsset;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: 'image';
+      };
+      light?: {
+        asset?: SanityImageAsset;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: 'image';
+      };
+      dark?: {
+        asset?: SanityImageAsset;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: 'image';
+      };
+    };
+  };
 };
 
 export function buildTestSanityMenuOffer(

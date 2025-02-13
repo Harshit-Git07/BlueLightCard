@@ -2,7 +2,7 @@ import { menuEventOfferFactory } from '@blc-mono/discovery/application/factories
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import { MenuEventEntity } from '@blc-mono/discovery/application/repositories/schemas/MenuOfferEntity';
 
-import { mapEventToMenuEventEntity, mapMenuEventEntityToEvent } from './MenuEventMapper';
+import { mapEventToMenuEventEntity, mapEventToMenuEventResponse, mapMenuEventEntityToEvent } from './MenuEventMapper';
 
 const event = menuEventOfferFactory.build();
 
@@ -16,6 +16,7 @@ const defaultMenuEventEntity: MenuEventEntity = {
   gsi2SortKey: 'EVENT-1',
   gsi3PartitionKey: 'EVENT-1',
   gsi3SortKey: 'MENU-menu1',
+  overrides: {},
 };
 
 const mapEventToMenuEventEntitiesTestCases = [
@@ -42,5 +43,37 @@ describe('MenuEventMapper', () => {
   it('should map MenuEventEntity to event', () => {
     const result = mapMenuEventEntityToEvent(defaultMenuEventEntity);
     expect(result).toEqual(event);
+  });
+});
+
+describe('mapEventToMenuEventResponse', () => {
+  it('should map Event to EventResponse', () => {
+    const result = mapEventToMenuEventResponse(event);
+    expect(result).toEqual({
+      eventID: event.id,
+      eventName: 'Sample event',
+      eventDescription: 'Sample event description',
+      offerType: event.offerType,
+      imageURL: 'https://cdn.bluelightcard.co.uk/offerimages/1724052659175.jpg',
+      venueID: '1',
+      venueName: 'Sample venue',
+    });
+  });
+
+  it('should return the override values if they exist', () => {
+    const eventWithOverrides = {
+      ...event,
+      overrides: { title: 'Override title', image: 'http://test.com', description: 'Override description' },
+    };
+    const result = mapEventToMenuEventResponse(eventWithOverrides);
+    expect(result).toEqual({
+      eventID: eventWithOverrides.id,
+      eventName: 'Override title',
+      eventDescription: 'Override description',
+      offerType: eventWithOverrides.offerType,
+      imageURL: 'http://test.com',
+      venueID: '1',
+      venueName: 'Sample venue',
+    });
   });
 });

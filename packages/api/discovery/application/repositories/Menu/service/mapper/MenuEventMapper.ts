@@ -28,6 +28,7 @@ export function mapMenuEventEntityToEvent(menuEventEntity: MenuEventEntity): Men
     position: menuEventEntity.position,
     start: menuEventEntity.start,
     end: menuEventEntity.end,
+    overrides: menuEventEntity.overrides,
   };
 }
 
@@ -53,10 +54,10 @@ export function mapEventToMenuEventEntity(
 export function mapEventToMenuEventResponse(event: MenuEventOffer): EventResponse {
   return {
     eventID: event.id,
-    eventName: event.name,
-    eventDescription: event.eventDescription,
+    eventName: event.overrides?.title ?? event.name,
+    eventDescription: event.overrides?.description ?? event.eventDescription,
     offerType: event.offerType,
-    imageURL: event.image,
+    imageURL: event.overrides?.image ?? event.image,
     venueID: event.venue.id,
     venueName: event.venue.name,
   };

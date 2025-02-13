@@ -64,20 +64,28 @@ export async function handleMarketplaceMenusDeleted({
 function extractMenuData(ingestedMenuOffers: IngestedMenuOffer[]) {
   const offerToMenus = new Map<string, string[]>();
   const menus = new Map<string, { menu: Menu; menuOffers: MenuOffer[] }>();
-  const menuOfferData = new Map<string, { position: number; start?: string; end?: string }>();
+  const menuOfferData = new Map<
+    string,
+    {
+      position: number;
+      start?: string;
+      end?: string;
+      overrides: { title?: string; description?: string; image?: string };
+    }
+  >();
   const offersToRetrieve: { id: string; companyId: string }[] = [];
 
   ingestedMenuOffers.forEach(({ offers: newMenuOffers, ...newMenu }) => {
     menus.set(newMenu.id, { menu: newMenu, menuOffers: [] });
 
-    newMenuOffers.forEach(({ id, company, position, start, end }) => {
+    newMenuOffers.forEach(({ id, company, position, start, end, overrides }) => {
       if (!offerToMenus.has(id)) {
         offerToMenus.set(id, []);
       }
       offerToMenus.get(id)?.push(newMenu.id);
       offersToRetrieve.push({ id, companyId: company.id });
 
-      menuOfferData.set(`${newMenu.id}#${id}`, { position, start, end });
+      menuOfferData.set(`${newMenu.id}#${id}`, { position, start, end, overrides });
     });
   });
 
@@ -87,7 +95,15 @@ function extractMenuData(ingestedMenuOffers: IngestedMenuOffer[]) {
 function mapOffersToMenus(
   offers: DiscountOffer[],
   offerToMenus: Map<string, string[]>,
-  menuOfferData: Map<string, { position: number; start?: string; end?: string }>,
+  menuOfferData: Map<
+    string,
+    {
+      position: number;
+      start?: string;
+      end?: string;
+      overrides: { title?: string; description?: string; image?: string };
+    }
+  >,
   menus: Map<string, { menu: Menu; menuOffers: MenuOffer[] }>,
 ) {
   offers.forEach((offer) => {

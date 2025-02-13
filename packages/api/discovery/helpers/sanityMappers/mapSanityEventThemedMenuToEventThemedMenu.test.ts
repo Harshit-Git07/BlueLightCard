@@ -236,7 +236,35 @@ const validInclusion = {
       },
     },
   },
-  events: [{ event: validSanityEvent }],
+  events: [
+    {
+      event: validSanityEvent,
+    },
+  ],
+};
+
+const validInclusionWithOverrides = {
+  _key: 'inclusion-key',
+  _type: 'themed.event',
+  eventCollectionDescription: richTextModuleArray,
+  eventCollectionName: 'collection name',
+  eventCollectionImage: {
+    default: {
+      asset: {
+        url: 'url',
+      },
+    },
+  },
+  events: [
+    {
+      event: validSanityEvent,
+      overrides: {
+        title: 'Mock Override Title',
+        description: 'Mock Override Description',
+        image: { default: { asset: { url: 'over-mock-url' } } },
+      },
+    },
+  ],
 };
 
 const validSanityThemedMenu = {
@@ -273,6 +301,56 @@ describe('mapSanityThemedMenuToThemedMenu', () => {
               },
               id: '1',
               position: 0,
+              overrides: {},
+            },
+          ],
+          title: 'collection name',
+        },
+      ],
+      updatedAt: '2021-09-01T00:00:00Z',
+    });
+
+    expect(result.themedMenusEvents[0].description).toContain('This is a heading');
+    expect(result.themedMenusEvents[0].description).toContain('This is a paragraph.');
+  });
+
+  it('should map sanity themed menu to themed menu with overrides', () => {
+    const validOverrideSanityThemedMenu = {
+      _createdAt: '2021-09-01T00:00:00Z',
+      _id: '123',
+      _rev: '123',
+      _type: 'menu.themed.event',
+      _updatedAt: '2021-09-01T00:00:00Z',
+      title: 'title',
+      end: '2021-09-01T00:00:00Z',
+      start: '2021-09-01T00:00:00Z',
+      inclusions: [validInclusionWithOverrides],
+    };
+    const result = mapSanityEventThemedMenuToEventThemedMenu(validOverrideSanityThemedMenu as SanityThemedMenuEvent);
+    expect(result).toEqual({
+      endTime: '2021-09-01T00:00:00Z',
+      id: '123',
+      menuType: 'flexible',
+      name: 'title',
+      startTime: '2021-09-01T00:00:00Z',
+      themedMenusEvents: [
+        {
+          description: expect.any(String),
+          id: 'inclusion-key',
+          imageURL: 'url',
+          position: 0,
+          events: [
+            {
+              venue: {
+                id: 'dc1adf94-f6f5-4d77-a155-65f72928fb77',
+              },
+              id: '1',
+              position: 0,
+              overrides: {
+                title: 'Mock Override Title',
+                image: 'over-mock-url',
+                description: 'Mock Override Description',
+              },
             },
           ],
           title: 'collection name',

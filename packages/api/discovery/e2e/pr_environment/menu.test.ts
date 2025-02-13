@@ -83,6 +83,8 @@ const previousScheduleMarketplaceUUID = `test-mp-prev-${randomUUID().toString()}
 const previousScheduleOfferUUID = `test-off-prev${randomUUID().toString()}`;
 const futureScheduleOfferUUID = `test-off-fut${randomUUID().toString()}`;
 const inScheduleOfferUUID = `test-off-in-sched-${randomUUID().toString()}`;
+const generatedOfferUUID2 = `test-${randomUUID().toString()}`;
+const menuOfferWithOverridesUUID = `test-menu-off-override-${randomUUID().toString()}`;
 const dealsOfTheWeekGeneratedMenuUUID = `test-dotw-${randomUUID().toString()}`;
 const featuredOffersGeneratedMenuUUID = `test-feat-${randomUUID().toString()}`;
 const flexibleGeneratedSubMenuUUID = `test-flexi-sub-${randomUUID().toString()}`;
@@ -141,6 +143,27 @@ const offers = [
   }),
 ];
 
+const offerUUID2 = buildTestSanityOffer({
+  id: generatedOfferUUID2,
+  companyId: generatedCompanyUUID,
+});
+
+const menuOfferWithOverrides = {
+  offer: offerUUID2,
+  _key: menuOfferWithOverridesUUID,
+  overrides: {
+    title: 'Test Override',
+    description: 'Test Description Override',
+    image: {
+      default: {
+        asset: {
+          url: 'https://test-override.com',
+        },
+      },
+    },
+  },
+};
+
 const menuOffers = offers.map((offer) => ({ offer, _key: offer._id }));
 
 const scheduledMenuOffers = [
@@ -180,6 +203,7 @@ const marketplaceMenus = [
         end: addMonths(new Date(), 1).toISOString(),
       },
       ...menuOffers,
+      menuOfferWithOverrides,
     ],
     inScheduleMarketplace2UUID,
     subMonths(new Date(), 1).toISOString(),
@@ -230,7 +254,7 @@ describe('Menu', async () => {
       });
       await sendTestEvents({
         source: Events.OFFER_CREATED,
-        events: [...offers, previousScheduledOffer, inScheduledOffer, futureScheduledOffer],
+        events: [...offers, previousScheduledOffer, inScheduledOffer, futureScheduledOffer, offerUUID2],
       });
       await sendTestEvents({ source: Events.EVENT_CREATED, events });
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -312,7 +336,7 @@ describe('Menu', async () => {
       });
     });
 
-    it('should consume menu and offer events from the correct events and return the single menu response with expired offers filtered out, in the correct order', async () => {
+    it('should consume menu and offer events from the correct events and return the single menu response with expired offers filtered out, in the correct order and with any overrides', async () => {
       const response = await whenMenuIsCalledWith(
         {
           id: 'marketplace',
@@ -329,6 +353,9 @@ describe('Menu', async () => {
       expect(result.data.marketplace?.find((menu) => menu.id === previousScheduleMarketplaceUUID)).not.toBeDefined();
       expect(result.data.marketplace?.[0].id).toEqual(inScheduleMarketplaceUUID);
       expect(result.data.marketplace?.[1].id).toEqual(inScheduleMarketplace2UUID);
+      expect(result.data.marketplace?.[1].offers[4].offerName).toStrictEqual('Test Override');
+      expect(result.data.marketplace?.[1].offers[4].offerDescription).toStrictEqual('Test Description Override');
+      expect(result.data.marketplace?.[1].offers[4].imageURL).toStrictEqual('https://test-override.com');
     });
 
     it('should filter out expired offers from the menu response and return in the correct order', async () => {
@@ -346,7 +373,7 @@ describe('Menu', async () => {
         (offer) => offer.offerID === expiredOfferUUID,
       );
 
-      expect(expectedMarketplaceMenu?.offers.length).toEqual(4);
+      expect(expectedMarketplaceMenu?.offers.length).toEqual(5);
       expect(expectedMarketplaceMenu?.id).toEqual(result.data.marketplace?.[1].id);
       expect(expectedMarketplaceMenu?.offers[0].offerID).toEqual(inScheduleOfferUUID);
       expect(expiredRestrictedOffer).toBeUndefined();
@@ -413,6 +440,11 @@ describe('Menu', async () => {
               buildExpectedOfferFrom(offers[0]),
               buildExpectedOfferFrom(offers[1]),
               buildExpectedOfferFrom(offers[2]),
+              buildExpectedOfferFrom(offerUUID2, {
+                title: menuOfferWithOverrides.overrides.title,
+                description: menuOfferWithOverrides.overrides.description,
+                image: menuOfferWithOverrides.overrides.image.default.asset.url,
+              }),
             ],
           },
         ],
@@ -517,16 +549,25 @@ describe('Menu', async () => {
   });
 });
 
-const buildExpectedOfferFrom = (offer: SanityOffer) => {
+const buildExpectedOfferFrom = (
+  offer: SanityOffer,
+  overrides?: { title?: string; description?: string; image?: string },
+) => {
+  const offerDescription = () => {
+    if (overrides?.description) {
+      return overrides.description;
+    }
+    return offer?.offerDescription?.content ? getBlockText(offer.offerDescription.content) : '';
+  };
   return {
     companyID: offer.company?._id,
     legacyCompanyID: offer.company?.companyId,
     companyName: offer.company?.brandCompanyDetails?.[0]?.companyName,
-    imageURL: offer.image?.default?.asset?.url,
-    offerDescription: offer?.offerDescription?.content ? getBlockText(offer.offerDescription.content) : '',
+    imageURL: overrides?.image ?? offer.image?.default?.asset?.url,
+    offerDescription: offerDescription(),
     offerID: offer._id,
     legacyOfferID: offer.offerId,
-    offerName: offer.name,
+    offerName: overrides?.title ?? offer.name,
     offerType: offer.offerType?.offerType,
   };
 };

@@ -40,6 +40,11 @@ export function mapSanityMarketPlaceMenusToMenuOffers(sanityMarketplace: SanityM
                 position: i,
                 start: offer?.start,
                 end: offer?.end,
+                overrides: {
+                  title: offer?.overrides?.title,
+                  image: offer?.overrides?.image?.default?.asset?.url,
+                  description: offer?.overrides?.description,
+                },
               };
             }) ?? [],
           position: index,

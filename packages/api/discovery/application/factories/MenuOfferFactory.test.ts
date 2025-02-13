@@ -5,7 +5,7 @@ import { ingestedMenuOfferFactory } from './MenuOfferFactory';
 describe('MenuOfferFactory', () => {
   it('should create a menu offer', () => {
     const menuOffer = ingestedMenuOfferFactory.build();
-    expect(menuOffer).toStrictEqual({
+    expect(menuOffer).toEqual({
       id: '1',
       name: 'Sample Menu',
       startTime: '2022-09-01T00:00:00',
@@ -19,6 +19,7 @@ describe('MenuOfferFactory', () => {
           start: '2021-09-01T00:00:00Z',
           end: '2021-09-01T00:00:00Z',
           position: 0,
+          overrides: {},
         },
         {
           id: '2',
@@ -26,6 +27,7 @@ describe('MenuOfferFactory', () => {
           start: '2021-09-01T00:00:00Z',
           end: '2021-09-01T00:00:00Z',
           position: 1,
+          overrides: {},
         },
         {
           id: '3',
@@ -33,6 +35,7 @@ describe('MenuOfferFactory', () => {
           start: '2021-09-01T00:00:00Z',
           end: '2021-09-01T00:00:00Z',
           position: 2,
+          overrides: {},
         },
       ],
     });

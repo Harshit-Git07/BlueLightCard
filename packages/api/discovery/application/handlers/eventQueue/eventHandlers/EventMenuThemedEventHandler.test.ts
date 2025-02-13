@@ -30,8 +30,8 @@ const themedMenuEvent: ThemedMenuEvent = {
   ...menu,
   menuType: MenuType.FLEXIBLE,
   themedMenusEvents: [
-    { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0 }] },
-    { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0 }] },
+    { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0, overrides: {} }] },
+    { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0, overrides: {} }] },
   ],
 };
 
@@ -71,8 +71,8 @@ describe('MenuThemedEventHandler', () => {
           ...newerMenu,
           menuType: MenuType.FLEXIBLE,
           themedMenusEvents: [
-            { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0 }] },
-            { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0 }] },
+            { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0, overrides: {} }] },
+            { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0, overrides: {} }] },
           ],
         };
 
@@ -95,8 +95,8 @@ describe('MenuThemedEventHandler', () => {
           ...menu,
           menuType: MenuType.FLEXIBLE,
           themedMenusEvents: [
-            { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0 }] },
-            { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0 }] },
+            { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0, overrides: {} }] },
+            { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0, overrides: {} }] },
           ],
           updatedAt: new Date(2021, 12, 30).toISOString(),
         };
@@ -123,8 +123,8 @@ describe('MenuThemedEventHandler', () => {
           ...newerMenu,
           menuType: MenuType.FLEXIBLE,
           themedMenusEvents: [
-            { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0 }] },
-            { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0 }] },
+            { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0, overrides: {} }] },
+            { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0, overrides: {} }] },
           ],
         };
 
@@ -138,8 +138,8 @@ describe('MenuThemedEventHandler', () => {
           ...menu,
           menuType: MenuType.FLEXIBLE,
           themedMenusEvents: [
-            { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0 }] },
-            { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0 }] },
+            { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0, overrides: {} }] },
+            { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0, overrides: {} }] },
           ],
           updatedAt: new Date(2021, 12, 30).toISOString(),
         };

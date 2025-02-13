@@ -289,6 +289,7 @@ export function updateMenuOfferEntities(menuOffers: MenuOfferEntity[], newOfferR
       position,
       start,
       end,
+      overrides,
     }) => ({
       partitionKey,
       sortKey,
@@ -301,6 +302,7 @@ export function updateMenuOfferEntities(menuOffers: MenuOfferEntity[], newOfferR
       position,
       start,
       end,
+      overrides,
       ...newOfferRecord,
     }),
   );
@@ -320,6 +322,7 @@ export function updateMenuEventEntities(menuEvents: MenuEventEntity[], newEventR
       position,
       start,
       end,
+      overrides,
     }) => ({
       partitionKey,
       sortKey,
@@ -332,6 +335,7 @@ export function updateMenuEventEntities(menuEvents: MenuEventEntity[], newEventR
       position,
       start,
       end,
+      overrides,
       ...newEventRecord,
     }),
   );

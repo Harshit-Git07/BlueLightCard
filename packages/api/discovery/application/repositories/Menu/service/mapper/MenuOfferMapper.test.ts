@@ -3,7 +3,11 @@ import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import { OfferStatus, OfferType } from '@blc-mono/discovery/application/models/Offer';
 import { MenuOfferEntity } from '@blc-mono/discovery/application/repositories/schemas/MenuOfferEntity';
 
-import { mapMenuOfferEntityToMenuOffer, mapMenuOfferToMenuOfferEntity } from './MenuOfferMapper';
+import {
+  mapMenuOfferEntityToMenuOffer,
+  mapMenuOfferToMenuOfferEntity,
+  mapMenuOfferToMenuOfferResponse,
+} from './MenuOfferMapper';
 
 const offer: MenuOffer = {
   id: 'offer1',
@@ -24,6 +28,7 @@ const offer: MenuOffer = {
     type: 'company',
     name: 'Test Company',
     logo: '',
+    legacyCompanyId: 0,
     ageRestrictions: '',
     alsoKnownAs: [],
     includedTrusts: [],
@@ -50,6 +55,7 @@ const offer: MenuOffer = {
   position: 1,
   end: new Date().toLocaleDateString(),
   start: new Date().toLocaleDateString(),
+  overrides: {},
 };
 
 const defaultMenuOfferEntity: MenuOfferEntity = {
@@ -88,5 +94,44 @@ describe('MenuOfferMapper', () => {
   it('should map MenuOfferEntity to Offer', () => {
     const result = mapMenuOfferEntityToMenuOffer(defaultMenuOfferEntity);
     expect(result).toEqual(offer);
+  });
+});
+
+describe('mapMenuOfferToMenuOfferResponse', () => {
+  it('should map MenuOffer to OfferResponse', () => {
+    const expectedResponse = {
+      offerID: 'offer1',
+      legacyOfferID: 1,
+      offerName: 'Test Offer',
+      offerDescription: 'Test Description',
+      offerType: OfferType.ONLINE,
+      imageURL: 'image_url',
+      companyID: 'company1',
+      legacyCompanyID: 0,
+      companyName: 'Test Company',
+    };
+
+    const result = mapMenuOfferToMenuOfferResponse(offer);
+    expect(result).toStrictEqual(expectedResponse);
+  });
+
+  it('should return the override values if they exist', () => {
+    const offerWithOverrides = {
+      ...offer,
+      overrides: { title: 'Override title', image: 'http://test.com', description: 'Override description' },
+    };
+    const expectedResponse = {
+      offerID: 'offer1',
+      legacyOfferID: 1,
+      offerName: 'Override title',
+      offerDescription: 'Override description',
+      offerType: OfferType.ONLINE,
+      imageURL: 'http://test.com',
+      companyID: 'company1',
+      legacyCompanyID: 0,
+      companyName: 'Test Company',
+    };
+    const result = mapMenuOfferToMenuOfferResponse(offerWithOverrides);
+    expect(result).toStrictEqual(expectedResponse);
   });
 });

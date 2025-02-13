@@ -37,6 +37,7 @@ describe('Offer Entity Factory', () => {
       start: '2021-09-01T00:00:00Z',
       end: '2021-09-01T00:00:00Z',
       position: 0,
+      overrides: {},
     });
   });
 

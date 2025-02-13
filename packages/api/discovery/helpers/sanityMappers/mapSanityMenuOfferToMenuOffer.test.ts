@@ -241,6 +241,7 @@ describe('mapSanityMenuOfferToOffer', () => {
           id: 'company1',
         },
         position: 0,
+        overrides: {},
       },
     ],
   };

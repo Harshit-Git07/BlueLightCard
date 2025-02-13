@@ -18,9 +18,17 @@ export async function handleMenusUpdated(newMenuOfferRecord: IngestedMenuOffer):
   if (!currentMenu || isAfter(new Date(newMenuOfferRecord.updatedAt), new Date(currentMenu.updatedAt))) {
     const { offers: newMenuOffers, ...newMenu } = newMenuOfferRecord;
 
-    const menuOfferData: Record<string, { position: number; start?: string; end?: string }> = {};
-    newMenuOffers.forEach(({ id, position, start, end }) => {
-      menuOfferData[`${newMenu.id}#${id}`] = { position, start, end };
+    const menuOfferData: Record<
+      string,
+      {
+        position: number;
+        start?: string;
+        end?: string;
+        overrides: { title?: string; description?: string; image?: string };
+      }
+    > = {};
+    newMenuOffers.forEach(({ id, position, start, end, overrides }) => {
+      menuOfferData[`${newMenu.id}#${id}`] = { position, start, end, overrides };
     });
 
     const offers = await getOffersByIds(newMenuOffers.map((offer) => ({ id: offer.id, companyId: offer.company.id })));

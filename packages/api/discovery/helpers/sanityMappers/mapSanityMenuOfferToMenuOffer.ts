@@ -41,6 +41,11 @@ export async function mapSanityMenuOfferToMenuOffer(menuOffer: SanityMenuOffer):
           position: index,
           start: offer.start,
           end: offer.end,
+          overrides: {
+            title: offer.overrides?.title,
+            image: offer.overrides?.image?.default?.asset?.url,
+            description: offer.overrides?.description,
+          },
         };
       }) ?? [],
   };

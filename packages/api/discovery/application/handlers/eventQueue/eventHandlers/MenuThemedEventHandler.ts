@@ -19,13 +19,21 @@ export async function handleMenuThemedUpdated(newThemedMenuRecord: ThemedMenuOff
     const offersToRetrieve = themedMenusOffers.flatMap(({ offers }) => offers);
 
     const offerToSubMenuIDMap: Record<string, string> = {};
-    const menuOfferData: Record<string, { position: number; start?: string; end?: string }> = {};
+    const menuOfferData: Record<
+      string,
+      {
+        position: number;
+        start?: string;
+        end?: string;
+        overrides: { title?: string; description?: string; image?: string };
+      }
+    > = {};
 
     themedMenusOffers.forEach(({ offers, ...subMenu }) => {
       newSubMenus.push(subMenu);
-      offers.forEach(({ id, position, start, end }) => {
+      offers.forEach(({ id, position, start, end, overrides }) => {
         offerToSubMenuIDMap[id] = subMenu.id;
-        menuOfferData[`${subMenu.id}#${id}`] = { position, start, end };
+        menuOfferData[`${subMenu.id}#${id}`] = { position, start, end, overrides };
       });
     });
 

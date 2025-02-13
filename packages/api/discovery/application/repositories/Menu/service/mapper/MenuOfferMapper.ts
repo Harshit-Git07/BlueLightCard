@@ -31,6 +31,7 @@ export function mapMenuOfferEntityToMenuOffer(menuOfferEntity: MenuOfferEntity):
     position: menuOfferEntity.position,
     start: menuOfferEntity.start,
     end: menuOfferEntity.end,
+    overrides: menuOfferEntity.overrides,
   };
 }
 
@@ -57,10 +58,10 @@ export function mapMenuOfferToMenuOfferResponse(offer: MenuOffer): OfferResponse
   return {
     offerID: offer.id,
     legacyOfferID: offer.legacyOfferId,
-    offerName: offer.name,
-    offerDescription: offer.offerDescription,
+    offerName: offer.overrides?.title ?? offer.name,
+    offerDescription: offer.overrides?.description ?? offer.offerDescription,
     offerType: offer.offerType,
-    imageURL: offer.image,
+    imageURL: offer.overrides?.image ?? offer.image,
     companyID: offer.company.id,
     legacyCompanyID: offer.company.legacyCompanyId,
     companyName: offer.company.name,

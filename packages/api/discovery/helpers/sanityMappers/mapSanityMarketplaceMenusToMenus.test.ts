@@ -15,7 +15,30 @@ const sanityMenuOffer: SanityMenuOffer = {
   end: '2023-12-31T00:00:00Z',
   _updatedAt: '2023-01-02T00:00:00Z',
   _createdAt: '2023-01-02T00:00:00Z',
-  inclusions: [{ ...validSanityMenuOffer, start: '2023-01-01T00:00:00Z', end: '2023-12-31T00:00:00Z' }],
+  inclusions: [
+    {
+      ...validSanityMenuOffer,
+      start: '2023-01-01T00:00:00Z',
+      end: '2023-12-31T00:00:00Z',
+      overrides: {
+        description: 'Override description',
+        image: {
+          default: {
+            asset: {
+              url: 'http://test.com',
+              _id: '',
+              _type: 'sanity.imageAsset',
+              _createdAt: '',
+              _updatedAt: '',
+              _rev: '',
+            },
+            _type: 'image',
+          },
+        },
+        title: 'Override title',
+      },
+    },
+  ],
 };
 
 const validSanityMarketplace: SanityMarketplace = {
@@ -44,6 +67,11 @@ describe('mapSanityMarketplaceMenusToMenus', () => {
             position: 0,
             start: '2023-01-01T00:00:00Z',
             end: '2023-12-31T00:00:00Z',
+            overrides: {
+              title: 'Override title',
+              image: 'http://test.com',
+              description: 'Override description',
+            },
           },
         ],
         position: 0,

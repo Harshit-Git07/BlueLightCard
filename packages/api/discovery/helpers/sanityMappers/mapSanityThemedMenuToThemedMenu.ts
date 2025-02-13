@@ -45,6 +45,11 @@ export function mapSanityThemedMenuToThemedMenu(themedMenu: SanityThemedMenu): T
                     id: offer.reference?.company?._id ?? '',
                   },
                   position: i,
+                  overrides: {
+                    title: offer?.overrides?.title,
+                    image: offer?.overrides?.image?.default?.asset?.url,
+                    description: offer?.overrides?.description,
+                  },
                 };
               }) ?? [],
         };

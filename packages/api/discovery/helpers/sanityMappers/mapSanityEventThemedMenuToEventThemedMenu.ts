@@ -40,6 +40,11 @@ export function mapSanityEventThemedMenuToEventThemedMenu(themedMenu: SanityThem
                   id: event.event.venue?._id ?? '',
                 },
                 position: i,
+                overrides: {
+                  title: event?.overrides?.title,
+                  image: event?.overrides?.image?.default?.asset?.url,
+                  description: event?.overrides?.description,
+                },
               };
             }) ?? [],
         };

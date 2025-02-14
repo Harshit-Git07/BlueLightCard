@@ -19,6 +19,8 @@ import { ValidationError } from '@blc-mono/members/application/errors/Validation
 import { applicationService } from '@blc-mono/members/application/services/applicationService';
 import { v4 as uuidv4 } from 'uuid';
 
+let emailServiceSingleton: EmailService;
+
 const secrets: secretsObject = {
   domain: getEnvOrDefault(MemberStackEnvironmentKeys.SERVICE_LAYER_AUTH0_DOMAIN, ''),
   clientId: getEnvOrDefault(MemberStackEnvironmentKeys.SERVICE_LAYER_AUTH0_API_CLIENT_ID, ''),
@@ -29,9 +31,11 @@ const secrets: secretsObject = {
 };
 
 export class EmailService {
-  private readonly sourceEmail: string;
-  private readonly bucketName: string = emailBucket;
-  private readonly brazeApiKey: string = getEnvOrDefault(
+  private readonly sourceEmail = getEnvOrDefault(
+    MemberStackEnvironmentKeys.MEMBERS_EMAIL_FROM,
+    emailFrom,
+  );
+  private readonly brazeApiKey = getEnvOrDefault(
     MemberStackEnvironmentKeys.EMAIL_SERVICE_BRAZE_API_KEY,
     '',
   );
@@ -40,8 +44,36 @@ export class EmailService {
     '',
   );
 
-  constructor(private readonly sesClient = new SES({ region: process.env.REGION ?? 'eu-west-2' })) {
-    this.sourceEmail = getEnvOrDefault(MemberStackEnvironmentKeys.MEMBERS_EMAIL_FROM, emailFrom);
+  constructor(
+    private readonly sesClient = new SES({ region: process.env.REGION ?? 'eu-west-2' }),
+  ) {}
+
+  public async sendEmailChangeRequest(newEmail: string) {
+    try {
+      // TODO: This needs to use the actual email, the original ticket is marked as done but isn't complete https://bluelightcard.atlassian.net/browse/MM-361
+      const subject = 'Change Email Request';
+      await this.sesClient.sendEmail({
+        Source: this.sourceEmail,
+        Destination: {
+          ToAddresses: [newEmail],
+        },
+        Message: {
+          Body: {
+            Html: {
+              Charset: 'UTF-8',
+              Data: emailChangeRequestBody({ subject: subject }),
+            },
+          },
+          Subject: {
+            Charset: 'UTF-8',
+            Data: subject,
+          },
+        },
+      });
+    } catch (error) {
+      logger.error({ message: 'Error sending changing email', error });
+      throw error;
+    }
   }
 
   public async sendTrustedDomainEmail(
@@ -129,33 +161,6 @@ export class EmailService {
     };
   }
 
-  public async sendEmailChangeRequest(newEmail: string): Promise<void> {
-    try {
-      const subject = 'Change Email Request';
-      await this.sesClient.sendEmail({
-        Source: this.sourceEmail,
-        Destination: {
-          ToAddresses: [newEmail],
-        },
-        Message: {
-          Body: {
-            Html: {
-              Charset: 'UTF-8',
-              Data: emailChangeRequestBody({ subject: subject }),
-            },
-          },
-          Subject: {
-            Charset: 'UTF-8',
-            Data: subject,
-          },
-        },
-      });
-    } catch (error) {
-      logger.error({ message: 'Failed to send email', error });
-      throw error;
-    }
-  }
-
   private async verifyEmailSteps(payload: EmailPayload): Promise<auth0LinkReturn> {
     const token = await getToken(secrets);
     const email = payload.email;
@@ -172,7 +177,7 @@ export class EmailService {
 
   private async sendViaSes(emailType: EmailTemplate, payload: EmailPayload): Promise<void> {
     const { email } = payload;
-    const template = await getEmailTemplate(this.bucketName, emailType, payload);
+    const template = await getEmailTemplate(emailBucket(), emailType, payload);
     if (!template) {
       logger.error({ message: 'no template found' });
       return;
@@ -222,4 +227,12 @@ export class EmailService {
       throw new Error(`Failed to send verify email: ${error}`);
     }
   }
+}
+
+export function emailService(): EmailService {
+  if (!emailServiceSingleton) {
+    emailServiceSingleton = new EmailService();
+  }
+
+  return emailServiceSingleton;
 }

@@ -1,3 +1,5 @@
 import { Config } from 'sst/node/config';
 
-export const emailBucket = Config?.['email-templates-bucket'] ?? '';
+export function emailBucket(): string {
+  return Config?.['email-templates-bucket'] ?? '';
+}

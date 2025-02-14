@@ -90,9 +90,9 @@ describe('Member Document Search', () => {
 
     it('should build search request with only signupDateStart when signupDateEnd undefined', () => {
       const filterParams: MemberDocumentsSearchModel = {
-        signupDateStart: 'signupDateStart',
         pageIndex: 1,
         pageSize: 50,
+        signupDateStart: 'signupDateStart',
       };
 
       const result = buildOpenSearchRequest(filterParams);
@@ -120,9 +120,9 @@ describe('Member Document Search', () => {
 
     it('should build search request with only signupDateEnd when signupDateStart undefined', () => {
       const filterParams: MemberDocumentsSearchModel = {
-        signupDateEnd: 'signupDateEnd',
         pageIndex: 1,
         pageSize: 50,
+        signupDateEnd: 'signupDateEnd',
       };
 
       const result = buildOpenSearchRequest(filterParams);

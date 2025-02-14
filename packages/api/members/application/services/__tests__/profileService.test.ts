@@ -13,7 +13,6 @@ import { NoteModel } from '@blc-mono/shared/models/members/noteModel';
 import { NoteSource } from '@blc-mono/shared/models/members/enums/NoteSource';
 import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 import { TokenSet } from 'auth0';
-import { EmailService } from '@blc-mono/members/application/services/emailService';
 
 jest.mock('../../repositories/profileRepository');
 jest.mock('../organisationService');
@@ -89,19 +88,16 @@ describe('ProfileService', () => {
   let profileRepositoryMock: jest.Mocked<ProfileRepository>;
   let organisationServiceMock: jest.Mocked<OrganisationService>;
   let auth0ClientMock: jest.Mocked<Auth0ClientService>;
-  let emailClientMock: jest.Mocked<EmailService>;
   let profileService: ProfileService;
 
   beforeEach(() => {
     profileRepositoryMock = new ProfileRepository() as jest.Mocked<ProfileRepository>;
     organisationServiceMock = new OrganisationService() as jest.Mocked<OrganisationService>;
     auth0ClientMock = new Auth0ClientService() as jest.Mocked<Auth0ClientService>;
-    emailClientMock = new EmailService() as jest.Mocked<EmailService>;
     profileService = new ProfileService(
       profileRepositoryMock,
       organisationServiceMock,
       auth0ClientMock,
-      emailClientMock,
     );
   });
 
@@ -181,41 +177,6 @@ describe('ProfileService', () => {
       await expect(profileService.changeEmail(memberId, emailChange)).rejects.toThrow(
         'Change failed',
       );
-    });
-  });
-
-  describe('sendEmailChangeRequest', () => {
-    it('should throw an error if user is not found', async () => {
-      profileRepositoryMock.getProfile.mockRejectedValue(new Error('repository Error'));
-
-      await expect(
-        profileService.sendEmailChangeRequest('123', 'current@example.com', 'new@example.com'),
-      ).rejects.toThrow('repository Error');
-    });
-
-    it('should throw an error if current email does not match', async () => {
-      profileRepositoryMock.getProfile.mockResolvedValue(profile);
-
-      await expect(
-        profileService.sendEmailChangeRequest('123', 'random@email.com', 'new@example.com'),
-      ).rejects.toThrow(
-        'Error sending change email: email in payload does not match current email does not match',
-      );
-    });
-
-    it('should log an error and throw if sendEmailChangeRequest fails', async () => {
-      profileRepositoryMock.getProfile.mockResolvedValue(profile);
-      emailClientMock.sendEmailChangeRequest.mockRejectedValue(new Error('SES error'));
-
-      await expect(
-        profileService.sendEmailChangeRequest('123', profile.email, 'new@example.com'),
-      ).rejects.toThrow('SES error');
-    });
-
-    it('should send an email change request successfully', async () => {
-      profileRepositoryMock.getProfile.mockResolvedValue(profile);
-      await profileService.sendEmailChangeRequest('123', profile.email, 'new@example.com');
-      expect(emailClientMock.sendEmailChangeRequest).toHaveBeenCalledWith('new@example.com');
     });
   });
 

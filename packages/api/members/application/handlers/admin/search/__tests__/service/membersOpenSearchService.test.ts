@@ -60,6 +60,7 @@ describe('MembersOpenSearchService', () => {
     it('should search index', async () => {
       const results = await openSearchService.searchProfiles({
         pageIndex: 1,
+        pageSize: 50,
         firstName: 'John',
       });
 

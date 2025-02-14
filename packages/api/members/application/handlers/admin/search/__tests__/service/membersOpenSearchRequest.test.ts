@@ -13,6 +13,7 @@ describe('Member Document Search', () => {
     it('should build search request with all filter params', () => {
       const filterParams: MemberDocumentsSearchModel = {
         pageIndex: 1,
+        pageSize: 50,
         memberId: 'memberId',
         organisationId: 'organisationId',
         employerId: 'employerId',
@@ -68,6 +69,7 @@ describe('Member Document Search', () => {
     it('should not include must queries for empty filter params', () => {
       const filterParams: MemberDocumentsSearchModel = {
         pageIndex: 1,
+        pageSize: 50,
         firstName: 'firstName',
       };
 
@@ -90,6 +92,7 @@ describe('Member Document Search', () => {
       const filterParams: MemberDocumentsSearchModel = {
         signupDateStart: 'signupDateStart',
         pageIndex: 1,
+        pageSize: 50,
       };
 
       const result = buildOpenSearchRequest(filterParams);
@@ -119,6 +122,7 @@ describe('Member Document Search', () => {
       const filterParams: MemberDocumentsSearchModel = {
         signupDateEnd: 'signupDateEnd',
         pageIndex: 1,
+        pageSize: 50,
       };
 
       const result = buildOpenSearchRequest(filterParams);
@@ -147,6 +151,7 @@ describe('Member Document Search', () => {
     it('should determine page size from "pageIndex"', () => {
       const filterParams: MemberDocumentsSearchModel = {
         pageIndex: 2,
+        pageSize: 50,
       };
 
       const result = buildOpenSearchRequest(filterParams);

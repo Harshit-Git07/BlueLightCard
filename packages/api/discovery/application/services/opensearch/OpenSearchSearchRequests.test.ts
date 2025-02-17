@@ -1,7 +1,10 @@
-import { QueryDslQueryContainer, SearchRequest } from '@opensearch-project/opensearch/api/types';
+import { QueryDslQueryContainer, SearchRequest, SearchSort } from '@opensearch-project/opensearch/api/types';
 
 import * as getEnvModule from '@blc-mono/core/utils/getEnv';
-import { OpenSearchSearchRequests } from '@blc-mono/discovery/application/services/opensearch/OpenSearchSearchRequests';
+import {
+  MAX_RESULTS,
+  OpenSearchSearchRequests,
+} from '@blc-mono/discovery/application/services/opensearch/OpenSearchSearchRequests';
 
 import { DistanceUnit } from '../../handlers/locations/locations.enum';
 
@@ -27,6 +30,7 @@ describe('OpenSearchSearchRequests', () => {
 
   const expectedAgeRestrictedQuery: QueryDslQueryContainer = {
     bool: {
+      minimum_should_match: 1,
       should: [
         {
           match: {
@@ -197,8 +201,10 @@ describe('OpenSearchSearchRequests', () => {
   };
 
   const expectedOfferNameQuery: QueryDslQueryContainer = {
-    match: {
-      offer_name: searchTerm,
+    term: {
+      offer_name: {
+        value: searchTerm,
+      },
     },
   };
 
@@ -213,13 +219,15 @@ describe('OpenSearchSearchRequests', () => {
 
   const target = new OpenSearchSearchRequests(indexName, dob);
 
-  const buildSearchRequest = (expectedQueries: QueryDslQueryContainer[]): SearchRequest => ({
+  const buildSearchRequest = (expectedQueries: QueryDslQueryContainer[], sortQueries?: SearchSort): SearchRequest => ({
     body: {
       query: {
         bool: {
           must: expectedQueries,
         },
       },
+      sort: sortQueries,
+      size: MAX_RESULTS,
     },
     index: indexName,
   });
@@ -297,15 +305,22 @@ describe('OpenSearchSearchRequests', () => {
   describe('Category Search', () => {
     it('should return a Category Search Request', () => {
       const categoryId = '123';
-      const expectedSearchRequest = buildSearchRequest([
-        expectedAgeRestrictedQuery,
-        expectedOfferIsLive,
-        {
-          match: {
-            category_id: categoryId,
+      const expectedSearchRequest = buildSearchRequest(
+        [
+          expectedAgeRestrictedQuery,
+          expectedOfferIsLive,
+          {
+            match: {
+              category_id: categoryId,
+            },
           },
-        },
-      ]);
+        ],
+        [
+          {
+            offer_id: { order: 'desc' },
+          },
+        ],
+      );
 
       const result = target.buildCategorySearch(categoryId);
 

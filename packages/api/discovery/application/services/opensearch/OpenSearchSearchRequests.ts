@@ -19,7 +19,7 @@ import {
 
 import { DistanceUnit } from '../../handlers/locations/locations.enum';
 
-const MAX_RESULTS = 10000;
+export const MAX_RESULTS = 10000;
 
 type LocationSearchRequestInput = {
   limit: number;
@@ -88,9 +88,11 @@ export class OpenSearchSearchRequests {
     if (this.offerType) {
       mustQueries.unshift(offerTypeQuery(this.offerType));
     }
+    const baseSearch = this.buildBaseSearch();
     return {
-      ...this.buildBaseSearch(),
+      ...baseSearch,
       body: {
+        ...baseSearch.body,
         query: {
           bool: {
             must: mustQueries,
@@ -173,9 +175,11 @@ export class OpenSearchSearchRequests {
     if (this.offerType) {
       mustQueries.unshift(offerTypeQuery(this.offerType));
     }
+    const baseSearch = this.buildBaseSearch();
     return {
-      ...this.buildBaseSearch(),
+      ...baseSearch,
       body: {
+        ...baseSearch.body,
         query: {
           bool: {
             must: mustQueries,
@@ -195,9 +199,11 @@ export class OpenSearchSearchRequests {
     if (this.offerType) {
       mustQueries.unshift(offerTypeQuery(this.offerType));
     }
+    const baseSearch = this.buildBaseSearch();
     return {
-      ...this.buildBaseSearch(),
+      ...baseSearch,
       body: {
+        ...baseSearch.body,
         query: {
           bool: {
             must: mustQueries,
@@ -217,9 +223,12 @@ export class OpenSearchSearchRequests {
     if (this.offerType) {
       mustQueries.unshift(offerTypeQuery(this.offerType));
     }
+    const baseSearch = this.buildBaseSearch();
+
     return {
-      ...this.buildBaseSearch(),
+      ...baseSearch,
       body: {
+        ...baseSearch.body,
         query: {
           bool: {
             must: mustQueries,
@@ -239,9 +248,12 @@ export class OpenSearchSearchRequests {
     if (this.offerType) {
       mustQueries.unshift(offerTypeQuery(this.offerType));
     }
+    const baseSearch = this.buildBaseSearch();
+
     return {
-      ...this.buildBaseSearch(),
+      ...baseSearch,
       body: {
+        ...baseSearch.body,
         query: {
           bool: {
             must: mustQueries,
@@ -257,28 +269,43 @@ export class OpenSearchSearchRequests {
       eventOfferIsLiveQuery(),
       categoryIdQuery(categoryId),
     ];
+
+    const baseSearch = this.buildBaseSearch();
+
     return {
-      ...this.buildBaseSearch(),
+      ...baseSearch,
       body: {
+        ...baseSearch.body,
         query: {
           bool: {
             must: mustQueries,
           },
         },
+        sort: [{ offer_id: 'desc' }],
       },
     };
   }
 
   private buildCategoryIdSearch(categoryId: string): SearchRequest {
     const mustQueries = [ageRestrictionsQuery(this.ageRestrictions), offerIsLiveQuery(), categoryIdQuery(categoryId)];
+
+    const baseSearch = this.buildBaseSearch();
     return {
-      ...this.buildBaseSearch(),
+      ...baseSearch,
       body: {
+        ...baseSearch.body,
         query: {
           bool: {
             must: mustQueries,
           },
         },
+        sort: [
+          {
+            offer_id: {
+              order: 'desc',
+            },
+          },
+        ],
       },
     };
   }

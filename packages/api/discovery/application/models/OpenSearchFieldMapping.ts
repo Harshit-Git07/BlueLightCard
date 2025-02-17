@@ -5,7 +5,7 @@ import { OpenSearchBody } from '@blc-mono/discovery/application/models/OpenSearc
 type OpenSearchFieldMapping = Record<keyof OpenSearchBody, MappingProperty>;
 
 export const openSearchFieldMapping: OpenSearchFieldMapping = {
-  offer_id: { type: 'text' },
+  offer_id: { type: 'keyword' },
   legacy_offer_id: { type: 'long' },
   offer_name: {
     type: 'text',
@@ -50,7 +50,7 @@ export const openSearchFieldMapping: OpenSearchFieldMapping = {
   included_trusts: { type: 'text' },
   excluded_trusts: { type: 'text' },
   category_name: { type: 'text' },
-  category_id: { type: 'text' },
+  category_id: { type: 'keyword' },
   date_offer_last_updated: { type: 'date' },
   venue_id: { type: 'text' },
   venue_name: { type: 'text' },

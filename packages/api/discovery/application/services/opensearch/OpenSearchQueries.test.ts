@@ -39,6 +39,7 @@ describe('OpenSearchQueries', () => {
     const ageRestrictions: AgeRestriction[] = ['none', '16+', '18+'];
     const expectedAgeGatedQuery = {
       bool: {
+        minimum_should_match: 1,
         should: [
           {
             match: {
@@ -143,8 +144,8 @@ describe('OpenSearchQueries', () => {
 
   it('should build an offer name query', () => {
     const expectedQuery = {
-      match: {
-        offer_name: searchTerm,
+      term: {
+        offer_name: { value: searchTerm },
       },
     };
     const query = offerNameQuery(searchTerm);

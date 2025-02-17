@@ -28,6 +28,7 @@ export const ageRestrictionsQuery = (ageRestrictions: AgeRestriction[]): QueryDs
   });
   return {
     bool: {
+      minimum_should_match: 1,
       should: shouldClauses,
     },
   };
@@ -96,8 +97,10 @@ export const offerTagQuery = (searchTerm: string): QueryDslQueryContainer => {
 
 export const offerNameQuery = (searchTerm: string): QueryDslQueryContainer => {
   return {
-    match: {
-      offer_name: searchTerm,
+    term: {
+      offer_name: {
+        value: searchTerm,
+      },
     },
   };
 };

@@ -1,5 +1,5 @@
 import { EmailChangeModel } from '@blc-mono/shared/models/members/emailChangeModel';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 import {
   CreateNoteModel,
   NoteModel,

@@ -22,7 +22,7 @@ import {
   EmailTemplate,
 } from '@blc-mono/members/application/types/emailTypes';
 import { emailChangeRequestBody } from '@blc-mono/members/application/services/email/templates/emailTemplates/emailChangeRequest';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 import { getEmailTemplate } from '@blc-mono/members/application/services/email/templates/getEmailTemplates';
 
 let emailServiceSingleton: EmailService;

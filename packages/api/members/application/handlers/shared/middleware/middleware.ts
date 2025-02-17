@@ -18,13 +18,12 @@ import { UnauthorizedError } from '@blc-mono/members/application/errors/Unauthor
 import { NotFoundError } from '@blc-mono/members/application/errors/NotFoundError';
 import { Response } from '@blc-mono/members/application/handlers/shared/middleware/responses/response';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
+
+const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 
 const SERVICE = process.env.SERVICE as string;
-const USE_DATADOG_AGENT = process.env.USE_DATADOG_AGENT ?? 'false';
 const auditLogger = new Logger({ serviceName: SERVICE });
-
-// Middleware will add logging context to this logger so consumers do not need to
-export const logger = new Logger({ serviceName: SERVICE });
 
 type Handler = (event: APIGatewayProxyEvent, context: Context) => Promise<APIGatewayProxyResult>;
 
@@ -198,12 +197,14 @@ export function dynamoDBMiddleware(handler: DynamoDBHandler): DynamoDBHandler {
   };
 }
 
-type EventBusHandler = (
-  event: EventBridgeEvent<string, StreamRecord>,
+type EventBusHandler<DetailType = StreamRecord> = (
+  event: EventBridgeEvent<string, DetailType>,
   context: Context,
 ) => Promise<void>;
 
-export function eventBusMiddleware(handler: EventBusHandler): EventBusHandler {
+export function eventBusMiddleware<DetailType = StreamRecord>(
+  handler: EventBusHandler<DetailType>,
+): EventBusHandler<DetailType> {
   return async (event, context): Promise<void> => {
     logger.addContext(context);
 

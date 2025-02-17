@@ -437,6 +437,7 @@ jobs:
           SERVICE_LAYER_EVENTS_ENABLED_EMAIL: true
           SERVICE_LAYER_EVENTS_ENABLED_LEGACY: false
           SERVICE_LAYER_EVENTS_ENABLED_SYSTEM: true
+          SERVICE_LAYER_EVENTS_ENABLED_PAYMENT: true
         run: npx sst deploy members members-api members-admin-api --stage $PR_PREFIX --region ${{matrix.region}}
       - name: Extract Api URL and set output
         id: sst-members-outputs

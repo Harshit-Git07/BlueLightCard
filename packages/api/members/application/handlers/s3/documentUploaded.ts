@@ -1,9 +1,7 @@
 import { S3Event } from 'aws-lambda';
-import {
-  logger,
-  s3Middleware,
-} from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { s3Middleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 
 const applicationService = new ApplicationService();
 

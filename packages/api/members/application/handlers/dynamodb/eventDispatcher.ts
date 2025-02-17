@@ -1,10 +1,7 @@
 import { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
 import { AttributeValue as StreamAttributeValue } from 'aws-lambda/trigger/dynamodb-stream';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
-import {
-  dynamoDBMiddleware,
-  logger,
-} from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { dynamoDBMiddleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { brazeEventsService } from '@blc-mono/members/application/services/events/BrazeEventsService';
 import { dataWarehouseEventsService } from '@blc-mono/members/application/services/events/DataWarehouseEventsService';
@@ -16,6 +13,7 @@ import {
   StreamRecordTypes,
 } from '@blc-mono/members/application/types/steamRecordTypes';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/environment';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 
 export const unwrappedHandler = async (event: DynamoDBStreamEvent): Promise<void> => {
   if (getEnv(MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_GLOBAL) !== 'true') {

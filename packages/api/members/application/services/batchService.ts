@@ -1,5 +1,5 @@
 import { BatchRepository } from '@blc-mono/members/application/repositories/batchRepository';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 import {
   BatchModel,
   CreateBatchModel,

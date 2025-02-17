@@ -1,14 +1,12 @@
 import { EventBridgeEvent, StreamRecord } from 'aws-lambda';
-import {
-  eventBusMiddleware,
-  logger,
-} from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { eventBusMiddleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { MemberEvent } from '@blc-mono/shared/models/members/enums/MemberEvent';
 import { getMemberApiUrlFromParameterStore } from '@blc-mono/members/application/providers/ParameterStore';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/environment';
 import { profileService } from '@blc-mono/members/application/services/profileService';
 import { emailService } from '@blc-mono/members/application/services/email/emailService';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 
 export const unwrappedHandler = async (
   event: EventBridgeEvent<string, StreamRecord>,

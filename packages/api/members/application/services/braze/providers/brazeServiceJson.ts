@@ -1,6 +1,6 @@
 import { GetSecretValueCommand, SecretsManagerClient } from '@aws-sdk/client-secrets-manager';
 import { getBrandFromEnv } from '@blc-mono/core/utils/checkBrand';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 
 export interface BrazeServiceJson {
   BRAZE_SERVICE_API_KEY: string;

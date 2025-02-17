@@ -10,7 +10,7 @@ import {
   CardRepository,
   UpsertCardOptions,
 } from '@blc-mono/members/application/repositories/cardRepository';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 
 let cardServiceSingleton: CardService;
 

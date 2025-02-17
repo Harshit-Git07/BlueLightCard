@@ -6,7 +6,7 @@ import {
 } from '@blc-mono/shared/models/members/brazeUpdateModel';
 import { brazeServiceJson } from '@blc-mono/members/application/services/braze/providers/brazeServiceJson';
 import { NotFoundError } from '@blc-mono/members/application/errors/NotFoundError';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 
 export interface CheckListResponse {
   users: CheckListResponseUser[];

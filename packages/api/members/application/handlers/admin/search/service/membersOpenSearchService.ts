@@ -1,7 +1,7 @@
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { OpenSearchService } from '@blc-mono/core/aws/opensearch/OpenSearchService';
 import { OpenSearchBulkUpdateCommand } from '@blc-mono/members/application/handlers/admin/search/service/opensearchMemberProfileDocument';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 import {
   MemberDocumentsSearchModel,
   MemberDocumentsSearchResponseModel,

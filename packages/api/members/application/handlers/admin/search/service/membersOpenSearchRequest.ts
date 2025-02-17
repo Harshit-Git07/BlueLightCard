@@ -8,7 +8,7 @@ import {
   MemberDocumentModel,
   MemberDocumentsSearchModel,
 } from '@blc-mono/shared/models/members/memberDocument';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 
 export function buildOpenSearchRequest(filterParams: MemberDocumentsSearchModel): SearchRequest {
   const pageIndex = filterParams.pageIndex;

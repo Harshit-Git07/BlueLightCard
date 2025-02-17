@@ -126,6 +126,10 @@ export function getDefaultFunctionProps(region: string): FunctionProps {
         MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_SYSTEM,
         'false',
       ),
+      SERVICE_LAYER_EVENTS_ENABLED_PAYMENT: getEnvOrDefault(
+        MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_PAYMENT,
+        'false',
+      ),
     },
     layers,
   };

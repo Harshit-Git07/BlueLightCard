@@ -16,10 +16,9 @@ const unwrappedHandler = async (
   event: APIGatewayProxyEvent,
 ): Promise<MemberDocumentsSearchResponseModel> => {
   const parsedFilterParams = MemberDocumentsSearchModel.safeParse(event.queryStringParameters);
-
-  if (parsedFilterParams.error?.message)
+  if (parsedFilterParams.error?.message) {
     logger.error({ message: parsedFilterParams.error?.message });
-
+  }
   if (!parsedFilterParams.success) throw new ValidationError('Invalid query parameters');
 
   return await openSearchService.searchProfiles(parsedFilterParams.data);

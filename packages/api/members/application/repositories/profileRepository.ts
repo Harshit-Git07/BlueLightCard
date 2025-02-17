@@ -31,6 +31,7 @@ import { ApplicationReason } from '@blc-mono/shared/models/members/enums/Applica
 import { DeleteCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/DeleteCommand';
 import { defaultDynamoDbClient } from '@blc-mono/members/application/providers/DynamoDb';
 import { memberProfilesTableName } from '@blc-mono/members/application/providers/Tables';
+import { TransactWriteCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/TransactWriteCommand';
 
 export class ProfileRepository extends Repository {
   constructor(dynamoDB = defaultDynamoDbClient) {
@@ -41,13 +42,15 @@ export class ProfileRepository extends Repository {
     const memberId = uuidv4();
     const applicationId = uuidv4();
 
-    const params = {
+    const primaryKey = memberKey(memberId);
+
+    const params: TransactWriteCommandInput = {
       TransactItems: [
         {
           Put: {
             TableName: memberProfilesTableName(),
             Item: {
-              pk: memberKey(memberId),
+              pk: primaryKey,
               sk: PROFILE,
               memberId,
               ...profile,
@@ -58,7 +61,7 @@ export class ProfileRepository extends Repository {
           Put: {
             TableName: memberProfilesTableName(),
             Item: {
-              pk: memberKey(memberId),
+              pk: primaryKey,
               sk: `${APPLICATION}#${applicationId}`,
               memberId,
               applicationId,
@@ -70,8 +73,8 @@ export class ProfileRepository extends Repository {
         },
       ],
     };
-
     await this.dynamoDB.send(new TransactWriteCommand(params));
+
     return memberId;
   }
 

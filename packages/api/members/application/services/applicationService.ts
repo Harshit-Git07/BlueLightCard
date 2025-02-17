@@ -22,7 +22,7 @@ import {
 } from '@blc-mono/shared/models/members/applicationModel';
 import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
 import { documentUploadBucket } from '@blc-mono/members/application/providers/S3';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 import { EmailService } from '@blc-mono/members/application/services/email/emailService';
 import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
 import { OrganisationRepository } from '@blc-mono/members/application/repositories/organisationRepository';

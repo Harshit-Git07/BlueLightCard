@@ -10,7 +10,7 @@ import {
 } from '@blc-mono/shared/models/members/employerModel';
 import { GetIdRequirementDocsModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 import { OrganisationRepository } from '@blc-mono/members/application/repositories/organisationRepository';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 import {
   getOrganisationIdMappings,
   mapOrganisationsAndEmployers,

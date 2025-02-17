@@ -1,9 +1,6 @@
 import { EventBridgeEvent, StreamRecord } from 'aws-lambda';
 import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
-import {
-  eventBusMiddleware,
-  logger,
-} from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { eventBusMiddleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
@@ -15,6 +12,7 @@ import { MemberEvent } from '@blc-mono/shared/models/members/enums/MemberEvent';
 import { unmarshallStreamImages } from '@blc-mono/members/application/utils/dynamoDb/unmarshallStreamImages';
 import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/environment';
 import { hasAttributeChanged } from '@blc-mono/members/application/services/events/utils/attibuteManagement';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 
 export const unwrappedHandler = async (
   event: EventBridgeEvent<string, StreamRecord>,

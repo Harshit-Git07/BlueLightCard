@@ -9,7 +9,7 @@ import {
   PromoCodeModel,
   PromoCodeResponseModel,
 } from '@blc-mono/shared/models/members/promoCodeModel';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 
 let promoCodeServiceSingleton: PromoCodesService;
 

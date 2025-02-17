@@ -10,7 +10,7 @@ import {
   IdRequirementsModel,
 } from '@blc-mono/shared/models/members/idRequirementsModel';
 import { parseCsvFile } from '@blc-mono/members/application/services/organisation/id-mapping/csv/csvParser';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 
 export interface OrganisationIdMapping {
   brand: string;

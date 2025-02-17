@@ -5,7 +5,7 @@ import { ValidationError } from '@blc-mono/members/application/errors/Validation
 import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { unmarshallStreamImages } from '@blc-mono/members/application/utils/dynamoDb/unmarshallStreamImages';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 import { isAfter } from 'date-fns';
 
 export const getDocumentFromProfileRecord = (

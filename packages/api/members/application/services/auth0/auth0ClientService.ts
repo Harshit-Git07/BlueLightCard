@@ -1,5 +1,5 @@
 import { GetUsersByEmailRequest, PasswordGrantRequest, TokenSet } from 'auth0';
-import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { logger } from '@blc-mono/members/application/utils/logging/Logger';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import {
   managementApiClient,

@@ -19,11 +19,11 @@ export class PaymentEventsRepository implements IPaymentEventsRepository {
     const command = new PutEventsCommand({
       Entries: [
         {
-          Time: new Date(),
-          EventBusName: getEnv(PaymentsStackEnvironmentKeys.PAYMENTS_EVENT_BUS_NAME),
           Source: PAYMENTS_EVENT_SOURCE,
           DetailType: PaymentsEventDetailType.PAYMENT_INITIATED,
           Detail: JSON.stringify(detail satisfies PaymentObjectEventDetail),
+          EventBusName: getEnv(PaymentsStackEnvironmentKeys.PAYMENTS_EVENT_BUS_NAME),
+          Time: new Date(),
         },
       ],
     });
@@ -35,11 +35,11 @@ export class PaymentEventsRepository implements IPaymentEventsRepository {
     const command = new PutEventsCommand({
       Entries: [
         {
-          Time: new Date(),
-          EventBusName: getEnv(PaymentsStackEnvironmentKeys.PAYMENTS_EVENT_BUS_NAME),
           Source: PAYMENTS_EVENT_SOURCE,
           DetailType: PaymentsEventDetailType.PAYMENT_SUCCEEDED,
           Detail: JSON.stringify(detail satisfies PaymentObjectEventDetail),
+          EventBusName: getEnv(PaymentsStackEnvironmentKeys.PAYMENTS_EVENT_BUS_NAME),
+          Time: new Date(),
         },
       ],
     });
@@ -51,11 +51,11 @@ export class PaymentEventsRepository implements IPaymentEventsRepository {
     const command = new PutEventsCommand({
       Entries: [
         {
-          Time: new Date(),
-          EventBusName: getEnv(PaymentsStackEnvironmentKeys.PAYMENTS_EVENT_BUS_NAME),
           Source: PAYMENTS_EVENT_SOURCE,
           DetailType: PaymentsEventDetailType.PAYMENT_FAILED,
           Detail: JSON.stringify(detail satisfies PaymentObjectEventDetail),
+          EventBusName: getEnv(PaymentsStackEnvironmentKeys.PAYMENTS_EVENT_BUS_NAME),
+          Time: new Date(),
         },
       ],
     });

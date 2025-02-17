@@ -1,4 +1,3 @@
-import SkipToContent from '@/ui/SkipToContent';
 import Announcement from '@/ui/Announcement';
 import { draftMode } from 'next/headers';
 import { VisualEditing } from 'next-sanity';
@@ -6,6 +5,7 @@ import '@/styles/app.css';
 import type { Metadata } from 'next';
 import { getBrand } from './actions';
 import { ThemeProvider } from 'next-themes';
+import Header from '@/ui/header';
 
 export const metadata: Metadata = {
   icons: {
@@ -19,10 +19,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen bg-background font-sans antialiased bg-canvas text-ink font-typography-body font-typography-body-weight">
         <ThemeProvider attribute="class" themes={['blcUk', 'blcAu', 'dds']}>
-          <SkipToContent />
-          <div className="bg-NavBar-bg-colour min-h-[50px] flex items-center justify-center">
-            <p className="text-NavBar-item-text-colour">Placeholder Header</p>
-          </div>
+          <Header />
           <Announcement brand={selectedBrand} />
           <div className="bg-colour-primary min-h-[100px] flex items-center justify-center">
             <p className="text-colour-onPrimary">

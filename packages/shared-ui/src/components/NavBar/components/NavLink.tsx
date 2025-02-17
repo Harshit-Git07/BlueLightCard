@@ -23,7 +23,7 @@ const tokens = {
   text: 'text-NavBar-link-font',
   letterSpacing: 'tracking-NavBar-link-font',
   lineHeight: 'leading-NavBar-link-font',
-  link: 'w-full h-10 px-5 flex min-w-fit items-center gap-1 border-b border-transparent transition mobile-xl:h-full mobile-xl:justify-center mobile-xl:px-0',
+  link: 'w-full h-10 px-5 flex min-w-fit items-center gap-1 border-b border-transparent transition tablet:h-full tablet:justify-center tablet:px-0',
   interaction: {
     active: 'text-NavBar-item-text-active-colour dark:text-NavBar-item-text-active-colour-dark',
     hover:
@@ -78,12 +78,16 @@ const NavLink: FC<Props> = ({ url, label, links, onClick }) => {
             onClick={onButtonClickHandler}
           >
             {label}
-            <FontAwesomeIcon icon={toggleVisibility ? faChevronUp : faChevronDown} />
+            <FontAwesomeIcon
+              icon={toggleVisibility ? faChevronUp : faChevronDown}
+              width={20}
+              height={20}
+            />
           </button>
           <LinkList
             links={links}
             className={toClassNames([
-              'w-full mobile-xl:w-max mobile-xl:absolute',
+              'w-full tablet:w-max tablet:absolute',
               toggleVisibility ? 'flex' : 'hidden',
             ])}
           />

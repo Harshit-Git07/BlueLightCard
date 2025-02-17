@@ -34,7 +34,7 @@ export async function fetchSanity<T = any>(
         }
       : {
           perspective: 'published',
-          useCdn: false,
+          useCdn: true,
           next: {
             revalidate: getRevalidationValue(),
             ...next,
@@ -54,7 +54,7 @@ export async function fetchSanityStatic<T = any>(
 ) {
   return await client.fetch<T>(query, params, {
     perspective: 'published',
-    useCdn: false,
+    useCdn: true,
     next: {
       revalidate: getRevalidationValue(),
       ...next,

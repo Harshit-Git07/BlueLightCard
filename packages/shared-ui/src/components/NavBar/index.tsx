@@ -11,8 +11,8 @@ const NavBar: FC<Props> = ({ links, className }) => {
   return (
     <div
       className={toClassNames([
-        'mobile-xl:flex mobile-xl:flex-1 mobile-xl:flex-row mobile-xl:gap-5 mobile-xl:h-[72px] mobile-xl:justify-between',
         className,
+        'tablet:flex tablet:flex-1 tablet:flex-row tablet:gap-5 tablet:h-[72px] tablet:justify-between',
       ])}
     >
       {links.map((link) => (

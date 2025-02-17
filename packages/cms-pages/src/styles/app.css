@@ -18,8 +18,6 @@
   }
 
   html {
-    accent-color: theme('colors.ink');
-    caret-color: theme('colors.ink');
     scroll-behavior: smooth;
   }
 
@@ -31,8 +29,6 @@
   html[data-theme='blcUk'] {
     --primary: #cbd5e1;
     --primary-foreground: #0f172a;
-    accent-color: theme('colors.ink');
-    caret-color: theme('colors.ink');
     scroll-behavior: smooth;
   }
   html[data-theme='blcAu'] {

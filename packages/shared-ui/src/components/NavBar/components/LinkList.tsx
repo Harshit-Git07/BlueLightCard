@@ -11,10 +11,10 @@ type Props = {
 const tokens = {
   ul: {
     bgColor:
-      'bg-dropDownItem-subitem-bg-colour dark:bg-dropDownItem-subitem-bg-colour-dark mobile-xl:bg-dropDownItem-bg-colour mobile-xl:dark:bg-dropDownItem-bg-colour-dark',
+      'bg-dropDownItem-subitem-bg-colour dark:bg-dropDownItem-subitem-bg-colour-dark tablet:bg-dropDownItem-bg-colour tablet:dark:bg-dropDownItem-bg-colour-dark',
     border:
-      'border-t border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark rounded-t-none rounded-b border-t-colour-primary dark:border-t-colour-primary-dark mobile-xl:border mobile-xl:border-t-2',
-    shadow: 'mobile-xl:shadow-dropdownTop',
+      'border-t border-colour-onSurface-outline dark:border-colour-onSurface-outline-dark rounded-t-none rounded-b border-t-colour-primary dark:border-t-colour-primary-dark tablet:border tablet:border-t-2',
+    shadow: 'tablet:shadow-dropdownTop',
   },
   link: {
     font: 'font-dropDownItem-label-font font-dropDownItem-label-font-weight',
@@ -22,12 +22,12 @@ const tokens = {
     lineHeight: 'leading-dropDownItem-label-font',
     letterSpacing: 'tracking-dropDownItem-label-font',
     border:
-      'mobile-xl:border-b border-b-dropDownItem-bg-colour dark:border-b-dropDownItem-bg-colour-dark',
+      'tablet:border-b border-b-dropDownItem-bg-colour dark:border-b-dropDownItem-bg-colour-dark',
     interaction: {
       focus:
         'focus:outline-none focus:text-dropDownItem-text-active-colour focus:border-b-dropDownItem-border-active-colour focus:border-b dark:focus:text-dropDownItem-text-active-colour-dark dark:focus:border-b-dropDownItem-border-active-colour-dark',
       hover:
-        'hover:bg-dropDownItem-bg-hover-colour hover:text-dropDownItem-text-hover-colour hover:border-b-dropDownItem-divider-hover-colour dark:hover:bg-dropDownItem-bg-hover-colour-dark dark:hover:text-dropDownItem-text-hover-colour-dark dark:hover:border-b-dropDownItem-divider-hover-colour-dark mobile-xl:hover:border-b',
+        'hover:bg-dropDownItem-bg-hover-colour hover:text-dropDownItem-text-hover-colour hover:border-b-dropDownItem-divider-hover-colour dark:hover:bg-dropDownItem-bg-hover-colour-dark dark:hover:text-dropDownItem-text-hover-colour-dark dark:hover:border-b-dropDownItem-divider-hover-colour-dark tablet:hover:border-b',
     },
   },
 } as const;

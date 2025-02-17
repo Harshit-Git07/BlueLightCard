@@ -31,21 +31,21 @@ export const creativeModuleQuery = groq`
 export async function getSite(brand: string) {
   const site = await fetchSanity<Sanity.Site>(
     groq`
-					*[_type == 'site' && brand->.code == $brand][0]{
-							...,
-							ctas[]{
-									...,
-									link{
-											...,
-											internal->{ _type, title, metadata }
-									}
-							},
-							headerMenu->{ ${navigationQuery} },
-							footerMenu->{ ${navigationQuery} },
-							social->{ ${navigationQuery} },
-							'ogimage': ogimage.asset->url
+			*[_type == 'site' && brand->.code == $brand][0]{
+				...,
+				ctas[]{
+					...,
+					link{
+						...,
+						internal->{ _type, title, metadata }
 					}
-			`,
+				},
+				headerMenu->{ ${navigationQuery} },
+				footerMenu->{ ${navigationQuery} },
+				social->{ ${navigationQuery} },
+				'ogimage': ogimage.asset->url
+			}
+	`,
     { params: { brand }, tags: ['site'] },
   );
 

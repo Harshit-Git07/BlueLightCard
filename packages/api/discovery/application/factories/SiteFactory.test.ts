@@ -7,6 +7,9 @@ describe('Site Factory', () => {
       id: '1',
       dealsOfTheWeekMenu: { id: 'deals-of-the-week-id-1' },
       featuredOffersMenu: { id: 'featured-offers-id-1' },
+      waysToSaveMenu: {
+        id: 'ways-to-save-id-1',
+      },
       updatedAt: '2022-09-01T00:00:00',
     });
   });

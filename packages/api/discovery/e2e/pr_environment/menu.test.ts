@@ -250,7 +250,13 @@ describe('Menu', async () => {
     beforeAll(async () => {
       await sendTestEvents({
         source: Events.SITE_CREATED,
-        events: [buildTestSanitySite(dealsOfTheWeekGeneratedMenuUUID, featuredOffersGeneratedMenuUUID)],
+        events: [
+          buildTestSanitySite(
+            dealsOfTheWeekGeneratedMenuUUID,
+            featuredOffersGeneratedMenuUUID,
+            flexibleGeneratedMenuUUID,
+          ),
+        ],
       });
       await sendTestEvents({
         source: Events.OFFER_CREATED,
@@ -400,32 +406,36 @@ describe('Menu', async () => {
             buildExpectedOfferFrom(offers[2]),
           ],
         },
-        flexible: expect.arrayContaining([
-          {
-            id: flexibleGeneratedEventMenuUUID,
-            title: flexibleSanityThemedMenuEvent?.title,
-            menus: [
-              {
-                id: flexibleGeneratedEventSubMenuUUID,
-                title: flexibleSanityThemedMenuEvent?.inclusions?.[0]?.eventCollectionName,
-                imageURL:
-                  flexibleSanityThemedMenuEvent?.inclusions?.[0]?.eventCollectionImage?.default?.asset?.url ?? '',
-              },
-            ],
-          },
-          {
-            id: flexibleGeneratedMenuUUID,
-            title: flexibleSanityThemedMenuOffer?.title,
-            menus: [
-              {
-                id: flexibleGeneratedSubMenuUUID,
-                title: flexibleSanityThemedMenuOffer?.inclusions?.[0]?.collectionName,
-                imageURL:
-                  flexibleSanityThemedMenuOffer?.inclusions?.[0]?.offerCollectionImage?.default?.asset?.url ?? '',
-              },
-            ],
-          },
-        ]),
+        flexible: {
+          events: [
+            {
+              id: flexibleGeneratedEventMenuUUID,
+              title: flexibleSanityThemedMenuEvent?.title,
+              menus: [
+                {
+                  id: flexibleGeneratedEventSubMenuUUID,
+                  title: flexibleSanityThemedMenuEvent?.inclusions?.[0]?.eventCollectionName,
+                  imageURL:
+                    flexibleSanityThemedMenuEvent?.inclusions?.[0]?.eventCollectionImage?.default?.asset?.url ?? '',
+                },
+              ],
+            },
+          ],
+          offers: [
+            {
+              id: flexibleGeneratedMenuUUID,
+              title: flexibleSanityThemedMenuOffer?.title,
+              menus: [
+                {
+                  id: flexibleGeneratedSubMenuUUID,
+                  title: flexibleSanityThemedMenuOffer?.inclusions?.[0]?.collectionName,
+                  imageURL:
+                    flexibleSanityThemedMenuOffer?.inclusions?.[0]?.offerCollectionImage?.default?.asset?.url ?? '',
+                },
+              ],
+            },
+          ],
+        },
         marketplace: [
           {
             id: marketplaceMenus[0]._id,

@@ -12,5 +12,8 @@ export function mapSanitySiteToSite(sanitySite: SanitySite): Site {
     featuredOffersMenu: {
       id: sanitySite?.featuredOffersMenu?._id,
     },
+    waysToSaveMenu: {
+      id: sanitySite?.waysToSaveMenu?._id,
+    },
   };
 }

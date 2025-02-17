@@ -240,8 +240,8 @@ describe('eventQueueListener', () => {
     async (eventSource) => {
       const themedMenuRecord = buildSQSRecord(eventSource);
       const menu = menuFactory.build();
-      const themedMenu: ThemedMenuOffer = { ...menu, menuType: MenuType.FLEXIBLE, themedMenusOffers: [] };
-      mapSanityThemedMenuToThemedMenuMock.mockReturnValue(themedMenu);
+      const themedMenu: ThemedMenuOffer = { ...menu, menuType: MenuType.FLEXIBLE_OFFERS, themedMenusOffers: [] };
+      mapSanityThemedMenuToThemedMenuMock.mockResolvedValue(themedMenu);
       await handler({ Records: [themedMenuRecord] });
       expect(mapSanityThemedMenuToThemedMenuMock).toHaveBeenCalledWith('body');
       expect(handleMenuThemedUpdatedMock).toHaveBeenCalledWith(themedMenu);
@@ -251,8 +251,8 @@ describe('eventQueueListener', () => {
   it('should handle "menu.themed.deleted" event', async () => {
     const themedMenuRecord = buildSQSRecord(Events.MENU_THEMED_OFFER_DELETED);
     const menu = menuFactory.build();
-    const themedMenu: ThemedMenuOffer = { ...menu, menuType: MenuType.FLEXIBLE, themedMenusOffers: [] };
-    mapSanityThemedMenuToThemedMenuMock.mockReturnValue(themedMenu);
+    const themedMenu: ThemedMenuOffer = { ...menu, menuType: MenuType.FLEXIBLE_OFFERS, themedMenusOffers: [] };
+    mapSanityThemedMenuToThemedMenuMock.mockResolvedValue(themedMenu);
     await handler({ Records: [themedMenuRecord] });
     expect(mapSanityThemedMenuToThemedMenuMock).toHaveBeenCalledWith('body');
     expect(handleMenuThemedDeletedMock).toHaveBeenCalledWith(themedMenu);

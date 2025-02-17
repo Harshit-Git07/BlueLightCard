@@ -55,7 +55,7 @@ export type ThemedSubMenuWithOffers = SubMenu & {
 
 type ThemedMenu = {
   id: string;
-  menuType: MenuType.FLEXIBLE;
+  menuType: MenuType.WAYS_TO_SAVE | MenuType.FLEXIBLE_OFFERS | MenuType.FLEXIBLE_EVENTS;
   name: string;
   startTime?: string;
   endTime?: string;

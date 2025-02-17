@@ -1,5 +1,11 @@
 import { OfferResponse } from '@blc-mono/discovery/application/models/OfferResponse';
 
+type FlexiMenuResponse = {
+  id: string;
+  title: string;
+  menus: { id: string; title: string; imageURL: string }[];
+};
+
 export type MenuResponse = {
   dealsOfTheWeek?: {
     id: string;
@@ -17,10 +23,9 @@ export type MenuResponse = {
     offers: OfferResponse[];
   }[];
   flexible?: {
-    id: string;
-    title: string;
-    menus: { id: string; title: string; imageURL: string }[];
-  }[];
+    offers?: FlexiMenuResponse[];
+    events?: FlexiMenuResponse[];
+  };
 };
 
 export enum MenuType {
@@ -28,6 +33,9 @@ export enum MenuType {
   FEATURED = 'featured',
   MARKETPLACE = 'marketplace',
   FLEXIBLE = 'flexible',
+  WAYS_TO_SAVE = 'waysToSave',
+  FLEXIBLE_OFFERS = 'flexibleOffers',
+  FLEXIBLE_EVENTS = 'flexibleEvents',
 }
 
 export const AVAILABLE_MENU_TYPES = [

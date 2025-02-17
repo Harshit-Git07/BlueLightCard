@@ -13,12 +13,12 @@ export function mapSubMenuEntityToSubMenu(subMenuEntity: SubMenuEntity): SubMenu
   };
 }
 
-export function mapSubMenuToSubMenuEntity(menuId: string, subMenu: SubMenu): SubMenuEntity {
+export function mapSubMenuToSubMenuEntity(menuId: string, subMenu: SubMenu, menuType: MenuType): SubMenuEntity {
   return {
     partitionKey: SubMenuKeyBuilders.buildPartitionKey(menuId),
     sortKey: SubMenuKeyBuilders.buildSortKey(subMenu.id),
-    gsi1PartitionKey: SubMenuKeyBuilders.buildGsi1PartitionKey(MenuType.FLEXIBLE),
-    gsi1SortKey: SubMenuKeyBuilders.buildGsi1SortKey(MenuType.FLEXIBLE),
+    gsi1PartitionKey: SubMenuKeyBuilders.buildGsi1PartitionKey(menuType),
+    gsi1SortKey: SubMenuKeyBuilders.buildGsi1SortKey(menuType),
     gsi2PartitionKey: SubMenuKeyBuilders.buildGsi2PartitionKey(subMenu.id),
     gsi2SortKey: SubMenuKeyBuilders.buildGsi2SortKey(subMenu.id),
     id: subMenu.id,

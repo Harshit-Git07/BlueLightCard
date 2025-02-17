@@ -29,7 +29,7 @@ const offerEntity = mapMenuOfferToMenuOfferEntity(offer, menu.id, menu.menuType)
 
 const subMenu = subMenuFactory.build();
 
-const subMenuEntity = mapSubMenuToSubMenuEntity(menu.id, subMenu);
+const subMenuEntity = mapSubMenuToSubMenuEntity(menu.id, subMenu, menu.menuType);
 
 describe('MenuMapper', () => {
   describe('mapMenuEntityToMenu', () => {
@@ -153,15 +153,31 @@ describe('MenuMapper', () => {
         },
       },
       {
-        menuType: MenuType.FLEXIBLE,
-        input: [{ ...menu, menuType: MenuType.FLEXIBLE, subMenus: [subMenu] }],
+        menuType: MenuType.WAYS_TO_SAVE,
+        input: [{ ...menu, menuType: MenuType.WAYS_TO_SAVE, subMenus: [subMenu] }],
         expected: {
           [MenuType.MARKETPLACE]: undefined,
           [MenuType.DEALS_OF_THE_WEEK]: undefined,
           [MenuType.FEATURED]: undefined,
-          [MenuType.FLEXIBLE]: mapMenuWithSubMenusToFlexibleMenuResponse([
-            { ...menu, menuType: MenuType.FLEXIBLE, subMenus: [subMenu] },
-          ]),
+          [MenuType.FLEXIBLE]: {
+            offers: mapMenuWithSubMenusToFlexibleMenuResponse([
+              { ...menu, menuType: MenuType.WAYS_TO_SAVE, subMenus: [subMenu] },
+            ]),
+          },
+        },
+      },
+      {
+        menuType: MenuType.FLEXIBLE_EVENTS,
+        input: [{ ...menu, menuType: MenuType.FLEXIBLE_EVENTS, subMenus: [subMenu] }],
+        expected: {
+          [MenuType.MARKETPLACE]: undefined,
+          [MenuType.DEALS_OF_THE_WEEK]: undefined,
+          [MenuType.FEATURED]: undefined,
+          [MenuType.FLEXIBLE]: {
+            events: mapMenuWithSubMenusToFlexibleMenuResponse([
+              { ...menu, menuType: MenuType.FLEXIBLE_EVENTS, subMenus: [subMenu] },
+            ]),
+          },
         },
       },
     ];

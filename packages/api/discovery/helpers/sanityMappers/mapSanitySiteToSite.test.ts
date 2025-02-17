@@ -24,6 +24,13 @@ describe('mapSanitySiteToSite', () => {
         _type: 'menu.offer',
         _updatedAt: '2021-08-02T14:00:00Z',
       },
+      waysToSaveMenu: {
+        _id: 'waysToSaveMenuId',
+        _createdAt: '2021-08-02T14:00:00Z',
+        _rev: 'rev',
+        _type: 'menu.themed.offer',
+        _updatedAt: '2021-08-02T14:00:00Z',
+      },
     };
 
     const result = mapSanitySiteToSite(sanitySite);
@@ -35,6 +42,9 @@ describe('mapSanitySiteToSite', () => {
       },
       featuredOffersMenu: {
         id: 'featuredOffersMenuId',
+      },
+      waysToSaveMenu: {
+        id: 'waysToSaveMenuId',
       },
     });
   });

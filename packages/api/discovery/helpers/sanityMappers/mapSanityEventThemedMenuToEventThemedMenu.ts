@@ -13,7 +13,7 @@ export function mapSanityEventThemedMenuToEventThemedMenu(themedMenu: SanityThem
     updatedAt: themedMenu._updatedAt,
     endTime: themedMenu.end,
     startTime: themedMenu.start,
-    menuType: MenuType.FLEXIBLE,
+    menuType: MenuType.FLEXIBLE_EVENTS,
     name: themedMenu.title,
     themedMenusEvents:
       themedMenu.inclusions?.map((themedEventCollection, index) => {

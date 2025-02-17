@@ -7,4 +7,7 @@ export type Site = {
   featuredOffersMenu: {
     id?: string;
   };
+  waysToSaveMenu: {
+    id?: string;
+  };
 };

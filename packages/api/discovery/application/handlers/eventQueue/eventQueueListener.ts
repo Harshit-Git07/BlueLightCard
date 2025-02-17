@@ -107,7 +107,7 @@ const unwrappedHandler = async (event: SQSEvent) => {
         }
         case Events.MENU_THEMED_OFFER_CREATED:
         case Events.MENU_THEMED_OFFER_UPDATED: {
-          await handleMenuThemedUpdated(mapSanityThemedMenuToThemedMenu(body.detail as SanityThemedMenu));
+          await handleMenuThemedUpdated(await mapSanityThemedMenuToThemedMenu(body.detail as SanityThemedMenu));
           break;
         }
         case Events.MENU_THEMED_EVENT_CREATED:
@@ -118,7 +118,7 @@ const unwrappedHandler = async (event: SQSEvent) => {
           break;
         }
         case Events.MENU_THEMED_OFFER_DELETED: {
-          await handleMenuThemedDeleted(mapSanityThemedMenuToThemedMenu(body.detail as SanityThemedMenu));
+          await handleMenuThemedDeleted(await mapSanityThemedMenuToThemedMenu(body.detail as SanityThemedMenu));
           break;
         }
         case Events.MENU_THEMED_EVENT_DELETED: {

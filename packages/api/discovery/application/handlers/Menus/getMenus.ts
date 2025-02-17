@@ -14,6 +14,7 @@ import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 
 import { MenuWithOffers } from '../../models/Menu';
 import { mapMenusAndOffersToMenuResponse } from '../../repositories/Menu/service/mapper/MenuMapper';
+import { isFlexibleMenuType } from '../../repositories/Menu/service/mapper/MenuOfferMapper';
 import { getMenusByMenuType } from '../../repositories/Menu/service/MenuService';
 import { extractHeaders } from '../../utils/extractHeaders';
 import { getUserDetails } from '../../utils/getUserDetails';
@@ -64,10 +65,7 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
 
     const { dob, organisation } = userProfile;
 
-    const menusToRetrieve =
-      menusRequested.length > 0
-        ? menusRequested
-        : [MenuType.DEALS_OF_THE_WEEK, MenuType.FEATURED, MenuType.MARKETPLACE, MenuType.FLEXIBLE];
+    const menusToRetrieve = menuTypesToRetrieve(menusRequested);
 
     const menusAndOffers: {
       [menuType: string]: (MenuWithOffers | MenuWithSubMenus)[];
@@ -96,6 +94,24 @@ const handlerUnwrapped = async (event: APIGatewayEvent) => {
 
 export const handler = USE_DATADOG_AGENT === 'true' ? datadog(handlerUnwrapped) : handlerUnwrapped;
 
+const menuTypesToRetrieve = (menusRequested: MenuType[]): MenuType[] => {
+  if (menusRequested.length > 0) {
+    return menusRequested.flatMap((menuType) => {
+      if (menuType === MenuType.FLEXIBLE) {
+        return [MenuType.FLEXIBLE_EVENTS, MenuType.WAYS_TO_SAVE];
+      }
+      return menuType;
+    });
+  }
+  return [
+    MenuType.DEALS_OF_THE_WEEK,
+    MenuType.FEATURED,
+    MenuType.MARKETPLACE,
+    MenuType.WAYS_TO_SAVE,
+    MenuType.FLEXIBLE_EVENTS,
+  ];
+};
+
 const filterInvalidMenuOffers = (
   menusAndOffers: Partial<Record<MenuType, MenuWithOffers[] | MenuWithSubMenus[]>>,
   dob: string,
@@ -106,7 +122,7 @@ const filterInvalidMenuOffers = (
   Object.keys(filteredMenusAndOffers).forEach((menuType) => {
     const type = menuType as MenuType;
 
-    if (type === MenuType.FLEXIBLE) return;
+    if (isFlexibleMenuType(type)) return;
 
     if (Array.isArray(filteredMenusAndOffers[type])) {
       filteredMenusAndOffers[type] = (filteredMenusAndOffers[type] as MenuWithOffers[])

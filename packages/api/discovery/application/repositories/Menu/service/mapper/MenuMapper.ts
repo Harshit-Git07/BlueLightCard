@@ -100,8 +100,16 @@ export function mapMenusAndOffersToMenuResponse(
     marketplace: menusWithOffers.marketplace
       ? mapMenuWithOffersToMarketplaceMenuResponses(menusWithOffers.marketplace as MenuWithOffers[])
       : undefined,
-    flexible: menusWithOffers.flexible
-      ? mapMenuWithSubMenusToFlexibleMenuResponse(menusWithOffers.flexible as MenuWithSubMenus[])
-      : undefined,
+    flexible:
+      menusWithOffers.flexibleEvents || menusWithOffers.waysToSave
+        ? {
+            offers: menusWithOffers.waysToSave
+              ? mapMenuWithSubMenusToFlexibleMenuResponse(menusWithOffers.waysToSave as MenuWithSubMenus[])
+              : undefined,
+            events: menusWithOffers.flexibleEvents
+              ? mapMenuWithSubMenusToFlexibleMenuResponse(menusWithOffers.flexibleEvents as MenuWithSubMenus[])
+              : undefined,
+          }
+        : undefined,
   };
 }

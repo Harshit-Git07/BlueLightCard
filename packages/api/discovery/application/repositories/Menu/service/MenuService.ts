@@ -23,7 +23,11 @@ import {
   mapMenuEntityWithSubMenuEntitiesToMenuWithSubMenus,
   mapMenuToMenuEntity,
 } from './mapper/MenuMapper';
-import { mapMenuOfferEntityToMenuOffer, mapMenuOfferToMenuOfferEntity } from './mapper/MenuOfferMapper';
+import {
+  isFlexibleMenuType,
+  mapMenuOfferEntityToMenuOffer,
+  mapMenuOfferToMenuOfferEntity,
+} from './mapper/MenuOfferMapper';
 import { mapSubMenuEntityToSubMenu, mapSubMenuToSubMenuEntity } from './mapper/SubMenuMapper';
 
 const logger = new LambdaLogger({ serviceName: 'menu-service' });
@@ -77,7 +81,7 @@ export async function insertThemedMenuWithSubMenusAndOffers(
   menuOffers: { subMenuId: string; offer: MenuOffer }[],
 ): Promise<void> {
   const menuEntity = mapMenuToMenuEntity(menu);
-  const subMenuEntities = subMenus.map((subMenu) => mapSubMenuToSubMenuEntity(menu.id, subMenu));
+  const subMenuEntities = subMenus.map((subMenu) => mapSubMenuToSubMenuEntity(menu.id, subMenu, menu.menuType));
   const offerEntities = menuOffers.map(({ offer, subMenuId }) =>
     mapMenuOfferToMenuOfferEntity(offer, menu.id, menu.menuType, subMenuId),
   );
@@ -104,7 +108,7 @@ export async function insertThemedMenuWithSubMenusAndEvents(
   menuEvents: { subMenuId: string; event: MenuEventOffer }[],
 ): Promise<void> {
   const menuEntity = mapMenuToMenuEntity(menu);
-  const subMenuEntities = subMenus.map((subMenu) => mapSubMenuToSubMenuEntity(menu.id, subMenu));
+  const subMenuEntities = subMenus.map((subMenu) => mapSubMenuToSubMenuEntity(menu.id, subMenu, menu.menuType));
   const eventEntities = menuEvents.map(({ event, subMenuId }) =>
     mapEventToMenuEventEntity(event, menu.id, menu.menuType, subMenuId),
   );
@@ -137,8 +141,8 @@ export async function deleteMenuWithSubMenusAndOffers(menuId: string): Promise<v
 export async function deleteMenusByMenuType(menuType: MenuType): Promise<void> {
   try {
     const itemsToDelete: (MenuEntity | SubMenuEntity | MenuOfferEntity)[] = [];
-    if (menuType === MenuType.FLEXIBLE) {
-      const menuWithSubMenus = await new MenuRepository().retrieveThemedMenusWithSubMenus();
+    if (isFlexibleMenuType(menuType)) {
+      const menuWithSubMenus = await new MenuRepository().retrieveThemedMenusWithSubMenus(menuType);
       menuWithSubMenus.forEach(({ subMenus, ...menu }) => {
         itemsToDelete.push(menu, ...subMenus);
       });
@@ -261,13 +265,15 @@ export async function updateEventInMenus(newEventRecord: EventOffer): Promise<vo
 
 export async function getMenusByMenuType(menuType: MenuType): Promise<(MenuWithOffers | MenuWithSubMenus)[]> {
   try {
-    if (menuType === MenuType.FLEXIBLE) {
-      const menuWithSubMenus = await new MenuRepository().retrieveThemedMenusWithSubMenus();
-      logger.info({ message: `Got menus with menuType: [${menuType}]` });
+    if (isFlexibleMenuType(menuType)) {
+      const menuWithSubMenus = await new MenuRepository().retrieveThemedMenusWithSubMenus(menuType);
+      logger.info({
+        message: `Got menus with sub menus menuType: [${menuType}] - ${JSON.stringify(menuWithSubMenus)}`,
+      });
       return sortMenusWithSubMenus(menuWithSubMenus.map(mapMenuEntityWithSubMenuEntitiesToMenuWithSubMenus));
     } else {
       const menuWithOffers = await new MenuRepository().retrieveMenusWithOffersByMenuType(menuType);
-      logger.info({ message: `Got menus with menuType: [${menuType}]` });
+      logger.info({ message: `Got menus with offers menuType: [${menuType}]` });
       return sortMenusWithOffers(menuWithOffers.map(mapMenuEntityWithOfferEntitiesToMenuWithOffers));
     }
   } catch (error) {

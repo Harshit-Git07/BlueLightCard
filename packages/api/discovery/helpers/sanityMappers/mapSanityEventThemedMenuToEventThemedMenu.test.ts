@@ -1,5 +1,7 @@
 import { Event as SanityEvent, MenuThemedEvent as SanityThemedMenuEvent } from '@bluelightcard/sanity-types';
 
+import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
+
 import { mapSanityEventThemedMenuToEventThemedMenu } from './mapSanityEventThemedMenuToEventThemedMenu';
 
 const richTextModuleArray = [
@@ -285,7 +287,7 @@ describe('mapSanityThemedMenuToThemedMenu', () => {
     expect(result).toEqual({
       endTime: '2021-09-01T00:00:00Z',
       id: '123',
-      menuType: 'flexible',
+      menuType: MenuType.FLEXIBLE_EVENTS,
       name: 'title',
       startTime: '2021-09-01T00:00:00Z',
       themedMenusEvents: [
@@ -330,7 +332,7 @@ describe('mapSanityThemedMenuToThemedMenu', () => {
     expect(result).toEqual({
       endTime: '2021-09-01T00:00:00Z',
       id: '123',
-      menuType: 'flexible',
+      menuType: MenuType.FLEXIBLE_EVENTS,
       name: 'title',
       startTime: '2021-09-01T00:00:00Z',
       themedMenusEvents: [

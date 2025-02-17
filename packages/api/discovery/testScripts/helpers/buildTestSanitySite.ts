@@ -1,7 +1,11 @@
 import { Site as SanitySite } from '@bluelightcard/sanity-types';
 import { v4 } from 'uuid';
 
-export function buildTestSanitySite(dealsOfTheWeekId?: string, featuredId?: string): SanitySite {
+export function buildTestSanitySite(
+  dealsOfTheWeekId?: string,
+  featuredId?: string,
+  waysToSaveMenuId?: string,
+): SanitySite {
   return {
     _id: v4(),
     _type: 'site',
@@ -19,6 +23,13 @@ export function buildTestSanitySite(dealsOfTheWeekId?: string, featuredId?: stri
       _id: featuredId ?? v4(),
       _rev: v4(),
       _type: 'menu.offer',
+      _createdAt: new Date().toISOString(),
+      _updatedAt: new Date().toISOString(),
+    },
+    waysToSaveMenu: {
+      _id: waysToSaveMenuId ?? v4(),
+      _rev: v4(),
+      _type: 'menu.themed.offer',
       _createdAt: new Date().toISOString(),
       _updatedAt: new Date().toISOString(),
     },

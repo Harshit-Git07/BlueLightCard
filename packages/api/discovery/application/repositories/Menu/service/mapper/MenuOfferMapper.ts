@@ -45,8 +45,8 @@ export function mapMenuOfferToMenuOfferEntity(
     ...menuOffer,
     partitionKey: MenuOfferKeyBuilders.buildPartitionKey(menuId),
     sortKey: MenuOfferKeyBuilders.buildSortKey(menuOffer.id),
-    gsi1PartitionKey: menuType !== MenuType.FLEXIBLE ? MenuOfferKeyBuilders.buildGsi1PartitionKey(menuType) : undefined,
-    gsi1SortKey: menuType !== MenuType.FLEXIBLE ? MenuOfferKeyBuilders.buildGsi1SortKey(menuType) : undefined,
+    gsi1PartitionKey: isFlexibleMenuType(menuType) ? undefined : MenuOfferKeyBuilders.buildGsi1PartitionKey(menuType),
+    gsi1SortKey: isFlexibleMenuType(menuType) ? undefined : MenuOfferKeyBuilders.buildGsi1SortKey(menuType),
     gsi2PartitionKey: subMenuId ? MenuOfferKeyBuilders.buildGsi2PartitionKey(subMenuId) : undefined,
     gsi2SortKey: subMenuId ? MenuOfferKeyBuilders.buildGsi2SortKey(menuOffer.id) : undefined,
     gsi3PartitionKey: MenuOfferKeyBuilders.buildGsi3PartitionKey(menuOffer.id),
@@ -67,3 +67,6 @@ export function mapMenuOfferToMenuOfferResponse(offer: MenuOffer): OfferResponse
     companyName: offer.company.name,
   };
 }
+
+export const isFlexibleMenuType = (menuType: MenuType): boolean =>
+  menuType === MenuType.FLEXIBLE_OFFERS || menuType === MenuType.FLEXIBLE_EVENTS || menuType === MenuType.WAYS_TO_SAVE;

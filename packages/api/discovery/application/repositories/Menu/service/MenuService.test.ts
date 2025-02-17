@@ -21,20 +21,20 @@ const menuEntity = mapMenuToMenuEntity(menu);
 const menuOfferEntity = mapMenuOfferToMenuOfferEntity(offer, menu.id, menu.menuType);
 const menuEventEntity = mapEventToMenuEventEntity(event, menu.id, menu.menuType);
 
-const flexibleMenu = { ...menu, menuType: MenuType.FLEXIBLE, id: '5678' };
+const flexibleMenu = { ...menu, menuType: MenuType.WAYS_TO_SAVE, id: '5678' };
 const flexibleMenuEntity = mapMenuToMenuEntity(flexibleMenu);
 const flexibleSubMenu = subMenuFactory.build();
-const flexibleSubMenuEntity = mapSubMenuToSubMenuEntity(flexibleMenu.id, flexibleSubMenu);
+const flexibleSubMenuEntity = mapSubMenuToSubMenuEntity(flexibleMenu.id, flexibleSubMenu, flexibleMenu.menuType);
 const flexibleSubMenuOfferEntity = mapMenuOfferToMenuOfferEntity(
   offer,
   flexibleMenu.id,
-  MenuType.FLEXIBLE,
+  MenuType.WAYS_TO_SAVE,
   flexibleSubMenu.id,
 );
 const flexibleSubMenuEventEntity = mapEventToMenuEventEntity(
   event,
   flexibleMenu.id,
-  MenuType.FLEXIBLE,
+  MenuType.WAYS_TO_SAVE,
   flexibleSubMenu.id,
 );
 
@@ -158,7 +158,7 @@ describe('Menu Service', () => {
 
   describe('deleteMenusByMenuType', () => {
     describe('menuType Flexible Offers or Flexible Events', () => {
-      it.each([MenuType.FLEXIBLE])('should delete menus with sub menus successfully', async (menuType) => {
+      it.each([MenuType.WAYS_TO_SAVE])('should delete menus with sub menus successfully', async (menuType) => {
         const retrieveThemedMenusWithSubMenus = jest
           .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'retrieveThemedMenusWithSubMenus')
           .mockResolvedValue([{ ...flexibleMenuEntity, subMenus: [flexibleSubMenuEntity] }]);
@@ -171,8 +171,8 @@ describe('Menu Service', () => {
 
       it('should throw error when themed menus with sub menus fails to get', async () => {
         givenMenuOfferRepositoryThrowsAnError('retrieveThemedMenusWithSubMenus');
-        await expect(target.deleteMenusByMenuType(MenuType.FLEXIBLE)).rejects.toThrow(
-          `Error occurred deleting menus by menu type: [flexible]: [Error: DynamoDB error]`,
+        await expect(target.deleteMenusByMenuType(MenuType.WAYS_TO_SAVE)).rejects.toThrow(
+          `Error occurred deleting menus by menu type: [waysToSave]: [Error: DynamoDB error]`,
         );
       });
 
@@ -181,8 +181,8 @@ describe('Menu Service', () => {
           .spyOn(MenuRepositoryFile.MenuRepository.prototype, 'retrieveThemedMenusWithSubMenus')
           .mockResolvedValue([{ ...flexibleMenuEntity, subMenus: [flexibleSubMenuEntity] }]);
         givenMenuOfferRepositoryThrowsAnError('batchDelete');
-        await expect(target.deleteMenusByMenuType(MenuType.FLEXIBLE)).rejects.toThrow(
-          `Error occurred deleting menus by menu type: [flexible]: [Error: DynamoDB error]`,
+        await expect(target.deleteMenusByMenuType(MenuType.WAYS_TO_SAVE)).rejects.toThrow(
+          `Error occurred deleting menus by menu type: [waysToSave]: [Error: DynamoDB error]`,
         );
       });
     });

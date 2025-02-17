@@ -55,9 +55,12 @@ const marketplaceMock: MenuWithOffers[] = [
   { ...menuFactory.build({ menuType: MenuType.MARKETPLACE }), offers: menuOfferFactory.buildList(2) },
 ];
 
-const flexibleMock: MenuWithSubMenus[] = [
-  { ...menuFactory.build({ menuType: MenuType.FLEXIBLE }), subMenus: subMenuFactory.buildList(2) },
-  { ...menuFactory.build({ menuType: MenuType.FLEXIBLE }), subMenus: subMenuFactory.buildList(2) },
+const waysToSaveMock: MenuWithSubMenus[] = [
+  { ...menuFactory.build({ menuType: MenuType.WAYS_TO_SAVE }), subMenus: subMenuFactory.buildList(2) },
+];
+
+const flexibleEventsMock: MenuWithSubMenus[] = [
+  { ...menuFactory.build({ menuType: MenuType.FLEXIBLE_EVENTS }), subMenus: subMenuFactory.buildList(2) },
 ];
 
 describe('getMenus handler', () => {
@@ -87,7 +90,7 @@ describe('getMenus handler', () => {
     });
 
     expect(result).toEqual(expectedResponse);
-    expect(getMenusByMenuTypeMock).toHaveBeenCalledTimes(4);
+    expect(getMenusByMenuTypeMock).toHaveBeenCalledTimes(5);
   });
 
   describe('and menus are found', () => {
@@ -100,8 +103,10 @@ describe('getMenus handler', () => {
             return Promise.resolve(featuredMock);
           case MenuType.MARKETPLACE:
             return Promise.resolve(marketplaceMock);
-          case MenuType.FLEXIBLE:
-            return Promise.resolve(flexibleMock);
+          case MenuType.WAYS_TO_SAVE:
+            return Promise.resolve(waysToSaveMock);
+          case MenuType.FLEXIBLE_EVENTS:
+            return Promise.resolve(flexibleEventsMock);
           default:
             return Promise.resolve([]);
         }
@@ -127,7 +132,8 @@ describe('getMenus handler', () => {
         data: mapMenusAndOffersToMenuResponse({
           dealsOfTheWeek: [],
           marketplace: [],
-          flexible: flexibleMock,
+          flexibleEvents: flexibleEventsMock,
+          waysToSave: waysToSaveMock,
         }),
       });
       expect(result).toEqual(expectedResponse);

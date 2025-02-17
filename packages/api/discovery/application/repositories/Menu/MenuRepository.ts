@@ -19,6 +19,8 @@ import {
 } from '../schemas/MenuOfferEntity';
 import { SubMenuEntity, SubMenuEntityWithOfferEntities } from '../schemas/SubMenuEntity';
 
+import { isFlexibleMenuType } from './service/mapper/MenuOfferMapper';
+
 type MenuRepositoryEntity = MenuEntity | MenuOfferEntity | SubMenuEntity | MenuEventEntity;
 
 export class MenuRepository {
@@ -193,11 +195,11 @@ export class MenuRepository {
     return groupMenusWithTopLevelData(menusAndOffers) as MenuEntityWithOfferEntities[];
   }
 
-  async retrieveThemedMenusWithSubMenus(): Promise<MenuEntityWithSubMenuEntities[]> {
+  async retrieveThemedMenusWithSubMenus(menuType: MenuType): Promise<MenuEntityWithSubMenuEntities[]> {
     const menusAndSubMenus = (await DynamoDBService.query({
       KeyConditionExpression: 'gsi1PartitionKey = :menu_type',
       ExpressionAttributeValues: {
-        ':menu_type': MenuKeyBuilders.buildGsi1PartitionKey(MenuType.FLEXIBLE),
+        ':menu_type': MenuKeyBuilders.buildGsi1PartitionKey(menuType),
       },
       IndexName: GSI1_NAME,
       TableName: this.tableName,
@@ -283,7 +285,7 @@ export const groupMenusWithTopLevelData = (
     throw new Error('Offers have been returned without a menu');
   }
   return menuAndItemsArr.map(({ items, menu }) => {
-    if (menu?.menuType === MenuType.FLEXIBLE) {
+    if (menu?.menuType && isFlexibleMenuType(menu.menuType)) {
       return { ...menu, subMenus: items } as MenuEntityWithSubMenuEntities;
     } else {
       return { ...menu, offers: items } as MenuEntityWithOfferEntities;

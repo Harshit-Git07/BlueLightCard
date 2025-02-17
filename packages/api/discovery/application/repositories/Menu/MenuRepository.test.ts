@@ -38,7 +38,7 @@ const subMenuEntities = subMenuEntityFactory.buildList(3);
 const menuOfferEntity = menuOfferEntityFactory.build();
 const menuEventEntity = menuEventEntityFactory.build();
 const menuOfferEntities = menuOfferEntityFactory.buildList(3);
-const flexibleMenuEntity = { ...menuEntity, menuType: MenuType.FLEXIBLE };
+const flexibleMenuEntity = { ...menuEntity, menuType: MenuType.WAYS_TO_SAVE };
 
 describe('Menu Repository', () => {
   const createBatchOfMenuAndOffers = () => {
@@ -409,12 +409,12 @@ describe('Menu Repository', () => {
     it('should call "Query" method with correct parameters', async () => {
       mockQuery.mockResolvedValue([subMenuEntity, flexibleMenuEntity]);
 
-      const result = await new MenuRepository().retrieveThemedMenusWithSubMenus();
+      const result = await new MenuRepository().retrieveThemedMenusWithSubMenus(flexibleMenuEntity.menuType);
 
       expect(mockQuery).toHaveBeenCalledWith({
         KeyConditionExpression: 'gsi1PartitionKey = :menu_type',
         ExpressionAttributeValues: {
-          ':menu_type': MenuKeyBuilders.buildGsi1PartitionKey(MenuType.FLEXIBLE),
+          ':menu_type': MenuKeyBuilders.buildGsi1PartitionKey(flexibleMenuEntity.menuType),
         },
         IndexName: GSI1_NAME,
         TableName: 'menus-table',
@@ -425,7 +425,7 @@ describe('Menu Repository', () => {
     it('should return an empty array if no data is returned', async () => {
       mockQuery.mockResolvedValue(undefined);
 
-      const result = await new MenuRepository().retrieveThemedMenusWithSubMenus();
+      const result = await new MenuRepository().retrieveThemedMenusWithSubMenus(flexibleMenuEntity.menuType);
 
       expect(result).toEqual([]);
     });
@@ -433,7 +433,7 @@ describe('Menu Repository', () => {
     it('should return an empty array if an empty array is returned', async () => {
       mockQuery.mockResolvedValue([]);
 
-      const result = await new MenuRepository().retrieveThemedMenusWithSubMenus();
+      const result = await new MenuRepository().retrieveThemedMenusWithSubMenus(flexibleMenuEntity.menuType);
 
       expect(result).toEqual([]);
     });

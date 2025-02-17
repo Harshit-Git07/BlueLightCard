@@ -319,6 +319,7 @@ describe('determineMenuType', () => {
         id: 'deals-of-the-week-id',
       },
       featuredOffersMenu: {},
+      waysToSaveMenu: {},
       id: 'site_id_1',
       updatedAt: '2023-01-01T00:00:00Z',
     };
@@ -338,6 +339,7 @@ describe('determineMenuType', () => {
       featuredOffersMenu: {
         id: 'featured-id',
       },
+      waysToSaveMenu: {},
       id: 'site_id_1',
       updatedAt: '2023-01-01T00:00:00Z',
     };
@@ -360,6 +362,7 @@ describe('determineMenuType', () => {
       featuredOffersMenu: {
         id: 'featured-id',
       },
+      waysToSaveMenu: {},
       id: 'site_id_1',
       updatedAt: '2023-01-01T00:00:00Z',
     };

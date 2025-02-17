@@ -6,6 +6,8 @@ import {
   MenuEventKeyBuilders,
 } from '@blc-mono/discovery/application/repositories/schemas/MenuOfferEntity';
 
+import { isFlexibleMenuType } from './MenuOfferMapper';
+
 export function mapMenuEventEntityToEvent(menuEventEntity: MenuEventEntity): MenuEventOffer {
   return {
     id: menuEventEntity.id,
@@ -42,8 +44,8 @@ export function mapEventToMenuEventEntity(
     ...eventOffer,
     partitionKey: MenuEventKeyBuilders.buildPartitionKey(menuId),
     sortKey: MenuEventKeyBuilders.buildSortKey(eventOffer.id),
-    gsi1PartitionKey: menuType !== MenuType.FLEXIBLE ? MenuEventKeyBuilders.buildGsi1PartitionKey(menuType) : undefined,
-    gsi1SortKey: menuType !== MenuType.FLEXIBLE ? MenuEventKeyBuilders.buildGsi1SortKey(menuType) : undefined,
+    gsi1PartitionKey: isFlexibleMenuType(menuType) ? undefined : MenuEventKeyBuilders.buildGsi1PartitionKey(menuType),
+    gsi1SortKey: isFlexibleMenuType(menuType) ? undefined : MenuEventKeyBuilders.buildGsi1SortKey(menuType),
     gsi2PartitionKey: subMenuId ? MenuEventKeyBuilders.buildGsi2PartitionKey(subMenuId) : undefined,
     gsi2SortKey: subMenuId ? MenuEventKeyBuilders.buildGsi2SortKey(eventOffer.id) : undefined,
     gsi3PartitionKey: MenuEventKeyBuilders.buildGsi3PartitionKey(eventOffer.id),

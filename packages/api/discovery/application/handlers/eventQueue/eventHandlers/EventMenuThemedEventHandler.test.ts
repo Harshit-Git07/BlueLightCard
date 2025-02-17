@@ -28,7 +28,7 @@ const getMenuByIdMock = jest.mocked(getMenuById);
 
 const themedMenuEvent: ThemedMenuEvent = {
   ...menu,
-  menuType: MenuType.FLEXIBLE,
+  menuType: MenuType.FLEXIBLE_EVENTS,
   themedMenusEvents: [
     { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0, overrides: {} }] },
     { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0, overrides: {} }] },
@@ -53,7 +53,7 @@ describe('MenuThemedEventHandler', () => {
       ]);
       expect(deleteMenuWithSubMenusAndOffersMock).not.toHaveBeenCalled();
       expect(insertThemedMenuWithSubMenusAndEventssMock).toHaveBeenCalledWith(
-        { ...menu, menuType: MenuType.FLEXIBLE },
+        { ...menu, menuType: MenuType.FLEXIBLE_EVENTS },
         [subMenu, secondSubMenu],
         [
           { subMenuId: '1', event: { ...event, position: 0, start: undefined, end: undefined } },
@@ -69,7 +69,7 @@ describe('MenuThemedEventHandler', () => {
         const newerMenu = { ...menu, updatedAt: '2023-09-01T00:00:00' };
         const newerThemedMenuEvent: ThemedMenuEvent = {
           ...newerMenu,
-          menuType: MenuType.FLEXIBLE,
+          menuType: MenuType.FLEXIBLE_EVENTS,
           themedMenusEvents: [
             { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0, overrides: {} }] },
             { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0, overrides: {} }] },
@@ -79,7 +79,7 @@ describe('MenuThemedEventHandler', () => {
         await handleEventMenuThemedUpdated(newerThemedMenuEvent);
         expect(deleteMenuWithSubMenusAndOffersMock).toHaveBeenCalledWith(newerThemedMenuEvent.id);
         expect(insertThemedMenuWithSubMenusAndEventssMock).toHaveBeenCalledWith(
-          { ...newerMenu, menuType: MenuType.FLEXIBLE },
+          { ...newerMenu, menuType: MenuType.FLEXIBLE_EVENTS },
           [subMenu, secondSubMenu],
           [
             { subMenuId: '1', event: { ...event, position: 0, start: undefined, end: undefined } },
@@ -93,7 +93,7 @@ describe('MenuThemedEventHandler', () => {
         getEventsByIdsMock.mockResolvedValue([event, secondEvent]);
         const olderThemedMenuEvent: ThemedMenuEvent = {
           ...menu,
-          menuType: MenuType.FLEXIBLE,
+          menuType: MenuType.FLEXIBLE_EVENTS,
           themedMenusEvents: [
             { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0, overrides: {} }] },
             { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0, overrides: {} }] },
@@ -121,7 +121,7 @@ describe('MenuThemedEventHandler', () => {
         const newerMenu = { ...menu, updatedAt: '2023-09-01T00:00:00' };
         const newerThemedMenuEvent: ThemedMenuEvent = {
           ...newerMenu,
-          menuType: MenuType.FLEXIBLE,
+          menuType: MenuType.FLEXIBLE_EVENTS,
           themedMenusEvents: [
             { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0, overrides: {} }] },
             { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0, overrides: {} }] },
@@ -136,7 +136,7 @@ describe('MenuThemedEventHandler', () => {
         getMenuByIdMock.mockResolvedValue(menu);
         const olderThemedMenuEvent: ThemedMenuEvent = {
           ...menu,
-          menuType: MenuType.FLEXIBLE,
+          menuType: MenuType.FLEXIBLE_EVENTS,
           themedMenusEvents: [
             { ...subMenu, events: [{ id: 'event-1', venue: { id: 'venue-1' }, position: 0, overrides: {} }] },
             { ...secondSubMenu, events: [{ id: 'event-2', venue: { id: 'venue-2' }, position: 0, overrides: {} }] },

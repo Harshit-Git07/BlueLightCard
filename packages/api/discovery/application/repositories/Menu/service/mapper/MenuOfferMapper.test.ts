@@ -77,7 +77,17 @@ const mapOffersToMenuOfferEntitiesTestCases = [
     menuOfferEntity: { ...defaultMenuOfferEntity, gsi2PartitionKey: undefined, gsi2SortKey: undefined },
   },
   {
-    menuType: MenuType.FLEXIBLE,
+    menuType: MenuType.FLEXIBLE_OFFERS,
+    subMenuId: 'submenu1',
+    menuOfferEntity: { ...defaultMenuOfferEntity, gsi1PartitionKey: undefined, gsi1SortKey: undefined },
+  },
+  {
+    menuType: MenuType.FLEXIBLE_EVENTS,
+    subMenuId: 'submenu1',
+    menuOfferEntity: { ...defaultMenuOfferEntity, gsi1PartitionKey: undefined, gsi1SortKey: undefined },
+  },
+  {
+    menuType: MenuType.WAYS_TO_SAVE,
     subMenuId: 'submenu1',
     menuOfferEntity: { ...defaultMenuOfferEntity, gsi1PartitionKey: undefined, gsi1SortKey: undefined },
   },

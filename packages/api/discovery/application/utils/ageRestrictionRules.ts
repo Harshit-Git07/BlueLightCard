@@ -5,5 +5,5 @@ export const isValidAge = (dob: string, offerAgeRestriction: string): boolean =>
 
   const offerAgeRestrictions = offerAgeRestriction.split(',').map((restriction) => restriction.trim());
 
-  return offerAgeRestrictions.every((restriction) => validAgeRestrictions.includes(restriction));
+  return offerAgeRestrictions.every((restriction) => validAgeRestrictions.includes(restriction.toLowerCase()));
 };

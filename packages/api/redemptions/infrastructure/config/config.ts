@@ -330,10 +330,13 @@ export class RedemptionsStackConfigResolver {
         networkConfig: {
           adminApiDefaultAllowedOrigins: [
             'http://localhost:3333',
-            'https://cms-sandbox.blcshine.io',
             'https://cms-staging.blcshine.io',
           ],
-          apiDefaultAllowedOrigins: ['https://www.staging.bluelightcard.co.uk', 'http://localhost:3000'],
+          apiDefaultAllowedOrigins: [
+            'https://www.staging.bluelightcard.co.uk',
+            'http://localhost:3000',
+            'https://legacy.staging.bluelightcard.co.uk',
+          ],
           redemptionsWebHost: 'https://staging.bluelightcard.co.uk',
           identityApiUrl: 'https://staging-identity.blcshine.io',
         },
@@ -392,7 +395,6 @@ export class RedemptionsStackConfigResolver {
         networkConfig: {
           adminApiDefaultAllowedOrigins: [
             'http://localhost:3333',
-            'https://cms-sandbox.blcshine.io',
             'https://cms-staging.blcshine.io',
           ],
           apiDefaultAllowedOrigins: ['https://www.develop.bluelightcard.com.au', 'http://localhost:3000'],
@@ -453,10 +455,13 @@ export class RedemptionsStackConfigResolver {
         networkConfig: {
           adminApiDefaultAllowedOrigins: [
             'http://localhost:3333',
-            'https://cms-sandbox.blcshine.io',
             'https://cms-staging.blcshine.io',
           ],
-          apiDefaultAllowedOrigins: ['https://www.ddsstaging.bluelightcard.tech', 'http://localhost:3000'],
+          apiDefaultAllowedOrigins: [
+            'https://www.ddsstaging.bluelightcard.tech',
+            'http://localhost:3000',
+            'https://legacy.staging.bluelightcard.co.uk',
+          ],
           redemptionsWebHost: 'https://www.ddsstaging.bluelightcard.tech',
           identityApiUrl: 'https://staging-identity.blcshine.io',
         },

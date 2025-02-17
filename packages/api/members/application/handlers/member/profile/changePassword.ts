@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { middleware } from '../../../middleware';
+import { middleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { verifyMemberHasAccessToProfile } from '../memberAuthorization';
 import { PasswordChangeModel } from '@blc-mono/shared/models/members/passwordChangeModel';

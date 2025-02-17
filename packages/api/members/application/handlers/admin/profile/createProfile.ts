@@ -1,12 +1,12 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { middleware } from '../../../middleware';
+import { middleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import {
   AdminCreateProfileModel,
   CreateProfileModelResponse,
 } from '@blc-mono/shared/models/members/profileModel';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { Auth0ClientService } from '@blc-mono/members/application/auth0/auth0ClientService';
+import { Auth0ClientService } from '@blc-mono/members/application/services/auth0/auth0ClientService';
 
 const service = new ProfileService();
 const auth0Service = new Auth0ClientService();

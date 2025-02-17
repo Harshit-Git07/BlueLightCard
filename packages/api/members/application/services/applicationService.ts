@@ -1,12 +1,10 @@
 import { S3 } from 'aws-sdk';
-import { Bucket } from 'sst/node/bucket';
 import { isAfter, subDays } from 'date-fns';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { v4 as uuidv4 } from 'uuid';
 import { ApplicationRepository } from '@blc-mono/members/application/repositories/applicationRepository';
 import { CardRepository } from '@blc-mono/members/application/repositories/cardRepository';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
-import { logger } from '../middleware';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import {
   DocumentListPresignedUrl,
@@ -15,8 +13,6 @@ import {
 import { ApplicationBatchApprovalModel } from '@blc-mono/shared/models/members/applicationApprovalModel';
 import { NoteSource } from '@blc-mono/shared/models/members/enums/NoteSource';
 import { TrustedDomainService } from './trustedDomainService';
-import { ProfileRepository } from '../repositories/profileRepository';
-import { OrganisationRepository } from '../repositories/organisationRepository';
 import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 import {
@@ -24,9 +20,16 @@ import {
   CreateApplicationModel,
   UpdateApplicationModel,
 } from '@blc-mono/shared/models/members/applicationModel';
-import { EmailService } from './emailService';
 import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
-import { EmailTemplate, getEmailTypeForApplicationRejectionReason } from '../types/emailTypes';
+import { documentUploadBucket } from '@blc-mono/members/application/providers/S3';
+import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { EmailService } from '@blc-mono/members/application/services/email/emailService';
+import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
+import { OrganisationRepository } from '@blc-mono/members/application/repositories/organisationRepository';
+import {
+  EmailTemplate,
+  getEmailTypeForApplicationRejectionReason,
+} from '@blc-mono/members/application/types/emailTypes';
 
 let applicationServiceSingleton: ApplicationService;
 
@@ -51,7 +54,7 @@ export interface ApplicationSearchResult {
 
 export class ApplicationService {
   constructor(
-    private readonly repository = new ApplicationRepository(),
+    private readonly applicationRepository = new ApplicationRepository(),
     private readonly profileService = new ProfileService(),
     private readonly trustedDomainService = new TrustedDomainService(
       new ProfileRepository(),
@@ -60,9 +63,6 @@ export class ApplicationService {
     private readonly emailService = new EmailService(),
     private readonly cardRepository = new CardRepository(),
     private readonly s3Client = new S3({ region: process.env.REGION ?? 'eu-west-2' }),
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    private readonly uploadBucketName: string = Bucket.documentUploadBucket.bucketName,
   ) {}
 
   async createApplication(
@@ -80,7 +80,7 @@ export class ApplicationService {
         return await this.createLostCardApplication(memberId, applicationToCreate);
       }
 
-      return await this.repository.createApplication(memberId, applicationToCreate);
+      return await this.applicationRepository.createApplication(memberId, applicationToCreate);
     } catch (error) {
       logger.error({ message: 'Error creating application', error });
       throw error;
@@ -102,7 +102,11 @@ export class ApplicationService {
         );
       }
 
-      await this.repository.updateApplication(memberId, applicationId, applicationUpdates);
+      await this.applicationRepository.updateApplication(
+        memberId,
+        applicationId,
+        applicationUpdates,
+      );
     } catch (error) {
       logger.error({ message: 'Error updating application', error });
       throw error;
@@ -112,7 +116,7 @@ export class ApplicationService {
   async getApplications(memberId: string): Promise<ApplicationModel[]> {
     try {
       logger.debug({ message: 'Fetching applications', memberId });
-      return await this.repository.getApplications(memberId);
+      return await this.applicationRepository.getApplications(memberId);
     } catch (error) {
       logger.error({ message: 'Error fetching applications', error });
       throw error;
@@ -122,7 +126,7 @@ export class ApplicationService {
   async getApplication(memberId: string, applicationId: string): Promise<ApplicationModel> {
     try {
       logger.debug({ message: 'Fetching application', memberId, applicationId });
-      return await this.repository.getApplication(memberId, applicationId);
+      return await this.applicationRepository.getApplication(memberId, applicationId);
     } catch (error) {
       logger.error({ message: 'Error fetching application', error });
       throw error;
@@ -139,7 +143,7 @@ export class ApplicationService {
         memberId,
         applicationId,
       });
-      const application = await this.repository.getApplication(memberId, applicationId);
+      const application = await this.applicationRepository.getApplication(memberId, applicationId);
 
       if (
         application.eligibilityStatus !== EligibilityStatus.INELIGIBLE &&
@@ -151,7 +155,7 @@ export class ApplicationService {
       const documentId = uuidv4();
       const key = `UPLOADS/${memberId}/${applicationId}/${documentId}`;
       const params = {
-        Bucket: this.uploadBucketName,
+        Bucket: documentUploadBucket(),
         Key: key,
         Expires: 1500,
       };
@@ -194,7 +198,7 @@ export class ApplicationService {
     try {
       logger.debug({ message: 'Fetching documents from application', memberId, applicationId });
 
-      const retrievedDocuments = await this.repository.getDocumentsFromApplication(
+      const retrievedDocuments = await this.applicationRepository.getDocumentsFromApplication(
         memberId,
         applicationId,
       );
@@ -204,7 +208,7 @@ export class ApplicationService {
       for (const documentId of retrievedDocuments) {
         const key = `UPLOADS/${memberId}/${applicationId}/${documentId}`;
         const s3Params = {
-          Bucket: this.uploadBucketName,
+          Bucket: documentUploadBucket(),
           Key: key,
           Expires: 1500,
         };
@@ -244,7 +248,7 @@ export class ApplicationService {
         ).map((application) => application.applicationId);
       }
 
-      await this.repository.assignApplicationBatch(adminId, applicationIds);
+      await this.applicationRepository.assignApplicationBatch(adminId, applicationIds);
       return applicationIds;
     } catch (error) {
       logger.error({ message: 'Error assigning applications for approval', error });
@@ -258,7 +262,7 @@ export class ApplicationService {
   ): Promise<void> {
     try {
       logger.debug({ message: `Releasing applications with IDs: ${allocation.applicationIds}` });
-      await this.repository.releaseApplicationBatch(allocation.applicationIds!);
+      await this.applicationRepository.releaseApplicationBatch(allocation.applicationIds!);
       await this.profileService.createNote(adminId, {
         text: `Application approval released. Reason: ${allocation.allocationRemovalReason}}`,
         source: NoteSource.ADMIN,
@@ -277,7 +281,7 @@ export class ApplicationService {
     try {
       logger.debug({ message: 'Searching applications' });
 
-      const applications = (await this.repository.getAllApplications())
+      const applications = (await this.applicationRepository.getAllApplications())
         .filter(
           (application) =>
             !searchQuery.eligibilityStatus ||
@@ -319,7 +323,7 @@ export class ApplicationService {
   ): Promise<void> {
     try {
       logger.debug({ message: 'Approving application', memberId, applicationId });
-      await this.repository.approveApplication(memberId, applicationId);
+      await this.applicationRepository.approveApplication(memberId, applicationId);
       await this.profileService.createNote(memberId, {
         text: `Application Approved. Application ID ${applicationId}`,
         source: NoteSource.ADMIN,
@@ -343,7 +347,11 @@ export class ApplicationService {
   ): Promise<void> {
     try {
       logger.debug({ message: 'Rejecting application', memberId, applicationId });
-      await this.repository.rejectApplication(memberId, applicationId, applicationRejectionReason);
+      await this.applicationRepository.rejectApplication(
+        memberId,
+        applicationId,
+        applicationRejectionReason,
+      );
       await this.profileService.createNote(memberId, {
         text: `Application rejected. Reason: ${applicationRejectionReason}`,
         source: NoteSource.ADMIN,
@@ -362,9 +370,12 @@ export class ApplicationService {
     }
   }
 
-  private async deleteDocumentsForApplication(memberId: string, applicationId: string) {
+  private async deleteDocumentsForApplication(
+    memberId: string,
+    applicationId: string,
+  ): Promise<void> {
     try {
-      const retrievedDocuments = await this.repository.getDocumentsFromApplication(
+      const retrievedDocuments = await this.applicationRepository.getDocumentsFromApplication(
         memberId,
         applicationId,
       );
@@ -372,10 +383,12 @@ export class ApplicationService {
       if (!retrievedDocuments) return;
 
       for (const documentId of retrievedDocuments) {
-        await this.s3Client.deleteObject({
-          Bucket: this.uploadBucketName,
-          Key: `UPLOADS/${memberId}/${applicationId}/${documentId}`,
-        });
+        await this.s3Client
+          .deleteObject({
+            Bucket: documentUploadBucket(),
+            Key: `UPLOADS/${memberId}/${applicationId}/${documentId}`,
+          })
+          .promise();
       }
     } catch (error) {
       logger.error({ message: 'Error deleting documents for application', error });
@@ -443,7 +456,7 @@ export class ApplicationService {
     memberId: string,
     applicationToCreate: CreateApplicationModel,
   ) {
-    const applicationOnDynamo = await this.repository.createApplication(memberId, {
+    const applicationOnDynamo = await this.applicationRepository.createApplication(memberId, {
       ...applicationToCreate,
       applicationReason: ApplicationReason.REPRINT,
     });
@@ -460,7 +473,7 @@ export class ApplicationService {
     logger.info(
       'Application for reprint not within 90 days. Setting applicationReason to lost card.',
     );
-    const applicationOnDynamo = await this.repository.createApplication(memberId, {
+    const applicationOnDynamo = await this.applicationRepository.createApplication(memberId, {
       ...applicationToCreate,
       applicationReason: ApplicationReason.LOST_CARD,
     });

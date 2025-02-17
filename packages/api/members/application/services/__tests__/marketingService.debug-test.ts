@@ -1,7 +1,7 @@
 /**
  * This is a debug test. It will not run as part of the test suite and is instead just used to test code against a real environment
  */
-import MarketingService from '@blc-mono/members/application/services/marketingService';
+import { MarketingService } from '@blc-mono/members/application/services/marketingService';
 
 const marketingService = new MarketingService();
 

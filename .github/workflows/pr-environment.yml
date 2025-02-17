@@ -431,7 +431,12 @@ jobs:
         env:
           BRAND: ${{ matrix.brand }}
           SKIP_MEMBERS_STACK: false
-          BRAZE_SERVICE_JSON: ${{ secrets.BLC_UK_BRAZE_SERVICE_JSON }}
+          SERVICE_LAYER_EVENTS_ENABLED_GLOBAL: true
+          SERVICE_LAYER_EVENTS_ENABLED_BRAZE: false
+          SERVICE_LAYER_EVENTS_ENABLED_DWH: false
+          SERVICE_LAYER_EVENTS_ENABLED_EMAIL: true
+          SERVICE_LAYER_EVENTS_ENABLED_LEGACY: false
+          SERVICE_LAYER_EVENTS_ENABLED_SYSTEM: true
         run: npx sst deploy members members-api members-admin-api --stage $PR_PREFIX --region ${{matrix.region}}
       - name: Extract Api URL and set output
         id: sst-members-outputs

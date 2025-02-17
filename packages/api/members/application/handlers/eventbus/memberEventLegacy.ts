@@ -1,6 +1,9 @@
 import { EventBridgeEvent, StreamRecord } from 'aws-lambda';
 import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge';
-import { eventBusMiddleware, logger } from '../../middleware';
+import {
+  eventBusMiddleware,
+  logger,
+} from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
@@ -8,9 +11,9 @@ import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
 import { MemberEvent } from '@blc-mono/shared/models/members/enums/MemberEvent';
-import { hasAttributeChanged } from '@blc-mono/members/application/utils/dynamoDb/attibuteManagement';
+import { hasAttributeChanged } from '@blc-mono/members/application/services/events/utils/attibuteManagement';
 import { unmarshallStreamImages } from '@blc-mono/members/application/utils/dynamoDb/unmarshallStreamImages';
-import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
+import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/environment';
 
 export const unwrappedHandler = async (
   event: EventBridgeEvent<string, StreamRecord>,

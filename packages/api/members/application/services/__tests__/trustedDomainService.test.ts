@@ -1,23 +1,17 @@
-import { TrustedDomainService } from '../trustedDomainService';
-import { OrganisationRepository } from '../../repositories/organisationRepository';
 import { v4 as uuidv4 } from 'uuid';
-import { ProfileRepository } from '../../repositories/profileRepository';
 import { EmployerModel } from '@blc-mono/shared/models/members/employerModel';
 import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
 import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 import { Gender } from '@blc-mono/shared/models/members/enums/Gender';
+import { TrustedDomainService } from '@blc-mono/members/application/services/trustedDomainService';
+import { OrganisationRepository } from '@blc-mono/members/application/repositories/organisationRepository';
+import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
 
-jest.mock('../../repositories/organisationRepository');
-jest.mock('../../repositories/profileRepository');
-jest.mock('sst/node/table', () => ({
-  Table: {
-    memberOrganisations: {
-      tableName: 'TestTableOrganisations',
-    },
-    memberProfiles: {
-      tableName: 'TestTableProfiles',
-    },
-  },
+jest.mock('@blc-mono/members/application/repositories/organisationRepository');
+jest.mock('@blc-mono/members/application/repositories/profileRepository');
+jest.mock('@blc-mono/members/application/providers/Tables', () => ({
+  getMemberProfilesTableName: () => 'TestTableProfiles',
+  memberOrganisationsTableName: () => 'TestTableOrganisations',
 }));
 
 describe('TrustedDomainService', () => {

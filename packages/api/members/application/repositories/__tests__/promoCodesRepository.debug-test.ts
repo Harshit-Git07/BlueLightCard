@@ -1,14 +1,13 @@
 /**
  * This is a debug test. It will not run as part of the test suite and is instead just used to test code against a real environment
  */
-
 import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
-import { defaultDynamoDbClient } from '@blc-mono/members/application/repositories/dynamoClient';
 
-const promoCodesRepository = new PromoCodesRepository(
-  defaultDynamoDbClient,
-  'staging-blc-mono-memberProfiles',
-);
+jest.mock('@blc-mono/members/application/providers/Tables', () => ({
+  memberProfilesTableName: () => 'staging-blc-mono-memberProfiles',
+}));
+
+const promoCodesRepository = new PromoCodesRepository();
 
 it('should return a promo code', async () => {
   const result =

@@ -8,7 +8,7 @@ import { UpdateApplicationModel } from '@blc-mono/shared/models/members/applicat
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/promoCodesService');
-jest.mock('@blc-mono/members/application/services/emailService');
+jest.mock('@blc-mono/members/application/services/email/emailService');
 
 const memberId = uuidv4();
 const applicationId = uuidv4();

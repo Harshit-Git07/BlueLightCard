@@ -1,10 +1,10 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { middleware } from '../../../middleware';
+import { middleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import { profileService } from '@blc-mono/members/application/services/profileService';
 import { verifyMemberHasAccessToProfile } from '../memberAuthorization';
 import { EmailChangeModel } from '@blc-mono/shared/models/members/emailChangeModel';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { emailService } from '@blc-mono/members/application/services/emailService';
+import { emailService } from '@blc-mono/members/application/services/email/emailService';
 
 const unwrappedHandler = async (event: APIGatewayProxyEvent): Promise<void> => {
   const { memberId } = event.pathParameters || {};

@@ -1,5 +1,8 @@
 import { SQSEvent, SQSRecord } from 'aws-lambda';
-import { logger, sqsMiddleware } from '../../../middleware';
+import {
+  logger,
+  sqsMiddleware,
+} from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import {
   AttributeValue as StreamAttributeValue,
@@ -13,7 +16,7 @@ import {
   getDocumentFromCardRecord,
   getDocumentFromProfileRecord,
 } from '@blc-mono/members/application/handlers/admin/search/service/parseDocumentFromRecord';
-import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
+import { OrganisationService } from '@blc-mono/members/application/services/organisation/organisationService';
 import { getStreamRecordType } from '@blc-mono/members/application/types/steamRecordTypes';
 
 const openSearchService = new MembersOpenSearchService();

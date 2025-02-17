@@ -1,11 +1,9 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { middleware } from '@blc-mono/members/application/middleware';
+import { middleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import { EmailModel } from '@blc-mono/shared/models/members/emailModel';
-import { EmailService } from '@blc-mono/members/application/services/emailService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { isEmailTemplate } from '@blc-mono/members/application/types/emailTypes';
-
-const service = new EmailService();
+import { emailService } from '@blc-mono/members/application/services/email/emailService';
 
 const unwrappedHandler = async (event: APIGatewayProxyEvent) => {
   if (!event.body) {
@@ -20,7 +18,7 @@ const unwrappedHandler = async (event: APIGatewayProxyEvent) => {
   if (!payload) {
     throw new ValidationError('Payload not found in body');
   }
-  return await service.sendEmail(emailType, payload);
+  return await emailService().sendEmail(emailType, payload);
 };
 
 export const handler = middleware(unwrappedHandler);

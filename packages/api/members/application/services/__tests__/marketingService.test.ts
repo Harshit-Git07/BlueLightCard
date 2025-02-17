@@ -1,8 +1,8 @@
-import MarketingService from '../../services/marketingService';
-import BrazeClient from '../../braze/brazeClient';
 import { v4 as uuidv4 } from 'uuid';
+import { BrazeClient } from '@blc-mono/members/application/services/braze/brazeClient';
+import { MarketingService } from '@blc-mono/members/application/services/marketingService';
 
-jest.mock('../../braze/brazeClient');
+jest.mock('@blc-mono/members/application/services/braze/brazeClient');
 
 describe('MarketingService', () => {
   const memberId = uuidv4();

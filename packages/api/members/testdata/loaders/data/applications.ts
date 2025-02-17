@@ -3,7 +3,10 @@ import { DynamoRow } from '@blc-mono/members/testdata/loaders/loader/databaseSee
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
-import { applicationKey, memberKey } from '@blc-mono/members/application/repositories/repository';
+import {
+  applicationKey,
+  memberKey,
+} from '@blc-mono/members/application/repositories/base/repository';
 
 type ApplicationModelForDynamo = ApplicationModel & DynamoRow;
 

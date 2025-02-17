@@ -2,7 +2,6 @@
  * This is a debug test. It will not run as part of the test suite and is instead just used to test code against a real environment
  */
 
-import { defaultDynamoDbClient } from '@blc-mono/members/application/repositories/dynamoClient';
 import { PromoCodesService } from '@blc-mono/members/application/services/promoCodesService';
 import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
@@ -13,11 +12,11 @@ jest.mock('@blc-mono/members/application/services/profileService', () => ({
     getProfile: jest.fn(),
   })),
 }));
+jest.mock('@blc-mono/members/application/providers/Tables', () => ({
+  memberProfilesTableName: () => 'pr-3501-blc-mono-blc-mono-memberProfiles',
+}));
 
-const promoCodesRepository = new PromoCodesRepository(
-  defaultDynamoDbClient,
-  'pr-3501-blc-mono-blc-mono-memberProfiles',
-);
+const promoCodesRepository = new PromoCodesRepository();
 const profileService = new ProfileService() as jest.Mocked<ProfileService>;
 
 const promoCodesService = new PromoCodesService(promoCodesRepository, profileService);

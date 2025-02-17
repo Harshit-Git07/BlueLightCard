@@ -1,6 +1,5 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { middleware } from '@blc-mono/members/application/middleware';
 import { BatchService } from '@blc-mono/members/application/services/batchService';
 import {
   BatchModel,
@@ -8,6 +7,7 @@ import {
   ExtendedBatchModel,
 } from '@blc-mono/shared/models/members/batchModel';
 import { CardPrintBatchModel } from '@blc-mono/shared/models/members/cardPrintBatchModel';
+import { middleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 
 const batchService = new BatchService();
 

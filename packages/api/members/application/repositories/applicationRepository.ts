@@ -1,5 +1,4 @@
 import {
-  DynamoDBDocumentClient,
   GetCommand,
   GetCommandInput,
   NativeAttributeValue,
@@ -11,11 +10,15 @@ import {
   UpdateCommand,
   UpdateCommandInput,
 } from '@aws-sdk/lib-dynamodb';
-import { defaultDynamoDbClient } from './dynamoClient';
-import { Table } from 'sst/node/table';
-import { APPLICATION, applicationKey, MEMBER, memberKey, Repository } from './repository';
+import {
+  APPLICATION,
+  applicationKey,
+  MEMBER,
+  memberKey,
+  Repository,
+} from '@blc-mono/members/application/repositories/base/repository';
 import { v4 as uuidv4 } from 'uuid';
-import { NotFoundError } from '../errors/NotFoundError';
+import { NotFoundError } from '@blc-mono/members/application/errors/NotFoundError';
 import {
   ApplicationModel,
   CreateApplicationModel,
@@ -23,19 +26,18 @@ import {
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { TransactWriteItem } from '@aws-sdk/client-dynamodb';
 import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
+import { defaultDynamoDbClient } from '@blc-mono/members/application/providers/DynamoDb';
+import { memberProfilesTableName } from '@blc-mono/members/application/providers/Tables';
 
 export class ApplicationRepository extends Repository {
-  constructor(
-    dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
-    private readonly tableName: string = Table.memberProfiles.tableName,
-  ) {
+  constructor(dynamoDB = defaultDynamoDbClient) {
     super(dynamoDB);
   }
 
   async createApplication(memberId: string, application: CreateApplicationModel): Promise<string> {
     const applicationId = uuidv4();
     const params = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       Item: {
         pk: memberKey(memberId),
         sk: applicationKey(applicationId),
@@ -56,7 +58,7 @@ export class ApplicationRepository extends Repository {
     application: Partial<ApplicationModel>,
   ): Promise<void> {
     await this.partialUpdate({
-      tableName: this.tableName,
+      tableName: memberProfilesTableName(),
       pk: memberKey(memberId),
       sk: applicationKey(applicationId),
       data: {
@@ -69,7 +71,7 @@ export class ApplicationRepository extends Repository {
   // TODO: This is temporary until we have OpenSearch in place
   async getAllApplications(): Promise<ApplicationModel[]> {
     const params: ScanCommandInput = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       FilterExpression: 'begins_with(pk, :member) AND begins_with(sk, :application)',
       ExpressionAttributeValues: {
         ':member': MEMBER,
@@ -89,7 +91,7 @@ export class ApplicationRepository extends Repository {
 
   async getApplications(memberId: string): Promise<ApplicationModel[]> {
     const queryParams = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
       ExpressionAttributeValues: {
         ':pk': memberKey(memberId),
@@ -110,7 +112,7 @@ export class ApplicationRepository extends Repository {
     applicationId: string,
   ): Promise<string[] | undefined> {
     const params = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       Key: {
         pk: memberKey(memberId),
         sk: applicationKey(applicationId),
@@ -127,7 +129,7 @@ export class ApplicationRepository extends Repository {
 
   async getApplication(memberId: string, applicationId: string): Promise<ApplicationModel> {
     const params: GetCommandInput = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       Key: {
         pk: memberKey(memberId),
         sk: applicationKey(applicationId),
@@ -149,7 +151,7 @@ export class ApplicationRepository extends Repository {
     for (const applicationId of applicationIds) {
       const queryResult = await this.dynamoDB.send(
         new QueryCommand({
-          TableName: this.tableName,
+          TableName: memberProfilesTableName(),
           IndexName: 'gsi1',
           KeyConditionExpression: 'sk = :sk AND begins_with(pk, :pk)',
           ExpressionAttributeValues: {
@@ -169,7 +171,7 @@ export class ApplicationRepository extends Repository {
 
       applicationsToAssign.push({
         Update: {
-          TableName: this.tableName,
+          TableName: memberProfilesTableName(),
           Key: {
             pk: fullPartitionKey,
             sk: fullSortKey,
@@ -194,7 +196,7 @@ export class ApplicationRepository extends Repository {
     for (const applicationId of applicationIds) {
       const applicationQueryResult = await this.dynamoDB.send(
         new QueryCommand({
-          TableName: this.tableName,
+          TableName: memberProfilesTableName(),
           IndexName: 'gsi1',
           KeyConditionExpression: 'sk = :skVal AND begins_with(pk, :pkVal)',
           ExpressionAttributeValues: {
@@ -214,7 +216,7 @@ export class ApplicationRepository extends Repository {
 
       applicationsToRelease.push({
         Update: {
-          TableName: this.tableName,
+          TableName: memberProfilesTableName(),
           Key: {
             pk: fullPartitionKey,
             sk: fullSortKey,
@@ -231,7 +233,7 @@ export class ApplicationRepository extends Repository {
 
   async approveApplication(memberId: string, applicationId: string): Promise<void> {
     const params: UpdateCommandInput = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       Key: {
         pk: memberKey(memberId),
         sk: applicationKey(applicationId),
@@ -251,7 +253,7 @@ export class ApplicationRepository extends Repository {
     applicationRejectionReason: RejectionReason,
   ): Promise<void> {
     const params: UpdateCommandInput = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       Key: {
         pk: memberKey(memberId),
         sk: applicationKey(applicationId),

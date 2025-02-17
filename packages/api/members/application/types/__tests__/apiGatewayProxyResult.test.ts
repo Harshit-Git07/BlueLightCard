@@ -1,5 +1,5 @@
-import * as target from '../apiGatewayProxyResult';
 import { APIGatewayProxyResult } from 'aws-lambda';
+import { isAPIGatewayProxyResult } from '@blc-mono/members/application/types/apiGatewayProxyResult';
 
 it('should return true', () => {
   const input: APIGatewayProxyResult = {
@@ -11,7 +11,7 @@ it('should return true', () => {
     body: '',
   };
 
-  const result = target.isAPIGatewayProxyResult(input);
+  const result = isAPIGatewayProxyResult(input);
 
   expect(result).toBe(true);
 });

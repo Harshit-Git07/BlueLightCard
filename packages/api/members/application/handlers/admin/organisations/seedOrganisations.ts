@@ -1,5 +1,5 @@
-import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
-import { middleware } from '../../../middleware';
+import { OrganisationService } from '@blc-mono/members/application/services/organisation/organisationService';
+import { middleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 
 const orgService = new OrganisationService();
 

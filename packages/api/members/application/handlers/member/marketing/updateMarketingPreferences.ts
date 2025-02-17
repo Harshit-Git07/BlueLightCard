@@ -1,6 +1,6 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { middleware } from '../../../middleware';
-import MarketingService from '@blc-mono/members/application/services/marketingService';
+import { middleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { MarketingService } from '@blc-mono/members/application/services/marketingService';
 import { verifyMemberHasAccessToProfile } from '../memberAuthorization';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { BrazeUpdateModel } from '@blc-mono/shared/models/members/brazeUpdateModel';

@@ -1,8 +1,8 @@
-import { ProfileRepository } from '../repositories/profileRepository';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { ZodError } from 'zod';
-import { OrganisationRepository } from '../repositories/organisationRepository';
 import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
+import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
+import { OrganisationRepository } from '@blc-mono/members/application/repositories/organisationRepository';
 
 interface OrganisationAndEmployerId {
   organisationId: string;
@@ -11,8 +11,8 @@ interface OrganisationAndEmployerId {
 
 export class TrustedDomainService {
   constructor(
-    private profileRepository: ProfileRepository = new ProfileRepository(),
-    private organisationRepository: OrganisationRepository = new OrganisationRepository(),
+    private profileRepository = new ProfileRepository(),
+    private organisationRepository = new OrganisationRepository(),
   ) {}
 
   async validateTrustedDomainEmail(memberId: string, trustedDomainEmail: string): Promise<void> {

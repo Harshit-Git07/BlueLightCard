@@ -1,7 +1,7 @@
 import { DynamoRow } from '@blc-mono/members/testdata/loaders/loader/databaseSeeder';
 import { PromoCodeModel } from '@blc-mono/shared/models/members/promoCodeModel';
 import { PromoCodeType } from '@blc-mono/shared/models/members/enums/PromoCodeType';
-import { promoCodeKey } from '@blc-mono/members/application/repositories/repository';
+import { promoCodeKey } from '@blc-mono/members/application/repositories/base/repository';
 
 export type PromoCodeModelForDynamo = PromoCodeModel & DynamoRow;
 

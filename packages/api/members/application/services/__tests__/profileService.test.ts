@@ -1,11 +1,6 @@
-import { ProfileService } from '../profileService';
-import { ProfileRepository } from '../../repositories/profileRepository';
-import { OrganisationService } from '../organisationService';
-import { Auth0ClientService } from '../../auth0/auth0ClientService';
 import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
 import { EmployerModel } from '@blc-mono/shared/models/members/employerModel';
 import { CreateProfileModel } from '@blc-mono/shared/models/members/profileModel';
-import { NotFoundError } from '../../errors/NotFoundError';
 import { PasswordChangeModel } from '@blc-mono/shared/models/members/passwordChangeModel';
 import { EmailChangeModel } from '@blc-mono/shared/models/members/emailChangeModel';
 import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
@@ -13,11 +8,15 @@ import { NoteModel } from '@blc-mono/shared/models/members/noteModel';
 import { NoteSource } from '@blc-mono/shared/models/members/enums/NoteSource';
 import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 import { TokenSet } from 'auth0';
+import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
+import { OrganisationService } from '@blc-mono/members/application/services/organisation/organisationService';
+import { Auth0ClientService } from '@blc-mono/members/application/services/auth0/auth0ClientService';
+import { ProfileService } from '@blc-mono/members/application/services/profileService';
+import { NotFoundError } from '@blc-mono/members/application/errors/NotFoundError';
 
-jest.mock('../../repositories/profileRepository');
-jest.mock('../organisationService');
-jest.mock('../../auth0/auth0ClientService');
-jest.mock('@blc-mono/members/application/services/emailService');
+jest.mock('@blc-mono/members/application/repositories/profileRepository');
+jest.mock('@blc-mono/members/application/services/organisation/organisationService');
+jest.mock('@blc-mono/members/application/services/auth0/auth0ClientService');
 
 describe('ProfileService', () => {
   const memberId = '7d92ad80-8691-4fc7-839a-715384a8a5e0';

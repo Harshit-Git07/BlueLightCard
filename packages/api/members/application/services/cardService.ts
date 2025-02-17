@@ -1,4 +1,3 @@
-import { logger } from '../middleware';
 import {
   AwaitingBatchingCardModel,
   BatchedCardModel,
@@ -6,18 +5,22 @@ import {
   CreateCardModel,
   UpdateCardModel,
 } from '@blc-mono/shared/models/members/cardModel';
-import { CardRepository, UpsertCardOptions } from '../repositories/cardRepository';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
+import {
+  CardRepository,
+  UpsertCardOptions,
+} from '@blc-mono/members/application/repositories/cardRepository';
+import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 
 let cardServiceSingleton: CardService;
 
 export class CardService {
-  constructor(private readonly repository: CardRepository = new CardRepository()) {}
+  constructor(private readonly cardRepository = new CardRepository()) {}
 
   async getCards(memberId: string): Promise<CardModel[]> {
     try {
       logger.debug({ message: 'Fetching cards', memberId });
-      return await this.repository.getCards(memberId);
+      return await this.cardRepository.getCards(memberId);
     } catch (error) {
       logger.error({ message: 'Error fetching cards', error });
       throw error;
@@ -27,7 +30,7 @@ export class CardService {
   async getCardsInBatch(batchNumber: string): Promise<BatchedCardModel[]> {
     try {
       logger.debug({ message: 'Fetching cards in batch', batchNumber });
-      return await this.repository.getCardsInBatch(batchNumber);
+      return await this.cardRepository.getCardsInBatch(batchNumber);
     } catch (error) {
       logger.error({ message: 'Error fetching cards', error });
       throw error;
@@ -37,7 +40,7 @@ export class CardService {
   async getCardsAwaitingBatching(): Promise<AwaitingBatchingCardModel[]> {
     try {
       logger.debug({ message: 'Fetching cards awaiting batching' });
-      return await this.repository.getCardsAwaitingBatching();
+      return await this.cardRepository.getCardsAwaitingBatching();
     } catch (error) {
       logger.error({ message: 'Error fetching cards awaiting batching', error });
       throw error;
@@ -47,7 +50,7 @@ export class CardService {
   async getCardsWithStatus(cardStatus: CardStatus): Promise<CardModel[]> {
     try {
       logger.debug({ message: 'Fetching cards' });
-      return await this.repository.getCardsWithStatus(cardStatus);
+      return await this.cardRepository.getCardsWithStatus(cardStatus);
     } catch (error) {
       logger.error({ message: 'Error fetching cards with status', error });
       throw error;
@@ -57,7 +60,7 @@ export class CardService {
   async getCard(memberId: string, cardNumber: string): Promise<CardModel> {
     try {
       logger.debug({ message: 'Fetching card', memberId, cardNumber });
-      return await this.repository.getCard(memberId, cardNumber);
+      return await this.cardRepository.getCard(memberId, cardNumber);
     } catch (error) {
       logger.error({ message: 'Error fetching card', error });
       throw error;
@@ -67,7 +70,7 @@ export class CardService {
   async getCardById(cardNumber: string): Promise<CardModel> {
     try {
       logger.debug({ message: 'Fetching card by id', cardNumber });
-      return await this.repository.getCardById(cardNumber);
+      return await this.cardRepository.getCardById(cardNumber);
     } catch (error) {
       logger.error({ message: 'Error fetching card by id', error });
       throw error;
@@ -77,7 +80,7 @@ export class CardService {
   async updateCard(memberId: string, cardNumber: string, card: UpdateCardModel): Promise<void> {
     try {
       logger.debug({ message: 'Updating card', memberId, card });
-      await this.repository.upsertCard({
+      await this.cardRepository.upsertCard({
         memberId,
         cardNumber,
         card,
@@ -110,7 +113,7 @@ export class CardService {
         card: newCard,
         isInsert: true,
       };
-      await this.repository.upsertCard(upsertCardOptions);
+      await this.cardRepository.upsertCard(upsertCardOptions);
     } catch (error) {
       logger.error({ message: 'Error updating card', error });
       throw error;

@@ -1,19 +1,17 @@
 /**
  * This is a debug test. It will not run as part of the test suite and is instead just used to test code against a real environment
  */
-
-import { defaultDynamoDbClient } from '@blc-mono/members/application/repositories/dynamoClient';
 import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
 import { ApplicationRepository } from '@blc-mono/members/application/repositories/applicationRepository';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 
-jest.mock('../emailService');
+jest.mock('@blc-mono/members/application/services/email/emailService');
+jest.mock('@blc-mono/members/application/providers/Tables', () => ({
+  memberProfilesTableName: () => 'pr-3666-blc-mono-blc-mono-memberProfiles',
+}));
 
-const repository = new ApplicationRepository(
-  defaultDynamoDbClient,
-  'pr-3666-blc-mono-blc-mono-memberProfiles',
-);
+const repository = new ApplicationRepository();
 
 const applicationService = new ApplicationService(repository);
 

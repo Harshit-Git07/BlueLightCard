@@ -5,6 +5,10 @@ import { PromoCodeType } from '@blc-mono/shared/models/members/enums/PromoCodeTy
 import 'aws-sdk-client-mock-jest';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 
+jest.mock('@blc-mono/members/application/providers/Tables', () => ({
+  memberProfilesTableName: () => 'memberProfilesTest',
+}));
+
 const mockDynamoDB = mockClient(DynamoDBDocumentClient);
 
 describe('PromoCodesRepository', () => {
@@ -17,7 +21,7 @@ describe('PromoCodesRepository', () => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     jest.setSystemTime(new Date(2023, 0, 1));
-    repository = new PromoCodesRepository(mockDynamoDB as any, 'memberProfilesTest');
+    repository = new PromoCodesRepository(mockDynamoDB as unknown as DynamoDBDocumentClient);
   });
 
   afterEach(() => {

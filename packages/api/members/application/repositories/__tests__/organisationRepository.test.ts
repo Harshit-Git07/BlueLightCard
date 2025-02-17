@@ -4,21 +4,24 @@ import {
   PutCommand,
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { OrganisationRepository } from '../organisationRepository';
 import {
   OrganisationModel,
   CreateOrganisationModel,
 } from '@blc-mono/shared/models/members/organisationModel';
-import { NotFoundError } from '../../errors/NotFoundError';
 import { v4 as uuidv4 } from 'uuid';
 import { GetIdRequirementDocsModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 import { EmployerModel } from '@blc-mono/shared/models/members/employerModel';
 import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
+import { OrganisationRepository } from '@blc-mono/members/application/repositories/organisationRepository';
+import { NotFoundError } from '@blc-mono/members/application/errors/NotFoundError';
 
 jest.mock('@aws-sdk/lib-dynamodb');
 jest.mock('uuid', () => ({
   v4: jest.fn(),
+}));
+jest.mock('@blc-mono/members/application/providers/Tables', () => ({
+  memberOrganisationsTableName: () => 'memberOrganisations',
 }));
 
 const organisationId = '2c84e384-5a36-4453-9cef-e343d080e5f0';
@@ -69,9 +72,11 @@ const employer: EmployerModel = {
 };
 
 let repository: OrganisationRepository;
-let dynamoDBMock = {
-  send: jest.fn(),
-};
+
+const dynamoDbSend = jest.fn();
+const dynamoDBMock = {
+  send: dynamoDbSend,
+} as unknown as DynamoDBDocumentClient;
 const putCommandMock = PutCommand as jest.MockedClass<typeof PutCommand>;
 const batchWriteCommandMock = BatchWriteCommand as jest.MockedClass<typeof BatchWriteCommand>;
 const updateCommandMock = UpdateCommand as jest.MockedClass<typeof UpdateCommand>;
@@ -81,22 +86,19 @@ describe('OrganisationRepository', () => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     jest.setSystemTime(new Date(2023, 0, 1));
-    repository = new OrganisationRepository(
-      dynamoDBMock as any as DynamoDBDocumentClient,
-      'memberOrganisations',
-    );
+    repository = new OrganisationRepository(dynamoDBMock);
   });
 
   describe('getIdRequirementDocs', () => {
     it('should return an empty array if no ID requirements are found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Items: [] });
+      dynamoDbSend.mockResolvedValue({ Items: [] });
       const result = await repository.getIdRequirementDocs();
       expect(result).toEqual([]);
     });
 
     it('should return ID requirements', async () => {
       const items = [idRequirement];
-      dynamoDBMock.send.mockResolvedValue({ Items: items });
+      dynamoDbSend.mockResolvedValue({ Items: items });
       const result = await repository.getIdRequirementDocs();
       expect(result).toEqual(items.map((item) => GetIdRequirementDocsModel.parse(item)));
     });
@@ -171,7 +173,7 @@ describe('OrganisationRepository', () => {
 
     it('should create a new organisation', async () => {
       (uuidv4 as jest.Mock).mockReturnValueOnce(organisationId);
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const result = await repository.createOrganisation(createOrganisation);
 
       expect(result).toBe(organisationId);
@@ -183,7 +185,7 @@ describe('OrganisationRepository', () => {
     });
     it('should create multiple organisations', async () => {
       (uuidv4 as jest.Mock).mockReturnValue(organisationId);
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const createOrganisation1: CreateOrganisationModel = {
         ...createOrganisation,
         name: 'New Organisation 1',
@@ -226,12 +228,12 @@ describe('OrganisationRepository', () => {
 
   describe('getOrganisation', () => {
     it('should throw NotFoundError if organisation is not found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Item: null });
+      dynamoDbSend.mockResolvedValue({ Item: null });
       await expect(repository.getOrganisation(organisationId)).rejects.toThrow(NotFoundError);
     });
 
     it('should return the organisation if found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Item: organisation });
+      dynamoDbSend.mockResolvedValue({ Item: organisation });
       const result = await repository.getOrganisation(organisationId);
       expect(result).toEqual(OrganisationModel.parse(organisation));
     });
@@ -239,14 +241,14 @@ describe('OrganisationRepository', () => {
 
   describe('getOrganisations', () => {
     it('should return an empty array if no organisations are found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Items: [] });
+      dynamoDbSend.mockResolvedValue({ Items: [] });
       const result = await repository.getOrganisations();
       expect(result).toEqual([]);
     });
 
     it('should return organisations', async () => {
       const items = [organisation];
-      dynamoDBMock.send.mockResolvedValue({ Items: items });
+      dynamoDbSend.mockResolvedValue({ Items: items });
       const result = await repository.getOrganisations();
       expect(result).toEqual(items.map((item) => OrganisationModel.parse(item)));
     });
@@ -254,7 +256,7 @@ describe('OrganisationRepository', () => {
 
   describe('updateOrganisation', () => {
     it('should update an existing organisation', async () => {
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const updateData = { name: 'Updated Organisation' };
       await repository.updateOrganisation(organisationId, updateData);
 
@@ -302,7 +304,7 @@ describe('OrganisationRepository', () => {
 
     it('should create a new employer', async () => {
       (uuidv4 as jest.Mock).mockReturnValueOnce(employerId);
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const result = await repository.createOrganisation(createEmployer);
 
       expect(result).toBe(employerId);
@@ -314,7 +316,7 @@ describe('OrganisationRepository', () => {
     });
     it('should create multiple employers', async () => {
       (uuidv4 as jest.Mock).mockReturnValue(employerId);
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const createEmployer1 = {
         ...createEmployer,
         name: 'New Employer 1',
@@ -355,12 +357,12 @@ describe('OrganisationRepository', () => {
 
   describe('getEmployer', () => {
     it('should throw NotFoundError if employer is not found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Item: null });
+      dynamoDbSend.mockResolvedValue({ Item: null });
       await expect(repository.getOrganisation(employerId)).rejects.toThrow(NotFoundError);
     });
 
     it('should return the employer if found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Item: employer });
+      dynamoDbSend.mockResolvedValue({ Item: employer });
       const result = await repository.getOrganisation(employerId);
       expect(result).toEqual(OrganisationModel.parse(employer));
     });
@@ -368,14 +370,14 @@ describe('OrganisationRepository', () => {
 
   describe('getEmployers', () => {
     it('should return an empty array if no employers are found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Items: [] });
+      dynamoDbSend.mockResolvedValue({ Items: [] });
       const result = await repository.getOrganisations();
       expect(result).toEqual([]);
     });
 
     it('should return employers', async () => {
       const items = [employer];
-      dynamoDBMock.send.mockResolvedValue({ Items: items });
+      dynamoDbSend.mockResolvedValue({ Items: items });
       const result = await repository.getOrganisations();
       expect(result).toEqual(items.map((item) => OrganisationModel.parse(item)));
     });
@@ -383,7 +385,7 @@ describe('OrganisationRepository', () => {
 
   describe('updateEmployer', () => {
     it('should update an existing employer', async () => {
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const updateData = { name: 'Updated Employer' };
       await repository.updateOrganisation(employerId, updateData);
 

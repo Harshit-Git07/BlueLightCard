@@ -1,10 +1,14 @@
 import { EventBridgeEvent, StreamRecord } from 'aws-lambda';
-import { eventBusMiddleware, logger } from '../../middleware';
+import {
+  eventBusMiddleware,
+  logger,
+} from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { MemberEvent } from '@blc-mono/shared/models/members/enums/MemberEvent';
-import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
-import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
-import { EmailService } from '@blc-mono/members/application/services/emailService';
+import { getMemberApiUrlFromParameterStore } from '@blc-mono/members/application/providers/ParameterStore';
+import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/environment';
+import { profileService } from '@blc-mono/members/application/services/profileService';
+import { emailService } from '@blc-mono/members/application/services/email/emailService';
 
 export const unwrappedHandler = async (
   event: EventBridgeEvent<string, StreamRecord>,
@@ -13,9 +17,6 @@ export const unwrappedHandler = async (
     logger.info({ message: 'Email events disabled, skipping...' });
     return;
   }
-
-  const emailService = new EmailService();
-  const profileRepository = new ProfileRepository();
 
   const newImage = event.detail['NewImage'];
   if (!newImage) {
@@ -27,11 +28,14 @@ export const unwrappedHandler = async (
     throw new Error('Required "memberId" is not found in event');
   }
 
-  const profile = await profileRepository.getProfile(memberUuid);
+  const eventType = event['detail-type'];
+  logger.info({ message: `Processing event: '${eventType}'` });
 
-  switch (event['detail-type']) {
+  switch (eventType) {
     case MemberEvent.EMAIL_SIGNUP: {
-      await emailService.sendEmail('activation_email', {
+      const profile = await profileService().getProfile(memberUuid);
+
+      await emailService().sendEmail('activation_email', {
         email: profile.email,
         subject: 'Welcome to Blue Light Card',
         content: {
@@ -46,20 +50,24 @@ export const unwrappedHandler = async (
         throw new Error('Required "trustedDomainEmail" is not found in event');
       }
 
-      await emailService.sendEmail('trusted_domain_work_email', {
-        email: trustedDomainEmail,
-        subject: 'Trusted Domain Verification Request',
-        content: {
-          F_Name: profile.firstName,
-        },
-      });
+      const memberApiUrl = getMemberApiUrlFromParameterStore();
+      if (!memberApiUrl) {
+        throw new Error(
+          'The member API endpoint is not configured properly on the parameter store',
+        );
+      }
+
+      const profile = await profileService().getProfile(memberUuid);
+      await emailService().sendTrustedDomainEmail(profile, memberApiUrl);
       break;
     }
     case MemberEvent.EMAIL_GENIE_CHECKS:
       // TODO: define what this actually means
       break;
     case MemberEvent.EMAIL_PROMO_PAYMENT: {
-      await emailService.sendEmail('promo_payment', {
+      const profile = await profileService().getProfile(memberUuid);
+
+      await emailService().sendEmail('promo_payment', {
         email: profile.email,
         subject: 'Promo Code Payment Accepted',
         content: {
@@ -69,7 +77,9 @@ export const unwrappedHandler = async (
       break;
     }
     case MemberEvent.EMAIL_PAYMENT_MADE: {
-      await emailService.sendEmail('payment_made', {
+      const profile = await profileService().getProfile(memberUuid);
+
+      await emailService().sendEmail('payment_made', {
         email: profile.email,
         subject: 'Payment Made',
         content: {
@@ -101,7 +111,9 @@ export const unwrappedHandler = async (
       break;
     }
     case MemberEvent.EMAIL_CARD_POSTED: {
-      await emailService.sendEmail('card_posted', {
+      const profile = await profileService().getProfile(memberUuid);
+
+      await emailService().sendEmail('card_posted', {
         email: profile.email,
         subject: 'Card Posted',
         content: {

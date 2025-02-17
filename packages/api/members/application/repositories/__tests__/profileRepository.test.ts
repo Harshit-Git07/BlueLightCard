@@ -4,23 +4,26 @@ import {
   TransactWriteCommand,
   UpdateCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { ProfileRepository } from '../profileRepository';
 import { v4 as uuidv4 } from 'uuid';
 import {
   CreateProfileModel,
   ProfileModel,
   UpdateProfileModel,
 } from '@blc-mono/shared/models/members/profileModel';
-import { NotFoundError } from '../../errors/NotFoundError';
-import { memberKey, noteKey } from '../repository';
+import { memberKey, noteKey } from '@blc-mono/members/application/repositories/base/repository';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 import { CreateNoteModel, NoteModel } from '@blc-mono/shared/models/members/noteModel';
 import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
+import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
+import { NotFoundError } from '@blc-mono/members/application/errors/NotFoundError';
 
 jest.mock('@aws-sdk/lib-dynamodb');
 jest.mock('uuid', () => ({
   v4: jest.fn(),
+}));
+jest.mock('@blc-mono/members/application/providers/Tables', () => ({
+  memberProfilesTableName: () => 'memberProfiles',
 }));
 
 const memberId = '7d92ad80-8691-4fc7-839a-715384a8a5e0';
@@ -42,9 +45,11 @@ const application: ApplicationModel = {
 const noteId = '9d2632fb-8983-4f09-bfa1-f652b17e9ca1';
 
 let repository: ProfileRepository;
-let dynamoDBMock = {
-  send: jest.fn(),
-};
+
+const dynamoDbSend = jest.fn();
+const dynamoDBMock = {
+  send: dynamoDbSend,
+} as unknown as DynamoDBDocumentClient;
 const transactWriteCommandMock = TransactWriteCommand as jest.MockedClass<
   typeof TransactWriteCommand
 >;
@@ -56,16 +61,13 @@ describe('ProfileRepository', () => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     jest.setSystemTime(new Date(2023, 0, 1));
-    repository = new ProfileRepository(
-      dynamoDBMock as any as DynamoDBDocumentClient,
-      'memberProfiles',
-    );
+    repository = new ProfileRepository(dynamoDBMock);
   });
 
   describe('createProfile', () => {
     it('should create a new profile', async () => {
       (uuidv4 as jest.Mock).mockReturnValueOnce(memberId).mockReturnValueOnce(applicationId);
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const createProfile: CreateProfileModel = {
         firstName: 'John',
         lastName: 'Doe',
@@ -110,7 +112,7 @@ describe('ProfileRepository', () => {
 
   describe('updateProfile', () => {
     it('should update an existing profile', async () => {
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const updateData: Partial<UpdateProfileModel> = { firstName: 'Jane' };
 
       await repository.updateProfile(memberId, updateData);
@@ -137,7 +139,7 @@ describe('ProfileRepository', () => {
 
   describe('getProfiles', () => {
     it('should return an empty array if no profiles are found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Items: [] });
+      dynamoDbSend.mockResolvedValue({ Items: [] });
 
       const result = await repository.getProfiles();
 
@@ -146,7 +148,7 @@ describe('ProfileRepository', () => {
 
     it('should return profiles', async () => {
       const items = [profile];
-      dynamoDBMock.send.mockResolvedValue({ Items: items });
+      dynamoDbSend.mockResolvedValue({ Items: items });
 
       const result = await repository.getProfiles();
 
@@ -156,13 +158,13 @@ describe('ProfileRepository', () => {
 
   describe('getProfile', () => {
     it('should throw NotFoundError if profile is not found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Items: [] });
+      dynamoDbSend.mockResolvedValue({ Items: [] });
 
       await expect(repository.getProfile(memberId)).rejects.toThrow(NotFoundError);
     });
 
     it('should return the profile if found', async () => {
-      dynamoDBMock.send.mockResolvedValue({
+      dynamoDbSend.mockResolvedValue({
         Items: [
           {
             ...profile,
@@ -187,7 +189,7 @@ describe('ProfileRepository', () => {
 
   describe('getNotes', () => {
     it('should return an empty array if no notes are found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Items: [] });
+      dynamoDbSend.mockResolvedValue({ Items: [] });
 
       const result = await repository.getNotes(memberId);
 
@@ -202,7 +204,7 @@ describe('ProfileRepository', () => {
         lastUpdated: '2023-01-01T00:00:00.000Z',
       };
       const items = [note];
-      dynamoDBMock.send.mockResolvedValue({ Items: items });
+      dynamoDbSend.mockResolvedValue({ Items: items });
 
       const result = await repository.getNotes(memberId);
 
@@ -213,7 +215,7 @@ describe('ProfileRepository', () => {
   describe('createNote', () => {
     it('should create a new note', async () => {
       (uuidv4 as jest.Mock).mockReturnValueOnce(noteId);
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const createNote: CreateNoteModel = {
         text: 'Test note',
       };
@@ -238,7 +240,7 @@ describe('ProfileRepository', () => {
 
   describe('updateNote', () => {
     it('should update an existing note', async () => {
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const updateData = { text: 'Updated note' };
 
       await repository.updateNote(memberId, noteId, updateData);

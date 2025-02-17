@@ -19,18 +19,13 @@ import { S3EventRecord } from 'aws-lambda';
 import { Client } from 'basic-ftp';
 import { BatchStatus } from '@blc-mono/shared/models/members/enums/BatchStatus';
 
-jest.mock('../../repositories/batchRepository');
-jest.mock('../profileService');
-jest.mock('../cardService');
+jest.mock('@blc-mono/members/application/repositories/batchRepository');
+jest.mock('@blc-mono/members/application/services/profileService');
+jest.mock('@blc-mono/members/application/services/cardService');
 jest.mock('aws-sdk');
-jest.mock('../../../../core/src/utils/checkBrand');
-
-jest.mock('sst/node/bucket', () => ({
-  Bucket: {
-    batchFilesBucket: {
-      bucketName: 'batchFileBucketMock',
-    },
-  },
+jest.mock('@blc-mono/core/utils/checkBrand');
+jest.mock('@blc-mono/members/application/providers/S3', () => ({
+  batchFilesBucket: () => 'batchFileBucketMock',
 }));
 
 const batchId = 'e3090de9-2d05-4a1a-8cc8-379767f9b54e';

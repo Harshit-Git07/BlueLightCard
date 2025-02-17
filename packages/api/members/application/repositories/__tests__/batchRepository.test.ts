@@ -13,7 +13,7 @@ import {
   batchKey,
   CARD,
   cardKey,
-} from '@blc-mono/members/application/repositories/repository';
+} from '@blc-mono/members/application/repositories/base/repository';
 import { BatchStatus } from '@blc-mono/shared/models/members/enums/BatchStatus';
 import { BatchEntryModel } from '@blc-mono/shared/models/members/batchEntryModel';
 
@@ -21,13 +21,18 @@ jest.mock('@aws-sdk/lib-dynamodb');
 jest.mock('uuid', () => ({
   v4: jest.fn(),
 }));
+jest.mock('@blc-mono/members/application/providers/Tables', () => ({
+  memberAdminTableName: () => 'memberAdmin',
+}));
 
 const batchId = '6c5d61ad-a2d7-4153-9041-28cc1452a44a';
 
 let repository: BatchRepository;
-let dynamoDBMock = {
-  send: jest.fn(),
-};
+
+const dynamoDbSend = jest.fn();
+const dynamoDBMock = {
+  send: dynamoDbSend,
+} as unknown as DynamoDBDocumentClient;
 const putCommandMock = PutCommand as jest.MockedClass<typeof PutCommand>;
 const updateCommandMock = UpdateCommand as jest.MockedClass<typeof UpdateCommand>;
 const queryCommandMock = QueryCommand as jest.MockedClass<typeof QueryCommand>;
@@ -37,13 +42,13 @@ describe('BatchRepository', () => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     jest.setSystemTime(new Date(2023, 0, 1));
-    repository = new BatchRepository(dynamoDBMock as any as DynamoDBDocumentClient, 'memberAdmin');
+    repository = new BatchRepository(dynamoDBMock);
   });
 
   describe('createBatch', () => {
     it('should create a new batch', async () => {
       (uuidv4 as jest.Mock).mockReturnValue(batchId);
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const createBatchModel: CreateBatchModel = {
         name: 'batchName',
         type: BatchType.EXTERNAL,
@@ -75,7 +80,7 @@ describe('BatchRepository', () => {
       const memberId = '318ae9fe-df1c-4ebe-8416-4f2cae0062b1';
       const applicationId = '1602cd27-7cf1-470b-a74b-4731ccecac30';
 
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const batchEntryModel: BatchEntryModel = {
         batchId: batchId,
         cardNumber: 'BLC034545',
@@ -106,7 +111,7 @@ describe('BatchRepository', () => {
       const updateBatchModel: UpdateBatchModel = {
         sentDate: '2023-01-01T00:00:00.000Z',
       };
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       await repository.updateBatch(batchId, updateBatchModel);
 
       expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(UpdateCommand));
@@ -129,7 +134,7 @@ describe('BatchRepository', () => {
 
   describe('getBatchEntries', () => {
     it('should get batch entries', async () => {
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       await repository.getBatchEntries(batchId);
 
       expect(dynamoDBMock.send).toHaveBeenCalledWith(expect.any(QueryCommand));

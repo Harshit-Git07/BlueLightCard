@@ -22,11 +22,6 @@ module.exports = {
   },
   root: true,
   overrides: [],
-  ignorePatterns: [
-    'application/braze/__tests__/*',
-    'application/repositories/__tests__/*',
-    'libs/emailTemplates',
-  ],
   parserOptions: {
     parser: '@typescript-eslint/parser',
     project: './tsconfig.json',

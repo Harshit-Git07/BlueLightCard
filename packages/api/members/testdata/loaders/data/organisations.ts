@@ -9,7 +9,7 @@ import { OrganisationModel } from '@blc-mono/shared/models/members/organisationM
 import {
   ORGANISATION,
   organisationKey,
-} from '@blc-mono/members/application/repositories/repository';
+} from '@blc-mono/members/application/repositories/base/repository';
 import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 import { IdRequirementsModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 

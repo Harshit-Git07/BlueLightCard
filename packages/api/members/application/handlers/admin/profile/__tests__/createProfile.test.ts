@@ -1,12 +1,12 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
-import { Auth0ClientService } from '@blc-mono/members/application/auth0/auth0ClientService';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 import { AdminCreateProfileModel } from '@blc-mono/shared/models/members/profileModel';
+import { Auth0ClientService } from '@blc-mono/members/application/services/auth0/auth0ClientService';
 
 jest.mock('@blc-mono/members/application/services/profileService');
-jest.mock('@blc-mono/members/application/auth0/auth0ClientService');
+jest.mock('@blc-mono/members/application/services/auth0/auth0ClientService');
 
 const serviceLayerCreateProfileMock = jest.fn();
 const serviceLayerDeleteProfileMock = jest.fn();

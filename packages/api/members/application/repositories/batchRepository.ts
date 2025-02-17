@@ -1,18 +1,11 @@
-import {
-  DynamoDBDocumentClient,
-  PutCommand,
-  QueryCommand,
-  QueryCommandInput,
-} from '@aws-sdk/lib-dynamodb';
-import { defaultDynamoDbClient } from '@blc-mono/members/application/repositories/dynamoClient';
-import { Table } from 'sst/node/table';
+import { PutCommand, QueryCommand, QueryCommandInput } from '@aws-sdk/lib-dynamodb';
 import {
   BATCH,
   batchKey,
   CARD,
   cardKey,
   Repository,
-} from '@blc-mono/members/application/repositories/repository';
+} from '@blc-mono/members/application/repositories/base/repository';
 import {
   CreateBatchModel,
   UpdateBatchModel,
@@ -21,22 +14,19 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { BatchStatus } from '@blc-mono/shared/models/members/enums/BatchStatus';
 import { BatchEntryModel } from '@blc-mono/shared/models/members/batchEntryModel';
-import { NotFoundError } from '../errors/NotFoundError';
+import { NotFoundError } from '@blc-mono/members/application/errors/NotFoundError';
+import { defaultDynamoDbClient } from '@blc-mono/members/application/providers/DynamoDb';
+import { memberAdminTableName } from '@blc-mono/members/application/providers/Tables';
 
 export class BatchRepository extends Repository {
-  constructor(
-    dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    private readonly tableName: string = Table.memberAdmin.tableName,
-  ) {
+  constructor(dynamoDB = defaultDynamoDbClient) {
     super(dynamoDB);
   }
 
   async createBatch(batch: CreateBatchModel): Promise<string> {
     const batchId = uuidv4();
     const params = {
-      TableName: this.tableName,
+      TableName: memberAdminTableName(),
       Item: {
         pk: batchKey(batchId),
         sk: BATCH,
@@ -53,7 +43,7 @@ export class BatchRepository extends Repository {
 
   async createBatchEntry(batchEntry: BatchEntryModel): Promise<string> {
     const params = {
-      TableName: this.tableName,
+      TableName: memberAdminTableName(),
       Item: {
         pk: batchKey(batchEntry.batchId),
         sk: cardKey(batchEntry.cardNumber),
@@ -67,7 +57,7 @@ export class BatchRepository extends Repository {
 
   async updateBatch(batchId: string, updateBatchModel: UpdateBatchModel): Promise<void> {
     await this.partialUpdate({
-      tableName: this.tableName,
+      tableName: memberAdminTableName(),
       pk: batchKey(batchId),
       sk: BATCH,
       data: {
@@ -78,7 +68,7 @@ export class BatchRepository extends Repository {
 
   async getBatchEntries(batchId: string): Promise<BatchEntryModel[]> {
     const queryParams = {
-      TableName: this.tableName,
+      TableName: memberAdminTableName(),
       KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
       ExpressionAttributeValues: {
         ':pk': batchKey(batchId),
@@ -96,7 +86,7 @@ export class BatchRepository extends Repository {
 
   async getBatches(): Promise<BatchModel[]> {
     const params: QueryCommandInput = {
-      TableName: this.tableName,
+      TableName: memberAdminTableName(),
       IndexName: 'gsi1',
       KeyConditionExpression: 'sk = :sk',
       ExpressionAttributeValues: {

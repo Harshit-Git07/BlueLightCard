@@ -4,7 +4,7 @@ import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 import {
   ID_REQUIREMENT,
   idRequirementKey,
-} from '@blc-mono/members/application/repositories/repository';
+} from '@blc-mono/members/application/repositories/base/repository';
 
 // TODO: This will need to change to the full `SupportedDocumentModel` type later, for some reason there is duplication on the org/employer...
 export type SupportedDocumentModelForDynamo = GetIdRequirementDocsModel & DynamoRow;

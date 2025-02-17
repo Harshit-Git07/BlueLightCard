@@ -1,5 +1,4 @@
 import {
-  DynamoDBDocumentClient,
   GetCommand,
   GetCommandInput,
   QueryCommand,
@@ -11,11 +10,16 @@ import {
   BatchedCardModel,
   CardModel,
 } from '@blc-mono/shared/models/members/cardModel';
-import { defaultDynamoDbClient } from './dynamoClient';
-import { Table } from 'sst/node/table';
-import { CARD, cardKey, memberKey } from './repository';
-import { NotFoundError } from '../errors/NotFoundError';
+import {
+  CARD,
+  cardKey,
+  memberKey,
+  Repository,
+} from '@blc-mono/members/application/repositories/base/repository';
+import { NotFoundError } from '@blc-mono/members/application/errors/NotFoundError';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
+import { defaultDynamoDbClient } from '@blc-mono/members/application/providers/DynamoDb';
+import { memberProfilesTableName } from '@blc-mono/members/application/providers/Tables';
 
 export interface UpsertCardOptions {
   memberId: string;
@@ -24,17 +28,14 @@ export interface UpsertCardOptions {
   isInsert?: boolean;
 }
 
-export class CardRepository {
-  constructor(
-    private readonly dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    private readonly tableName: string = Table.memberProfiles.tableName,
-  ) {}
+export class CardRepository extends Repository {
+  constructor(dynamoDB = defaultDynamoDbClient) {
+    super(dynamoDB);
+  }
 
   async getCards(memberId: string): Promise<CardModel[]> {
     const queryParams: QueryCommandInput = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       KeyConditionExpression: 'pk = :pk AND begins_with(sk, :card)',
       ExpressionAttributeValues: {
         ':pk': memberKey(memberId),
@@ -52,7 +53,7 @@ export class CardRepository {
 
   async getCardsInBatch(batchNumber: string): Promise<BatchedCardModel[]> {
     const queryParams: QueryCommandInput = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       KeyConditionExpression: 'begins_with(sk, :card) AND :batchNumber = batchNumber',
       ExpressionAttributeValues: {
         ':card': CARD,
@@ -67,7 +68,7 @@ export class CardRepository {
 
   async getCardsAwaitingBatching(): Promise<AwaitingBatchingCardModel[]> {
     const params = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       IndexName: 'CardStatusIndex',
       KeyConditionExpression: 'cardStatus = :cardStatus',
       ExpressionAttributeValues: {
@@ -82,7 +83,7 @@ export class CardRepository {
 
   async getCardsWithStatus(cardStatus: CardStatus): Promise<CardModel[]> {
     const params = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       IndexName: 'CardStatusIndex',
       KeyConditionExpression: 'cardStatus = :cardStatus',
       ExpressionAttributeValues: {
@@ -101,7 +102,7 @@ export class CardRepository {
 
   async getCard(memberId: string, cardNumber: string): Promise<CardModel> {
     const params: GetCommandInput = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       Key: {
         pk: memberKey(memberId),
         sk: cardKey(cardNumber),
@@ -118,7 +119,7 @@ export class CardRepository {
 
   async getCardById(cardNumber: string): Promise<CardModel> {
     const params: QueryCommandInput = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       IndexName: 'gsi1',
       KeyConditionExpression: 'sk = :sk',
       ExpressionAttributeValues: {
@@ -156,7 +157,7 @@ export class CardRepository {
     expressionAttributeValues[':lastUpdated'] = new Date().toISOString();
 
     const params = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       Key: {
         pk: memberKey(memberId),
         sk: cardKey(cardNumber),

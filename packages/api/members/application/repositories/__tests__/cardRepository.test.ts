@@ -1,13 +1,16 @@
 import { DynamoDBDocumentClient, QueryCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
-import { CardRepository } from '../cardRepository';
 import { BatchedCardModel, CardModel } from '@blc-mono/shared/models/members/cardModel';
-import { NotFoundError } from '../../errors/NotFoundError';
 import { v4 as uuidv4 } from 'uuid';
-import { cardKey, memberKey } from '../repository';
+import { cardKey, memberKey } from '@blc-mono/members/application/repositories/base/repository';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
+import { CardRepository } from '@blc-mono/members/application/repositories/cardRepository';
+import { NotFoundError } from '@blc-mono/members/application/errors/NotFoundError';
 
 jest.mock('@aws-sdk/lib-dynamodb');
+jest.mock('@blc-mono/members/application/providers/Tables', () => ({
+  memberProfilesTableName: () => 'memberProfiles',
+}));
 
 const memberId = uuidv4();
 const batchNumber = uuidv4();
@@ -25,9 +28,11 @@ const card: CardModel = {
 };
 
 let repository: CardRepository;
-let dynamoDBMock = {
-  send: jest.fn(),
-};
+
+const dynamoDbSend = jest.fn();
+const dynamoDBMock = {
+  send: dynamoDbSend,
+} as unknown as DynamoDBDocumentClient;
 const updateCommandMock = UpdateCommand as jest.MockedClass<typeof UpdateCommand>;
 const queryCommandMock = QueryCommand as jest.MockedClass<typeof QueryCommand>;
 
@@ -36,15 +41,12 @@ describe('CardRepository', () => {
     jest.clearAllMocks();
     jest.useFakeTimers();
     jest.setSystemTime(new Date(2023, 0, 1));
-    repository = new CardRepository(
-      dynamoDBMock as any as DynamoDBDocumentClient,
-      'memberProfiles',
-    );
+    repository = new CardRepository(dynamoDBMock);
   });
 
   describe('getCards', () => {
     it('should return an empty array if no cards are found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Items: [] });
+      dynamoDbSend.mockResolvedValue({ Items: [] });
 
       const result = await repository.getCards(memberId);
 
@@ -53,7 +55,7 @@ describe('CardRepository', () => {
 
     it('should return cards for the member', async () => {
       const items = [card];
-      dynamoDBMock.send.mockResolvedValue({ Items: items });
+      dynamoDbSend.mockResolvedValue({ Items: items });
 
       const result = await repository.getCards(memberId);
 
@@ -63,7 +65,7 @@ describe('CardRepository', () => {
 
   describe('getCardsInBatch', () => {
     it('should return an empty array if no cards are found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Items: [] });
+      dynamoDbSend.mockResolvedValue({ Items: [] });
 
       const result = await repository.getCardsInBatch(batchNumber);
 
@@ -72,7 +74,7 @@ describe('CardRepository', () => {
 
     it('should return cards for the batch number', async () => {
       const items = [card];
-      dynamoDBMock.send.mockResolvedValue({ Items: items });
+      dynamoDbSend.mockResolvedValue({ Items: items });
 
       const result = await repository.getCardsInBatch(batchNumber);
 
@@ -82,13 +84,13 @@ describe('CardRepository', () => {
 
   describe('getCard', () => {
     it('should throw NotFoundError if card is not found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Item: null });
+      dynamoDbSend.mockResolvedValue({ Item: null });
 
       await expect(repository.getCard(memberId, cardNumber)).rejects.toThrow(NotFoundError);
     });
 
     it('should return the card if found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Item: card });
+      dynamoDbSend.mockResolvedValue({ Item: card });
 
       const result = await repository.getCard(memberId, cardNumber);
 
@@ -98,7 +100,7 @@ describe('CardRepository', () => {
 
   describe('getCardsWithStatus', () => {
     it('should return an empty array if no cards are found', async () => {
-      dynamoDBMock.send.mockResolvedValue({ Items: [] });
+      dynamoDbSend.mockResolvedValue({ Items: [] });
 
       const result = await repository.getCardsWithStatus(CardStatus.AWAITING_BATCHING);
 
@@ -107,7 +109,7 @@ describe('CardRepository', () => {
 
     it('should return cards with matching status', async () => {
       const items = [card];
-      dynamoDBMock.send.mockResolvedValue({ Items: items });
+      dynamoDbSend.mockResolvedValue({ Items: items });
 
       const result = await repository.getCardsWithStatus(CardStatus.AWAITING_BATCHING);
 
@@ -125,7 +127,7 @@ describe('CardRepository', () => {
 
   describe('upsertCard', () => {
     it('should insert a new card', async () => {
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
 
       const result = await repository.upsertCard({
         memberId: memberId,
@@ -161,7 +163,7 @@ describe('CardRepository', () => {
     });
 
     it('should update an existing card', async () => {
-      dynamoDBMock.send.mockResolvedValue({});
+      dynamoDbSend.mockResolvedValue({});
       const result = await repository.upsertCard({
         memberId: memberId,
         cardNumber: cardNumber,

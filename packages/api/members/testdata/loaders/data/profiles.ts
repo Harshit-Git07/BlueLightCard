@@ -1,7 +1,7 @@
 import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 import { Gender } from '@blc-mono/shared/models/members/enums/Gender';
 import { DynamoRow } from '@blc-mono/members/testdata/loaders/loader/databaseSeeder';
-import { memberKey, PROFILE } from '@blc-mono/members/application/repositories/repository';
+import { memberKey, PROFILE } from '@blc-mono/members/application/repositories/base/repository';
 
 export type ProfileModelForDynamo = ProfileModel & DynamoRow;
 

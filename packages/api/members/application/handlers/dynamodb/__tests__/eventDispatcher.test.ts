@@ -1,17 +1,39 @@
 import { DynamoDBStreamEvent } from 'aws-lambda';
 import { getEnv } from '@blc-mono/core/utils/getEnv';
-import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
-import { BrazeEventsService } from '@blc-mono/members/application/events/BrazeEventsService';
-import { DwhEventsService } from '@blc-mono/members/application/events/DwhEventsService';
-import { EmailEventsService } from '@blc-mono/members/application/events/EmailEventsService';
-import { LegacyEventsService } from '@blc-mono/members/application/events/LegacyEventsService';
+import {
+  brazeEventsService,
+  BrazeEventsService,
+} from '@blc-mono/members/application/services/events/BrazeEventsService';
+import {
+  dataWarehouseEventsService,
+  DataWarehouseEventsService,
+} from '@blc-mono/members/application/services/events/DataWarehouseEventsService';
+import {
+  emailEventsService,
+  EmailEventsService,
+} from '@blc-mono/members/application/services/events/EmailEventsService';
+import {
+  legacyEventsService,
+  LegacyEventsService,
+} from '@blc-mono/members/application/services/events/LegacyEventsService';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
+import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/environment';
 
 jest.mock('@blc-mono/core/utils/getEnv');
-jest.mock('@blc-mono/members/application/events/BrazeEventsService');
-jest.mock('@blc-mono/members/application/events/DwhEventsService');
-jest.mock('@blc-mono/members/application/events/EmailEventsService');
-jest.mock('@blc-mono/members/application/events/LegacyEventsService');
+jest.mock('@blc-mono/members/application/services/events/BrazeEventsService');
+jest.mock('@blc-mono/members/application/services/events/DataWarehouseEventsService');
+jest.mock('@blc-mono/members/application/services/events/EmailEventsService');
+jest.mock('@blc-mono/members/application/services/events/LegacyEventsService');
+
+const brazeEventsServiceMock = jest.mocked(brazeEventsService);
+const dataWarehouseEventsServiceMock = jest.mocked(dataWarehouseEventsService);
+const emailEventsServiceMock = jest.mocked(emailEventsService);
+const legacyEventsServiceMock = jest.mocked(legacyEventsService);
+
+const BrazeServiceMock = jest.mocked(new BrazeEventsService());
+const DataWarehouseEventsServiceMock = jest.mocked(new DataWarehouseEventsService());
+const EmailEventsServiceMock = jest.mocked(new EmailEventsService());
+const LegacyEventsServiceMock = jest.mocked(new LegacyEventsService());
 
 describe('eventDispatcher handler', () => {
   const mockEvent: DynamoDBStreamEvent = {
@@ -56,11 +78,6 @@ describe('eventDispatcher handler', () => {
     StreamViewType: 'NEW_AND_OLD_IMAGES',
   };
 
-  const mockIsSendProfileCreateToBraze = jest.fn();
-  const mockIsSendProfileCreateToDwh = jest.fn();
-  const mockIsSendProfileCreateToEmail = jest.fn();
-  const mockIsSendProfileCreateToLegacy = jest.fn();
-
   beforeEach(() => {
     (getEnv as jest.Mock).mockImplementation((name: string) => {
       if (name === MemberStackEnvironmentKeys.SERVICE_LAYER_EVENTS_ENABLED_GLOBAL) {
@@ -68,24 +85,26 @@ describe('eventDispatcher handler', () => {
       }
     });
 
-    BrazeEventsService.prototype.emitProfileCreatedEvent = mockIsSendProfileCreateToBraze;
-    DwhEventsService.prototype.emitProfileCreatedEvent = mockIsSendProfileCreateToDwh;
-    EmailEventsService.prototype.emitEmailSignupEvent = mockIsSendProfileCreateToEmail;
-    LegacyEventsService.prototype.emitProfileCreatedEvent = mockIsSendProfileCreateToLegacy;
+    brazeEventsServiceMock.mockReturnValue(BrazeServiceMock);
+    dataWarehouseEventsServiceMock.mockReturnValue(DataWarehouseEventsServiceMock);
+    emailEventsServiceMock.mockReturnValue(EmailEventsServiceMock);
+    legacyEventsServiceMock.mockReturnValue(LegacyEventsServiceMock);
+
+    BrazeServiceMock.emitProfileCreatedEvent.mockResolvedValue(undefined);
+    DataWarehouseEventsServiceMock.emitProfileCreatedEvent.mockResolvedValue(undefined);
+    EmailEventsServiceMock.emitEmailSignupEvent.mockResolvedValue(undefined);
+    LegacyEventsServiceMock.emitProfileCreatedEvent.mockResolvedValue(undefined);
   });
 
   it('should process the event and send messages', async () => {
-    mockIsSendProfileCreateToBraze.mockResolvedValue(undefined);
-    mockIsSendProfileCreateToDwh.mockResolvedValue(undefined);
-    mockIsSendProfileCreateToEmail.mockResolvedValue(undefined);
-    mockIsSendProfileCreateToLegacy.mockResolvedValue(undefined);
-
     await handler(mockEvent);
 
-    expect(mockIsSendProfileCreateToBraze).toHaveBeenCalledWith(mockResponse);
-    expect(mockIsSendProfileCreateToDwh).toHaveBeenCalledWith(mockResponse);
-    expect(mockIsSendProfileCreateToEmail).toHaveBeenCalledWith(mockResponse);
-    expect(mockIsSendProfileCreateToLegacy).toHaveBeenCalledWith(mockResponse);
+    expect(BrazeServiceMock.emitProfileCreatedEvent).toHaveBeenCalledWith(mockResponse);
+    expect(DataWarehouseEventsServiceMock.emitProfileCreatedEvent).toHaveBeenCalledWith(
+      mockResponse,
+    );
+    expect(EmailEventsServiceMock.emitEmailSignupEvent).toHaveBeenCalledWith(mockResponse);
+    expect(LegacyEventsServiceMock.emitProfileCreatedEvent).toHaveBeenCalledWith(mockResponse);
   });
 });
 

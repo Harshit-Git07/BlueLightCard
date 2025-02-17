@@ -1,12 +1,12 @@
-import { logger } from '../middleware';
-import BrazeClient from '../braze/brazeClient';
 import { MarketingPreferencesEnvironment } from '@blc-mono/members/application/types/marketingPreferencesEnvironment';
 import { BrazeUpdateModel } from '@blc-mono/shared/models/members/brazeUpdateModel';
+import { BrazeClient } from '@blc-mono/members/application/services/braze/brazeClient';
+import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 
 let marketingServiceSingleton: MarketingService;
 
-export default class MarketingService {
-  constructor(private readonly brazeClient: BrazeClient = new BrazeClient()) {}
+export class MarketingService {
+  constructor(private readonly brazeClient = new BrazeClient()) {}
 
   async getAttributes(memberId: string, attributes: string[]): Promise<Record<string, unknown>> {
     try {

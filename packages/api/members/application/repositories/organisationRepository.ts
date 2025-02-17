@@ -1,17 +1,10 @@
-import {
-  DynamoDBDocumentClient,
-  GetCommand,
-  PutCommand,
-  QueryCommand,
-} from '@aws-sdk/lib-dynamodb';
+import { GetCommand, PutCommand, QueryCommand } from '@aws-sdk/lib-dynamodb';
 import {
   CreateOrganisationModel,
   OrganisationModel,
 } from '@blc-mono/shared/models/members/organisationModel';
-import { Table } from 'sst/node/table';
-import { defaultDynamoDbClient } from './dynamoClient';
 import { CreateEmployerModel, EmployerModel } from '@blc-mono/shared/models/members/employerModel';
-import { NotFoundError } from '../errors/NotFoundError';
+import { NotFoundError } from '@blc-mono/members/application/errors/NotFoundError';
 import {
   EMPLOYER,
   employerKey,
@@ -19,24 +12,21 @@ import {
   ORGANISATION,
   organisationKey,
   Repository,
-} from './repository';
+} from '@blc-mono/members/application/repositories/base/repository';
 import { v4 as uuidv4 } from 'uuid';
 import { GetIdRequirementDocsModel } from '@blc-mono/shared/models/members/idRequirementsModel';
 import { NativeAttributeValue } from '@aws-sdk/util-dynamodb';
+import { defaultDynamoDbClient } from '@blc-mono/members/application/providers/DynamoDb';
+import { memberOrganisationsTableName } from '@blc-mono/members/application/providers/Tables';
 
 export class OrganisationRepository extends Repository {
-  constructor(
-    dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    private readonly tableName: string = Table.memberOrganisations.tableName,
-  ) {
+  constructor(dynamoDB = defaultDynamoDbClient) {
     super(dynamoDB);
   }
 
   async getIdRequirementDocs(): Promise<GetIdRequirementDocsModel[]> {
     const queryParams = {
-      TableName: this.tableName,
+      TableName: memberOrganisationsTableName(),
       KeyConditionExpression: 'sk = :sk AND begins_with(pk, :pk)',
       ExpressionAttributeValues: {
         ':pk': ID_REQUIREMENT,
@@ -57,7 +47,7 @@ export class OrganisationRepository extends Repository {
   async createOrganisation(organisation: CreateOrganisationModel): Promise<string> {
     const organisationId = uuidv4();
     const params = {
-      TableName: this.tableName,
+      TableName: memberOrganisationsTableName(),
       Item: {
         pk: organisationKey(organisationId),
         sk: ORGANISATION,
@@ -88,7 +78,7 @@ export class OrganisationRepository extends Repository {
       });
     });
 
-    await this.batchInsert(organisationsToInsert, this.tableName);
+    await this.batchInsert(organisationsToInsert, memberOrganisationsTableName());
 
     return organisationIds;
   }
@@ -98,7 +88,7 @@ export class OrganisationRepository extends Repository {
     organisation: Partial<OrganisationModel>,
   ): Promise<void> {
     await this.partialUpdate({
-      tableName: this.tableName,
+      tableName: memberOrganisationsTableName(),
       pk: organisationKey(organisationId),
       sk: ORGANISATION,
       data: {
@@ -110,7 +100,7 @@ export class OrganisationRepository extends Repository {
 
   async getOrganisations(): Promise<OrganisationModel[]> {
     const queryParams = {
-      TableName: this.tableName,
+      TableName: memberOrganisationsTableName(),
       KeyConditionExpression: 'sk = :sk AND begins_with(pk, :pk)',
       ExpressionAttributeValues: {
         ':pk': ORGANISATION,
@@ -130,7 +120,7 @@ export class OrganisationRepository extends Repository {
 
   async getOrganisation(organisationId: string): Promise<OrganisationModel> {
     const params = {
-      TableName: this.tableName,
+      TableName: memberOrganisationsTableName(),
       Key: {
         pk: organisationKey(organisationId),
         sk: ORGANISATION,
@@ -149,7 +139,7 @@ export class OrganisationRepository extends Repository {
   async createEmployer(organisationId: string, employer: CreateEmployerModel): Promise<string> {
     const employerId = uuidv4();
     const params = {
-      TableName: this.tableName,
+      TableName: memberOrganisationsTableName(),
       Item: {
         pk: organisationKey(organisationId),
         sk: employerKey(employerId),
@@ -185,7 +175,7 @@ export class OrganisationRepository extends Repository {
       });
     });
 
-    await this.batchInsert(employersToInsert, this.tableName);
+    await this.batchInsert(employersToInsert, memberOrganisationsTableName());
 
     return employerIds;
   }
@@ -196,7 +186,7 @@ export class OrganisationRepository extends Repository {
     employer: Partial<EmployerModel>,
   ): Promise<void> {
     await this.partialUpdate({
-      tableName: this.tableName,
+      tableName: memberOrganisationsTableName(),
       pk: organisationKey(organisationId),
       sk: employerKey(employerId),
       data: {
@@ -208,7 +198,7 @@ export class OrganisationRepository extends Repository {
 
   async getEmployers(organisationId: string): Promise<EmployerModel[]> {
     const queryParams = {
-      TableName: this.tableName,
+      TableName: memberOrganisationsTableName(),
       KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
       ExpressionAttributeValues: {
         ':pk': organisationKey(organisationId),
@@ -226,7 +216,7 @@ export class OrganisationRepository extends Repository {
 
   async getEmployer(organisationId: string, employerId: string): Promise<EmployerModel> {
     const params = {
-      TableName: this.tableName,
+      TableName: memberOrganisationsTableName(),
       Key: {
         pk: organisationKey(organisationId),
         sk: employerKey(employerId),

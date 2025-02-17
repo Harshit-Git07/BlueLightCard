@@ -1,8 +1,7 @@
 import { getEnv } from '@blc-mono/core/utils/getEnv';
 import { OpenSearchService } from '@blc-mono/core/aws/opensearch/OpenSearchService';
 import { OpenSearchBulkUpdateCommand } from '@blc-mono/members/application/handlers/admin/search/service/opensearchMemberProfileDocument';
-import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
-import { logger } from '@blc-mono/members/application/middleware';
+import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import {
   MemberDocumentsSearchModel,
   MemberDocumentsSearchResponseModel,
@@ -12,6 +11,7 @@ import {
   mapOpenSearchResultsToMemberDocuments,
 } from '@blc-mono/members/application/handlers/admin/search/service/membersOpenSearchRequest';
 import { SearchResponse } from '@opensearch-project/opensearch/api/types';
+import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/environment';
 
 const service = getEnv(MemberStackEnvironmentKeys.SERVICE);
 const stage = getEnv(MemberStackEnvironmentKeys.STAGE);

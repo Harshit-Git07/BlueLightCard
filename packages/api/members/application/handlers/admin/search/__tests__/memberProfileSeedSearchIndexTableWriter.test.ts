@@ -1,14 +1,14 @@
 import { SQSEvent } from 'aws-lambda';
-import { Repository } from '@blc-mono/members/application/repositories/repository';
+import { Repository } from '@blc-mono/members/application/repositories/base/repository';
 import 'aws-sdk-client-mock-jest';
-import { getMemberProfilesSeedSearchIndexTableName } from '@blc-mono/members/application/handlers/admin/search/getMemberProfileResources';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
+import { memberProfilesSeedSearchIndexTableName } from '@blc-mono/members/application/providers/Tables';
 
-jest.mock('@blc-mono/members/application/repositories/repository');
-jest.mock('../getMemberProfileResources');
+jest.mock('@blc-mono/members/application/repositories/base/repository');
+jest.mock('@blc-mono/members/application/providers/Tables');
 
-const getMemberProfilesSeedSearchIndexTableNameMock = jest.mocked(
-  getMemberProfilesSeedSearchIndexTableName,
+const memberProfilesSeedSearchIndexTableNameMock = jest.mocked(
+  memberProfilesSeedSearchIndexTableName,
 );
 
 const profile = {
@@ -33,7 +33,7 @@ describe('Write to member profile seed index table', () => {
   });
 
   beforeEach(() => {
-    getMemberProfilesSeedSearchIndexTableNameMock.mockReturnValue('mockTableName');
+    memberProfilesSeedSearchIndexTableNameMock.mockReturnValue('mockTableName');
     Repository.prototype.batchInsert = jest.fn().mockResolvedValue({});
   });
 

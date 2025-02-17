@@ -5,27 +5,31 @@ import {
   getDocumentFromCardRecord,
   getDocumentFromProfileRecord,
 } from '@blc-mono/members/application/handlers/admin/search/service/parseDocumentFromRecord';
-import { APPLICATION, CARD, PROFILE } from '@blc-mono/members/application/repositories/repository';
 import { MembersOpenSearchService } from '@blc-mono/members/application/handlers/admin/search/service/membersOpenSearchService';
 import { MemberDocumentModel } from '@blc-mono/shared/models/members/memberDocument';
 import {
   createMemberProfileOpenSearchDocuments,
   OpenSearchBulkUpdateCommand,
 } from '@blc-mono/members/application/handlers/admin/search/service/opensearchMemberProfileDocument';
-import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
+import { OrganisationService } from '@blc-mono/members/application/services/organisation/organisationService';
 import { EmployerModel } from '@blc-mono/shared/models/members/employerModel';
 import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
+import {
+  APPLICATION,
+  CARD,
+  PROFILE,
+} from '@blc-mono/members/application/repositories/base/repository';
 
 jest.mock('@blc-mono/members/application/handlers/admin/search/service/parseDocumentFromRecord');
 jest.mock('@blc-mono/core/utils/getEnv');
 jest.mock(
   '@blc-mono/members/application/handlers/admin/search/service/opensearchMemberProfileDocument',
 );
-jest.mock('@blc-mono/members/application/services/organisationService');
+jest.mock('@blc-mono/members/application/services/organisation/organisationService');
 
 const getDocumentFromProfileRecordMock = jest.mocked(getDocumentFromProfileRecord);
 const getDocumentFromApplicationRecordMock = jest.mocked(getDocumentFromApplicationRecord);

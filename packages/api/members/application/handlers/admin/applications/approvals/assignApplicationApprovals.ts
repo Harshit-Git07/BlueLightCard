@@ -1,9 +1,9 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { middleware } from '../../../../middleware';
 import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { UnauthorizedError } from '@blc-mono/members/application/errors/UnauthorizedError';
 import { ApplicationBatchApprovalModel } from '@blc-mono/shared/models/members/applicationApprovalModel';
+import { middleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 
 const service = new ApplicationService();
 

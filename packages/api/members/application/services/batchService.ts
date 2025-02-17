@@ -1,5 +1,5 @@
 import { BatchRepository } from '@blc-mono/members/application/repositories/batchRepository';
-import { logger } from '@blc-mono/members/application/middleware';
+import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import {
   BatchModel,
   CreateBatchModel,
@@ -14,7 +14,6 @@ import { CardService } from '@blc-mono/members/application/services/cardService'
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { ExternalCardPrintingDataModel } from '@blc-mono/shared/models/members/ExternalCardPrintingDataModel';
-import { Bucket } from 'sst/node/bucket';
 import { BatchType } from '@blc-mono/shared/models/members/enums/BatchType';
 import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 import { ApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
@@ -29,22 +28,23 @@ import csvParser from 'csv-parser';
 import { Readable } from 'stream';
 import { BatchStatus } from '@blc-mono/shared/models/members/enums/BatchStatus';
 import path from 'path';
+import { batchFilesBucket } from '@blc-mono/members/application/providers/S3';
 
 const MAX_NAME_ON_CARD_CHARACTER_LIMIT = 25;
 const EXTERNAL_BATCH_SIZE_LIMIT = 500;
 
 export class BatchService {
   constructor(
-    private repository: BatchRepository = new BatchRepository(),
-    private cardService: CardService = new CardService(),
-    private profileService: ProfileService = new ProfileService(),
-    private s3Client: S3 = new S3({}),
+    private batchRepository = new BatchRepository(),
+    private cardService = new CardService(),
+    private profileService = new ProfileService(),
+    private s3Client = new S3({}),
   ) {}
 
   async createBatch(batch: CreateBatchModel): Promise<string> {
     try {
       logger.debug({ message: 'Creating batch' });
-      return await this.repository.createBatch(batch);
+      return await this.batchRepository.createBatch(batch);
     } catch (error) {
       logger.error({ message: 'Error creating batch', error });
       throw error;
@@ -54,7 +54,7 @@ export class BatchService {
   async createBatchEntry(batchEntry: BatchEntryModel): Promise<string> {
     try {
       logger.debug({ message: 'Creating batch entry' });
-      return await this.repository.createBatchEntry(batchEntry);
+      return await this.batchRepository.createBatchEntry(batchEntry);
     } catch (error) {
       logger.error({ message: 'Error creating batch entry', error });
       throw error;
@@ -64,7 +64,7 @@ export class BatchService {
   async updateBatch(batchId: string, batchUpdateModel: UpdateBatchModel): Promise<void> {
     try {
       logger.debug({ message: 'Updating batch' });
-      return await this.repository.updateBatch(batchId, batchUpdateModel);
+      return await this.batchRepository.updateBatch(batchId, batchUpdateModel);
     } catch (error) {
       logger.error({ message: 'Error updating batch', error });
       throw error;
@@ -74,7 +74,7 @@ export class BatchService {
   async getBatchEntries(batchId: string): Promise<BatchEntryModel[]> {
     try {
       logger.debug({ message: 'Find card IDs for batch', batchId });
-      return await this.repository.getBatchEntries(batchId);
+      return await this.batchRepository.getBatchEntries(batchId);
     } catch (error) {
       logger.error({ message: 'Error finding card IDs for batch', error });
       throw error;
@@ -100,7 +100,7 @@ export class BatchService {
         applicationId: application.applicationId,
       });
 
-      await this.repository.createBatchEntry(batchEntryAttributes);
+      await this.batchRepository.createBatchEntry(batchEntryAttributes);
 
       await this.cardService.updateCard(card.memberId, card.cardNumber, {
         cardStatus: CardStatus.ADDED_TO_BATCH,
@@ -122,7 +122,7 @@ export class BatchService {
         count: validCards.length,
       });
 
-      const batchId = await this.repository.createBatch(batchAttributes);
+      const batchId = await this.batchRepository.createBatch(batchAttributes);
 
       await this.processValidCards(batchId, validCards);
 
@@ -172,7 +172,7 @@ export class BatchService {
   async getBatches(): Promise<ExtendedBatchModel[]> {
     try {
       logger.debug({ message: 'Getting all batches' });
-      const batches = await this.repository.getBatches();
+      const batches = await this.batchRepository.getBatches();
       const extendedBatches = await Promise.all(
         batches.map(async (batch) => ({
           ...batch,
@@ -190,7 +190,7 @@ export class BatchService {
   async openInternalBatches(): Promise<BatchModel[]> {
     try {
       logger.debug({ message: 'Getting all internal open batches' });
-      const batches = await this.repository.getBatches();
+      const batches = await this.batchRepository.getBatches();
       const filteredBatches = batches.filter(
         (batch) => batch.status === BatchStatus.BATCH_OPEN && batch.type === BatchType.INTERNAL,
       );
@@ -247,7 +247,7 @@ export class BatchService {
         const csvContent = this.convertToCSV(externalCardPrintingData);
         await this.uploadToS3(
           csvContent,
-          Bucket.batchFilesBucket.bucketName,
+          batchFilesBucket(),
           this.getOutboundS3Key(currentBatchId),
           currentBatchId,
         );
@@ -262,7 +262,7 @@ export class BatchService {
     try {
       logger.debug({ message: 'Uploading batch file' });
       const key = s3Record.s3.object.key;
-      const bucketName = Bucket.batchFilesBucket.bucketName;
+      const bucketName = batchFilesBucket();
       const file = await this.downloadFileFromS3(bucketName, key);
 
       await this.uploadFileToSftpServer(file, key);
@@ -346,8 +346,7 @@ export class BatchService {
     try {
       logger.debug({ message: 'Processing inbound batch file' });
       const key = s3Record.s3.object.key;
-      const bucketName = Bucket.batchFilesBucket.bucketName;
-      const file = await this.downloadFileFromS3(bucketName, key);
+      const file = await this.downloadFileFromS3(batchFilesBucket(), key);
 
       if (Buffer.isBuffer(file.Body)) {
         const cardDataResponse = await this.parseInboundBatchCSV(file.Body);

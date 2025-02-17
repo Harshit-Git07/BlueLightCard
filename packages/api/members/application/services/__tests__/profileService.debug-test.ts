@@ -2,22 +2,20 @@
  * This is a debug test. It will not run as part of the test suite and is instead just used to test code against a real environment
  */
 
-import { defaultDynamoDbClient } from '@blc-mono/members/application/repositories/dynamoClient';
 import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
-import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
+import { OrganisationService } from '@blc-mono/members/application/services/organisation/organisationService';
 import { OrganisationRepository } from '@blc-mono/members/application/repositories/organisationRepository';
 
-const organisationRepository = new OrganisationRepository(
-  defaultDynamoDbClient,
-  'pr-3629-blc-mono-blc-mono-memberOrganisations',
-);
-const profileRepository = new ProfileRepository(
-  defaultDynamoDbClient,
-  'pr-3629-blc-mono-blc-mono-memberProfiles',
-);
+jest.mock('@blc-mono/members/application/providers/Tables', () => ({
+  memberOrganisationsTableName: () => 'pr-3629-blc-mono-blc-mono-memberOrganisations',
+  memberProfilesTableName: () => 'pr-3629-blc-mono-blc-mono-memberProfiles',
+}));
+
+const organisationRepository = new OrganisationRepository();
+const profileRepository = new ProfileRepository();
 
 const organisationService = new OrganisationService(organisationRepository);
 const profileService = new ProfileService(profileRepository, organisationService);

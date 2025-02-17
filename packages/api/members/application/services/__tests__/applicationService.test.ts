@@ -1,9 +1,5 @@
-import { ApplicationService } from '../applicationService';
-import { ApplicationRepository } from '../../repositories/applicationRepository';
-import { CardRepository } from '../../repositories/cardRepository';
 import { S3 } from 'aws-sdk';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
-import { TrustedDomainService } from '../trustedDomainService';
 import { subDays } from 'date-fns';
 import {
   ApplicationModel,
@@ -17,33 +13,33 @@ import { ApplicationReason } from '@blc-mono/shared/models/members/enums/Applica
 import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { ReorderCardReason } from '@blc-mono/shared/models/members/enums/ReorderCardReason';
-import { EmailService } from '@blc-mono/members/application/services/emailService';
+import { EmailService } from '@blc-mono/members/application/services/email/emailService';
 import { RejectionReason } from '@blc-mono/shared/models/members/enums/RejectionReason';
 import { NoteSource } from '@blc-mono/shared/models/members/enums/NoteSource';
+import { TrustedDomainService } from '@blc-mono/members/application/services/trustedDomainService';
+import { ApplicationService } from '@blc-mono/members/application/services/applicationService';
+import { ApplicationRepository } from '@blc-mono/members/application/repositories/applicationRepository';
+import { CardRepository } from '@blc-mono/members/application/repositories/cardRepository';
 
-jest.mock('../../repositories/applicationRepository');
-jest.mock('../profileService');
-jest.mock('../../repositories/cardRepository');
-jest.mock('../emailService');
-jest.mock('../trustedDomainService');
+jest.mock('@blc-mono/members/application/repositories/applicationRepository');
+jest.mock('@blc-mono/members/application/services/profileService');
+jest.mock('@blc-mono/members/application/repositories/cardRepository');
+jest.mock('@blc-mono/members/application/services/email/emailService');
+jest.mock('@blc-mono/members/application/services/trustedDomainService');
 jest.mock('aws-sdk', () => ({
   S3: jest.fn().mockImplementation(() => ({
     getSignedUrlPromise: jest.fn(),
-    deleteObject: jest.fn(),
+    deleteObject: jest.fn().mockImplementation(() => ({
+      promise: () => Promise.resolve(),
+    })),
   })),
 }));
-jest.mock('sst/node/bucket', () => ({
-  Bucket: jest.fn(),
+jest.mock('@blc-mono/members/application/providers/S3', () => ({
+  documentUploadBucket: () => 'mockBucketName',
 }));
-jest.mock('sst/node/table', () => ({
-  Table: {
-    memberOrganisations: {
-      tableName: 'TestTableOrganisations',
-    },
-    memberProfiles: {
-      tableName: 'TestTableProfiles',
-    },
-  },
+jest.mock('@blc-mono/members/application/providers/Tables', () => ({
+  getMemberProfilesTableName: () => 'TestTableProfiles',
+  memberOrganisationsTableName: () => 'TestTableOrganisations',
 }));
 jest.mock('uuid', () => ({
   v4: jest.fn(),
@@ -102,7 +98,6 @@ describe('ApplicationService', () => {
       emailServiceMock,
       cardRepositoryMock,
       s3ClientMock,
-      'mockBucketName',
     );
   });
 

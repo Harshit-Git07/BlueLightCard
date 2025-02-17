@@ -4,7 +4,7 @@ import { PromoCodeType } from '@blc-mono/shared/models/members/enums/PromoCodeTy
 import {
   promoCodeKey,
   singleUsePromoCodeKey,
-} from '@blc-mono/members/application/repositories/repository';
+} from '@blc-mono/members/application/repositories/base/repository';
 
 export type PromoCodeModelForDynamo = PromoCodeModel & DynamoRow;
 

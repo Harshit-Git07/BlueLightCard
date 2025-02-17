@@ -9,7 +9,7 @@ import { jest } from '@jest/globals';
 import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
 
 jest.mock('@blc-mono/members/application/services/applicationService');
-jest.mock('@blc-mono/members/application/services/emailService');
+jest.mock('@blc-mono/members/application/services/email/emailService');
 
 const memberId = uuidv4();
 const applicationId = uuidv4();

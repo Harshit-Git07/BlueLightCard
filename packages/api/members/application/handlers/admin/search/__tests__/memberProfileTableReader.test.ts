@@ -1,19 +1,18 @@
-import { Repository } from '@blc-mono/members/application/repositories/repository';
+import { Repository } from '@blc-mono/members/application/repositories/base/repository';
 import { ScanCommandOutput } from '@aws-sdk/lib-dynamodb';
 import { mockClient } from 'aws-sdk-client-mock';
 import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import 'aws-sdk-client-mock-jest';
-import {
-  getMemberProfilesTableName,
-  getSeedSearchIndexTableQueueUrl,
-} from '../getMemberProfileResources';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
+import { seedSearchIndexTableQueueUrl } from '@blc-mono/members/application/providers/Queues';
+import { memberProfilesTableName } from '@blc-mono/members/application/providers/Tables';
 
-jest.mock('@blc-mono/members/application/repositories/repository');
-jest.mock('../getMemberProfileResources');
+jest.mock('@blc-mono/members/application/repositories/base/repository');
+jest.mock('@blc-mono/members/application/providers/Queues');
+jest.mock('@blc-mono/members/application/providers/Tables');
 
-const getMemberProfilesTableNameMock = jest.mocked(getMemberProfilesTableName);
-const getSeedSearchIndexTableQueueUrlMock = jest.mocked(getSeedSearchIndexTableQueueUrl);
+const memberProfilesTableNameMock = jest.mocked(memberProfilesTableName);
+const getSeedSearchIndexTableQueueUrlMock = jest.mocked(seedSearchIndexTableQueueUrl);
 
 const mockSqsClient = mockClient(SQSClient);
 
@@ -48,7 +47,7 @@ describe('Read member profile data', () => {
       .fn()
       .mockResolvedValueOnce(mockScanFirstResponse)
       .mockResolvedValue(mockScanSecondResponse);
-    getMemberProfilesTableNameMock.mockReturnValue('mockTableName');
+    memberProfilesTableNameMock.mockReturnValue('mockTableName');
     getSeedSearchIndexTableQueueUrlMock.mockReturnValue('queueUrl');
   });
 

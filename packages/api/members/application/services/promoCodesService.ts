@@ -1,4 +1,3 @@
-import { logger } from '../middleware';
 import { ApplyPromoCodeApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
 import { PromoCodesRepository } from '@blc-mono/members/application/repositories/promoCodesRepository';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
@@ -10,13 +9,14 @@ import {
   PromoCodeModel,
   PromoCodeResponseModel,
 } from '@blc-mono/shared/models/members/promoCodeModel';
+import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 
 let promoCodeServiceSingleton: PromoCodesService;
 
 export class PromoCodesService {
   constructor(
-    private repository: PromoCodesRepository = new PromoCodesRepository(),
-    private profileService: ProfileService = new ProfileService(),
+    private promoCodesRepository = new PromoCodesRepository(),
+    private profileService = new ProfileService(),
   ) {}
 
   async applyPromoCode(
@@ -44,7 +44,7 @@ export class PromoCodesService {
 
         if (applyPromoCodeApplicationModel) {
           if (codeDetails.promoCodeType === PromoCodeType.SINGLE_USE) {
-            await this.repository.updatePromoCodeUsage(
+            await this.promoCodesRepository.updatePromoCodeUsage(
               codeDetails.promoCodeType,
               codeDetails.parentId,
               memberId,
@@ -53,7 +53,7 @@ export class PromoCodesService {
               codeDetails.singleCodeId,
             );
           } else {
-            await this.repository.updatePromoCodeUsage(
+            await this.promoCodesRepository.updatePromoCodeUsage(
               codeDetails.promoCodeType,
               codeDetails.parentId,
               memberId,
@@ -158,7 +158,7 @@ export class PromoCodesService {
     singleUseChildCode: PromoCodeModel,
   ): Promise<PromoCodeModel | undefined> {
     try {
-      const parentCodeResult = await this.repository.getSingleUseParentPromoCode(
+      const parentCodeResult = await this.promoCodesRepository.getSingleUseParentPromoCode(
         singleUseChildCode.parentId,
       );
       return parentCodeResult?.[0];
@@ -218,7 +218,8 @@ export class PromoCodesService {
     promoCode: string,
   ): Promise<PromoCodeModel | undefined> {
     try {
-      const codeResult = await this.repository.getMultiUseOrSingleUseChildPromoCode(promoCode);
+      const codeResult =
+        await this.promoCodesRepository.getMultiUseOrSingleUseChildPromoCode(promoCode);
       return codeResult?.[0];
     } catch (error) {
       logger.error({

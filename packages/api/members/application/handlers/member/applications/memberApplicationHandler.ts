@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { middleware } from '@blc-mono/members/application/middleware';
+import { middleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import {
   applyPromoCodeHandler,
   isApplyPromoCodeEvent,

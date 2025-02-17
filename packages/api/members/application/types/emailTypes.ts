@@ -16,7 +16,7 @@ const emailFromMapping: Record<Brand, string> = {
   BLC_AU: 'noreply@bluelightcard.com.au',
 };
 
-export interface auth0LinkReturn {
+export interface Auth0LinkReturn {
   memberId: string;
   url: string;
 }

@@ -1,11 +1,10 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
-import MarketingService from '@blc-mono/members/application/services/marketingService';
+import { MarketingService } from '@blc-mono/members/application/services/marketingService';
 import { BrazeAttributesModel } from '@blc-mono/shared/models/members/brazeAttributesModel';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
 
 jest.mock('@blc-mono/members/application/services/marketingService');
-jest.mock('../../memberAuthorization');
 
 describe('getBrazeAttributes handler', () => {
   const memberId = uuidv4();

@@ -1,6 +1,6 @@
-import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
+import { OrganisationService } from '@blc-mono/members/application/services/organisation/organisationService';
 import { APIGatewayProxyEvent } from 'aws-lambda/trigger/api-gateway-proxy';
-import { middleware } from '../../../middleware';
+import { middleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import { UpdateOrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 

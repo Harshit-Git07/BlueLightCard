@@ -6,11 +6,14 @@ import {
 } from '@blc-mono/members/application/services/profileService';
 import { EmailChangeModel } from '@blc-mono/shared/models/members/emailChangeModel';
 import { emptyContextStub } from '@blc-mono/members/application/utils/testing/emptyContext';
-import { EmailService, emailService } from '@blc-mono/members/application/services/emailService';
+import {
+  EmailService,
+  emailService,
+} from '@blc-mono/members/application/services/email/emailService';
 import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 
 jest.mock('@blc-mono/members/application/services/profileService');
-jest.mock('@blc-mono/members/application/services/emailService');
+jest.mock('@blc-mono/members/application/services/email/emailService');
 
 const profileServiceMock = jest.mocked(profileService);
 const emailServiceMock = jest.mocked(emailService);

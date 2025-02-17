@@ -1,4 +1,4 @@
-import { middleware } from '../../../middleware';
+import { middleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
 

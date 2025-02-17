@@ -1,20 +1,18 @@
-import { lambdaMiddleware } from '../../../middleware';
-import { Repository } from '@blc-mono/members/application/repositories/repository';
+import { lambdaMiddleware } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
+import { Repository } from '@blc-mono/members/application/repositories/base/repository';
 import { NativeAttributeValue } from '@aws-sdk/lib-dynamodb';
 import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { getEnvOrDefault } from '@blc-mono/core/utils/getEnv';
-import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/constants/environment';
-import {
-  getMemberProfilesTableName,
-  getSeedSearchIndexTableQueueUrl,
-} from '@blc-mono/members/application/handlers/admin/search/getMemberProfileResources';
+import { MemberStackEnvironmentKeys } from '@blc-mono/members/infrastructure/environment';
+import { memberProfilesTableName } from '@blc-mono/members/application/providers/Tables';
+import { seedSearchIndexTableQueueUrl } from '@blc-mono/members/application/providers/Queues';
 
 const region: string = getEnvOrDefault(MemberStackEnvironmentKeys.REGION, 'eu-west-2');
 const sqs = new SQSClient({ region: region });
 
 const repository = new Repository();
-const tableName = getMemberProfilesTableName();
-const queueUrl = getSeedSearchIndexTableQueueUrl();
+const tableName = memberProfilesTableName();
+const queueUrl = seedSearchIndexTableQueueUrl();
 
 const MAX_SQS_EVENT_BATCH_SIZE = 100;
 

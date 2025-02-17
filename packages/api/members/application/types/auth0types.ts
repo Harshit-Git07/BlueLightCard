@@ -1,4 +1,4 @@
-export interface secretsObject {
+export interface SecretsObject {
   domain: string;
   clientId: string;
   clientSecret: string;

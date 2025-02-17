@@ -3,7 +3,7 @@ import {
   CARD,
   NOTE,
   PROFILE,
-} from '@blc-mono/members/application/repositories/repository';
+} from '@blc-mono/members/application/repositories/base/repository';
 
 export type StreamRecordTypes = 'Profile' | 'Application' | 'Card' | 'Note';
 

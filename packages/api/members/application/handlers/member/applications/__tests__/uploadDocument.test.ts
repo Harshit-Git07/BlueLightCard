@@ -9,7 +9,7 @@ import { DocumentUploadLocation } from '@blc-mono/shared/models/members/document
 import { jest } from '@jest/globals';
 
 jest.mock('@blc-mono/members/application/services/applicationService');
-jest.mock('@blc-mono/members/application/services/emailService');
+jest.mock('@blc-mono/members/application/services/email/emailService');
 
 const memberId = uuidv4();
 const applicationId = uuidv4();

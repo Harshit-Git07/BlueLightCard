@@ -10,8 +10,8 @@ import { Orders } from '@blc-mono/orders/infrastructure/stack';
 import { MemberServicesHub } from 'member-services-hub/stack';
 import { Discovery } from '@blc-mono/discovery/infrastructure/stack';
 import { isProduction, isStaging } from '@blc-mono/core/utils/checkEnvironment';
-import { Members, MembersAdminApi, MembersApi } from '@blc-mono/members/infrastructure/stack';
 import { Zendesk } from '@blc-mono/zendesk/infrastructure/stack';
+import { memberStacks } from '@blc-mono/members/infrastructure/memberStacks';
 
 export default {
   config(_input) {
@@ -34,7 +34,6 @@ export default {
       app.setDefaultRemovalPolicy('destroy');
     }
     app.stack(Shared, { id: 'global' }).stack(Identity, { id: 'identity' });
-    await app.stack(Members, { id: 'members' });
 
     await Promise.all([
       // Add async stacks here https://docs.sst.dev/constructs/Stack#async-stacks
@@ -44,9 +43,8 @@ export default {
       app.stack(OffersCMS, { id: 'offers-cms' }),
       app.stack(Payments, { id: 'payments' }),
       app.stack(Orders, { id: 'orders' }),
-      app.stack(MembersApi, { id: 'members-api' }),
-      app.stack(MembersAdminApi, { id: 'members-admin-api' }),
       app.stack(Zendesk, { id: 'zendesk' }),
+      memberStacks(app),
     ]);
 
     app.stack(Web, { id: 'web' }).stack(MemberServicesHub, { id: 'member-services-hub' });

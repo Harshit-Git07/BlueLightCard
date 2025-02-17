@@ -1,12 +1,12 @@
-import { OrganisationService } from '../organisationService';
 import { OrganisationModel } from '@blc-mono/shared/models/members/organisationModel';
 import { EmployerModel } from '@blc-mono/shared/models/members/employerModel';
 import { v4 as uuidv4 } from 'uuid';
-import { OrganisationRepository } from '../../repositories/organisationRepository';
 import { EmploymentStatus } from '@blc-mono/shared/models/members/enums/EmploymentStatus';
 import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
+import { OrganisationService } from '@blc-mono/members/application/services/organisation/organisationService';
+import { OrganisationRepository } from '@blc-mono/members/application/repositories/organisationRepository';
 
-jest.mock('../../repositories/organisationRepository');
+jest.mock('@blc-mono/members/application/repositories/organisationRepository');
 
 describe('OrganisationService', () => {
   const organisationId = uuidv4();

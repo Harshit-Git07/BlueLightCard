@@ -1,5 +1,3 @@
-import { CardService } from '../../services/cardService';
-import { CardRepository } from '../../repositories/cardRepository';
 import {
   AwaitingBatchingCardModel,
   CardModel,
@@ -11,8 +9,10 @@ import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 import { PaymentStatus } from '@blc-mono/shared/models/members/enums/PaymentStatus';
 import { ProfileService } from '@blc-mono/members/application/services/profileService';
 import { ProfileModel } from '@blc-mono/shared/models/members/profileModel';
+import { CardService } from '@blc-mono/members/application/services/cardService';
+import { CardRepository } from '@blc-mono/members/application/repositories/cardRepository';
 
-jest.mock('../../repositories/cardRepository');
+jest.mock('@blc-mono/members/application/repositories/cardRepository');
 
 describe('CardService', () => {
   const memberId = uuidv4();

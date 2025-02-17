@@ -1,6 +1,5 @@
 import {
   DeleteCommand,
-  DynamoDBDocumentClient,
   PutCommand,
   QueryCommand,
   QueryCommandInput,
@@ -8,8 +7,6 @@ import {
   ScanCommandInput,
   TransactWriteCommand,
 } from '@aws-sdk/lib-dynamodb';
-import { defaultDynamoDbClient } from './dynamoClient';
-import { Table } from 'sst/node/table';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateNoteModel, NoteModel } from '@blc-mono/shared/models/members/noteModel';
 import { CardModel } from '@blc-mono/shared/models/members/cardModel';
@@ -19,19 +16,24 @@ import {
   ProfileModel,
   UpdateProfileModel,
 } from '@blc-mono/shared/models/members/profileModel';
-import { APPLICATION, MEMBER, memberKey, NOTE, noteKey, PROFILE, Repository } from './repository';
-import { NotFoundError } from '../errors/NotFoundError';
+import {
+  APPLICATION,
+  MEMBER,
+  memberKey,
+  NOTE,
+  noteKey,
+  PROFILE,
+  Repository,
+} from '@blc-mono/members/application/repositories/base/repository';
+import { NotFoundError } from '@blc-mono/members/application/errors/NotFoundError';
 import { EligibilityStatus } from '@blc-mono/shared/models/members/enums/EligibilityStatus';
 import { ApplicationReason } from '@blc-mono/shared/models/members/enums/ApplicationReason';
 import { DeleteCommandInput } from '@aws-sdk/lib-dynamodb/dist-types/commands/DeleteCommand';
+import { defaultDynamoDbClient } from '@blc-mono/members/application/providers/DynamoDb';
+import { memberProfilesTableName } from '@blc-mono/members/application/providers/Tables';
 
 export class ProfileRepository extends Repository {
-  constructor(
-    dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    private readonly tableName: string = Table.memberProfiles.tableName,
-  ) {
+  constructor(dynamoDB = defaultDynamoDbClient) {
     super(dynamoDB);
   }
 
@@ -43,7 +45,7 @@ export class ProfileRepository extends Repository {
       TransactItems: [
         {
           Put: {
-            TableName: this.tableName,
+            TableName: memberProfilesTableName(),
             Item: {
               pk: memberKey(memberId),
               sk: PROFILE,
@@ -54,7 +56,7 @@ export class ProfileRepository extends Repository {
         },
         {
           Put: {
-            TableName: this.tableName,
+            TableName: memberProfilesTableName(),
             Item: {
               pk: memberKey(memberId),
               sk: `${APPLICATION}#${applicationId}`,
@@ -75,7 +77,7 @@ export class ProfileRepository extends Repository {
 
   async deleteProfile(memberId: string): Promise<void> {
     const params: DeleteCommandInput = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       Key: {
         pk: memberKey(memberId),
         sk: PROFILE,
@@ -87,7 +89,7 @@ export class ProfileRepository extends Repository {
 
   async updateProfile(memberId: string, profile: Partial<UpdateProfileModel>): Promise<void> {
     await this.partialUpdate({
-      tableName: this.tableName,
+      tableName: memberProfilesTableName(),
       pk: memberKey(memberId),
       sk: PROFILE,
       data: {
@@ -100,7 +102,7 @@ export class ProfileRepository extends Repository {
   // This is temporary until we have OpenSearch in place
   async getProfiles(): Promise<ProfileModel[]> {
     const params: ScanCommandInput = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       FilterExpression: 'begins_with(pk, :member) AND begins_with(sk, :profile)',
       ExpressionAttributeValues: {
         ':member': MEMBER,
@@ -120,7 +122,7 @@ export class ProfileRepository extends Repository {
 
   async getProfile(memberId: string): Promise<ProfileModel> {
     const params: QueryCommandInput = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       KeyConditionExpression: 'pk = :pk',
       ExpressionAttributeValues: {
         ':pk': memberKey(memberId),
@@ -162,7 +164,7 @@ export class ProfileRepository extends Repository {
 
   async getNotes(memberId: string): Promise<NoteModel[]> {
     const params: QueryCommandInput = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       KeyConditionExpression: 'pk = :pk AND begins_with(sk, :sk)',
       ExpressionAttributeValues: {
         ':pk': memberKey(memberId),
@@ -182,7 +184,7 @@ export class ProfileRepository extends Repository {
   async createNote(memberId: string, note: CreateNoteModel): Promise<string> {
     const noteId = uuidv4();
     const params = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       Item: {
         pk: memberKey(memberId),
         sk: noteKey(noteId),
@@ -199,7 +201,7 @@ export class ProfileRepository extends Repository {
 
   async updateNote(memberId: string, noteId: string, note: Partial<NoteModel>): Promise<void> {
     await this.partialUpdate({
-      tableName: this.tableName,
+      tableName: memberProfilesTableName(),
       pk: memberKey(memberId),
       sk: noteKey(noteId),
       data: {

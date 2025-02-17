@@ -1,6 +1,6 @@
 import { CardModel } from '@blc-mono/shared/models/members/cardModel';
 import { DynamoRow } from '@blc-mono/members/testdata/loaders/loader/databaseSeeder';
-import { cardKey, memberKey } from '@blc-mono/members/application/repositories/repository';
+import { cardKey, memberKey } from '@blc-mono/members/application/repositories/base/repository';
 import { CardStatus } from '@blc-mono/shared/models/members/enums/CardStatus';
 
 export type CardModelForDynamo = CardModel & DynamoRow;

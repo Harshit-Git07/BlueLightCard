@@ -1,30 +1,29 @@
 import {
-  DynamoDBDocumentClient,
   QueryCommand,
   QueryCommandOutput,
   TransactWriteCommand,
   TransactWriteCommandInput,
 } from '@aws-sdk/lib-dynamodb';
 import { PromoCodeModel } from '@blc-mono/shared/models/members/promoCodeModel';
-import { defaultDynamoDbClient } from './dynamoClient';
-import { Table } from 'sst/node/table';
 import { PromoCodeType } from '@blc-mono/shared/models/members/enums/PromoCodeType';
 import { ApplyPromoCodeApplicationModel } from '@blc-mono/shared/models/members/applicationModel';
-import { applicationKey, memberKey, promoCodeKey, Repository } from './repository';
+import {
+  applicationKey,
+  memberKey,
+  promoCodeKey,
+  Repository,
+} from '@blc-mono/members/application/repositories/base/repository';
+import { defaultDynamoDbClient } from '@blc-mono/members/application/providers/DynamoDb';
+import { memberProfilesTableName } from '@blc-mono/members/application/providers/Tables';
 
 export class PromoCodesRepository extends Repository {
-  constructor(
-    dynamoDB: DynamoDBDocumentClient = defaultDynamoDbClient,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    private readonly tableName: string = Table.memberProfiles.tableName,
-  ) {
+  constructor(dynamoDB = defaultDynamoDbClient) {
     super(dynamoDB);
   }
 
   async getMultiUseOrSingleUseChildPromoCode(promoCode: string): Promise<PromoCodeModel[] | null> {
     const queryCommand = new QueryCommand({
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       IndexName: 'PromoCodeIndex',
       KeyConditionExpression: 'code = :code',
       FilterExpression: 'sk = :multiCodeSk OR begins_with(sk, :singleCodeChildSk)',
@@ -42,7 +41,7 @@ export class PromoCodesRepository extends Repository {
 
   async getSingleUseParentPromoCode(promoCodeId: string): Promise<PromoCodeModel[] | null> {
     const params = {
-      TableName: this.tableName,
+      TableName: memberProfilesTableName(),
       KeyConditionExpression: 'pk = :pk AND sk = :singleCodeParentSk',
       ExpressionAttributeValues: {
         ':pk': promoCodeKey(promoCodeId),
@@ -66,7 +65,7 @@ export class PromoCodesRepository extends Repository {
     const currentDate = new Date().toISOString();
     const singleUseChildCodeUpdateParams = {
       Update: {
-        TableName: this.tableName,
+        TableName: memberProfilesTableName(),
         Key: {
           pk: promoCodeKey(parentPromoCodeId),
           sk: `SINGLE_USE#${singlePromoCodeId}`,
@@ -84,7 +83,7 @@ export class PromoCodesRepository extends Repository {
     };
     const parentCodeUpdateParams = {
       Update: {
-        TableName: this.tableName,
+        TableName: memberProfilesTableName(),
         Key: {
           pk: promoCodeKey(parentPromoCodeId),
           sk: promoCodeType,
@@ -100,7 +99,7 @@ export class PromoCodesRepository extends Repository {
       this.getPartialUpdateExpressionValues(applyPromoCodeApplicationModel);
     const applicationUpdateParams = {
       Update: {
-        TableName: this.tableName,
+        TableName: memberProfilesTableName(),
         Key: {
           pk: memberKey(memberId),
           sk: applicationKey(applicationId),

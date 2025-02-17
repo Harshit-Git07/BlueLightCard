@@ -1,5 +1,5 @@
 import * as unmarshall from '@aws-sdk/util-dynamodb';
-import { unmarshallStreamImages } from '../unmarshallStreamImages';
+import { unmarshallStreamImages } from '@blc-mono/members/application/utils/dynamoDb/unmarshallStreamImages';
 
 jest.mock('@aws-sdk/util-dynamodb');
 

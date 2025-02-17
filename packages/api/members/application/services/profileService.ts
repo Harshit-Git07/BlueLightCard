@@ -1,5 +1,5 @@
 import { EmailChangeModel } from '@blc-mono/shared/models/members/emailChangeModel';
-import { logger } from '@blc-mono/members/application/middleware';
+import { logger } from '@blc-mono/members/application/handlers/shared/middleware/middleware';
 import {
   CreateNoteModel,
   NoteModel,
@@ -13,22 +13,22 @@ import {
 } from '@blc-mono/shared/models/members/profileModel';
 import { ValidationError } from '@blc-mono/members/application/errors/ValidationError';
 import { ProfileRepository } from '@blc-mono/members/application/repositories/profileRepository';
-import { Auth0ClientService } from '@blc-mono/members/application/auth0/auth0ClientService';
-import { OrganisationService } from '@blc-mono/members/application/services/organisationService';
+import { Auth0ClientService } from '@blc-mono/members/application/services/auth0/auth0ClientService';
+import { OrganisationService } from '@blc-mono/members/application/services/organisation/organisationService';
 
 let profileServiceSingleton: ProfileService;
 
 export class ProfileService {
   constructor(
-    private readonly repository: ProfileRepository = new ProfileRepository(),
-    private readonly organisationService: OrganisationService = new OrganisationService(),
-    private readonly auth0Client: Auth0ClientService = new Auth0ClientService(),
+    private readonly profileRepository = new ProfileRepository(),
+    private readonly organisationService = new OrganisationService(),
+    private readonly auth0Client = new Auth0ClientService(),
   ) {}
 
   async createProfile(profile: CreateProfileModel): Promise<string> {
     try {
       logger.debug({ message: 'Creating profile', profile });
-      return await this.repository.createProfile(profile);
+      return await this.profileRepository.createProfile(profile);
     } catch (error) {
       logger.error({ message: 'Error creating profile', error });
       throw error;
@@ -38,7 +38,7 @@ export class ProfileService {
   async deleteProfile(memberId: string): Promise<void> {
     try {
       logger.debug({ message: 'Deleting profile', memberId });
-      await this.repository.deleteProfile(memberId);
+      await this.profileRepository.deleteProfile(memberId);
     } catch (error) {
       logger.error({ message: 'Error deleting profile', error });
       throw error;
@@ -49,7 +49,7 @@ export class ProfileService {
     try {
       logger.debug({ message: 'Updating profile', profile });
       await this.verifyEmployerExists(profile);
-      return await this.repository.updateProfile(memberId, profile);
+      return await this.profileRepository.updateProfile(memberId, profile);
     } catch (error) {
       logger.error({ message: 'Error updating profile', error });
       throw error;
@@ -78,7 +78,7 @@ export class ProfileService {
   async getProfiles(): Promise<ProfileModel[]> {
     try {
       logger.debug({ message: 'Fetching profiles' });
-      return await this.repository.getProfiles();
+      return await this.profileRepository.getProfiles();
     } catch (error) {
       logger.error({ message: 'Error fetching profiles', error });
       throw error;
@@ -88,7 +88,7 @@ export class ProfileService {
   async getProfile(memberId: string): Promise<ProfileModel> {
     try {
       logger.debug({ message: 'Fetching profile', memberId });
-      return await this.repository.getProfile(memberId);
+      return await this.profileRepository.getProfile(memberId);
     } catch (error) {
       logger.error({ message: 'Error fetching profile', error });
       throw error;
@@ -135,7 +135,7 @@ export class ProfileService {
   async createNote(memberId: string, note: CreateNoteModel): Promise<string> {
     try {
       logger.debug({ message: 'Creating note', note });
-      return await this.repository.createNote(memberId, note);
+      return await this.profileRepository.createNote(memberId, note);
     } catch (error) {
       logger.error({ message: 'Error creating note', error });
       throw error;
@@ -145,7 +145,7 @@ export class ProfileService {
   async updateNote(memberId: string, noteId: string, note: UpdateNoteModel): Promise<void> {
     try {
       logger.debug({ message: 'Updating note', note });
-      await this.repository.updateNote(memberId, noteId, note);
+      await this.profileRepository.updateNote(memberId, noteId, note);
     } catch (error) {
       logger.error({ message: 'Error updating note', error });
       throw error;
@@ -155,7 +155,7 @@ export class ProfileService {
   async getNotes(memberId: string): Promise<NoteModel[]> {
     try {
       logger.debug({ message: 'Fetching notes' });
-      return await this.repository.getNotes(memberId);
+      return await this.profileRepository.getNotes(memberId);
     } catch (error) {
       logger.error({ message: 'Error fetching notes', error });
       throw error;

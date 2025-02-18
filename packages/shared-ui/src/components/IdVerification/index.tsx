@@ -5,18 +5,19 @@ import { IdVerificationMethod } from './IdVerificationTypes';
 import IdVerificationEmail from './components/IdVerificationEmail/IdVerificationEmail';
 import { initializeIdVerificationAtom } from './idVerificationAtom';
 import IdVerificationUpload from './components/IdVerificationUpload/IdVerificationUpload';
+import useMemberId from '@/hooks/useMemberId';
 
 interface IdVerificationProps {
-  memberUuid: string;
   isDoubleId?: boolean;
 }
 
-const IdVerificationIndex: FC<IdVerificationProps> = ({ memberUuid, isDoubleId = false }) => {
+const IdVerificationIndex: FC<IdVerificationProps> = ({ isDoubleId = false }) => {
   const { selectedMethod, updateVerification } = useIdVerification();
+  const memberId = useMemberId();
 
   useEffect(() => {
-    updateVerification(initializeIdVerificationAtom(isDoubleId, memberUuid));
-  }, [isDoubleId, memberUuid]);
+    updateVerification(initializeIdVerificationAtom(isDoubleId, memberId));
+  }, [isDoubleId, memberId]);
 
   if (selectedMethod === IdVerificationMethod.WORK_EMAIL) {
     return <IdVerificationEmail />;

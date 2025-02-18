@@ -49,17 +49,12 @@ async function isAuthenticated(
     exp: tokenExpiryInSecondsSinceEpoch,
     sub: usernameFromToken,
     iss: issuer,
-    memberUuid,
   } = unpackJWT(idToken);
   if (AuthTokensService.expiryTimeHasPassed(tokenExpiryInSecondsSinceEpoch)) {
     //refresh token and update storage and return true or false based on if it works
     return Auth0Service.isAuth0Issuer(issuer)
       ? await Auth0Service.updateTokensUsingRefreshToken(refreshToken, updateAuthTokens)
-      : await reAuthFromRefreshToken(
-          memberUuid ?? usernameFromToken,
-          refreshToken,
-          updateAuthTokens
-        );
+      : await reAuthFromRefreshToken(usernameFromToken, refreshToken, updateAuthTokens);
   }
   return true;
 }

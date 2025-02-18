@@ -8,8 +8,8 @@ const componentMeta: Meta<typeof IdVerification> = {
 };
 
 const DefaultTemplate: StoryFn<typeof IdVerification> = (args) => {
-  const { isDoubleId = false, memberUuid } = args;
-  const content = <IdVerification memberUuid={memberUuid} isDoubleId={isDoubleId} />;
+  const { isDoubleId = false } = args;
+  const content = <IdVerification isDoubleId={isDoubleId} />;
 
   return <StoryDrawerWrapper content={content} minHeight={800} />;
 };
@@ -18,7 +18,6 @@ export const Default = DefaultTemplate.bind({});
 
 Default.args = {
   isDoubleId: false,
-  memberUuid: 'abcd-1234',
 };
 
 export default componentMeta;

@@ -26,8 +26,8 @@ function MockLogin() {
   // This is only a mock of the login, used to get a token for testing GraphQL queries it is NOT INTENDED FOR PRODUCTION.
 
   function getUsername(token: string) {
-    const { sub: username, memberUuid } = unpackJWT(token);
-    return memberUuid ?? username;
+    const { sub: username } = unpackJWT(token);
+    return username;
   }
 
   async function getToken(username: string, password: string) {

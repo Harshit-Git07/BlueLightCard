@@ -1,13 +1,15 @@
 import { usePlatformAdapter } from '../../../adapters';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApiResponseError, ApiResponseSuccess } from '../../../api/types';
 import { UpdateCustomerProfilePayload, UpdateCustomerProfileResponse } from '../types';
 import { jsonOrNull } from '../../../utils/jsonUtils';
 import { V5_API_URL } from '../../../constants';
+import useMemberId from '../../../hooks/useMemberId';
 
-export const useMemberProfilePut = (memberId: string) => {
+export const useMemberProfilePut = () => {
   const platformAdapter = usePlatformAdapter();
-
+  const queryClient = useQueryClient();
+  const memberId = useMemberId();
   return useMutation({
     mutationFn: async (
       putBody: UpdateCustomerProfilePayload,
@@ -26,6 +28,9 @@ export const useMemberProfilePut = (memberId: string) => {
             type: 'error',
             ...jsonOrNull<ApiResponseError>(data),
           };
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['memberProfile', memberId] });
     },
   });
 };

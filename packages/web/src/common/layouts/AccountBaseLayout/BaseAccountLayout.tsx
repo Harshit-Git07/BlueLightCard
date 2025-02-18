@@ -7,7 +7,6 @@ import {
   Drawer,
   Toaster,
   useMemberCard,
-  useMemberId,
   useMemberProfileGet,
 } from '@bluelightcard/shared-ui';
 
@@ -28,10 +27,8 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
   const authContext = useContext(AuthContext);
   const loggedIn = authContext.isUserAuthenticated();
 
-  const memberId = useMemberId();
-
-  const { memberProfile } = useMemberProfileGet(memberId);
-  const { card } = useMemberCard(memberId);
+  const { memberProfile } = useMemberProfileGet();
+  const { card } = useMemberCard();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -84,7 +81,7 @@ const BaseAccountLayout: FC<LayoutProps> = ({ children }) => {
       <Toaster />
       <div className="sticky top-0 z-40">
         <Navigation onAccountClick={toggleDrawer} />
-        <CardVerificationAlerts memberUuid={memberId} />
+        <CardVerificationAlerts />
       </div>
       <div className="mt-[32px] flex flex-col hidden tablet:block desktop:container mx-[20px] desktop:mx-auto">
         <AccountDetails

@@ -20,10 +20,15 @@ interface testRenderProps {
   selectedMethod?: null | IdVerificationMethod;
 }
 
+const memberUuid = 'abcd-1234';
+jest.mock('../../hooks/useMemberId', () => ({
+  __esModule: true,
+  default: () => memberUuid,
+}));
+
 export const testRender = async ({
   status = 200,
   data = '',
-  memberUuid = '',
   isDoubleId = false,
   selectedMethod = null,
 }: testRenderProps) => {
@@ -33,7 +38,7 @@ export const testRender = async ({
     <PlatformAdapterProvider adapter={mockPlatformAdapter}>
       <QueryClientProvider client={createQueryClient()}>
         <Provider store={store}>
-          <IdVerificationIndex memberUuid={memberUuid ?? ''} isDoubleId={isDoubleId} />
+          <IdVerificationIndex isDoubleId={isDoubleId} />
         </Provider>
       </QueryClientProvider>
     </PlatformAdapterProvider>,
@@ -44,9 +49,9 @@ export const testRender = async ({
 
 describe('IdVerification component', () => {
   it('should render the method selection screen', async () => {
-    await testRender({ memberUuid: 'abcd-1234' });
+    await testRender({});
     const verification = store.get(idVerificationAtom);
-    expect(verification).toHaveProperty('memberUuid', 'abcd-1234');
+    expect(verification).toHaveProperty('memberUuid', memberUuid);
     expect(verification).toHaveProperty('isDoubleId', false);
 
     expect(screen.getByText('Choose verification method')).toBeInTheDocument();

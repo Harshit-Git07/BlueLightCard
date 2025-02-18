@@ -9,7 +9,6 @@ import {
   RequestNewCardButton,
   ThemeVariant,
   useMemberCard,
-  useMemberId,
   useMemberProfileGet,
   usePlatformAdapter,
   YourCard,
@@ -21,10 +20,9 @@ import { BRAND } from '@/global-vars';
 import withAccountLayout from '@/layouts/AccountBaseLayout/withAccountLayout';
 
 const YourCardPage: NextPage = () => {
-  const memberId = useMemberId();
   const adapter = usePlatformAdapter();
-  const { card } = useMemberCard(memberId);
-  const { isLoading, memberProfile } = useMemberProfileGet(memberId);
+  const { isLoading, memberProfile } = useMemberProfileGet();
+  const { card } = useMemberCard();
 
   //Prefetch orgs for faster sequence management
   useGetOrganisation(memberProfile?.organisationId);

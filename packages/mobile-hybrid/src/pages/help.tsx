@@ -12,7 +12,6 @@ import { BRAND } from '@/globals';
 import { BRANDS } from '@/types/brands.enum';
 
 const HelpPage: NextPage = () => {
-  const memberId = useMemberId();
   useRouterReady();
 
   const navigation = new InvokeNativeNavigation();
@@ -23,7 +22,7 @@ const HelpPage: NextPage = () => {
   return (
     <>
       <AccountPagesHeader title="Help" />
-      <CardVerificationAlerts memberUuid={memberId} />
+      <CardVerificationAlerts />
       <div className="p-[16px]">
         <h2
           className={`pb-[24px] text-left text-colour-onSurface dark:text-colour-onSurface-dark ${fonts.titleMedium}`}

@@ -7,23 +7,21 @@ import Button from '../../Button-V2';
 import { ThemeVariant } from '../../../types';
 import PasswordInput from '../../PasswordInput';
 import useMemberProfileGet from '../../../hooks/useMemberProfileGet';
-import useMemberId from '../../../hooks/useMemberId';
 import TextInput from '../../MyAccountDuplicatedComponents/TextInput';
 
 export const EmailPasswordSection: FC = () => {
-  const memberId = useMemberId();
-  const { memberProfile } = useMemberProfileGet(memberId);
+  const { memberProfile } = useMemberProfileGet();
   const { open: openDrawer } = useDrawer();
 
   const isEmailDisabled = !memberProfile?.email;
 
   const onChangeEmailClick = () => {
     if (!isEmailDisabled) {
-      openDrawer(<ChangeEmailAddress memberUuid={memberId} email={memberProfile.email} />);
+      openDrawer(<ChangeEmailAddress email={memberProfile.email} />);
     }
   };
   const onChangePasswordClick = () =>
-    openDrawer(<ChangePasswordForm memberId={memberId} onPasswordUpdateSuccess={() => {}} />);
+    openDrawer(<ChangePasswordForm onPasswordUpdateSuccess={() => {}} />);
 
   return (
     <>

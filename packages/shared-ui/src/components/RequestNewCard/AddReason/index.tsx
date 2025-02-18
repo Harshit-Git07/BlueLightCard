@@ -35,8 +35,8 @@ export const radioOptions: RadioGroupItems = [
 ];
 
 const RequestNewCardReason: FC = () => {
-  const { mutateAsync, isPending, goNext, memberId, application } = useRequestNewCard();
-  const { insideReprintPeriod } = useMemberCard(memberId);
+  const { mutateAsync, isPending, goNext, application } = useRequestNewCard();
+  const { insideReprintPeriod } = useMemberCard();
 
   const { close } = useDrawer();
 

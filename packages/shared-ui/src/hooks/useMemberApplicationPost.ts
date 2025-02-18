@@ -3,12 +3,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { jsonOrNull } from '../utils/jsonUtils';
 import { ApplicationSchema } from '../components/CardVerificationAlerts/types';
 import { V5_API_URL } from '../constants';
+import useMemberId from './useMemberId';
 
 export interface MemberApplicationPostResponse {
   applicationId: string;
 }
 
-const useMemberApplicationPost = (memberId: string) => {
+const useMemberApplicationPost = () => {
+  const memberId = useMemberId();
   const queryClient = useQueryClient();
   const adapter = usePlatformAdapter();
 

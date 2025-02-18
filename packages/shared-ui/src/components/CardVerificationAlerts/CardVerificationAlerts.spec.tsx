@@ -31,8 +31,6 @@ const rejectedProfile: ApplicationSchema = {
   rejectionReason: RejectionReason.BLURRY_IMAGE_DECLINE_ID,
 };
 
-const testUuid = 'testUuid';
-
 describe('CardVerificationAlert', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -41,7 +39,7 @@ describe('CardVerificationAlert', () => {
   it('renders awaitingId banner', () => {
     mockUseMemberApplication.mockReturnValue({ application: awaitingIdProfile });
 
-    const { container } = render(<CardVerificationBanner memberUuid={testUuid} />);
+    const { container } = render(<CardVerificationBanner />);
 
     expect(
       screen.getByText(copy.awaitingId.title.replace('{brandTitle}', 'Blue Light Card')),
@@ -53,7 +51,7 @@ describe('CardVerificationAlert', () => {
   it('renders awaitingIdApproval banner', () => {
     mockUseMemberApplication.mockReturnValue({ application: awaitingIdApprovalProfile });
 
-    const { container } = render(<CardVerificationBanner memberUuid={testUuid} />);
+    const { container } = render(<CardVerificationBanner />);
 
     expect(screen.getByText(copy.awaitingIdApproval.title)).toBeInTheDocument();
     expect(screen.getByRole('link')).toBeInTheDocument();
@@ -63,7 +61,7 @@ describe('CardVerificationAlert', () => {
   it('renders rejection banner', () => {
     mockUseMemberApplication.mockReturnValue({ application: rejectedProfile });
 
-    const { container } = render(<CardVerificationBanner memberUuid={testUuid} />);
+    const { container } = render(<CardVerificationBanner />);
 
     expect(screen.getByText(copy.rejected.title)).toBeInTheDocument();
     expect(screen.getByRole('link')).toBeInTheDocument();
@@ -82,7 +80,7 @@ describe('CardVerificationAlert', () => {
     };
     mockUseMemberApplication.mockReturnValue({ application: otherApplicationReasonProfile });
 
-    const { container } = render(<CardVerificationBanner memberUuid={testUuid} />);
+    const { container } = render(<CardVerificationBanner />);
 
     expect(container).toBeEmptyDOMElement();
   });
@@ -90,7 +88,7 @@ describe('CardVerificationAlert', () => {
   it('renders nothing for no profile', () => {
     mockUseMemberApplication.mockReturnValue({ application: null });
 
-    const { container } = render(<CardVerificationBanner memberUuid={testUuid} />);
+    const { container } = render(<CardVerificationBanner />);
 
     expect(container).toBeEmptyDOMElement();
   });
@@ -98,7 +96,7 @@ describe('CardVerificationAlert', () => {
   it('renders nothing for no applications', () => {
     mockUseMemberApplication.mockReturnValue({ data: {} });
 
-    const { container } = render(<CardVerificationBanner memberUuid={testUuid} />);
+    const { container } = render(<CardVerificationBanner />);
 
     expect(container).toBeEmptyDOMElement();
   });

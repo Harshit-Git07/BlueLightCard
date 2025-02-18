@@ -5,15 +5,15 @@ import useMarketingPreferencesPost from './useMarketingPreferencesPost';
 import { useQueryClient } from '@tanstack/react-query';
 import { marketingPreferencesQueryKey, optedInKeys } from './marketingPreferencesUtils';
 
-const useMarketingPreferencesState = (memberUuid: string) => {
+const useMarketingPreferencesState = () => {
   const client = useQueryClient();
   const [savedKeys, setSavedKeys] = useState('');
   const [isBusy, setIsBusy] = useState(false);
   const [preferences, setPreferences] = useState<MarketingPreferencesData>(
     marketingPreferencesDefault(),
   );
-  const { isLoading, data: responseData } = useMarketingPreferencesGet(memberUuid);
-  const saveMutation = useMarketingPreferencesPost(memberUuid);
+  const { isLoading, data: responseData } = useMarketingPreferencesGet();
+  const saveMutation = useMarketingPreferencesPost();
 
   const data = responseData?.data;
   useEffect(() => {
@@ -27,7 +27,7 @@ const useMarketingPreferencesState = (memberUuid: string) => {
   const savePreferences = async () => {
     setIsBusy(true);
     const result = await saveMutation.mutateAsync(preferences);
-    const success = !Array.isArray(result?.data?.errors);
+    const success = result.status < 400;
     if (success) {
       setSavedKeys(optedInKeys(preferences));
     } else {

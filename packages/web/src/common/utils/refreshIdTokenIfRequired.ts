@@ -12,7 +12,6 @@ export async function refreshIdTokenIfRequired(): Promise<string> {
       exp: tokenExpiryInSecondsSinceEpoch,
       sub: usernameFromToken,
       iss: issuer,
-      memberUuid,
     } = unpackJWT(idToken);
 
     if (AuthTokensService.expiryTimeHasPassed(tokenExpiryInSecondsSinceEpoch)) {
@@ -20,7 +19,7 @@ export async function refreshIdTokenIfRequired(): Promise<string> {
       const refreshedSuccessfully = await performTokenRefresh(
         issuer,
         refreshToken,
-        memberUuid ?? usernameFromToken
+        usernameFromToken
       );
       if (refreshedSuccessfully) {
         // Need to get the idToken again as it has been updated in local storage

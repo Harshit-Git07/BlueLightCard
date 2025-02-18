@@ -4,7 +4,6 @@ import { getBrandedSupportLink, PlatformVariant, ThemeVariant, usePlatformAdapte
 import { copy } from '../copy';
 import Button from '../../Button-V2';
 import { useGetEmployers } from '../../../hooks/useGetEmployers';
-import useMemberId from '../../../hooks/useMemberId';
 import useMemberProfileGet from '../../../hooks/useMemberProfileGet';
 import { useGetOrganisation } from '../../../hooks/useGetOrganisation';
 import Dropdown from '../../MyAccountDuplicatedComponents/Dropdown';
@@ -18,8 +17,7 @@ type EmploymentSectionProps = {
   onDivisionChange: (division: DropdownOption) => void;
 };
 export const EmploymentSection: FC<EmploymentSectionProps> = ({ divisionId, onDivisionChange }) => {
-  const memberId = useMemberId();
-  const { memberProfile } = useMemberProfileGet(memberId);
+  const { memberProfile } = useMemberProfileGet();
   const { data: organisationDetails } = useGetOrganisation(memberProfile?.organisationId);
   const { isLoading: isLoadingEmployerDetails, data: employerDetails } = useGetEmployers(
     memberProfile?.organisationId,

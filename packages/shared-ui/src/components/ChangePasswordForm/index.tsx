@@ -8,13 +8,12 @@ import copy from './copy';
 import { PasswordFields } from './constants';
 
 export type Props = {
-  memberId: string;
   onPasswordUpdateSuccess: () => void;
 };
 
-const ChangePasswordForm: FC<Props> = ({ memberId, onPasswordUpdateSuccess }) => {
+const ChangePasswordForm: FC<Props> = ({ onPasswordUpdateSuccess }) => {
   const { formState, saveDisabled, updatePasswordValue, updatePasswordError, makeApiRequest } =
-    useChangePasswordState(memberId);
+    useChangePasswordState();
   const { close } = useDrawer();
 
   const onFormSubmit: FormEventHandler<HTMLFormElement> = async (event) => {

@@ -1,6 +1,5 @@
 import useMemberApplicationPost from '../../hooks/useMemberApplicationPost';
 import useMemberApplicationPut from '../../hooks/useMemberApplicationPut';
-import useMemberId from '../../hooks/useMemberId';
 import { useSetAtom } from 'jotai/index';
 import { requestNewCardAtom } from './requestNewCardAtom';
 import useRequestNewCardSequence from './useRequestNewCardSequence';
@@ -13,11 +12,10 @@ import useMemberProfilePut from '../../hooks/useMemberProfilePut';
 import useMemberApplicationConfirmPaymentPut from '../../hooks/useMemberApplicationConfirmPaymentPut';
 
 const useRequestNewCard = () => {
-  const memberId = useMemberId();
   const setAtom = useSetAtom(requestNewCardAtom);
   const { sequence, currentStep, preferredStep } = useRequestNewCardSequence();
-  const { memberProfile } = useMemberProfileGet(memberId);
-  const { applicationId, application } = useMemberApplication(memberId);
+  const { memberProfile } = useMemberProfileGet();
+  const { applicationId, application } = useMemberApplication();
   const supportingDocs = useSupportedDocs(
     memberProfile?.organisationId ?? '',
     memberProfile?.employmentStatus ?? '',
@@ -25,12 +23,12 @@ const useRequestNewCard = () => {
   const { isDoubleId } = supportingDocs;
   const verificationMethod = application?.verificationMethod;
   //
-  const mutatePost = useMemberApplicationPost(memberId);
-  const mutatePut = useMemberApplicationPut(memberId, applicationId);
+  const mutatePost = useMemberApplicationPost();
+  const mutatePut = useMemberApplicationPut(applicationId);
   const { mutateAsync: mutateMemberProfile, isPending: isPendingMemberProfilePUT } =
-    useMemberProfilePut(memberId);
+    useMemberProfilePut();
   const { mutateAsync: mutateConfirmPayment, isPending: isPendingConfirmPayment } =
-    useMemberApplicationConfirmPaymentPut(memberId, applicationId);
+    useMemberApplicationConfirmPaymentPut(applicationId);
   //
   const previousStep = Math.max((currentStep ?? 0) - 1, 0);
   const nextStep = Math.min((currentStep ?? 0) + 1, sequence.length - 1);
@@ -61,7 +59,6 @@ const useRequestNewCard = () => {
     mutateConfirmPayment,
     isPending: isPendingApplicationMutation || isPendingMemberProfilePUT || isPendingConfirmPayment,
     mutateMemberProfile,
-    memberId,
     applicationId,
     application,
     previousStep,

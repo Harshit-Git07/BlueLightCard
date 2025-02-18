@@ -1,10 +1,12 @@
 import { usePlatformAdapter } from '../adapters';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { V5_API_URL } from '../constants';
+import useMemberId from './useMemberId';
 
-const useMemberApplicationConfirmPaymentPut = (memberId: string, applicationId: string) => {
+const useMemberApplicationConfirmPaymentPut = (applicationId: string) => {
   const queryClient = useQueryClient();
   const adapter = usePlatformAdapter();
+  const memberId = useMemberId();
 
   return useMutation({
     mutationFn: async () => {

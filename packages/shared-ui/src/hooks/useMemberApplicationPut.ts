@@ -3,17 +3,19 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ApplicationSchema } from '../components/CardVerificationAlerts/types';
 import { V5_API_URL } from '../constants';
 import useMemberApplication from './useMemberApplication';
+import useMemberId from './useMemberId';
 
-const useMemberApplicationPut = (memberId: string, applicationId: string) => {
+const useMemberApplicationPut = (applicationId: string) => {
   const queryClient = useQueryClient();
   const adapter = usePlatformAdapter();
-
-  const { application } = useMemberApplication(memberId);
+  const memberId = useMemberId();
+  const { application } = useMemberApplication();
 
   const fieldsRequiredForPut = {
     memberId,
     applicationId,
     applicationReason: application?.applicationReason,
+    reorderCardReason: application?.reorderCardReason,
   };
 
   return useMutation({

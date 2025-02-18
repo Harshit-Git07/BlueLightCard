@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { jsonOrNull } from '../../utils/jsonUtils';
 import { V5_API_URL } from '../../constants';
 import { EmailChangeModel } from '@blc-mono/shared/models/members/emailChangeModel';
+import useMemberId from '../../hooks/useMemberId';
 
 type PutSchema = EmailChangeModel;
 
@@ -10,8 +11,10 @@ interface PutResponseData {
   error?: string;
 }
 
-const useChangeEmailAddressPut = (memberId: string) => {
+const useChangeEmailAddressPut = () => {
   const adapter = usePlatformAdapter();
+  const memberId = useMemberId();
+
   return useMutation({
     mutationFn: async (putBody: PutSchema) => {
       try {

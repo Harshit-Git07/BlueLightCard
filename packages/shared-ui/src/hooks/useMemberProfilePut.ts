@@ -4,11 +4,13 @@ import { ProfileSchema } from '../components/CardVerificationAlerts/types';
 import { V5_API_URL } from '../constants';
 import { useMemberProfileGet } from './useMemberProfileGet';
 
-const useMemberProfilePut = (memberId: string) => {
+const useMemberProfilePut = () => {
   const queryClient = useQueryClient();
   const adapter = usePlatformAdapter();
 
-  const { memberProfile } = useMemberProfileGet(memberId);
+  const { memberProfile } = useMemberProfileGet();
+  const memberId = memberProfile?.memberId ?? '';
+
   const fieldsRequiredForPut = {
     firstName: memberProfile?.firstName,
     lastName: memberProfile?.lastName,

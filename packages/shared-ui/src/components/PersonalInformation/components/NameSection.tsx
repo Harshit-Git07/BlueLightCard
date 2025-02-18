@@ -2,15 +2,13 @@ import { FC } from 'react';
 import { copy } from '../copy';
 import Button from '../../Button-V2';
 import { PlatformVariant, ThemeVariant } from '../../../types';
-import useMemberId from '../../../hooks/useMemberId';
 import useMemberProfileGet from '../../../hooks/useMemberProfileGet';
 import TextInput from '../../MyAccountDuplicatedComponents/TextInput';
 import { getBrandedSupportLink } from '../../../utils/getBrandedSupportLink';
 import { usePlatformAdapter } from '../../../adapters';
 
 export const NameSection: FC = () => {
-  const memberId = useMemberId();
-  const { memberProfile } = useMemberProfileGet(memberId);
+  const { memberProfile } = useMemberProfileGet();
 
   const { platform, navigate } = usePlatformAdapter();
   const zendeskUrl = getBrandedSupportLink();

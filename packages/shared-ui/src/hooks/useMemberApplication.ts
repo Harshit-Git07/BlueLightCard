@@ -1,8 +1,8 @@
 import useMemberProfileGet from './useMemberProfileGet';
 import { ApplicationSchema } from '../components/CardVerificationAlerts/types';
 
-const useMemberApplication = (memberId: string) => {
-  const { isLoading, memberProfile } = useMemberProfileGet(memberId);
+const useMemberApplication = () => {
+  const { isLoading, memberProfile } = useMemberProfileGet();
 
   const applications = memberProfile?.applications ?? [];
 

@@ -3,6 +3,7 @@ import { usePlatformAdapter } from '../adapters';
 import { jsonOrNull } from '../utils/jsonUtils';
 import { MemberProfile } from '../api/types';
 import { V5_API_URL } from '../constants';
+import useMemberUuidAtom from '../components/MyAccountDebugTools/useMemberAtom';
 
 type GETSuccessResponse = {
   type: 'success';
@@ -15,16 +16,21 @@ type GETErrorResponse = {
   message: string;
 };
 
-export const useMemberProfileGet = (memberId: string) => {
+export const useMemberProfileGet = () => {
+  const { atomMemberUuid } = useMemberUuidAtom();
+
   const adapter = usePlatformAdapter();
   const query = useQuery({
-    queryKey: ['memberProfile', memberId],
+    queryKey: ['memberProfile', atomMemberUuid],
     queryFn: async (): Promise<GETSuccessResponse | GETErrorResponse> => {
       try {
-        const { status, data } = await adapter.invokeV5Api(V5_API_URL.Profile(memberId), {
-          method: 'GET',
-          queryParameters: {},
-        });
+        const { status, data } = await adapter.invokeV5Api(
+          V5_API_URL.Profile(atomMemberUuid ?? undefined),
+          {
+            method: 'GET',
+            queryParameters: {},
+          },
+        );
 
         const profile = jsonOrNull<MemberProfile>(data);
         if (profile) {
@@ -46,8 +52,7 @@ export const useMemberProfileGet = (memberId: string) => {
         };
       }
     },
-    staleTime: 10000,
-    enabled: memberId.length !== 0,
+    staleTime: 1000 * 60 * 10,
   });
 
   const memberProfile = query.data?.type === 'success' ? query.data.profile : null;

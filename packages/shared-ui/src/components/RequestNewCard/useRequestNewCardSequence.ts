@@ -7,7 +7,6 @@ import {
   sequenceIdUploadOnly,
   sequenceInsideReprintPeriod,
 } from './requestNewCardStep';
-import useMemberId from '../../hooks/useMemberId';
 import useMemberCard from '../../hooks/useMemberCard';
 import { useAtomValue, useSetAtom } from 'jotai/index';
 import { requestNewCardAtom } from './requestNewCardAtom';
@@ -17,13 +16,13 @@ import useMemberProfileGet from '../../hooks/useMemberProfileGet';
 import { IdType } from '@blc-mono/shared/models/members/enums/IdType';
 
 const useRequestNewCardSequence = () => {
-  const memberId = useMemberId();
   const atomValue = useAtomValue(requestNewCardAtom);
   const setAtom = useSetAtom(requestNewCardAtom);
 
-  const { application } = useMemberApplication(memberId);
-  const { insideReprintPeriod } = useMemberCard(memberId);
-  const { memberProfile } = useMemberProfileGet(memberId);
+  const { memberProfile } = useMemberProfileGet();
+  const { application } = useMemberApplication();
+  const { insideReprintPeriod } = useMemberCard();
+
   const { mandatory } = useSupportedDocs(
     memberProfile?.organisationId ?? '',
     memberProfile?.employmentStatus ?? '',

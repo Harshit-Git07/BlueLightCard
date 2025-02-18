@@ -14,11 +14,11 @@ import { IdVerificationMethod } from '../../IdVerificationTypes';
 
 const validation = z.string().email();
 const IdVerificationEmail: FC = () => {
-  const { resetVerification, memberUuid, title } = useIdVerification();
+  const { resetVerification, title } = useIdVerification();
   const [email, setEmail] = useState<string>('');
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [countDown, setCountDown, getCountDown] = useStateSync<number>(0);
-  const { mutateAsync, isPending } = useIdVerificationEmailPut(memberUuid);
+  const { mutateAsync, isPending } = useIdVerificationEmailPut();
   const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>();
 
   const stopInterval = () => {

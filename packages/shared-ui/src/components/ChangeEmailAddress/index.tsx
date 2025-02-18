@@ -5,11 +5,10 @@ import ChangeEmailAddressForm from './components/ChangeEmailAddressForm';
 import ChangeEmailAddressVerification from './components/ChangeEmailAddressVerification';
 
 interface ChangeEmailAddressFormProps {
-  memberUuid: string;
   email: string;
 }
 
-const ChangeEmailAddress: FC<ChangeEmailAddressFormProps> = ({ email, memberUuid }) => {
+const ChangeEmailAddress: FC<ChangeEmailAddressFormProps> = ({ email }) => {
   const { close } = useDrawer();
 
   const {
@@ -21,7 +20,7 @@ const ChangeEmailAddress: FC<ChangeEmailAddressFormProps> = ({ email, memberUuid
     confirmEmail,
     confirmEmailError,
     showVerification,
-  } = useChangeEmailAddressState(email, memberUuid);
+  } = useChangeEmailAddressState(email);
 
   if (showVerification) {
     return (

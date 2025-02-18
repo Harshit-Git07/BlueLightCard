@@ -6,10 +6,15 @@ import { idVerificationText, verificationMethods } from '../../IdVerificationCon
 import { colours } from '../../../../tailwind/theme';
 
 const memberUuid = 'abcd-1234';
+jest.mock('../../../../hooks/useMemberId', () => ({
+  __esModule: true,
+  default: () => memberUuid,
+}));
+
 const selectedMethod = IdVerificationMethod.PAYSLIP;
 describe('IdVerificationFileUpload component', () => {
   it('should render the file upload screen', async () => {
-    await testRender({ memberUuid, selectedMethod });
+    await testRender({ selectedMethod });
     const config = verificationMethods[selectedMethod];
     const detail = screen.getByText(config.detail ?? '', { collapseWhitespace: false });
     expect(detail).toBeInTheDocument();
@@ -22,7 +27,7 @@ describe('IdVerificationFileUpload component', () => {
   });
 
   it('should render disable the next button until files are selected', async () => {
-    await testRender({ memberUuid, selectedMethod });
+    await testRender({ selectedMethod });
     const btn = screen.getByRole('button', { name: 'Next' });
     expect(btn).toBeDisabled();
   });

@@ -8,6 +8,12 @@ import { act } from 'react';
 import changeEmailAddressText from './ChangeEmailAddressText';
 import { V5_API_URL } from '@/constants';
 
+const memberUuid = 'abcd-1234';
+jest.mock('../../hooks/useMemberId', () => ({
+  __esModule: true,
+  default: () => memberUuid,
+}));
+
 const createTestQueryClient = () =>
   new QueryClient({
     defaultOptions: {
@@ -19,12 +25,12 @@ const createTestQueryClient = () =>
 
 const testHarness = (status = 200, data = {}) => {
   const email = 'example@blc.co.uk';
-  const memberUuid = 'abcd-1234';
+
   const mockPlatformAdapter = useMockPlatformAdapter(status, data);
   render(
     <PlatformAdapterProvider adapter={mockPlatformAdapter}>
       <QueryClientProvider client={createTestQueryClient()}>
-        <ChangeEmailAddress email={email} memberUuid={memberUuid} />
+        <ChangeEmailAddress email={email} />
       </QueryClientProvider>
     </PlatformAdapterProvider>,
   );

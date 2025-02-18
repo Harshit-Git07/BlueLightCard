@@ -6,7 +6,6 @@ import useMemberProfileGet from '../../../hooks/useMemberProfileGet';
 import { ProfileSchema } from '../../CardVerificationAlerts/types';
 import moment from 'moment';
 import { useGetEmployers } from '../../../hooks/useGetEmployers';
-import useMemberId from '../../../hooks/useMemberId';
 import { getFieldNameFromKey } from '../constants';
 
 type FormItemState<T> = {
@@ -37,12 +36,12 @@ export const defaultFormState: PersonalInfoFormState = {
 
 export const usePersonalInfoState = () => {
   const [formState, setFormState] = useState<PersonalInfoFormState>(defaultFormState);
-  const memberId = useMemberId();
-  const { isLoading: isLoadingMemberProfile, memberProfile } = useMemberProfileGet(memberId);
+
+  const { isLoading: isLoadingMemberProfile, memberProfile } = useMemberProfileGet();
   const { isLoading: isLoadingEmployerDetails, data: employerDetails } = useGetEmployers(
     memberProfile?.organisationId,
   );
-  const { isPending: isSavingMemberProfile, mutateAsync } = useMemberProfilePut(memberId);
+  const { isPending: isSavingMemberProfile, mutateAsync } = useMemberProfilePut();
   const { changedFromUserDefaults, validateField, formHasInvalidFields } = useFormValidation(
     formState,
     memberProfile,

@@ -53,12 +53,12 @@ export class Auth0Service {
         redirect_uri: this.config.redirectUrl,
         code,
       });
-      const { sub, memberUuid } = unpackJWT(id_token);
+      const { sub } = unpackJWT(id_token);
       updateAuthTokens({
         accessToken: access_token,
         idToken: id_token,
         refreshToken: refresh_token,
-        username: memberUuid ?? sub,
+        username: sub,
       });
       return true;
     } catch (error) {
@@ -80,12 +80,12 @@ export class Auth0Service {
         client_secret: this.config.clientSecret,
         refresh_token: refreshToken,
       });
-      const { sub, memberUuid } = unpackJWT(id_token);
+      const { sub } = unpackJWT(id_token);
       updateAuthTokens({
         accessToken: access_token,
         idToken: id_token,
         refreshToken: refresh_token,
-        username: memberUuid ?? sub,
+        username: sub,
       });
     } catch (error) {
       AuthTokensService.clearTokens();

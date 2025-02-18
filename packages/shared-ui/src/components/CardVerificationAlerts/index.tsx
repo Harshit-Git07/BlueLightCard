@@ -77,12 +77,8 @@ const bannerTypeToAlert = (
   return null;
 };
 
-type Props = {
-  memberUuid: string;
-};
-
-const CardVerificationBanner: FC<Props> = ({ memberUuid }) => {
-  const { application } = useMemberApplication(memberUuid);
+const CardVerificationBanner: FC = () => {
+  const { application } = useMemberApplication();
 
   if (!application) {
     return null;

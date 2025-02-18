@@ -3,12 +3,12 @@ import useChangeEmailAddressPut from './useChangeEmailAddressPut';
 import changeEmailAddressText from './ChangeEmailAddressText';
 import useChangeEmailAddressValidation from './useChangeEmailAddressValidation';
 
-const useChangeEmailAddressState = (email: string, memberUuid: string) => {
+const useChangeEmailAddressState = (email: string) => {
   const [showVerification, setShowVerification] = useState(false);
   const [genericError, setGenericError] = useState<string>('');
   const [newEmail, setNewEmail] = useState('');
   const [confirmEmail, setConfirmEmail] = useState('');
-  const { mutateAsync, isPending } = useChangeEmailAddressPut(memberUuid);
+  const { mutateAsync, isPending } = useChangeEmailAddressPut();
   const [dirty, setDirty] = useState({
     newEmail: false,
     confirmEmail: false,

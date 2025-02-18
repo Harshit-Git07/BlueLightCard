@@ -51,7 +51,7 @@ const Wrapper: FC<WrapperProps> = (props) => {
   return (
     <PlatformAdapterProvider adapter={adapter}>
       <QueryClientProvider client={testClient}>
-        <CardVerificationBanner memberUuid="testMemberId" />
+        <CardVerificationBanner />
         <section className="h-screen flex items-center justify-center">
           <p>Stuff on the page</p>
         </section>

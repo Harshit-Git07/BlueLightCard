@@ -33,11 +33,8 @@ const FileUpload: FC<Props> = ({
   validatePasswordProtectedPdfs = true,
   onChange,
 }) => {
-  const { memberId, applicationId } = useRequestNewCard();
-  const { mutateAsync: getSignedUrl } = useMemberApplicationUploadDocumentPost(
-    memberId,
-    applicationId,
-  );
+  const { applicationId } = useRequestNewCard();
+  const { mutateAsync: getSignedUrl } = useMemberApplicationUploadDocumentPost(applicationId);
   const { mutateAsync: uploadToS3 } = useS3Upload();
   const { selectedFiles, addFiles, updateFile, removeFiles } = useFileSelector();
   const [fileSelectionError, setFileSelectionError] = useState<string | null>(null);

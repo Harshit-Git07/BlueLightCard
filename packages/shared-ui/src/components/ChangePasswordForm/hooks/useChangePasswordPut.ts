@@ -4,9 +4,11 @@ import { UpdatePasswordPayload, UpdatePasswordResponse } from '../types';
 import { jsonOrNull } from '../../../utils/jsonUtils';
 import { ApiResponseError, ApiResponseSuccess } from '../../../api/types';
 import { V5_API_URL } from '../../../constants';
+import useMemberId from '../../../hooks/useMemberId';
 
-export const useChangePasswordPut = (memberId: string) => {
+export const useChangePasswordPut = () => {
   const platformAdapter = usePlatformAdapter();
+  const memberId = useMemberId();
 
   return useMutation({
     mutationFn: async (putBody: UpdatePasswordPayload): Promise<UpdatePasswordResponse> => {

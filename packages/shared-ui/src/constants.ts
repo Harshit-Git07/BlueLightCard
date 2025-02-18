@@ -37,7 +37,11 @@ export const V5_API_URL = {
     `/${V5_REGION}/members/members/${memberId}/marketing/braze`,
   Menus: `${DISCOVERY_PATH}/menus`,
   Organisation: (orgId?: string) => `/${V5_REGION}/members/orgs/${orgId}`,
-  Profile: (memberId: string) => `/${V5_REGION}/members/members/${memberId}/profile`,
+  Profile: (memberId?: string) => {
+    return memberId
+      ? `/${V5_REGION}/members/members/${memberId}/profile`
+      : `/${V5_REGION}/members/members/profile`;
+  },
   Application: (memberId: string) => `/${V5_REGION}/members/members/${memberId}/applications`,
   PaymentConfirmed: (memberId: string, applicationId: string) =>
     `/${V5_REGION}/members/members/${memberId}/applications/${applicationId}/paymentConfirmed`,

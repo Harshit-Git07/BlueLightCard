@@ -9,10 +9,9 @@ import useMemberProfileGet from '../../../hooks/useMemberProfileGet';
 import useMemberApplication from '../../../hooks/useMemberApplication';
 
 const ChangeAddress: FC = () => {
-  const { mutateMemberProfile, mutateAsync, isPending, goBack, goNext, memberId } =
-    useRequestNewCard();
-  const { memberProfile } = useMemberProfileGet(memberId);
-  const { application } = useMemberApplication(memberId);
+  const { mutateMemberProfile, mutateAsync, isPending, goBack, goNext } = useRequestNewCard();
+  const { memberProfile } = useMemberProfileGet();
+  const { application } = useMemberApplication();
   const [hasError, setHasError] = useState(false);
   const [address, setAddress] = useState<Address>({
     address1: '',

@@ -63,7 +63,7 @@ export const Example: StoryFn<typeof MarketingPreferences> = () => {
       <QueryClientProvider client={createQueryClient()}>
         <Toaster />
         <div className={'max-w-[847px]'}>
-          <MarketingPreferences memberUuid={'Batman'} />
+          <MarketingPreferences />
         </div>
         <div className={`${fonts.bodySmall} pt-[50px]`}>
           <p>GET response</p>

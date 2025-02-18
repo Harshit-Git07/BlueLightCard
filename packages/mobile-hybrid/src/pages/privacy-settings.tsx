@@ -3,7 +3,6 @@ import useRouterReady from '@/hooks/useRouterReady';
 import {
   CardVerificationAlerts,
   ThemeVariant,
-  useMemberId,
   fonts,
   ButtonV2 as Button,
   colours,
@@ -16,15 +15,13 @@ import AccountPagesHeader from '@/page-components/account/AccountPagesHeader';
 const PrivacySettingsPage: NextPage = () => {
   useRouterReady();
 
-  const memberId = useMemberId();
   const navigation = new InvokeNativeNavigation();
-
   const descriptionStyle = `${fonts.body} text-colour-onSurface-subtle-light dark:!text-colour-onSurface-subtle-dark pb-2`;
 
   return (
     <>
       <AccountPagesHeader title="Privacy Settings" />
-      <CardVerificationAlerts memberUuid={memberId} />
+      <CardVerificationAlerts />
       <div className="p-[16px]">
         <div className="py-5 grid w-full">
           <div className="col-span-2">

@@ -14,11 +14,11 @@ const initialFormState: CurrentFormState = {
   newPasswordConfirm: initialElementState,
 };
 
-export const useChangePasswordState = (memberUuid: string) => {
+export const useChangePasswordState = () => {
   const [formState, setFormState] = useState<CurrentFormState>(initialFormState);
-  const { memberProfile } = useMemberProfileGet(memberUuid);
+  const { memberProfile } = useMemberProfileGet();
   const { validationResult, validateForm } = useFormValidation(formState);
-  const { mutateAsync, isPending } = useChangePasswordPut(memberUuid);
+  const { mutateAsync, isPending } = useChangePasswordPut();
 
   const updateValidation = (updatedForm: CurrentFormState, field: PasswordField) => {
     const validation = validateForm(updatedForm);

@@ -8,14 +8,10 @@ import Toast from '../Toast';
 import { ToastPosition, ToastStatus } from '../Toast/ToastTypes';
 import useToaster from '../Toast/Toaster/useToaster';
 
-interface MarketingPreferencesProps {
-  memberUuid: string;
-}
-
-const MarketingPreferences = ({ memberUuid }: MarketingPreferencesProps) => {
+const MarketingPreferences = () => {
   const { openToast } = useToaster();
   const { preferences, isLoading, isBusy, savePreferences, togglePreference, hasChanged } =
-    useMarketingPreferencesState(memberUuid);
+    useMarketingPreferencesState();
   const onChange = (id: keyof MarketingPreferencesData) => () => {
     togglePreference(id);
   };

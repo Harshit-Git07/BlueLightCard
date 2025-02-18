@@ -1,6 +1,7 @@
 import { usePlatformAdapter } from '../../../../adapters';
 import { useMutation } from '@tanstack/react-query';
 import { jsonOrNull } from '../../../../utils/jsonUtils';
+import useMemberId from '../../../../hooks/useMemberId';
 
 interface Updates {
   email: string;
@@ -10,8 +11,9 @@ interface PutResponseData {
   error?: string;
 }
 
-const useIdVerificationEmailPut = (memberUuid: string) => {
+const useIdVerificationEmailPut = () => {
   const adapter = usePlatformAdapter();
+  const memberUuid = useMemberId();
   return useMutation({
     mutationFn: async (update: Updates) => {
       const { email } = update;

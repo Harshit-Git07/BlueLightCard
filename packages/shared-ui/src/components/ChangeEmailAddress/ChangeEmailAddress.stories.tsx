@@ -17,7 +17,7 @@ const componentMeta: Meta<typeof ChangeEmailAddress> = {
 
 // Define the template which uses the component
 const DefaultTemplate: StoryFn<typeof ChangeEmailAddress> = (args) => {
-  const { email, memberUuid } = args;
+  const { email } = args;
   const { open } = useDrawer();
   const adapter = { ...storybookPlatformAdapter };
   adapter.invokeV5Api = async (url, options) => {
@@ -37,19 +37,15 @@ const DefaultTemplate: StoryFn<typeof ChangeEmailAddress> = (args) => {
   };
 
   useEffect(() => {
-    open(<ChangeEmailAddress email={email} memberUuid={memberUuid} />);
-  }, [email, memberUuid]);
+    open(<ChangeEmailAddress email={email} />);
+  }, [email]);
 
   return (
     <PlatformAdapterProvider adapter={adapter}>
       <QueryClientProvider client={createQueryClient()}>
         <div className={'min-h-[600px]'}>
           <Drawer />
-          <Button
-            onClick={() => open(<ChangeEmailAddress email={email} memberUuid={memberUuid} />)}
-          >
-            Change email
-          </Button>
+          <Button onClick={() => open(<ChangeEmailAddress email={email} />)}>Change email</Button>
           <div className={`relative z-[1000] bg-colour-surface w-[200px] ${fonts.bodySmall} mt-4`}>
             <p>To simulate an API error enter an email starting with &apos;e&apos;</p>
           </div>
@@ -63,7 +59,6 @@ export const Default = DefaultTemplate.bind({});
 
 Default.args = {
   email: 'stuartcraigen@bluelightcard.co.uk',
-  memberUuid: 'abcd-1234',
 };
 
 export default componentMeta;

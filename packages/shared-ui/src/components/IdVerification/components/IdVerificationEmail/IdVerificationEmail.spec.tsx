@@ -8,9 +8,15 @@ import { testRender } from '../../IdVerification.spec';
 const email = 'foobar@blc.co.uk';
 const memberUuid = 'abcd-1234';
 const selectedMethod = IdVerificationMethod.WORK_EMAIL;
+
+jest.mock('../../../../hooks/useMemberId', () => ({
+  __esModule: true,
+  default: () => memberUuid,
+}));
+
 describe('IdVerificationEmail component', () => {
   it('handle email verification', async () => {
-    const { mockPlatformAdapter } = await testRender({ memberUuid, selectedMethod });
+    const { mockPlatformAdapter } = await testRender({ selectedMethod });
 
     const submit = screen.getByRole('button', { name: 'Verify email' });
     expect(submit).toBeDisabled();

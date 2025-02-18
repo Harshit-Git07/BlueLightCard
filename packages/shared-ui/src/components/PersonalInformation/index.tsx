@@ -10,7 +10,6 @@ import { EmploymentSection } from './components/EmploymentSection';
 import Button from '../Button-V2';
 import { faArrowUpRightFromSquare } from '@fortawesome/pro-solid-svg-icons';
 import FieldLabel from '../FieldLabel';
-import useMemberId from '../../hooks/useMemberId';
 import { ProfileSchema } from '../CardVerificationAlerts/types';
 import useMemberProfileGet from '../../hooks/useMemberProfileGet';
 import { PhoneNumberRegionSection } from './components/PhoneNumberRegionSection';
@@ -21,8 +20,7 @@ import useToaster from '../Toast/Toaster/useToaster';
 import { ToastPosition, ToastStatus } from '../Toast/ToastTypes';
 
 const PersonalInformation: FC = () => {
-  const memberId = useMemberId();
-  const { isLoading } = useMemberProfileGet(memberId);
+  const { isLoading } = useMemberProfileGet();
   const { formState, saveButtonDisabled, updateFormValue, makeApiRequest } = usePersonalInfoState();
   const { openToast } = useToaster();
 

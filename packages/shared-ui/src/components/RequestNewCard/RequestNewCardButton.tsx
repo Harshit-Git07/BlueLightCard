@@ -3,7 +3,6 @@ import { faCreditCardBlank } from '@fortawesome/pro-solid-svg-icons';
 import { ButtonV2 as Button, useDrawer, useMemberProfileGet } from '../../index';
 import { FC, SyntheticEvent } from 'react';
 import RequestNewCard from './index';
-import useMemberId from '../../hooks/useMemberId';
 import useMemberApplication from '../../hooks/useMemberApplication';
 import { applicationIsComplete } from './util/applicationIsComplete';
 
@@ -19,9 +18,8 @@ interface RequestNewCardButtonProps {
 
 const RequestNewCardButton: FC<RequestNewCardButtonProps> = ({ isTertiary }) => {
   const { open } = useDrawer();
-  const memberId = useMemberId();
-  const { memberProfile } = useMemberProfileGet(memberId);
-  const { hasApplication, application } = useMemberApplication(memberId);
+  const { memberProfile } = useMemberProfileGet();
+  const { hasApplication, application } = useMemberApplication();
 
   const onRequestNewCard = (e: SyntheticEvent) => {
     e.preventDefault();

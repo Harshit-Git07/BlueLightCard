@@ -71,7 +71,6 @@ const DefaultTemplate: StoryFn<typeof ChangePasswordForm> = (args) => {
 
 export const Default = DefaultTemplate.bind({});
 Default.args = {
-  memberId: 'tmpMemberId',
   onPasswordUpdateSuccess: () => undefined,
 };
 

@@ -23,9 +23,8 @@ import { BRAND_WEB_URL } from '@/globals';
 const MyCardPage: NextPage = () => {
   useRouterReady();
 
-  const memberId = useMemberId();
-  const { card } = useMemberCard(memberId);
-  const { isFetching, memberProfile } = useMemberProfileGet(memberId);
+  const { isFetching, memberProfile } = useMemberProfileGet();
+  const { card } = useMemberCard();
 
   const navigation = new InvokeNativeNavigation();
 
@@ -43,7 +42,7 @@ const MyCardPage: NextPage = () => {
   return (
     <>
       <AccountPagesHeader title="Your Card" hasBackButton={false} />
-      <CardVerificationAlerts memberUuid={memberId} />
+      <CardVerificationAlerts />
 
       {!hasNoCard ? (
         <div className="flex flex-col w-full items-center overflow-hidden">

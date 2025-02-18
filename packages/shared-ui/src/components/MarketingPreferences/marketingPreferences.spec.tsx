@@ -16,6 +16,11 @@ import { initializeToastAtom, toastAtom } from '../Toast/toastState';
 import { V5_API_URL } from '../../constants';
 import { PlatformVariant } from '../../types';
 
+jest.mock('../../hooks/useMemberId', () => ({
+  __esModule: true,
+  default: () => 'abcd-1234',
+}));
+
 const store = createStore();
 
 const createTestQueryClient = () =>
@@ -27,8 +32,8 @@ const createTestQueryClient = () =>
     },
   });
 
-const getMarketingPreferenceURL = V5_API_URL.MarketingPreferences('foobar', 'web');
-const updateMarketingPreferencesURL = `${V5_API_URL.BrazePreferences('foobar')}/update`;
+const getMarketingPreferenceURL = V5_API_URL.MarketingPreferences('abcd-1234', 'web');
+const updateMarketingPreferencesURL = `${V5_API_URL.BrazePreferences('abcd-1234')}/update`;
 
 const testRender = (status = 200, body = { success: true, data: { ...defaultPrefBlazeData } }) => {
   const mockPlatformAdapter = useMockPlatformAdapter(status, body, PlatformVariant.Web);
@@ -40,7 +45,7 @@ const testRender = (status = 200, body = { success: true, data: { ...defaultPref
       <PlatformAdapterProvider adapter={mockPlatformAdapter}>
         <QueryClientProvider client={createTestQueryClient()}>
           <Toaster />
-          <MarketingPreferences memberUuid={'foobar'} />
+          <MarketingPreferences />
         </QueryClientProvider>
       </PlatformAdapterProvider>
     </Provider>,

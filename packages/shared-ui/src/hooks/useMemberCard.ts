@@ -3,8 +3,8 @@ import { getCardAgeInDays } from '../utils/cardUtils';
 
 export const reprintPeriodInDays = 90;
 
-const useMemberCard = (memberId: string) => {
-  const { isLoading, memberProfile } = useMemberProfileGet(memberId);
+const useMemberCard = () => {
+  const { isLoading, memberProfile } = useMemberProfileGet();
   const card = memberProfile?.cards?.at(-1) ?? null;
 
   const purchaseDate = card?.purchaseDate;

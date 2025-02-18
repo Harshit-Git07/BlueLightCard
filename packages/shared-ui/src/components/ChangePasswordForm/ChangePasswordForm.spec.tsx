@@ -12,10 +12,13 @@ const mockClose = jest.fn();
 jest.mock('../Drawer/useDrawer', () => () => ({
   close: mockClose,
 }));
+jest.mock('../../hooks/useMemberId', () => ({
+  __esModule: true,
+  default: () => 'abcd-1234',
+}));
 
 const mockPasswordUpdateSuccess = jest.fn();
 const defaultProps: Props = {
-  memberId: 'testMemberId',
   onPasswordUpdateSuccess: () => mockPasswordUpdateSuccess(),
 };
 
@@ -178,7 +181,7 @@ describe('Save button & Validation', () => {
         expect(mockPasswordUpdateSuccess).toHaveBeenCalled();
         expect(mockClose).toHaveBeenCalled();
         expect(adapter.invokeV5Api).toHaveBeenCalledWith(
-          `${V5_API_URL.Profile(defaultProps.memberId)}/password`,
+          `${V5_API_URL.Profile('abcd-1234')}/password`,
           {
             body: JSON.stringify({
               currentPassword: 'currentPassword',

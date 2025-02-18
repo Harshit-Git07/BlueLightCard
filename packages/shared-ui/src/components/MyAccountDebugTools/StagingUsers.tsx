@@ -1,7 +1,7 @@
-import useMemberId from '../../hooks/useMemberId';
+import useMemberAtom from './useMemberAtom';
 import { ChangeEvent } from 'react';
 import { colours } from '../../tailwind/theme';
-
+import ToggleInput from '../ToggleInput';
 /*
 this component will stop being useful when login/auth and active user are properly connected and working
  */
@@ -38,22 +38,38 @@ const stagingUsers = {
 };
 
 const StagingUsers = () => {
-  const memberId = useMemberId();
+  const { atomMemberUuid, setMemberUuidAtom } = useMemberAtom();
+
   const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { value } = e.target;
-    localStorage.setItem('username', value);
-    window.location.reload();
+    setMemberUuidAtom(value);
   };
+
+  const onToggleChange = () => {
+    if (atomMemberUuid) {
+      setMemberUuidAtom(null);
+    }
+  };
+
   return (
-    <label className={'block'}>
-      Staging Users
+    <label className="block">
+      <span className="flex justify-between">
+        Staging Users
+        <label className={'flex items-center py-1 gap-2'}>
+          <ToggleInput onChange={onToggleChange} selected={!!atomMemberUuid} />
+          Assume User?
+        </label>
+      </span>
       <select
-        value={memberId}
+        value={atomMemberUuid ?? ''}
         onChange={onChange}
         className={`block border rounded rounded-[8px] ${colours.borderPrimary} px-2 py-1`}
       >
-        <option value={''} disabled>
-          Select a staging member to mimic
+        <option key="select" value={''} disabled>
+          Select a Staging Member to mimic
+        </option>
+        <option key="will" value={'56c292e4-a031-7027-0ccf-8c8cc152eb2d'}>
+          Will Smith
         </option>
         {Object.entries(stagingUsers).map(([name, members]) => (
           <>

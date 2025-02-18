@@ -41,7 +41,7 @@ const useMemberProfilePut = () => {
       }
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['memberProfile', memberId] });
+      await queryClient.invalidateQueries({ queryKey: ['memberProfile'] });
     },
   });
 };

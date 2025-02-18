@@ -9,7 +9,6 @@ import {
   NoCardImage,
   ThemeVariant,
   useMemberCard,
-  useMemberId,
   useMemberProfileGet,
   YourCard,
   RequestNewCardButton,

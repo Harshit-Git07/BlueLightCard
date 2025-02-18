@@ -44,7 +44,7 @@ const useMemberApplicationPut = (applicationId: string) => {
       }
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ['memberProfile', memberId] });
+      await queryClient.invalidateQueries({ queryKey: ['memberProfile'] });
     },
   });
 };

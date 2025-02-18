@@ -21,7 +21,7 @@ export const useMemberProfileGet = () => {
 
   const adapter = usePlatformAdapter();
   const query = useQuery({
-    queryKey: ['memberProfile', atomMemberUuid],
+    queryKey: ['memberProfile'],
     queryFn: async (): Promise<GETSuccessResponse | GETErrorResponse> => {
       try {
         const { status, data } = await adapter.invokeV5Api(

@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import useRouterReady from '@/hooks/useRouterReady';
-import { CardVerificationAlerts, useMemberId } from '@bluelightcard/shared-ui';
+import { CardVerificationAlerts } from '@bluelightcard/shared-ui';
 import AccountPagesHeader from '@/page-components/account/AccountPagesHeader';
 
 const WalletPage: NextPage = () => {

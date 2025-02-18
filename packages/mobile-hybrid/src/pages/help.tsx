@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import useRouterReady from '@/hooks/useRouterReady';
-import { CardVerificationAlerts, useMemberId, Card, fonts } from '@bluelightcard/shared-ui';
+import { CardVerificationAlerts, Card, fonts } from '@bluelightcard/shared-ui';
 import AccountPagesHeader from '@/page-components/account/AccountPagesHeader';
 
 import InvokeNativeNavigation from '@/invoke/navigation';

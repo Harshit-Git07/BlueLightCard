@@ -18,7 +18,8 @@ export function adminBatchRoutes(defaultRouteProps: DefaultRouteProps): AdminRou
   const adminBatchHandler = new Function(defaultRouteProps.stack, 'AdminBatchHandlerFunction', {
     bind: defaultRouteProps.bind,
     permissions: defaultRouteProps.permissions,
-    handler: 'packages/api/members/application/handlers/admin/batch/adminBatchHandler.handler',
+    handler:
+      'packages/api/members/application/handlers/admin/batch/routes/adminBatchHandler.handler',
     environment: {
       [MemberStackEnvironmentKeys.SERVICE]: 'members',
       ...defaultRouteProps.environment,

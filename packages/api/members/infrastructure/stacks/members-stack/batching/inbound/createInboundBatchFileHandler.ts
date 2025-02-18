@@ -12,7 +12,7 @@ export function createInboundBatchFileHandler(
 ): void {
   const processInboundBatchFileFunction = new SSTFunction(stack, 'processInboundBatchFileHandler', {
     handler:
-      'packages/api/members/application/handlers/admin/batch/processInboundBatchFile.handler',
+      'packages/api/members/application/handlers/admin/batch/events/processInboundBatchFile.handler',
     bind: [tables.adminTable, tables.profilesTable, buckets.batchFilesBucket],
     permissions: ['dynamodb:Query', 's3:CopyObject', 's3:DeleteObject'],
   });

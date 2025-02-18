@@ -11,8 +11,9 @@ export function createOutboundBatchFileHandler(
   buckets: Buckets,
 ): void {
   const uploadBatchFileDeadLetterQueue = new Queue(stack, 'UploadBatchFileDeadLetterQueue');
+
   const uploadBatchFileFunction = new SSTFunction(stack, 'uploadBatchFileHandler', {
-    handler: 'packages/api/members/application/handlers/admin/batch/uploadBatchFile.handler',
+    handler: 'packages/api/members/application/handlers/admin/batch/events/uploadBatchFile.handler',
     bind: [tables.adminTable, tables.profilesTable, buckets.batchFilesBucket],
     deadLetterQueue: uploadBatchFileDeadLetterQueue.cdk.queue,
     deadLetterQueueEnabled: true,

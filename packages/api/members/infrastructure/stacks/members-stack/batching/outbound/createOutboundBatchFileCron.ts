@@ -16,7 +16,7 @@ export function createOutboundBatchFileCron(
 ): Cron {
   const outboundBatchFileFunction = new SSTFunction(stack, 'outboundBatchFileHandler', {
     handler:
-      'packages/api/members/application/handlers/admin/batch/createOutboundBatchFile.handler',
+      'packages/api/members/application/handlers/admin/batch/events/createOutboundBatchFile.handler',
     bind: [tables.adminTable, tables.profilesTable, buckets.batchFilesBucket],
     permissions: ['dynamodb:Query', 'dynamodb:Scan', 'dynamodb:UpdateItem', 'dynamodb:PutItem'],
   });

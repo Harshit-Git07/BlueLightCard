@@ -11,7 +11,7 @@ const EVERY_HOUR_AT_15_MINUTES_PAST = 'cron(15 * * * ? *)';
 export function createInboundBatchFileCron(stack: Stack, tables: DynamoDbTables): Cron {
   const retrieveInboundBatchFilesFunction = new SSTFunction(stack, 'inboundBatchFileHandler', {
     handler:
-      'packages/api/members/application/handlers/admin/batch/retrieveInboundBatchFiles.handler',
+      'packages/api/members/application/handlers/admin/batch/events/retrieveInboundBatchFiles.handler',
     bind: [tables.adminTable],
   });
 

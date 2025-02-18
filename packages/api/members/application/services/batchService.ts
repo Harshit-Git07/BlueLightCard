@@ -30,6 +30,8 @@ import { BatchStatus } from '@blc-mono/shared/models/members/enums/BatchStatus';
 import path from 'path';
 import { batchFilesBucket } from '@blc-mono/members/application/providers/S3';
 
+let batchServiceSingleton: BatchService;
+
 const MAX_NAME_ON_CARD_CHARACTER_LIMIT = 25;
 const EXTERNAL_BATCH_SIZE_LIMIT = 500;
 
@@ -94,7 +96,7 @@ export class BatchService {
       if (!application) return;
 
       const batchEntryAttributes: BatchEntryModel = BatchEntryModel.parse({
-        batchId: batchId,
+        batchId,
         cardNumber: card.cardNumber,
         memberId: card.memberId,
         applicationId: application.applicationId,
@@ -114,6 +116,7 @@ export class BatchService {
   ): Promise<CreateInternalBatchModelResponse> {
     try {
       logger.debug({ message: 'Creating internal batch' });
+
       const validCards = await this.getValidCards(cards);
 
       const batchAttributes: CreateBatchModel = CreateBatchModel.parse({
@@ -121,7 +124,6 @@ export class BatchService {
         type: BatchType.INTERNAL,
         count: validCards.length,
       });
-
       const batchId = await this.batchRepository.createBatch(batchAttributes);
 
       await this.processValidCards(batchId, validCards);
@@ -154,7 +156,9 @@ export class BatchService {
   async getCardsProcessedByBatchId(batchId: string): Promise<number> {
     try {
       logger.debug({ message: 'Getting cards processed by batch ID' });
+
       const batchEntries = await this.getBatchEntries(batchId);
+
       let processed = 0;
       for (const batch of batchEntries) {
         const card = await this.cardService.getCard(batch.memberId, batch.cardNumber);
@@ -172,15 +176,14 @@ export class BatchService {
   async getBatches(): Promise<ExtendedBatchModel[]> {
     try {
       logger.debug({ message: 'Getting all batches' });
+
       const batches = await this.batchRepository.getBatches();
-      const extendedBatches = await Promise.all(
+      return await Promise.all(
         batches.map(async (batch) => ({
           ...batch,
           processed: await this.getCardsProcessedByBatchId(batch.batchId),
         })),
       );
-
-      return extendedBatches;
     } catch (error) {
       logger.error({ message: 'Error finding any batch', error });
       throw error;
@@ -190,12 +193,11 @@ export class BatchService {
   async openInternalBatches(): Promise<BatchModel[]> {
     try {
       logger.debug({ message: 'Getting all internal open batches' });
+
       const batches = await this.batchRepository.getBatches();
-      const filteredBatches = batches.filter(
+      return batches.filter(
         (batch) => batch.status === BatchStatus.BATCH_OPEN && batch.type === BatchType.INTERNAL,
       );
-
-      return filteredBatches;
     } catch (error) {
       logger.error({ message: 'Error finding any batch', error });
       throw error;
@@ -218,30 +220,29 @@ export class BatchService {
         const externalCardPrintingData: Array<ExternalCardPrintingDataModel> = [];
         for (const card of batch) {
           const [profile, application] = await this.getProfileAndApplication(card);
-
-          if (profile && application) {
-            const batchAttributes: BatchEntryModel = BatchEntryModel.parse({
-              batchId: currentBatchId,
-              cardNumber: card.cardNumber,
-              memberId: card.memberId,
-              applicationId: application.applicationId,
-            });
-            await this.createBatchEntry(batchAttributes);
-
-            await this.cardService.updateCard(card.memberId, card.cardNumber, {
-              cardStatus: CardStatus.ADDED_TO_BATCH,
-            });
-
-            const cardPrintingData = this.getCardPrintingData(
-              currentBatchId,
-              card,
-              profile,
-              application,
-            );
-            externalCardPrintingData.push(cardPrintingData);
-          } else {
+          if (!profile || !application) {
             throw new Error('Cannot find profile and application for this card');
           }
+
+          const batchAttributes: BatchEntryModel = BatchEntryModel.parse({
+            batchId: currentBatchId,
+            cardNumber: card.cardNumber,
+            memberId: card.memberId,
+            applicationId: application.applicationId,
+          });
+          await this.createBatchEntry(batchAttributes);
+
+          await this.cardService.updateCard(card.memberId, card.cardNumber, {
+            cardStatus: CardStatus.ADDED_TO_BATCH,
+          });
+
+          const cardPrintingData = this.getCardPrintingData(
+            currentBatchId,
+            card,
+            profile,
+            application,
+          );
+          externalCardPrintingData.push(cardPrintingData);
         }
 
         const csvContent = this.convertToCSV(externalCardPrintingData);
@@ -311,27 +312,27 @@ export class BatchService {
   private async uploadFileToSftpServer(file: S3.GetObjectOutput, key: string): Promise<void> {
     try {
       logger.debug({ message: 'Uploading batch file to SFTP server' });
-      if (Buffer.isBuffer(file.Body)) {
-        const fileAsString = this.convertBufferToString(file.Body);
-
-        const sftpClient = new Client();
-        sftpClient.ftp.verbose = true;
-
-        await sftpClient.access({
-          host: process.env.SFTP_HOST,
-          user: process.env.SFTP_USER,
-          password: process.env.SFTP_PASSWORD,
-          secure: true,
-        });
-
-        const fileName = path.basename(key);
-        const remotePath = `${process.env.SFTP_PATH_SEND_BATCH_FILE}${fileName}`;
-
-        await sftpClient.uploadFrom(fileAsString, remotePath);
-        await sftpClient.close();
-      } else {
+      if (!Buffer.isBuffer(file.Body)) {
         throw new Error('Unexpected file type');
       }
+
+      const fileAsString = this.convertBufferToString(file.Body);
+
+      const sftpClient = new Client();
+      sftpClient.ftp.verbose = true;
+
+      await sftpClient.access({
+        host: process.env.SFTP_HOST,
+        user: process.env.SFTP_USER,
+        password: process.env.SFTP_PASSWORD,
+        secure: true,
+      });
+
+      const fileName = path.basename(key);
+      const remotePath = `${process.env.SFTP_PATH_SEND_BATCH_FILE}${fileName}`;
+
+      await sftpClient.uploadFrom(fileAsString, remotePath);
+      await sftpClient.close();
     } catch (error) {
       logger.error({ message: 'Error uploading file to SFTP server', error });
       throw error;
@@ -348,36 +349,36 @@ export class BatchService {
       const key = s3Record.s3.object.key;
       const file = await this.downloadFileFromS3(batchFilesBucket(), key);
 
-      if (Buffer.isBuffer(file.Body)) {
-        const cardDataResponse = await this.parseInboundBatchCSV(file.Body);
-        const batchIds: string[] = [];
-
-        for (const card of cardDataResponse) {
-          await this.cardService.processPrintedCard(
-            card.memberId,
-            card.cardNumber,
-            card.timePrinted,
-            card.timePosted,
-          );
-
-          // Multiple batches can be included in one response file
-          if (!batchIds.includes(card.batchId)) {
-            batchIds.push(card.batchId);
-          }
-        }
-
-        for (const batchId of batchIds) {
-          await this.updateBatch(batchId, {
-            receivedDate: new Date().toISOString(),
-            status: BatchStatus.BATCH_COMPLETE,
-            closedDate: new Date().toISOString(),
-          });
-        }
-
-        // TODO: Archive internal batch file
-      } else {
+      if (!Buffer.isBuffer(file.Body)) {
         throw new Error('Unexpected file type');
       }
+
+      const cardDataResponse = await this.parseInboundBatchCSV(file.Body);
+      const batchIds: string[] = [];
+
+      for (const card of cardDataResponse) {
+        await this.cardService.processPrintedCard(
+          card.memberId,
+          card.cardNumber,
+          card.timePrinted,
+          card.timePosted,
+        );
+
+        // Multiple batches can be included in one response file
+        if (!batchIds.includes(card.batchId)) {
+          batchIds.push(card.batchId);
+        }
+      }
+
+      for (const batchId of batchIds) {
+        await this.updateBatch(batchId, {
+          receivedDate: new Date().toISOString(),
+          status: BatchStatus.BATCH_COMPLETE,
+          closedDate: new Date().toISOString(),
+        });
+      }
+
+      // TODO: Archive internal batch file
     } catch (error) {
       logger.error({ message: 'Error uploading batch file', error });
       throw error;
@@ -398,20 +399,20 @@ export class BatchService {
         CardStatus.ADDED_TO_BATCH,
         CardStatus.AWAITING_POSTAGE,
       ];
+      if (!validCardStatuses.includes(card.cardStatus)) return;
 
-      if (validCardStatuses.includes(card.cardStatus)) {
-        const timePosted = new Date().toISOString();
-        const currentDate = new Date();
-        currentDate.setDate(currentDate.getDate() - 1);
-        const timePrinted = currentDate.toISOString();
+      const currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() - 1);
+      const timePrinted = currentDate.toISOString();
 
-        await this.cardService.processPrintedCard(
-          card.memberId,
-          card.cardNumber,
-          timePrinted,
-          timePosted,
-        );
-      }
+      const timePosted = new Date().toISOString();
+
+      await this.cardService.processPrintedCard(
+        card.memberId,
+        card.cardNumber,
+        timePrinted,
+        timePosted,
+      );
     }
 
     await this.updateBatch(batchId, {
@@ -654,4 +655,12 @@ export class BatchService {
   }
 
   private fieldNotEmpty = (field: string | undefined) => field && field.trim().length > 0;
+}
+
+export function batchService(): BatchService {
+  if (!batchServiceSingleton) {
+    batchServiceSingleton = new BatchService();
+  }
+
+  return batchServiceSingleton;
 }

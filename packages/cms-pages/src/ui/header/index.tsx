@@ -3,7 +3,7 @@ import { getSite } from '@/lib/sanity/queries';
 import Img from '../Img';
 import Link from 'next/link';
 import { Navigation } from './navigation';
-import { mapToNavLinks } from './utils';
+import { mapToNavLinks } from '../../lib/utils';
 
 export default async function Header() {
   const brand = await getBrand();

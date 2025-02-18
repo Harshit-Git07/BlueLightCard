@@ -17,6 +17,10 @@
     scroll-margin-top: var(--header-height);
   }
 
+  a {
+    @apply transition;
+  }
+
   html {
     scroll-behavior: smooth;
   }

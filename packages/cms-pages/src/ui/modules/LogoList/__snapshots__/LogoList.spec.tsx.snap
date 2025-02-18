@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogoList Default should match snapshot 1`] = `
+<div>
+  <section
+    class="section space-y-8"
+  >
+    <header
+      class="richtext text-center"
+    >
+      <h2
+        class="text-center font-typography-display-medium font-typography-display-medium-weight text-typography-display-small leading-typography-display-medium"
+      >
+        This is the pretitle for the logo list
+      </h2>
+      <div
+        class="richtext mx-auto w-full space-y-[1em] [&>:first-child]:!mt-0"
+      >
+        <h4
+          class="mb-2 dark:text-colour-onSurface-dark text-typography-title-large font-typography-title-large-weight leading-typography-title-large tracking-typography-title-large"
+        >
+          intro content
+        </h4>
+      </div>
+    </header>
+    <figure
+      class="item-center mx-auto flex flex-wrap justify-center gap-x-4 gap-y-8"
+    >
+      <div />
+    </figure>
+  </section>
+</div>
+`;

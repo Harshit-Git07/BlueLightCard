@@ -1,0 +1,38 @@
+import { Canvas, Controls, Meta, Story, DocsContext } from '@storybook/blocks';
+import ComponentStatus from '@bluelightcard/shared-ui/storybook-config/blocks/ComponentStatus';
+import FigmaEmbed from '@bluelightcard/shared-ui/storybook-config/blocks/FigmaEmbed';
+import * as LogoList from './LogoList.stories'
+
+<Meta title="Logo List" of={LogoList} />
+
+# Category
+
+- [Status](#status)
+- [Overview](#overview)
+- [Props](#props)
+- [State](#state)
+- [Design](#design)
+
+## Status
+
+<ComponentStatus />
+
+## Overview
+
+The Logo List module is used for displaying logo images of various brands and companies.
+
+## Props
+
+<Controls />
+
+## State
+
+This component does not manage any state of its own.
+
+## Design
+
+<FigmaEmbed />
+
+### Default
+
+<Canvas of={LogoList.Default} />

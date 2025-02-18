@@ -6,7 +6,6 @@ import FlagList from './FlagList';
 import Hero from './Hero';
 import HeroSplit from './HeroSplit';
 import HeroSaaS from './HeroSaaS';
-import LogoList from './LogoList';
 import RichtextModule from './RichtextModule';
 import StatList from './StatList';
 import StepList from './StepList';
@@ -16,6 +15,7 @@ import MenuCampaign from './MenuCampaign';
 import MenuCompany from './MenuCompany';
 import MenuOffer from './MenuOffer';
 import Content from './RichtextModule/Content';
+import LogoList from '@/ui/modules/LogoList';
 
 export default function Modules({ modules, title }: { modules?: Sanity.Module[]; title?: string }) {
   return (

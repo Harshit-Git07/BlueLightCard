@@ -306,6 +306,24 @@ describe('ApplicationService', () => {
     });
   });
 
+  describe('given a application is adding documents', () => {
+    it('should update the application and set the documentUploadedDate', async () => {
+      jest.useFakeTimers();
+      jest.setSystemTime(new Date(2025, 1, 12, 12, 12, 12));
+
+      applicationBeingUpdated = {
+        documents: ['document1', 'document2', 'document3'],
+      } as UpdateApplicationModel;
+
+      await applicationService.updateApplication(memberId, applicationId, applicationBeingUpdated);
+
+      expect(repositoryMock.updateApplication).toHaveBeenCalledWith(memberId, applicationId, {
+        documents: ['document1', 'document2', 'document3'],
+        documentsUploadedDate: '2025-02-12T12:12:12.000Z',
+      });
+    });
+  });
+
   describe('generateDocumentUploadUrl', () => {
     it('should throw validation error if application is not awaiting ID approval', async () => {
       repositoryMock.getApplication.mockResolvedValue({

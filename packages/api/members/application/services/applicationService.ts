@@ -102,6 +102,10 @@ export class ApplicationService {
         );
       }
 
+      if (applicationUpdates.documents && applicationUpdates.documents.length > 0) {
+        applicationUpdates.documentsUploadedDate = new Date().toISOString();
+      }
+
       await this.applicationRepository.updateApplication(
         memberId,
         applicationId,

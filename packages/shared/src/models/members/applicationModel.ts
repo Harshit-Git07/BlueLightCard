@@ -25,6 +25,7 @@ export const ApplicationModel = createZodNamedType(
     country: z.string().optional(),
     promoCode: z.string().nullable().optional(),
     documents: z.array(z.string()).optional(),
+    documentsUploadedDate: z.string().datetime().optional(),
     promoCodeApplied: z.boolean().optional(),
     trustedDomainEmail: z.string().optional(),
     trustedDomainValidated: z.boolean().optional(),

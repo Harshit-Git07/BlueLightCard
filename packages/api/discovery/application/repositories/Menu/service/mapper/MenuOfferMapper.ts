@@ -58,13 +58,13 @@ export function mapMenuOfferToMenuOfferResponse(offer: MenuOffer): OfferResponse
   return {
     offerID: offer.id,
     legacyOfferID: offer.legacyOfferId,
-    offerName: offer.overrides?.title ?? offer.name,
-    offerDescription: offer.overrides?.description ?? offer.offerDescription,
+    offerName: offer.overrides?.description ?? offer.name,
+    offerDescription: offer.offerDescription,
     offerType: offer.offerType,
     imageURL: offer.overrides?.image ?? offer.image,
     companyID: offer.company.id,
     legacyCompanyID: offer.company.legacyCompanyId,
-    companyName: offer.company.name,
+    companyName: offer.overrides?.title ?? offer.company.name,
   };
 }
 

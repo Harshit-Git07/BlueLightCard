@@ -133,13 +133,13 @@ describe('mapMenuOfferToMenuOfferResponse', () => {
     const expectedResponse = {
       offerID: 'offer1',
       legacyOfferID: 1,
-      offerName: 'Override title',
-      offerDescription: 'Override description',
+      offerName: 'Override description',
+      offerDescription: 'Test Description',
       offerType: OfferType.ONLINE,
       imageURL: 'http://test.com',
       companyID: 'company1',
       legacyCompanyID: 0,
-      companyName: 'Test Company',
+      companyName: 'Override title',
     };
     const result = mapMenuOfferToMenuOfferResponse(offerWithOverrides);
     expect(result).toStrictEqual(expectedResponse);

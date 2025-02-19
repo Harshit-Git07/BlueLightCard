@@ -365,8 +365,8 @@ describe('Menu', async () => {
       expect(result.data.marketplace?.find((menu) => menu.id === previousScheduleMarketplaceUUID)).not.toBeDefined();
       expect(result.data.marketplace?.[0].id).toEqual(inScheduleMarketplaceUUID);
       expect(result.data.marketplace?.[1].id).toEqual(inScheduleMarketplace2UUID);
-      expect(result.data.marketplace?.[1].offers[4].offerName).toStrictEqual('Test Override');
-      expect(result.data.marketplace?.[1].offers[4].offerDescription).toStrictEqual('Test Description Override');
+      expect(result.data.marketplace?.[1].offers[4].companyName).toStrictEqual('Test Override');
+      expect(result.data.marketplace?.[1].offers[4].offerName).toStrictEqual('Test Description Override');
       expect(result.data.marketplace?.[1].offers[4].imageURL).toStrictEqual('https://test-override.com');
     });
 

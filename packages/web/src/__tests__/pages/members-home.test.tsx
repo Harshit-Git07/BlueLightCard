@@ -18,7 +18,6 @@ import useFetchHomepageData from '@/hooks/useFetchHomepageData';
 import { BannerType, FeaturedOffersType, FlexibleMenuType } from '@/page-types/members-home';
 import { PlatformAdapterProvider, useMockPlatformAdapter } from '@bluelightcard/shared-ui/adapters';
 import { AmplitudeExperimentFlags } from '../../common/utils/amplitude/AmplitudeExperimentFlags';
-import { CardCarouselOffer } from '../../offers/components/CardCarousel/types';
 
 /**
  * GOTCHA: the describe blocks in this file won't always pass in isolation so run
@@ -196,7 +195,7 @@ describe('Members-Home Page', () => {
       dealsOfTheWeek: [],
       featuredOffers: [],
       flexibleMenu: [],
-      flexibleMenusDataTransformedForView: [],
+      flexibleEventsMenu: [],
       marketplaceMenus: [],
       banners: [
         {
@@ -266,27 +265,17 @@ describe('Members-Home Page', () => {
     });
   });
 
-  describe('Showing ALL flexible carousels', () => {
-    it('should show all flexible carousels when the flag is on', async () => {
-      const cardCarouselOffer: CardCarouselOffer = {
-        imageUrl: 'mock/image/url',
-        href: 'mock/href',
-      };
-
+  describe('Showing flexible event carousel', () => {
+    it('should show flexible event carousel when the flag is on', async () => {
       useFetchHomepageDataMock.mockReturnValue({
         dealsOfTheWeek: [],
         featuredOffers: [],
         flexibleMenu: [],
-        flexibleMenusDataTransformedForView: [
+        flexibleEventsMenu: [
           {
-            id: 'first-flexible-carousel-id',
-            title: 'first-flexible-carousel-title',
-            menus: [cardCarouselOffer],
-          },
-          {
-            id: 'second-flexible-carousel-id',
-            title: 'second-flexible-carousel-title',
-            menus: [cardCarouselOffer],
+            title: 'Flexible Event',
+            imagehome: 'test.jpg',
+            hide: false,
           },
         ],
         marketplaceMenus: [],
@@ -301,31 +290,21 @@ describe('Members-Home Page', () => {
         [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
       });
       await waitFor(() => {
-        const flexibleCarousels = screen.queryAllByTestId('all-flexible-carousel-display');
-        expect(flexibleCarousels.length).toBe(2);
+        const flexibleEventsCarousel = screen.queryAllByTestId('flexi-events-menu-carousel');
+        expect(flexibleEventsCarousel.length).toBe(1);
       });
     });
 
-    it('should NOT show any flexible carousels when the flag is off', async () => {
-      const cardCarouselOffer: CardCarouselOffer = {
-        imageUrl: 'mock/image/url',
-        href: 'mock/href',
-      };
-
+    it('should NOT show flexible events carousel when the flag is off', async () => {
       useFetchHomepageDataMock.mockReturnValue({
         dealsOfTheWeek: [],
         featuredOffers: [],
         flexibleMenu: [],
-        flexibleMenusDataTransformedForView: [
+        flexibleEventsMenu: [
           {
-            id: 'first-flexible-carousel-id',
-            title: 'first-flexible-carousel-title',
-            menus: [cardCarouselOffer],
-          },
-          {
-            id: 'second-flexible-carousel-id',
-            title: 'second-flexible-carousel-title',
-            menus: [cardCarouselOffer],
+            title: 'Flexible Event',
+            imagehome: 'test.jpg',
+            hide: false,
           },
         ],
         marketplaceMenus: [],
@@ -340,31 +319,21 @@ describe('Members-Home Page', () => {
         [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
       });
       await waitFor(() => {
-        const flexibleCarousels = screen.queryAllByTestId('all-flexible-carousel-display');
-        expect(flexibleCarousels.length).toBe(0);
+        const flexibleEventsCarousel = screen.queryAllByTestId('flexi-events-menu-carousel');
+        expect(flexibleEventsCarousel.length).toBe(0);
       });
     });
 
-    it('should NOT show any flexible carousels when the flag is on and the modern flexi menu flag is off', async () => {
-      const cardCarouselOffer: CardCarouselOffer = {
-        imageUrl: 'mock/image/url',
-        href: 'mock/href',
-      };
-
+    it('should NOT show flexible events carousel when the flag is on and the modern flexi menu flag is off', async () => {
       useFetchHomepageDataMock.mockReturnValue({
         dealsOfTheWeek: [],
         featuredOffers: [],
         flexibleMenu: [],
-        flexibleMenusDataTransformedForView: [
+        flexibleEventsMenu: [
           {
-            id: 'first-flexible-carousel-id',
-            title: 'first-flexible-carousel-title',
-            menus: [cardCarouselOffer],
-          },
-          {
-            id: 'second-flexible-carousel-id',
-            title: 'second-flexible-carousel-title',
-            menus: [cardCarouselOffer],
+            title: 'Flexible Event',
+            imagehome: 'test.jpg',
+            hide: false,
           },
         ],
         marketplaceMenus: [],
@@ -379,31 +348,21 @@ describe('Members-Home Page', () => {
         [AmplitudeExperimentFlags.BRAZE_CONTENT_CARDS_ENABLED]: 'control',
       });
       await waitFor(() => {
-        const flexibleCarousels = screen.queryAllByTestId('all-flexible-carousel-display');
-        expect(flexibleCarousels.length).toBe(0);
+        const flexibleEventsCarousel = screen.queryAllByTestId('flexi-events-menu-carousel');
+        expect(flexibleEventsCarousel.length).toBe(0);
       });
     });
 
     it('should NOT show the single flexible carousel when the show all flag is on', async () => {
-      const cardCarouselOffer: CardCarouselOffer = {
-        imageUrl: 'mock/image/url',
-        href: 'mock/href',
-      };
-
       useFetchHomepageDataMock.mockReturnValue({
         dealsOfTheWeek: [],
         featuredOffers: [],
         flexibleMenu: [],
-        flexibleMenusDataTransformedForView: [
+        flexibleEventsMenu: [
           {
-            id: 'first-flexible-carousel-id',
-            title: 'first-flexible-carousel-title',
-            menus: [cardCarouselOffer],
-          },
-          {
-            id: 'second-flexible-carousel-id',
-            title: 'second-flexible-carousel-title',
-            menus: [cardCarouselOffer],
+            title: 'Flexible Event',
+            imagehome: 'test.jpg',
+            hide: false,
           },
         ],
         marketplaceMenus: [],
@@ -448,7 +407,7 @@ describe('Members-Home Page Tracking', () => {
       dealsOfTheWeek: [dealOfTheWeek],
       featuredOffers: [],
       flexibleMenu: [],
-      flexibleMenusDataTransformedForView: [],
+      flexibleEventsMenu: [],
       marketplaceMenus: [],
       banners: [],
       hasLoaded: true,
@@ -486,7 +445,7 @@ describe('Members-Home Page Tracking', () => {
       dealsOfTheWeek: [dealOfTheWeek],
       featuredOffers: [],
       flexibleMenu: [],
-      flexibleMenusDataTransformedForView: [],
+      flexibleEventsMenu: [],
       marketplaceMenus: [],
       banners: [],
       hasLoaded: true,
@@ -523,7 +482,7 @@ describe('Members-Home Page Tracking', () => {
       dealsOfTheWeek: [],
       featuredOffers: [],
       flexibleMenu: [],
-      flexibleMenusDataTransformedForView: [],
+      flexibleEventsMenu: [],
       marketplaceMenus: [],
       banners: [banner],
       hasLoaded: true,
@@ -548,7 +507,7 @@ describe('Members-Home Page Tracking', () => {
       dealsOfTheWeek: [],
       featuredOffers: [],
       flexibleMenu: [],
-      flexibleMenusDataTransformedForView: [],
+      flexibleEventsMenu: [],
       marketplaceMenus: [],
       banners: [],
       hasLoaded: true,
@@ -579,7 +538,7 @@ describe('Members-Home Page Tracking', () => {
       dealsOfTheWeek: [],
       featuredOffers: [],
       flexibleMenu: [flexibleItem],
-      flexibleMenusDataTransformedForView: [],
+      flexibleEventsMenu: [],
       marketplaceMenus: [],
       banners: [],
       hasLoaded: true,
@@ -615,8 +574,8 @@ describe('Members-Home Page Tracking', () => {
     useFetchHomepageDataMock.mockReturnValue({
       dealsOfTheWeek: [],
       featuredOffers: [featuredOffer],
-      flexibleMenusDataTransformedForView: [],
       flexibleMenu: [],
+      flexibleEventsMenu: [],
       marketplaceMenus: [],
       banners: [],
       hasLoaded: true,
@@ -667,7 +626,7 @@ describe('Members-Home Page Carousels', () => {
           dealsOfTheWeek: [],
           featuredOffers: [],
           flexibleMenu: [flexibleItem],
-          flexibleMenusDataTransformedForView: [],
+          flexibleEventsMenu: [],
           marketplaceMenus: [],
           banners: [],
           hasLoaded: true,
@@ -697,7 +656,7 @@ describe('Members-Home Page Carousels', () => {
           dealsOfTheWeek: [],
           featuredOffers: [],
           flexibleMenu: [flexibleItem],
-          flexibleMenusDataTransformedForView: [],
+          flexibleEventsMenu: [],
           marketplaceMenus: [],
           banners: [],
           hasLoaded: true,

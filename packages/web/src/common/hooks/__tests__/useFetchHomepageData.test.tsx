@@ -11,11 +11,9 @@ import { AmplitudeExperimentFlags } from '@/utils/amplitude/AmplitudeExperimentF
 import AuthContext, { AuthContextType } from '@/context/Auth/AuthContext';
 import { as } from '@core/utils/testing';
 import _noop from 'lodash/noop';
-import { transformFlexibleMenuDataForView } from '../../utils/transformFlexibleMenuDataForView';
 
 let mockPlatformAdapter: ReturnType<typeof useMockPlatformAdapter>;
 
-jest.mock('../../utils/transformFlexibleMenuDataForView');
 jest.mock('@/context/AmplitudeExperiment', () => ({
   ...jest.requireActual('@/context/AmplitudeExperiment'),
   useAmplitudeExperiment: jest.fn(),
@@ -69,9 +67,6 @@ describe('useFetchHomepageData', () => {
   describe('it calls the menus V5 API', () => {
     beforeEach(() => {
       jest.resetAllMocks();
-      (transformFlexibleMenuDataForView as jest.Mock).mockImplementation(
-        (flexibleMenusDataTransformedForView) => flexibleMenusDataTransformedForView
-      );
       mockPlatformAdapter.invokeV5Api.mockImplementation(() => {
         return Promise.resolve({
           status: 200,
@@ -97,23 +92,6 @@ describe('useFetchHomepageData', () => {
         },
         loading: false,
         networkStatus: NetworkStatus.ready,
-      });
-    });
-
-    it('should return flexible menus data transformed for view when "modernFlexiMenus" flag is on ', async () => {
-      givenExperimentsReturn('on');
-
-      const { result } = renderHook(() => useFetchHomepageData(), {
-        wrapper,
-      });
-
-      await waitFor(() => {
-        expect(transformFlexibleMenuDataForView).toHaveBeenCalledWith(
-          mockV5MenuData.flexible,
-          mockPlatformAdapter
-        );
-
-        expect(result.current.flexibleMenusDataTransformedForView).toEqual(mockV5MenuData.flexible);
       });
     });
 
@@ -196,6 +174,14 @@ describe('useFetchHomepageData', () => {
             id: '100',
             title: 'Flexible Menu 1',
             imagehome: 'image-1',
+            hide: false,
+          },
+        ]);
+        expect(result.current.flexibleEventsMenu).toEqual([
+          {
+            id: '101',
+            title: 'Flexible Event 1',
+            imagehome: 'image-2',
             hide: false,
           },
         ]);
@@ -284,6 +270,14 @@ describe('useFetchHomepageData', () => {
             hide: false,
           },
         ]);
+        expect(result.current.flexibleEventsMenu).toEqual([
+          {
+            id: '101',
+            title: 'Flexible Event 1',
+            imagehome: 'image-2',
+            hide: false,
+          },
+        ]);
       });
     });
 
@@ -363,19 +357,6 @@ describe('useFetchHomepageData', () => {
         data: v4MockData,
         loading: false,
         networkStatus: NetworkStatus.ready,
-      });
-    });
-
-    it('should return flexible menus data transformed for view when "modernFlexiMenus" flag is off ', async () => {
-      givenExperimentsReturn('off');
-
-      const { result } = renderHook(() => useFetchHomepageData(), {
-        wrapper,
-      });
-
-      await waitFor(() => {
-        expect(transformFlexibleMenuDataForView).not.toHaveBeenCalledWith();
-        expect(result.current.flexibleMenusDataTransformedForView).toEqual([]);
       });
     });
 
@@ -553,19 +534,34 @@ const mockV5MenuData = {
       },
     ],
   },
-  flexible: [
-    {
-      id: 'flexible-1',
-      title: 'Ways to Save',
-      menus: [
-        {
-          id: '100',
-          title: 'Flexible Menu 1',
-          imageURL: 'image-1',
-        },
-      ],
-    },
-  ],
+  flexible: {
+    offers: [
+      {
+        id: 'flexible-1',
+        title: 'Ways to Save',
+        menus: [
+          {
+            id: '100',
+            title: 'Flexible Menu 1',
+            imageURL: 'image-1',
+          },
+        ],
+      },
+    ],
+    events: [
+      {
+        id: 'flexible-2',
+        title: 'Flexible Events',
+        menus: [
+          {
+            id: '101',
+            title: 'Flexible Event 1',
+            imageURL: 'image-2',
+          },
+        ],
+      },
+    ],
+  },
 };
 
 const v4MockData = {

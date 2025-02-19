@@ -95,15 +95,14 @@ const HomePage: NextPage<any> = () => {
     featuredOffers,
     marketplaceMenus,
     flexibleMenu,
+    flexibleEventsMenu,
     hasLoaded,
     loadingError,
-    flexibleMenusDataTransformedForView,
   } = useFetchHomepageData();
 
   const shouldShowAllFlexibleOffersCarousels =
     isAllFlexibleMenusEnabled &&
-    (!hasLoaded ||
-      (flexibleMenusDataTransformedForView && flexibleMenusDataTransformedForView.length > 0));
+    (!hasLoaded || (flexibleEventsMenu && flexibleEventsMenu.length > 0));
 
   useEffect(() => {
     logMembersHomePage();
@@ -158,6 +157,18 @@ const HomePage: NextPage<any> = () => {
     }))
     .filter((offer) => !offer.hide);
 
+  const flexibleEventsData = flexibleEventsMenu
+    .map((offer: FlexibleMenuType, index: number) => ({
+      hide: offer.hide,
+      offername: cleanText(offer.title),
+      imageUrl: offer.imagehome ? offer.imagehome : finalFallbackImage,
+      href:
+        modernFlexiMenusFlag.data?.variantName === 'on' && offer.id
+          ? `/flexible-offers?id=${offer.id}`
+          : `/flexibleOffers.php?id=${index}`,
+    }))
+    .filter((offer) => !offer.hide);
+
   const featuredOffersData = featuredOffers.map((offer: FeaturedOffersType) => ({
     companyname: cleanText(offer.companyname),
     offername: cleanText(offer.offername),
@@ -183,6 +194,7 @@ const HomePage: NextPage<any> = () => {
 
   const isBlackFriday = inTimePeriod(BLACK_FRIDAY_TIMELOCK_SETTINGS);
   const flexibleMenuTitle = isBlackFriday ? 'Shop Black Friday' : 'Ways to Save';
+  const flexibleEventsTitle = 'Free Events';
 
   return (
     <>
@@ -269,7 +281,7 @@ const HomePage: NextPage<any> = () => {
         </Container>
       )}
       {/* Flexible offers carousel without "show all" feature flag */}
-      {(flexibleOffersData.length > 0 || !hasLoaded) && !isAllFlexibleMenusEnabled && (
+      {(flexibleOffersData.length > 0 || !hasLoaded) && (
         <Container
           className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
           addBottomHorizontalLine
@@ -288,27 +300,23 @@ const HomePage: NextPage<any> = () => {
       )}
 
       {/* Flexible offers carousel with "show all" feature flag */}
-      {shouldShowAllFlexibleOffersCarousels &&
-        flexibleMenusDataTransformedForView?.map((transformedFlexibleMenuData) => {
-          return (
-            <Container
-              key={transformedFlexibleMenuData.id}
-              className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
-              addBottomHorizontalLine
-              data-testid="all-flexible-carousel-display"
-            >
-              <CardCarousel
-                title={transformedFlexibleMenuData.title}
-                itemsToShow={transformedFlexibleMenuData.menus.length}
-                offers={transformedFlexibleMenuData.menus}
-                useSmallCards
-                onCarouselInteracted={() => {
-                  trackHomepageCarouselInteraction('flexi_menu', transformedFlexibleMenuData.title);
-                }}
-              />
-            </Container>
-          );
-        })}
+      {shouldShowAllFlexibleOffersCarousels && flexibleEventsData && (
+        <Container
+          className="flex flex-col py-10 bg-surface-secondary-light dark:bg-surface-secondary-dark"
+          addBottomHorizontalLine
+          data-testid="flexi-events-menu-carousel"
+        >
+          <CardCarousel
+            title={flexibleEventsTitle}
+            itemsToShow={3}
+            offers={flexibleEventsData}
+            useSmallCards
+            onCarouselInteracted={() => {
+              trackHomepageCarouselInteraction('flexi_menu', flexibleEventsTitle);
+            }}
+          />
+        </Container>
+      )}
 
       {/* Marketplace carousels */}
       {marketplaceMenus.length > 0 &&

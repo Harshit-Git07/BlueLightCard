@@ -15,7 +15,6 @@ import { spinner } from '@/modules/Spinner/store';
 import { useCallback } from 'react';
 import { experimentsAndFeatureFlags } from '@/components/AmplitudeProvider/store';
 import { AmplitudeFeatureFlagState } from '@/components/AmplitudeProvider/types';
-import { transformFlexibleMenuDataForView } from '../utils/transformFlexibleMenuDataForView';
 
 export interface OffersResultResponse {
   success: boolean;
@@ -100,8 +99,10 @@ const mapV5MenuResults = (data: any, useLegacyIds: boolean): OfferDataModel => {
 
   return {
     deal: mapDealsOfTheWeek(data.dealsOfTheWeek, useLegacyIds),
-    flexible: data.flexible.length > 0 ? mapFlexibleMenu(data.flexible[0]) : undefined,
-    allFlexible: transformFlexibleMenuDataForView((data as MenusData).flexible),
+    flexible:
+      data.flexible.offers.length > 0 ? mapFlexibleMenu(data.flexible.offers[0]) : undefined,
+    flexibleEvents:
+      data.flexible.events.length > 0 ? mapFlexibleMenu(data.flexible.events[0]) : undefined,
     groups: [...marketplaceMenus, featuredOffersMenu],
   };
 };

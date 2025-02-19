@@ -67,8 +67,7 @@ let amplitudeFlagsAndExperiments: Record<string, string>;
 let mockPlatformAdapter: IPlatformAdapter;
 
 const fakeSingleFlexibleOfferCarouselTitle = 'fakeSingleFlexibleOfferCarouselTitle';
-const fakeAllFlexibleOfferCarouselTitle1 = 'fakeAllFlexibleOfferCarouselTitle1';
-const fakeAllFlexibleOfferCarouselTitle2 = 'fakeAllFlexibleOfferCarouselTitle2';
+const fakeSingleFlexibleEventCarouselTitle = 'fakeSingleFlexibleEventCarouselTitle';
 
 describe('Home', () => {
   mockPlatformAdapter = useMockPlatformAdapter();
@@ -84,20 +83,12 @@ describe('Home', () => {
           subtitle: '',
           items: [],
         },
-        allFlexible: [
-          {
-            title: fakeAllFlexibleOfferCarouselTitle1,
-            random: false,
-            subtitle: '',
-            items: [],
-          },
-          {
-            title: fakeAllFlexibleOfferCarouselTitle2,
-            random: false,
-            subtitle: '',
-            items: [],
-          },
-        ],
+        flexibleEvents: {
+          title: fakeSingleFlexibleEventCarouselTitle,
+          random: false,
+          subtitle: '',
+          items: [],
+        },
         deal: [],
         groups: [
           {
@@ -153,11 +144,9 @@ describe('Home', () => {
       expect(flexibleOfferCarousel).toBeInTheDocument();
     });
 
-    it("should NOT render 'All Flexible offer carousel' when home page is rendered", () => {
-      const allFlexibleOfferCarousel1 = screen.queryByText(fakeAllFlexibleOfferCarouselTitle1);
-      const allFlexibleOfferCarousel2 = screen.queryByText(fakeAllFlexibleOfferCarouselTitle2);
-      expect(allFlexibleOfferCarousel1).not.toBeInTheDocument();
-      expect(allFlexibleOfferCarousel2).not.toBeInTheDocument();
+    it('should NOT render flexible events carousel when home page is rendered', () => {
+      const flexibleEventsCarousel = screen.queryByText(fakeSingleFlexibleEventCarouselTitle);
+      expect(flexibleEventsCarousel).not.toBeInTheDocument();
     });
 
     it("should render 'Standard offer carousel' when home page is rendered", () => {
@@ -328,20 +317,12 @@ describe('Home when enable all flexible menus feature flag is "on"', () => {
           subtitle: '',
           items: [],
         },
-        allFlexible: [
-          {
-            title: fakeAllFlexibleOfferCarouselTitle1,
-            random: false,
-            subtitle: '',
-            items: [],
-          },
-          {
-            title: fakeAllFlexibleOfferCarouselTitle2,
-            random: false,
-            subtitle: '',
-            items: [],
-          },
-        ],
+        flexibleEvents: {
+          title: fakeSingleFlexibleEventCarouselTitle,
+          random: false,
+          subtitle: '',
+          items: [],
+        },
         deal: [],
         groups: [
           {
@@ -362,16 +343,14 @@ describe('Home when enable all flexible menus feature flag is "on"', () => {
   });
 
   describe('Offers', () => {
-    it("should NOT render 'Flexible offer carousel' when home page is rendered", () => {
-      const flexibleOfferCarousel = screen.queryByText('Flexible offer carousel');
-      expect(flexibleOfferCarousel).not.toBeInTheDocument();
+    it("should render 'Flexible offer carousel' when home page is rendered", () => {
+      const flexibleOfferCarousel = screen.queryByText(fakeSingleFlexibleOfferCarouselTitle);
+      expect(flexibleOfferCarousel).toBeInTheDocument();
     });
 
-    it("should render 'All Flexible offer carousel' when home page is rendered", () => {
-      const allFlexibleOfferCarousels1 = screen.queryByText(fakeAllFlexibleOfferCarouselTitle1);
-      const allFlexibleOfferCarousels2 = screen.queryByText(fakeAllFlexibleOfferCarouselTitle2);
-      expect(allFlexibleOfferCarousels1).toBeInTheDocument();
-      expect(allFlexibleOfferCarousels2).toBeInTheDocument();
+    it('should render flexible events carousel when home page is rendered', () => {
+      const flexibleEventsCarousel = screen.queryByText(fakeSingleFlexibleEventCarouselTitle);
+      expect(flexibleEventsCarousel).toBeInTheDocument();
     });
   });
 
@@ -379,7 +358,7 @@ describe('Home when enable all flexible menus feature flag is "on"', () => {
     it('should render popular brands, offer carousels, latest news in descending order when home page is rendered', () => {
       const popularBrandsTitle = screen.queryByText('Popular brands');
       const standardOfferCarousel = screen.queryByText('Standard offer carousel');
-      const flexibleOfferCarousel = screen.queryByText(fakeAllFlexibleOfferCarouselTitle1);
+      const flexibleOfferCarousel = screen.queryByText(fakeSingleFlexibleOfferCarouselTitle);
       const newsTitle = screen.queryByText('Latest news');
 
       expect(elementIsBeneath(popularBrandsTitle, standardOfferCarousel)).toBe(true);

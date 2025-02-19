@@ -49,6 +49,7 @@ export interface OfferFlexibleModel {
 export interface OfferDataModel {
   deal: OfferSharedModel[];
   flexible?: OfferFlexibleModel;
+  flexibleEvents?: OfferFlexibleModel;
   allFlexible?: OfferFlexibleModel[];
   groups: OfferSharedModel[];
 }

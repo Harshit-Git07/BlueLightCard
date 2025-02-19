@@ -5,22 +5,6 @@ import InvokeNativeAPICall from '@/invoke/apiCall';
 import { IPlatformAdapter, useMockPlatformAdapter } from '@bluelightcard/shared-ui';
 import { FeatureFlags } from '@/components/AmplitudeProvider/amplitudeKeys';
 import useOffers from '@/hooks/useOffers';
-import * as transformFlexibleMenuDataForViewModule from '../../utils/transformFlexibleMenuDataForView';
-import { OfferFlexibleModel } from '../../models/offer';
-
-jest.mock('../../utils/transformFlexibleMenuDataForView');
-const transformFlexibleMenuDataForViewModuleMock = jest.mocked(
-  jest.requireMock('../../utils/transformFlexibleMenuDataForView'),
-) as jest.Mocked<typeof transformFlexibleMenuDataForViewModule>;
-
-const fakeFlexibleMenuDataForViewForView: OfferFlexibleModel[] = [
-  {
-    title: 'fakeFlexibleMenuDataForViewForViewTitle',
-    subtitle: 'fakeFlexibleMenuDataForViewForViewSubtitle',
-    random: false,
-    items: [],
-  },
-];
 
 const renderWithHydratedAtoms = (mockPlatformAdapter: IPlatformAdapter, atomValues: any[] = []) => {
   return renderHook(() => {
@@ -86,10 +70,6 @@ describe('useOffers', () => {
         }
         return 'off';
       });
-
-      jest
-        .spyOn(transformFlexibleMenuDataForViewModuleMock, 'transformFlexibleMenuDataForView')
-        .mockReturnValue(fakeFlexibleMenuDataForViewForView);
 
       await act(async () => {
         await state.result.current.getOfferPromos();
@@ -212,14 +192,25 @@ describe('useOffers', () => {
           },
         ],
       });
-
-      expect(
-        transformFlexibleMenuDataForViewModuleMock.transformFlexibleMenuDataForView,
-      ).toHaveBeenCalledWith(mockV5Response.flexible);
-
-      expect(state.result.current.offerPromos.allFlexible).toEqual(
-        fakeFlexibleMenuDataForViewForView,
-      );
+      expect(state.result.current.offerPromos.flexibleEvents).toEqual({
+        title: 'Flexible Event Menu 1',
+        subtitle: '',
+        random: true,
+        items: [
+          {
+            id: 'flexible-event-1',
+            title: 'Flexible Event 1',
+            imagehome: 'image-2',
+            imagedetail: 'image-2',
+            navtitle: '',
+            intro: '',
+            footer: '',
+            random: true,
+            hide: false,
+            items: [],
+          },
+        ],
+      });
     });
 
     it('executes V5 menu data request with modern IDs', async () => {
@@ -471,17 +462,32 @@ const mockV5Response = {
       },
     ],
   },
-  flexible: [
-    {
-      id: 'flexible-menu-1',
-      title: 'Flexible Menu 1',
-      menus: [
-        {
-          id: 'flexible-item-1',
-          title: 'Flexible Item 1',
-          imageURL: 'image-1',
-        },
-      ],
-    },
-  ],
+  flexible: {
+    offers: [
+      {
+        id: 'flexible-menu-1',
+        title: 'Flexible Menu 1',
+        menus: [
+          {
+            id: 'flexible-item-1',
+            title: 'Flexible Item 1',
+            imageURL: 'image-1',
+          },
+        ],
+      },
+    ],
+    events: [
+      {
+        id: 'flexible-event-menu-1',
+        title: 'Flexible Event Menu 1',
+        menus: [
+          {
+            id: 'flexible-event-1',
+            title: 'Flexible Event 1',
+            imageURL: 'image-2',
+          },
+        ],
+      },
+    ],
+  },
 };

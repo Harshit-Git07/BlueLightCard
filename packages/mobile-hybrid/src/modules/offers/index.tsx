@@ -18,7 +18,7 @@ const Offers: FC = () => {
   const { is } = useAmplitude();
   const platformAdapter = usePlatformAdapter();
   const {
-    offerPromos: { allFlexible, flexible, groups },
+    offerPromos: { flexible, flexibleEvents, groups },
   } = useOffers(platformAdapter);
   const { viewOffer } = useOfferDetails();
 
@@ -55,7 +55,7 @@ const Offers: FC = () => {
     FeatureFlags.ENABLE_ALL_FLEXIBLE_MENUS_HOMEPAGE_HYBRID,
     AmplitudeFeatureFlagState.On,
   );
-  const shouldShowAllFlexibleMenus = enableAllFlexibleMenus && allFlexible && allFlexible.length;
+  const shouldShowAllFlexibleMenus = enableAllFlexibleMenus && flexibleEvents;
 
   const onFlexOfferClick = (flexiTitle: string, { id, title }: OfferFlexibleItemModel) => {
     const path = modernFlexiMenu ? `/flexible-offers?id=${id}` : `/flexibleOffers.php?id=${id}`;
@@ -102,7 +102,7 @@ const Offers: FC = () => {
 
   return (
     <>
-      {flexible && !enableAllFlexibleMenus && (
+      {flexible && (
         <div className="mb-6">
           <Heading title={headingFeatureFlag ? 'Shop Black Friday' : flexible.title} />
           <CardCarousel
@@ -123,30 +123,27 @@ const Offers: FC = () => {
           />
         </div>
       )}
-      {shouldShowAllFlexibleMenus &&
-        allFlexible.map((flexible, index) => {
-          return (
-            <div className="mb-6" key={index}>
-              <Heading title={flexible.title} />
-              <CardCarousel
-                slides={flexible.items
-                  .filter((offer) => offer.hide == false)
-                  .map((offer) => ({
-                    id: offer.id,
-                    imageSrc: offer.imagedetail,
-                    meta: offer,
-                  }))}
-                onSlideItemClick={(slide) =>
-                  onFlexOfferClick(
-                    flexible.title,
-                    flexible.items.find((flex) => flex.id === slide.id) as OfferFlexibleItemModel,
-                  )
-                }
-                onSlideChanged={() => onSlideChange(flexible.title)}
-              />
-            </div>
-          );
-        })}
+      {shouldShowAllFlexibleMenus && (
+        <div className="mb-6">
+          <Heading title={flexibleEvents.title} />
+          <CardCarousel
+            slides={flexibleEvents.items
+              .filter((offer) => offer.hide == false)
+              .map((offer) => ({
+                id: offer.id,
+                imageSrc: offer.imagedetail,
+                meta: offer,
+              }))}
+            onSlideItemClick={(slide) =>
+              onFlexOfferClick(
+                flexibleEvents.title,
+                flexibleEvents.items.find((flex) => flex.id === slide.id) as OfferFlexibleItemModel,
+              )
+            }
+            onSlideChanged={() => onSlideChange(flexibleEvents.title)}
+          />
+        </div>
+      )}
       {homepagePositionOffersExpr && (
         <section className="mb-6">
           <Heading title={homepagePositionOffersExpr.title} />

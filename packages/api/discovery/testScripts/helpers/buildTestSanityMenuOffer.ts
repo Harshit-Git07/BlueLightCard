@@ -1,4 +1,6 @@
 import {
+  MenuDealsOfTheWeek as SanityMenuDealsOfTheWeek,
+  MenuFeaturedOffers as SanityMenuFeaturedOffers,
   MenuOffer as SanityMenuOffer,
   Offer as SanityOffer,
   SanityImageAsset,
@@ -39,6 +41,31 @@ type InclusionOffer = {
   };
 };
 
+const menuOfferValues = (offers: InclusionOffer[], id?: string, start?: string, end?: string) => {
+  return {
+    _createdAt: '2024-07-30T09:36:14Z',
+    _id: id ?? v4(),
+    _rev: 'HxAzVxEm31DYQTCb4WY0L5',
+    _updatedAt: new Date().toISOString(),
+    start: start ?? subMonths(new Date(), 1).toISOString(),
+    end: end ?? addMonths(new Date(), 1).toISOString(),
+    inclusions: offers,
+    title: 'Test Menu Offer',
+  };
+};
+
+export function buildTestSanityFeaturedMenuOffer(
+  offers: InclusionOffer[],
+  id?: string,
+  start?: string,
+  end?: string,
+): SanityMenuFeaturedOffers {
+  return {
+    ...menuOfferValues(offers, id, start, end),
+    _type: 'menu.featuredOffers',
+  };
+}
+
 export function buildTestSanityMenuOffer(
   offers: InclusionOffer[],
   id?: string,
@@ -46,14 +73,19 @@ export function buildTestSanityMenuOffer(
   end?: string,
 ): SanityMenuOffer {
   return {
-    _createdAt: '2024-07-30T09:36:14Z',
-    _id: id ?? v4(),
-    _rev: 'HxAzVxEm31DYQTCb4WY0L5',
+    ...menuOfferValues(offers, id, start, end),
     _type: 'menu.offer',
-    _updatedAt: new Date().toISOString(),
-    start: start ?? subMonths(new Date(), 1).toISOString(),
-    end: end ?? addMonths(new Date(), 1).toISOString(),
-    inclusions: offers,
-    title: 'Test Menu Offer',
+  };
+}
+
+export function buildTestSanityDOTWMenuOffer(
+  offers: InclusionOffer[],
+  id?: string,
+  start?: string,
+  end?: string,
+): SanityMenuDealsOfTheWeek {
+  return {
+    ...menuOfferValues(offers, id, start, end),
+    _type: 'menu.dealsOfTheWeek',
   };
 }

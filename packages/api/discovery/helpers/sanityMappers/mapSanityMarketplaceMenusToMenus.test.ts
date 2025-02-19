@@ -1,4 +1,4 @@
-import { Marketplace as SanityMarketplace, MenuOffer as SanityMenuOffer } from '@bluelightcard/sanity-types';
+import { MenuMarketplace as SanityMenuMarketplace, MenuOffer as SanityMenuOffer } from '@bluelightcard/sanity-types';
 
 import { IngestedMenuOffer } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
@@ -41,13 +41,13 @@ const sanityMenuOffer: SanityMenuOffer = {
   ],
 };
 
-const validSanityMarketplace: SanityMarketplace = {
+const validSanityMarketplace: SanityMenuMarketplace = {
   _createdAt: '2023-01-02T00:00:00Z',
   _id: '123',
   _rev: '123',
-  _type: 'marketplace',
+  _type: 'menu.marketplace',
   _updatedAt: '2023-01-02T00:00:00Z',
-  menus: [sanityMenuOffer],
+  menus: [{ offerMenu: sanityMenuOffer, _key: 'offerMenu' }],
 };
 
 describe('mapSanityMarketplaceMenusToMenus', () => {
@@ -90,14 +90,14 @@ describe('mapSanityMarketplaceMenusToMenus', () => {
   const errorCases = [
     {
       error: 'Missing sanity field: title',
-      menuOffer: {
+      offerMenu: {
         ...sanityMenuOffer,
         title: undefined,
       },
     },
     {
       error: 'Missing sanity field: offer',
-      menuOffer: {
+      offerMenu: {
         ...sanityMenuOffer,
         inclusions: [
           {
@@ -109,7 +109,7 @@ describe('mapSanityMarketplaceMenusToMenus', () => {
     },
     {
       error: 'Missing sanity field: company',
-      menuOffer: {
+      offerMenu: {
         ...sanityMenuOffer,
         inclusions: [
           {
@@ -124,7 +124,7 @@ describe('mapSanityMarketplaceMenusToMenus', () => {
     },
     {
       error: 'Missing sanity field: company',
-      menuOffer: {
+      offerMenu: {
         ...sanityMenuOffer,
         inclusions: [
           {
@@ -139,15 +139,16 @@ describe('mapSanityMarketplaceMenusToMenus', () => {
     },
     {
       error: 'Invalid sanity menu item passed',
-      menuOffer: {
+      offerMenu: {
         ...sanityMenuOffer,
         _type: 'menu.themed.offer',
       },
     },
   ];
-  it.each(errorCases)('should throw an error if %s is not present', async ({ error, menuOffer }) => {
-    const invalidSanityMarketplace = { ...validSanityMarketplace, menus: [menuOffer] };
-    // @ts-expect-error menu offer dereferencing not ideal
-    expect(() => mapSanityMarketPlaceMenusToMenuOffers(invalidSanityMarketplace)).toThrow(error);
+  it.each(errorCases)('should throw an error if %s is not present', async ({ error, offerMenu }) => {
+    const invalidSanityMarketplace = { ...validSanityMarketplace, menus: [{ offerMenu, _key: 'mock-key' }] };
+    expect(() => mapSanityMarketPlaceMenusToMenuOffers(invalidSanityMarketplace as SanityMenuMarketplace)).toThrow(
+      error,
+    );
   });
 });

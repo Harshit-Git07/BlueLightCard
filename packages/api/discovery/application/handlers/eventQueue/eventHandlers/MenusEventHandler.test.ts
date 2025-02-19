@@ -63,16 +63,6 @@ describe('MenusEventHandler', () => {
         });
       });
     });
-    describe('and menu is MenuType of Marketplace', () => {
-      const marketplaceMenuOffer = ingestedMenuOfferFactory.build({ menuType: MenuType.MARKETPLACE });
-      it('should return early and not process the event', async () => {
-        await target.handleMenusUpdated(marketplaceMenuOffer);
-        expect(getMenuByIdMock).not.toHaveBeenCalled();
-        expect(getOffersByIdsMock).not.toHaveBeenCalled();
-        expect(deleteMenuWithSubMenusAndOffersMock).not.toHaveBeenCalled();
-        expect(insertMenuWithOffersMock).not.toHaveBeenCalled();
-      });
-    });
   });
 
   describe('handleMenusDeleted', () => {
@@ -95,15 +85,6 @@ describe('MenusEventHandler', () => {
           await target.handleMenusDeleted(olderMenuOffer);
           expect(deleteMenuWithSubMenusAndOffersMock).not.toHaveBeenCalled();
         });
-      });
-    });
-
-    describe('and menu is MenuType of Marketplace', () => {
-      const marketplaceMenuOffer = ingestedMenuOfferFactory.build({ menuType: MenuType.MARKETPLACE });
-      it('should return early and not process the event', async () => {
-        await target.handleMenusDeleted(marketplaceMenuOffer);
-        expect(getMenuByIdMock).not.toHaveBeenCalled();
-        expect(deleteMenuWithSubMenusAndOffersMock).not.toHaveBeenCalled();
       });
     });
   });

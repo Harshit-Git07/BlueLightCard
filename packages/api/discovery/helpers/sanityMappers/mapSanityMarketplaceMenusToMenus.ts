@@ -1,4 +1,4 @@
-import { Marketplace as SanityMarketplace } from '@bluelightcard/sanity-types';
+import { MenuMarketplace as SanityMarketplace } from '@bluelightcard/sanity-types';
 
 import { IngestedMenuOffer } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
@@ -12,38 +12,38 @@ export function mapSanityMarketPlaceMenusToMenuOffers(sanityMarketplace: SanityM
   return {
     updatedAt: sanityMarketplace._updatedAt,
     ingestedMenuOffers:
-      sanityMarketplace.menus?.map((menuOffer, index) => {
-        if (!menuOffer.title) {
+      sanityMarketplace.menus?.map(({ offerMenu }, index) => {
+        if (!offerMenu?.title) {
           throw new Error('Missing sanity field: title');
         }
-        if (menuOffer._type !== 'menu.offer') {
+        if (offerMenu._type !== 'menu.offer') {
           throw new Error('Invalid sanity menu item passed');
         }
         return {
-          id: menuOffer._id,
-          name: menuOffer.title,
-          startTime: menuOffer.start,
-          endTime: menuOffer.end,
-          updatedAt: menuOffer._updatedAt,
+          id: offerMenu._id,
+          name: offerMenu.title,
+          startTime: offerMenu.start,
+          endTime: offerMenu.end,
+          updatedAt: offerMenu._updatedAt,
           menuType: MenuType.MARKETPLACE,
           offers:
-            menuOffer.inclusions?.map((offer, i) => {
-              if (!offer.offer) {
+            offerMenu.inclusions?.map((inclusion, i) => {
+              if (!inclusion.offer) {
                 throw new Error('Missing sanity field: offer');
               }
-              if (!offer.offer.company) {
+              if (!inclusion.offer.company) {
                 throw new Error('Missing sanity field: company');
               }
               return {
-                id: offer.offer._id,
-                company: { id: offer.offer.company._id },
+                id: inclusion.offer._id,
+                company: { id: inclusion.offer.company._id },
                 position: i,
-                start: offer?.start,
-                end: offer?.end,
+                start: inclusion?.start,
+                end: inclusion?.end,
                 overrides: {
-                  title: offer?.overrides?.title,
-                  image: offer?.overrides?.image?.default?.asset?.url,
-                  description: offer?.overrides?.description,
+                  title: inclusion?.overrides?.title,
+                  image: inclusion?.overrides?.image?.default?.asset?.url,
+                  description: inclusion?.overrides?.description,
                 },
               };
             }) ?? [],

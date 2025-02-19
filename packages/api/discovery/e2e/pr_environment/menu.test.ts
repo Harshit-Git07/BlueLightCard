@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-import { Event as SanityEvent, MenuOffer as SanityMenuOffer, Offer as SanityOffer } from '@bluelightcard/sanity-types';
+import { Event as SanityEvent, Offer as SanityOffer } from '@bluelightcard/sanity-types';
 import { addMonths, subDays, subMonths } from 'date-fns';
 import { ApiGatewayV1Api } from 'sst/node/api';
 
@@ -12,11 +12,17 @@ import { ENDPOINTS } from '@blc-mono/discovery/infrastructure/constants/environm
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 import { buildTestSanityEventOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityEventOffer';
 import { buildTestSanityMarketplace } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMarketplace';
-import { buildTestSanityMenuOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMenuOffer';
+import {
+  buildTestSanityDOTWMenuOffer,
+  buildTestSanityFeaturedMenuOffer,
+  buildTestSanityMenuOffer,
+} from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMenuOffer';
 import { buildTestSanityMenuThemedEvent } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMenuThemedEvent';
-import { buildTestSanityMenuThemedOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMenuThemedOffer';
+import {
+  buildTestSanityMenuThemedOffer,
+  buildTestSanityWaysToSaveMenu,
+} from '@blc-mono/discovery/testScripts/helpers/buildTestSanityMenuThemedOffer';
 import { buildTestSanityOffer } from '@blc-mono/discovery/testScripts/helpers/buildTestSanityOffer';
-import { buildTestSanitySite } from '@blc-mono/discovery/testScripts/helpers/buildTestSanitySite';
 import { sendTestEvents } from '@blc-mono/discovery/testScripts/helpers/sendTestEvents';
 
 import { getBlockText } from '../../helpers/sanityMappers/mapSanityOfferToOffer';
@@ -63,8 +69,8 @@ const whenFlexibleMenuIsCalledWith = async (
   });
 };
 
-const generatedOfferUUID = `test-${randomUUID().toString()}`;
-const generatedEventUUID = `test-${randomUUID().toString()}`;
+const generatedOfferUUID = `test-offer-${randomUUID().toString()}`;
+const generatedEventUUID = `test-event-${randomUUID().toString()}`;
 const generatedExpiredEventUUID = `test-expired-event-${randomUUID().toString()}`;
 const generatedExcludedEventUUID = `test-exclusive-event${randomUUID().toString()}`;
 const generatedClosedGuestlistEventUUID = `test-closed-guest-${randomUUID().toString()}`;
@@ -75,7 +81,6 @@ const trustRestrictedOfferUUID = `test-trust-restrict${randomUUID().toString()}`
 const trustRestrictedCompanyUUID = `test-company-trust-restrict${randomUUID().toString()}`;
 const expiredOfferUUID = `test-expired-${randomUUID().toString()}`;
 const expiredCompanyUUID = `test-company-expired-${randomUUID().toString()}`;
-const marketplaceMenuOfferGeneratedMenuUUID = `test-marketplace-${randomUUID().toString()}`;
 const inScheduleMarketplaceUUID = `test-mp-in-sched-${randomUUID().toString()}`;
 const inScheduleMarketplace2UUID = `test-mp-in-sched-2-${randomUUID().toString()}`;
 const futureScheduleMarketplaceUUID = `test-mp-fut-${randomUUID().toString()}`;
@@ -89,8 +94,10 @@ const dealsOfTheWeekGeneratedMenuUUID = `test-dotw-${randomUUID().toString()}`;
 const featuredOffersGeneratedMenuUUID = `test-feat-${randomUUID().toString()}`;
 const flexibleGeneratedSubMenuUUID = `test-flexi-sub-${randomUUID().toString()}`;
 const flexibleGeneratedMenuUUID = `test-flexi-menu-${randomUUID().toString()}`;
-const flexibleGeneratedEventSubMenuUUID = `test-flexi-sub-event${randomUUID().toString()}`;
-const flexibleGeneratedEventMenuUUID = `test-flexi-menu-event${randomUUID().toString()}`;
+const waysToSaveGeneratedMenuUUID = `test-wts-menu-${randomUUID().toString()}`;
+const waysToSaveGenereratedSubMenuUUID = `test-wts-menu-${randomUUID().toString()}`;
+const flexibleGeneratedEventSubMenuUUID = `test-flexi-sub-event-${randomUUID().toString()}`;
+const flexibleGeneratedEventMenuUUID = `test-flexi-menu-event-${randomUUID().toString()}`;
 
 const events: SanityEvent[] = [
   buildTestSanityEventOffer({ _id: generatedEventUUID }),
@@ -222,24 +229,26 @@ const marketplaceMenus = [
     subMonths(new Date(), 1).toISOString(),
   ),
 ];
-const marketplaceSanityMenuOffer = buildTestSanityMenuOffer(menuOffers, marketplaceMenuOfferGeneratedMenuUUID);
-const dealsOfTheWeekSanityMenuOffer = buildTestSanityMenuOffer(menuOffers, dealsOfTheWeekGeneratedMenuUUID);
-const featuredOffersSanityMenuOffer = buildTestSanityMenuOffer(menuOffers, featuredOffersGeneratedMenuUUID);
+
+const dealsOfTheWeekSanityMenuOffer = buildTestSanityDOTWMenuOffer(menuOffers, dealsOfTheWeekGeneratedMenuUUID);
+const featuredOffersSanityMenuOffer = buildTestSanityFeaturedMenuOffer(menuOffers, featuredOffersGeneratedMenuUUID);
 const flexibleSanityThemedMenuOffer = buildTestSanityMenuThemedOffer(
   offers,
   flexibleGeneratedMenuUUID,
   flexibleGeneratedSubMenuUUID,
 );
+
+const waysToSaveSanityThemedMenuOffer = buildTestSanityWaysToSaveMenu(
+  offers,
+  waysToSaveGeneratedMenuUUID,
+  waysToSaveGenereratedSubMenuUUID,
+);
+
 const flexibleSanityThemedMenuEvent = buildTestSanityMenuThemedEvent(
   events,
   flexibleGeneratedEventMenuUUID,
   flexibleGeneratedEventSubMenuUUID,
 );
-const menus: SanityMenuOffer[] = [
-  marketplaceSanityMenuOffer,
-  dealsOfTheWeekSanityMenuOffer,
-  featuredOffersSanityMenuOffer,
-];
 
 const marketplaceSanityEvent = buildTestSanityMarketplace(marketplaceMenus);
 
@@ -248,16 +257,6 @@ describe('Menu', async () => {
     const testUserTokens = await TestUser.authenticate();
 
     beforeAll(async () => {
-      await sendTestEvents({
-        source: Events.SITE_CREATED,
-        events: [
-          buildTestSanitySite(
-            dealsOfTheWeekGeneratedMenuUUID,
-            featuredOffersGeneratedMenuUUID,
-            flexibleGeneratedMenuUUID,
-          ),
-        ],
-      });
       await sendTestEvents({
         source: Events.OFFER_CREATED,
         events: [...offers, previousScheduledOffer, inScheduledOffer, futureScheduledOffer, offerUUID2],
@@ -271,8 +270,18 @@ describe('Menu', async () => {
       });
 
       await sendTestEvents({
-        source: Events.MENU_OFFER_CREATED,
-        events: menus,
+        source: Events.DEALS_OF_THE_WEEK_CREATED,
+        events: [dealsOfTheWeekSanityMenuOffer],
+      });
+
+      await sendTestEvents({
+        source: Events.FEATURED_CREATED,
+        events: [featuredOffersSanityMenuOffer],
+      });
+
+      await sendTestEvents({
+        source: Events.WAYS_TO_SAVE_CREATED,
+        events: [waysToSaveSanityThemedMenuOffer],
       });
       await sendTestEvents({
         source: Events.MENU_THEMED_OFFER_CREATED,
@@ -287,16 +296,20 @@ describe('Menu', async () => {
         events: [buildTestSanityMarketplace(marketplaceMenus)],
       });
       await sendTestEvents({
-        source: Events.MENU_OFFER_DELETED,
-        events: [
-          buildTestSanityMenuOffer(menuOffers, marketplaceMenuOfferGeneratedMenuUUID),
-          buildTestSanityMenuOffer(menuOffers, dealsOfTheWeekGeneratedMenuUUID),
-          buildTestSanityMenuOffer(menuOffers, featuredOffersGeneratedMenuUUID),
-        ],
+        source: Events.DEALS_OF_THE_WEEK_DELETED,
+        events: [buildTestSanityDOTWMenuOffer(menuOffers, dealsOfTheWeekGeneratedMenuUUID)],
+      });
+      await sendTestEvents({
+        source: Events.FEATURED_DELETED,
+        events: [buildTestSanityFeaturedMenuOffer(menuOffers, featuredOffersGeneratedMenuUUID)],
       });
       await sendTestEvents({
         source: Events.MENU_THEMED_OFFER_DELETED,
         events: [buildTestSanityMenuThemedOffer(offers, flexibleGeneratedMenuUUID, flexibleGeneratedSubMenuUUID)],
+      });
+      await sendTestEvents({
+        source: Events.WAYS_TO_SAVE_DELETED,
+        events: [buildTestSanityWaysToSaveMenu(offers, waysToSaveGeneratedMenuUUID, waysToSaveGenereratedSubMenuUUID)],
       });
       await sendTestEvents({
         source: Events.MENU_THEMED_EVENT_DELETED,
@@ -336,10 +349,6 @@ describe('Menu', async () => {
           buildTestSanityEventOffer({ _id: generatedExcludedEventUUID }),
         ],
       });
-      await sendTestEvents({
-        source: Events.SITE_DELETED,
-        events: [buildTestSanitySite(dealsOfTheWeekGeneratedMenuUUID, featuredOffersGeneratedMenuUUID)],
-      });
     });
 
     it('should consume menu and offer events from the correct events and return the single menu response with expired offers filtered out, in the correct order and with any overrides', async () => {
@@ -352,9 +361,6 @@ describe('Menu', async () => {
 
       const result = (await response.json()) as { data: MenuResponse };
 
-      expect(
-        result.data.marketplace?.find((menu) => menu.id === marketplaceMenuOfferGeneratedMenuUUID),
-      ).not.toBeDefined();
       expect(result.data.marketplace?.find((menu) => menu.id === futureScheduleMarketplaceUUID)).not.toBeDefined();
       expect(result.data.marketplace?.find((menu) => menu.id === previousScheduleMarketplaceUUID)).not.toBeDefined();
       expect(result.data.marketplace?.[0].id).toEqual(inScheduleMarketplaceUUID);
@@ -388,6 +394,8 @@ describe('Menu', async () => {
     it('should consume menu and offer events and return all menus in the response', async () => {
       const response = await whenMenuIsCalledWith({}, { Authorization: `Bearer ${testUserTokens.idToken}` });
       const result = (await response.json()) as { data: MenuResponse };
+
+      expect(result.data.flexible?.offers?.find((menu) => menu.id === flexibleGeneratedMenuUUID)).toBeFalsy();
 
       expect(result.data).toEqual({
         dealsOfTheWeek: {
@@ -423,14 +431,14 @@ describe('Menu', async () => {
           ],
           offers: [
             {
-              id: flexibleGeneratedMenuUUID,
-              title: flexibleSanityThemedMenuOffer?.title,
+              id: waysToSaveGeneratedMenuUUID,
+              title: waysToSaveSanityThemedMenuOffer?.title,
               menus: [
                 {
-                  id: flexibleGeneratedSubMenuUUID,
-                  title: flexibleSanityThemedMenuOffer?.inclusions?.[0]?.collectionName,
+                  id: waysToSaveGenereratedSubMenuUUID,
+                  title: waysToSaveSanityThemedMenuOffer?.inclusions?.[0]?.collectionName,
                   imageURL:
-                    flexibleSanityThemedMenuOffer?.inclusions?.[0]?.offerCollectionImage?.default?.asset?.url ?? '',
+                    waysToSaveSanityThemedMenuOffer?.inclusions?.[0]?.offerCollectionImage?.default?.asset?.url ?? '',
                 },
               ],
             },
@@ -475,6 +483,29 @@ describe('Menu', async () => {
         title: flexibleSanityThemedMenuOffer?.inclusions?.[0]?.collectionName,
         description: flexibleSanityThemedMenuOffer?.inclusions?.[0]?.collectionDescription,
         imageURL: flexibleSanityThemedMenuOffer?.inclusions?.[0]?.offerCollectionImage?.default?.asset?.url ?? '',
+        events: [],
+        offers: expect.arrayContaining([
+          buildExpectedOfferFrom(offers[0]),
+          buildExpectedOfferFrom(offers[1]),
+          buildExpectedOfferFrom(offers[2]),
+        ]),
+      });
+    });
+
+    it('should return ways to save menu data containing offers correctly', async () => {
+      const response = await whenFlexibleMenuIsCalledWith(
+        waysToSaveGenereratedSubMenuUUID,
+        {},
+        {
+          Authorization: `Bearer ${testUserTokens.idToken}`,
+        },
+      );
+      const result = (await response.json()) as { data: FlexibleMenuResponse };
+      expect(result.data).toEqual({
+        id: waysToSaveGenereratedSubMenuUUID,
+        title: waysToSaveSanityThemedMenuOffer?.inclusions?.[0]?.collectionName,
+        description: waysToSaveSanityThemedMenuOffer?.inclusions?.[0]?.collectionDescription,
+        imageURL: waysToSaveSanityThemedMenuOffer?.inclusions?.[0]?.offerCollectionImage?.default?.asset?.url ?? '',
         events: [],
         offers: expect.arrayContaining([
           buildExpectedOfferFrom(offers[0]),

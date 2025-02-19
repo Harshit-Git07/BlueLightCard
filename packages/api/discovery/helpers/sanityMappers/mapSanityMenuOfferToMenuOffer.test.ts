@@ -1,20 +1,15 @@
 import {
   BoostType as SanityBoostType,
   DiscountType as SanityDiscountType,
-  MenuOffer as SanityMenuOffer,
+  MenuDealsOfTheWeek as SanityMenuDealsOfTheWeek,
+  MenuFeaturedOffers as SanityMenuFeaturedOffers,
   Offer as SanityOffer,
 } from '@bluelightcard/sanity-types';
 
-import { getSiteConfig } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/SiteEventHandler';
 import { IngestedMenuOffer } from '@blc-mono/discovery/application/models/Menu';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
-import { Site } from '@blc-mono/discovery/application/models/Site';
 
-import { determineMenuType, mapSanityMenuOfferToMenuOffer } from './mapSanityMenuOfferToMenuOffer';
-
-jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/SiteEventHandler');
-
-const getSiteConfigMock = jest.mocked(getSiteConfig);
+import { mapSanityMenuOfferToMenuOffer } from './mapSanityMenuOfferToMenuOffer';
 
 const richTextModuleData = {
   _type: 'richtext-module' as const,
@@ -213,9 +208,21 @@ export const validSanityMenuOffer: {
   },
 };
 
-const sanityMenuOffer: SanityMenuOffer = {
+const sanityFeaturedMenuOffer: SanityMenuFeaturedOffers = {
   _id: 'menu1',
-  _type: 'menu.offer',
+  _type: 'menu.featuredOffers',
+  _rev: 'rev1',
+  title: 'Test Menu',
+  start: '2023-01-01T00:00:00Z',
+  end: '2023-12-31T00:00:00Z',
+  _updatedAt: '2023-01-02T00:00:00Z',
+  _createdAt: '2023-01-02T00:00:00Z',
+  inclusions: [validSanityMenuOffer],
+};
+
+const sanityDOTWMenuOffer: SanityMenuDealsOfTheWeek = {
+  _id: 'menu1',
+  _type: 'menu.dealsOfTheWeek',
   _rev: 'rev1',
   title: 'Test Menu',
   start: '2023-01-01T00:00:00Z',
@@ -226,14 +233,13 @@ const sanityMenuOffer: SanityMenuOffer = {
 };
 
 describe('mapSanityMenuOfferToOffer', () => {
-  getSiteConfigMock.mockResolvedValue(undefined);
-  const expectedDefaultResponse: IngestedMenuOffer = {
+  const expectedDefaultResponse = (menuType: MenuType): IngestedMenuOffer => ({
     id: 'menu1',
     name: 'Test Menu',
     startTime: '2023-01-01T00:00:00Z',
     endTime: '2023-12-31T00:00:00Z',
     updatedAt: '2023-01-02T00:00:00Z',
-    menuType: MenuType.MARKETPLACE,
+    menuType,
     offers: [
       {
         id: '1',
@@ -244,26 +250,35 @@ describe('mapSanityMenuOfferToOffer', () => {
         overrides: {},
       },
     ],
-  };
+  });
 
-  it('should map sanity menu offer to menu offer correctly', async () => {
-    const result = await mapSanityMenuOfferToMenuOffer(sanityMenuOffer);
+  const testCases = [
+    {
+      input: sanityFeaturedMenuOffer,
+      menuType: MenuType.FEATURED,
+    },
+    { input: sanityDOTWMenuOffer, menuType: MenuType.DEALS_OF_THE_WEEK },
+  ];
 
-    expect(result).toEqual(expectedDefaultResponse);
+  it.each(testCases)('should map sanity menu offer to menu offer correctly', ({ input, menuType }) => {
+    const expected = expectedDefaultResponse(menuType);
+    const result = mapSanityMenuOfferToMenuOffer(input);
+
+    expect(result).toEqual(expected);
   });
 
   const errorCases = [
     {
       field: 'title',
       menuOffer: {
-        ...sanityMenuOffer,
+        ...sanityDOTWMenuOffer,
         title: undefined,
       },
     },
     {
       field: 'offer',
       menuOffer: {
-        ...sanityMenuOffer,
+        ...sanityDOTWMenuOffer,
         inclusions: [
           {
             ...validSanityMenuOffer,
@@ -275,7 +290,7 @@ describe('mapSanityMenuOfferToOffer', () => {
     {
       field: 'company',
       menuOffer: {
-        ...sanityMenuOffer,
+        ...sanityDOTWMenuOffer,
         inclusions: [
           {
             ...validSanityMenuOffer,
@@ -288,96 +303,23 @@ describe('mapSanityMenuOfferToOffer', () => {
       },
     },
   ];
-  it.each(errorCases)('should throw an error if %s is not present', async ({ field, menuOffer }) => {
+  it.each(errorCases)('should throw an error if %s is not present', ({ field, menuOffer }) => {
     // @ts-expect-error menu offer dereferencing not ideal
-    await expect(mapSanityMenuOfferToMenuOffer(menuOffer)).rejects.toThrow(`Missing sanity field: ${field}`);
+    expect(() => mapSanityMenuOfferToMenuOffer(menuOffer)).toThrow(`Missing sanity field: ${field}`);
   });
 
-  it('should return an empty array if inclusions are undefined', async () => {
+  it('should return an empty array if inclusions are undefined', () => {
     const sanityMenuOfferWithoutInclusions = {
-      ...sanityMenuOffer,
+      ...sanityDOTWMenuOffer,
       inclusions: undefined,
     };
     const expected = {
-      ...expectedDefaultResponse,
+      ...expectedDefaultResponse(MenuType.DEALS_OF_THE_WEEK),
       offers: [],
     };
 
-    const result = await mapSanityMenuOfferToMenuOffer(sanityMenuOfferWithoutInclusions);
+    const result = mapSanityMenuOfferToMenuOffer(sanityMenuOfferWithoutInclusions);
 
     expect(result).toEqual(expected);
-  });
-});
-
-describe('determineMenuType', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-  it('should return DEALS_OF_THE_WEEK when menu offer matches id stored within the site config', async () => {
-    const siteConfig: Site = {
-      dealsOfTheWeekMenu: {
-        id: 'deals-of-the-week-id',
-      },
-      featuredOffersMenu: {},
-      waysToSaveMenu: {},
-      id: 'site_id_1',
-      updatedAt: '2023-01-01T00:00:00Z',
-    };
-    getSiteConfigMock.mockResolvedValue(siteConfig);
-    const menuOffer: SanityMenuOffer = {
-      ...sanityMenuOffer,
-      _id: 'deals-of-the-week-id',
-    } as SanityMenuOffer;
-
-    const result = await determineMenuType(menuOffer);
-
-    expect(result).toEqual(MenuType.DEALS_OF_THE_WEEK);
-  });
-  it('should return FEATURED when menu offer matches id stored within the site config', async () => {
-    const siteConfig: Site = {
-      dealsOfTheWeekMenu: {},
-      featuredOffersMenu: {
-        id: 'featured-id',
-      },
-      waysToSaveMenu: {},
-      id: 'site_id_1',
-      updatedAt: '2023-01-01T00:00:00Z',
-    };
-    getSiteConfigMock.mockResolvedValue(siteConfig);
-    const menuOffer: SanityMenuOffer = {
-      ...sanityMenuOffer,
-      _id: 'featured-id',
-    } as SanityMenuOffer;
-
-    const result = await determineMenuType(menuOffer);
-
-    expect(result).toEqual(MenuType.FEATURED);
-  });
-
-  it('should return MARKETPLACE when menu offer does not match any id stored within the site config', async () => {
-    const siteConfig: Site = {
-      dealsOfTheWeekMenu: {
-        id: 'deals-of-the-week-id',
-      },
-      featuredOffersMenu: {
-        id: 'featured-id',
-      },
-      waysToSaveMenu: {},
-      id: 'site_id_1',
-      updatedAt: '2023-01-01T00:00:00Z',
-    };
-    getSiteConfigMock.mockResolvedValue(siteConfig);
-
-    const result = await determineMenuType(sanityMenuOffer);
-
-    expect(result).toEqual(MenuType.MARKETPLACE);
-  });
-
-  it('should return MARKETPLACE when site config is not found', async () => {
-    getSiteConfigMock.mockResolvedValue(undefined);
-
-    const result = await determineMenuType(sanityMenuOffer);
-
-    expect(result).toEqual(MenuType.MARKETPLACE);
   });
 });

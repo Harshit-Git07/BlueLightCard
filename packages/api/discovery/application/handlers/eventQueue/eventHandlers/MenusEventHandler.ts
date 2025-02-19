@@ -2,7 +2,6 @@ import { isAfter } from 'date-fns';
 
 import { LambdaLogger } from '@blc-mono/core/utils/logger';
 import { IngestedMenuOffer, MenuOffer } from '@blc-mono/discovery/application/models/Menu';
-import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import {
   deleteMenuWithSubMenusAndOffers,
   getMenuById,
@@ -13,7 +12,6 @@ import { getOffersByIds } from '@blc-mono/discovery/application/repositories/Off
 const logger = new LambdaLogger({ serviceName: 'menus-event-handler' });
 
 export async function handleMenusUpdated(newMenuOfferRecord: IngestedMenuOffer): Promise<void> {
-  if (newMenuOfferRecord.menuType === MenuType.MARKETPLACE) return;
   const currentMenu = await getMenuById(newMenuOfferRecord.id);
   if (!currentMenu || isAfter(new Date(newMenuOfferRecord.updatedAt), new Date(currentMenu.updatedAt))) {
     const { offers: newMenuOffers, ...newMenu } = newMenuOfferRecord;
@@ -49,7 +47,6 @@ export async function handleMenusUpdated(newMenuOfferRecord: IngestedMenuOffer):
 }
 
 export async function handleMenusDeleted(deleteMenuOfferRecord: IngestedMenuOffer): Promise<void> {
-  if (deleteMenuOfferRecord.menuType === MenuType.MARKETPLACE) return;
   logger.info({ message: `Handling delete menu offer event for menu id: [${deleteMenuOfferRecord.id}]` });
   const currentMenuRecord = await getMenuById(deleteMenuOfferRecord.id);
   if (!currentMenuRecord) {

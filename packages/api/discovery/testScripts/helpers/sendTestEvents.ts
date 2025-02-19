@@ -4,12 +4,13 @@ import { EventBridgeClient, PutEventsCommand, PutEventsCommandInput } from '@aws
 import {
   Company,
   Event as EventOffer,
-  Marketplace,
-  MenuOffer,
+  MenuDealsOfTheWeek,
+  MenuFeaturedOffers,
+  MenuMarketplace,
   MenuThemedEvent,
   MenuThemedOffer,
+  MenuWaysToSave,
   Offer,
-  Site,
 } from '@bluelightcard/sanity-types';
 import { EventBus } from 'sst/node/event-bus';
 
@@ -23,13 +24,14 @@ interface TestEvents {
   events:
     | Offer[]
     | Company[]
-    | MenuOffer[]
-    | Site[]
     | MenuThemedOffer[]
     | SanityCompanyLocationEventBody[]
     | EventOffer[]
     | MenuThemedEvent[]
-    | Marketplace[];
+    | MenuMarketplace[]
+    | MenuDealsOfTheWeek[]
+    | MenuFeaturedOffers[]
+    | MenuWaysToSave[];
 }
 
 export async function sendTestEvents(testEvents: TestEvents, eventBusName?: string): Promise<void> {

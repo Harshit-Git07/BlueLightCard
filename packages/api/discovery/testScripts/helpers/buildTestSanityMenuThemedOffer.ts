@@ -1,17 +1,18 @@
-import { MenuThemedOffer as SanityMenuThemedOffer, Offer as SanityOffer } from '@bluelightcard/sanity-types';
+import {
+  MenuThemedOffer,
+  MenuThemedOffer as SanityMenuThemedOffer,
+  MenuWaysToSave as SanityMenuWaysToSave,
+  Offer as SanityOffer,
+} from '@bluelightcard/sanity-types';
 import { v4 } from 'uuid';
 
-export function buildTestSanityMenuThemedOffer(
-  offers: SanityOffer[],
-  id?: string,
-  subMenuId?: string,
-): SanityMenuThemedOffer {
+const themedMenuOfferValues = (offers: SanityOffer[], id?: string, subMenuId?: string): MenuThemedOffer => {
   return {
     _createdAt: '2024-07-30T09:36:14Z',
     _id: id ?? v4(),
     _rev: 'HxAzVxEm31DYQTCb4WY0L5',
-    _type: 'menu.themed.offer',
     _updatedAt: new Date().toISOString(),
+    _type: 'menu.themed.offer',
     start: new Date().toISOString(),
     end: new Date().toISOString(),
     inclusions: [
@@ -28,5 +29,27 @@ export function buildTestSanityMenuThemedOffer(
       },
     ],
     title: 'Test Menu Themed Offer',
+  };
+};
+
+export function buildTestSanityMenuThemedOffer(
+  offers: SanityOffer[],
+  id?: string,
+  subMenuId?: string,
+): SanityMenuThemedOffer {
+  return {
+    ...themedMenuOfferValues(offers, id, subMenuId),
+    _type: 'menu.themed.offer',
+  };
+}
+
+export function buildTestSanityWaysToSaveMenu(
+  offers: SanityOffer[],
+  id?: string,
+  subMenuId?: string,
+): SanityMenuWaysToSave {
+  return {
+    ...themedMenuOfferValues(offers, id, subMenuId),
+    _type: 'menu.waysToSave',
   };
 }

@@ -2,12 +2,13 @@ import { Logger } from '@aws-lambda-powertools/logger';
 import {
   Company as SanityCompany,
   Event as SanityEvent,
-  Marketplace as SanityMarketplaceMenu,
-  MenuOffer as SanityMenuOffer,
+  MenuDealsOfTheWeek as SanityMenuDealsOfTheWeek,
+  MenuFeaturedOffers as SanityMenuFeaturedOffers,
+  MenuMarketplace as SanityMenuMarketplace,
   MenuThemedEvent as SanityEventThemedMenu,
   MenuThemedOffer as SanityThemedMenu,
+  MenuWaysToSave as SanityMenuWaysToSave,
   Offer as SanityOffer,
-  Site as SanitySite,
 } from '@bluelightcard/sanity-types';
 import { EventBridgeEvent, SQSEvent } from 'aws-lambda';
 
@@ -34,7 +35,6 @@ import { mapSanityEventToEventOffer } from '@blc-mono/discovery/helpers/sanityMa
 import { mapSanityMarketPlaceMenusToMenuOffers } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMarketplaceMenusToMenus';
 import { mapSanityMenuOfferToMenuOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
-import { mapSanitySiteToSite } from '@blc-mono/discovery/helpers/sanityMappers/mapSanitySiteToSite';
 import { mapSanityThemedMenuToThemedMenu } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityThemedMenuToThemedMenu';
 import { Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
@@ -42,7 +42,6 @@ import { handleCompanyLocationsUpdated } from './eventHandlers/CompanyLocationEv
 import { handleMarketplaceMenusDeleted, handleMarketplaceMenusUpdated } from './eventHandlers/MarketplaceEventHandler';
 import { handleMenusDeleted, handleMenusUpdated } from './eventHandlers/MenusEventHandler';
 import { handleMenuThemedDeleted, handleMenuThemedUpdated } from './eventHandlers/MenuThemedEventHandler';
-import { handleSiteDeleted, handleSiteUpdated } from './eventHandlers/SiteEventHandler';
 
 const logger = new Logger({ serviceName: 'event-queue-listener' });
 
@@ -79,35 +78,37 @@ const unwrappedHandler = async (event: SQSEvent) => {
         case Events.MARKETPLACE_MENUS_CREATED:
         case Events.MARKETPLACE_MENUS_UPDATED:
           await handleMarketplaceMenusUpdated(
-            mapSanityMarketPlaceMenusToMenuOffers(body.detail as SanityMarketplaceMenu),
+            mapSanityMarketPlaceMenusToMenuOffers(body.detail as SanityMenuMarketplace),
           );
           break;
         case Events.MARKETPLACE_MENUS_DELETED:
           await handleMarketplaceMenusDeleted(
-            mapSanityMarketPlaceMenusToMenuOffers(body.detail as SanityMarketplaceMenu),
+            mapSanityMarketPlaceMenusToMenuOffers(body.detail as SanityMenuMarketplace),
           );
           break;
-        case Events.MENU_OFFER_CREATED:
-        case Events.MENU_OFFER_UPDATED: {
-          await handleMenusUpdated(await mapSanityMenuOfferToMenuOffer(body.detail as SanityMenuOffer));
+        case Events.DEALS_OF_THE_WEEK_CREATED:
+        case Events.DEALS_OF_THE_WEEK_UPDATED:
+        case Events.FEATURED_CREATED:
+        case Events.FEATURED_UPDATED: {
+          await handleMenusUpdated(
+            mapSanityMenuOfferToMenuOffer(body.detail as SanityMenuDealsOfTheWeek | SanityMenuFeaturedOffers),
+          );
           break;
         }
-        case Events.MENU_OFFER_DELETED: {
-          await handleMenusDeleted(await mapSanityMenuOfferToMenuOffer(body.detail as SanityMenuOffer));
+        case Events.FEATURED_DELETED:
+        case Events.DEALS_OF_THE_WEEK_DELETED: {
+          await handleMenusDeleted(
+            mapSanityMenuOfferToMenuOffer(body.detail as SanityMenuDealsOfTheWeek | SanityMenuFeaturedOffers),
+          );
           break;
         }
-        case Events.SITE_CREATED:
-        case Events.SITE_UPDATED: {
-          await handleSiteUpdated(mapSanitySiteToSite(body.detail as SanitySite));
-          break;
-        }
-        case Events.SITE_DELETED: {
-          await handleSiteDeleted(mapSanitySiteToSite(body.detail as SanitySite));
-          break;
-        }
+        case Events.WAYS_TO_SAVE_CREATED:
+        case Events.WAYS_TO_SAVE_UPDATED:
         case Events.MENU_THEMED_OFFER_CREATED:
         case Events.MENU_THEMED_OFFER_UPDATED: {
-          await handleMenuThemedUpdated(await mapSanityThemedMenuToThemedMenu(body.detail as SanityThemedMenu));
+          await handleMenuThemedUpdated(
+            mapSanityThemedMenuToThemedMenu(body.detail as SanityThemedMenu | SanityMenuWaysToSave),
+          );
           break;
         }
         case Events.MENU_THEMED_EVENT_CREATED:
@@ -117,8 +118,11 @@ const unwrappedHandler = async (event: SQSEvent) => {
           );
           break;
         }
+        case Events.WAYS_TO_SAVE_DELETED:
         case Events.MENU_THEMED_OFFER_DELETED: {
-          await handleMenuThemedDeleted(await mapSanityThemedMenuToThemedMenu(body.detail as SanityThemedMenu));
+          await handleMenuThemedDeleted(
+            mapSanityThemedMenuToThemedMenu(body.detail as SanityThemedMenu | SanityMenuWaysToSave),
+          );
           break;
         }
         case Events.MENU_THEMED_EVENT_DELETED: {

@@ -1,25 +1,17 @@
-import { MenuOffer as SanityMenuOffer } from '@bluelightcard/sanity-types';
+import { MenuDealsOfTheWeek, MenuFeaturedOffers } from '@bluelightcard/sanity-types';
 
-import { getSiteConfig } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/SiteEventHandler';
 import { IngestedMenuOffer } from '@blc-mono/discovery/application/models/Menu';
-import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
+import { MenuEventTypes } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
-export async function determineMenuType(menuOffer: SanityMenuOffer): Promise<MenuType> {
-  const siteConfig = await getSiteConfig();
-  if (siteConfig?.dealsOfTheWeekMenu?.id === menuOffer._id) {
-    return MenuType.DEALS_OF_THE_WEEK;
-  }
-  if (siteConfig?.featuredOffersMenu?.id === menuOffer._id) {
-    return MenuType.FEATURED;
-  }
-  return MenuType.MARKETPLACE;
-}
+import { mapSanityMenuEventTypeToMenuType } from './mapSanityMenuEventTypeToMenuType';
 
-export async function mapSanityMenuOfferToMenuOffer(menuOffer: SanityMenuOffer): Promise<IngestedMenuOffer> {
+export function mapSanityMenuOfferToMenuOffer(menuOffer: MenuDealsOfTheWeek | MenuFeaturedOffers): IngestedMenuOffer {
   if (!menuOffer.title) {
     throw new Error('Missing sanity field: title');
   }
-  const menuType = await determineMenuType(menuOffer);
+
+  const menuType = mapSanityMenuEventTypeToMenuType(menuOffer._type as MenuEventTypes);
+
   return {
     id: menuOffer._id,
     name: menuOffer.title,

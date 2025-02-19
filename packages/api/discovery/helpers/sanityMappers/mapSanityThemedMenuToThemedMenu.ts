@@ -1,32 +1,28 @@
-import { MenuThemedOffer as SanityThemedMenu } from '@bluelightcard/sanity-types';
+import { MenuThemedOffer as SanityThemedMenu, MenuWaysToSave } from '@bluelightcard/sanity-types';
 
-import { getSiteConfig } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/SiteEventHandler';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 import { ThemedMenuOffer } from '@blc-mono/discovery/application/models/ThemedMenu';
+import { MenuEventTypes } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
-async function determineThemedMenuType(
-  themedMenu: SanityThemedMenu,
-): Promise<MenuType.WAYS_TO_SAVE | MenuType.FLEXIBLE_OFFERS> {
-  const siteConfig = await getSiteConfig();
-  if (siteConfig?.waysToSaveMenu?.id === themedMenu._id) {
-    return MenuType.WAYS_TO_SAVE;
-  }
-  return MenuType.FLEXIBLE_OFFERS;
-}
+import { mapSanityMenuEventTypeToMenuType } from './mapSanityMenuEventTypeToMenuType';
 
-export async function mapSanityThemedMenuToThemedMenu(themedMenu: SanityThemedMenu): Promise<ThemedMenuOffer> {
+export function mapSanityThemedMenuToThemedMenu(themedMenu: SanityThemedMenu | MenuWaysToSave): ThemedMenuOffer {
   if (!themedMenu.title) {
     throw new Error('Missing sanity field: title');
   }
 
-  const menuType = await determineThemedMenuType(themedMenu);
+  const menuType = mapSanityMenuEventTypeToMenuType(themedMenu._type as MenuEventTypes);
+
+  if (menuType !== MenuType.FLEXIBLE_OFFERS && menuType !== MenuType.WAYS_TO_SAVE) {
+    throw new Error('Invalid menu type');
+  }
 
   return {
     id: themedMenu._id,
     updatedAt: themedMenu._updatedAt,
     endTime: themedMenu.end,
     startTime: themedMenu.start,
-    menuType,
+    menuType: menuType,
     name: themedMenu.title,
     themedMenusOffers:
       themedMenu.inclusions?.map((collection, index) => {

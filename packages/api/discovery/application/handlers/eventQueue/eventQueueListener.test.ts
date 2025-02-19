@@ -20,13 +20,11 @@ import { mapSanityEventToEventOffer } from '@blc-mono/discovery/helpers/sanityMa
 import { mapSanityMarketPlaceMenusToMenuOffers } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMarketplaceMenusToMenus';
 import { mapSanityMenuOfferToMenuOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer';
 import { mapSanityOfferToOffer } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer';
-import { mapSanitySiteToSite } from '@blc-mono/discovery/helpers/sanityMappers/mapSanitySiteToSite';
 import { mapSanityThemedMenuToThemedMenu } from '@blc-mono/discovery/helpers/sanityMappers/mapSanityThemedMenuToThemedMenu';
 import { DetailTypes, Events } from '@blc-mono/discovery/infrastructure/eventHandling/events';
 
 import { menuFactory } from '../../factories/MenuFactory';
 import { ingestedMenuOfferFactory } from '../../factories/MenuOfferFactory';
-import { siteFactory } from '../../factories/SiteFactory';
 import { MenuType } from '../../models/MenuResponse';
 import { ThemedMenuOffer } from '../../models/ThemedMenu';
 
@@ -34,7 +32,6 @@ import { handleCompanyLocationsUpdated } from './eventHandlers/CompanyLocationEv
 import { handleMarketplaceMenusDeleted, handleMarketplaceMenusUpdated } from './eventHandlers/MarketplaceEventHandler';
 import { handleMenusDeleted, handleMenusUpdated } from './eventHandlers/MenusEventHandler';
 import { handleMenuThemedDeleted, handleMenuThemedUpdated } from './eventHandlers/MenuThemedEventHandler';
-import { handleSiteDeleted, handleSiteUpdated } from './eventHandlers/SiteEventHandler';
 import { handler } from './eventQueueListener';
 
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/OfferEventHandler');
@@ -44,7 +41,6 @@ jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/Com
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/MenusEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/MarketplaceEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/MenuThemedEventHandler');
-jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/SiteEventHandler');
 jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/EventMenuThemedEventHandler');
 
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityEventThemedMenuToEventThemedMenu');
@@ -52,7 +48,6 @@ jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityOfferToOffer');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyToCompany');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityMarketplaceMenusToMenus');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityMenuOfferToMenuOffer');
-jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanitySiteToSite');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityThemedMenuToThemedMenu');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityCompanyLocationToCompanyLocation');
 jest.mock('@blc-mono/discovery/helpers/sanityMappers/mapSanityEventToEvent');
@@ -65,8 +60,6 @@ const handleCompanyUpdatedMock = jest.mocked(handleCompanyUpdated);
 const handleCompanyLocationsUpdatedMock = jest.mocked(handleCompanyLocationsUpdated);
 const handleMenuOfferUpdatedMock = jest.mocked(handleMenusUpdated);
 const handleMenuOfferDeletedMock = jest.mocked(handleMenusDeleted);
-const handleSiteUpdatedMock = jest.mocked(handleSiteUpdated);
-const handleSiteDeletedMock = jest.mocked(handleSiteDeleted);
 const handleMarketplaceMenusUpdatedMock = jest.mocked(handleMarketplaceMenusUpdated);
 const handleMarketplaceMenusDeletedMock = jest.mocked(handleMarketplaceMenusDeleted);
 const handleMenuThemedUpdatedMock = jest.mocked(handleMenuThemedUpdated);
@@ -80,7 +73,6 @@ const mapSanityEventToEventMock = jest.mocked(mapSanityEventToEventOffer);
 const mapSanityCompanyToCompanyMock = jest.mocked(mapSanityCompanyToCompany);
 const mapSanityMenuOfferToMenuOfferMock = jest.mocked(mapSanityMenuOfferToMenuOffer);
 const mapSanityMarketPlaceMenusToMenuOffersMock = jest.mocked(mapSanityMarketPlaceMenusToMenuOffers);
-const mapSanitySiteToSiteMock = jest.mocked(mapSanitySiteToSite);
 const mapSanityThemedMenuToThemedMenuMock = jest.mocked(mapSanityThemedMenuToThemedMenu);
 const mapSanityCompanyLocationToCompanyLocationEventMock = jest.mocked(mapSanityCompanyLocationToCompanyLocationEvent);
 const mapSanityEventThemedMenuToEventThemedMenuMock = jest.mocked(mapSanityEventThemedMenuToEventThemedMenu);
@@ -195,68 +187,61 @@ describe('eventQueueListener', () => {
     });
   });
 
-  it.each([Events.MENU_OFFER_CREATED, Events.MENU_OFFER_UPDATED])('should handle %s event', async (eventSource) => {
+  it.each([
+    Events.FEATURED_CREATED,
+    Events.FEATURED_UPDATED,
+    Events.DEALS_OF_THE_WEEK_CREATED,
+    Events.DEALS_OF_THE_WEEK_UPDATED,
+  ])('should handle %s event', async (eventSource) => {
     const menuRecord = buildSQSRecord(eventSource);
     const menuOffer = ingestedMenuOfferFactory.build();
-    mapSanityMenuOfferToMenuOfferMock.mockResolvedValue(menuOffer);
+    mapSanityMenuOfferToMenuOfferMock.mockReturnValue(menuOffer);
     await handler({ Records: [menuRecord] });
 
     expect(mapSanityMenuOfferToMenuOfferMock).toHaveBeenCalledWith('body');
     expect(handleMenuOfferUpdatedMock).toHaveBeenCalledWith(menuOffer);
   });
 
-  it('should handle "menu.deleted" event', async () => {
-    const menuDeletedRecord = buildSQSRecord(Events.MENU_OFFER_DELETED);
-    const menuOffer = ingestedMenuOfferFactory.build();
-    mapSanityMenuOfferToMenuOfferMock.mockResolvedValue(menuOffer);
-    await handler({ Records: [menuDeletedRecord] });
-
-    expect(mapSanityMenuOfferToMenuOfferMock).toHaveBeenCalledWith('body');
-    expect(handleMenuOfferDeletedMock).toHaveBeenCalledWith(menuOffer);
-  });
-
-  it.each([Events.SITE_CREATED, Events.SITE_UPDATED])('should handle %s event', async (eventSource) => {
-    const siteRecord = buildSQSRecord(eventSource);
-    const site = siteFactory.build();
-    mapSanitySiteToSiteMock.mockReturnValue(site);
-    await handler({ Records: [siteRecord] });
-
-    expect(mapSanitySiteToSiteMock).toHaveBeenCalledWith('body');
-    expect(handleSiteUpdatedMock).toHaveBeenCalledWith(site);
-  });
-
-  it('should handle "site.delete" event', async () => {
-    const siteRecord = buildSQSRecord(Events.SITE_DELETED);
-    const site = siteFactory.build();
-    mapSanitySiteToSiteMock.mockReturnValue(site);
-    await handler({ Records: [siteRecord] });
-
-    expect(mapSanitySiteToSiteMock).toHaveBeenCalledWith('body');
-    expect(handleSiteDeletedMock).toHaveBeenCalledWith(site);
-  });
-
-  it.each([Events.MENU_THEMED_OFFER_CREATED, Events.MENU_THEMED_OFFER_UPDATED])(
+  it.each([Events.FEATURED_DELETED, Events.DEALS_OF_THE_WEEK_DELETED])(
     'should handle %s event',
     async (eventSource) => {
-      const themedMenuRecord = buildSQSRecord(eventSource);
-      const menu = menuFactory.build();
-      const themedMenu: ThemedMenuOffer = { ...menu, menuType: MenuType.FLEXIBLE_OFFERS, themedMenusOffers: [] };
-      mapSanityThemedMenuToThemedMenuMock.mockResolvedValue(themedMenu);
-      await handler({ Records: [themedMenuRecord] });
-      expect(mapSanityThemedMenuToThemedMenuMock).toHaveBeenCalledWith('body');
-      expect(handleMenuThemedUpdatedMock).toHaveBeenCalledWith(themedMenu);
+      const menuDeletedRecord = buildSQSRecord(eventSource);
+      const menuOffer = ingestedMenuOfferFactory.build();
+      mapSanityMenuOfferToMenuOfferMock.mockReturnValue(menuOffer);
+      await handler({ Records: [menuDeletedRecord] });
+
+      expect(mapSanityMenuOfferToMenuOfferMock).toHaveBeenCalledWith('body');
+      expect(handleMenuOfferDeletedMock).toHaveBeenCalledWith(menuOffer);
     },
   );
 
-  it('should handle "menu.themed.deleted" event', async () => {
-    const themedMenuRecord = buildSQSRecord(Events.MENU_THEMED_OFFER_DELETED);
+  it.each([
+    Events.WAYS_TO_SAVE_CREATED,
+    Events.WAYS_TO_SAVE_UPDATED,
+    Events.MENU_THEMED_OFFER_CREATED,
+    Events.MENU_THEMED_OFFER_UPDATED,
+  ])('should handle %s event', async (eventSource) => {
+    const themedMenuRecord = buildSQSRecord(eventSource);
     const menu = menuFactory.build();
     const themedMenu: ThemedMenuOffer = { ...menu, menuType: MenuType.FLEXIBLE_OFFERS, themedMenusOffers: [] };
-    mapSanityThemedMenuToThemedMenuMock.mockResolvedValue(themedMenu);
+    mapSanityThemedMenuToThemedMenuMock.mockReturnValue(themedMenu);
     await handler({ Records: [themedMenuRecord] });
     expect(mapSanityThemedMenuToThemedMenuMock).toHaveBeenCalledWith('body');
-    expect(handleMenuThemedDeletedMock).toHaveBeenCalledWith(themedMenu);
+    expect(handleMenuThemedUpdatedMock).toHaveBeenCalledWith(themedMenu);
   });
+
+  it.each([Events.WAYS_TO_SAVE_DELETED, Events.MENU_THEMED_OFFER_DELETED])(
+    'should handle "menu.themed.deleted" event',
+    async () => {
+      const themedMenuRecord = buildSQSRecord(Events.MENU_THEMED_OFFER_DELETED);
+      const menu = menuFactory.build();
+      const themedMenu: ThemedMenuOffer = { ...menu, menuType: MenuType.FLEXIBLE_OFFERS, themedMenusOffers: [] };
+      mapSanityThemedMenuToThemedMenuMock.mockReturnValue(themedMenu);
+      await handler({ Records: [themedMenuRecord] });
+      expect(mapSanityThemedMenuToThemedMenuMock).toHaveBeenCalledWith('body');
+      expect(handleMenuThemedDeletedMock).toHaveBeenCalledWith(themedMenu);
+    },
+  );
 
   it('should throw error on invalid event source', async () => {
     const invalidEventSourceRecord = buildSQSRecord('random-event-source');

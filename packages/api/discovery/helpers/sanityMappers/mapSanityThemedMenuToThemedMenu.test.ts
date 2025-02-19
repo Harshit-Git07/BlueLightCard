@@ -1,14 +1,9 @@
-import { MenuThemedOffer as SanityThemedMenuOffer } from '@bluelightcard/sanity-types';
+import { MenuThemedOffer as SanityThemedMenuOffer, MenuWaysToSave } from '@bluelightcard/sanity-types';
 
-import { getSiteConfig } from '@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/SiteEventHandler';
 import { MenuType } from '@blc-mono/discovery/application/models/MenuResponse';
 
 import { validSanityMenuOffer } from './mapSanityMenuOfferToMenuOffer.test';
 import { mapSanityThemedMenuToThemedMenu } from './mapSanityThemedMenuToThemedMenu';
-
-jest.mock('@blc-mono/discovery/application/handlers/eventQueue/eventHandlers/SiteEventHandler');
-
-const getSiteConfigMock = jest.mocked(getSiteConfig);
 
 const validInclusion = {
   _key: 'inclusion-key',
@@ -56,14 +51,35 @@ const validSanityThemedMenu = {
   start: '2021-09-01T00:00:00Z',
   inclusions: [validInclusion],
 };
+
+const validSanityWaysToSaveMenu = {
+  _createdAt: '2021-09-01T00:00:00Z',
+  _id: '123',
+  _rev: '123',
+  _type: 'menu.waysToSave',
+  _updatedAt: '2021-09-01T00:00:00Z',
+  title: 'title',
+  end: '2021-09-01T00:00:00Z',
+  start: '2021-09-01T00:00:00Z',
+  inclusions: [validInclusion],
+};
 describe('mapSanityThemedMenuToThemedMenu', () => {
-  it('should map sanity themed menu to themed menu', async () => {
-    getSiteConfigMock.mockResolvedValue(undefined);
-    const result = await mapSanityThemedMenuToThemedMenu(validSanityThemedMenu as SanityThemedMenuOffer);
-    expect(result).toEqual({
+  const testCases = [
+    {
+      input: validSanityThemedMenu,
+      menuType: MenuType.FLEXIBLE_OFFERS,
+    },
+    {
+      input: validSanityWaysToSaveMenu,
+      menuType: MenuType.WAYS_TO_SAVE,
+    },
+  ];
+  it.each(testCases)('should map sanity themed menu to themed menu', ({ input, menuType }) => {
+    const result = mapSanityThemedMenuToThemedMenu(input as SanityThemedMenuOffer | MenuWaysToSave);
+    const expected = (menuType: MenuType) => ({
       endTime: '2021-09-01T00:00:00Z',
       id: '123',
-      menuType: MenuType.FLEXIBLE_OFFERS,
+      menuType: menuType,
       name: 'title',
       startTime: '2021-09-01T00:00:00Z',
       themedMenusOffers: [
@@ -91,20 +107,7 @@ describe('mapSanityThemedMenuToThemedMenu', () => {
       ],
       updatedAt: '2021-09-01T00:00:00Z',
     });
-  });
-
-  it('should map to the correct sanity Themed Menu Type if ways to save is in site config', async () => {
-    getSiteConfigMock.mockResolvedValue({
-      waysToSaveMenu: {
-        id: validSanityThemedMenu._id,
-      },
-      dealsOfTheWeekMenu: {},
-      featuredOffersMenu: {},
-      id: '123',
-      updatedAt: '2021-09-01T00:00:00Z',
-    });
-    const result = await mapSanityThemedMenuToThemedMenu(validSanityThemedMenu as SanityThemedMenuOffer);
-    expect(result.menuType).toBe(MenuType.WAYS_TO_SAVE);
+    expect(result).toEqual(expected(menuType));
   });
 
   const errorCases = [
@@ -189,8 +192,8 @@ describe('mapSanityThemedMenuToThemedMenu', () => {
     },
   ];
 
-  it.each(errorCases)('should throw error when %s is missing', async ({ field, menuThemedOffer }) => {
-    await expect(mapSanityThemedMenuToThemedMenu(menuThemedOffer as SanityThemedMenuOffer)).rejects.toThrow(
+  it.each(errorCases)('should throw error when %s is missing', ({ field, menuThemedOffer }) => {
+    expect(() => mapSanityThemedMenuToThemedMenu(menuThemedOffer as SanityThemedMenuOffer)).toThrow(
       `Missing sanity field: ${field}`,
     );
   });

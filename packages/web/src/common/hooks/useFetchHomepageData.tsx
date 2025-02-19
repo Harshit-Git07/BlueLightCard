@@ -194,11 +194,11 @@ const mapMenusResponse = (
     ),
     featuredOffers: mapFeaturedOffers(menusResponse.featured, useLegacyIds),
     flexibleMenu:
-      menusResponse.flexible.offers.length > 0
+      menusResponse?.flexible?.offers?.length > 0
         ? menusResponse.flexible.offers[0].menus.map(mapFlexibleMenu)
         : [],
     flexibleEventsMenu:
-      menusResponse.flexible.events.length > 0
+      menusResponse?.flexible?.events?.length > 0
         ? menusResponse.flexible.events[0].menus.map(mapFlexibleMenu)
         : [],
   };

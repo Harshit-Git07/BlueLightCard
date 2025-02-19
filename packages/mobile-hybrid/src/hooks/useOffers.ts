@@ -100,9 +100,9 @@ const mapV5MenuResults = (data: any, useLegacyIds: boolean): OfferDataModel => {
   return {
     deal: mapDealsOfTheWeek(data.dealsOfTheWeek, useLegacyIds),
     flexible:
-      data.flexible.offers.length > 0 ? mapFlexibleMenu(data.flexible.offers[0]) : undefined,
+      data?.flexible?.offers?.length > 0 ? mapFlexibleMenu(data.flexible.offers[0]) : undefined,
     flexibleEvents:
-      data.flexible.events.length > 0 ? mapFlexibleMenu(data.flexible.events[0]) : undefined,
+      data?.flexible?.events?.length > 0 ? mapFlexibleMenu(data.flexible.events[0]) : undefined,
     groups: [...marketplaceMenus, featuredOffersMenu],
   };
 };

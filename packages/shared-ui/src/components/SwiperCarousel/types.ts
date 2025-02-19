@@ -1,6 +1,6 @@
-export type CarouselProps = {
-  children: React.ReactNode[] | React.ReactNode;
+import { PropsWithChildren } from 'react';
 
+export type CarouselProps = {
   // Display
   pagination?: boolean;
   navigation?: boolean;
@@ -10,4 +10,4 @@ export type CarouselProps = {
   elementsPerPageLaptop?: number;
   elementsPerPageTablet?: number;
   elementsPerPageMobile?: number;
-};
+} & PropsWithChildren;

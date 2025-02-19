@@ -8,12 +8,14 @@ export default function LogoList({
   intro,
   logoType = 'default',
   logos,
-}: Partial<{
-  pretitle: string;
-  intro: any;
-  logoType: 'default' | 'light' | 'dark';
-  logos: Sanity.Logo[];
-}>) {
+}: Readonly<
+  Partial<{
+    pretitle: string;
+    intro: any;
+    logoType: 'default' | 'light' | 'dark';
+    logos: Sanity.Logo[];
+  }>
+>) {
   return (
     <section className="section space-y-8">
       {(pretitle || intro) && (
@@ -28,7 +30,7 @@ export default function LogoList({
 
       <figure className="item-center mx-auto flex flex-wrap justify-center gap-x-4 gap-y-8">
         <SwiperCarousel pagination elementsPerPageMobile={2}>
-          {logos &&
+          {logos?.length &&
             logos.map((logo, key) => (
               <div className="w-full flex items-center justify-center" key={key}>
                 <Img

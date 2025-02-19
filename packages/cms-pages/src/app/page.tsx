@@ -5,6 +5,8 @@ import processMetadata from '@/lib/processMetadata';
 import { getBrand } from './actions';
 import { notFound } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
   const page = await getPage();
   if (!page) notFound();

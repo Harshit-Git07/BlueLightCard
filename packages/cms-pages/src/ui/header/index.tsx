@@ -14,7 +14,7 @@ export default async function Header() {
   return (
     <header className="sticky top-0 z-20">
       <div className="dark:bg-NavBar-bg-colour-dark bg-NavBar-bg-colour text-NavBar-item-text-colour dark:text-NavBar-item-text-colour-dark">
-        <div className="p-0 flex items-center flex-wrap tablet:gap-4 tablet:p-4 desktop:py-0 desktop:flex-nowrap laptop:container laptop:mx-auto">
+        <div className="min-h-[64px] p-0 flex items-center flex-wrap tablet:gap-4 tablet:p-4 desktop:py-0 desktop:flex-nowrap laptop:container laptop:mx-auto">
           {logo.image.default && (
             <div className="order-1 grow px-4 py-5 tablet:p-0">
               <Link href="/">

@@ -205,6 +205,9 @@ jobs:
         env:
           BRAND: BLC_UK
 
+      - name: Run typecheck
+        run: npm run typecheck -w packages/cms-pages
+
       - name: Deploy Worker
         if: ${{ steps.terraform-apply.outputs.status == 'Success' || steps.terraform-apply.outputs.status == 'Noop' }}
         id: deploy

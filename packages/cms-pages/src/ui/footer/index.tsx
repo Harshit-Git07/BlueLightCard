@@ -17,14 +17,14 @@ export default async function Footer() {
   const staticContentForBrand = staticContent[brand];
 
   return (
-    <div className="bg-footer-bg-colour-light dark:bg-footer-bg-colour-dark text-footer-text-colour dark:text-footer-text-colour-dark pt-11 px-5 w-auto">
+    <div className="border-t border-shade-greyscale-grey-100 bg-footer-bg-colour-light dark:bg-footer-bg-colour-dark text-footer-text-colour dark:text-footer-text-colour-dark pt-11 px-5 w-auto">
       <div className="desktop:container desktop:mx-auto grid grid-cols-3 items-center justify-items-center">
         <div className="flex items-center col-span-3 laptop:justify-self-start laptop:col-span-1 laptop:order-1 h-12 mobile-xl:h-16">
           {logo.image.default && (
             <Link href="/">
               <Img
                 image={logo.image.default as Sanity.Image}
-                className="max-w-[200px] mobile-xl:max-w-[280px]"
+                className="max-h-[74px] max-w-[200px] mobile-xl:max-w-[280px]"
               />
             </Link>
           )}

@@ -1,6 +1,8 @@
 import { fetchSanity, groq } from '@/lib/sanity/fetch';
 import Modules from '@/ui/modules';
 
+export const dynamic = 'force-dynamic';
+
 export default async function NotFound() {
   const page = await get404();
   if (!page) return <h1 className="text-center text-5xl">404</h1>;

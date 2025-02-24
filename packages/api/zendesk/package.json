@@ -1,6 +1,6 @@
 {
   "name": "@blc-mono/zendesk",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "scripts": {
     "test": "jest --coverage",
     "typecheck": "tsc --noEmit",

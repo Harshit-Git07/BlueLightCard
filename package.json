@@ -185,7 +185,7 @@
     "tsafe": "1.6.6",
     "typed-inject": "4.0.0",
     "winston": "3.13.1",
-    "zod-validation-error": "3.3.1"
+    "zod-validation-error": "3.4.0"
   },
   "optionalDependencies": {
     "@esbuild/linux-x64": "0.20.0",

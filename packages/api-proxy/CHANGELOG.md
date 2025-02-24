@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.0.0 (2025-02-24)
+
+
+### Features
+
+* Globalisation of redeem apis ([#2999](https://github.com/Harshit-Git07/BlueLightCard/issues/2999)) ([885bd60](https://github.com/Harshit-Git07/BlueLightCard/commit/885bd6056f83f47f665f89b38c71e76b2e44e5be))
+* Updated PR API Proxy worker CORS regex to be more flexible ([#3570](https://github.com/Harshit-Git07/BlueLightCard/issues/3570)) ([1bc8a19](https://github.com/Harshit-Git07/BlueLightCard/commit/1bc8a19f18f22bad0d23f2040e2b8c879ef11de2))
+
+
+### Bug Fixes
+
+* MM-477 - Adding service layer APIs to API proxy ([#3458](https://github.com/Harshit-Git07/BlueLightCard/issues/3458)) ([6462b42](https://github.com/Harshit-Git07/BlueLightCard/commit/6462b4292ac7f7f500be7c254a6ca4bbe7bd3e1b))
+* PR ephemeral env globalisation fixes ([#3366](https://github.com/Harshit-Git07/BlueLightCard/issues/3366)) ([544ac8b](https://github.com/Harshit-Git07/BlueLightCard/commit/544ac8b9fe86b17d82737eb7d653f9f0135f7c2a))
+
+
+### Other Changes
+
+* enable workers logging ([#3506](https://github.com/Harshit-Git07/BlueLightCard/issues/3506)) ([22fcbea](https://github.com/Harshit-Git07/BlueLightCard/commit/22fcbea2d518d7266db56247ea3fdf15d43321c7))
+* **main:** release bluelightcard/api-proxy 1.0.0 ([#2835](https://github.com/Harshit-Git07/BlueLightCard/issues/2835)) ([9d40abb](https://github.com/Harshit-Git07/BlueLightCard/commit/9d40abb186c2d857cb251dd813a89a6540135e8e))
+* **main:** release bluelightcard/api-proxy 1.2.1 ([#3270](https://github.com/Harshit-Git07/BlueLightCard/issues/3270)) ([efb87c6](https://github.com/Harshit-Git07/BlueLightCard/commit/efb87c60cc2dd18681742228d35d9e933786cccf))
+* **main:** release bluelightcard/web 1.104.0 ([#3523](https://github.com/Harshit-Git07/BlueLightCard/issues/3523)) ([0f6b904](https://github.com/Harshit-Git07/BlueLightCard/commit/0f6b9049186c401c328afdfa95faebfc4407fac1))
+* Manually bump API Proxy to v1.2.1 ([#3268](https://github.com/Harshit-Git07/BlueLightCard/issues/3268)) ([2d1fc84](https://github.com/Harshit-Git07/BlueLightCard/commit/2d1fc84f1ba72b8af045b9896c59fa8b7cba096c))
+
 ## [1.2.1](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/api-proxy-v1.0.0...bluelightcard/api-proxy-v1.2.1) (2024-12-05)
 
 ### Features

@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.0.0 (2025-02-24)
+
+
+### Features
+
+* [MM-418] multiple document upload/download ([#3244](https://github.com/Harshit-Git07/BlueLightCard/issues/3244)) ([dec4c11](https://github.com/Harshit-Git07/BlueLightCard/commit/dec4c1172232a910097b7eff068e43a1e86a2baa))
+* [MM-523] Add payment event listener ([#3718](https://github.com/Harshit-Git07/BlueLightCard/issues/3718)) ([4032287](https://github.com/Harshit-Git07/BlueLightCard/commit/403228702f5c266399cb207bcf4bce9b5c4d196f))
+* DWh events for ballot redemption ([#3455](https://github.com/Harshit-Git07/BlueLightCard/issues/3455)) ([0e60ab0](https://github.com/Harshit-Git07/BlueLightCard/commit/0e60ab0819b9c214625f2a7b50f979c2938264a0))
+* dwh logging code ([#2979](https://github.com/Harshit-Git07/BlueLightCard/issues/2979)) ([9b07e17](https://github.com/Harshit-Git07/BlueLightCard/commit/9b07e174f313e8a5e505064ac2b70ebe660e0c6e))
+* Move zod models to shared folder and use it throughout the frontend instead of the generated openAPI types ([#3554](https://github.com/Harshit-Git07/BlueLightCard/issues/3554)) ([f6ae220](https://github.com/Harshit-Git07/BlueLightCard/commit/f6ae220bc5f13846cb234b69e02f9b4cc62a7919))
+* Payment emails ([#2939](https://github.com/Harshit-Git07/BlueLightCard/issues/2939)) ([2b17c50](https://github.com/Harshit-Git07/BlueLightCard/commit/2b17c50544e07ab3190a1ee8120edb70d213582f))
+
+
+### Other Changes
+
+* **main:** release bluelightcard/payments 1.3.0 ([#2970](https://github.com/Harshit-Git07/BlueLightCard/issues/2970)) ([ce1088a](https://github.com/Harshit-Git07/BlueLightCard/commit/ce1088a01ca3639b4c79c45059264f59651bfd5c))
+* **main:** release bluelightcard/web 1.104.0 ([#3523](https://github.com/Harshit-Git07/BlueLightCard/issues/3523)) ([0f6b904](https://github.com/Harshit-Git07/BlueLightCard/commit/0f6b9049186c401c328afdfa95faebfc4407fac1))
+
 ## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/payments-v1.2.0...bluelightcard/payments-v1.3.0) (2024-11-20)
 
 

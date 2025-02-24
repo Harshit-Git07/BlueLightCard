@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.0.0 (2025-02-24)
+
+
+### Features
+
+* force another release ([#3392](https://github.com/Harshit-Git07/BlueLightCard/issues/3392)) ([762e13f](https://github.com/Harshit-Git07/BlueLightCard/commit/762e13fc5a560cace07f664fe7a0538ea4359aea))
+* force release ([#3382](https://github.com/Harshit-Git07/BlueLightCard/issues/3382)) ([cf313bb](https://github.com/Harshit-Git07/BlueLightCard/commit/cf313bbb51501ff5a933090091b10c145317c88f))
+* Move zod models to shared folder and use it throughout the frontend instead of the generated openAPI types ([#3554](https://github.com/Harshit-Git07/BlueLightCard/issues/3554)) ([f6ae220](https://github.com/Harshit-Git07/BlueLightCard/commit/f6ae220bc5f13846cb234b69e02f9b4cc62a7919))
+
+
+### Bug Fixes
+
+* streamline CompanyOffersService and improve response handling in API routes ([#3067](https://github.com/Harshit-Git07/BlueLightCard/issues/3067)) ([99abeaa](https://github.com/Harshit-Git07/BlueLightCard/commit/99abeaa1f4a1c1b62f48cd89fa2a1f3e4d1ed252))
+
+
+### Other Changes
+
+* [None] Set isolatedModules to true in ts-jest to speed up tests ([#3435](https://github.com/Harshit-Git07/BlueLightCard/issues/3435)) ([195d4f6](https://github.com/Harshit-Git07/BlueLightCard/commit/195d4f6c9b0f18d497e6378b55d23298447cea79))
+* **main:** release bluelightcard/offers 1.40.2 ([#2910](https://github.com/Harshit-Git07/BlueLightCard/issues/2910)) ([f2a32f0](https://github.com/Harshit-Git07/BlueLightCard/commit/f2a32f0ee09122af52124c10547d608a6851b7df))
+* **main:** release bluelightcard/offers 1.41.0 ([#3384](https://github.com/Harshit-Git07/BlueLightCard/issues/3384)) ([cafbf4a](https://github.com/Harshit-Git07/BlueLightCard/commit/cafbf4a302add44a1989276205f7c60ceebd30b0))
+* **main:** release bluelightcard/offers 1.42.0 ([#3393](https://github.com/Harshit-Git07/BlueLightCard/issues/3393)) ([5b73782](https://github.com/Harshit-Git07/BlueLightCard/commit/5b737825af6f7c635cd6b8ed304e7c9848ce9e54))
+* **main:** release bluelightcard/web 1.104.0 ([#3523](https://github.com/Harshit-Git07/BlueLightCard/issues/3523)) ([0f6b904](https://github.com/Harshit-Git07/BlueLightCard/commit/0f6b9049186c401c328afdfa95faebfc4407fac1))
+
 ## [1.42.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/offers-v1.41.0...bluelightcard/offers-v1.42.0) (2024-12-12)
 
 

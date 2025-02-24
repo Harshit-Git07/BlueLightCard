@@ -1,5 +1,55 @@
 # Changelog
 
+## 1.0.0 (2025-02-24)
+
+
+### Features
+
+* [TR-934] addeds e2e tests for verify type ([#2992](https://github.com/Harshit-Git07/BlueLightCard/issues/2992)) ([4831dde](https://github.com/Harshit-Git07/BlueLightCard/commit/4831ddef15628ffe2a8942e93a819ca59a3bf831))
+* add campaign ids for push ([#2980](https://github.com/Harshit-Git07/BlueLightCard/issues/2980)) ([4116fc9](https://github.com/Harshit-Git07/BlueLightCard/commit/4116fc9095f4578a11c969330324faba4e8ee328))
+* add new stream for member redemptions ([#3297](https://github.com/Harshit-Git07/BlueLightCard/issues/3297)) ([5926338](https://github.com/Harshit-Git07/BlueLightCard/commit/59263388ee3f26bbb1d681752d65862a37d3edd2))
+* add push notification for verify redemption type ([#3025](https://github.com/Harshit-Git07/BlueLightCard/issues/3025)) ([ef223cd](https://github.com/Harshit-Git07/BlueLightCard/commit/ef223cd5c568d0ddef15b81ee8f349e60bcfd32a))
+* Admin create ballot ([#3031](https://github.com/Harshit-Git07/BlueLightCard/issues/3031)) ([e965220](https://github.com/Harshit-Git07/BlueLightCard/commit/e96522083737bc105a717714e8a14f59bd3c7147))
+* Blt 32 ballot push notifications ([#3385](https://github.com/Harshit-Git07/BlueLightCard/issues/3385)) ([cc596d2](https://github.com/Harshit-Git07/BlueLightCard/commit/cc596d2eca9c84ed3912274c992b35933d33e973))
+* Blt 38 add redeem ballot email ([#3341](https://github.com/Harshit-Git07/BlueLightCard/issues/3341)) ([7258750](https://github.com/Harshit-Git07/BlueLightCard/commit/7258750a4648fe0260385ce1124708e0ca68080d))
+* DWh events for ballot redemption ([#3455](https://github.com/Harshit-Git07/BlueLightCard/issues/3455)) ([0e60ab0](https://github.com/Harshit-Git07/BlueLightCard/commit/0e60ab0819b9c214625f2a7b50f979c2938264a0))
+* Ge 10 blt redemptions stack changes ([#3610](https://github.com/Harshit-Git07/BlueLightCard/issues/3610)) ([08de860](https://github.com/Harshit-Git07/BlueLightCard/commit/08de860e60bb2b45b5d29272366eefe968317539))
+* Merge Blue light tickets ([#3231](https://github.com/Harshit-Git07/BlueLightCard/issues/3231)) ([f9dd089](https://github.com/Harshit-Git07/BlueLightCard/commit/f9dd08989dda94188f55fd22e551f131dd5eec6e))
+* merge redemption dev  ([#3090](https://github.com/Harshit-Git07/BlueLightCard/issues/3090)) ([05774e7](https://github.com/Harshit-Git07/BlueLightCard/commit/05774e78bd66b0c899f24fabecc68a54ffcfc9dc))
+* Move zod models to shared folder and use it throughout the frontend instead of the generated openAPI types ([#3554](https://github.com/Harshit-Git07/BlueLightCard/issues/3554)) ([f6ae220](https://github.com/Harshit-Git07/BlueLightCard/commit/f6ae220bc5f13846cb234b69e02f9b4cc62a7919))
+* new stream ([#3452](https://github.com/Harshit-Git07/BlueLightCard/issues/3452)) ([a4aa868](https://github.com/Harshit-Git07/BlueLightCard/commit/a4aa868fcd3fb318301bd2dfed56efbf13a4cd1a))
+* preApplied prod campaign id ([#3041](https://github.com/Harshit-Git07/BlueLightCard/issues/3041)) ([441303d](https://github.com/Harshit-Git07/BlueLightCard/commit/441303ddf1bd138381aadc28d18b7ee542e541f4))
+* Sw 111/add blc and dds domains to staging redemption config ([#3713](https://github.com/Harshit-Git07/BlueLightCard/issues/3713)) ([e61264f](https://github.com/Harshit-Git07/BlueLightCard/commit/e61264f528c3680067a6750b895025e17acedd9f))
+* temp pr ([#3528](https://github.com/Harshit-Git07/BlueLightCard/issues/3528)) ([dc2a1b2](https://github.com/Harshit-Git07/BlueLightCard/commit/dc2a1b2f7c99349df512fbe0efb86f7b118bf246))
+* Tr 1125 vault batch dwh ([#3397](https://github.com/Harshit-Git07/BlueLightCard/issues/3397)) ([15a2982](https://github.com/Harshit-Git07/BlueLightCard/commit/15a2982106b84cc47105590924ea858494aa706e))
+* tr 1126 add integration vault callback stream ([#3416](https://github.com/Harshit-Git07/BlueLightCard/issues/3416)) ([619a4db](https://github.com/Harshit-Git07/BlueLightCard/commit/619a4db32a3297c58ab7a2a644721ae1ea354080))
+* Tr 1136 vault stock lambda dwh ([#3541](https://github.com/Harshit-Git07/BlueLightCard/issues/3541)) ([428e3d3](https://github.com/Harshit-Git07/BlueLightCard/commit/428e3d3f7753323610a97f3d9855573a36ea76b9))
+* tr 739 add push notification for credit card redemption type ([#2984](https://github.com/Harshit-Git07/BlueLightCard/issues/2984)) ([c60e55f](https://github.com/Harshit-Git07/BlueLightCard/commit/c60e55fb3c636349d56b6fc51b5173c59a245219))
+* Tr 741 verify add braze email notification ([#3006](https://github.com/Harshit-Git07/BlueLightCard/issues/3006)) ([ddb5540](https://github.com/Harshit-Git07/BlueLightCard/commit/ddb55405061cdcc26ebd646a30ec409c49a86d86))
+* TR-1135 - change redemption type creditCard to compare ([#3238](https://github.com/Harshit-Git07/BlueLightCard/issues/3238)) ([d84c2f4](https://github.com/Harshit-Git07/BlueLightCard/commit/d84c2f421e210b9e805de45336038ae292610a9d))
+* TR-937 - add redemptionType verify to POST redemption config endpoint ([#2997](https://github.com/Harshit-Git07/BlueLightCard/issues/2997)) ([b491bb6](https://github.com/Harshit-Git07/BlueLightCard/commit/b491bb6f5617691f77bcf7c433240a2f98b25a3b))
+* TR-938 - improve validation of redemption config api request ([#2960](https://github.com/Harshit-Git07/BlueLightCard/issues/2960)) ([df9cfb2](https://github.com/Harshit-Git07/BlueLightCard/commit/df9cfb23555f5fe76da9cb9ca5ed229636ae073e))
+* tr-939 patch verify redemption type ([#3004](https://github.com/Harshit-Git07/BlueLightCard/issues/3004)) ([075249b](https://github.com/Harshit-Git07/BlueLightCard/commit/075249b09dca99ba257379b0937f245e49d573cc))
+* whole change redo ([#2989](https://github.com/Harshit-Git07/BlueLightCard/issues/2989)) ([c5a3e48](https://github.com/Harshit-Git07/BlueLightCard/commit/c5a3e4838dbffa85270c90811c7fca6316733947))
+
+
+### Bug Fixes
+
+* buffer warning ([#3443](https://github.com/Harshit-Git07/BlueLightCard/issues/3443)) ([89df0e5](https://github.com/Harshit-Git07/BlueLightCard/commit/89df0e56d2fc21a6990d267bc0db5b547d1c0c20))
+* CMS-282 - Make url optional for ballot redemptions ([#3538](https://github.com/Harshit-Git07/BlueLightCard/issues/3538)) ([130000a](https://github.com/Harshit-Git07/BlueLightCard/commit/130000a342a570a2bdc9e7b2b386090f1a057da2))
+* CMS-282 make URL optional for ballot redemptions ([130000a](https://github.com/Harshit-Git07/BlueLightCard/commit/130000a342a570a2bdc9e7b2b386090f1a057da2))
+* get entries by right status ([#3527](https://github.com/Harshit-Git07/BlueLightCard/issues/3527)) ([de76ef6](https://github.com/Harshit-Git07/BlueLightCard/commit/de76ef61aa5a306330ae1f5dcc554ef8c273eda2))
+* Remove logging to email provider and revert ballot changes ([#3532](https://github.com/Harshit-Git07/BlueLightCard/issues/3532)) ([7eec35e](https://github.com/Harshit-Git07/BlueLightCard/commit/7eec35e4a942ab6f89a43a8342244ebfc532ef01))
+* TR-1048 - bump drizzle version ([#2931](https://github.com/Harshit-Git07/BlueLightCard/issues/2931)) ([7503fcc](https://github.com/Harshit-Git07/BlueLightCard/commit/7503fcca61051cd20abc1485b1926816700c22a2))
+
+
+### Other Changes
+
+* **main:** release bluelightcard/redemptions 1.36.0 ([#2981](https://github.com/Harshit-Git07/BlueLightCard/issues/2981)) ([4b81c6e](https://github.com/Harshit-Git07/BlueLightCard/commit/4b81c6e520ea49157c0a7a7bfbaf924e77d87180))
+* **main:** release bluelightcard/redemptions 1.37.0 ([#3236](https://github.com/Harshit-Git07/BlueLightCard/issues/3236)) ([0c0506f](https://github.com/Harshit-Git07/BlueLightCard/commit/0c0506fa8c0e8f9e4c8479a983ec25fdd94fcace))
+* **main:** release bluelightcard/web 1.104.0 ([#3523](https://github.com/Harshit-Git07/BlueLightCard/issues/3523)) ([0f6b904](https://github.com/Harshit-Git07/BlueLightCard/commit/0f6b9049186c401c328afdfa95faebfc4407fac1))
+* Update shared authoriser ([#3596](https://github.com/Harshit-Git07/BlueLightCard/issues/3596)) ([39b0d68](https://github.com/Harshit-Git07/BlueLightCard/commit/39b0d6894d12971a56a26e3e82539d1ea41ec3f0))
+
 ## [1.37.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/redemptions-v1.36.0...bluelightcard/redemptions-v1.37.0) (2024-12-03)
 
 

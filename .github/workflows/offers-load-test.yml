@@ -45,7 +45,7 @@ jobs:
       STAGING_BASE_URL: 'https://www.staging.bluelightcard.co.uk'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Configure Non Prod AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:

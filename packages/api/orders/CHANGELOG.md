@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.0 (2025-02-24)
+
+
+### Features
+
+* [MM-418] multiple document upload/download ([#3244](https://github.com/Harshit-Git07/BlueLightCard/issues/3244)) ([dec4c11](https://github.com/Harshit-Git07/BlueLightCard/commit/dec4c1172232a910097b7eff068e43a1e86a2baa))
+* dwh logging code ([#2979](https://github.com/Harshit-Git07/BlueLightCard/issues/2979)) ([9b07e17](https://github.com/Harshit-Git07/BlueLightCard/commit/9b07e174f313e8a5e505064ac2b70ebe660e0c6e))
+* Move zod models to shared folder and use it throughout the frontend instead of the generated openAPI types ([#3554](https://github.com/Harshit-Git07/BlueLightCard/issues/3554)) ([f6ae220](https://github.com/Harshit-Git07/BlueLightCard/commit/f6ae220bc5f13846cb234b69e02f9b4cc62a7919))
+* Payment emails ([#2939](https://github.com/Harshit-Git07/BlueLightCard/issues/2939)) ([2b17c50](https://github.com/Harshit-Git07/BlueLightCard/commit/2b17c50544e07ab3190a1ee8120edb70d213582f))
+
+
+### Other Changes
+
+* **main:** release bluelightcard/orders 1.3.0 ([#2971](https://github.com/Harshit-Git07/BlueLightCard/issues/2971)) ([c0a4ca2](https://github.com/Harshit-Git07/BlueLightCard/commit/c0a4ca2c9a0150475cb1c57845794354d554df99))
+* **main:** release bluelightcard/web 1.104.0 ([#3523](https://github.com/Harshit-Git07/BlueLightCard/issues/3523)) ([0f6b904](https://github.com/Harshit-Git07/BlueLightCard/commit/0f6b9049186c401c328afdfa95faebfc4407fac1))
+
 ## [1.3.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/orders-v1.2.0...bluelightcard/orders-v1.3.0) (2024-11-20)
 
 

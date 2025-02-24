@@ -1,5 +1,61 @@
 # Changelog
 
+## 1.0.0 (2025-02-24)
+
+
+### Features
+
+* [DISCO-1023] Map trust name instead of trust code to included and excluded trusts ([#3038](https://github.com/Harshit-Git07/BlueLightCard/issues/3038)) ([3d77e56](https://github.com/Harshit-Git07/BlueLightCard/commit/3d77e568ce99ffc169a740ce714c89ca6bcc6211))
+* [DISCO-1214] Add Trust, Age & Expiry filters to Menu Offers ([#3123](https://github.com/Harshit-Git07/BlueLightCard/issues/3123)) ([58a3dff](https://github.com/Harshit-Git07/BlueLightCard/commit/58a3dff6faf6e9273319e4ee956a3d42bc3e954c))
+* [DISCO-1258] Update trust inclusion logic to subtract excluded trusts from included trusts ([#3085](https://github.com/Harshit-Git07/BlueLightCard/issues/3085)) ([4e92c02](https://github.com/Harshit-Git07/BlueLightCard/commit/4e92c02070371f22df73f1d09eabb03227808668))
+* [MM-105] Add Members OpenSearch ingestion pipeline ([#3253](https://github.com/Harshit-Git07/BlueLightCard/issues/3253)) ([022213d](https://github.com/Harshit-Git07/BlueLightCard/commit/022213d56b8ce63dd15cb84fc3de81e801ce5c01))
+* Blt backend v2 ([#3225](https://github.com/Harshit-Git07/BlueLightCard/issues/3225)) ([56abf68](https://github.com/Harshit-Git07/BlueLightCard/commit/56abf68085f0c338847244d729eed5311f23308b))
+* Disco - 1393 Update other backend endpoints ([#3592](https://github.com/Harshit-Git07/BlueLightCard/issues/3592)) ([15067c7](https://github.com/Harshit-Git07/BlueLightCard/commit/15067c783dac07334365387b719c885550ef9f46))
+* Disco 1068 - Ingest Flexible Menus ([#2864](https://github.com/Harshit-Git07/BlueLightCard/issues/2864)) ([30e16e4](https://github.com/Harshit-Git07/BlueLightCard/commit/30e16e46175de735b69e0f6db16b98f1a068b6a5))
+* Disco 1294 - Nearest Offers ([#3637](https://github.com/Harshit-Git07/BlueLightCard/issues/3637)) ([8bb44e5](https://github.com/Harshit-Git07/BlueLightCard/commit/8bb44e5dc521432691b0fff374db324b3a64f174))
+* disco 1418 ([#3565](https://github.com/Harshit-Git07/BlueLightCard/issues/3565)) ([a4ef32d](https://github.com/Harshit-Git07/BlueLightCard/commit/a4ef32df00dc98a17534e3e4d36e90ab334bbc3b))
+* Disco 1423 - Handle Ordering & Scheduling of Marketplace Menus ([#3660](https://github.com/Harshit-Git07/BlueLightCard/issues/3660)) ([2bdeefd](https://github.com/Harshit-Git07/BlueLightCard/commit/2bdeefd95f1784905714c763d98c39eef199493d))
+* Disco 1425: Flexi Menu Singleton  ([#3703](https://github.com/Harshit-Git07/BlueLightCard/issues/3703)) ([1b96f54](https://github.com/Harshit-Git07/BlueLightCard/commit/1b96f543e710573d75fa4bda27c8b1165a2f23a1))
+* Disco-1073 - Add Support for company location events ([#3165](https://github.com/Harshit-Git07/BlueLightCard/issues/3165)) ([fdeb71a](https://github.com/Harshit-Git07/BlueLightCard/commit/fdeb71afa7809b539591387f4fb3d84c2eba9170))
+* disco-1181 - Add Firehose Events to Search ([#3489](https://github.com/Harshit-Git07/BlueLightCard/issues/3489)) ([f36ea6b](https://github.com/Harshit-Git07/BlueLightCard/commit/f36ea6b20714c8f9e7e9776a1dea9b85a6c0fd16))
+* Disco-1392 ([#3498](https://github.com/Harshit-Git07/BlueLightCard/issues/3498)) ([1d432a5](https://github.com/Harshit-Git07/BlueLightCard/commit/1d432a5f998d43d5b1e6900c5c3e8b96abba3e7c))
+* Disco-1424 MenuOffer overrides ([#3692](https://github.com/Harshit-Git07/BlueLightCard/issues/3692)) ([dbcc98d](https://github.com/Harshit-Git07/BlueLightCard/commit/dbcc98d828136a589c2c2e12281ff3db06631ae3))
+* Disco-1470 - Ingest new marketplace events ([#3673](https://github.com/Harshit-Git07/BlueLightCard/issues/3673)) ([7959348](https://github.com/Harshit-Git07/BlueLightCard/commit/79593482e16f08854db06d39a8c0743b1677583d))
+* Disco-1479 - Changing Event Ingestion ([#3734](https://github.com/Harshit-Git07/BlueLightCard/issues/3734)) ([e14869c](https://github.com/Harshit-Git07/BlueLightCard/commit/e14869c19024a5b1c056ad870eaf22fa73a69f3a))
+* Disco-1481 Upgrade to CMS 0.39 & Handle breaking changes ([#3688](https://github.com/Harshit-Git07/BlueLightCard/issues/3688)) ([bad0140](https://github.com/Harshit-Git07/BlueLightCard/commit/bad0140d1d8f8fc9bdc5cedc8bfbc020276922af))
+* Move zod models to shared folder and use it throughout the frontend instead of the generated openAPI types ([#3554](https://github.com/Harshit-Git07/BlueLightCard/issues/3554)) ([f6ae220](https://github.com/Harshit-Git07/BlueLightCard/commit/f6ae220bc5f13846cb234b69e02f9b4cc62a7919))
+* PER-562 -Update Correct Overrides Fields ([#3735](https://github.com/Harshit-Git07/BlueLightCard/issues/3735)) ([dd481c3](https://github.com/Harshit-Git07/BlueLightCard/commit/dd481c3fe9a9c8eff7f630086b28870ad4551352))
+
+
+### Bug Fixes
+
+* [DISCO-1023] Merge company included and excluded trusts into the offer level ([#2988](https://github.com/Harshit-Git07/BlueLightCard/issues/2988)) ([5a0728e](https://github.com/Harshit-Git07/BlueLightCard/commit/5a0728ee0623ca2bcc8ce7fdbbb723782d67512d))
+* [DISCO-1214] Add offer status live & start date check to search query ([#3099](https://github.com/Harshit-Git07/BlueLightCard/issues/3099)) ([9f14e03](https://github.com/Harshit-Git07/BlueLightCard/commit/9f14e036927497e5c0cbd9bc4450a2f5b50018ae))
+* [DISCO-1214] Add offer status live check to search query ([9f14e03](https://github.com/Harshit-Git07/BlueLightCard/commit/9f14e036927497e5c0cbd9bc4450a2f5b50018ae))
+* [DISCO-1249] Remove "Get offer by id" duplication issue ([#3094](https://github.com/Harshit-Git07/BlueLightCard/issues/3094)) ([5c6dcc3](https://github.com/Harshit-Git07/BlueLightCard/commit/5c6dcc31a275368c55e2c4a8692e923d9be676e9))
+* [DISCO-1277] Enable delete old search indices cron in PR account ([#3196](https://github.com/Harshit-Git07/BlueLightCard/issues/3196)) ([085227f](https://github.com/Harshit-Git07/BlueLightCard/commit/085227f46430357f850f841b8a396e6b8663094c))
+* Discovery Companies Test into PR environment ([#3579](https://github.com/Harshit-Git07/BlueLightCard/issues/3579)) ([c00b127](https://github.com/Harshit-Git07/BlueLightCard/commit/c00b12733775e68e76edbc135a3cc0006211f5aa))
+* fix environment variable capitalisation discovery stack ([#3613](https://github.com/Harshit-Git07/BlueLightCard/issues/3613)) ([85672c2](https://github.com/Harshit-Git07/BlueLightCard/commit/85672c2a7e337a9fe79f58a8ee27dc71986bb753))
+* Fixing Discovery E2E ([#3246](https://github.com/Harshit-Git07/BlueLightCard/issues/3246)) ([a2ec80d](https://github.com/Harshit-Git07/BlueLightCard/commit/a2ec80d0c4affb18531e68a4da30b1c17e9b9225))
+* Handle Company Age Restriction Change ([#3715](https://github.com/Harshit-Git07/BlueLightCard/issues/3715)) ([a1b3bef](https://github.com/Harshit-Git07/BlueLightCard/commit/a1b3bef26e38ee46ab83916f53272ae6c1e3832d))
+* Search results failing in staging due to extra data in there ([#3254](https://github.com/Harshit-Git07/BlueLightCard/issues/3254)) ([99b3a59](https://github.com/Harshit-Git07/BlueLightCard/commit/99b3a5938a46d5a6b077fa11e39787d712624798))
+* trigger release please ([#3582](https://github.com/Harshit-Git07/BlueLightCard/issues/3582)) ([efa2bf4](https://github.com/Harshit-Git07/BlueLightCard/commit/efa2bf4bf01d3a57f19db59bcf14dc2a6f6420f8))
+* Update Category to be valid id within staging test: ([#3242](https://github.com/Harshit-Git07/BlueLightCard/issues/3242)) ([d2aa645](https://github.com/Harshit-Git07/BlueLightCard/commit/d2aa645a3c11cfae480aa5ea8fe764afa37c8c7e))
+
+
+### Other Changes
+
+* [None] Set isolatedModules to true in ts-jest to speed up tests ([#3435](https://github.com/Harshit-Git07/BlueLightCard/issues/3435)) ([195d4f6](https://github.com/Harshit-Git07/BlueLightCard/commit/195d4f6c9b0f18d497e6378b55d23298447cea79))
+* DISCO-1283 Updated Discovery API categories list to match CMS categories ([#3214](https://github.com/Harshit-Git07/BlueLightCard/issues/3214)) ([d09b2aa](https://github.com/Harshit-Git07/BlueLightCard/commit/d09b2aa92b59484493a8cb83a5a19fafb96fe55f))
+* **main:** release bluelightcard/discovery 1.18.0 ([#2896](https://github.com/Harshit-Git07/BlueLightCard/issues/2896)) ([2e1a5d2](https://github.com/Harshit-Git07/BlueLightCard/commit/2e1a5d2bf14b38488e4d991166affea74eb17661))
+* **main:** release bluelightcard/discovery 1.19.0 ([#3013](https://github.com/Harshit-Git07/BlueLightCard/issues/3013)) ([33ef240](https://github.com/Harshit-Git07/BlueLightCard/commit/33ef2406348398b7fee21647acde719b585afb9a))
+* **main:** release bluelightcard/discovery 1.20.0 ([#3043](https://github.com/Harshit-Git07/BlueLightCard/issues/3043)) ([fda2a5b](https://github.com/Harshit-Git07/BlueLightCard/commit/fda2a5b91541751ca754406415f2db542aff8eba))
+* **main:** release bluelightcard/discovery 1.21.0 ([#3241](https://github.com/Harshit-Git07/BlueLightCard/issues/3241)) ([bf20324](https://github.com/Harshit-Git07/BlueLightCard/commit/bf20324eab6bb0bb737c41da16861ac6106767d8))
+* **main:** release bluelightcard/discovery 1.22.0 ([#3577](https://github.com/Harshit-Git07/BlueLightCard/issues/3577)) ([c99afb6](https://github.com/Harshit-Git07/BlueLightCard/commit/c99afb6a3d3182cb66c3f21de9a5ffc6538a26b2))
+* **main:** release bluelightcard/discovery 1.22.1 ([#3583](https://github.com/Harshit-Git07/BlueLightCard/issues/3583)) ([72e23c8](https://github.com/Harshit-Git07/BlueLightCard/commit/72e23c8ec7aa9076d5ac0cfa2d400641dd86f281))
+* **main:** release bluelightcard/discovery 1.23.0 ([#3604](https://github.com/Harshit-Git07/BlueLightCard/issues/3604)) ([b1b69b3](https://github.com/Harshit-Git07/BlueLightCard/commit/b1b69b37a3241c417d6e17477f70433a5c6e6c67))
+* **main:** release bluelightcard/web 1.104.0 ([#3523](https://github.com/Harshit-Git07/BlueLightCard/issues/3523)) ([0f6b904](https://github.com/Harshit-Git07/BlueLightCard/commit/0f6b9049186c401c328afdfa95faebfc4407fac1))
+
 ## [1.23.0](https://github.com/bluelightcard/BlueLightCard-2.0/compare/bluelightcard/discovery-v1.22.1...bluelightcard/discovery-v1.23.0) (2025-01-27)
 
 
